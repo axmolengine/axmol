@@ -136,7 +136,7 @@ void Bone3D::clearBoneBlendState()
 /**
  * Creates C3DBone.
  */
-Bone3D* Bone3D::create(const std::string& id)
+Bone3D* Bone3D::create(std::string_view id)
 {
     auto bone = new Bone3D(id);
     bone->autorelease();
@@ -185,7 +185,7 @@ void Bone3D::removeAllChildBone()
     _children.clear();
 }
 
-Bone3D::Bone3D(const std::string& id) : _name(id), _parent(nullptr), _worldDirty(true) {}
+Bone3D::Bone3D(std::string_view id) : _name(id), _parent(nullptr), _worldDirty(true) {}
 
 Bone3D::~Bone3D()
 {
@@ -279,7 +279,7 @@ Bone3D* Skeleton3D::getBoneByIndex(unsigned int index) const
 
     return nullptr;
 }
-Bone3D* Skeleton3D::getBoneByName(const std::string& id) const
+Bone3D* Skeleton3D::getBoneByName(std::string_view id) const
 {
     // search from bones
     for (auto it : _bones)

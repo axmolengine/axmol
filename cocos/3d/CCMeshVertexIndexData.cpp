@@ -49,7 +49,7 @@ using namespace std;
 NS_CC_BEGIN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-MeshIndexData* MeshIndexData::create(const std::string& id,
+MeshIndexData* MeshIndexData::create(std::string_view id,
                                      MeshVertexData* vertexData,
                                      backend::Buffer* indexbuffer,
                                      const AABB& aabb)
@@ -160,7 +160,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
     return vertexdata;
 }
 
-MeshIndexData* MeshVertexData::getMeshIndexDataById(const std::string& id) const
+MeshIndexData* MeshVertexData::getMeshIndexDataById(std::string_view id) const
 {
     for (auto it : _indexs)
     {

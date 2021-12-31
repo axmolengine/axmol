@@ -133,7 +133,7 @@ static const char* COLOR_INFO         = "color";
 static const char* CONFIG_FILE_PATH = "config_file_path";
 static const char* CONTENT_SCALE    = "content_scale";
 
-static std::string readFileContent(const std::string& filename, bool binary)
+static std::string readFileContent(std::string_view filename, bool binary)
 {
     auto fs = FileUtils::getInstance();
     std::string s;
@@ -264,7 +264,7 @@ DataReaderHelper::~DataReaderHelper()
     _dataReaderHelper = nullptr;
 }
 
-void DataReaderHelper::addDataFromFile(const std::string& filePath)
+void DataReaderHelper::addDataFromFile(std::string_view filePath)
 {
     /*
      * Check if file is already added to ArmatureDataManager, if then return.
@@ -276,19 +276,15 @@ void DataReaderHelper::addDataFromFile(const std::string& filePath)
             return;
         }
     }
-    _configFileList.push_back(filePath);
+    _configFileList.push_back(std::string{filePath});
 
     //! find the base file path
-    std::string basefilePath = filePath;
-    size_t pos               = basefilePath.find_last_of('/');
+    std::string basefilePath;
+    size_t pos = filePath.find_last_of('/');
 
     if (pos != std::string::npos)
     {
-        basefilePath = basefilePath.substr(0, pos + 1);
-    }
-    else
-    {
-        basefilePath = "";
+        basefilePath = filePath.substr(0, pos + 1);
     }
 
     std::string fileExtension = cocos2d::FileUtils::getInstance()->getFileExtension(filePath);
@@ -319,9 +315,9 @@ void DataReaderHelper::addDataFromFile(const std::string& filePath)
     }
 }
 
-void DataReaderHelper::addDataFromFileAsync(const std::string& imagePath,
-                                            const std::string& plistPath,
-                                            const std::string& filePath,
+void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
+                                            std::string_view plistPath,
+                                            std::string_view filePath,
                                             Ref* target,
                                             SEL_SCHEDULE selector)
 {
@@ -346,19 +342,15 @@ void DataReaderHelper::addDataFromFileAsync(const std::string& imagePath,
             return;
         }
     }
-    _configFileList.push_back(filePath);
+    _configFileList.push_back(std::string{filePath});
 
     //! find the base file path
-    std::string basefilePath = filePath;
-    size_t pos               = basefilePath.find_last_of('/');
+    std::string basefilePath;
+    size_t pos = filePath.find_last_of('/');
 
     if (pos != std::string::npos)
     {
-        basefilePath = basefilePath.substr(0, pos + 1);
-    }
-    else
-    {
-        basefilePath = "";
+        basefilePath = filePath.substr(0, pos + 1);
     }
 
     // lazy init
@@ -490,7 +482,7 @@ void DataReaderHelper::addDataAsyncCallBack(float /*dt*/)
     }
 }
 
-void DataReaderHelper::removeConfigFile(const std::string& configFile)
+void DataReaderHelper::removeConfigFile(std::string_view configFile)
 {
     auto it_end = _configFileList.end();
     for (auto it = _configFileList.begin(); it != it_end; ++it)
@@ -503,10 +495,12 @@ void DataReaderHelper::removeConfigFile(const std::string& configFile)
     }
 }
 
-void DataReaderHelper::addDataFromCache(const std::string& pFileContent, DataInfo* dataInfo)
+void DataReaderHelper::addDataFromCache(std::string_view pFileContent, DataInfo* dataInfo)
 {
     pugi::xml_document document;
-    document.load_string(pFileContent.c_str());
+    pugi::xml_parse_result ret = document.load_buffer(pFileContent.data(), pFileContent.length());
+    if (!ret)
+        return;
 
     auto root                  = document.document_element();
     dataInfo->flashToolVersion = root.attribute(VERSION).as_float();
@@ -1116,15 +1110,15 @@ ContourData* DataReaderHelper::decodeContour(pugi::xml_node& contourXML, DataInf
     return contourData;
 }
 
-void DataReaderHelper::addDataFromJsonCache(const std::string& fileContent, DataInfo* dataInfo)
+void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataInfo* dataInfo)
 {
     rapidjson::Document json;
-    rapidjson::StringStream stream(fileContent.c_str());
+    rapidjson::StringStream stream(fileContent.data());
 
     if (fileContent.size() >= 3)
     {
         // Skip BOM if exists
-        const unsigned char* c = (const unsigned char*)fileContent.c_str();
+        const unsigned char* c = (const unsigned char*)fileContent.data();
         unsigned bom           = c[0] | (c[1] << 8) | (c[2] << 16);
 
         if (bom == 0xBFBBEF)  // UTF8 BOM

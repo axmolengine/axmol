@@ -57,7 +57,7 @@ public:
      * @param tileHeight The height of the item.
      * @param itemsToRender The quantity of items to render.
      */
-    static AtlasNode* create(const std::string& filename, int tileWidth, int tileHeight, int itemsToRender);
+    static AtlasNode* create(std::string_view filename, int tileWidth, int tileHeight, int itemsToRender);
 
     /** updates the Atlas (indexed vertex array).
      * Shall be overridden in subclasses.
@@ -106,7 +106,7 @@ public:
 
     /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to
      * render*/
-    bool initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender);
+    bool initWithTileFile(std::string_view tile, int tileWidth, int tileHeight, int itemsToRender);
 
     /** Initializes an AtlasNode  with a texture the width and height of each item measured in points and the quantity
      * of items to render*/

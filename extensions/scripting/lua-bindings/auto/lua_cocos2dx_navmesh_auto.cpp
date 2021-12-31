@@ -1424,8 +1424,8 @@ int lua_cocos2dx_navmesh_NavMeshAgent_getNavMeshAgentComponentName(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_navmesh_NavMeshAgent_getNavMeshAgentComponentName'", nullptr);
             return 0;
         }
-        const std::string& ret = cocos2d::NavMeshAgent::getNavMeshAgentComponentName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cocos2d::NavMeshAgent::getNavMeshAgentComponentName();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.NavMeshAgent:getNavMeshAgentComponentName",argc, 0);
@@ -1958,8 +1958,8 @@ int lua_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName'", nullptr);
             return 0;
         }
-        const std::string& ret = cocos2d::NavMeshObstacle::getNavMeshObstacleComponentName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cocos2d::NavMeshObstacle::getNavMeshObstacleComponentName();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.NavMeshObstacle:getNavMeshObstacleComponentName",argc, 0);
@@ -2450,10 +2450,10 @@ int lua_cocos2dx_navmesh_NavMesh_create(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        std::string arg0;
-        std::string arg1;
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.NavMesh:create");
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "cc.NavMesh:create");
+        std::string_view arg0;
+        std::string_view arg1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.NavMesh:create");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.NavMesh:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_navmesh_NavMesh_create'", nullptr);

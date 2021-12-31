@@ -27,6 +27,8 @@
 
 #include <stdint.h>
 #include <iosfwd>
+#include <string>
+#include <string_view>
 
 @class UIWebViewWrapper;
 
@@ -49,19 +51,19 @@ public:
 
     virtual ~WebViewImpl();
 
-    void setJavascriptInterfaceScheme(const std::string& scheme);
+    void setJavascriptInterfaceScheme(std::string_view scheme);
 
     void loadData(const cocos2d::Data& data,
-                  const std::string& MIMEType,
-                  const std::string& encoding,
-                  const std::string& baseURL);
+                  std::string_view MIMEType,
+                  std::string_view encoding,
+                  std::string_view baseURL);
 
-    void loadHTMLString(const std::string& string, const std::string& baseURL);
+    void loadHTMLString(std::string_view string, std::string_view baseURL);
 
-    void loadURL(const std::string& url);
-    void loadURL(const std::string& url, bool cleanCachedData);
+    void loadURL(std::string_view url);
+    void loadURL(std::string_view url, bool cleanCachedData);
 
-    void loadFile(const std::string& fileName);
+    void loadFile(std::string_view fileName);
 
     void stopLoading();
 
@@ -75,7 +77,7 @@ public:
 
     void goForward();
 
-    void evaluateJS(const std::string& js);
+    void evaluateJS(std::string_view js);
 
     void setScalesPageToFit(const bool scalesPageToFit);
 

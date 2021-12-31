@@ -29,7 +29,6 @@
 
 #include "../BaseTest.h"
 
-
 DEFINE_TEST_SUITE(TransitionsTests);
 
 class TransitionsTest : public TestCase
@@ -41,9 +40,9 @@ public:
 class TestLayer1 : public cocos2d::Layer
 {
 public:
-    static TestLayer1* create(const std::string& transitionName);
+    static TestLayer1* create(std::string_view transitionName);
 
-    TestLayer1(const std::string& transitionName);
+    TestLayer1(std::string_view transitionName);
     ~TestLayer1();
 
     void step(float dt);
@@ -57,9 +56,9 @@ public:
 class TestLayer2 : public cocos2d::Layer
 {
 public:
-    static TestLayer2* create(const std::string& transitionName);
+    static TestLayer2* create(std::string_view transitionName);
 
-    TestLayer2(const std::string& transitionName);
+    TestLayer2(std::string_view transitionName);
     ~TestLayer2();
 
     void step(float dt);

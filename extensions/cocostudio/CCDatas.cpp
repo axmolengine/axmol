@@ -136,16 +136,18 @@ Color4B BaseData::getColor()
     return Color4B(r, g, b, a);
 }
 
-std::string DisplayData::changeDisplayToTexture(const std::string& displayName)
+std::string DisplayData::changeDisplayToTexture(std::string_view displayName)
 {
     // remove .xxx
-    std::string textureName = displayName;
-    size_t startPos         = textureName.find_last_of(".");
+    std::string textureName;
+    size_t startPos = displayName.find_last_of(".");
 
     if (startPos != std::string::npos)
     {
-        textureName = textureName.erase(startPos);
+        textureName.assign(displayName.data(), startPos);  // textureName = textureName.erase(startPos);
     }
+    else
+        textureName = displayName;
 
     return textureName;
 }
@@ -216,7 +218,7 @@ void ArmatureData::addBoneData(BoneData* boneData)
     boneDataDic.insert(boneData->name, boneData);
 }
 
-BoneData* ArmatureData::getBoneData(const std::string& boneName)
+BoneData* ArmatureData::getBoneData(std::string_view boneName)
 {
     return static_cast<BoneData*>(boneDataDic.at(boneName));
 }
@@ -305,7 +307,7 @@ void MovementData::addMovementBoneData(MovementBoneData* movBoneData)
     movBoneDataDic.insert(movBoneData->name, movBoneData);
 }
 
-MovementBoneData* MovementData::getMovementBoneData(const std::string& boneName)
+MovementBoneData* MovementData::getMovementBoneData(std::string_view boneName)
 {
     return movBoneDataDic.at(boneName);
 }
@@ -320,7 +322,7 @@ void AnimationData::addMovement(MovementData* movData)
     movementNames.push_back(movData->name);
 }
 
-MovementData* AnimationData::getMovement(const std::string& movementName)
+MovementData* AnimationData::getMovement(std::string_view movementName)
 {
     return movementDataDic.at(movementName);
 }

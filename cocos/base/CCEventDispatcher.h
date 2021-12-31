@@ -87,7 +87,7 @@ public:
      * @param callback A given callback method that associated the event name.
      * @return the generated event. Needed in order to remove the event from the dispatcher
      */
-    EventListenerCustom* addCustomEventListener(const std::string& eventName,
+    EventListenerCustom* addCustomEventListener(std::string_view eventName,
                                                 const std::function<void(EventCustom*)>& callback);
 
     /////////////////////////////////////////////
@@ -117,7 +117,7 @@ public:
      *
      * @param customEventName A given event listener name which needs to be removed.
      */
-    void removeCustomEventListeners(const std::string& customEventName);
+    void removeCustomEventListeners(std::string_view customEventName);
 
     /** Removes all listeners.
      */
@@ -177,7 +177,7 @@ public:
      * @param eventName The name of the event which needs to be dispatched.
      * @param optionalUserData The optional user data, it's a void*, the default value is nullptr.
      */
-    void dispatchCustomEvent(const std::string& eventName, void* optionalUserData = nullptr);
+    void dispatchCustomEvent(std::string_view eventName, void* optionalUserData = nullptr);
 
     /** Query whether the specified event listener id has been added.
      *
@@ -185,7 +185,7 @@ public:
      *
      * @return True if dispatching events is exist
      */
-    bool hasEventListener(const EventListener::ListenerID& listenerID) const;
+    bool hasEventListener(std::string_view listenerID) const;
 
     /////////////////////////////////////////////
 
@@ -252,22 +252,22 @@ protected:
     void forceAddEventListener(EventListener* listener);
 
     /** Gets event the listener list for the event listener type. */
-    EventListenerVector* getListeners(const EventListener::ListenerID& listenerID) const;
+    EventListenerVector* getListeners(std::string_view listenerID) const;
 
     /** Update dirty flag */
     void updateDirtyFlagForSceneGraph();
 
     /** Removes all listeners with the same event listener ID */
-    void removeEventListenersForListenerID(const EventListener::ListenerID& listenerID);
+    void removeEventListenersForListenerID(std::string_view listenerID);
 
     /** Sort event listener */
-    void sortEventListeners(const EventListener::ListenerID& listenerID);
+    void sortEventListeners(std::string_view listenerID);
 
     /** Sorts the listeners of specified type by scene graph priority */
-    void sortEventListenersOfSceneGraphPriority(const EventListener::ListenerID& listenerID, Node* rootNode);
+    void sortEventListenersOfSceneGraphPriority(std::string_view listenerID, Node* rootNode);
 
     /** Sorts the listeners of specified type by fixed priority */
-    void sortEventListenersOfFixedPriority(const EventListener::ListenerID& listenerID);
+    void sortEventListenersOfFixedPriority(std::string_view listenerID);
 
     /** Updates all listeners
      *  1) Removes all listener items that have been marked as 'removed' when dispatching event.
@@ -311,7 +311,7 @@ protected:
     };
 
     /** Sets the dirty flag for a specified listener ID */
-    void setDirty(const EventListener::ListenerID& listenerID, DirtyFlag flag);
+    void setDirty(std::string_view listenerID, DirtyFlag flag);
 
     /** Walks though scene graph to get the draw order for each node, it's called before sorting event listener with
      * scene graph priority */
@@ -321,10 +321,10 @@ protected:
     void cleanToRemovedListeners();
 
     /** Listeners map */
-    std::unordered_map<EventListener::ListenerID, EventListenerVector*> _listenerMap;
+    hlookup::string_map<EventListenerVector*> _listenerMap;
 
     /** The map of dirty flag */
-    std::unordered_map<EventListener::ListenerID, DirtyFlag> _priorityDirtyFlagMap;
+    hlookup::string_map<DirtyFlag> _priorityDirtyFlagMap;
 
     /** The map of node and event listeners */
     std::unordered_map<Node*, std::vector<EventListener*>*> _nodeListenersMap;

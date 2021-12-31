@@ -186,7 +186,7 @@ void Configuration::destroyInstance()
     CC_SAFE_RELEASE_NULL(s_sharedConfiguration);
 }
 
-bool Configuration::checkForGLExtension(const std::string& searchName) const
+bool Configuration::checkForGLExtension(std::string_view searchName) const
 {
     return _glExtensions.find(searchName) != std::string::npos;
 }
@@ -315,7 +315,7 @@ Animate3DQuality Configuration::getAnimate3DQuality() const
 //
 // generic getters for properties
 //
-const Value& Configuration::getValue(const std::string& key, const Value& defaultValue) const
+const Value& Configuration::getValue(std::string_view key, const Value& defaultValue) const
 {
     auto iter = _valueDict.find(key);
     if (iter != _valueDict.cend())
@@ -324,15 +324,15 @@ const Value& Configuration::getValue(const std::string& key, const Value& defaul
     return defaultValue;
 }
 
-void Configuration::setValue(const std::string& key, const Value& value)
+void Configuration::setValue(std::string_view key, const Value& value)
 {
-    _valueDict[key] = value;
+    hlookup::set_item(_valueDict, key, value);  // _valueDict[key] = value;
 }
 
 //
 // load file
 //
-void Configuration::loadConfigFile(const std::string& filename)
+void Configuration::loadConfigFile(std::string_view filename)
 {
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(filename);
     CCASSERT(!dict.empty(), "cannot create dictionary");
@@ -360,14 +360,14 @@ void Configuration::loadConfigFile(const std::string& filename)
 
     if (!validMetadata)
     {
-        CCLOG("Invalid config format for file: %s", filename.c_str());
+        CCLOG("Invalid config format for file: %s", filename.data());
         return;
     }
 
     auto dataIter = dict.find("data");
     if (dataIter == dict.cend() || dataIter->second.getType() != Value::Type::MAP)
     {
-        CCLOG("Expected 'data' dict, but not found. Config file: %s", filename.c_str());
+        CCLOG("Expected 'data' dict, but not found. Config file: %s", filename.data());
         return;
     }
 

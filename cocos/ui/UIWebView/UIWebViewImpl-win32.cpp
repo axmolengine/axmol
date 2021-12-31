@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(ADXE_HAVE_WEBVIEW2)
 
 #    include "UIWebViewImpl-win32.h"
 #    include "UIWebView.h"
@@ -57,9 +57,9 @@
 USING_NS_CC;
 using namespace rapidjson;
 
-using msg_cb_t = std::function<void(const std::string)>;
+using msg_cb_t = std::function<void(std::string_view)>;
 
-inline std::string htmlFromUri(const std::string& s)
+inline std::string htmlFromUri(std::string_view s)
 {
     if (s.substr(0, 15) == "data:text/html,")
     {
@@ -139,14 +139,14 @@ inline int jsonUnescape(const char* s, size_t n, char* out)
 // The following is a special case, where the exact json string is not returned due
 // to how rapidjson re-creates the nested object, original: "{"bar": 1}", parsed result: "{"bar":1}"
 // assert(jsonParse(R"({"foo": {"bar": 1}})", "foo", -1) == R"({"bar":1})");
-inline std::string jsonParse(const std::string& s, const std::string& key, const int index)
+inline std::string jsonParse(std::string_view s, std::string_view key, const int index)
 {
     const char* value = nullptr;
     size_t value_sz{};
     StringBuffer sb;
     Writer<StringBuffer> writer(sb);
     Document d;
-    d.Parse(s.c_str());
+    d.Parse(s.data());
     if (key.empty() && index > -1)
     {
         if (d.IsArray())
@@ -162,7 +162,7 @@ inline std::string jsonParse(const std::string& s, const std::string& key, const
     }
     else
     {
-        auto&& fieldItr = d.FindMember(key.c_str());
+        auto&& fieldItr = d.FindMember(key.data());
         if (fieldItr != d.MemberEnd())
         {
             auto&& jsonValue = fieldItr->value;
@@ -214,12 +214,12 @@ static std::string getUriStringFromArgs(ArgType* args)
     return {};
 }
 
-static std::string getDataURI(const std::string& data, const std::string& mime_type)
+static std::string getDataURI(std::string_view data, std::string_view mime_type)
 {
     char* encodedData;
     cocos2d::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()),
                           &encodedData);
-    return "data:" + mime_type + ";base64," + utils::urlEncode(encodedData);
+    return std::string{"data:"}.append(mime_type).append(";base64,").append(utils::urlEncode(encodedData));
 }
 
 static double getDeviceScaleFactor()
@@ -250,24 +250,24 @@ class Win32WebControl
 public:
     Win32WebControl();
 
-    bool createWebView(const std::function<bool(const std::string&)>& shouldStartLoading,
-                       const std::function<void(const std::string&)>& didFinishLoading,
-                       const std::function<void(const std::string&)>& didFailLoading,
-                       const std::function<void(const std::string&)>& onJsCallback);
+    bool createWebView(const std::function<bool(std::string_view)>& shouldStartLoading,
+                       const std::function<void(std::string_view)>& didFinishLoading,
+                       const std::function<void(std::string_view)>& didFailLoading,
+                       const std::function<void(std::string_view)>& onJsCallback);
     void removeWebView();
 
     void setWebViewRect(const int left, const int top, const int width, const int height);
-    void setJavascriptInterfaceScheme(const std::string& scheme);
-    void loadHTMLString(const std::string& html, const std::string& baseURL);
-    void loadURL(const std::string& url, bool cleanCachedData);
-    void loadFile(const std::string& filePath);
+    void setJavascriptInterfaceScheme(std::string_view scheme);
+    void loadHTMLString(std::string_view html, std::string_view baseURL);
+    void loadURL(std::string_view url, bool cleanCachedData);
+    void loadFile(std::string_view filePath);
     void stopLoading();
     void reload() const;
     bool canGoBack() const;
     bool canGoForward() const;
     void goBack() const;
     void goForward() const;
-    void evaluateJS(const std::string& js);
+    void evaluateJS(std::string_view js);
     void setScalesPageToFit(const bool scalesPageToFit);
     void setWebViewVisible(const bool visible) const;
     void setBounces(bool bounces);
@@ -286,19 +286,19 @@ private:
     std::string m_jsScheme;
     bool _scalesPageToFit{};
 
-    std::function<bool(const std::string&)> _shouldStartLoading;
-    std::function<void(const std::string&)> _didFinishLoading;
-    std::function<void(const std::string&)> _didFailLoading;
-    std::function<void(const std::string&)> _onJsCallback;
+    std::function<bool(std::string_view)> _shouldStartLoading;
+    std::function<void(std::string_view)> _didFinishLoading;
+    std::function<void(std::string_view)> _didFailLoading;
+    std::function<void(std::string_view)> _onJsCallback;
 
     static bool s_isInitialized;
     static void lazyInit();
 
-    static LPWSTR to_lpwstr(const std::string s)
+    static LPWSTR to_lpwstr(std::string_view s)
     {
-        const int n = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, NULL, 0);
+        const int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, NULL, 0);
         auto* ws    = new wchar_t[n];
-        MultiByteToWideChar(CP_UTF8, 0, s.c_str(), -1, ws, n);
+        MultiByteToWideChar(CP_UTF8, 0, s.data(), -1, ws, n);
         return ws;
     }
 
@@ -325,7 +325,7 @@ private:
                     m_webview->AddRef();
                     flag.clear();
                 },
-                [this](const std::string& url) -> bool {
+                [this](std::string_view url) -> bool {
                     const auto scheme = url.substr(0, url.find_first_of(':'));
                     if (scheme == m_jsScheme)
                     {
@@ -358,7 +358,7 @@ private:
                     if (_didFailLoading)
                         _didFailLoading(result);
                 },
-                [this](const std::string& url) { loadURL(url, false); }));
+                [this](std::string_view url) { loadURL(url, false); }));
 
         if (res != S_OK)
         {
@@ -386,28 +386,28 @@ private:
         m_controller->put_Bounds(bounds);
     }
 
-    void navigate(const std::string url)
+    void navigate(std::string_view url)
     {
         auto wurl = to_lpwstr(url);
         m_webview->Navigate(wurl);
         delete[] wurl;
     }
 
-    void init(const std::string js)
+    void init(std::string_view js)
     {
         LPCWSTR wjs = to_lpwstr(js);
         m_webview->AddScriptToExecuteOnDocumentCreated(wjs, nullptr);
         delete[] wjs;
     }
 
-    void eval(const std::string js)
+    void eval(std::string_view js)
     {
         LPCWSTR wjs = to_lpwstr(js);
         m_webview->ExecuteScript(wjs, nullptr);
         delete[] wjs;
     }
 
-    void on_message(const std::string msg)
+    void on_message(std::string_view msg)
     {
         const auto seq  = jsonParse(msg, "id", 0);
         const auto name = jsonParse(msg, "method", 0);
@@ -440,10 +440,10 @@ private:
         webview2_com_handler(HWND hwnd,
                              msg_cb_t msgCb,
                              webview2_com_handler_cb_t cb,
-                             std::function<bool(const std::string&)> navStartingCallback,
+                             std::function<bool(std::string_view)> navStartingCallback,
                              std::function<void()> navCompleteCallback,
                              std::function<void()> navErrorCallback,
-                             std::function<void(const std::string& url)> loadUrlCallback)
+                             std::function<void(std::string_view url)> loadUrlCallback)
             : m_window(hwnd)
             , m_msgCb(std::move(msgCb))
             , m_cb(std::move(cb))
@@ -587,10 +587,10 @@ private:
         HWND m_window;
         msg_cb_t m_msgCb;
         webview2_com_handler_cb_t m_cb;
-        std::function<bool(const std::string&)> m_navStartingCallback;
+        std::function<bool(std::string_view)> m_navStartingCallback;
         std::function<void()> m_navCompleteCallback;
         std::function<void()> m_navErrorCallback;
-        std::function<void(const std::string& url)> m_loadUrlCallback;
+        std::function<void(std::string_view url)> m_loadUrlCallback;
     };
 };
 
@@ -607,7 +607,7 @@ WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _systemWeb
     }
 
     _createSucceeded = _systemWebControl->createWebView(
-        [this](const std::string& url) -> bool {
+        [this](std::string_view url) -> bool {
             const auto shouldStartLoading = _webView->getOnShouldStartLoading();
             if (shouldStartLoading != nullptr)
             {
@@ -615,21 +615,21 @@ WebViewImpl::WebViewImpl(WebView* webView) : _createSucceeded(false), _systemWeb
             }
             return true;
         },
-        [this](const std::string& url) {
+        [this](std::string_view url) {
             WebView::ccWebViewCallback didFinishLoading = _webView->getOnDidFinishLoading();
             if (didFinishLoading != nullptr)
             {
                 didFinishLoading(_webView, url);
             }
         },
-        [this](const std::string& url) {
+        [this](std::string_view url) {
             WebView::ccWebViewCallback didFailLoading = _webView->getOnDidFailLoading();
             if (didFailLoading != nullptr)
             {
                 didFailLoading(_webView, url);
             }
         },
-        [this](const std::string& url) {
+        [this](std::string_view url) {
             WebView::ccWebViewCallback onJsCallback = _webView->getOnJSCallback();
             if (onJsCallback != nullptr)
             {
@@ -649,9 +649,9 @@ WebViewImpl::~WebViewImpl()
 }
 
 void WebViewImpl::loadData(const Data& data,
-                           const std::string& MIMEType,
-                           const std::string& encoding,
-                           const std::string& baseURL)
+                           std::string_view MIMEType,
+                           std::string_view encoding,
+                           std::string_view baseURL)
 {
     if (_createSucceeded)
     {
@@ -662,7 +662,7 @@ void WebViewImpl::loadData(const Data& data,
     }
 }
 
-void WebViewImpl::loadHTMLString(const std::string& string, const std::string& baseURL)
+void WebViewImpl::loadHTMLString(std::string_view string, std::string_view baseURL)
 {
     if (_createSucceeded)
     {
@@ -684,7 +684,7 @@ void WebViewImpl::loadHTMLString(const std::string& string, const std::string& b
     }
 }
 
-void WebViewImpl::loadURL(const std::string& url, bool cleanCachedData)
+void WebViewImpl::loadURL(std::string_view url, bool cleanCachedData)
 {
     if (_createSucceeded)
     {
@@ -692,7 +692,7 @@ void WebViewImpl::loadURL(const std::string& url, bool cleanCachedData)
     }
 }
 
-void WebViewImpl::loadFile(const std::string& fileName)
+void WebViewImpl::loadFile(std::string_view fileName)
 {
     if (_createSucceeded)
     {
@@ -751,7 +751,7 @@ void WebViewImpl::goForward()
     }
 }
 
-void WebViewImpl::setJavascriptInterfaceScheme(const std::string& scheme)
+void WebViewImpl::setJavascriptInterfaceScheme(std::string_view scheme)
 {
     if (_createSucceeded)
     {
@@ -759,7 +759,7 @@ void WebViewImpl::setJavascriptInterfaceScheme(const std::string& scheme)
     }
 }
 
-void WebViewImpl::evaluateJS(const std::string& js)
+void WebViewImpl::evaluateJS(std::string_view js)
 {
     if (_createSucceeded)
     {
@@ -838,10 +838,10 @@ Win32WebControl::Win32WebControl() : _shouldStartLoading(nullptr), _didFinishLoa
     }
 }
 
-bool Win32WebControl::createWebView(const std::function<bool(const std::string&)>& shouldStartLoading,
-                                    const std::function<void(const std::string&)>& didFinishLoading,
-                                    const std::function<void(const std::string&)>& didFailLoading,
-                                    const std::function<void(const std::string&)>& onJsCallback)
+bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>& shouldStartLoading,
+                                    const std::function<void(std::string_view)>& didFinishLoading,
+                                    const std::function<void(std::string_view)>& didFailLoading,
+                                    const std::function<void(std::string_view)>& onJsCallback)
 {
     bool ret = false;
     do
@@ -905,7 +905,7 @@ bool Win32WebControl::createWebView(const std::function<bool(const std::string&)
         UpdateWindow(m_window);
         SetFocus(m_window);
 
-        auto cb = [this](const std::string msg) { on_message(msg); };
+        auto cb = [this](std::string_view msg) { on_message(msg); };
 
         if (!embed(m_window, false, cb))
         {
@@ -956,12 +956,12 @@ void Win32WebControl::setWebViewRect(const int left, const int top, const int wi
     m_controller->put_ZoomFactor(_scalesPageToFit ? getDeviceScaleFactor() : 1.0);
 }
 
-void Win32WebControl::setJavascriptInterfaceScheme(const std::string& scheme)
+void Win32WebControl::setJavascriptInterfaceScheme(std::string_view scheme)
 {
     m_jsScheme = scheme;
 }
 
-void Win32WebControl::loadHTMLString(const std::string& html, const std::string& baseURL)
+void Win32WebControl::loadHTMLString(std::string_view html, std::string_view baseURL)
 {
     if (!html.empty())
     {
@@ -971,7 +971,7 @@ void Win32WebControl::loadHTMLString(const std::string& html, const std::string&
     }
 }
 
-void Win32WebControl::loadURL(const std::string& url, bool cleanCachedData)
+void Win32WebControl::loadURL(std::string_view url, bool cleanCachedData)
 {
     if (cleanCachedData)
     {
@@ -980,7 +980,7 @@ void Win32WebControl::loadURL(const std::string& url, bool cleanCachedData)
     navigate(url);
 }
 
-void Win32WebControl::loadFile(const std::string& filePath)
+void Win32WebControl::loadFile(std::string_view filePath)
 {
     auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath);
     if (fullPath.find("file:///") != 0)
@@ -1029,7 +1029,7 @@ void Win32WebControl::goForward() const
     m_webview->GoForward();
 }
 
-void Win32WebControl::evaluateJS(const std::string& js)
+void Win32WebControl::evaluateJS(std::string_view js)
 {
     eval(js);
 }

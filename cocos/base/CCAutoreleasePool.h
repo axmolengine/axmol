@@ -58,7 +58,7 @@ public:
      *
      * @param name The name of created autorelease pool.
      */
-    AutoreleasePool(const std::string& name);
+    AutoreleasePool(std::string_view name);
 
     /**
      * @js NA

@@ -28,7 +28,7 @@
 
 #include "platform/CCPlatformConfig.h"
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(ADXE_HAVE_WEBVIEW2)
 
 #    include <string>
 #    include "CCStdC.h"
@@ -58,21 +58,21 @@ public:
     WebViewImpl(cocos2d::ui::WebView* webView);
     virtual ~WebViewImpl();
 
-    void setJavascriptInterfaceScheme(const std::string& scheme);
+    void setJavascriptInterfaceScheme(std::string_view scheme);
     void loadData(const cocos2d::Data& data,
-                  const std::string& MIMEType,
-                  const std::string& encoding,
-                  const std::string& baseURL);
-    void loadHTMLString(const std::string& string, const std::string& baseURL);
-    void loadURL(const std::string& url, bool cleanCachedData);
-    void loadFile(const std::string& fileName);
+                  std::string_view MIMEType,
+                  std::string_view encoding,
+                  std::string_view baseURL);
+    void loadHTMLString(std::string_view string, std::string_view baseURL);
+    void loadURL(std::string_view url, bool cleanCachedData);
+    void loadFile(std::string_view fileName);
     void stopLoading();
     void reload();
     bool canGoBack();
     bool canGoForward();
     void goBack();
     void goForward();
-    void evaluateJS(const std::string& js);
+    void evaluateJS(std::string_view js);
     void setScalesPageToFit(const bool scalesPageToFit);
 
     virtual void draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const& transform, uint32_t flags);

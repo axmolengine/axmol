@@ -375,7 +375,7 @@ std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret)
     return utf8Str;
 }
 
-jstring newStringUTFJNI(JNIEnv* env, const std::string& utf8Str, bool* ret)
+jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret)
 {
     std::u16string utf16Str;
     bool flag = cocos2d::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
@@ -399,9 +399,9 @@ std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16
     return std::vector<char16_t>(utf16.begin(), utf16.end());
 }
 
-int32_t getCharacterCountInUTF8String(const std::string& utf8)
+int32_t getCharacterCountInUTF8String(std::string_view utf8)
 {
-    return getUTF8StringLength((const UTF8*)utf8.c_str());
+    return getUTF8StringLength((const UTF8*)utf8.data());
 }
 
 bool hasNonAsciiUTF8(const char* str, size_t len)
@@ -455,7 +455,7 @@ bool isLegalUTF8String(const char* str, size_t len)
 
 StringUTF8::StringUTF8() {}
 
-StringUTF8::StringUTF8(const std::string& newStr)
+StringUTF8::StringUTF8(std::string_view newStr)
 {
     replace(newStr);
 }
@@ -467,18 +467,18 @@ std::size_t StringUTF8::length() const
     return _str.size();
 }
 
-void StringUTF8::replace(const std::string& newStr)
+void StringUTF8::replace(std::string_view newStr)
 {
     _str.clear();
     if (!newStr.empty())
     {
-        UTF8* sequenceUtf8 = (UTF8*)newStr.c_str();
+        UTF8* sequenceUtf8 = (UTF8*)newStr.data();
 
         int lengthString = getUTF8StringLength(sequenceUtf8);
 
         if (lengthString == 0)
         {
-            CCLOG("Bad utf-8 set string: %s", newStr.c_str());
+            CCLOG("Bad utf-8 set string: %s", newStr.data());
             return;
         }
 
@@ -536,7 +536,7 @@ bool StringUTF8::deleteChar(std::size_t pos)
     }
 }
 
-bool StringUTF8::insert(std::size_t pos, const std::string& insertStr)
+bool StringUTF8::insert(std::size_t pos, std::string_view insertStr)
 {
     StringUTF8 utf8(insertStr);
 

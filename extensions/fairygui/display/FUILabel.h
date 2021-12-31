@@ -23,7 +23,7 @@ public:
 
     void setUnderlineColor(const cocos2d::Color3B& value);
 
-    virtual bool setBMFontFilePath(const std::string& bmfontFilePath, const cocos2d::Vec2& imageOffset = cocos2d::Vec2::ZERO, float fontSize = 0) override;
+    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, const cocos2d::Vec2& imageOffset = cocos2d::Vec2::ZERO, float fontSize = 0) override;
 
     void setGrayed(bool value);
 protected:

@@ -58,12 +58,12 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new skybox inited with given parameters.
      */
-    static Skybox* create(const std::string& positive_x,
-                          const std::string& negative_x,
-                          const std::string& positive_y,
-                          const std::string& negative_y,
-                          const std::string& positive_z,
-                          const std::string& negative_z);
+    static Skybox* create(std::string_view positive_x,
+                          std::string_view negative_x,
+                          std::string_view positive_y,
+                          std::string_view negative_y,
+                          std::string_view positive_z,
+                          std::string_view negative_z);
 
     /**texture getter and setter*/
     void setTexture(TextureCube*);
@@ -93,12 +93,12 @@ public:
     /**
      * initialize with texture path
      */
-    bool init(const std::string& positive_x,
-              const std::string& negative_x,
-              const std::string& positive_y,
-              const std::string& negative_y,
-              const std::string& positive_z,
-              const std::string& negative_z);
+    bool init(std::string_view positive_x,
+              std::string_view negative_x,
+              std::string_view positive_y,
+              std::string_view negative_y,
+              std::string_view positive_z,
+              std::string_view negative_z);
 
 protected:
     /**

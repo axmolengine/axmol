@@ -25,84 +25,79 @@
 class ShapeEditing : public Test
 {
 public:
+    ShapeEditing()
+    {
+        {
+            b2BodyDef bd;
+            b2Body* ground = m_world->CreateBody(&bd);
 
-	ShapeEditing()
-	{
-		{
-			b2BodyDef bd;
-			b2Body* ground = m_world->CreateBody(&bd);
+            b2EdgeShape shape;
+            shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+            ground->CreateFixture(&shape, 0.0f);
+        }
 
-			b2EdgeShape shape;
-			shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
-			ground->CreateFixture(&shape, 0.0f);
-		}
+        b2BodyDef bd;
+        bd.type = b2_dynamicBody;
+        bd.position.Set(0.0f, 10.0f);
+        m_body = m_world->CreateBody(&bd);
 
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position.Set(0.0f, 10.0f);
-		m_body = m_world->CreateBody(&bd);
+        b2PolygonShape shape;
+        shape.SetAsBox(4.0f, 4.0f, b2Vec2(0.0f, 0.0f), 0.0f);
+        m_fixture1 = m_body->CreateFixture(&shape, 10.0f);
 
-		b2PolygonShape shape;
-		shape.SetAsBox(4.0f, 4.0f, b2Vec2(0.0f, 0.0f), 0.0f);
-		m_fixture1 = m_body->CreateFixture(&shape, 10.0f);
+        m_fixture2 = NULL;
 
-		m_fixture2 = NULL;
+        m_sensor = false;
+    }
 
-		m_sensor = false;
-	}
+    void Keyboard(int key) override
+    {
+        switch (key)
+        {
+        case GLFW_KEY_C:
+            if (m_fixture2 == NULL)
+            {
+                b2CircleShape shape;
+                shape.m_radius = 3.0f;
+                shape.m_p.Set(0.5f, -4.0f);
+                m_fixture2 = m_body->CreateFixture(&shape, 10.0f);
+                m_body->SetAwake(true);
+            }
+            break;
 
-	void Keyboard(int key) override
-	{
-		switch (key)
-		{
-		case GLFW_KEY_C:
-			if (m_fixture2 == NULL)
-			{
-				b2CircleShape shape;
-				shape.m_radius = 3.0f;
-				shape.m_p.Set(0.5f, -4.0f);
-				m_fixture2 = m_body->CreateFixture(&shape, 10.0f);
-				m_body->SetAwake(true);
-			}
-			break;
+        case GLFW_KEY_D:
+            if (m_fixture2 != NULL)
+            {
+                m_body->DestroyFixture(m_fixture2);
+                m_fixture2 = NULL;
+                m_body->SetAwake(true);
+            }
+            break;
 
-		case GLFW_KEY_D:
-			if (m_fixture2 != NULL)
-			{
-				m_body->DestroyFixture(m_fixture2);
-				m_fixture2 = NULL;
-				m_body->SetAwake(true);
-			}
-			break;
+        case GLFW_KEY_S:
+            if (m_fixture2 != NULL)
+            {
+                m_sensor = !m_sensor;
+                m_fixture2->SetSensor(m_sensor);
+            }
+            break;
+        }
+    }
 
-		case GLFW_KEY_S:
-			if (m_fixture2 != NULL)
-			{
-				m_sensor = !m_sensor;
-				m_fixture2->SetSensor(m_sensor);
-			}
-			break;
-		}
-	}
+    void Step(Settings& settings) override
+    {
+        Test::Step(settings);
+        DrawString(5, m_textLine, "Press: (c) create a shape, (d) destroy a shape.");
 
-	void Step(Settings& settings) override
-	{
-		Test::Step(settings);
-		DrawString(5, m_textLine, "Press: (c) create a shape, (d) destroy a shape.");
-		
-		DrawString(5, m_textLine, "sensor = %d", m_sensor);
-		
-	}
+        DrawString(5, m_textLine, "sensor = %d", m_sensor);
+    }
 
-	static Test* Create()
-	{
-		return new ShapeEditing;
-	}
+    static Test* Create() { return new ShapeEditing; }
 
-	b2Body* m_body;
-	b2Fixture* m_fixture1;
-	b2Fixture* m_fixture2;
-	bool m_sensor;
+    b2Body* m_body;
+    b2Fixture* m_fixture1;
+    b2Fixture* m_fixture2;
+    bool m_sensor;
 };
 
 static int testIndex = RegisterTest("Examples", "Shape Editing", ShapeEditing::Create);

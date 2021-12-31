@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -83,20 +83,19 @@ public:
     /**
      * @inheritDoc
      */
-    inline virtual bool hasDBEventListener(const std::string& type) const override { return _dispatcher->isEnabled(); }
+    inline virtual bool hasDBEventListener(std::string_view type) const override { return _dispatcher->isEnabled(); }
     /**
      * @inheritDoc
      */
-    virtual void dispatchDBEvent(const std::string& type, EventObject* value) override;
+    virtual void dispatchDBEvent(std::string_view type, EventObject* value) override;
     /**
      * @inheritDoc
      */
-    virtual void addDBEventListener(const std::string& type,
-                                    const std::function<void(EventObject*)>& listener) override;
+    virtual void addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& listener) override;
     /**
      * @inheritDoc
      */
-    virtual void removeDBEventListener(const std::string& type,
+    virtual void removeDBEventListener(std::string_view type,
                                        const std::function<void(EventObject*)>& listener) override;
     /**
      * @inheritDoc

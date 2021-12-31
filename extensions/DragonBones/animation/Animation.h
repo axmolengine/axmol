@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -64,7 +64,7 @@ private:
     float _inheritTimeScale;
     std::vector<std::string> _animationNames;
     std::vector<AnimationState*> _animationStates;
-    std::map<std::string, AnimationData*> _animations;
+    hlookup::string_map<AnimationData*> _animations;
     Armature* _armature;
     AnimationConfig* _animationConfig;
     AnimationState* _lastAnimationState;
@@ -115,7 +115,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    void stop(const std::string& animationName);
+    void stop(std::string_view animationName);
     /**
      * - Play animation with a specific animation config.
      * The API is still in the experimental phase and may encounter bugs or stability or compatibility issues when used.
@@ -166,7 +166,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    AnimationState* play(const std::string& animationName = "", int playTimes = -1);
+    AnimationState* play(std::string_view animationName = "", int playTimes = -1);
     /**
      * - Fade in a specific animation.
      * @param animationName - The name of animation data.
@@ -211,11 +211,11 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* fadeIn(const std::string& animationName,
+    AnimationState* fadeIn(std::string_view animationName,
                            float fadeInTime                 = -1.f,
                            int playTimes                    = -1,
                            int layer                        = 0,
-                           const std::string& group         = "",
+                           std::string_view group           = "",
                            AnimationFadeOutMode fadeOutMode = AnimationFadeOutMode::SameLayerAndGroup);
     /**
      * - Play a specific animation from the specific time.
@@ -236,7 +236,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* gotoAndPlayByTime(const std::string& animationName, float time = 0.f, int playTimes = -1);
+    AnimationState* gotoAndPlayByTime(std::string_view animationName, float time = 0.f, int playTimes = -1);
     /**
      * - Play a specific animation from the specific frame.
      * @param animationName - The name of animation data.
@@ -256,7 +256,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* gotoAndPlayByFrame(const std::string& animationName, unsigned frame = 0, int playTimes = -1);
+    AnimationState* gotoAndPlayByFrame(std::string_view animationName, unsigned frame = 0, int playTimes = -1);
     /**
      * - Play a specific animation from the specific progress.
      * @param animationName - The name of animation data.
@@ -276,7 +276,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* gotoAndPlayByProgress(const std::string& animationName, float progress = 0.f, int playTimes = -1);
+    AnimationState* gotoAndPlayByProgress(std::string_view animationName, float progress = 0.f, int playTimes = -1);
     /**
      * - Stop a specific animation at the specific time.
      * @param animationName - The name of animation data.
@@ -293,7 +293,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* gotoAndStopByTime(const std::string& animationName, float time = 0.f);
+    AnimationState* gotoAndStopByTime(std::string_view animationName, float time = 0.f);
     /**
      * - Stop a specific animation at the specific frame.
      * @param animationName - The name of animation data.
@@ -310,7 +310,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* gotoAndStopByFrame(const std::string& animationName, unsigned frame = 0);
+    AnimationState* gotoAndStopByFrame(std::string_view animationName, unsigned frame = 0);
     /**
      * - Stop a specific animation at the specific progress.
      * @param animationName - The name of animation data.
@@ -327,7 +327,7 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    AnimationState* gotoAndStopByProgress(const std::string& animationName, float progress = 0.f);
+    AnimationState* gotoAndStopByProgress(std::string_view animationName, float progress = 0.f);
     /**
      * - Get a specific animation state.
      * @param animationName - The name of animation state.
@@ -354,7 +354,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    AnimationState* getState(const std::string& animationName) const;
+    AnimationState* getState(std::string_view animationName) const;
     /**
      * - Check whether a specific animation data is included.
      * @param animationName - The name of animation data.
@@ -369,7 +369,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    bool hasAnimation(const std::string& animationName) const;
+    bool hasAnimation(std::string_view animationName) const;
     /**
      * - Get all the animation states.
      * @version DragonBones 5.1
@@ -419,7 +419,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    const std::string& getLastAnimationName() const;
+    std::string_view getLastAnimationName() const;
     /**
      * - The name of all animation data
      * @version DragonBones 4.5
@@ -441,8 +441,8 @@ public:
      * @version DragonBones 4.5
      * @language zh_CN
      */
-    inline const std::map<std::string, AnimationData*>& getAnimations() const { return _animations; }
-    void setAnimations(const std::map<std::string, AnimationData*>& value);
+    inline const hlookup::string_map<AnimationData*>& getAnimations() const { return _animations; }
+    void setAnimations(const hlookup::string_map<AnimationData*>& value);
     /**
      * - An AnimationConfig instance that can be used quickly.
      * @see dragonBones.AnimationConfig

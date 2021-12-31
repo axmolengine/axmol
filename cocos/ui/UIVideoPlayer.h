@@ -86,26 +86,26 @@ public:
     /**
      * Sets a file path as a video source for VideoPlayer.
      */
-    virtual void setFileName(const std::string& videoPath);
+    virtual void setFileName(std::string_view videoPath);
 
     /**
      * @brief Get the local video file name.
      *
      * @return The video file name.
      */
-    virtual const std::string& getFileName() const { return _videoURL; }
+    virtual std::string_view getFileName() const { return _videoURL; }
 
     /**
      * Sets a URL as a video source for VideoPlayer.
      */
-    virtual void setURL(const std::string& _videoURL);
+    virtual void setURL(std::string_view _videoURL);
 
     /**
      * @brief Get the URL of remoting video source.
      *
      * @return A remoting URL address.
      */
-    virtual const std::string& getURL() const { return _videoURL; }
+    virtual std::string_view getURL() const { return _videoURL; }
 
     /**
      * @brief Set if playback is done in loop mode

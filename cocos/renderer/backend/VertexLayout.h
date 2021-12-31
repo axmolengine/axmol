@@ -48,7 +48,7 @@ public:
     struct Attribute
     {
         Attribute() = default;
-        Attribute(const std::string& _name,
+        Attribute(std::string_view _name,
                   std::size_t _index,
                   VertexFormat _format,
                   std::size_t _offset,
@@ -74,7 +74,7 @@ public:
      * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted
      * directly as fixed-point values (false) when they are accessed.
      */
-    void setAttribute(const std::string& name,
+    void setAttribute(std::string_view name,
                       std::size_t index,
                       VertexFormat format,
                       std::size_t offset,
@@ -103,7 +103,7 @@ public:
      * Get attribute informations
      * @return Atrribute informations.
      */
-    inline const std::unordered_map<std::string, Attribute>& getAttributes() const { return _attributes; }
+    inline const hlookup::string_map<Attribute>& getAttributes() const { return _attributes; }
 
     /**
      * Check if vertex layout has been set.
@@ -111,7 +111,7 @@ public:
     inline bool isValid() const { return _stride != 0; }
 
 private:
-    std::unordered_map<std::string, Attribute> _attributes;
+    hlookup::string_map<Attribute> _attributes;
     std::size_t _stride      = 0;
     VertexStepMode _stepMode = VertexStepMode::VERTEX;
 };

@@ -37,14 +37,14 @@
 #include "ui/UIHelper.h"
 #include "yasio/cxx17/string_view.hpp"
 
-static const std::string className = "org.cocos2dx.lib.Cocos2dxWebViewHelper";
+static const char* className = "org.cocos2dx.lib.Cocos2dxWebViewHelper";
 
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "", __VA_ARGS__)
 
-static const std::string s_defaultBaseUrl = "file:///android_asset/";
-static const std::string s_sdRootBaseUrl  = "file://";
+static constexpr std::string_view s_defaultBaseUrl = "file:///android_asset/"sv;
+static constexpr std::string_view s_sdRootBaseUrl  = "file://"sv;
 
-static std::string getFixedBaseUrl(const std::string& baseUrl)
+static std::string getFixedBaseUrl(std::string_view baseUrl)
 {
     std::string fixedBaseUrl;
     if (baseUrl.empty())
@@ -55,26 +55,26 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
     {
         fixedBaseUrl = baseUrl;
     }
-    else if (baseUrl.c_str()[0] != '/')
+    else if (baseUrl[0] != '/')
     {
         using namespace cxx17;  // for cxx17::string_view literal
-        if (cxx20::starts_with(cxx17::string_view{baseUrl}, "assets/"_sv))
+        if (cxx20::starts_with(baseUrl, "assets/"_sv))
         {
-            fixedBaseUrl = s_defaultBaseUrl + baseUrl.c_str()[7];
+            fixedBaseUrl.assign(s_defaultBaseUrl).push_back(baseUrl[7]);
         }
         else
         {
-            fixedBaseUrl = s_defaultBaseUrl + baseUrl;
+            fixedBaseUrl.assign(s_defaultBaseUrl).append(baseUrl);
         }
     }
     else
     {
-        fixedBaseUrl = s_sdRootBaseUrl + baseUrl;
+        fixedBaseUrl.assign(s_sdRootBaseUrl).append(baseUrl);
     }
 
     if (fixedBaseUrl.c_str()[fixedBaseUrl.length() - 1] != '/')
     {
-        fixedBaseUrl += "/";
+        fixedBaseUrl.push_back('/');
     }
 
     return fixedBaseUrl;
@@ -155,7 +155,7 @@ namespace
 int createWebViewJNI()
 {
     cocos2d::JniMethodInfo t;
-    if (cocos2d::JniHelper::getStaticMethodInfo(t, className.c_str(), "createWebView", "()I"))
+    if (cocos2d::JniHelper::getStaticMethodInfo(t, className, "createWebView", "()I"))
     {
         // LOGD("error: %s,%d",__func__,__LINE__);
         jint viewTag = t.env->CallStaticIntMethod(t.classID, t.methodID);
@@ -165,7 +165,7 @@ int createWebViewJNI()
     return -1;
 }
 
-std::string getUrlStringByFileName(const std::string& fileName)
+std::string getUrlStringByFileName(std::string_view fileName)
 {
     // LOGD("error: %s,%d",__func__,__LINE__);
     const std::string basePath("file:///android_asset/");
@@ -214,31 +214,31 @@ WebViewImpl::~WebViewImpl()
 }
 
 void WebViewImpl::loadData(const Data& data,
-                           const std::string& MIMEType,
-                           const std::string& encoding,
-                           const std::string& baseURL)
+                           std::string_view MIMEType,
+                           std::string_view encoding,
+                           std::string_view baseURL)
 {
     std::string dataString(reinterpret_cast<char*>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
     JniHelper::callStaticVoidMethod(className, "setJavascriptInterfaceScheme", _viewTag, dataString, MIMEType, encoding,
                                     baseURL);
 }
 
-void WebViewImpl::loadHTMLString(const std::string& string, const std::string& baseURL)
+void WebViewImpl::loadHTMLString(std::string_view string, std::string_view baseURL)
 {
     JniHelper::callStaticVoidMethod(className, "loadHTMLString", _viewTag, string, getFixedBaseUrl(baseURL));
 }
 
-void WebViewImpl::loadURL(const std::string& url)
+void WebViewImpl::loadURL(std::string_view url)
 {
     this->loadURL(url, false);
 }
 
-void WebViewImpl::loadURL(const std::string& url, bool cleanCachedData)
+void WebViewImpl::loadURL(std::string_view url, bool cleanCachedData)
 {
     JniHelper::callStaticVoidMethod(className, "loadUrl", _viewTag, url, cleanCachedData);
 }
 
-void WebViewImpl::loadFile(const std::string& fileName)
+void WebViewImpl::loadFile(std::string_view fileName)
 {
     auto fullPath = getUrlStringByFileName(fileName);
     JniHelper::callStaticVoidMethod(className, "loadFile", _viewTag, fullPath);
@@ -274,12 +274,12 @@ void WebViewImpl::goForward()
     JniHelper::callStaticVoidMethod(className, "goForward", _viewTag);
 }
 
-void WebViewImpl::setJavascriptInterfaceScheme(const std::string& scheme)
+void WebViewImpl::setJavascriptInterfaceScheme(std::string_view scheme)
 {
     JniHelper::callStaticVoidMethod(className, "setJavascriptInterfaceScheme", _viewTag, scheme);
 }
 
-void WebViewImpl::evaluateJS(const std::string& js)
+void WebViewImpl::evaluateJS(std::string_view js)
 {
     JniHelper::callStaticVoidMethod(className, "evaluateJS", _viewTag, js);
 }
@@ -289,7 +289,7 @@ void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
     JniHelper::callStaticVoidMethod(className, "setScalesPageToFit", _viewTag, scalesPageToFit);
 }
 
-bool WebViewImpl::shouldStartLoading(const int viewTag, const std::string& url)
+bool WebViewImpl::shouldStartLoading(const int viewTag, std::string_view url)
 {
     bool allowLoad = true;
     auto it        = s_WebViewImpls.find(viewTag);
@@ -304,7 +304,7 @@ bool WebViewImpl::shouldStartLoading(const int viewTag, const std::string& url)
     return allowLoad;
 }
 
-void WebViewImpl::didFinishLoading(const int viewTag, const std::string& url)
+void WebViewImpl::didFinishLoading(const int viewTag, std::string_view url)
 {
     auto it = s_WebViewImpls.find(viewTag);
     if (it != s_WebViewImpls.end())
@@ -317,7 +317,7 @@ void WebViewImpl::didFinishLoading(const int viewTag, const std::string& url)
     }
 }
 
-void WebViewImpl::didFailLoading(const int viewTag, const std::string& url)
+void WebViewImpl::didFailLoading(const int viewTag, std::string_view url)
 {
     auto it = s_WebViewImpls.find(viewTag);
     if (it != s_WebViewImpls.end())
@@ -330,7 +330,7 @@ void WebViewImpl::didFailLoading(const int viewTag, const std::string& url)
     }
 }
 
-void WebViewImpl::onJsCallback(const int viewTag, const std::string& message)
+void WebViewImpl::onJsCallback(const int viewTag, std::string_view message)
 {
     auto it = s_WebViewImpls.find(viewTag);
     if (it != s_WebViewImpls.end())

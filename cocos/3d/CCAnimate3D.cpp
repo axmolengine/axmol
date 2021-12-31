@@ -128,9 +128,9 @@ Animate3D* Animate3D::reverse() const
     return animate;
 }
 
-Node* findChildByNameRecursively(Node* node, const std::string& childName)
+Node* findChildByNameRecursively(Node* node, std::string_view childName)
 {
-    const std::string& name = node->getName();
+    std::string_view name = node->getName();
     if (name == childName)
         return node;
 
@@ -162,11 +162,11 @@ void Animate3D::startWithTarget(Node* target)
         {
             if (_animation)
             {
-                const std::unordered_map<std::string, Animation3D::Curve*>& boneCurves = _animation->getBoneCurves();
+                auto& boneCurves = _animation->getBoneCurves();
                 for (const auto& iter : boneCurves)
                 {
-                    const std::string& boneName = iter.first;
-                    auto skin                   = sprite->getSkeleton();
+                    std::string_view boneName = iter.first;
+                    auto skin                 = sprite->getSkeleton();
                     if (skin)
                     {
                         auto bone = skin->getBoneByName(boneName);
@@ -200,11 +200,11 @@ void Animate3D::startWithTarget(Node* target)
         }
         else
         {
-            const std::unordered_map<std::string, Animation3D::Curve*>& boneCurves = _animation->getBoneCurves();
+            auto& boneCurves = _animation->getBoneCurves();
             for (const auto& iter : boneCurves)
             {
-                const std::string& boneName = iter.first;
-                Node* node                  = nullptr;
+                std::string_view boneName = iter.first;
+                Node* node                = nullptr;
                 if (target->getName() == boneName)
                     node = target;
                 else

@@ -92,7 +92,7 @@ Value::Value(const char* v) : _type(Type::STRING)
     _field.strVal = new std::string(v ? v : "");
 }
 
-Value::Value(const std::string& v) : _type(Type::STRING)
+Value::Value(std::string_view v) : _type(Type::STRING)
 {
     _field.strVal = new std::string(v);
 }
@@ -308,7 +308,7 @@ Value& Value::operator=(const char* v)
     return *this;
 }
 
-Value& Value::operator=(const std::string& v)
+Value& Value::operator=(std::string_view v)
 {
     reset(Type::STRING);
     *_field.strVal = v;
@@ -769,7 +769,7 @@ std::string Value::asString() const
     return ret;
 }
 
-const std::string& Value::asStringRef() const
+std::string_view Value::asStringRef() const
 {
     if (_type == Type::STRING)
         return *_field.strVal;

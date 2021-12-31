@@ -38,7 +38,7 @@ NS_CC_BEGIN
 typedef std::vector<std::string> strArray;
 
 // string toolkit
-static inline void split(const std::string& src, const std::string& token, strArray& vect)
+static inline void split(std::string_view src, std::string_view token, strArray& vect)
 {
     size_t nend      = 0;
     size_t nbegin    = 0;
@@ -47,9 +47,9 @@ static inline void split(const std::string& src, const std::string& token, strAr
     {
         nend = src.find(token, nbegin);
         if (nend == std::string::npos)
-            vect.push_back(src.substr(nbegin, src.length() - nbegin));
+            vect.push_back(std::string{src.substr(nbegin, src.length() - nbegin)});
         else
-            vect.push_back(src.substr(nbegin, nend - nbegin));
+            vect.push_back(std::string{src.substr(nbegin, nend - nbegin)});
         nbegin = nend + tokenSize;
     }
 }
@@ -58,7 +58,7 @@ static inline void split(const std::string& src, const std::string& token, strAr
 // if the form is right,the string will be split into the parameter strs;
 // or the parameter strs will be empty.
 // if the form is right return true,else return false.
-static bool splitWithForm(const std::string& content, strArray& strs)
+static bool splitWithForm(std::string_view content, strArray& strs)
 {
     bool bRet = false;
 
@@ -74,7 +74,7 @@ static bool splitWithForm(const std::string& content, strArray& strs)
         // '}' is before '{'
         CC_BREAK_IF(nPosLeft > nPosRight);
 
-        const std::string pointStr = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
+        auto pointStr = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
         // nothing between '{' and '}'
         CC_BREAK_IF(pointStr.empty());
 
@@ -98,14 +98,14 @@ static bool splitWithForm(const std::string& content, strArray& strs)
 
 // implement the functions
 
-Rect RectFromString(const std::string& str)
+Rect RectFromString(std::string_view str)
 {
     Rect result = Rect::ZERO;
 
     do
     {
         CC_BREAK_IF(str.empty());
-        std::string content = str;
+        auto content = str;
 
         // find the first '{' and the third '}'
         size_t nPosLeft  = content.find('{');
@@ -127,8 +127,8 @@ Rect RectFromString(const std::string& str)
         CC_BREAK_IF(nPointEnd == std::string::npos);
 
         // get the point string and size string
-        const std::string pointStr = content.substr(0, nPointEnd);
-        const std::string sizeStr  = content.substr(nPointEnd + 1, content.length() - nPointEnd);
+        auto pointStr = content.substr(0, nPointEnd);
+        auto sizeStr  = content.substr(nPointEnd + 1, content.length() - nPointEnd);
 
         // split the string with ','
         strArray pointInfo;
@@ -147,7 +147,7 @@ Rect RectFromString(const std::string& str)
     return result;
 }
 
-Vec2 PointFromString(const std::string& str)
+Vec2 PointFromString(std::string_view str)
 {
     Vec2 ret;
 
@@ -165,7 +165,7 @@ Vec2 PointFromString(const std::string& str)
     return ret;
 }
 
-Vec2 SizeFromString(const std::string& pszContent)
+Vec2 SizeFromString(std::string_view pszContent)
 {
     Vec2 ret = Vec2::ZERO;
 

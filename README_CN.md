@@ -1,8 +1,9 @@
 # adxe
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
-[![dev](https://img.shields.io/badge/v1.0.0-beta4-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-beta5-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
   
 [![Windows Build Status](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml)
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
@@ -11,16 +12,15 @@
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
 
-**这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++14/17...**
+**这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17...**
   
 **[English](README.md)**
   
 ### 宗旨:
-* C++14/17
+* C++17
 * Focus on native game dev only
 * Fix bugs ASAP
 * Review PR ASAP
-* Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
 * Windows x64编译支持
@@ -33,7 +33,7 @@
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
 * 使用现代化的GL加载器glad代替glew
 * 增加google angle渲染后端支持
-* 设置默认C++标准为C++14
+* C++最低标准要求: C++17
 * 设置ios下最低目标平台为ios9.0
 * 使用更快的xml解析库pugixml代替tinyxml2
 * Downloader全平台统一实现，均基于curl

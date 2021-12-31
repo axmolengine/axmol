@@ -106,7 +106,7 @@ public:
         DLLOG("Destruct DownloadTaskCURL %p", this);
     }
 
-    bool init(const std::string& filename, const std::string& tempSuffix)
+    bool init(std::string_view filename, std::string_view tempSuffix)
     {
         if (0 == filename.length())
         {
@@ -170,7 +170,7 @@ public:
             }
 
             // init md5 state
-            _checksumFileName = filename + ".chksum";
+            _checksumFileName = _tempFileName + ".chksum";
 
             _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::OVERLAPPED);
             _fsMd5->seek(0, SEEK_END);
@@ -219,7 +219,7 @@ public:
     /*
     retval: 0. don't check, 1. check succeed, 2. check failed
     */
-    int checkFileMd5(const std::string& requiredsum, std::string* outsum = nullptr)
+    int checkFileMd5(std::string_view requiredsum, std::string* outsum = nullptr)
     {
         int status = 0;
         if (!requiredsum.empty())
@@ -573,7 +573,7 @@ private:
         do
         {
             long httpResponseCode = 0;
-            rc                       = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
+            rc                    = curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &httpResponseCode);
             if (CURLE_OK != rc)
             {
                 break;

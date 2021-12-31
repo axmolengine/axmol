@@ -141,15 +141,15 @@ ControlButton* ControlButton::create(Node* label,
     return pRet;
 }
 
-bool ControlButton::initWithTitleAndFontNameAndFontSize(const std::string& title,
-                                                        const std::string& fontName,
+bool ControlButton::initWithTitleAndFontNameAndFontSize(std::string_view title,
+                                                        std::string_view fontName,
                                                         float fontSize)
 {
     return initWithLabelAndBackgroundSprite(Label::createWithSystemFont(title, fontName, fontSize),
                                             cocos2d::ui::Scale9Sprite::create(), true);
 }
 
-ControlButton* ControlButton::create(const std::string& title, const std::string& fontName, float fontSize)
+ControlButton* ControlButton::create(std::string_view title, std::string_view fontName, float fontSize)
 {
     ControlButton* pRet = new ControlButton();
     pRet->initWithTitleAndFontNameAndFontSize(title, fontName, fontSize);
@@ -291,7 +291,7 @@ std::string ControlButton::getTitleForState(State state)
     return iter != _titleDispatchTable.end() ? iter->second : "";
 }
 
-void ControlButton::setTitleForState(const std::string& title, State state)
+void ControlButton::setTitleForState(std::string_view title, State state)
 {
     _titleDispatchTable.erase((int)state);
 
@@ -371,12 +371,12 @@ void ControlButton::setTitleLabelForState(Node* titleLabel, State state)
     }
 }
 
-void ControlButton::setTitleTTFForState(const std::string& fontName, State state)
+void ControlButton::setTitleTTFForState(std::string_view fontName, State state)
 {
     this->setTitleLabelForState(Label::createWithSystemFont(getTitleForState(state), fontName, 12), state);
 }
 
-const std::string& ControlButton::getTitleTTFForState(State state)
+std::string_view ControlButton::getTitleTTFForState(State state)
 {
     LabelProtocol* label = dynamic_cast<LabelProtocol*>(this->getTitleLabelForState(state));
     Label* labelTTF      = dynamic_cast<Label*>(label);
@@ -416,13 +416,13 @@ float ControlButton::getTitleTTFSizeForState(State state)
     }
 }
 
-void ControlButton::setTitleBMFontForState(const std::string& fntFile, State state)
+void ControlButton::setTitleBMFontForState(std::string_view fntFile, State state)
 {
     std::string title = this->getTitleForState(state);
     this->setTitleLabelForState(Label::createWithBMFont(fntFile, title), state);
 }
 
-const std::string& ControlButton::getTitleBMFontForState(State state)
+std::string_view ControlButton::getTitleBMFontForState(State state)
 {
     LabelProtocol* label = dynamic_cast<LabelProtocol*>(this->getTitleLabelForState(state));
     auto labelBMFont     = dynamic_cast<Label*>(label);

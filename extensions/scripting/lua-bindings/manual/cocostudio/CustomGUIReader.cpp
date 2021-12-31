@@ -85,7 +85,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
     (*callbackMap)[className] = parseselector(CustomGUIReader::setCustomProps);
 }
 
-void CustomGUIReader::setCustomProps(const std::string& classType,
+void CustomGUIReader::setCustomProps(std::string_view classType,
                                      cocos2d::Ref* widget,
                                      const rapidjson::Value& customOptions)
 {
@@ -96,7 +96,7 @@ void CustomGUIReader::setCustomProps(const std::string& classType,
         customOptions.Accept(writer);
 
         auto stack = LuaEngine::getInstance()->getLuaStack();
-        stack->pushString(classType.c_str(), static_cast<int>(classType.size()));
+        stack->pushString(classType);
         stack->pushObject(widget, "cc.Ref");
         stack->pushString(buffer.GetString(), static_cast<int>(buffer.GetSize()));
         stack->executeFunctionByHandler(_setPropsFunc, 3);

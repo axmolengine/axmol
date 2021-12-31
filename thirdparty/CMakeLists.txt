@@ -65,6 +65,17 @@ endif()
 
 add_library(thirdparty STATIC empty.cpp)
 
+# header only libs
+target_include_directories(thirdparty
+	INTERFACE "robin-map/include"
+)
+
+if (ANDROID)
+    target_include_directories(thirdparty
+        INTERFACE "jni.hpp/include"
+    )
+endif()
+
 if(MACOSX OR ANDROID OR WINDOWS)
     add_subdirectory(zlib)
     target_link_libraries(thirdparty 
@@ -304,6 +315,7 @@ if(BUILD_DEP_LLHTTP)
     target_link_libraries(thirdparty llhttp)
 endif()
 
+# yaml
 if(BUILD_DEP_YAML_CPP)
     set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
@@ -316,6 +328,7 @@ if(BUILD_DEP_YAML_CPP)
     # target_link_libraries(thirdparty yaml-cpp)
 endif()
 
+# kcp
 if(BUILD_DEP_KCP)
     add_subdirectory(kcp)
     configure_target_outdir(kcp)
@@ -323,6 +336,7 @@ if(BUILD_DEP_KCP)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
 endif()
 
+# fmt-lib
 add_subdirectory(fmt)
 target_link_libraries(thirdparty fmt-header-only)
 configure_target_outdir(fmt)

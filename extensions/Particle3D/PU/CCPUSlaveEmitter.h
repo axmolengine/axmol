@@ -39,15 +39,15 @@ public:
 
     /**
      */
-    const std::string& getMasterTechniqueName() const;
+    std::string_view getMasterTechniqueName() const;
 
     /**
      */
-    void setMasterTechniqueName(const std::string& masterTechniqueName);
+    void setMasterTechniqueName(std::string_view masterTechniqueName);
 
     /**
      */
-    const std::string& getMasterEmitterName() const;
+    std::string_view getMasterEmitterName() const;
 
     /** See ParticleEmitter.
      */
@@ -79,7 +79,7 @@ public:
 
     /**
      */
-    void setMasterEmitterName(const std::string& masterEmitterName);
+    void setMasterEmitterName(std::string_view masterEmitterName);
 
     virtual PUSlaveEmitter* clone() override;
     virtual void copyAttributesTo(PUEmitter* emitter) override;

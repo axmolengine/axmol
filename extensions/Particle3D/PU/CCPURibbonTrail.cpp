@@ -36,8 +36,8 @@
 
 NS_CC_BEGIN
 
-PURibbonTrail::PURibbonTrail(const std::string& name,
-                             const std::string& texFile,
+PURibbonTrail::PURibbonTrail(std::string_view name,
+                             std::string_view texFile,
                              size_t maxElements,
                              size_t numberOfChains,
                              bool useTextureCoords,

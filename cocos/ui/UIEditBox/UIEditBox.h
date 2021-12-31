@@ -78,7 +78,7 @@ public:
      * @param editBox The edit box object that generated the event.
      * @param text The new text.
      */
-    virtual void editBoxTextChanged(EditBox* /*editBox*/, const std::string& /*text*/) {}
+    virtual void editBoxTextChanged(EditBox* /*editBox*/, std::string_view /*text*/) {}
 
     /**
      * This method is called when the return button was pressed or the outside area of keyboard was touched.
@@ -214,17 +214,17 @@ public:
      * create a edit box with size.
      * @return An autorelease pointer of EditBox, you don't need to release it only if you retain it again.
      */
-    static EditBox* create(const Size& size, const std::string& normalImage, TextureResType texType);
+    static EditBox* create(const Size& size, std::string_view normalImage, TextureResType texType);
 
     /**
      * create a edit box with size.
      * @return An autorelease pointer of EditBox, you don't need to release it only if you retain it again.
      */
     static EditBox* create(const Size& size,
-                           const std::string& normalImage,
-                           const std::string& pressedImage  = "",
-                           const std::string& disabledImage = "",
-                           TextureResType texType           = TextureResType::LOCAL);
+                           std::string_view normalImage,
+                           std::string_view pressedImage  = "",
+                           std::string_view disabledImage = "",
+                           TextureResType texType         = TextureResType::LOCAL);
 
     /**
      * Constructor.
@@ -248,7 +248,7 @@ public:
      * @return Whether initialization is successfully or not.
      */
     bool initWithSizeAndBackgroundSprite(const Size& size,
-                                         const std::string& normal9SpriteBg,
+                                         std::string_view normal9SpriteBg,
                                          TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -281,10 +281,10 @@ public:
      * @return Whether initialization is successfully or not.
      */
     bool initWithSizeAndTexture(const Size& size,
-                                const std::string& normalImage,
-                                const std::string& pressedImage  = "",
-                                const std::string& disabledImage = "",
-                                TextureResType texType           = TextureResType::LOCAL);
+                                std::string_view normalImage,
+                                std::string_view pressedImage  = "",
+                                std::string_view disabledImage = "",
+                                TextureResType texType         = TextureResType::LOCAL);
 
     /**
      * Load textures for edit box.
@@ -294,10 +294,10 @@ public:
      * @param disabled    disabled state texture name.
      * @param texType    @see `TextureResType`
      */
-    void loadTextures(const std::string& normal,
-                      const std::string& pressed,
-                      const std::string& disabled = "",
-                      TextureResType texType      = TextureResType::LOCAL);
+    void loadTextures(std::string_view normal,
+                      std::string_view pressed,
+                      std::string_view disabled = "",
+                      TextureResType texType    = TextureResType::LOCAL);
 
     /**
      * Load normal state texture for edit box.
@@ -305,7 +305,7 @@ public:
      * @param normal    normal state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTextureNormal(const std::string& normal, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureNormal(std::string_view normal, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load pressed state texture for edit box.
@@ -313,7 +313,7 @@ public:
      * @param pressed    pressed state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTexturePressed(const std::string& pressed, TextureResType texType = TextureResType::LOCAL);
+    void loadTexturePressed(std::string_view pressed, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load disabled state texture for edit box.
@@ -321,7 +321,7 @@ public:
      * @param disabled    dark state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTextureDisabled(const std::string& disabled, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureDisabled(std::string_view disabled, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Sets capInsets for edit box.

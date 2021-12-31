@@ -57,11 +57,7 @@ public:
      * @param path The texture file name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade,
-                                  float minSeg,
-                                  float stroke,
-                                  const Color3B& color,
-                                  const std::string& path);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      *
      * @param fade The fade time, in seconds.
@@ -164,7 +160,7 @@ public:
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename
      */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path);
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
     bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);

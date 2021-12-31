@@ -87,7 +87,7 @@ public:
     static const size_t DEFAULT_NUMBER_OF_SEGMENTS;
     static const PUBillboardChain::TexCoordDirection DEFAULT_TEXTURE_DIRECTION;
 
-    static PUBeamRender* create(const std::string& texFile = "");
+    static PUBeamRender* create(std::string_view texFile = "");
 
     virtual void prepare() override;
     virtual void unPrepare() override;

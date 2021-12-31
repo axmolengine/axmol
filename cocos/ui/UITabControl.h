@@ -70,9 +70,9 @@ public:
      * @param texType  The texture's resource type in `Widget::TextureResType`.
      * @return A TabHeader instance pointer
      */
-    static TabHeader* create(const std::string& titleStr,
-                             const std::string& backGround,
-                             const std::string& cross,
+    static TabHeader* create(std::string_view titleStr,
+                             std::string_view backGround,
+                             std::string_view cross,
                              TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -87,12 +87,12 @@ public:
      *
      * @return A TabHeader instance pointer.
      */
-    static TabHeader* create(const std::string& titleStr,
-                             const std::string& backGround,
-                             const std::string& backGroundSelected,
-                             const std::string& cross,
-                             const std::string& backGroundDisabled,
-                             const std::string& frontCrossDisabled,
+    static TabHeader* create(std::string_view titleStr,
+                             std::string_view backGround,
+                             std::string_view backGroundSelected,
+                             std::string_view cross,
+                             std::string_view backGroundDisabled,
+                             std::string_view frontCrossDisabled,
                              TextureResType texType = TextureResType::LOCAL);
     /**
      * Return the inner Label renderer of TabHeader.
@@ -104,13 +104,13 @@ public:
      * Change the content of Header's text.
      *@param text The Header's text.
      */
-    void setTitleText(const std::string& text);
+    void setTitleText(std::string_view text);
 
     /**
      * get the TabHeader text
      *@return he TabHeader text
      */
-    std::string getTitleText() const;
+    std::string_view getTitleText() const;
 
     /**
      * Change the color of he TabHeader text
@@ -140,13 +140,13 @@ public:
      * Change the font name of TabHeader text
      *@param fontName a font name string.
      */
-    void setTitleFontName(const std::string& fontName);
+    void setTitleFontName(std::string_view fontName);
 
     /**
      * get the font name of TabHeader text
      *@return font name in std::string
      */
-    std::string getTitleFontName() const;
+    std::string_view getTitleFontName() const;
 
     /**
      * get the index this header in the TabControl

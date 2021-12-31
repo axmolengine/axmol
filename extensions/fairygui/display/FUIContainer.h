@@ -77,6 +77,7 @@ public:
     void onExit() override;
     void visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags) override;
     void setCameraMask(unsigned short mask, bool applyChildren = true) override;
+    void setGlobalZOrder(float globalZOrder) override;
 
     GObject* gOwner;
 private:

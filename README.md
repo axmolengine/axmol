@@ -1,7 +1,9 @@
 # adxe
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
-[![dev](https://img.shields.io/badge/v1.0.0-beta4-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+
+[![dev](https://img.shields.io/badge/v1.0.0-beta5-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
   
 [![Windows Build Status](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml)
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
@@ -9,7 +11,7 @@
 [![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
-**This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 14/17 and some more (see 'Highlight Features' for more info).**  
+**This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and some more (see 'Highlight Features' for more info).**  
 
 ### View code with vscode online: 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/adxeproject/adxe)
@@ -19,10 +21,9 @@
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary
-* C++ 14/17
+* C++ 17
 * Focus on native game dev (quick starting, easy to use, fast)
 * Bugfixes ASAP
-* Usefull PRs from **you** are welcome (review/merge ASAP)
   
 ### Highlight Features
 * Windows x64 build support
@@ -36,7 +37,7 @@
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 * Use modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
-* C++ 14 standard
+* C++ 17 standard
 * IOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
@@ -136,7 +137,7 @@ https://github.com/adxeproject/adxe/discussions/411
 - @aismann
 - @weiwest
 
-### Fullly changes since cocos2d-x-4.0
+### Fully changes since cocos2d-x-4.0
 
 - [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
 - [HIGHLIGHT] Windows x64 build support

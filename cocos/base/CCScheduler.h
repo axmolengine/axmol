@@ -109,13 +109,13 @@ public:
     bool initWithCallback(Scheduler* scheduler,
                           const ccSchedulerFunc& callback,
                           void* target,
-                          const std::string& key,
+                          std::string_view key,
                           float seconds,
                           unsigned int repeat,
                           float delay);
 
     const ccSchedulerFunc& getCallback() const { return _callback; }
-    const std::string& getKey() const { return _key; }
+    std::string_view getKey() const { return _key; }
 
     virtual void trigger(float dt) override;
     virtual void cancel() override;
@@ -252,7 +252,7 @@ public:
                   unsigned int repeat,
                   float delay,
                   bool paused,
-                  const std::string& key);
+                  std::string_view key);
 
     /** The scheduled method will be called every 'interval' seconds for ever.
      @param callback The callback function.
@@ -263,7 +263,7 @@ public:
      @param key The key to identify the callback function, because there is not way to identify a std::function<>.
      @since v3.0
      */
-    void schedule(const ccSchedulerFunc& callback, void* target, float interval, bool paused, const std::string& key);
+    void schedule(const ccSchedulerFunc& callback, void* target, float interval, bool paused, std::string_view key);
 
     /** The scheduled method will be called every `interval` seconds.
      If paused is true, then it won't be called until it is resumed.
@@ -329,7 +329,7 @@ public:
      @param target The target to be unscheduled.
      @since v3.0
      */
-    void unschedule(const std::string& key, void* target);
+    void unschedule(std::string_view key, void* target);
 
     /** Unschedules a selector for a given target.
      If you want to unschedule the "update", use `unscheduleUpdate()`.
@@ -386,7 +386,7 @@ public:
      @return True if the specified callback is invoked, false if not.
      @since v3.0.0
      */
-    bool isScheduled(const std::string& key, const void* target) const;
+    bool isScheduled(std::string_view key, const void* target) const;
 
     /** Checks whether a selector for a given target is scheduled.
      @param selector The selector to be checked.

@@ -220,21 +220,21 @@ struct SkinData
         rootBoneIndex = -1;
     }
 
-    void addSkinBoneNames(const std::string& name)
+    void addSkinBoneNames(std::string_view name)
     {
         auto it = std::find(skinBoneNames.begin(), skinBoneNames.end(), name);
         if (it == skinBoneNames.end())
-            skinBoneNames.push_back(name);
+            skinBoneNames.push_back(std::string{name});
     }
 
-    void addNodeBoneNames(const std::string& name)
+    void addNodeBoneNames(std::string_view name)
     {
         auto it = std::find(nodeBoneNames.begin(), nodeBoneNames.end(), name);
         if (it == nodeBoneNames.end())
-            nodeBoneNames.push_back(name);
+            nodeBoneNames.push_back(std::string{name});
     }
 
-    int getSkinBoneNameIndex(const std::string& name) const
+    int getSkinBoneNameIndex(std::string_view name) const
     {
         int i = 0;
         for (const auto& iter : skinBoneNames)
@@ -246,7 +246,7 @@ struct SkinData
         return -1;
     }
 
-    int getBoneNameIndex(const std::string& name) const
+    int getBoneNameIndex(std::string_view name) const
     {
         int i = 0;
         for (const auto& iter : skinBoneNames)
@@ -323,7 +323,7 @@ struct MaterialDatas
 {
     std::vector<NMaterialData> materials;
     void resetData() { materials.clear(); }
-    const NMaterialData* getMaterialData(const std::string& materialid) const
+    const NMaterialData* getMaterialData(std::string_view materialid) const
     {
         for (const auto& it : materials)
         {

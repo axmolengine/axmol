@@ -39,7 +39,7 @@ namespace
 static const std::string SHADER_PREDEFINE = "#version 100\n precision highp float;\n precision highp int;\n";
 }
 
-ProgramGL::ProgramGL(const std::string& vertexShader, const std::string& fragmentShader)
+ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
 #if defined(CC_USE_GLES)
@@ -197,12 +197,12 @@ void ProgramGL::computeLocations()
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
 }
 
-bool ProgramGL::getAttributeLocation(const std::string& attributeName, unsigned int& location) const
+bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned int& location) const
 {
-    GLint loc = glGetAttribLocation(_program, attributeName.c_str());
+    GLint loc = glGetAttribLocation(_program, attributeName.data());
     if (-1 == loc)
     {
-        CCLOG("Cocos2d: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.c_str());
+        CCLOG("Cocos2d: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
         return false;
     }
 
@@ -210,9 +210,9 @@ bool ProgramGL::getAttributeLocation(const std::string& attributeName, unsigned 
     return true;
 }
 
-const std::unordered_map<std::string, AttributeBindInfo> ProgramGL::getActiveAttributes() const
+const hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() const
 {
-    std::unordered_map<std::string, AttributeBindInfo> attributes;
+    hlookup::string_map<AttributeBindInfo> attributes;
 
     if (!_program)
         return attributes;
@@ -293,9 +293,9 @@ int ProgramGL::getAttributeLocation(Attribute name) const
     return _builtinAttributeLocation[name];
 }
 
-int ProgramGL::getAttributeLocation(const std::string& name) const
+int ProgramGL::getAttributeLocation(std::string_view name) const
 {
-    return glGetAttribLocation(_program, name.c_str());
+    return glGetAttribLocation(_program, name.data());
 }
 
 UniformLocation ProgramGL::getUniformLocation(backend::Uniform name) const
@@ -303,7 +303,7 @@ UniformLocation ProgramGL::getUniformLocation(backend::Uniform name) const
     return _builtinUniformLocation[name];
 }
 
-UniformLocation ProgramGL::getUniformLocation(const std::string& uniform) const
+UniformLocation ProgramGL::getUniformLocation(std::string_view uniform) const
 {
     UniformLocation uniformLocation;
     if (_activeUniformInfos.find(uniform) != _activeUniformInfos.end())
@@ -352,7 +352,7 @@ const UniformInfo& ProgramGL::getActiveUniformInfo(ShaderStage stage, int locati
     return s_emptyInfo;
 }
 
-const std::unordered_map<std::string, UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const
+const hlookup::string_map<UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const
 {
     return _activeUniformInfos;
 }

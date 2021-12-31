@@ -60,7 +60,7 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(const std::string& uniform) const = 0;
+    virtual UniformLocation getUniformLocation(std::string_view uniform) const = 0;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
@@ -74,7 +74,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(const std::string& name) const = 0;
+    virtual int getAttributeLocation(std::string_view name) const = 0;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -99,19 +99,19 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const std::unordered_map<std::string, AttributeBindInfo> getActiveAttributes() const = 0;
+    virtual const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const = 0;
 
     /**
      * Get vertex shader.
      * @return Vertex shader.
      */
-    const std::string& getVertexShader() const { return _vertexShader; }
+    std::string_view getVertexShader() const { return _vertexShader; }
 
     /**
      * Get fragment shader.
      * @ Fragment shader.
      */
-    const std::string& getFragmentShader() const { return _fragmentShader; }
+    std::string_view getFragmentShader() const { return _fragmentShader; }
 
     /**
      * Get engine built-in program type.
@@ -138,7 +138,7 @@ public:
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const = 0;
+    virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const = 0;
 
     /**
      * Set engin built-in program type.
@@ -151,7 +151,7 @@ protected:
      * @param vs Specifes the vertex shader source.
      * @param fs Specifes the fragment shader source.
      */
-    Program(const std::string& vs, const std::string& fs);
+    Program(std::string_view vs, std::string_view fs);
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     /**

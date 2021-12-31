@@ -75,7 +75,7 @@ public:
      * @param texType    @see `Widget::TextureResType`
      * @return A ImageView instance.
      */
-    static ImageView* create(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
+    static ImageView* create(std::string_view imageFileName, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load texture for imageview.
@@ -83,7 +83,7 @@ public:
      * @param fileName   file name of texture.
      * @param texType    @see `Widget::TextureResType`
      */
-    void loadTexture(const std::string& fileName, TextureResType texType = TextureResType::LOCAL);
+    void loadTexture(std::string_view fileName, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Updates the texture rect of the ImageView in points.
@@ -150,7 +150,7 @@ public:
         // initializes state of widget.
         virtual bool
         init() override;
-    virtual bool init(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
+    virtual bool init(std::string_view imageFileName, TextureResType texType = TextureResType::LOCAL);
 
 protected:
     virtual void initRenderer() override;

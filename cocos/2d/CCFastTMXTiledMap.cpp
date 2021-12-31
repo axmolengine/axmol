@@ -33,7 +33,7 @@ NS_CC_BEGIN
 
 // implementation FastTMXTiledMap
 
-FastTMXTiledMap* FastTMXTiledMap::create(const std::string& tmxFile)
+FastTMXTiledMap* FastTMXTiledMap::create(std::string_view tmxFile)
 {
     FastTMXTiledMap* ret = new FastTMXTiledMap();
     if (ret->initWithTMXFile(tmxFile))
@@ -45,7 +45,7 @@ FastTMXTiledMap* FastTMXTiledMap::create(const std::string& tmxFile)
     return nullptr;
 }
 
-FastTMXTiledMap* FastTMXTiledMap::createWithXML(const std::string& tmxString, const std::string& resourcePath)
+FastTMXTiledMap* FastTMXTiledMap::createWithXML(std::string_view tmxString, std::string_view resourcePath)
 {
     FastTMXTiledMap* ret = new FastTMXTiledMap();
     if (ret->initWithXML(tmxString, resourcePath))
@@ -57,7 +57,7 @@ FastTMXTiledMap* FastTMXTiledMap::createWithXML(const std::string& tmxString, co
     return nullptr;
 }
 
-bool FastTMXTiledMap::initWithTMXFile(const std::string& tmxFile)
+bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile)
 {
     CCASSERT(tmxFile.size() > 0, "FastTMXTiledMap: tmx file should not be empty");
 
@@ -77,7 +77,7 @@ bool FastTMXTiledMap::initWithTMXFile(const std::string& tmxFile)
     return true;
 }
 
-bool FastTMXTiledMap::initWithXML(const std::string& tmxString, const std::string& resourcePath)
+bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view resourcePath)
 {
     setContentSize(Vec2::ZERO);
 
@@ -194,7 +194,7 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
 }
 
 // public
-FastTMXLayer* FastTMXTiledMap::getLayer(const std::string& layerName) const
+FastTMXLayer* FastTMXTiledMap::getLayer(std::string_view layerName) const
 {
     CCASSERT(!layerName.empty(), "Invalid layer name!");
 
@@ -214,7 +214,7 @@ FastTMXLayer* FastTMXTiledMap::getLayer(const std::string& layerName) const
     return nullptr;
 }
 
-TMXObjectGroup* FastTMXTiledMap::getObjectGroup(const std::string& groupName) const
+TMXObjectGroup* FastTMXTiledMap::getObjectGroup(std::string_view groupName) const
 {
     CCASSERT(!groupName.empty(), "Invalid group name!");
 
@@ -233,7 +233,7 @@ TMXObjectGroup* FastTMXTiledMap::getObjectGroup(const std::string& groupName) co
     return nullptr;
 }
 
-Value FastTMXTiledMap::getProperty(const std::string& propertyName) const
+Value FastTMXTiledMap::getProperty(std::string_view propertyName) const
 {
     auto propsItr = _properties.find(propertyName);
     if (propsItr != _properties.end())

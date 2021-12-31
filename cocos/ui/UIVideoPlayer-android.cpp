@@ -38,7 +38,7 @@
 
 //-----------------------------------------------------------------------------------------------------------
 
-static const std::string videoHelperClassName = "org.cocos2dx.lib.Cocos2dxVideoHelper";
+static const char* videoHelperClassName = "org.cocos2dx.lib.Cocos2dxVideoHelper";
 
 USING_NS_CC;
 
@@ -60,7 +60,7 @@ int createVideoWidgetJNI()
 {
     JniMethodInfo t;
     int ret = -1;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "createVideoWidget", "()I"))
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName, "createVideoWidget", "()I"))
     {
         ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
 
@@ -73,7 +73,7 @@ int createVideoWidgetJNI()
 void setLoopingJNI(int index, bool looping)
 {
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setLooping", "(IZ)V"))
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName, "setLooping", "(IZ)V"))
     {
         t.env->CallStaticVoidMethod(t.classID, t.methodID, index, looping);
 
@@ -84,7 +84,7 @@ void setLoopingJNI(int index, bool looping)
 void setUserInputEnabledJNI(int index, bool enableInput)
 {
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName.c_str(), "setUserInputEnabled", "(IZ)V"))
+    if (JniHelper::getStaticMethodInfo(t, videoHelperClassName, "setUserInputEnabled", "(IZ)V"))
     {
         t.env->CallStaticVoidMethod(t.classID, t.methodID, index, enableInput);
 
@@ -124,7 +124,7 @@ VideoPlayer::~VideoPlayer()
     JniHelper::callStaticVoidMethod(videoHelperClassName, "removeVideoWidget", _videoPlayerIndex);
 }
 
-void VideoPlayer::setFileName(const std::string& fileName)
+void VideoPlayer::setFileName(std::string_view fileName)
 {
     _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
@@ -132,7 +132,7 @@ void VideoPlayer::setFileName(const std::string& fileName)
                                     _videoURL);
 }
 
-void VideoPlayer::setURL(const std::string& videoUrl)
+void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;

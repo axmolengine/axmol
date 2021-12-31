@@ -91,7 +91,7 @@ protected:
     ~Technique();
     bool init(Material* parent);
 
-    void setName(const std::string& name);
+    void setName(std::string_view name);
     RenderState _renderState;
     std::string _name;
     Vector<Pass*> _passes;

@@ -1564,6 +1564,47 @@ bool luaval_to_std_vector_string(lua_State* L, int lo, std::vector<std::string>*
     return ok;
 }
 
+bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::string_view>* ret, const char* funcName)
+{
+    if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
+        return false;
+
+    tolua_Error tolua_err;
+    bool ok = true;
+    if (!tolua_istable(L, lo, 0, &tolua_err))
+    {
+#if COCOS2D_DEBUG >= 1
+        luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
+#endif
+        ok = false;
+    }
+
+    if (ok)
+    {
+        size_t len             = lua_objlen(L, lo);
+        std::string_view value = "";
+        for (size_t i = 0; i < len; i++)
+        {
+            lua_pushnumber(L, i + 1);
+            lua_gettable(L, lo);
+            if (lua_isstring(L, -1))
+            {
+                ok = luaval_to_std_string_view(L, -1, &value);
+                if (ok)
+                    ret->push_back(value);
+            }
+            else
+            {
+                CCASSERT(false, "string type is needed");
+            }
+
+            lua_pop(L, 1);
+        }
+    }
+
+    return ok;
+}
+
 bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -2402,7 +2443,7 @@ void ccvalue_to_luaval(lua_State* L, const cocos2d::Value& inValue)
         lua_pushinteger(L, obj.asInt64());
         break;
     case Value::Type::STRING:
-        lua_pushstring(L, obj.asStringRef().c_str());
+        lua_pushstring(L, obj.asStringRef().data());
         break;
     case Value::Type::VECTOR:
         ccvaluevector_to_luaval(L, obj.asValueVector());
@@ -2527,7 +2568,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
         case Value::Type::STRING:
         {
             lua_pushstring(L, key.c_str());
-            lua_pushstring(L, obj.asStringRef().c_str());
+            lua_pushstring(L, obj.asStringRef().data());
             lua_rawset(L, -3);
         }
         break;
@@ -2725,10 +2766,10 @@ void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>&
 
     int index = 1;
 
-    for (const std::string& value : inValue)
+    for (std::string_view value : inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
-        lua_pushstring(L, value.c_str());
+        lua_pushlstring(L, value.data(), value.length());
         lua_rawset(L, -3);
         ++index;
     }
@@ -2858,10 +2899,7 @@ void std_map_string_string_to_luaval(lua_State* L, const std::map<std::string, s
     }
 }
 
-bool luaval_to_std_map_string_string(lua_State* L,
-                                     int lo,
-                                     std::map<std::string, std::string>* ret,
-                                     const char* funcName)
+bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<std::string>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2880,15 +2918,15 @@ bool luaval_to_std_map_string_string(lua_State* L,
         return ok;
 
     lua_pushnil(L);
-    std::string key;
-    std::string value;
+    std::string_view key;
+    std::string_view value;
     while (lua_next(L, lo) != 0)
     {
         if (lua_isstring(L, -2) && lua_isstring(L, -1))
         {
-            if (luaval_to_std_string(L, -2, &key) && luaval_to_std_string(L, -1, &value))
+            if (luaval_to_std_string_view(L, -2, &key) && luaval_to_std_string_view(L, -1, &value))
             {
-                (*ret)[key] = value;
+                ret->emplace(key, value);  // (*ret)[key] = value;
             }
         }
         else
@@ -3022,8 +3060,7 @@ void uniformLocation_to_luaval(lua_State* L, const cocos2d::backend::UniformLoca
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L,
-                                   const std::unordered_map<std::string, cocos2d::backend::AttributeBindInfo>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<cocos2d::backend::AttributeBindInfo>& attrs)
 {
     if (L == nullptr)
         return;

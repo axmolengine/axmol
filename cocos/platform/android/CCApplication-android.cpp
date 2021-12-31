@@ -43,7 +43,7 @@ extern "C" size_t __ctype_get_mb_cur_max(void)
 }
 #endif
 
-static const std::string helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
+static const char* helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
 NS_CC_BEGIN
 
@@ -119,7 +119,7 @@ std::string Application::getVersion()
     return JniHelper::callStaticStringMethod(helperClassName, "getVersion");
 }
 
-bool Application::openURL(const std::string& url)
+bool Application::openURL(std::string_view url)
 {
     return JniHelper::callStaticBooleanMethod(helperClassName, "openURL", url);
 }

@@ -79,6 +79,11 @@
 - Version: git d78c3d2
 - License: MIT
 
+## jni.hpp
+- Upstream: https://github.com/mapbox/jni.hpp
+- Version: v4.0.0
+- License: MIT-like
+
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
 - Version: 2.1.2
@@ -181,6 +186,13 @@
 - Version: git 65b314a (747) with dtCrowd::getEditableAgentAnim
 - License: zlib
 
+## robin-map
+- Upstream: https://github.com/Tessil/robin-map
+- Version: git 0.6.3-84c1bee (101) with modified for more compatible with stl
+    - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
+    - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
+- License: MIT
+
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
 - Version: 2.27
@@ -190,11 +202,6 @@
 - Upstream: https://github.com/cxong/tinydir
 - Version: git 1.2.4-ec6bff2 (168)
 - License: BSD-2-Clause
-
-## tsl (robin-map)
-- Upstream: https://github.com/Tessil/robin-map
-- Version: git 0.6.3-84c1bee (100)
-- License: MIT
 
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12

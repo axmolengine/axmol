@@ -184,7 +184,7 @@ public:
      *
      * @param stringValue a pointer point to a zero-terminated string stringValue.
      */
-    virtual void pushString(const char* stringValue);
+    virtual void pushString(std::string_view stringValue);
 
     /**
      * Pushes the string pointed to by stringValue with size length onto the stack.

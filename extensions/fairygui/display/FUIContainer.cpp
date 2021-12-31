@@ -496,4 +496,14 @@ void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & par
         Node::visit(renderer, parentTransform, parentFlags);
 }
 
+void FUIContainer::setGlobalZOrder(float globalZOrder)
+{
+    Node::setGlobalZOrder(globalZOrder);
+    if (_stencilClippingSupport && _stencilClippingSupport->_stencil)
+    {
+        _stencilClippingSupport->_stencil->setGlobalZOrder(globalZOrder);
+    }
+}
+
+
 NS_FGUI_END

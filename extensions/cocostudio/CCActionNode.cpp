@@ -188,11 +188,11 @@ void ActionNode::initWithDictionary(const rapidjson::Value& dic, Ref* root)
     initActionNodeFromRoot(root);
 }
 
-int ActionNode::valueToInt(const std::string& value)
+int ActionNode::valueToInt(std::string_view value)
 {
-    return atoi(value.c_str());
+    return atoi(value.data());
 }
-bool ActionNode::valueToBool(const std::string& value)
+bool ActionNode::valueToBool(std::string_view value)
 {
     int intValue = valueToInt(value);
     if (1 == intValue)
@@ -204,9 +204,9 @@ bool ActionNode::valueToBool(const std::string& value)
         return false;
     }
 }
-float ActionNode::valueToFloat(const std::string& value)
+float ActionNode::valueToFloat(std::string_view value)
 {
-    return utils::atof(value.c_str());
+    return utils::atof(value.data());
 }
 
 void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Ref* root)
@@ -494,8 +494,9 @@ Spawn* ActionNode::refreshActionProperty()
                     // #11173 Fixed every node of UI animation(json) is starting at frame 0.
                     //                  if (frame->getFrameIndex() > 0)
                     //				    {
-                    //					    DelayTime* cDelayTime = DelayTime::create(frame->getFrameIndex() *
-                    //getUnitTime()); 					    if (cDelayTime != nullptr)
+                    //					    DelayTime* cDelayTime =
+                    // DelayTime::create(frame->getFrameIndex()
+                    //* getUnitTime()); 					    if (cDelayTime != nullptr)
                     //						    cSequenceArray.pushBack(static_cast<FiniteTimeAction*>(cDelayTime));
                     //				    }
                 }

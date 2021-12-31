@@ -71,12 +71,12 @@ LoadingBar* LoadingBar::create()
     return nullptr;
 }
 
-LoadingBar* LoadingBar::create(const std::string& textureName, float percentage)
+LoadingBar* LoadingBar::create(std::string_view textureName, float percentage)
 {
     return LoadingBar::create(textureName, TextureResType::LOCAL, percentage);
 }
 
-LoadingBar* LoadingBar::create(const std::string& textureName, TextureResType texType, float percentage)
+LoadingBar* LoadingBar::create(std::string_view textureName, TextureResType texType, float percentage)
 {
     LoadingBar* widget = new LoadingBar;
     if (widget->init())
@@ -125,7 +125,7 @@ LoadingBar::Direction LoadingBar::getDirection() const
     return _direction;
 }
 
-void LoadingBar::loadTexture(const std::string& texture, TextureResType texType)
+void LoadingBar::loadTexture(std::string_view texture, TextureResType texType)
 {
     if (texture.empty())
     {
