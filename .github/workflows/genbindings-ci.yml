@@ -6,7 +6,7 @@ on:
       - dev
       - main
     paths:
-      - cocos/**/*
+      - core/**/*
       - extensions/**/*
       - .github/workflows/genbindings-ci.yml
 

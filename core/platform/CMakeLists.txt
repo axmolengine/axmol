@@ -23,7 +23,6 @@
 # ****************************************************************************/
 
 if(ANDROID)
-    # refer to target: cocos/platform/android/CMakeLists.txt
     set(COCOS_PLATFORM_SPECIFIC_SRC
         platform/android/CCApplication-android.cpp
         platform/android/CCCommon-android.cpp

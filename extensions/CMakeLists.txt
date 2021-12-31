@@ -121,4 +121,7 @@ if(BUILD_LUA_LIBS) # TODO: rename to BUILD_EXTENSION_LUA
   add_subdirectory(scripting/lua-bindings)
 endif()
 
+
+include(x-studio.cmake)
+
 message(STATUS "CC_EXTENSION_LIBS:${CC_EXTENSION_LIBS}")

@@ -51,7 +51,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
     set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
-    add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+    add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
 endif()
 
 # record sources, headers, resources...
@@ -143,7 +143,7 @@ endif()
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
-        PRIVATE ${ADXE_ROOT_PATH}/cocos/audio/include/
+        PRIVATE ${ADXE_ROOT_PATH}/core/audio/include/
 )
 
 # mark app resources

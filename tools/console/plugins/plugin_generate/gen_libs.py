@@ -217,7 +217,7 @@ class LibsCompiler(adxe.CCPlugin):
             raise CCPluginError(MultiLanguage.get_string('GEN_LIBS_ERROR_VS_NOT_FOUND'),
                                 CCPluginError.ERROR_TOOLS_NOT_FOUND)
 
-        cocos2d_proj_file = os.path.join(self.repo_x, 'cocos/2d/libcocos2d.vcxproj')
+        cocos2d_proj_file = os.path.join(self.repo_x, 'core/2d/libcocos2d.vcxproj')
 
         # get the VS projects info
         win32_proj_info = self.cfg_info[LibsCompiler.KEY_VS_PROJS_INFO]

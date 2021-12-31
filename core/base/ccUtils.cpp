@@ -428,7 +428,7 @@ CC_DLL std::string computeDigest(std::string_view data, std::string_view algorit
 LanguageType getLanguageTypeByISO2(const char* code)
 {
     // this function is used by all platforms to get system language
-    // except windows: cocos/platform/win32/CCApplication-win32.cpp
+    // except windows: core/platform/win32/CCApplication-win32.cpp
     LanguageType ret = LanguageType::ENGLISH;
 
     if (strncmp(code, "zh", 2) == 0)

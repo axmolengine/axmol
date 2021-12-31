@@ -87,7 +87,7 @@ class TemplateModifier(object):
         if language == "js":
             pbx_proj.remove_proj_reference("cocos2d_js_bindings.xcodeproj")
             pbx_proj.remove_proj_reference("libsimulator.xcodeproj")
-            pbx_proj.remove_file_by_path("../../cocos2d-x/cocos/scripting/js-bindings/script")
+            pbx_proj.remove_file_by_path("../../cocos2d-x/core/scripting/js-bindings/script")
 
             common_group = pbx_proj.get_or_create_group("JS Common")
             pbx_proj.add_file_if_doesnt_exist("../../../script", common_group, tree="<group>")

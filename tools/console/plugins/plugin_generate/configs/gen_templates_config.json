@@ -88,7 +88,7 @@
             ]
         },
         {
-            "from": "cocos/scripting/js-bindings/manual",
+            "from": "core/scripting/js-bindings/manual",
             "to": "js-template-binary/frameworks/runtime-src/Classes",
             "include": [
                 "js_module_register.h"
@@ -112,45 +112,45 @@
             ]
         },
         {
-            "from": "cocos/platform/android/java/src",
+            "from": "core/platform/android/java/src",
             "to": "cpp-template-binary/proj.android/src"
         },
         {
-            "from": "cocos/platform/android/java/src",
+            "from": "core/platform/android/java/src",
             "to": "lua-template-binary/frameworks/runtime-src/proj.android/src"
         },
         {
-            "from": "cocos/platform/android/java/src",
+            "from": "core/platform/android/java/src",
             "to": "js-template-binary/frameworks/runtime-src/proj.android/src"
         },
         {
-            "from": "cocos/platform/android/java/libs",
+            "from": "core/platform/android/java/libs",
             "to": "cpp-template-binary/proj.android/libs"
         },
         {
-            "from": "cocos/platform/android/java/libs",
+            "from": "core/platform/android/java/libs",
             "to": "lua-template-binary/frameworks/runtime-src/proj.android/libs"
         },
         {
-            "from": "cocos/platform/android/java/libs",
+            "from": "core/platform/android/java/libs",
             "to": "js-template-binary/frameworks/runtime-src/proj.android/libs"
         },
         {
-            "from": "cocos/2d/",
+            "from": "core/2d/",
             "to": "cpp-template-binary/proj.win32/",
             "include": [
                 "cocos2dx.props"
             ]
         },
         {
-            "from": "cocos/2d/",
+            "from": "core/2d/",
             "to": "lua-template-binary/frameworks/runtime-src/proj.win32/",
             "include": [
                 "cocos2dx.props"
             ]
         },
         {
-            "from": "cocos/2d/",
+            "from": "core/2d/",
             "to": "js-template-binary/frameworks/runtime-src/proj.win32/",
             "include": [
                 "cocos2dx.props"
@@ -203,17 +203,17 @@
     "modify_files" : [
         {
             "file_path": "cpp-template-binary/proj.android/project.properties",
-            "pattern": ".*cocos/platform/android/java\\s$",
+            "pattern": ".*core/platform/android/java\\s$",
             "replace_string": ""
         },
         {
             "file_path": "lua-template-binary/frameworks/runtime-src/proj.android/project.properties",
-            "pattern": ".*cocos/platform/android/java\\s$",
+            "pattern": ".*core/platform/android/java\\s$",
             "replace_string": ""
         },
         {
             "file_path": "js-template-binary/frameworks/runtime-src/proj.android/project.properties",
-            "pattern": ".*cocos/platform/android/java\\s$",
+            "pattern": ".*core/platform/android/java\\s$",
             "replace_string": ""
         },
         {
@@ -277,7 +277,7 @@
         "js-template-binary/frameworks/runtime-src/proj.android/build-cfg.json" : {
             "replace_string" : [
                 {
-                    "src_str" : "../../cocos2d-x/cocos/scripting/js-bindings/script",
+                    "src_str" : "../../cocos2d-x/core/scripting/js-bindings/script",
                     "dst_str" : "../../../script"
                 },
                 {
@@ -297,7 +297,7 @@
         "js-template-binary/frameworks/runtime-src/proj.win32/build-cfg.json" : {
             "replace_string" : [
                 {
-                    "src_str" : "../../cocos2d-x/cocos/scripting/js-bindings/script",
+                    "src_str" : "../../cocos2d-x/core/scripting/js-bindings/script",
                     "dst_str" : "../../../script"
                 }
             ]

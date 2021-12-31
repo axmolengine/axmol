@@ -52,7 +52,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
 
     include(CocosBuildSet)
     set(BUILD_LUA_LIBS ON)
-    add_subdirectory(${ADXE_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
+    add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
 endif()
 
 set(RUNTIME_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src)
@@ -135,7 +135,7 @@ if(NOT ANDROID)
     target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
-    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/cocos/lua-android)
+    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/core/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
     # whole archive ${ADXE_LUA_LIB} to make sure JNI_Onload can be invoke from java 
     target_link_libraries(${APP_NAME} -Wl,--whole-archive ${ADXE_LUA_LIB} -Wl,--whole-archive)

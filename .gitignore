@@ -142,8 +142,8 @@ project.properties
 /v*-lua-runtime-*.zip
 /v*-console-*.zip
 /tools/fbx-conv/
-/templates/lua-template-default/src/cocos/
-/tests/lua-tests/src/cocos/
+/templates/lua-template-default/src/core/
+/tests/lua-tests/src/core/
 /tests/js-tests/res/
 /tools/framework-compile/bin/proj_modifier/plutil-win32/
 !/tools/framework-compile/bin/
