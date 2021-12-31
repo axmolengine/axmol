@@ -39,22 +39,22 @@ PUSlaveEmitter::PUSlaveEmitter()
     , _masterEmitterNameSet(false)
 {}
 //-----------------------------------------------------------------------
-const std::string& PUSlaveEmitter::getMasterTechniqueName() const
+std::string_view PUSlaveEmitter::getMasterTechniqueName() const
 {
     return _masterTechniqueName;
 }
 //-----------------------------------------------------------------------
-void PUSlaveEmitter::setMasterTechniqueName(const std::string& masterTechniqueName)
+void PUSlaveEmitter::setMasterTechniqueName(std::string_view masterTechniqueName)
 {
     _masterTechniqueName = masterTechniqueName;
 }
 //-----------------------------------------------------------------------
-const std::string& PUSlaveEmitter::getMasterEmitterName() const
+std::string_view PUSlaveEmitter::getMasterEmitterName() const
 {
     return _masterEmitterName;
 }
 //-----------------------------------------------------------------------
-void PUSlaveEmitter::setMasterEmitterName(const std::string& masterEmitterName)
+void PUSlaveEmitter::setMasterEmitterName(std::string_view masterEmitterName)
 {
     _masterEmitterName    = masterEmitterName;
     _masterEmitterNameSet = true;

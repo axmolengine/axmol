@@ -25,37 +25,33 @@
 class Heavy1 : public Test
 {
 public:
-    
     Heavy1()
-	{
-		{
-			b2BodyDef bd;
-			b2Body* ground = m_world->CreateBody(&bd);
-            
-			b2EdgeShape shape;
-			shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
-			ground->CreateFixture(&shape, 0.0f);
-		}
-        
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position.Set(0.0f, 0.5f);
-		b2Body* body = m_world->CreateBody(&bd);
-        
-		b2CircleShape shape;
-		shape.m_radius = 0.5f;
+    {
+        {
+            b2BodyDef bd;
+            b2Body* ground = m_world->CreateBody(&bd);
+
+            b2EdgeShape shape;
+            shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+            ground->CreateFixture(&shape, 0.0f);
+        }
+
+        b2BodyDef bd;
+        bd.type = b2_dynamicBody;
+        bd.position.Set(0.0f, 0.5f);
+        b2Body* body = m_world->CreateBody(&bd);
+
+        b2CircleShape shape;
+        shape.m_radius = 0.5f;
         body->CreateFixture(&shape, 10.0f);
-        
+
         bd.position.Set(0.0f, 6.0f);
-        body = m_world->CreateBody(&bd);
+        body           = m_world->CreateBody(&bd);
         shape.m_radius = 5.0f;
         body->CreateFixture(&shape, 10.0f);
-	}
-    
-	static Test* Create()
-	{
-		return new Heavy1;
-	}
+    }
+
+    static Test* Create() { return new Heavy1; }
 };
 
 static int testIndex = RegisterTest("Solver", "Heavy 1", Heavy1::Create);

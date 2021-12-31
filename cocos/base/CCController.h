@@ -153,7 +153,7 @@ public:
     /**
      * Gets the name of this Controller object.
      */
-    const std::string& getDeviceName() const { return _deviceName; }
+    std::string_view getDeviceName() const { return _deviceName; }
 
     /**
      * Gets the Controller id.

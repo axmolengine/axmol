@@ -73,11 +73,11 @@ AbstractCheckButton::AbstractCheckButton()
 
 AbstractCheckButton::~AbstractCheckButton() {}
 
-bool AbstractCheckButton::init(const std::string& backGround,
-                               const std::string& backGroundSelected,
-                               const std::string& cross,
-                               const std::string& backGroundDisabled,
-                               const std::string& frontCrossDisabled,
+bool AbstractCheckButton::init(std::string_view backGround,
+                               std::string_view backGroundSelected,
+                               std::string_view cross,
+                               std::string_view backGroundDisabled,
+                               std::string_view frontCrossDisabled,
                                TextureResType texType)
 {
     bool ret = true;
@@ -120,11 +120,11 @@ void AbstractCheckButton::initRenderer()
     addProtectedChild(_frontCrossDisabledRenderer, FRONTCROSSDISABLED_RENDERER_Z, -1);
 }
 
-void AbstractCheckButton::loadTextures(const std::string& backGround,
-                                       const std::string& backGroundSelected,
-                                       const std::string& cross,
-                                       const std::string& backGroundDisabled,
-                                       const std::string& frontCrossDisabled,
+void AbstractCheckButton::loadTextures(std::string_view backGround,
+                                       std::string_view backGroundSelected,
+                                       std::string_view cross,
+                                       std::string_view backGroundDisabled,
+                                       std::string_view frontCrossDisabled,
                                        TextureResType texType)
 {
     loadTextureBackGround(backGround, texType);
@@ -134,7 +134,7 @@ void AbstractCheckButton::loadTextures(const std::string& backGround,
     loadTextureFrontCrossDisabled(frontCrossDisabled, texType);
 }
 
-void AbstractCheckButton::loadTextureBackGround(const std::string& backGround, TextureResType texType)
+void AbstractCheckButton::loadTextureBackGround(std::string_view backGround, TextureResType texType)
 {
     _backGroundFileName = backGround;
 
@@ -169,7 +169,7 @@ void AbstractCheckButton::loadTextureBackGround(SpriteFrame* spriteFrame)
     this->setupBackgroundTexture();
 }
 
-void AbstractCheckButton::loadTextureBackGroundSelected(const std::string& backGroundSelected, TextureResType texType)
+void AbstractCheckButton::loadTextureBackGroundSelected(std::string_view backGroundSelected, TextureResType texType)
 {
     _backGroundSelectedFileName        = backGroundSelected;
     _isBackgroundSelectedTextureLoaded = !backGroundSelected.empty();
@@ -203,7 +203,7 @@ void AbstractCheckButton::setupBackgroundSelectedTexture()
     _backGroundSelectedBoxRendererAdaptDirty = true;
 }
 
-void AbstractCheckButton::loadTextureFrontCross(const std::string& cross, TextureResType texType)
+void AbstractCheckButton::loadTextureFrontCross(std::string_view cross, TextureResType texType)
 {
     _frontCrossFileName = cross;
 
@@ -234,7 +234,7 @@ void AbstractCheckButton::setupFrontCrossTexture()
     _frontCrossRendererAdaptDirty = true;
 }
 
-void AbstractCheckButton::loadTextureBackGroundDisabled(const std::string& backGroundDisabled, TextureResType texType)
+void AbstractCheckButton::loadTextureBackGroundDisabled(std::string_view backGroundDisabled, TextureResType texType)
 {
     _backGroundDisabledFileName        = backGroundDisabled;
     _isBackgroundDisabledTextureLoaded = !backGroundDisabled.empty();
@@ -269,7 +269,7 @@ void AbstractCheckButton::setupBackgroundDisable()
     _backGroundBoxDisabledRendererAdaptDirty = true;
 }
 
-void AbstractCheckButton::loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled, TextureResType texType)
+void AbstractCheckButton::loadTextureFrontCrossDisabled(std::string_view frontCrossDisabled, TextureResType texType)
 {
     _frontCrossDisabledFileName        = frontCrossDisabled;
     _isFrontCrossDisabledTextureLoaded = !frontCrossDisabled.empty();

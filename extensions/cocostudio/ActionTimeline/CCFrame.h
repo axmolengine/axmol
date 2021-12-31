@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
 http://www.cocos2d-x.org
@@ -119,8 +119,8 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setTextureName(std::string textureName) { _textureName = textureName; }
-    inline std::string getTextureName() const { return _textureName; }
+    inline void setTextureName(std::string_view textureName) { _textureName = textureName; }
+    inline std::string_view getTextureName() const { return _textureName; }
 
 protected:
     cocos2d::Sprite* _sprite;
@@ -293,7 +293,7 @@ public:
     void setEndFrameIndex(int frameIndex);
     inline int getEndFrameIndex() const { return _endFrameIndex; }
 
-    void setAnimationName(const std::string& animationNamed);
+    void setAnimationName(std::string_view animationNamed);
 
     inline void setSingleFrameIndex(int frameIndex) { _singleFrameIndex = frameIndex; }
     inline int getSingleFrameIndex() const { return _singleFrameIndex; }
@@ -366,8 +366,8 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setEvent(std::string event) { _event = event; }
-    inline std::string getEvent() const { return _event; }
+    inline void setEvent(std::string_view event) { _event = event; }
+    inline std::string_view getEvent() const { return _event; }
 
 protected:
     std::string _event;

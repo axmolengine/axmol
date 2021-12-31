@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,13 @@
 
 USING_NS_CC;
 
-template <typename T> std::string tostr(const T& t) { std::ostringstream os; os<<t; return os.str(); }
+template <typename T>
+std::string tostr(const T& t)
+{
+    std::ostringstream os;
+    os << t;
+    return os.str();
+}
 
 MouseTests::MouseTests()
 {
@@ -43,21 +49,20 @@ MouseEventTest::MouseEventTest()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    //Create a label to display the mouse action
+    // Create a label to display the mouse action
     _labelAction = Label::createWithTTF("Click mouse button and see this change", "fonts/arial.ttf", 22);
-    _labelAction->setPosition(Vec2(s.width/2, s.height*2/3));
+    _labelAction->setPosition(Vec2(s.width / 2, s.height * 2 / 3));
     addChild(_labelAction, 0);
 
-    //Create a label to display the mouse position
+    // Create a label to display the mouse position
     _labelPosition = Label::createWithTTF("Mouse not supported on this device", "fonts/arial.ttf", 22);
-    _labelPosition->setPosition(Vec2(s.width/2, s.height/3));
+    _labelPosition->setPosition(Vec2(s.width / 2, s.height / 3));
     addChild(_labelPosition);
 
-
-    _mouseListener = EventListenerMouse::create();
-    _mouseListener->onMouseMove = CC_CALLBACK_1(MouseEventTest::onMouseMove, this);
-    _mouseListener->onMouseUp = CC_CALLBACK_1(MouseEventTest::onMouseUp, this);
-    _mouseListener->onMouseDown = CC_CALLBACK_1(MouseEventTest::onMouseDown, this);
+    _mouseListener                = EventListenerMouse::create();
+    _mouseListener->onMouseMove   = CC_CALLBACK_1(MouseEventTest::onMouseMove, this);
+    _mouseListener->onMouseUp     = CC_CALLBACK_1(MouseEventTest::onMouseUp, this);
+    _mouseListener->onMouseDown   = CC_CALLBACK_1(MouseEventTest::onMouseDown, this);
     _mouseListener->onMouseScroll = CC_CALLBACK_1(MouseEventTest::onMouseScroll, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
@@ -68,35 +73,35 @@ MouseEventTest::~MouseEventTest()
     _eventDispatcher->removeEventListener(_mouseListener);
 }
 
-void MouseEventTest::onMouseDown(Event *event)
+void MouseEventTest::onMouseDown(Event* event)
 {
-    EventMouse* e = (EventMouse*)event;
+    EventMouse* e   = (EventMouse*)event;
     std::string str = "Mouse Down detected, Key: ";
     str += tostr(static_cast<int>(e->getMouseButton()));
     _labelAction->setString(str.c_str());
 }
 
-void MouseEventTest::onMouseUp(Event *event)
+void MouseEventTest::onMouseUp(Event* event)
 {
-    EventMouse* e = (EventMouse*)event;
+    EventMouse* e   = (EventMouse*)event;
     std::string str = "Mouse Up detected, Key: ";
     str += tostr(static_cast<int>(e->getMouseButton()));
     _labelAction->setString(str.c_str());
 }
 
-void MouseEventTest::onMouseMove(Event *event)
+void MouseEventTest::onMouseMove(Event* event)
 {
-    EventMouse* e = (EventMouse*)event;
+    EventMouse* e   = (EventMouse*)event;
     std::string str = "MousePosition X:";
-    str = str + tostr(e->getCursorX()) + " Y:" + tostr(e->getCursorY());
+    str             = str + tostr(e->getCursorX()) + " Y:" + tostr(e->getCursorY());
     _labelPosition->setString(str.c_str());
 }
 
-void MouseEventTest::onMouseScroll(Event *event)
+void MouseEventTest::onMouseScroll(Event* event)
 {
-    EventMouse* e = (EventMouse*)event;
+    EventMouse* e   = (EventMouse*)event;
     std::string str = "Mouse Scroll detected, X: ";
-    str = str + tostr(e->getScrollX()) + " Y: " + tostr(e->getScrollY());
+    str             = str + tostr(e->getScrollX()) + " Y: " + tostr(e->getScrollY());
     _labelAction->setString(str.c_str());
 }
 
@@ -118,16 +123,12 @@ std::string MouseEventTest::subtitle() const
 
 HideMouseTest::HideMouseTest()
 {
-    
-    _lis = EventListenerMouse::create();
-    _lis->onMouseDown = [](Event* e){
-        Director::getInstance()->getOpenGLView()->setCursorVisible(false);
-    };
-    
-    _lis->onMouseUp = [](Event* e){
-        Director::getInstance()->getOpenGLView()->setCursorVisible(true);
-    };
-    
+
+    _lis              = EventListenerMouse::create();
+    _lis->onMouseDown = [](Event* e) { Director::getInstance()->getOpenGLView()->setCursorVisible(false); };
+
+    _lis->onMouseUp = [](Event* e) { Director::getInstance()->getOpenGLView()->setCursorVisible(true); };
+
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_lis, this);
 }
 
@@ -145,4 +146,3 @@ std::string HideMouseTest::subtitle() const
 {
     return "Click to hide mouse";
 }
-

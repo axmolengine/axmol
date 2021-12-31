@@ -45,8 +45,8 @@ class CC_EX_DLL PUBehaviour : public Ref
 public:
     /** Todo
      */
-    const std::string& getBehaviourType() const { return _behaviourType; };
-    void setBehaviourType(const std::string& behaviourType) { _behaviourType = behaviourType; };
+    std::string_view getBehaviourType() const { return _behaviourType; };
+    void setBehaviourType(std::string_view behaviourType) { _behaviourType = behaviourType; };
 
     /** Notify that the Behaviour is rescaled.
      */

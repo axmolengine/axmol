@@ -28,7 +28,7 @@
 
 CC_BACKEND_BEGIN
 
-void VertexLayout::setAttribute(const std::string& name,
+void VertexLayout::setAttribute(std::string_view name,
                                 std::size_t index,
                                 VertexFormat format,
                                 std::size_t offset,
@@ -37,7 +37,11 @@ void VertexLayout::setAttribute(const std::string& name,
     if (index == -1)
         return;
 
-    _attributes[name] = {name, index, format, offset, needToBeNormallized};
+    // FIXME 2021/12/25 TODO: store name key is enough
+    hlookup::set_item(
+        _attributes, name,
+        Attribute{name, index, format, offset,
+                  needToBeNormallized});  // _attributes[name] = {name, index, format, offset, needToBeNormallized};
 }
 
 void VertexLayout::setLayout(std::size_t stride)

@@ -199,7 +199,7 @@ public:
      * Added to facilitate the migration from v0.8 to v0.9.
      * @param filename The path of SpriteFrame.
      */
-    void addSpriteFrameWithFile(const std::string& filename);
+    void addSpriteFrameWithFile(std::string_view filename);
 
     /** Adds a frame with a texture and a rect. Internally it will create a SpriteFrame and it will add it.
      * The frame will be added with one "delay unit".

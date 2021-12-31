@@ -44,31 +44,31 @@ public:
     /**
      *get bonenode in skeleton node by bone name
      */
-    BoneNode* getBoneNode(const std::string& boneName);
+    BoneNode* getBoneNode(std::string_view boneName);
 
     /**
      *get All bones in this skeleton, <bone's name, BoneNode>
      */
-    const cocos2d::Map<std::string, BoneNode*>& getAllSubBonesMap() const;
+    const cocos2d::StringMap<BoneNode*>& getAllSubBonesMap() const;
 
     /**
      *@brief: change displays
      *@param: boneSkinNameMap, map <name of bone, name of skin to display which added to bone>
      */
-    void changeSkins(const std::map<std::string, std::string>& boneSkinNameMap);
+    void changeSkins(const hlookup::string_map<std::string>& boneSkinNameMap);
 
     /**
      *@brief: change displays
      *@param: skinGroupName have
      */
-    void changeSkins(const std::string& skinGroupName);
+    void changeSkins(std::string_view skinGroupName);
 
     /**
      *@brief: add a boneSkinNameMap as a SkinGroup named groupName
      *@param: groupName, key
      *@param: boneSkinNameMap, map <name of bone, name of skin to display which added to bone>
      */
-    void addSkinGroup(std::string groupName, std::map<std::string, std::string> boneSkinNameMap);
+    void addSkinGroup(std::string groupName, hlookup::string_map<std::string> boneSkinNameMap);
 
     cocos2d::Rect getBoundingBox() const override;
 
@@ -86,7 +86,7 @@ protected:
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 
 protected:
-    cocos2d::Map<std::string, BoneNode*> _subBonesMap;
+    cocos2d::StringMap<BoneNode*> _subBonesMap;
 
 private:
     struct VertexData
@@ -98,7 +98,7 @@ private:
     cocos2d::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
-    std::map<std::string, std::map<std::string, std::string>>
+    hlookup::string_map<hlookup::string_map<std::string>>
         _skinGroupMap;  // map< suit name, map< bone name, skin name> >
     CC_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
 

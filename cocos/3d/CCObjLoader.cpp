@@ -395,7 +395,7 @@ static bool exportFaceGroupToShape(shape_t& shape,
                                    const std::vector<float>& in_texcoords,
                                    const std::vector<std::vector<vertex_index>>& faceGroup,
                                    const int material_id,
-                                   const std::string& name,
+                                   std::string_view name,
                                    bool clearCache)
 {
     if (faceGroup.empty())
@@ -517,7 +517,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
             char namebuf[TINYOBJ_SSCANF_BUFFER_SIZE];
             token += 7;
 #ifdef _MSC_VER
-            sscanf_s(token, "%s", namebuf, _countof(namebuf));
+            sscanf_s(token, "%s", namebuf, static_cast<unsigned int>(_countof(namebuf)));
 #else
             sscanf(token, "%s", namebuf);
 #endif
@@ -681,7 +681,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
     return err.str();
 }
 
-std::string MaterialFileReader::operator()(const std::string& matId,
+std::string MaterialFileReader::operator()(std::string_view matId,
                                            std::vector<material_t>& materials,
                                            std::map<std::string, int>& matMap)
 {
@@ -689,7 +689,7 @@ std::string MaterialFileReader::operator()(const std::string& matId,
 
     if (!m_mtlBasePath.empty())
     {
-        filepath = std::string(m_mtlBasePath) + matId;
+        filepath.append(m_mtlBasePath).append(matId);
     }
     else
     {

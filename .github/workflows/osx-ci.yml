@@ -16,12 +16,9 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  TRAVIS_OS_NAME: osx
+  GH_OS_NAME: osx
   BUILD_TARGET: osx
-  # Simple let github action to build all (TODO: optimize in the future)
-  TRAVIS_PULL_REQUEST: true
   BUILD_TYPE: Release
-  GITHUB_CI: true
 
 jobs:
   build:
@@ -41,8 +38,8 @@ jobs:
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all
-      run: tools/travis-scripts/before-install.sh
+      run: tools/unix-ci/before-install.sh
       
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: tools/travis-scripts/run-script.sh
+      run: tools/unix-ci/run-script.sh

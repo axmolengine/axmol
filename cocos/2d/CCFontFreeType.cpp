@@ -653,7 +653,7 @@ std::string_view FontFreeType::getGlyphCollection() const
     return glyphCollection;
 }
 
-void FontFreeType::releaseFont(const std::string& fontName)
+void FontFreeType::releaseFont(std::string_view fontName)
 {
     auto item = s_cacheFontData.begin();
     while (s_cacheFontData.end() != item)

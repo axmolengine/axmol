@@ -91,22 +91,22 @@ public:
 
     /** Todo
      */
-    const std::string& getAffectorType() const { return _affectorType; };
-    void setAffectorType(const std::string& affectorType) { _affectorType = affectorType; };
+    std::string_view getAffectorType() const { return _affectorType; };
+    void setAffectorType(std::string_view affectorType) { _affectorType = affectorType; };
 
     /** Add a ParticleEmitter name that excludes Particles emitted by this ParticleEmitter from being
         affected.
     */
-    void addEmitterToExclude(const std::string& emitterName);
+    void addEmitterToExclude(std::string_view emitterName);
 
     /** Remove a ParticleEmitter name that excludes Particles emitted by this ParticleEmitter.
      */
-    void removeEmitterToExclude(const std::string& emitterName);
+    void removeEmitterToExclude(std::string_view emitterName);
 
     /** Todo
      */
-    const std::string& getName() const { return _name; };
-    void setName(const std::string& name) { _name = name; };
+    std::string_view getName() const { return _name; };
+    void setName(std::string_view name) { _name = name; };
 
     virtual void copyAttributesTo(PUAffector* affector);
 

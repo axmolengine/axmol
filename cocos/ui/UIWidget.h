@@ -684,25 +684,25 @@ public:
      * Set callback name.
      *@param callbackName A string representation of callback name.
      */
-    void setCallbackName(const std::string& callbackName) { _callbackName = callbackName; }
+    void setCallbackName(std::string_view callbackName) { _callbackName = callbackName; }
 
     /**
      * Query callback name.
      *@return The callback name.
      */
-    const std::string& getCallbackName() const { return _callbackName; }
+    std::string_view getCallbackName() const { return _callbackName; }
 
     /**
      * Set callback type.
      * @param callbackType A string representation of callback type.
      */
-    void setCallbackType(const std::string& callbackType) { _callbackType = callbackType; }
+    void setCallbackType(std::string_view callbackType) { _callbackType = callbackType; }
 
     /**
      * Query callback type.
      *@return Callback type string.
      */
-    const std::string& getCallbackType() const { return _callbackType; }
+    std::string_view getCallbackType() const { return _callbackType; }
 
     /**
      * Toggle layout component enable.

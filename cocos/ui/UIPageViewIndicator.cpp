@@ -195,7 +195,7 @@ void PageViewIndicator::setIndexNodesScale(float indexNodesScale)
     rearrange();
 }
 
-void PageViewIndicator::setIndexNodesTexture(const std::string& texName, Widget::TextureResType texType)
+void PageViewIndicator::setIndexNodesTexture(std::string_view texName, Widget::TextureResType texType)
 {
     _useDefaultTexture     = false;
     _indexNodesTextureFile = texName;

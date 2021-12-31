@@ -30,13 +30,13 @@
 
 NS_CC_EXT_BEGIN
 
-EventAssetsManagerEx::EventAssetsManagerEx(const std::string& eventName,
+EventAssetsManagerEx::EventAssetsManagerEx(std::string_view eventName,
                                            cocos2d::extension::AssetsManagerEx* manager,
                                            const EventCode& code,
                                            float percent /* = 0 */,
                                            float percentByFile /* = 0*/,
-                                           const std::string& assetId /* = "" */,
-                                           const std::string& message /* = "" */,
+                                           std::string_view assetId /* = "" */,
+                                           std::string_view message /* = "" */,
                                            int curle_code /* = CURLE_OK*/,
                                            int curlm_code /* = CURLM_OK*/)
     : EventCustom(eventName)

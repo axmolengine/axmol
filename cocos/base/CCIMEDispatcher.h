@@ -76,7 +76,7 @@ public:
      * @brief Get the content text from IMEDelegate, retrieved previously from IME.
      * @lua NA
      */
-    const std::string& getContentText();
+    std::string_view getContentText();
 
     //////////////////////////////////////////////////////////////////////////
     // dispatch keyboard notification

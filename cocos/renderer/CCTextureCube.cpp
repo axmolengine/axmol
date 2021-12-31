@@ -119,7 +119,7 @@ unsigned char* getImageData(Image* img, backend::PixelFormat& ePixFmt)
     return pTmpData;
 }
 
-Image* createImage(const std::string& path)
+Image* createImage(std::string_view path)
 {
     // Split up directory and filename
     // MUTEX:
@@ -150,12 +150,12 @@ TextureCube::~TextureCube()
     CC_SAFE_RELEASE_NULL(_texture);
 }
 
-TextureCube* TextureCube::create(const std::string& positive_x,
-                                 const std::string& negative_x,
-                                 const std::string& positive_y,
-                                 const std::string& negative_y,
-                                 const std::string& positive_z,
-                                 const std::string& negative_z)
+TextureCube* TextureCube::create(std::string_view positive_x,
+                                 std::string_view negative_x,
+                                 std::string_view positive_y,
+                                 std::string_view negative_y,
+                                 std::string_view positive_z,
+                                 std::string_view negative_z)
 {
     auto ret = new TextureCube();
     if (ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z))
@@ -167,12 +167,12 @@ TextureCube* TextureCube::create(const std::string& positive_x,
     return nullptr;
 }
 
-bool TextureCube::init(const std::string& positive_x,
-                       const std::string& negative_x,
-                       const std::string& positive_y,
-                       const std::string& negative_y,
-                       const std::string& positive_z,
-                       const std::string& negative_z)
+bool TextureCube::init(std::string_view positive_x,
+                       std::string_view negative_x,
+                       std::string_view positive_y,
+                       std::string_view negative_y,
+                       std::string_view positive_z,
+                       std::string_view negative_z)
 {
     _imgPath[0] = positive_x;
     _imgPath[1] = negative_x;

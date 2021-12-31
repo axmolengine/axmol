@@ -60,14 +60,14 @@ class CC_DLL GLViewImpl : public GLView
     friend class GLFWEventHandler;
 
 public:
-    static GLViewImpl* create(const std::string& viewName);
-    static GLViewImpl* create(const std::string& viewName, bool resizable);
-    static GLViewImpl* createWithRect(const std::string& viewName,
+    static GLViewImpl* create(std::string_view viewName);
+    static GLViewImpl* create(std::string_view viewName, bool resizable);
+    static GLViewImpl* createWithRect(std::string_view viewName,
                                       Rect size,
                                       float frameZoomFactor = 1.0f,
                                       bool resizable        = false);
-    static GLViewImpl* createWithFullScreen(const std::string& viewName);
-    static GLViewImpl* createWithFullScreen(const std::string& viewName,
+    static GLViewImpl* createWithFullScreen(std::string_view viewName);
+    static GLViewImpl* createWithFullScreen(std::string_view viewName,
                                             const GLFWvidmode& videoMode,
                                             GLFWmonitor* monitor);
 
@@ -121,8 +121,8 @@ public:
     virtual void setIMEKeyboardState(bool bOpen) override;
 
 #if CC_ICON_SET_SUPPORT
-    virtual void setIcon(const std::string& filename) const override;
-    virtual void setIcon(const std::vector<std::string>& filelist) const override;
+    virtual void setIcon(std::string_view filename) const override;
+    virtual void setIcon(const std::vector<std::string_view>& filelist) const override;
     virtual void setDefaultIcon() const override;
 #endif /* CC_ICON_SET_SUPPORT */
 
@@ -157,9 +157,9 @@ protected:
     GLViewImpl(bool initglfw = true);
     virtual ~GLViewImpl();
 
-    bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor, bool resizable);
-    bool initWithFullScreen(const std::string& viewName);
-    bool initWithFullscreen(const std::string& viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
+    bool initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor, bool resizable);
+    bool initWithFullScreen(std::string_view viewName);
+    bool initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
 
     bool loadGL();
 

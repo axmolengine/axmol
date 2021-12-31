@@ -169,7 +169,7 @@ void Bundle3D::clear()
     }
 }
 
-bool Bundle3D::load(const std::string& path)
+bool Bundle3D::load(std::string_view path)
 {
     if (path.empty())
         return false;
@@ -193,7 +193,7 @@ bool Bundle3D::load(const std::string& path)
     }
     else
     {
-        CCLOG("warning: %s is invalid file formate", path.c_str());
+        CCLOG("warning: %s is invalid file formate", path.data());
     }
 
     ret ? (_path = path) : (_path = "");
@@ -204,7 +204,7 @@ bool Bundle3D::load(const std::string& path)
 bool Bundle3D::loadObj(MeshDatas& meshdatas,
                        MaterialDatas& materialdatas,
                        NodeDatas& nodedatas,
-                       const std::string& fullPath,
+                       std::string_view fullPath,
                        const char* mtl_basepath)
 {
     meshdatas.resetData();
@@ -219,7 +219,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
 
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    auto ret = tinyobj::LoadObj(shapes, materials, fullPath.c_str(), mtlPath.c_str());
+    auto ret = tinyobj::LoadObj(shapes, materials, fullPath.data(), mtlPath.c_str());
     if (ret.empty())
     {
         // fill data
@@ -329,11 +329,11 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
 
         return true;
     }
-    CCLOG("warning: load %s file error: %s", fullPath.c_str(), ret.c_str());
+    CCLOG("warning: load %s file error: %s", fullPath.data(), ret.c_str());
     return false;
 }
 
-bool Bundle3D::loadSkinData(const std::string& /*id*/, SkinData* skindata)
+bool Bundle3D::loadSkinData(std::string_view /*id*/, SkinData* skindata)
 {
     skindata->resetData();
 
@@ -347,7 +347,7 @@ bool Bundle3D::loadSkinData(const std::string& /*id*/, SkinData* skindata)
     }
 }
 
-bool Bundle3D::loadAnimationData(const std::string& id, Animation3DData* animationdata)
+bool Bundle3D::loadAnimationData(std::string_view id, Animation3DData* animationdata)
 {
     animationdata->resetData();
 
@@ -1062,7 +1062,7 @@ bool Bundle3D::loadMaterialsJson(MaterialDatas& materialdatas)
     }
     return true;
 }
-bool Bundle3D::loadJson(const std::string& path)
+bool Bundle3D::loadJson(std::string_view path)
 {
     clear();
 
@@ -1084,7 +1084,7 @@ bool Bundle3D::loadJson(const std::string& path)
     return true;
 }
 
-bool Bundle3D::loadBinary(const std::string& path)
+bool Bundle3D::loadBinary(std::string_view path)
 {
     clear();
 
@@ -1094,7 +1094,7 @@ bool Bundle3D::loadBinary(const std::string& path)
     if (_binaryBuffer.isNull())
     {
         clear();
-        CCLOG("warning: Failed to read file: %s", path.c_str());
+        CCLOG("warning: Failed to read file: %s", path.data());
         return false;
     }
 
@@ -1107,7 +1107,7 @@ bool Bundle3D::loadBinary(const std::string& path)
     if (_binaryReader.read(sig, 1, 4) != 4 || memcmp(sig, identifier, 4) != 0)
     {
         clear();
-        CCLOG("warning: Invalid identifier: %s", path.c_str());
+        CCLOG("warning: Invalid identifier: %s", path.data());
         return false;
     }
 
@@ -1127,7 +1127,7 @@ bool Bundle3D::loadBinary(const std::string& path)
     if (_binaryReader.read(&_referenceCount, 4, 1) != 1)
     {
         clear();
-        CCLOG("warning: Failed to read ref table size '%s'.", path.c_str());
+        CCLOG("warning: Failed to read ref table size '%s'.", path.data());
         return false;
     }
 
@@ -1141,7 +1141,7 @@ bool Bundle3D::loadBinary(const std::string& path)
             _binaryReader.read(&_references[i].offset, 4, 1) != 1)
         {
             clear();
-            CCLOG("warning: Failed to read ref number %u for bundle '%s'.", i, path.c_str());
+            CCLOG("warning: Failed to read ref number %u for bundle '%s'.", i, path.data());
             CC_SAFE_DELETE_ARRAY(_references);
             return false;
         }
@@ -1460,7 +1460,7 @@ bool loadMaterialDataJson_0_2(MaterialData* /*materialdata*/)
     return true;
 }
 
-bool Bundle3D::loadAnimationDataJson(const std::string& id, Animation3DData* animationdata)
+bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* animationdata)
 {
     std::string anim = "";
     if (_version == "1.2" || _version == "0.2")
@@ -1549,7 +1549,7 @@ bool Bundle3D::loadAnimationDataJson(const std::string& id, Animation3DData* ani
     return true;
 }
 
-bool Bundle3D::loadAnimationDataBinary(const std::string& id, Animation3DData* animationdata)
+bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* animationdata)
 {
 
     if (_version == "0.1" || _version == "0.2" || _version == "0.3" || _version == "0.4")
@@ -1560,9 +1560,9 @@ bool Bundle3D::loadAnimationDataBinary(const std::string& id, Animation3DData* a
     else
     {
         // if id is not a null string, we need to add a suffix of "animation" for seeding.
-        std::string id_ = id;
-        if (id != "")
-            id_ = id + "animation";
+        std::string id_{id};
+        if (!id.empty())
+            id_.append("animation");
 
         if (!seekToFirstType(BUNDLE_TYPE_ANIMATIONS, id_))
             return false;
@@ -1998,7 +1998,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
     return nodedata;
 }
 
-backend::VertexFormat Bundle3D::parseGLDataType(const std::string& str, int size)
+backend::VertexFormat Bundle3D::parseGLDataType(std::string_view str, int size)
 {
     backend::VertexFormat ret = backend::VertexFormat::INT;
     if (str == "GL_BYTE")
@@ -2097,7 +2097,7 @@ backend::VertexFormat Bundle3D::parseGLDataType(const std::string& str, int size
     return ret;
 }
 
-backend::SamplerAddressMode Bundle3D::parseSamplerAddressMode(const std::string& str)
+backend::SamplerAddressMode Bundle3D::parseSamplerAddressMode(std::string_view str)
 {
 
     if (str == "REPEAT")
@@ -2115,7 +2115,7 @@ backend::SamplerAddressMode Bundle3D::parseSamplerAddressMode(const std::string&
     }
 }
 
-NTextureData::Usage Bundle3D::parseGLTextureType(const std::string& str)
+NTextureData::Usage Bundle3D::parseGLTextureType(std::string_view str)
 {
     if (str == "AMBIENT")
     {
@@ -2163,7 +2163,7 @@ NTextureData::Usage Bundle3D::parseGLTextureType(const std::string& str)
         return NTextureData::Usage::Unknown;
     }
 }
-shaderinfos::VertexKey Bundle3D::parseGLProgramAttribute(const std::string& str)
+shaderinfos::VertexKey Bundle3D::parseGLProgramAttribute(std::string_view str)
 {
     if (str == "VERTEX_ATTRIB_POSITION")
     {
@@ -2233,14 +2233,14 @@ shaderinfos::VertexKey Bundle3D::parseGLProgramAttribute(const std::string& str)
     }
 }
 
-void Bundle3D::getModelRelativePath(const std::string& path)
+void Bundle3D::getModelRelativePath(std::string_view path)
 {
     ssize_t index = path.find_last_of('/');
     std::string fullModelPath;
     _modelPath = path.substr(0, index + 1);
 }
 
-Reference* Bundle3D::seekToFirstType(unsigned int type, const std::string& id)
+Reference* Bundle3D::seekToFirstType(unsigned int type, std::string_view id)
 {
     // for each Reference
     for (unsigned int i = 0; i < _referenceCount; ++i)
@@ -2266,7 +2266,7 @@ Reference* Bundle3D::seekToFirstType(unsigned int type, const std::string& id)
     return nullptr;
 }
 
-std::vector<Vec3> Bundle3D::getTrianglesList(const std::string& path)
+std::vector<Vec3> Bundle3D::getTrianglesList(std::string_view path)
 {
     std::vector<Vec3> trianglesList;
 

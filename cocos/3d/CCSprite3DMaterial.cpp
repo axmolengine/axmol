@@ -238,7 +238,7 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
     return nullptr;
 }
 
-Sprite3DMaterial* Sprite3DMaterial::createWithFilename(const std::string& path)
+Sprite3DMaterial* Sprite3DMaterial::createWithFilename(std::string_view path)
 {
     auto validfilename = FileUtils::getInstance()->fullPathForFilename(path);
     if (!validfilename.empty())
@@ -311,19 +311,19 @@ void Sprite3DMaterialCache::destroyInstance()
     }
 }
 
-bool Sprite3DMaterialCache::addSprite3DMaterial(const std::string& key, Texture2D* texture)
+bool Sprite3DMaterialCache::addSprite3DMaterial(std::string_view key, Texture2D* texture)
 {
     auto itr = _materials.find(key);
     if (itr == _materials.end())
     {
         CC_SAFE_RETAIN(texture);
-        _materials[key] = texture;
+        _materials.emplace(key, texture);
         return true;
     }
     return false;
 }
 
-Texture2D* Sprite3DMaterialCache::getSprite3DMaterial(const std::string& key)
+Texture2D* Sprite3DMaterialCache::getSprite3DMaterial(std::string_view key)
 {
     auto itr = _materials.find(key);
     if (itr != _materials.end())

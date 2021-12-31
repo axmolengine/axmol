@@ -63,7 +63,7 @@ Widget* Helper::seekWidgetByTag(Widget* root, int tag)
     return nullptr;
 }
 
-Widget* Helper::seekWidgetByName(Widget* root, const std::string& name)
+Widget* Helper::seekWidgetByName(Widget* root, std::string_view name)
 {
     if (!root)
     {
@@ -116,25 +116,25 @@ Widget* Helper::seekActionWidgetByActionTag(Widget* root, int tag)
     return nullptr;
 }
 
-std::string Helper::getSubStringOfUTF8String(const std::string& str,
+std::string Helper::getSubStringOfUTF8String(std::string_view str,
                                              std::string::size_type start,
                                              std::string::size_type length)
 {
     std::u32string utf32;
     if (!StringUtils::UTF8ToUTF32(str, utf32))
     {
-        CCLOGERROR("Can't convert string to UTF-32: %s", str.c_str());
+        CCLOGERROR("Can't convert string to UTF-32: %s", str.data());
         return "";
     }
     if (utf32.size() < start)
     {
-        CCLOGERROR("'start' is out of range: %d, %s", static_cast<int32_t>(start), str.c_str());
+        CCLOGERROR("'start' is out of range: %d, %s", static_cast<int32_t>(start), str.data());
         return "";
     }
     std::string result;
     if (!StringUtils::UTF32ToUTF8(utf32.substr(start, length), result))
     {
-        CCLOGERROR("Can't convert internal UTF-32 string to UTF-8: %s", str.c_str());
+        CCLOGERROR("Can't convert internal UTF-32 string to UTF-8: %s", str.data());
         return "";
     }
     return result;

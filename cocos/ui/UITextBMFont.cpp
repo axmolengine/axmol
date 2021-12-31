@@ -53,7 +53,7 @@ TextBMFont* TextBMFont::create()
     return nullptr;
 }
 
-TextBMFont* TextBMFont::create(const std::string& text, const std::string& filename)
+TextBMFont* TextBMFont::create(std::string_view text, std::string_view filename)
 {
     TextBMFont* widget = new TextBMFont();
     if (widget->init())
@@ -73,7 +73,7 @@ void TextBMFont::initRenderer()
     addProtectedChild(_labelBMFontRenderer, LABELBMFONT_RENDERER_Z, -1);
 }
 
-void TextBMFont::setFntFile(const std::string& fileName)
+void TextBMFont::setFntFile(std::string_view fileName)
 {
     if (fileName.empty())
     {
@@ -86,7 +86,7 @@ void TextBMFont::setFntFile(const std::string& fileName)
     _labelBMFontRendererAdaptDirty = true;
 }
 
-void TextBMFont::setString(const std::string& value)
+void TextBMFont::setString(std::string_view value)
 {
     if (value == _labelBMFontRenderer->getString())
     {
@@ -98,7 +98,7 @@ void TextBMFont::setString(const std::string& value)
     _labelBMFontRendererAdaptDirty = true;
 }
 
-const std::string& TextBMFont::getString() const
+std::string_view TextBMFont::getString() const
 {
     return _stringValue;
 }

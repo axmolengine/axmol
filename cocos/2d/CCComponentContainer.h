@@ -54,10 +54,10 @@ public:
     /**
      * @js getComponent
      */
-    Component* get(const std::string& name) const;
+    Component* get(std::string_view name) const;
 
     bool add(Component* com);
-    bool remove(const std::string& name);
+    bool remove(std::string_view name);
     bool remove(Component* com);
     void removeAll();
     void visit(float delta);
@@ -68,7 +68,7 @@ public:
     bool isEmpty() const { return _componentMap.empty(); }
 
 private:
-    std::unordered_map<std::string, Component*> _componentMap;
+    hlookup::string_map<Component*> _componentMap;
     Node* _owner;
 
     friend class Node;

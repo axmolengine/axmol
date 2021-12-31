@@ -47,4 +47,4 @@ public:
 
 #endif
 
-#endif // _CURL_TEST_H_
+#endif  // _CURL_TEST_H_

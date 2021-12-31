@@ -250,7 +250,7 @@ public:
      *
      * @since v2.0.5
      */
-    ZipFile(const std::string& zipFile, const std::string& filter = std::string());
+    ZipFile(std::string_view zipFile, std::string_view filter = std::string());
     virtual ~ZipFile();
 
     /**
@@ -262,7 +262,7 @@ public:
      *
      * @since v2.0.5
      */
-    bool setFilter(const std::string& filter);
+    bool setFilter(std::string_view filter);
 
     /**
      * Check does a file exists or not in zip file
@@ -272,7 +272,7 @@ public:
      *
      * @since v2.0.5
      */
-    bool fileExists(const std::string& fileName) const;
+    bool fileExists(std::string_view fileName) const;
 
     /**
      * Get files and folders in pathname
@@ -280,7 +280,7 @@ public:
      * @param dirname
      * @return
      */
-    std::vector<std::string> listFiles(const std::string& pathname) const;
+    std::vector<std::string> listFiles(std::string_view pathname) const;
 
     /**
      * Get resource file data from a zip file.
@@ -291,7 +291,7 @@ public:
      *
      * @since v2.0.5
      */
-    unsigned char* getFileData(const std::string& fileName, ssize_t* size);
+    unsigned char* getFileData(std::string_view fileName, ssize_t* size);
 
     /**
      * Get resource file data from a zip file.
@@ -299,7 +299,7 @@ public:
      * @param[out] buffer If the file read operation succeeds, if will contain the file data.
      * @return True if successful.
      */
-    bool getFileData(const std::string& fileName, ResizableBuffer* buffer);
+    bool getFileData(std::string_view fileName, ResizableBuffer* buffer);
 
     std::string getFirstFilename();
     std::string getNextFilename();
@@ -310,7 +310,7 @@ public:
      * zipFile Streaming support, !!!important, the file in zip must no compress level, otherwise
      *  stream seek doesn't work.
      */
-    bool zfopen(const std::string& fileName, ZipFileStream* zfs);
+    bool zfopen(std::string_view fileName, ZipFileStream* zfs);
     int zfread(ZipFileStream* zfs, void* buf, unsigned int size);
     int32_t zfseek(ZipFileStream* zfs, int32_t offset, int origin);
     void zfclose(ZipFileStream* zfs);
@@ -325,9 +325,7 @@ public:
      *  @warning Recall: you are responsible for calling free() on any Non-nullptr pointer returned.
      */
     CC_DEPRECATED()
-    static unsigned char* getFileDataFromZip(const std::string& zipFilePath,
-                                             const std::string& filename,
-                                             ssize_t* size);
+    static unsigned char* getFileDataFromZip(std::string_view zipFilePath, std::string_view filename, ssize_t* size);
 
 private:
     /* Only used internal for createWithBuffer() */

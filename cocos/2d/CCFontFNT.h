@@ -115,27 +115,27 @@ public:
     std::string description() const;
 
     /** allocates a BMFontConfiguration with a FNT file */
-    static BMFontConfiguration* create(const std::string& FNTfile);
+    static BMFontConfiguration* create(std::string_view FNTfile);
 
     /** initializes a BitmapFontConfiguration with a FNT file */
-    bool initWithFNTfile(const std::string& FNTfile);
+    bool initWithFNTfile(std::string_view FNTfile);
 
-    const std::string& getAtlasName() { return _atlasName; }
-    void setAtlasName(const std::string& atlasName) { _atlasName = atlasName; }
+    std::string_view getAtlasName() { return _atlasName; }
+    void setAtlasName(std::string_view atlasName) { _atlasName = atlasName; }
 
     std::set<unsigned int>* getCharacterSet() const;
 
 protected:
-    virtual std::set<unsigned int>* parseConfigFile(const std::string& controlFile);
+    virtual std::set<unsigned int>* parseConfigFile(std::string_view controlFile);
     virtual std::set<unsigned int>* parseBinaryConfigFile(unsigned char* pData,
                                                           uint32_t size,
-                                                          const std::string& controlFile);
+                                                          std::string_view controlFile);
 
 private:
     unsigned int parseCharacterDefinition(const char* line);
     void parseInfoArguments(const char* line);
     void parseCommonArguments(const char* line);
-    void parseImageFileName(const char* line, const std::string& fntFile);
+    void parseImageFileName(const char* line, std::string_view fntFile);
     void parseKerningEntry(const char* line);
     void purgeKerningDictionary();
     void purgeFontDefDictionary();
@@ -145,12 +145,11 @@ class CC_DLL FontFNT : public Font
 {
 
 public:
-    static FontFNT* create(const std::string& fntFilePath, const Rect& imageRect, bool imageRotated);
-    static FontFNT* create(const std::string& fntFilePath, const std::string& subTextureKey);
-    static FontFNT* create(const std::string& fntFilePath);
+    static FontFNT* create(std::string_view fntFilePath, const Rect& imageRect, bool imageRotated);
+    static FontFNT* create(std::string_view fntFilePath, std::string_view subTextureKey);
+    static FontFNT* create(std::string_view fntFilePath);
 
-    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(const std::string& fntFilePath,
-                                                   const Vec2& imageOffset = Vec2::ZERO);
+    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
 
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.
@@ -164,7 +163,7 @@ public:
 
     int getOriginalFontSize() const;
 
-    static void reloadBMFontResource(const std::string& fntFilePath);
+    static void reloadBMFontResource(std::string_view fntFilePath);
 
 protected:
     FontFNT(BMFontConfiguration* theContfig, const Rect& imageRect, bool imageRotated);

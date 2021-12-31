@@ -47,7 +47,7 @@ public:
         /** For testing whether test case not crash.*/
         ROBUSTNESS,
         /**
-         * For check the correctness of regular test cases. 
+         * For check the correctness of regular test cases.
          * A test case passes only if the actual output equal to the expected output.
          */
         UNIT,
@@ -66,7 +66,6 @@ public:
     virtual Type getTestType() const;
     /** Returns the time the test case needs.*/
     virtual float getDuration() const;
-
 
     /** Returns the expected output.*/
     virtual std::string getExpectedOutput() const { return ""; }
@@ -91,15 +90,14 @@ public:
     /**
      * You should NEVER call this method, unless you know what you are doing.
      */
-    void setTestCaseName(const std::string& name) { _testCaseName = name; }
+    void setTestCaseName(std::string_view name) { _testCaseName = name; }
     std::string getTestCaseName() const { return _testCaseName; }
 
     const cocos2d::Label* getSubtitleLable() const { return _subtitleLabel; }
     const cocos2d::MenuItemImage* getRestartTestItem() const { return _restartTestItem; }
 
     virtual void onEnter() override;
-CC_CONSTRUCTOR_ACCESS:
-    virtual bool init() override;
+    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
 
 protected:
     cocos2d::MenuItemImage* _priorTestItem;
@@ -138,13 +136,14 @@ public:
     ssize_t getChildTestCount() { return _childTestNames.size(); }
 
     /**
-    * You should NEVER call this method.
-    */
+     * You should NEVER call this method.
+     */
     void setTestParent(TestBase* parent) { _parentTest = parent; }
     TestBase* getTestParent() { return _parentTest; }
 
-    void setTestName(const std::string& testName) { _testName = testName; }
+    void setTestName(std::string_view testName) { _testName = testName; }
     std::string getTestName() const { return _testName; }
+
 protected:
     TestBase();
 
@@ -157,13 +156,13 @@ protected:
 class TestController;
 
 /**
-* TestSuite correspond to a group of test cases.
-* @note Each test case should add to a TestSuite object. 
-*/
+ * TestSuite correspond to a group of test cases.
+ * @note Each test case should add to a TestSuite object.
+ */
 class TestSuite : public TestBase
 {
 public:
-    void addTestCase(const std::string& testName, std::function<cocos2d::Scene*()> callback);
+    void addTestCase(std::string_view testName, std::function<cocos2d::Scene*()> callback);
 
     virtual void restartCurrTest();
     virtual void enterNextTest();
@@ -184,26 +183,30 @@ class TestCustomTableView;
 /**
  * An instance of TestList is a means for displaying hierarchical lists of TestSuite.
  */
-class TestList : public TestBase, public cocos2d::extension::TableViewDataSource, public cocos2d::extension::TableViewDelegate
+class TestList : public TestBase,
+                 public cocos2d::extension::TableViewDataSource,
+                 public cocos2d::extension::TableViewDelegate
 {
 public:
     TestList();
     ~TestList();
 
-    void addTest(const std::string& testName, std::function<TestBase*()> callback);
+    void addTest(std::string_view testName, std::function<TestBase*()> callback);
 
     virtual void runThisTest() override;
 
+    virtual void tableCellTouched(cocos2d::extension::TableView* table,
+                                  cocos2d::extension::TableViewCell* cell) override;
+    virtual cocos2d::extension::TableViewCell* tableCellAtIndex(cocos2d::extension::TableView* table,
+                                                                ssize_t idx) override;
+    virtual cocos2d::Size tableCellSizeForIndex(cocos2d::extension::TableView* table, ssize_t idx) override;
+    virtual ssize_t numberOfCellsInTableView(cocos2d::extension::TableView* table) override;
 
-    virtual void tableCellTouched(cocos2d::extension::TableView* table, cocos2d::extension::TableViewCell* cell) override;
-    virtual cocos2d::extension::TableViewCell* tableCellAtIndex(cocos2d::extension::TableView *table, ssize_t idx) override;
-    virtual cocos2d::Size tableCellSizeForIndex(cocos2d::extension::TableView *table, ssize_t idx) override;
-    virtual ssize_t numberOfCellsInTableView(cocos2d::extension::TableView *table) override;
-
-    virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view) override{}
-    virtual void scrollViewDidZoom(cocos2d::extension::ScrollView* view) override{}
+    virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view) override {}
+    virtual void scrollViewDidZoom(cocos2d::extension::ScrollView* view) override {}
 
     void deatchTableView();
+
 private:
     std::vector<std::function<TestBase*()>> _testCallbacks;
     bool _cellTouchEnabled;
@@ -213,32 +216,40 @@ private:
     TestCustomTableView* _tableView{};
 };
 
+#define ADD_TEST(__className__) addTest(#__className__, []() { return new __className__; });
 
-#define ADD_TEST(__className__) addTest( #__className__, [](){ return new __className__;} );
+#define ADD_TEST_CASE(__className__) addTestCase(#__className__, []() { return __className__::create(); });
 
-#define ADD_TEST_CASE(__className__) addTestCase( #__className__, [](){ return __className__::create();} );
+#define DEFINE_TEST_LIST(__className__)   \
+    class __className__ : public TestList \
+    {                                     \
+    public:                               \
+        __className__();                  \
+    }
 
-#define DEFINE_TEST_LIST(__className__) class __className__  : public TestList { public: __className__();}
-
-#define DEFINE_TEST_SUITE(__className__) class __className__  : public TestSuite { public: __className__();}
-
+#define DEFINE_TEST_SUITE(__className__)   \
+    class __className__ : public TestSuite \
+    {                                      \
+    public:                                \
+        __className__();                   \
+    }
 
 /**
  * BaseTest is retained for compatibility with older versions.
- * @warning It should soon be removed. 
+ * @warning It should soon be removed.
  */
 class BaseTest : public cocos2d::Layer
 {
 public:
     virtual std::string title() const { return ""; }
-    virtual std::string subtitle() const{ return ""; }
+    virtual std::string subtitle() const { return ""; }
 
     virtual void restartCallback(cocos2d::Ref* sender) {}
-    virtual void nextCallback(cocos2d::Ref* sender){}
-    virtual void backCallback(cocos2d::Ref* sender){}
+    virtual void nextCallback(cocos2d::Ref* sender) {}
+    virtual void backCallback(cocos2d::Ref* sender) {}
 
-    virtual void onEnter() override{}
-    virtual void onExit() override{}
+    virtual void onEnter() override {}
+    virtual void onExit() override {}
 };
 
 #endif /* defined(_CPPTESTS_BASETEST_H__) */

@@ -71,12 +71,12 @@ CameraBackgroundDepthBrush* CameraBackgroundBrush::createDepthBrush(float depth)
     return CameraBackgroundDepthBrush::create(depth);
 }
 
-CameraBackgroundSkyBoxBrush* CameraBackgroundBrush::createSkyboxBrush(const std::string& positive_x,
-                                                                      const std::string& negative_x,
-                                                                      const std::string& positive_y,
-                                                                      const std::string& negative_y,
-                                                                      const std::string& positive_z,
-                                                                      const std::string& negative_z)
+CameraBackgroundSkyBoxBrush* CameraBackgroundBrush::createSkyboxBrush(std::string_view positive_x,
+                                                                      std::string_view negative_x,
+                                                                      std::string_view positive_y,
+                                                                      std::string_view negative_y,
+                                                                      std::string_view positive_z,
+                                                                      std::string_view negative_z)
 {
     return CameraBackgroundSkyBoxBrush::create(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
 }
@@ -303,12 +303,12 @@ CameraBackgroundSkyBoxBrush::~CameraBackgroundSkyBoxBrush()
 #endif
 }
 
-CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(const std::string& positive_x,
-                                                                 const std::string& negative_x,
-                                                                 const std::string& positive_y,
-                                                                 const std::string& negative_y,
-                                                                 const std::string& positive_z,
-                                                                 const std::string& negative_z)
+CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(std::string_view positive_x,
+                                                                 std::string_view negative_x,
+                                                                 std::string_view positive_y,
+                                                                 std::string_view negative_y,
+                                                                 std::string_view positive_z,
+                                                                 std::string_view negative_z)
 {
     CameraBackgroundSkyBoxBrush* ret = nullptr;
 

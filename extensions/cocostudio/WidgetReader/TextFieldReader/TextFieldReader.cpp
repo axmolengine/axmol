@@ -101,9 +101,9 @@ void TextFieldReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 
     textField->setFontSize(DICTOOL->getIntValue_json(options, P_FontSize, 20));
 
-    std::string jsonPath     = GUIReader::getInstance()->getFilePath();
-    std::string fontName     = DICTOOL->getStringValue_json(options, P_FontName, "");
-    std::string fontFilePath = jsonPath.append(fontName);
+    std::string fontFilePath{GUIReader::getInstance()->getFilePath()};
+    auto fontName = DICTOOL->getStringValue_json(options, P_FontName, "");
+    fontFilePath.append(fontName);
     if (FileUtils::getInstance()->isFileExist(fontFilePath))
         textField->setFontName(fontFilePath);
     else

@@ -90,7 +90,7 @@ static const int TILECACHESET_MAGIC   = 'T' << 24 | 'S' << 16 | 'E' << 8 | 'T'; 
 static const int TILECACHESET_VERSION = 2;                                       // 1: fastlz, 2: lz4
 static const int MAX_AGENTS           = 128;
 
-NavMesh* NavMesh::create(const std::string& navFilePath, const std::string& geomFilePath)
+NavMesh* NavMesh::create(std::string_view navFilePath, std::string_view geomFilePath)
 {
     auto ref = new NavMesh();
     if (ref->initWithFilePath(navFilePath, geomFilePath))
@@ -138,7 +138,7 @@ NavMesh::~NavMesh()
     _obstacleList.clear();
 }
 
-bool NavMesh::initWithFilePath(const std::string& navFilePath, const std::string& geomFilePath)
+bool NavMesh::initWithFilePath(std::string_view navFilePath, std::string_view geomFilePath)
 {
     _navFilePath  = navFilePath;
     _geomFilePath = geomFilePath;

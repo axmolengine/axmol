@@ -174,7 +174,7 @@ int LuaEngine::reallocateScriptHandler(int nHandler)
     return nRet;
 }
 
-bool LuaEngine::parseConfig(ConfigType type, const std::string& str)
+bool LuaEngine::parseConfig(ConfigType type, std::string_view str)
 {
     lua_getglobal(_stack->getLuaState(), "__onParseConfig");
     if (!lua_isfunction(_stack->getLuaState(), -1))
@@ -185,7 +185,7 @@ bool LuaEngine::parseConfig(ConfigType type, const std::string& str)
     }
 
     _stack->pushInt((int)type);
-    _stack->pushString(str.c_str());
+    _stack->pushString(str.data(), str.length());
 
     return _stack->executeFunction(2);
 }

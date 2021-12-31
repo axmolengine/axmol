@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,7 +34,7 @@ class ActionManagerTest : public TestCase
 protected:
     cocos2d::TextureAtlas* _atlas;
 
-    std::string    _title;
+    std::string _title;
 
 public:
     ActionManagerTest();
@@ -112,11 +112,13 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     void stopAction(float time);
+
 protected:
-    const unsigned int kMoveFlag = 0x01;
-    const unsigned int kScaleFlag = 0x02;
-    const unsigned int kRotateFlag = 0x04;
-    const unsigned int kRepeatForeverFlag = 0x08; // You don't need this for the test, but it's for demonstration how to activate several flags on an action.
+    const unsigned int kMoveFlag          = 0x01;
+    const unsigned int kScaleFlag         = 0x02;
+    const unsigned int kRotateFlag        = 0x04;
+    const unsigned int kRepeatForeverFlag = 0x08;  // You don't need this for the test, but it's for demonstration how
+                                                   // to activate several flags on an action.
 };
 
 class Issue14050Test : public ActionManagerTest
@@ -126,6 +128,7 @@ public:
 
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
+
 protected:
 };
 

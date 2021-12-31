@@ -56,15 +56,15 @@ void EditBox::openKeyboard() const
     _editBoxImpl->openKeyboard();
 }
 
-EditBox* EditBox::create(const Vec2& size, const std::string& normalImage, TextureResType texType)
+EditBox* EditBox::create(const Vec2& size, std::string_view normalImage, TextureResType texType)
 {
     return EditBox::create(size, normalImage, "", "", texType);
 }
 
 EditBox* EditBox::create(const Vec2& size,
-                         const std::string& normalImage,
-                         const std::string& pressedImage /* = "" */,
-                         const std::string& disabledImage /* = "" */,
+                         std::string_view normalImage,
+                         std::string_view pressedImage /* = "" */,
+                         std::string_view disabledImage /* = "" */,
                          TextureResType texType /* = TextureResType::LOCAL */)
 {
     EditBox* pRet = new EditBox();
@@ -136,16 +136,16 @@ bool EditBox::initWithSizeAndBackgroundSprite(const Vec2& size,
 }
 
 bool EditBox::initWithSizeAndBackgroundSprite(const Vec2& size,
-                                              const std::string& pNormal9SpriteBg,
+                                              std::string_view pNormal9SpriteBg,
                                               TextureResType texType)
 {
     return initWithSizeAndTexture(size, pNormal9SpriteBg, "", "", texType);
 }
 
 bool EditBox::initWithSizeAndTexture(const Vec2& size,
-                                     const std::string& normalImage,
-                                     const std::string& pressedImage /* = "" */,
-                                     const std::string& disabledImage /* = "" */,
+                                     std::string_view normalImage,
+                                     std::string_view pressedImage /* = "" */,
+                                     std::string_view disabledImage /* = "" */,
                                      TextureResType texType /* = TextureResType::LOCAL */)
 {
     if (Widget::init())
@@ -178,9 +178,9 @@ void EditBox::initRenderer()
     addProtectedChild(_disabledRenderer, DISABLED_RENDERER_Z, -1);
 }
 
-void EditBox::loadTextures(const std::string& normal,
-                           const std::string& pressed,
-                           const std::string& disabled,
+void EditBox::loadTextures(std::string_view normal,
+                           std::string_view pressed,
+                           std::string_view disabled,
                            TextureResType texType)
 {
     loadTextureNormal(normal, texType);
@@ -188,7 +188,7 @@ void EditBox::loadTextures(const std::string& normal,
     loadTextureDisabled(disabled, texType);
 }
 
-void EditBox::loadTextureNormal(const std::string& normal, TextureResType texType)
+void EditBox::loadTextureNormal(std::string_view normal, TextureResType texType)
 {
     _normalFileName    = normal;
     _normalTexType     = texType;
@@ -236,7 +236,7 @@ void EditBox::loadTextureNormal(SpriteFrame* normalSpriteFrame)
     this->setupNormalTexture(nullptr != normalSpriteFrame);
 }
 
-void EditBox::loadTexturePressed(const std::string& pressed, TextureResType texType)
+void EditBox::loadTexturePressed(std::string_view pressed, TextureResType texType)
 {
     _pressedFileName   = pressed;
     _pressedTexType    = texType;
@@ -279,7 +279,7 @@ void EditBox::loadTexturePressed(SpriteFrame* pressedSpriteFrame)
     this->setupPressedTexture(nullptr != pressedSpriteFrame);
 }
 
-void EditBox::loadTextureDisabled(const std::string& disabled, TextureResType texType)
+void EditBox::loadTextureDisabled(std::string_view disabled, TextureResType texType)
 {
     _disabledFileName  = disabled;
     _disabledTexType   = texType;

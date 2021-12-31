@@ -108,7 +108,7 @@ bool SAXParser::parse(const char* xmlData, size_t dataLength)
     return false;
 }
 
-bool SAXParser::parse(const std::string& filename)
+bool SAXParser::parse(std::string_view filename)
 {
     bool ret  = false;
     Data data = FileUtils::getInstance()->getDataFromFile(filename);

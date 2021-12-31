@@ -98,9 +98,9 @@ WidgetReader::WidgetReader()
     , _opacity(255)
     , _isAdaptScreen(false)
 {
-    valueToInt = [=](const std::string& str) -> int { return atoi(str.c_str()); };
+    valueToInt = [=](std::string_view str) -> int { return atoi(str.data()); };
 
-    valueToBool = [=](const std::string& str) -> bool {
+    valueToBool = [=](std::string_view str) -> bool {
         int intValue = valueToInt(str);
         if (1 == intValue)
         {
@@ -112,7 +112,7 @@ WidgetReader::WidgetReader()
         }
     };
 
-    valueToFloat = [=](const std::string& str) -> float { return utils::atof(str.c_str()); };
+    valueToFloat = [=](std::string_view str) -> float { return utils::atof(str.data()); };
 }
 
 WidgetReader::~WidgetReader() {}
@@ -303,17 +303,17 @@ void WidgetReader::endSetBasicProperties(Widget* widget)
 }
 
 std::string WidgetReader::getResourcePath(const rapidjson::Value& dict,
-                                          const std::string& key,
+                                          std::string_view key,
                                           cocos2d::ui::Widget::TextureResType texType)
 {
-    std::string jsonPath      = GUIReader::getInstance()->getFilePath();
-    const char* imageFileName = DICTOOL->getStringValue_json(dict, key.c_str());
+    std::string_view jsonPath = GUIReader::getInstance()->getFilePath();
+    const char* imageFileName = DICTOOL->getStringValue_json(dict, key.data());
     std::string imageFileName_tp;
     if (nullptr != imageFileName)
     {
         if (texType == ui::Widget::TextureResType::LOCAL)
         {
-            imageFileName_tp = jsonPath + imageFileName;
+            imageFileName_tp.append(jsonPath).append(imageFileName);
         }
         else if (texType == ui::Widget::TextureResType::PLIST)
         {
@@ -339,14 +339,14 @@ std::string WidgetReader::getResourcePath(CocoLoader* cocoLoader,
         return "";
     }
 
-    std::string binaryPath = GUIReader::getInstance()->getFilePath();
+    std::string_view binaryPath = GUIReader::getInstance()->getFilePath();
 
     std::string imageFileName_tp;
     if (!backgroundValue.empty())
     {
         if (texType == ui::Widget::TextureResType::LOCAL)
         {
-            imageFileName_tp = binaryPath + backgroundValue;
+            imageFileName_tp.append(binaryPath).append(backgroundValue);
         }
         else if (texType == ui::Widget::TextureResType::PLIST)
         {
@@ -940,20 +940,19 @@ Node* WidgetReader::createNodeWithFlatBuffers(const flatbuffers::Table* widgetOp
     return widget;
 }
 
-std::string WidgetReader::getResourcePath(const std::string& path, cocos2d::ui::Widget::TextureResType texType)
+std::string WidgetReader::getResourcePath(std::string_view path, cocos2d::ui::Widget::TextureResType texType)
 {
-    std::string filePath      = GUIReader::getInstance()->getFilePath();
-    const char* imageFileName = path.c_str();
+    std::string_view filePath = GUIReader::getInstance()->getFilePath();
     std::string imageFileName_tp;
-    if (nullptr != imageFileName && 0 != strcmp("", imageFileName))
+    if (!path.empty())
     {
         if (texType == ui::Widget::TextureResType::LOCAL)
         {
-            imageFileName_tp = filePath + imageFileName;
+            imageFileName_tp.append(filePath).append(path);
         }
         else if (texType == ui::Widget::TextureResType::PLIST)
         {
-            imageFileName_tp = imageFileName;
+            imageFileName_tp.assign(path);
         }
         else
         {

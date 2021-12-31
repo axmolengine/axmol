@@ -107,18 +107,18 @@ private:
     VertexAttribBinding& operator=(const VertexAttribBinding&);
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
-    void setVertexAttribPointer(const std::string& name,
+    void setVertexAttribPointer(std::string_view name,
                                 backend::VertexFormat type,
                                 bool normalized,
                                 int offset,
                                 int flag);
-    backend::AttributeBindInfo* getVertexAttribValue(const std::string& name);
+    backend::AttributeBindInfo* getVertexAttribValue(std::string_view name);
     void parseAttributes();
 
     MeshIndexData* _meshIndexData;
     backend::ProgramState* _programState;
     std::shared_ptr<backend::VertexLayout> _vertexLayout = std::make_shared<backend::VertexLayout>();
-    std::unordered_map<std::string, backend::AttributeBindInfo> _attributes;
+    hlookup::string_map<backend::AttributeBindInfo> _attributes;
     uint32_t _vertexAttribsFlags;
 };
 

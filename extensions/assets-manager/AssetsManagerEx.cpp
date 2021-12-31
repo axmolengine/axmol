@@ -168,8 +168,7 @@ int AssetManagerEx_error_file_func(voidpf opaque, voidpf stream)
 
 // Implementation of AssetsManagerEx
 
-AssetsManagerEx::AssetsManagerEx(const std::string& manifestUrl, const std::string& storagePath)
-    : _manifestUrl(manifestUrl)
+AssetsManagerEx::AssetsManagerEx(std::string_view manifestUrl, std::string_view storagePath) : _manifestUrl(manifestUrl)
 {
     // Init variables
     _eventDispatcher    = Director::getInstance()->getEventDispatcher();
@@ -208,14 +207,14 @@ AssetsManagerEx::~AssetsManagerEx()
     CC_SAFE_RELEASE(_remoteManifest);
 }
 
-AssetsManagerEx* AssetsManagerEx::create(const std::string& manifestUrl, const std::string& storagePath)
+AssetsManagerEx* AssetsManagerEx::create(std::string_view manifestUrl, std::string_view storagePath)
 {
     AssetsManagerEx* ret = new AssetsManagerEx(manifestUrl, storagePath);
     ret->autorelease();
     return ret;
 }
 
-void AssetsManagerEx::initManifests(const std::string& manifestUrl)
+void AssetsManagerEx::initManifests(std::string_view manifestUrl)
 {
     _inited = true;
     // Init and load local manifest
@@ -260,7 +259,7 @@ void AssetsManagerEx::prepareLocalManifest()
     _localManifest->prependSearchPaths();
 }
 
-void AssetsManagerEx::loadLocalManifest(const std::string& /*manifestUrl*/)
+void AssetsManagerEx::loadLocalManifest(std::string_view /*manifestUrl*/)
 {
     Manifest* cachedManifest = nullptr;
     // Find the cached manifest file
@@ -329,7 +328,7 @@ void AssetsManagerEx::loadLocalManifest(const std::string& /*manifestUrl*/)
     }
 }
 
-std::string AssetsManagerEx::basename(const std::string& path) const
+std::string_view AssetsManagerEx::basename(std::string_view path) const
 {
     size_t found = path.find_last_of("/\\");
 
@@ -343,7 +342,7 @@ std::string AssetsManagerEx::basename(const std::string& path) const
     }
 }
 
-std::string AssetsManagerEx::get(const std::string& key) const
+std::string AssetsManagerEx::get(std::string_view key) const
 {
     auto it = _assets->find(key);
     if (it != _assets->cend())
@@ -364,12 +363,12 @@ const Manifest* AssetsManagerEx::getRemoteManifest() const
     return _remoteManifest;
 }
 
-const std::string& AssetsManagerEx::getStoragePath() const
+std::string_view AssetsManagerEx::getStoragePath() const
 {
     return _storagePath;
 }
 
-void AssetsManagerEx::setStoragePath(const std::string& storagePath)
+void AssetsManagerEx::setStoragePath(std::string_view storagePath)
 {
     _storagePath = storagePath;
     adjustPath(_storagePath);
@@ -389,16 +388,16 @@ void AssetsManagerEx::adjustPath(std::string& path)
     }
 }
 
-bool AssetsManagerEx::decompress(const std::string& zip)
+bool AssetsManagerEx::decompress(std::string_view zip)
 {
     // Find root path for zip file
     size_t pos = zip.find_last_of("/\\");
     if (pos == std::string::npos)
     {
-        CCLOG("AssetsManagerEx : no root path specified for zip file %s\n", zip.c_str());
+        CCLOG("AssetsManagerEx : no root path specified for zip file %s\n", zip.data());
         return false;
     }
-    const std::string rootPath = zip.substr(0, pos + 1);
+    const std::string_view rootPath = zip.substr(0, pos + 1);
 
     zlib_filefunc_def_s zipFunctionOverrides;
     fillZipFunctionOverrides(zipFunctionOverrides);
@@ -409,10 +408,10 @@ bool AssetsManagerEx::decompress(const std::string& zip)
     zipFunctionOverrides.opaque = &zipFileInfo;
 
     // Open the zip file
-    unzFile zipfile = unzOpen2(zip.c_str(), &zipFunctionOverrides);
+    unzFile zipfile = unzOpen2(zip.data(), &zipFunctionOverrides);
     if (!zipfile)
     {
-        CCLOG("AssetsManagerEx : can not open downloaded zip file %s\n", zip.c_str());
+        CCLOG("AssetsManagerEx : can not open downloaded zip file %s\n", zip.data());
         return false;
     }
 
@@ -420,7 +419,7 @@ bool AssetsManagerEx::decompress(const std::string& zip)
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK)
     {
-        CCLOG("AssetsManagerEx : can not read file global info of %s\n", zip.c_str());
+        CCLOG("AssetsManagerEx : can not read file global info of %s\n", zip.data());
         unzClose(zipfile);
         return false;
     }
@@ -440,7 +439,8 @@ bool AssetsManagerEx::decompress(const std::string& zip)
             unzClose(zipfile);
             return false;
         }
-        const std::string fullPath = rootPath + fileName;
+        std::string fullPath{rootPath};
+        fullPath += fileName;
 
         // Check if this entry is a directory or a file.
         const size_t filenameLength = strlen(fileName);
@@ -459,7 +459,7 @@ bool AssetsManagerEx::decompress(const std::string& zip)
         else
         {
             // Create all directories in advance to avoid issue
-            std::string dir = basename(fullPath);
+            std::string_view dir = basename(fullPath);
             if (!_fileUtils->isDirectoryExist(dir))
             {
                 if (!_fileUtils->createDirectory(dir))
@@ -531,7 +531,7 @@ bool AssetsManagerEx::decompress(const std::string& zip)
     return true;
 }
 
-void AssetsManagerEx::decompressDownloadedZip(const std::string& customId, const std::string& storagePath)
+void AssetsManagerEx::decompressDownloadedZip(std::string_view customId, std::string_view storagePath)
 {
     struct AsyncData
     {
@@ -573,8 +573,8 @@ void AssetsManagerEx::decompressDownloadedZip(const std::string& customId, const
 }
 
 void AssetsManagerEx::dispatchUpdateEvent(EventAssetsManagerEx::EventCode code,
-                                          const std::string& assetId /* = ""*/,
-                                          const std::string& message /* = ""*/,
+                                          std::string_view assetId /* = ""*/,
+                                          std::string_view message /* = ""*/,
                                           int curle_code /* = CURLE_OK*/,
                                           int curlm_code /* = CURLM_OK*/)
 {
@@ -619,7 +619,7 @@ void AssetsManagerEx::downloadVersion()
     if (_updateState > State::PREDOWNLOAD_VERSION)
         return;
 
-    std::string versionUrl = _localManifest->getVersionFileUrl();
+    std::string_view versionUrl = _localManifest->getVersionFileUrl();
 
     if (!versionUrl.empty())
     {
@@ -786,7 +786,7 @@ void AssetsManagerEx::startUpdate()
         _tempManifest = _remoteManifest;
 
         // Check difference between local manifest and remote manifest
-        std::unordered_map<std::string, Manifest::AssetDiff> diff_map = _localManifest->genDiff(_remoteManifest);
+        hlookup::string_map<Manifest::AssetDiff> diff_map = _localManifest->genDiff(_remoteManifest);
         if (diff_map.empty())
         {
             updateSucceed();
@@ -794,7 +794,7 @@ void AssetsManagerEx::startUpdate()
         else
         {
             // Generate download units for all assets that need to be updated or added
-            std::string packageUrl = _remoteManifest->getPackageUrl();
+            std::string_view packageUrl = _remoteManifest->getPackageUrl();
             // Save current download manifest information for resuming
             _tempManifest->saveToFile(_tempManifestPath);
             // Preprocessing local files in previous version and creating download folders
@@ -803,10 +803,11 @@ void AssetsManagerEx::startUpdate()
                 Manifest::AssetDiff diff = it->second;
                 if (diff.type != Manifest::DiffType::DELETED)
                 {
-                    std::string path = diff.asset.path;
+                    const std::string& path = diff.asset.path;
                     DownloadUnit unit;
-                    unit.customId    = it->first;
-                    unit.srcUrl      = packageUrl + path;
+                    unit.customId = it->first;
+                    unit.srcUrl   = packageUrl;
+                    unit.srcUrl += path;
                     unit.storagePath = _tempStoragePath + path;
                     unit.size        = diff.asset.size;
                     _downloadUnits.emplace(unit.customId, unit);
@@ -1034,8 +1035,8 @@ void AssetsManagerEx::downloadFailedAssets()
     updateAssets(_failedUnits);
 }
 
-void AssetsManagerEx::fileError(const std::string& identifier,
-                                const std::string& errorStr,
+void AssetsManagerEx::fileError(std::string_view identifier,
+                                std::string_view errorStr,
                                 int errorCode,
                                 int errorCodeInternal)
 {
@@ -1056,7 +1057,7 @@ void AssetsManagerEx::fileError(const std::string& identifier,
     queueDowload();
 }
 
-void AssetsManagerEx::fileSuccess(const std::string& customId, const std::string& storagePath)
+void AssetsManagerEx::fileSuccess(std::string_view customId, std::string_view storagePath)
 {
     // Set download state to SUCCESSED
     _tempManifest->setAssetDownloadState(customId, Manifest::DownloadState::SUCCESSED);
@@ -1089,7 +1090,7 @@ void AssetsManagerEx::fileSuccess(const std::string& customId, const std::string
 void AssetsManagerEx::onError(const network::DownloadTask& task,
                               int errorCode,
                               int errorCodeInternal,
-                              const std::string& errorStr)
+                              std::string_view errorStr)
 {
     // Skip version error occurred
     if (task.identifier == VERSION_ID)
@@ -1110,10 +1111,7 @@ void AssetsManagerEx::onError(const network::DownloadTask& task,
     }
 }
 
-void AssetsManagerEx::onProgress(double total,
-                                 double downloaded,
-                                 const std::string& /*url*/,
-                                 const std::string& customId)
+void AssetsManagerEx::onProgress(double total, double downloaded, std::string_view /*url*/, std::string_view customId)
 {
     if (customId == VERSION_ID || customId == MANIFEST_ID)
     {
@@ -1170,9 +1168,7 @@ void AssetsManagerEx::onProgress(double total,
     }
 }
 
-void AssetsManagerEx::onSuccess(const std::string& /*srcUrl*/,
-                                const std::string& storagePath,
-                                const std::string& customId)
+void AssetsManagerEx::onSuccess(std::string_view /*srcUrl*/, std::string_view storagePath, std::string_view customId)
 {
     if (customId == VERSION_ID)
     {

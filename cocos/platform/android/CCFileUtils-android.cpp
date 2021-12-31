@@ -36,6 +36,8 @@ THE SOFTWARE.
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "yasio/cxx17/string_view.hpp"
+
 #define LOG_TAG "CCFileUtils-android.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
@@ -103,7 +105,7 @@ bool FileUtilsAndroid::init()
     return FileUtils::init();
 }
 
-std::string FileUtilsAndroid::getNewFilename(const std::string& filename) const
+std::string FileUtilsAndroid::getNewFilename(std::string_view filename) const
 {
     std::string newFileName = FileUtils::getNewFilename(filename);
     // ../xxx do not fix this path
@@ -156,7 +158,7 @@ std::string FileUtilsAndroid::getNewFilename(const std::string& filename) const
     return newFileName;
 }
 
-bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
+bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
 {
 
     DECLARE_GUARD;
@@ -171,7 +173,7 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
     // Check whether file exists in apk.
     if (strFilePath[0] != '/')
     {
-        const char* s = strFilePath.c_str();
+        const char* s = strFilePath.data();
 
         // Found "assets/" at the beginning of the path and we don't want it
         if (strFilePath.find(_defaultResRootPath) == 0)
@@ -198,26 +200,30 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
     else
     {
         struct stat st;
-        if (::stat(strFilePath.c_str(), &st) == 0)
+        if (::stat(strFilePath.data(), &st) == 0)
             bFound = S_ISREG(st.st_mode);
     }
     return bFound;
 }
 
-bool FileUtilsAndroid::isDirectoryExistInternal(const std::string& dirPath) const
+bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
 {
     if (dirPath.empty())
     {
         return false;
     }
 
-    std::string dirPathCopy = dirPath;
-    if (dirPathCopy[dirPathCopy.length() - 1] == '/')
+    std::string_view path;
+    std::string dirPathCopy;
+    if (dirPath[dirPath.length() - 1] == '/')
     {
-        dirPathCopy.erase(dirPathCopy.length() - 1);
+        dirPathCopy.assign(dirPath.data(), dirPath.length() - 1);
+        path = dirPathCopy;
     }
+    else
+        path = dirPath;
 
-    const char* s = dirPathCopy.c_str();
+    const char* s = path.data();
 
     // find absolute path in flash memory
     if (s[0] == '/')
@@ -254,7 +260,7 @@ bool FileUtilsAndroid::isDirectoryExistInternal(const std::string& dirPath) cons
     return false;
 }
 
-bool FileUtilsAndroid::isAbsolutePath(const std::string& strPath) const
+bool FileUtilsAndroid::isAbsolutePath(std::string_view strPath) const
 {
     DECLARE_GUARD;
     // On Android, there are two situations for full path.
@@ -264,7 +270,7 @@ bool FileUtilsAndroid::isAbsolutePath(const std::string& strPath) const
     return (strPath[0] == '/' || strPath.find(_defaultResRootPath) == 0);
 }
 
-int64_t FileUtilsAndroid::getFileSize(const std::string& filepath) const
+int64_t FileUtilsAndroid::getFileSize(std::string_view filepath) const
 {
     DECLARE_GUARD;
     int64_t size = FileUtils::getFileSize(filepath);
@@ -275,13 +281,16 @@ int64_t FileUtilsAndroid::getFileSize(const std::string& filepath) const
 
     if (FileUtilsAndroid::assetmanager)
     {
-        string relativePath = filepath;
-        if (filepath.find(_defaultResRootPath) == 0)
+        std::string_view path;
+        std::string relativePath;
+        if (cxx20::starts_with(filepath, _defaultResRootPath))
         {
-            relativePath = filepath.substr(_defaultResRootPath.size());
+            path = relativePath = filepath.substr(_defaultResRootPath.size());
         }
+        else
+            path = filepath;
 
-        AAsset* asset = AAssetManager_open(FileUtilsAndroid::assetmanager, relativePath.data(), AASSET_MODE_UNKNOWN);
+        AAsset* asset = AAssetManager_open(FileUtilsAndroid::assetmanager, path.data(), AASSET_MODE_UNKNOWN);
         if (asset)
         {
             size = AAsset_getLength(asset);
@@ -292,7 +301,7 @@ int64_t FileUtilsAndroid::getFileSize(const std::string& filepath) const
     return size;
 }
 
-std::vector<std::string> FileUtilsAndroid::listFiles(const std::string& dirPath) const
+std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) const
 {
 
     if (!dirPath.empty() && dirPath[0] == '/')
@@ -347,7 +356,7 @@ std::vector<std::string> FileUtilsAndroid::listFiles(const std::string& dirPath)
     return fileList;
 }
 
-FileUtils::Status FileUtilsAndroid::getContents(const std::string& filename, ResizableBuffer* buffer) const
+FileUtils::Status FileUtilsAndroid::getContents(std::string_view filename, ResizableBuffer* buffer) const
 {
     static const std::string apkprefix("assets/");
     if (filename.empty())

@@ -1,0 +1,36 @@
+name: genbindings
+
+on: 
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - cocos/**/*
+      - extensions/**/*
+      - .github/workflows/genbindings-ci.yml
+
+jobs:
+  build:
+    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        lfs: 'true'
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+
+    - uses: ilammy/msvc-dev-cmd@v1.9.0
+      with: 
+        arch: ${{ env.BUILD_ARCH }}
+
+    - name: Build
+      run: tools\win-ci\genbindings.ps1

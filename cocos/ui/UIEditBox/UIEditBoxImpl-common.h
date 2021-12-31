@@ -107,11 +107,11 @@ public:
     virtual void openKeyboard() override;
     virtual void closeKeyboard() override;
 
-    virtual void onEndEditing(const std::string& text);
+    virtual void onEndEditing(std::string_view text);
 
     void editBoxEditingDidBegin();
-    void editBoxEditingChanged(const std::string& text);
-    void editBoxEditingDidEnd(const std::string& text,
+    void editBoxEditingChanged(std::string_view text);
+    void editBoxEditingDidEnd(std::string_view text,
                               EditBoxDelegate::EditBoxEndAction action = EditBoxDelegate::EditBoxEndAction::UNKNOWN);
 
     virtual bool isEditing() override                                                = 0;

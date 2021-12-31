@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -105,15 +105,14 @@ public:
 
     void deleteFlatBufferBuilder();
 
-    std::string test(const std::string& xmlFileName, const std::string& flatbuffersFileName);
+    std::string test(std::string_view xmlFileName, std::string_view flatbuffersFileName);
 
     /* serialize flat buffers with XML */
-    static std::string serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
-                                                       const std::string& flatbuffersFileName);
+    static std::string serializeFlatBuffersWithXMLFile(std::string_view xmlFileName,
+                                                       std::string_view flatbuffersFileName);
     /* x-studio spec: serialize flat buffers with XML buffer */
-    static std::string serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer,
-                                                         const std::string& flatbuffersFileName);
-    static std::string serializeFlatBuffersWithOpaque(void* opaque, const std::string& flatbuffersFileName);
+    static std::string serializeFlatBuffersWithXMLBuffer(std::string& xmlBuffer, std::string_view flatbuffersFileName);
+    static std::string serializeFlatBuffersWithOpaque(void* opaque, std::string_view flatbuffersFileName);
 
     // NodeTree
     flatbuffers::Offset<flatbuffers::NodeTree> createNodeTree(pugi::xml_node objectData, std::string classType);
@@ -138,11 +137,11 @@ public:
     /**/
 
     int getResourceType(std::string key);
-    std::string getGUIClassName(const std::string& name);
+    std::string getGUIClassName(std::string_view name);
     std::string getWidgetReaderClassName(cocos2d::ui::Widget* widget);
 
     /* create flat buffers with XML */
-    flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(const std::string& xmlFileName);
+    flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(std::string_view xmlFileName);
     flatbuffers::Offset<flatbuffers::NodeTree> createNodeTreeForSimulator(pugi::xml_node objectData,
                                                                           std::string classType);
     flatbuffers::Offset<flatbuffers::ProjectNodeOptions> createProjectNodeOptionsForSimulator(
@@ -151,9 +150,9 @@ public:
     std::string getCsdVersion() { return _csdVersion; }
 
     /* Serialize language XML file to Flat Buffers file. */
-    std::string serializeFlatBuffersWithXMLFileForLanguageData(const std::string& xmlFilePath,
-                                                               const std::string& flatBuffersFilePath,
-                                                               const std::string& languageName);
+    std::string serializeFlatBuffersWithXMLFileForLanguageData(std::string_view xmlFilePath,
+                                                               std::string_view flatBuffersFilePath,
+                                                               std::string_view languageName);
 
 public:
     std::vector<flatbuffers::Offset<flatbuffers::String>> _textures;

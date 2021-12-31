@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -141,7 +141,7 @@ CC_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
 CCS_DLL extern void (*onLoadSpriteFramesWithFile)(std::string& file);
 
 CCS_DLL extern cocos2d::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
-CCS_DLL extern cocos2d::ResourceData makeResourceData(const std::string& path, int type = 0);
+CCS_DLL extern cocos2d::ResourceData makeResourceData(std::string_view path, int type = 0);
 CCS_DLL extern cocos2d::ResourceData makeResourceData(std::string&& path, int type = 0);
 CCS_DLL extern void resetReaderAllHooks();
 
@@ -168,7 +168,7 @@ CCS_DLL extern cocos2d::ui::PageView* (*aPageView)();
 CCS_DLL extern cocos2d::Node* (*aArmatureNode)();
 CCS_DLL extern cocostudio::timeline::SkeletonNode* (*aSkeletonNode)();
 CCS_DLL extern cocostudio::timeline::BoneNode* (*aBoneNode)();
-CCS_DLL extern cocos2d::ParticleSystemQuad* (*aParticleSystemQuad)(const std::string&);
+CCS_DLL extern cocos2d::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
 CCS_DLL extern cocos2d::Node* (*aNestingNode)(std::string);
 
 ///// 3d objects /////

@@ -152,7 +152,7 @@ public:
      * @param propertyName The value for the specific property name.
      * @return The value for the specific property name.
      */
-    Value getProperty(const std::string& propertyName) const;
+    Value getProperty(std::string_view propertyName) const;
 
     /** Creates the tiles. */
     void setupTiles();
@@ -161,13 +161,13 @@ public:
      *
      * @return The tile layer name.
      */
-    const std::string& getLayerName() { return _layerName; }
+    std::string_view getLayerName() { return _layerName; }
 
     /** Set the tile layer name.
      *
      * @param layerName The new layer name.
      */
-    void setLayerName(const std::string& layerName) { _layerName = layerName; }
+    void setLayerName(std::string_view layerName) { _layerName = layerName; }
 
     /** Gets the size of the layer in tiles.
      *

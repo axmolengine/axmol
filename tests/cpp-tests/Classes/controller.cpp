@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,15 +45,14 @@ public:
     {
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(CC_PLATFORM_PC)
-        addTest("ImGuiEXT", []() {return new ImGuiEXTTests(); });
+        addTest("ImGuiEXT", []() { return new ImGuiEXTTests(); });
 #endif
-        addTest("Texture2D", []() {return new Texture2DTests(); });
-        addTest("ActionManager", [](){return new ActionManagerTests(); });
-        addTest("Actions - Basic", [](){ return new ActionsTests(); });
-        addTest("Actions - Ease", [](){return new ActionsEaseTests(); });
-        addTest("Actions - Progress", [](){return new ActionsProgressTests(); });
+        addTest("Texture2D", []() { return new Texture2DTests(); });
+        addTest("ActionManager", []() { return new ActionManagerTests(); });
+        addTest("Actions - Basic", []() { return new ActionsTests(); });
+        addTest("Actions - Ease", []() { return new ActionsEaseTests(); });
+        addTest("Actions - Progress", []() { return new ActionsProgressTests(); });
         addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
-
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
 #if defined(CC_PLATFORM_PC)
@@ -64,7 +63,7 @@ public:
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
-        addTest("Click and Move", [](){return new ClickAndMoveTest(); });
+        addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
         addTest("Curl", []() { return new CurlTests(); });
@@ -72,80 +71,78 @@ public:
         addTest("Network Test", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
         addTest("Effects - Advanced", []() { return new EffectAdvanceTests(); });
-        addTest("Effects - Basic", [](){return new EffectTests(); });
+        addTest("Effects - Basic", []() { return new EffectTests(); });
         addTest("Extensions", []() { return new ExtensionsTests(); });
         addTest("FileUtils", []() { return new FileUtilsTests(); });
         addTest("Fonts", []() { return new FontTests(); });
-        addTest("Interval", [](){return new IntervalTests(); });
+        addTest("Interval", []() { return new IntervalTests(); });
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         addTest("JNIHelper", []() { return new JNITests(); });
 #endif
-        addTest("Material System", [](){return new MaterialSystemTest(); });
-        addTest("Navigation Mesh", [](){return new NavMeshTests(); });
-        addTest("Node: BillBoard Test", [](){  return new BillBoardTests(); });
-        addTest("Node: Camera3D Test", [](){  return new Camera3DTests(); });
+        addTest("Material System", []() { return new MaterialSystemTest(); });
+        addTest("Navigation Mesh", []() { return new NavMeshTests(); });
+        addTest("Node: BillBoard Test", []() { return new BillBoardTests(); });
+        addTest("Node: Camera3D Test", []() { return new Camera3DTests(); });
         addTest("Node: Clipping", []() { return new ClippingNodeTests(); });
-        addTest("Node: Draw", [](){return new DrawPrimitivesTests(); });
-        addTest("Node: Label - New API", [](){return new NewLabelTests(); });
-        addTest("Node: Layer", [](){return new LayerTests(); });
-        addTest("Node: Light", [](){return new LightTests(); });
-        addTest("Node: Menu", [](){return new MenuTests(); });
-        addTest("Node: MotionStreak", [](){return new MotionStreakTests(); });
-        addTest("Node: Node", [](){return new CocosNodeTests(); });
-        addTest("Node: Parallax", [](){return new ParallaxTests(); });
-        addTest("Node: Particles", [](){return new ParticleTests(); });
-        addTest("Node: Particle3D (PU)", [](){return new Particle3DTests(); });
+        addTest("Node: Draw", []() { return new DrawPrimitivesTests(); });
+        addTest("Node: Label - New API", []() { return new NewLabelTests(); });
+        addTest("Node: Layer", []() { return new LayerTests(); });
+        addTest("Node: Light", []() { return new LightTests(); });
+        addTest("Node: Menu", []() { return new MenuTests(); });
+        addTest("Node: MotionStreak", []() { return new MotionStreakTests(); });
+        addTest("Node: Node", []() { return new CocosNodeTests(); });
+        addTest("Node: Parallax", []() { return new ParallaxTests(); });
+        addTest("Node: Particles", []() { return new ParticleTests(); });
+        addTest("Node: Particle3D (PU)", []() { return new Particle3DTests(); });
 #if CC_USE_PHYSICS
         addTest("Node: Physics", []() { return new PhysicsTests(); });
 #endif
-        addTest("Node: Physics3D", []() { return new Physics3DTests(); } );
-        addTest("Node: RenderTexture", [](){return new RenderTextureTests(); });
-        addTest("Node: Scene", [](){return new SceneTests(); });
-        addTest("Node: Spine", [](){return new SpineTests(); });
-        addTest("Node: Sprite", [](){return new SpriteTests(); });
-        addTest("Node: Sprite3D", [](){  return new Sprite3DTests(); });
-        addTest("Node: SpritePolygon", [](){return new SpritePolygonTest(); });
-        addTest("Node: Terrain", [](){  return new TerrainTests(); });
-        addTest("Node: FastTileMap", [](){return new FastTileMapTests(); });
-        addTest("Node: Text Input", [](){return new TextInputTests(); });
-        addTest("Node: UI", [](){  return new UITests(); });
+        addTest("Node: Physics3D", []() { return new Physics3DTests(); });
+        addTest("Node: RenderTexture", []() { return new RenderTextureTests(); });
+        addTest("Node: Scene", []() { return new SceneTests(); });
+        addTest("Node: Spine", []() { return new SpineTests(); });
+        addTest("Node: Sprite", []() { return new SpriteTests(); });
+        addTest("Node: Sprite3D", []() { return new Sprite3DTests(); });
+        addTest("Node: SpritePolygon", []() { return new SpritePolygonTest(); });
+        addTest("Node: Terrain", []() { return new TerrainTests(); });
+        addTest("Node: FastTileMap", []() { return new FastTileMapTests(); });
+        addTest("Node: Text Input", []() { return new TextInputTests(); });
+        addTest("Node: UI", []() { return new UITests(); });
         addTest("Mouse", []() { return new MouseTests(); });
         addTest("MultiTouch", []() { return new MultiTouchTests(); });
         addTest("Renderer", []() { return new NewRendererTests(); });
-        addTest("ReleasePool", [](){ return new ReleasePoolTests(); });
-        addTest("Rotate World", [](){return new RotateWorldTests(); });
-        addTest("Scheduler", [](){return new SchedulerTests(); });
+        addTest("ReleasePool", []() { return new ReleasePoolTests(); });
+        addTest("Rotate World", []() { return new RotateWorldTests(); });
+        addTest("Scheduler", []() { return new SchedulerTests(); });
         addTest("Shader - Basic", []() { return new ShaderTests(); });
         addTest("Shader - Sprite", []() { return new Shader2Tests(); });
         addTest("TextureCache", []() { return new TextureCacheTests(); });
         addTest("TexturePacker Encryption", []() { return new TextureAtlasEncryptionTests(); });
-        addTest("Touches", [](){return new TouchesTests(); });
-        addTest("Transitions", [](){return new TransitionsTests(); });
+        addTest("Touches", []() { return new TouchesTests(); });
+        addTest("Transitions", []() { return new TransitionsTests(); });
         addTest("Unit Test", []() { return new UnitTests(); });
-        addTest("Unzip Test", []() {return new ZipTests();});
+        addTest("Unzip Test", []() { return new ZipTests(); });
         addTest("URL Open Test", []() { return new OpenURLTests(); });
         addTest("UserDefault", []() { return new UserDefaultTests(); });
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         addTest("Vibrate", []() { return new VibrateTests(); });
 #endif
         addTest("Zwoptex", []() { return new ZwoptexTests(); });
-        addTest("SpriteFrameCache", []() { return new SpriteFrameCacheTests(); }); // TODO
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        addTest("Window Test", []() { return new WindowTests(); }); // TODO wrong effect
+        addTest("SpriteFrameCache", []() { return new SpriteFrameCacheTests(); });  // TODO
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+        addTest("Window Test", []() { return new WindowTests(); });  // TODO wrong effect
 #endif
     }
 };
 
-TestController::TestController()
-: _stopAutoTest(true)
-, _isRunInBackground(false)
-, _testSuite(nullptr)
+TestController::TestController() : _stopAutoTest(true), _isRunInBackground(false), _testSuite(nullptr)
 {
     _rootTestList = new RootTests;
     _rootTestList->runThisTest();
     _director = Director::getInstance();
 
-    _touchListener = EventListenerTouchOneByOne::create();
+    _touchListener               = EventListenerTouchOneByOne::create();
     _touchListener->onTouchBegan = CC_CALLBACK_2(TestController::blockTouchBegan, this);
     _touchListener->setSwallowTouches(true);
 
@@ -164,7 +161,7 @@ void TestController::startAutoTest()
 {
     if (!_autoTestThread.joinable())
     {
-        _stopAutoTest = false;
+        _stopAutoTest   = false;
         _logIndentation = "";
         _autoTestThread = std::thread(&TestController::traverseThreadFunc, this);
         _autoTestThread.detach();
@@ -174,8 +171,9 @@ void TestController::startAutoTest()
 void TestController::stopAutoTest()
 {
     _stopAutoTest = true;
-    
-    if (_autoTestThread.joinable()) {
+
+    if (_autoTestThread.joinable())
+    {
         _sleepCondition.notify_all();
         _autoTestThread.join();
     }
@@ -184,7 +182,7 @@ void TestController::stopAutoTest()
 void TestController::traverseThreadFunc()
 {
     std::mutex sleepMutex;
-    auto lock = std::unique_lock<std::mutex>(sleepMutex);
+    auto lock        = std::unique_lock<std::mutex>(sleepMutex);
     _sleepUniqueLock = &lock;
     traverseTestList(_rootTestList);
     _sleepUniqueLock = nullptr;
@@ -204,10 +202,11 @@ void TestController::traverseTestList(TestList* testList)
     logEx("%s%sBegin traverse TestList:%s", LOG_TAG, _logIndentation.c_str(), testList->getTestName().c_str());
 
     auto scheduler = _director->getScheduler();
-    int testIndex = 0;
+    int testIndex  = 0;
     for (auto& callback : testList->_testCallbacks)
     {
-        if (_stopAutoTest) break;
+        if (_stopAutoTest)
+            break;
         while (_isRunInBackground)
         {
             logEx("_director is paused");
@@ -220,9 +219,7 @@ void TestController::traverseTestList(TestList* testList)
             test->setTestName(testList->_childTestNames[testIndex++]);
             if (test->isTestList())
             {
-                scheduler->performFunctionInCocosThread([&](){
-                    test->runThisTest();
-                });
+                scheduler->performFunctionInCocosThread([&]() { test->runThisTest(); });
 
                 traverseTestList((TestList*)test);
             }
@@ -241,22 +238,20 @@ void TestController::traverseTestList(TestList* testList)
     {
         if (!_stopAutoTest)
         {
-            //Backs up one level and release TestList object.
-            scheduler->performFunctionInCocosThread([&](){
-                testList->_parentTest->runThisTest();
-            });
+            // Backs up one level and release TestList object.
+            scheduler->performFunctionInCocosThread([&]() { testList->_parentTest->runThisTest(); });
             _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
             testList->release();
         }
-        
+
         _logIndentation.erase(_logIndentation.rfind(LOG_INDENTATION));
     }
 }
 
 void TestController::traverseTestSuite(TestSuite* testSuite)
 {
-    auto scheduler = _director->getScheduler();
-    int testIndex = 0;
+    auto scheduler         = _director->getScheduler();
+    int testIndex          = 0;
     float testCaseDuration = 0.0f;
     _logIndentation += LOG_INDENTATION;
     logEx("%s%sBegin traverse TestSuite:%s", LOG_TAG, _logIndentation.c_str(), testSuite->getTestName().c_str());
@@ -268,37 +263,40 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
     for (auto& callback : testSuite->_testCallbacks)
     {
         auto testName = testSuite->_childTestNames[testIndex++];
-        
-        Scene* testScene = nullptr;
-        TestCase* testCase = nullptr;
+
+        Scene* testScene                 = nullptr;
+        TestCase* testCase               = nullptr;
         TransitionScene* transitionScene = nullptr;
 
-        if (_stopAutoTest) break;
+        if (_stopAutoTest)
+            break;
 
         while (_isRunInBackground)
         {
             logEx("_director is paused");
             _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
         }
-        //Run test case in the cocos[GL] thread.
-        scheduler->performFunctionInCocosThread([&, logIndentation, testName](){
-            if (_stopAutoTest) return;
+        // Run test case in the cocos[GL] thread.
+        scheduler->performFunctionInCocosThread([&, logIndentation, testName]() {
+            if (_stopAutoTest)
+                return;
             logEx("%s%sRun test:%s.", LOG_TAG, logIndentation.c_str(), testName.c_str());
 
             auto scene = callback();
-            if (_stopAutoTest) return;
+            if (_stopAutoTest)
+                return;
 
             if (scene)
             {
                 transitionScene = dynamic_cast<TransitionScene*>(scene);
                 if (transitionScene)
                 {
-                    testCase = (TestCase*)transitionScene->getInScene();
+                    testCase         = (TestCase*)transitionScene->getInScene();
                     testCaseDuration = transitionScene->getDuration() + 0.5f;
                 }
                 else
                 {
-                    testCase = (TestCase*)scene;
+                    testCase         = (TestCase*)scene;
                     testCaseDuration = testCase->getDuration();
                 }
                 testSuite->_currTestIndex++;
@@ -310,9 +308,10 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
             }
         });
 
-        if (_stopAutoTest) break;
+        if (_stopAutoTest)
+            break;
 
-        //Wait for the test case be created.
+        // Wait for the test case be created.
         float waitTime = 0.0f;
         while (!testScene && !_stopAutoTest)
         {
@@ -330,9 +329,10 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
             }
         }
 
-        if (_stopAutoTest) break;
+        if (_stopAutoTest)
+            break;
 
-        //Wait for test completed.
+        // Wait for test completed.
         _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(int(1000 * testCaseDuration)));
 
         if (transitionScene == nullptr)
@@ -356,7 +356,7 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
 
             if (!_stopAutoTest)
             {
-                //Check the result of test.
+                // Check the result of test.
                 checkTest(testCase);
             }
         }
@@ -364,11 +364,9 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
 
     if (!_stopAutoTest)
     {
-        //Backs up one level and release TestSuite object.
+        // Backs up one level and release TestSuite object.
         auto parentTest = testSuite->_parentTest;
-        scheduler->performFunctionInCocosThread([&](){
-            parentTest->runThisTest();
-        });
+        scheduler->performFunctionInCocosThread([&]() { parentTest->runThisTest(); });
 
         _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(1000));
         testSuite->release();
@@ -434,7 +432,7 @@ void TestController::onEnterForeground()
     _isRunInBackground = false;
 }
 
-void TestController::logEx(const char * format, ...)
+void TestController::logEx(const char* format, ...)
 {
     char buff[1024];
 
@@ -447,7 +445,7 @@ void TestController::logEx(const char * format, ...)
     __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buff);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-    WCHAR wszBuf[1024] = { 0 };
+    WCHAR wszBuf[1024] = {0};
     MultiByteToWideChar(CP_UTF8, 0, buff, -1, wszBuf, sizeof(wszBuf));
     OutputDebugStringW(wszBuf);
 
@@ -492,7 +490,7 @@ bool TestController::blockTouchBegan(Touch* touch, Event* event)
 
 //==================================================================================================
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-#include <windows.h>
+#    include <windows.h>
 
 static long __stdcall windowExceptionFilter(_EXCEPTION_POINTERS* excp)
 {
@@ -513,30 +511,18 @@ static void disableCrashCatch()
     SetUnhandledExceptionFilter(UnhandledExceptionFilter);
 }
 
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+    CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#    if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static int s_fatal_signals[] = {
-    SIGILL,
-    SIGABRT,
-    SIGBUS,
-    SIGFPE,
-    SIGSEGV,
-    SIGSTKFLT,
-    SIGPIPE,
+    SIGILL, SIGABRT, SIGBUS, SIGFPE, SIGSEGV, SIGSTKFLT, SIGPIPE,
 };
-#else
+#    else
 static int s_fatal_signals[] = {
-    SIGABRT,
-    SIGBUS,
-    SIGFPE,
-    SIGILL,
-    SIGSEGV,
-    SIGTRAP,
-    SIGTERM,
-    SIGKILL,
+    SIGABRT, SIGBUS, SIGFPE, SIGILL, SIGSEGV, SIGTRAP, SIGTERM, SIGKILL,
 };
-#endif
+#    endif
 
 static void signalHandler(int sig)
 {
@@ -564,12 +550,8 @@ static void disableCrashCatch()
 
 #else
 
-static void initCrashCatch()
-{
-}
+static void initCrashCatch() {}
 
-static void disableCrashCatch()
-{
-}
+static void disableCrashCatch() {}
 
 #endif

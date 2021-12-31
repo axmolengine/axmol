@@ -41,7 +41,7 @@ const std::string ComponentLua::UPDATE   = "update";
 
 namespace
 {
-void adjustScriptFileName(std::string& scriptFileName)
+void adjustScriptFileName(std::string_view& scriptFileName, std::string& holder)
 {
     assert(scriptFileName.size() > 4);
 
@@ -54,22 +54,26 @@ void adjustScriptFileName(std::string& scriptFileName)
 
     // xxx.lua -> xxx.luac or
     // xxx.luac -> xxx.lua
-    if (scriptFileName.compare(scriptFileName.size() - luaSuffix.size(), luaSuffix.size(), luaSuffix) == 0)
-        scriptFileName.replace(scriptFileName.size() - luaSuffix.size(), luaSuffix.size(), luacSuffix);
+    holder = scriptFileName;
+    if (holder.compare(holder.size() - luaSuffix.size(), luaSuffix.size(), luaSuffix) == 0)
+        holder.replace(holder.size() - luaSuffix.size(), luaSuffix.size(), luacSuffix);
     else
-        scriptFileName.replace(scriptFileName.size() - luacSuffix.size(), luacSuffix.size(), luaSuffix);
+        holder.replace(holder.size() - luacSuffix.size(), luacSuffix.size(), luaSuffix);
+
+    scriptFileName = holder;
 }
 }  // namespace
 
 int ComponentLua::_index = 0;
 
-ComponentLua* ComponentLua::create(const std::string& scriptFileName)
+ComponentLua* ComponentLua::create(std::string_view scriptFileName)
 {
     CC_ASSERT(!scriptFileName.empty());
 
     initClass();
 
-    adjustScriptFileName(const_cast<std::string&>(scriptFileName));
+    std::string holder;
+    adjustScriptFileName(scriptFileName, holder);
     auto componentLua = new ComponentLua(scriptFileName);
     if (componentLua)
     {
@@ -79,7 +83,7 @@ ComponentLua* ComponentLua::create(const std::string& scriptFileName)
     return componentLua;
 }
 
-ComponentLua::ComponentLua(const std::string& scriptFileName)
+ComponentLua::ComponentLua(std::string_view scriptFileName)
     : _scriptFileName(scriptFileName), _table(nullptr), _strIndex("")
 {
     _succeedLoadingScript = loadAndExecuteScript();
@@ -134,18 +138,18 @@ void ComponentLua::onExit()
     }
 }
 
-bool ComponentLua::getLuaFunction(const std::string& functionName)
+bool ComponentLua::getLuaFunction(std::string_view functionName)
 {
     lua_State* l = LuaEngine::getInstance()->getLuaStack()->getLuaState();
 
-    lua_pushstring(l, KEY_COMPONENT);         // stack: "component"
-    lua_rawget(l, LUA_REGISTRYINDEX);         // stack: table_of_component
-    lua_pushstring(l, _strIndex.c_str());     // stack: table_of_component strIndex
-    lua_rawget(l, -2);                        // stack: table_of_component table_of_this
-    lua_pushstring(l, functionName.c_str());  // stack: table_of_component table_of_this "update"
-    lua_rawget(l, -2);                        // stack: table_of_component table_of_this table_of_this["update"]
-    lua_remove(l, -2);                        // stack: table_of_component table_of_this["update"]
-    lua_remove(l, -2);                        // stack: table_of_this["update"]
+    lua_pushstring(l, KEY_COMPONENT);                                // stack: "component"
+    lua_rawget(l, LUA_REGISTRYINDEX);                                // stack: table_of_component
+    lua_pushstring(l, _strIndex.c_str());                            // stack: table_of_component strIndex
+    lua_rawget(l, -2);                                               // stack: table_of_component table_of_this
+    lua_pushlstring(l, functionName.data(), functionName.length());  // stack: table_of_component table_of_this "update"
+    lua_rawget(l, -2);  // stack: table_of_component table_of_this table_of_this["update"]
+    lua_remove(l, -2);  // stack: table_of_component table_of_this["update"]
+    lua_remove(l, -2);  // stack: table_of_this["update"]
 
     int type = lua_type(l, -1);
     //    if (type != LUA_TFUNCTION)

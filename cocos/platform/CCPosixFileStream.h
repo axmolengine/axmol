@@ -54,7 +54,7 @@
 #    define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
 
 #    define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
-#    define posix_open_cxx(path, ...) ::open(path.c_str(), ##__VA_ARGS__)
+#    define posix_open_cxx(path, ...) ::open(path.data(), ##__VA_ARGS__)
 #    define posix_open ::open
 #    define posix_close ::close
 #    define posix_lseek ::lseek
@@ -114,7 +114,7 @@ public:
         APPEND,
     };
 
-    bool open(const std::string& path, FileStream::Mode mode) override;
+    bool open(std::string_view path, FileStream::Mode mode) override;
     int close() override;
 
     int seek(int64_t offset, int origin) override;

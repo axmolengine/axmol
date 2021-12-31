@@ -114,16 +114,16 @@ public:
      */
     ~DataReaderHelper();
 
-    void addDataFromFile(const std::string& filePath);
-    void addDataFromFileAsync(const std::string& imagePath,
-                              const std::string& plistPath,
-                              const std::string& filePath,
+    void addDataFromFile(std::string_view filePath);
+    void addDataFromFileAsync(std::string_view imagePath,
+                              std::string_view plistPath,
+                              std::string_view filePath,
                               cocos2d::Ref* target,
                               cocos2d::SEL_SCHEDULE selector);
 
     void addDataAsyncCallBack(float dt);
 
-    void removeConfigFile(const std::string& configFile);
+    void removeConfigFile(std::string_view configFile);
 
 public:
     /**
@@ -132,7 +132,7 @@ public:
      *
      * @param xmlPath The cache of the xml
      */
-    static void addDataFromCache(const std::string& pFileContent, DataInfo* dataInfo = nullptr);
+    static void addDataFromCache(std::string_view pFileContent, DataInfo* dataInfo = nullptr);
 
     /**
      * Decode Armature Datas from xml export from Dragon Bone flash tool
@@ -166,7 +166,7 @@ public:
     static ContourData* decodeContour(pugi::xml_node& contourXML, DataInfo* dataInfo);
 
 public:
-    static void addDataFromJsonCache(const std::string& fileContent, DataInfo* dataInfo = nullptr);
+    static void addDataFromJsonCache(std::string_view fileContent, DataInfo* dataInfo = nullptr);
 
     static ArmatureData* decodeArmature(const rapidjson::Value& json, DataInfo* dataInfo);
     static BoneData* decodeBone(const rapidjson::Value& json, DataInfo* dataInfo);

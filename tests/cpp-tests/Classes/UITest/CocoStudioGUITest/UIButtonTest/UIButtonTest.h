@@ -42,6 +42,7 @@ public:
     void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 
     void printWidgetResources(cocos2d::Ref* sender);
+
 protected:
     cocos2d::ui::Text* _displayValueLabel;
     cocos2d::ui::Button* _button;
@@ -74,7 +75,7 @@ public:
     void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 
 protected:
-        cocos2d::ui::Text* _displayValueLabel;
+    cocos2d::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTest_PressedAction : public UIScene
@@ -254,16 +255,16 @@ class Issue12249 : public UIScene
 {
 public:
     CREATE_FUNC(Issue12249);
-    
+
     Issue12249();
-    
+
     virtual bool init() override;
-    
+
 protected:
     cocos2d::ui::Text* _displayValueLabel;
 };
 
-class Issue17116: public UIScene
+class Issue17116 : public UIScene
 {
 public:
     CREATE_FUNC(Issue17116);
@@ -273,23 +274,23 @@ public:
     virtual bool init() override;
 };
 
-class UIButtonWithPolygonInfo: public UIScene
+class UIButtonWithPolygonInfo : public UIScene
 {
 public:
     CREATE_FUNC(UIButtonWithPolygonInfo);
-    
+
     UIButtonWithPolygonInfo();
-    
+
     virtual bool init() override;
 };
 
-class UIButtonScale9ChangeSpriteFrame: public UIScene
+class UIButtonScale9ChangeSpriteFrame : public UIScene
 {
 public:
     CREATE_FUNC(UIButtonScale9ChangeSpriteFrame);
-    
+
     UIButtonScale9ChangeSpriteFrame();
-    
+
     virtual bool init() override;
 };
 

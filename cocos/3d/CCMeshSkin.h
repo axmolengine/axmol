@@ -54,7 +54,7 @@ class CC_DLL MeshSkin : public Ref
 
 public:
     /**create a new meshskin if do not want to share meshskin*/
-    static MeshSkin* create(Skeleton3D* skeleton, const std::string& filename, const std::string& name);
+    static MeshSkin* create(Skeleton3D* skeleton, std::string_view filename, std::string_view name);
 
     static MeshSkin* create(Skeleton3D* skeleton,
                             const std::vector<std::string>& boneNames,
@@ -65,7 +65,7 @@ public:
 
     /**get bone*/
     Bone3D* getBoneByIndex(unsigned int index) const;
-    Bone3D* getBoneByName(const std::string& id) const;
+    Bone3D* getBoneByName(std::string_view id) const;
 
     /**get bone index*/
     int getBoneIndex(Bone3D* bone) const;

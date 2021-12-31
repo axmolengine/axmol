@@ -1,8 +1,9 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +35,8 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <android/api-level.h>
 #include <jni.h>
+
+#include "jni/jni.hpp"
 
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

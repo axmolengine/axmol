@@ -33,7 +33,7 @@ ComponentContainer::ComponentContainer(Node* node) : _owner(node) {}
 
 ComponentContainer::~ComponentContainer() {}
 
-Component* ComponentContainer::get(const std::string& name) const
+Component* ComponentContainer::get(std::string_view name) const
 {
     Component* ret = nullptr;
 
@@ -60,7 +60,7 @@ bool ComponentContainer::add(Component* com)
             CCASSERT(false, "ComponentContainer already have this kind of component");
             break;
         }
-        _componentMap[componentName] = com;
+        hlookup::set_item(_componentMap, componentName, com);  //_componentMap[componentName] = com;
         com->retain();
         com->setOwner(_owner);
         com->onAdd();
@@ -70,7 +70,7 @@ bool ComponentContainer::add(Component* com)
     return ret;
 }
 
-bool ComponentContainer::remove(const std::string& componentName)
+bool ComponentContainer::remove(std::string_view componentName)
 {
     bool ret = false;
     do

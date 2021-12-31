@@ -79,7 +79,7 @@ public:
      * Initializes event with type and callback function
      * @js NA
      */
-    bool init(Type t, const ListenerID& listenerID, const std::function<void(Event*)>& callback);
+    bool init(Type t, std::string_view listenerID, const std::function<void(Event*)>& callback);
 
 public:
     /** Destructor.
@@ -143,7 +143,7 @@ protected:
     /** Gets the listener ID of this listener
      *  When event is being dispatched, listener ID is used as key for searching listeners according to event type.
      */
-    const ListenerID& getListenerID() const { return _listenerID; }
+    std::string_view getListenerID() const { return _listenerID; }
 
     /** Sets the fixed priority for this listener
      *  @note This method is only used for `fixed priority listeners`, it needs to access a non-zero value.

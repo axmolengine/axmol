@@ -78,11 +78,11 @@ public:
 
     /** Get the name of the emitter that is used to emit its particles.
      */
-    const std::string& getForceEmitterName() const { return _forceEmitterName; };
+    std::string_view getForceEmitterName() const { return _forceEmitterName; };
 
     /** Set the name of the emitter that is used to emit its particles.
      */
-    void setForceEmitterName(const std::string& forceEmitterName);
+    void setForceEmitterName(std::string_view forceEmitterName);
 
     /** Returns a pointer to the emitter that is used as a force emitter.
      */

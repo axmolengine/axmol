@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 Copyright (c) 2021 Bytedance Inc.
 
@@ -61,7 +61,7 @@ public:
      */
     static void destroyInstance();
     static const char* sceneReaderVersion();
-    cocos2d::Node* createNodeWithSceneFile(const std::string& fileName,
+    cocos2d::Node* createNodeWithSceneFile(std::string_view fileName,
                                            AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
     void setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)>& selector);
     cocos2d::Node* getNodeByTag(int nTag);
@@ -70,15 +70,15 @@ public:
     virtual ~SceneReader();
 
 private:
-    std::string getComponentClassName(const std::string& name);
+    std::string getComponentClassName(std::string_view name);
 
-    cocos2d::Component* createComponent(const std::string& classname);
+    cocos2d::Component* createComponent(std::string_view classname);
 
     cocos2d::Node* createObject(const rapidjson::Value& dict,
                                 cocos2d::Node* parent,
                                 AttachComponentType attachComponent);
     void setPropertyFromJsonDict(const rapidjson::Value& dict, cocos2d::Node* node);
-    bool readJson(const std::string& fileName, rapidjson::Document& doc);
+    bool readJson(std::string_view fileName, rapidjson::Document& doc);
 
     cocos2d::Node* createObject(CocoLoader* cocoLoader,
                                 stExpCocoNode* cocoNode,

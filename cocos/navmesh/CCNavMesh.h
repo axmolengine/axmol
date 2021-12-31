@@ -60,7 +60,7 @@ public:
     @param navFilePath The NavMesh File path.
     @param geomFilePath The geometry File Path,include offmesh information,etc.
     */
-    static NavMesh* create(const std::string& navFilePath, const std::string& geomFilePath);
+    static NavMesh* create(std::string_view navFilePath, std::string_view geomFilePath);
 
     /** update navmesh. */
     void update(float dt);
@@ -99,7 +99,7 @@ public:
     virtual ~NavMesh();
 
 protected:
-    bool initWithFilePath(const std::string& navFilePath, const std::string& geomFilePath);
+    bool initWithFilePath(std::string_view navFilePath, std::string_view geomFilePath);
     bool read();
     bool loadNavMeshFile();
     bool loadGeomFile();

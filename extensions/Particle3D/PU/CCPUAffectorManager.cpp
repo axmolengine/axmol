@@ -63,7 +63,7 @@ PUAffectorManager* PUAffectorManager::Instance()
     return &pam;
 }
 
-PUScriptTranslator* PUAffectorManager::getTranslator(const std::string& type)
+PUScriptTranslator* PUAffectorManager::getTranslator(std::string_view type)
 {
     if (type == "Align")
     {
@@ -172,7 +172,7 @@ PUScriptTranslator* PUAffectorManager::getTranslator(const std::string& type)
     return nullptr;
 }
 
-PUAffector* PUAffectorManager::createAffector(const std::string& type)
+PUAffector* PUAffectorManager::createAffector(std::string_view type)
 {
     if (type == "Align")
     {

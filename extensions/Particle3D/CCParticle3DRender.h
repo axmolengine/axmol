@@ -95,7 +95,7 @@ protected:
 class CC_EX_DLL Particle3DQuadRender : public Particle3DRender
 {
 public:
-    static Particle3DQuadRender* create(const std::string& texFile = "");
+    static Particle3DQuadRender* create(std::string_view texFile = "");
 
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
@@ -104,7 +104,7 @@ public:
     virtual ~Particle3DQuadRender();
 
 protected:
-    bool initQuadRender(const std::string& texFile);
+    bool initQuadRender(std::string_view texFile);
 
     void onBeforeDraw();
     void onAfterDraw();
@@ -145,7 +145,7 @@ protected:
 class CC_EX_DLL Particle3DModelRender : public Particle3DRender
 {
 public:
-    static Particle3DModelRender* create(const std::string& modelFile, const std::string& texFile = "");
+    static Particle3DModelRender* create(std::string_view modelFile, std::string_view texFile = "");
 
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 

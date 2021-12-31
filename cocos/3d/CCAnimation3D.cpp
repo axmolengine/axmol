@@ -29,11 +29,11 @@
 
 NS_CC_BEGIN
 
-Animation3D* Animation3D::create(const std::string& fileName, const std::string& animationName)
+Animation3D* Animation3D::create(std::string_view fileName, std::string_view animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-    std::string key      = fullPath + "#" + animationName;
-    auto animation       = Animation3DCache::getInstance()->getAnimation(key);
+    fullPath.append("#").append(animationName);
+    auto animation = Animation3DCache::getInstance()->getAnimation(fullPath);
     if (animation != nullptr)
         return animation;
 
@@ -50,7 +50,7 @@ Animation3D* Animation3D::create(const std::string& fileName, const std::string&
     return animation;
 }
 
-bool Animation3D::initWithFile(const std::string& filename, const std::string& animationName)
+bool Animation3D::initWithFile(std::string_view filename, std::string_view animationName)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
 
@@ -59,8 +59,8 @@ bool Animation3D::initWithFile(const std::string& filename, const std::string& a
     Animation3DData animationdata;
     if (bundle->load(fullPath) && bundle->loadAnimationData(animationName, &animationdata) && init(animationdata))
     {
-        std::string key = fullPath + "#" + animationName;
-        Animation3DCache::getInstance()->addAnimation(key, this);
+        fullPath.append("#").append(animationName);
+        Animation3DCache::getInstance()->addAnimation(fullPath, this);
         Bundle3D::destroyBundle(bundle);
         return true;
     }
@@ -70,7 +70,7 @@ bool Animation3D::initWithFile(const std::string& filename, const std::string& a
     return false;
 }
 
-Animation3D::Curve* Animation3D::getBoneCurveByName(const std::string& name) const
+Animation3D::Curve* Animation3D::getBoneCurveByName(std::string_view name) const
 {
     auto it = _boneCurves.find(name);
     if (it != _boneCurves.end())
@@ -199,7 +199,7 @@ void Animation3DCache::destroyInstance()
     CC_SAFE_DELETE(_cacheInstance);
 }
 
-Animation3D* Animation3DCache::getAnimation(const std::string& key)
+Animation3D* Animation3DCache::getAnimation(std::string_view key)
 {
     auto it = _animations.find(key);
     if (it != _animations.end())
@@ -207,14 +207,14 @@ Animation3D* Animation3DCache::getAnimation(const std::string& key)
     return nullptr;
 }
 
-void Animation3DCache::addAnimation(const std::string& key, Animation3D* animation)
+void Animation3DCache::addAnimation(std::string_view key, Animation3D* animation)
 {
     const auto& it = _animations.find(key);
     if (it != _animations.end())
     {
         return;  // already have this key
     }
-    _animations[key] = animation;
+    _animations.emplace(key, animation);  //_animations[key] = animation;
     animation->retain();
 }
 

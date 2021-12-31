@@ -1,4 +1,4 @@
-﻿/**
+/**
  * The MIT License (MIT)
  *
  * Copyright (c) 2012-2018 DragonBones team and other contributors
@@ -201,7 +201,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    void invalidUpdate(const std::string& boneName = "", bool updateSlot = false);
+    void invalidUpdate(std::string_view boneName = "", bool updateSlot = false);
     /**
      * - Check whether a specific point is inside a custom bounding box in a slot.
      * The coordinate system of the point is the inner coordinate system of the armature.
@@ -278,7 +278,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    Bone* getBone(const std::string& name) const;
+    Bone* getBone(std::string_view name) const;
     /**
      * - Get a specific bone by the display.
      * @param display - The display object.
@@ -308,7 +308,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    Slot* getSlot(const std::string& name) const;
+    Slot* getSlot(std::string_view name) const;
     /**
      * - Get a specific slot by the display.
      * @param display - The display object.
@@ -426,7 +426,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    inline const std::string& getName() const { return _armatureData->name; }
+    inline std::string_view getName() const { return _armatureData->name; }
     /**
      * - The armature data.
      * @see dragonBones.ArmatureData

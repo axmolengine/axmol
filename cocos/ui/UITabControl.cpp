@@ -487,9 +487,9 @@ TabHeader* TabHeader::create()
     return nullptr;
 }
 
-TabHeader* TabHeader::create(const std::string& titleStr,
-                             const std::string& backGround,
-                             const std::string& cross,
+TabHeader* TabHeader::create(std::string_view titleStr,
+                             std::string_view backGround,
+                             std::string_view cross,
                              TextureResType texType)
 {
     TabHeader* tabcell = new TabHeader;
@@ -505,12 +505,12 @@ TabHeader* TabHeader::create(const std::string& titleStr,
     return nullptr;
 }
 
-TabHeader* TabHeader::create(const std::string& titleStr,
-                             const std::string& backGround,
-                             const std::string& backGroundSelected,
-                             const std::string& cross,
-                             const std::string& backGroundDisabled,
-                             const std::string& frontCrossDisabled,
+TabHeader* TabHeader::create(std::string_view titleStr,
+                             std::string_view backGround,
+                             std::string_view backGroundSelected,
+                             std::string_view cross,
+                             std::string_view backGroundDisabled,
+                             std::string_view frontCrossDisabled,
                              TextureResType texType /*= TextureResType::LOCAL*/)
 {
     TabHeader* tabcell = new TabHeader;
@@ -543,7 +543,7 @@ void TabHeader::initRenderer()
     addProtectedChild(_tabLabelRender, -1, -1);
 }
 
-void TabHeader::setTitleText(const std::string& text)
+void TabHeader::setTitleText(std::string_view text)
 {
     if (text == getTitleText())
     {
@@ -555,11 +555,11 @@ void TabHeader::setTitleText(const std::string& text)
     _tabLabelRender->setPosition(_contentSize * 0.5f);
 }
 
-std::string TabHeader::getTitleText() const
+std::string_view TabHeader::getTitleText() const
 {
     if (nullptr == _tabLabelRender)
     {
-        return "";
+        return ""sv;
     }
     return _tabLabelRender->getString();
 }
@@ -609,11 +609,11 @@ void TabHeader::updateContentSize()
     onSizeChanged();
 }
 
-void TabHeader::setTitleFontName(const std::string& fontName)
+void TabHeader::setTitleFontName(std::string_view fontName)
 {
     if (FileUtils::getInstance()->isFileExist(fontName))
     {
-        std::string lowerCasedFontName = fontName;
+        std::string lowerCasedFontName{fontName};
         std::transform(lowerCasedFontName.begin(), lowerCasedFontName.end(), lowerCasedFontName.begin(), ::tolower);
         if (lowerCasedFontName.find(".fnt") != std::string::npos)
         {
@@ -647,7 +647,7 @@ Label* TabHeader::getTitleRenderer() const
     return _tabLabelRender;
 }
 
-std::string TabHeader::getTitleFontName() const
+std::string_view TabHeader::getTitleFontName() const
 {
     if (this->_fontType == FontType::SYSTEM)
     {
@@ -661,7 +661,7 @@ std::string TabHeader::getTitleFontName() const
     {
         return _tabLabelRender->getBMFontFilePath();
     }
-    return "";
+    return ""sv;
 }
 
 void TabHeader::onSizeChanged()

@@ -58,7 +58,7 @@ public:
     /**
      * Parse a Uri from a string.  Throws std::invalid_argument on parse error.
      */
-    static Uri parse(const std::string& str);
+    static Uri parse(std::string_view str);
 
     /** Default constructor */
     Uri();
@@ -85,18 +85,18 @@ public:
     bool isSecure() const { return _isSecure; }
 
     /** Gets the scheme name for this URI. */
-    const std::string& getScheme() const { return _scheme; }
+    std::string_view getScheme() const { return _scheme; }
 
     /** Gets the user name with the specified URI. */
-    const std::string& getUserName() const { return _username; }
+    std::string_view getUserName() const { return _username; }
 
     /** Gets the password with the specified URI. */
-    const std::string& getPassword() const { return _password; }
+    std::string_view getPassword() const { return _password; }
     /**
      * Get host part of URI. If host is an IPv6 address, square brackets will be
      * returned, for example: "[::1]".
      */
-    const std::string& getHost() const { return _host; }
+    std::string_view getHost() const { return _host; }
     /**
      * Get host part of URI. If host is an IPv6 address, square brackets will not
      * be returned, for exmaple "::1"; otherwise it returns the same thing as
@@ -106,29 +106,29 @@ public:
      * or API that connects to that host/port; e.g. getaddrinfo() only understands
      * IPv6 host without square brackets
      */
-    const std::string& getHostName() const { return _hostName; }
+    std::string_view getHostName() const { return _hostName; }
 
     /** Gets the port number of the URI. */
     uint16_t getPort() const { return _port; }
 
     /** Gets the path part of the URI. */
-    const std::string& getPath() const { return _path; }
+    std::string_view getPath() const { return _path; }
 
     /// Gets the path, query and fragment parts of the URI.
-    const std::string& getPathEtc() const { return _pathEtc; }
+    std::string_view getPathEtc() const { return _pathEtc; }
 
     /** Gets the query part of the URI. */
-    const std::string& getQuery() const { return _query; }
+    std::string_view getQuery() const { return _query; }
 
     /** Gets the fragment part of the URI */
-    const std::string& getFragment() const { return _fragment; }
+    std::string_view getFragment() const { return _fragment; }
 
     /** Gets the authority part (userName, password, host and port) of the URI.
      * @note If the port number is a well-known port
      *      number for the given scheme (e.g., 80 for http), it
      *      is not included in the authority.
      */
-    const std::string& getAuthority() const { return _authority; }
+    std::string_view getAuthority() const { return _authority; }
 
     /** Gets a string representation of the URI. */
     std::string toString() const;
@@ -159,7 +159,7 @@ public:
     void clear();
 
 private:
-    bool doParse(const std::string& str);
+    bool doParse(std::string_view str);
 
     bool _isValid;
     bool _isSecure;

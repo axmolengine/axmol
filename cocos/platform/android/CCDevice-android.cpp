@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "yasio/cxx17/string_view.hpp"
 
-static const std::string helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
+static const char* helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
 NS_CC_BEGIN
 

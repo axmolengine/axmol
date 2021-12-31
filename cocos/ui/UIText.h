@@ -96,7 +96,7 @@ public:
      * @param fontSize A given font size.
      * @return An autoreleased Text object.
      */
-    static Text* create(const std::string& textContent, const std::string& fontName, float fontSize);
+    static Text* create(std::string_view textContent, std::string_view fontName, float fontSize);
 
     /**
      * Changes the string value of label.
@@ -110,7 +110,7 @@ public:
      *
      * @return String value.
      */
-    const std::string& getString() const;
+    std::string_view getString() const;
 
     /**
      * Gets the string length of the label.
@@ -151,13 +151,13 @@ public:
      * @endcode
      * @param name Font name.
      */
-    void setFontName(const std::string& name);
+    void setFontName(std::string_view name);
 
     /** Gets the font name.
      *
      * @return Font name.
      */
-    const std::string& getFontName() const;
+    std::string_view getFontName() const;
 
     /** Gets the font type.
      * @return The font type.
@@ -342,7 +342,7 @@ public:
     virtual const BlendFunc& getBlendFunc() const override;
 
     CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
-    virtual bool init(const std::string& textContent, const std::string& fontName, float fontSize);
+    virtual bool init(std::string_view textContent, std::string_view fontName, float fontSize);
 
 protected:
     virtual void initRenderer() override;

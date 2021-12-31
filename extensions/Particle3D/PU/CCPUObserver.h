@@ -63,8 +63,8 @@ public:
 
     /** Todo
      */
-    const std::string& getObserverType() const { return _observerType; };
-    void setObserverType(const std::string& observerType) { _observerType = observerType; };
+    std::string_view getObserverType() const { return _observerType; };
+    void setObserverType(std::string_view observerType) { _observerType = observerType; };
 
     /** Todo
      */
@@ -93,8 +93,8 @@ public:
 
     /** Todo
      */
-    const std::string& getName() const { return _name; };
-    void setName(const std::string& name) { _name = name; };
+    std::string_view getName() const { return _name; };
+    void setName(std::string_view name) { _name = name; };
 
     /** Todo
      */
@@ -115,7 +115,7 @@ public:
 
     /** Todo
      */
-    PUEventHandler* createEventHandler(const std::string& eventHandlerType);
+    PUEventHandler* createEventHandler(std::string_view eventHandlerType);
 
     /** Todo
      */
@@ -131,7 +131,7 @@ public:
 
     /** Todo
      */
-    PUEventHandler* getEventHandler(const std::string& eventHandlerName) const;
+    PUEventHandler* getEventHandler(std::string_view eventHandlerName) const;
 
     /** Todo
      */
