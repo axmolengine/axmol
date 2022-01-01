@@ -929,6 +929,7 @@ void Label::setString(const std::string& text)
 {
     if (text.compare(_utf8Text))
     {
+        // issue #565 Label overflow shrink bug
         restoreFontSize();
      
         _utf8Text = text;
