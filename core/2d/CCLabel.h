@@ -66,7 +66,7 @@ typedef struct _ttfConfig
     _ttfConfig(std::string_view filePath              = {},
                float size                             = CC_DEFAULT_FONT_LABEL_SIZE,
                const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
-               std::string_view customGlyphCollection = {},
+               const char* customGlyphCollection      = nullptr, /* nullable */
                bool useDistanceField                  = false,
                int outline                            = 0,
                bool useItalics                        = false,
@@ -76,7 +76,7 @@ typedef struct _ttfConfig
         : fontFilePath(filePath)
         , fontSize(size)
         , glyphs(glyphCollection)
-        , customGlyphs(customGlyphCollection)
+        , customGlyphs(customGlyphCollection ? customGlyphCollection : "")
         , distanceFieldEnabled(useDistanceField)
         , outlineSize(outline)
         , italics(useItalics)
