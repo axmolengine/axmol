@@ -929,6 +929,8 @@ void Label::setString(const std::string& text)
 {
     if (text.compare(_utf8Text))
     {
+        restoreFontSize();
+     
         _utf8Text = text;
         _contentDirty = true;
 
