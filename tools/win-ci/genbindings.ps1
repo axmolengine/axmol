@@ -1,6 +1,12 @@
+# Store env path
+$storedEnvPath = $env:Path
+
+# Make and goto ignored build directory
+mkdir build
+cd build
+
 ## Installing pyenv
 mkdir $HOME/.pyenv/
-mkdir pyenv
 
 curl -L "https://github.com/pyenv-win/pyenv-win/archive/master.zip" -o "pyenv-win.zip"
 Expand-Archive -Path pyenv-win.zip -DestinationPath .\
@@ -14,7 +20,7 @@ $env:Path = "$pyenv_bin;$env:Path"
 pyenv install -l
 pyenv install 2.7.18-win32
 
-$python_root="$pyenv_root\pyenv-win\versions\2.7.18-win32"
+$python_root = "$pyenv_root\pyenv-win\versions\2.7.18-win32"
 
 $env:Path = "$python_root\Scripts\;$python_root\;$env:Path"
 
@@ -33,5 +39,8 @@ $env:ANDROID_NDK=$ndk_root
 
 ## run genbindings.py
 pwd
-cd tools/tolua
+cd ..\tools\tolua
 python genbindings.py
+
+$env:Path = $storedEnvPath
+cd ..\..
