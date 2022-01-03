@@ -1,6 +1,13 @@
 
 cc = cc or {}
 
+-- Native vec2_new use array[2] to store x,y w,h u,v performance is better
+-- p[1] alias: x w u width
+-- p[2] alias: y h v height
+local nvec2 = vec2_new
+local nvec3 = vec3_new
+local nvec4 = vec4_new
+
 function cc.clampf(value, min_inclusive, max_inclusive)
     -- body
     local temp = 0
@@ -19,33 +26,37 @@ function cc.clampf(value, min_inclusive, max_inclusive)
     end
 end
 
---Point
-function cc.p(_x,_y)
+--Vec2/Point
+function cc.vec2(_x, _y)
     if nil == _y then
-         return { x = _x.x, y = _x.y }
+        return nvec2(_x.x, _x.y)
     else
-         return { x = _x, y = _y }
+        return nvec2(_x, _y)
     end
+
+end
+function cc.p(_x, ...)
+    return cc.vec2(_x, ...)
 end
 
 function cc.pAdd(pt1,pt2)
-    return {x = pt1.x + pt2.x , y = pt1.y + pt2.y }
+    return cc.p(pt1.x + pt2.x , pt1.y + pt2.y )
 end
 
 function cc.pSub(pt1,pt2)
-    return {x = pt1.x - pt2.x , y = pt1.y - pt2.y }
+    return cc.p(pt1.x - pt2.x , pt1.y - pt2.y )
 end
 
 function cc.pMul(pt1,factor)
-    return { x = pt1.x * factor , y = pt1.y * factor }
+    return cc.p( pt1.x * factor , pt1.y * factor )
 end
 
 function cc.pMidpoint(pt1,pt2)
-    return { x = (pt1.x + pt2.x) / 2.0 , y = ( pt1.y + pt2.y) / 2.0 }
+    return cc.p( (pt1.x + pt2.x) / 2.0 , ( pt1.y + pt2.y) / 2.0 )
 end
 
 function cc.pForAngle(a)
-    return { x = math.cos(a), y = math.sin(a) }
+    return cc.p( math.cos(a), math.sin(a) )
 end
 
 function cc.pGetLength(pt)
@@ -55,10 +66,10 @@ end
 function cc.pNormalize(pt)
     local length = cc.pGetLength(pt)
     if 0 == length then
-        return { x = 1.0,y = 0.0 }
+        return cc.p(  1.0, 0.0 )
     end
 
-    return { x = pt.x / length, y = pt.y / length }
+    return cc.p(  pt.x / length,  pt.y / length )
 end
 
 function cc.pCross(self,other)
@@ -119,23 +130,23 @@ function cc.pIsLineIntersect(A, B, C, D, s, t)
 end
 
 function cc.pPerp(pt)
-    return { x = -pt.y, y = pt.x }
+    return cc.p(  -pt.y,  pt.x )
 end
 
 function cc.RPerp(pt)
-    return { x = pt.y,  y = -pt.x }
+    return cc.p(  pt.y,   -pt.x )
 end
 
 function cc.pProject(pt1, pt2)
-    return { x = pt2.x * (cc.pDot(pt1,pt2) / cc.pDot(pt2,pt2)) , y = pt2.y * (cc.pDot(pt1,pt2) / cc.pDot(pt2,pt2)) }
+    return cc.p(  pt2.x * (cc.pDot(pt1,pt2) / cc.pDot(pt2,pt2)) ,  pt2.y * (cc.pDot(pt1,pt2) / cc.pDot(pt2,pt2)) )
 end
 
 function cc.pRotate(pt1, pt2)
-    return { x = pt1.x * pt2.x - pt1.y * pt2.y, y = pt1.x * pt2.y + pt1.y * pt2.x }
+    return cc.p(  pt1.x * pt2.x - pt1.y * pt2.y,  pt1.x * pt2.y + pt1.y * pt2.x )
 end
 
 function cc.pUnrotate(pt1, pt2)
-    return { x = pt1.x * pt2.x + pt1.y * pt2.y, pt1.y * pt2.x - pt1.x * pt2.y }
+    return cc.p(  pt1.x * pt2.x + pt1.y * pt2.y, pt1.y * pt2.x - pt1.x * pt2.y )
 end
 --Calculates the square length of pt
 function cc.pLengthSQ(pt)
@@ -147,11 +158,11 @@ function cc.pDistanceSQ(pt1,pt2)
 end
 
 function cc.pGetClampPoint(pt1,pt2,pt3)
-    return { x = cc.clampf(pt1.x, pt2.x, pt3.x), y = cc.clampf(pt1.y, pt2.y, pt3.y) }
+    return cc.p(  cc.clampf(pt1.x, pt2.x, pt3.x),  cc.clampf(pt1.y, pt2.y, pt3.y) )
 end
 
 function cc.pFromSize(sz)
-    return { x = sz.width, y = sz.height }
+    return cc.p( sz.width,  sz.height )
 end
 
 function cc.pLerp(pt1,pt2,alpha)
@@ -192,7 +203,7 @@ function cc.pGetIntersectPoint(pt1,pt2,pt3,pt4)
 end
 --Size
 function cc.size( _width,_height )
-    return { width = _width, height = _height }
+    return cc.p(_width, _height)
 end
 
 --Rect
@@ -238,7 +249,7 @@ function cc.rectContainsPoint( rect, point )
     local ret = false
 
     if (point.x >= rect.x) and (point.x <= rect.x + rect.width) and
-       (point.y >= rect.y) and (point.y <= rect.y + rect.height) then
+    (point.y >= rect.y) and (point.y <= rect.y + rect.height) then
         ret = true
     end
 
@@ -247,9 +258,9 @@ end
 
 function cc.rectIntersectsRect( rect1, rect2 )
     local intersect = not ( rect1.x > rect2.x + rect2.width or
-                    rect1.x + rect1.width < rect2.x         or
-                    rect1.y > rect2.y + rect2.height        or
-                    rect1.y + rect1.height < rect2.y )
+        rect1.x + rect1.width < rect2.x         or
+        rect1.y > rect2.y + rect2.height        or
+        rect1.y + rect1.height < rect2.y )
 
     return intersect
 end
@@ -340,17 +351,17 @@ end
 
 --Vertex2F
 function cc.vertex2F(_x,_y)
-    return { x = _x, y = _y }
+    return cc.vec2(_x, _y )
 end
 
 --Vertex3F
 function cc.Vertex3F(_x,_y,_z)
-    return { x = _x, y = _y, z = _z }
+    return cc.vec3(_x, _y, _z)
 end
 
 --Tex2F
 function cc.tex2F(_u,_v)
-    return { u = _u, v = _v }
+    return cc.vec2( _u, _v )
 end
 
 --PointSprite
@@ -410,27 +421,27 @@ end
 
 --PhysicsMaterial
 function cc.PhysicsMaterial(_density, _restitution, _friction)
-	return { density = _density, restitution = _restitution, friction = _friction }
+    return { density = _density, restitution = _restitution, friction = _friction }
 end
 
 function cc.vec3(_x, _y, _z)
-    return { x = _x, y = _y, z = _z }
+    return nvec3( _x,  _y,  _z)
 end
 
 function cc.vec4(_x, _y, _z, _w)
-    return { x = _x, y = _y, z = _z, w = _w }
+    return nvec4(  _x,  _y,  _z, _w )
 end
 
 function cc.vec3add(vec3a, vec3b)
-    return {x = vec3a.x + vec3b.x, y = vec3a.y + vec3b.y, z = vec3a.z + vec3b.z}
+    return cc.vec3( vec3a.x + vec3b.x,  vec3a.y + vec3b.y,  vec3a.z + vec3b.z)
 end
 
 function cc.vec3sub(vec3a, vec3b)
-    return {x = vec3a.x - vec3b.x, y = vec3a.y - vec3b.y, z = vec3a.z - vec3b.z}
+    return cc.vec3( vec3a.x - vec3b.x,  vec3a.y - vec3b.y,  vec3a.z - vec3b.z)
 end
 
 function cc.vec3mul(vec3, factor)
-    return {x = vec3.x * factor, y = vec3.y * factor, z = vec3.z * factor}
+    return cc.vec3( vec3.x * factor,  vec3.y * factor,  vec3.z * factor)
 end
 
 function cc.vec3dot(vec3a, vec3b)
@@ -453,7 +464,7 @@ function cc.vec3normalize(vec3)
 end
 
 function cc.quaternion(_x, _y ,_z,_w)
-    return { x = _x, y = _y, z = _z, w = _w }
+    return cc.vec4(_x, _y, _z, _w)
 end
 
 function cc.quaternion_createFromAxisAngle(axis, angle)
@@ -521,9 +532,9 @@ end
 
 function cc.mat4.createIdentity()
     return cc.mat4.new(1.0 ,0.0, 0.0, 0.0,
-                       0.0, 1.0, 0.0, 0.0,
-                       0.0, 0.0, 1.0, 0.0,
-                       0.0, 0.0, 0.0, 1.0)
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0)
 end
 
 function cc.mat4.translate(self,vec3)
