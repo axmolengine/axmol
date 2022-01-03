@@ -61,7 +61,7 @@ THE SOFTWARE.
 #include "base/ObjectFactory.h"
 #include "platform/CCApplication.h"
 #include "renderer/backend/ProgramCache.h"
-#include "audio/include/AudioEngine.h"
+#include "audio/AudioEngine.h"
 
 #if CC_ENABLE_SCRIPT_BINDING
 #    include "base/CCScriptSupport.h"
