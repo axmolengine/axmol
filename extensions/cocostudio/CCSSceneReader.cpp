@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 #include "CocoStudio.h"
 #include "ui/CocosGUI.h"
-// #include "audio/include/SimpleAudioEngine.h"
 #include "base/ObjectFactory.h"
 #include "base/ccUtils.h"
 #include "platform/CCFileUtils.h"

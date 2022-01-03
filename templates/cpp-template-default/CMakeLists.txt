@@ -143,7 +143,7 @@ endif()
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
-        PRIVATE ${ADXE_ROOT_PATH}/core/audio/include/
+        PRIVATE ${ADXE_ROOT_PATH}/core/audio
 )
 
 # mark app resources

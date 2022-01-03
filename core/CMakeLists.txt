@@ -135,7 +135,7 @@ target_include_directories(${ADXE_CORE_LIB}
     INTERFACE ${ADXE_ROOT_PATH}/thirdparty
     INTERFACE ${ADXE_ROOT_PATH}/extensions
     INTERFACE ${ADXE_ROOT_PATH}/core/base
-    INTERFACE ${ADXE_ROOT_PATH}/core/audio/include
+    INTERFACE ${ADXE_ROOT_PATH}/core/audio
     INTERFACE ${ADXE_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
 )
 

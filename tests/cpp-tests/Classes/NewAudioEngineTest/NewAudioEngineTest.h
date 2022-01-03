@@ -32,7 +32,7 @@
 #    include "cocos2d.h"
 #    include "../BaseTest.h"
 
-#    include "audio/include/AudioEngine.h"
+#    include "audio/AudioEngine.h"
 
 DEFINE_TEST_SUITE(AudioEngineTests);
 

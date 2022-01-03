@@ -1,50 +1,50 @@
 
 # common headers and sources
 set(COCOS_AUDIO_HEADER
-    audio/include/alconfig.h
-    audio/include/AudioEngine.h
-    audio/include/AudioMacros.h
-    audio/include/AudioDecoderManager.h
-    audio/include/AudioDecoder.h
-    audio/include/AudioDecoderOgg.h
-    audio/include/AudioPlayer.h
-    audio/include/AudioCache.h
-    audio/include/AudioEngineImpl.h
+    audio/alconfig.h
+    audio/AudioEngine.h
+    audio/AudioMacros.h
+    audio/AudioDecoderManager.h
+    audio/AudioDecoder.h
+    audio/AudioDecoderOgg.h
+    audio/AudioPlayer.h
+    audio/AudioCache.h
+    audio/AudioEngineImpl.h
     )
     
 set(COCOS_AUDIO_SRC
-    audio/src/AudioEngine.cpp
-    audio/src/AudioDecoderManager.cpp
-    audio/src/AudioDecoder.cpp
-    audio/src/AudioDecoderOgg.cpp
-    audio/src/AudioPlayer.cpp
-    audio/src/AudioCache.cpp
+    audio/AudioEngine.cpp
+    audio/AudioDecoderManager.cpp
+    audio/AudioDecoder.cpp
+    audio/AudioDecoderOgg.cpp
+    audio/AudioPlayer.cpp
+    audio/AudioCache.cpp
     )
     
 # stupid, clang always compie .mm as objc/cpp mix obj
 if(ANDROID OR LINUX)
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-        audio/src/linux-link.cpp
+        audio/linux-link.cpp
     )
 else()
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-        audio/src/AudioEngineImpl.mm
+        audio/AudioEngineImpl.mm
     )
 endif()
 
 # Apple, we use system audio decoder
 if(APPLE)
     set(COCOS_AUDIO_HEADER ${COCOS_AUDIO_HEADER}
-                        audio/include/AudioDecoderEXT.h)
+                        audio/AudioDecoderEXT.h)
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-                        audio/src/AudioDecoderEXT.mm)
+                        audio/AudioDecoderEXT.mm)
 else()
     set(COCOS_AUDIO_HEADER ${COCOS_AUDIO_HEADER}
-                        audio/include/AudioDecoderMp3.h
-                        audio/include/AudioDecoderWav.h
+                        audio/AudioDecoderMp3.h
+                        audio/AudioDecoderWav.h
     )
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-                        audio/src/AudioDecoderMp3.cpp
-                        audio/src/AudioDecoderWav.cpp
+                        audio/AudioDecoderMp3.cpp
+                        audio/AudioDecoderWav.cpp
     )
 endif()

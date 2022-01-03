@@ -29,7 +29,7 @@
 #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
-#    include "audio/include/AudioEngine.h"
+#    include "audio/AudioEngine.h"
 #endif
 
 USING_NS_CC;
