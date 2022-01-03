@@ -8188,6 +8188,23 @@ tolua_lerror:
 #endif
 }
 
+static int tolua_cocos2d_Vec2_new(lua_State* L)
+{
+    return vec2_to_luaval(L, Vec2{static_cast<float>(lua_tonumber(L, 1)), static_cast<float>(lua_tonumber(L, 2))});
+}
+
+static int tolua_cocos2d_Vec3_new(lua_State* L)
+{
+    return vec3_to_luaval(L, Vec3{static_cast<float>(lua_tonumber(L, 1)), static_cast<float>(lua_tonumber(L, 2)),
+                                  static_cast<float>(lua_tonumber(L, 3))});
+}
+
+static int tolua_cocos2d_Vec4_new(lua_State* L)
+{
+    return vec4_to_luaval(L, Vec4{static_cast<float>(lua_tonumber(L, 1)), static_cast<float>(lua_tonumber(L, 2)),
+                                  static_cast<float>(lua_tonumber(L, 3)), static_cast<float>(lua_tonumber(L, 4))});
+}
+
 int register_all_cocos2dx_math_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
@@ -8205,6 +8222,9 @@ int register_all_cocos2dx_math_manual(lua_State* tolua_S)
     tolua_function(tolua_S, "mat4_createTranslation", tolua_cocos2d_Mat4_createTranslation);
     tolua_function(tolua_S, "mat4_createRotation", tolua_cocos2d_Mat4_createRotation);
     tolua_function(tolua_S, "vec3_cross", tolua_cocos2d_Vec3_cross);
+    tolua_function(tolua_S, "vec2_new", tolua_cocos2d_Vec2_new);
+    tolua_function(tolua_S, "vec3_new", tolua_cocos2d_Vec3_new);
+    tolua_function(tolua_S, "vec4_new", tolua_cocos2d_Vec4_new);
     tolua_endmodule(tolua_S);
     return 0;
 }

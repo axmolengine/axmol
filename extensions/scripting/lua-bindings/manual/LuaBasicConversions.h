@@ -897,7 +897,7 @@ extern bool luaval_to_std_map_string_string(lua_State* L,
  * @param L the current lua_State.
  * @param vec2  a cocos2d::Vec2 object.
  */
-extern void vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2);
+extern int vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2);
 
 /**
  * Push a table converted from a cocos2d::Vec3 object into the Lua stack.
@@ -906,7 +906,7 @@ extern void vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2);
  * @param L the current lua_State.
  * @param vec3  a cocos2d::Vec3 object.
  */
-extern void vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3);
+extern int vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3);
 
 /**
  * Push a table converted from a cocos2d::Vec4 object into the Lua stack.
@@ -915,7 +915,7 @@ extern void vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3);
  * @param L the current lua_State.
  * @param vec4  a cocos2d::Vec4 object.
  */
-extern void vec4_to_luaval(lua_State* L, const cocos2d::Vec4& vec4);
+extern int vec4_to_luaval(lua_State* L, const cocos2d::Vec4& vec4);
 
 /**
  * Push a table converted from a cocos2d::Vec2 array into the Lua stack.

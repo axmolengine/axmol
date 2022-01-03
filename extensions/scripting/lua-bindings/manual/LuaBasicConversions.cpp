@@ -359,15 +359,33 @@ bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* f
         ok = false;
     }
 
+    // assertion: since we only have vec2, you should never passing rect as vec2 to native
+    const auto objlen = lua_objlen(L, -1);
+    assert(objlen == 2);
+
     if (ok)
     {
         lua_pushstring(L, "x");
         lua_gettable(L, lo);
+        if (lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            lua_pushstring(L, "width");
+            lua_gettable(L, lo);
+        }
+
         outValue->x = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
         lua_pushstring(L, "y");
         lua_gettable(L, lo);
+        if (lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            lua_pushstring(L, "height");
+            lua_gettable(L, lo);
+        }
+
         outValue->y = lua_isnil(L, -1) ? 0.0f : (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
     }
@@ -2079,54 +2097,53 @@ void vec2_array_to_luaval(lua_State* L, const cocos2d::Vec2* points, int count)
 }
 
 static int vec2_index(lua_State* L)
-{
-    // top is table
-    const char* name = lua_tostring(L, 2);
-    if (strcmp(name, "width") == 0)
+{  // t k
+    const char signature = lua_tostring(L, 2)[0];
+    int n                = 0;
+    if (signature == 'x' || signature == 'w' || signature == 'u')
     {
-        lua_pop(L, 1);  // pop the old name
-        lua_pushstring(L, "x");
+        lua_pop(L, 1);  // pop the string key
+        n = 1;
     }
-    else if (strcmp(name, "height") == 0)
+    else if (signature == 'y' || signature == 'h' || signature == 'v')
     {
-        lua_pop(L, 1);
-        lua_pushstring(L, "y");
+        lua_pop(L, 1);  // pop the string key
+        n = 2;
     }
-    lua_rawget(L, -2);
+    if (n)
+        lua_rawgeti(L, -1, n);
+    else
+        lua_pushnil(L);
     return 1;
 }
 static int vec2_newindex(lua_State* L)
-{
-    const char* name = lua_tostring(L, 2);
-    if (strcmp(name, "width") == 0)
+{  // t k v
+    const char signature = lua_tostring(L, 2)[0];
+    int n                = 0;
+    if (signature == 'x' || signature == 'w' || signature == 'u')
     {
-        lua_remove(L, 2);
-        lua_pushstring(L, "x");
-        lua_insert(L, 2);
+        lua_remove(L, 2);  // remove the string key
+        n = 1;
     }
-    else if (strcmp(name, "height") == 0)
+    else if (signature == 'y' || signature == 'h' || signature == 'v')
     {
-        lua_remove(L, 2);
-        lua_pushstring(L, "y");
-        lua_insert(L, 2);
+        lua_remove(L, 2);  // remove the string key
+        n = 2;
     }
 
-    lua_rawset(L, -3);
+    if (n)
+        lua_rawseti(L, -2, n);
 
     return 0;
 }
 
-void vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2)
+int vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2)
 {
-    if (NULL == L)
-        return;
-    lua_newtable(L);                       /* L: table */
-    lua_pushstring(L, "x");                /* L: table key */
+    lua_createtable(L, 2, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec2.x); /* L: table key value*/
-    lua_rawset(L, -3);                     /* table[key] = value, L: table */
-    lua_pushstring(L, "y");                /* L: table key */
+    lua_rawseti(L, -2, 1);                 /* table[key] = value, L: table */
     lua_pushnumber(L, (lua_Number)vec2.y); /* L: table key value*/
-    lua_rawset(L, -3);
+    lua_rawseti(L, -2, 2);
 
     int top = lua_gettop(L);
     luaL_getmetatable(L, "_vec2mt");
@@ -2140,43 +2157,102 @@ void vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2)
         lua_setfield(L, -2, "__newindex");
     }
     lua_setmetatable(L, -2);
+
+    return 1;
 }
 
-void vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3)
-{
-    if (NULL == L)
-        return;
+static int vec3_index(lua_State* L)
+{  // t k
+    const char signature = lua_tostring(L, 2)[0];
+    assert(signature >= 'x' || signature <= 'z');
+    lua_pop(L, 1);  // pop the string key
+    const int n = signature - 'x' + 1;
+    lua_rawgeti(L, -1, n);
+    return 1;
+}
+static int vec3_newindex(lua_State* L)
+{  // t k v
+    const char signature = lua_tostring(L, 2)[0];
+    assert(signature >= 'x' || signature <= 'z');
+    lua_remove(L, 2);  // remove the string key
+    const int n = signature - 'x' + 1;
+    lua_rawseti(L, -2, n);
 
-    lua_newtable(L);                       /* L: table */
-    lua_pushstring(L, "x");                /* L: table key */
+    return 0;
+}
+
+int vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3)
+{
+    lua_createtable(L, 3, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec3.x); /* L: table key value*/
-    lua_rawset(L, -3);                     /* table[key] = value, L: table */
-    lua_pushstring(L, "y");                /* L: table key */
+    lua_rawseti(L, -2, 1);                 /* table[key] = value, L: table */
     lua_pushnumber(L, (lua_Number)vec3.y); /* L: table key value*/
-    lua_rawset(L, -3);
-    lua_pushstring(L, "z");                /* L: table key */
+    lua_rawseti(L, -2, 2);
     lua_pushnumber(L, (lua_Number)vec3.z); /* L: table key value*/
-    lua_rawset(L, -3);
+    lua_rawseti(L, -2, 3);
+
+    int top = lua_gettop(L);
+    luaL_getmetatable(L, "_vec3mt");
+    if (!lua_istable(L, -1))
+    {
+        lua_settop(L, top);  // restore stack
+        luaL_newmetatable(L, "_vec3mt");
+        lua_pushcfunction(L, vec3_index);
+        lua_setfield(L, -2, "__index");
+        lua_pushcfunction(L, vec3_newindex);
+        lua_setfield(L, -2, "__newindex");
+    }
+    lua_setmetatable(L, -2);
+
+    return 1;
 }
 
-void vec4_to_luaval(lua_State* L, const cocos2d::Vec4& vec4)
-{
-    if (NULL == L)
-        return;
+static int vec4_index(lua_State* L)
+{  // t k
+    const char signature = lua_tostring(L, 2)[0];
+    assert(signature >= 'w' || signature <= 'z');
+    lua_pop(L, 1);  // pop the string key
+    const int n = signature != 'w' ? signature - 'x' + 1 : 4;
+    lua_rawgeti(L, -1, n);
+    return 1;
+}
+static int vec4_newindex(lua_State* L)
+{  // t k v
+    const char signature = lua_tostring(L, 2)[0];
+    assert(signature >= 'w' || signature <= 'z');
+    lua_remove(L, 2);  // remove the string key
+    const int n = signature != 'w' ? signature - 'x' + 1 : 4;
+    lua_rawseti(L, -2, n);
 
-    lua_newtable(L);                       /* L: table */
-    lua_pushstring(L, "x");                /* L: table key */
+    return 0;
+}
+
+int vec4_to_luaval(lua_State* L, const cocos2d::Vec4& vec4)
+{
+    lua_createtable(L, 4, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec4.x); /* L: table key value*/
-    lua_rawset(L, -3);                     /* table[key] = value, L: table */
-    lua_pushstring(L, "y");                /* L: table key */
+    lua_rawseti(L, -2, 1);                 /* table[key] = value, L: table */
     lua_pushnumber(L, (lua_Number)vec4.y); /* L: table key value*/
-    lua_rawset(L, -3);
-    lua_pushstring(L, "z");                /* L: table key */
+    lua_rawseti(L, -2, 2);
     lua_pushnumber(L, (lua_Number)vec4.z); /* L: table key value*/
-    lua_rawset(L, -3);
-    lua_pushstring(L, "w");                /* L: table key */
+    lua_rawseti(L, -2, 3);
     lua_pushnumber(L, (lua_Number)vec4.w); /* L: table key value*/
-    lua_rawset(L, -3);
+    lua_rawseti(L, -2, 4);
+
+    int top = lua_gettop(L);
+    luaL_getmetatable(L, "_vec4mt");
+    if (!lua_istable(L, -1))
+    {
+        lua_settop(L, top);  // restore stack
+        luaL_newmetatable(L, "_vec4mt");
+        lua_pushcfunction(L, vec4_index);
+        lua_setfield(L, -2, "__index");
+        lua_pushcfunction(L, vec4_newindex);
+        lua_setfield(L, -2, "__newindex");
+    }
+    lua_setmetatable(L, -2);
+
+    return 1;
 }
 
 #if CC_USE_PHYSICS
