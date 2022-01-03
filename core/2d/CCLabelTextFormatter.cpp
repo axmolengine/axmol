@@ -416,7 +416,7 @@ void Label::shrinkLabelToContentSize(const std::function<bool(void)>& lambda)
     {
         if (fontSize - i >= 0)
         {
-            this->scaleFontSizeDown(fontSize - i);
+            this->scaleFontSize(fontSize - i);
         }
     }
 }
