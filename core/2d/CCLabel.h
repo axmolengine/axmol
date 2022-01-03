@@ -786,7 +786,7 @@ protected:
 
     virtual void updateShaderProgram();
     virtual void updateBMFontScale();
-    void scaleFontSizeDown(float fontSize);
+    void scaleFontSize(float fontSize);
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     void setBMFontSizeInternal(float fontSize);
     bool isHorizontalClamped(float letterPositionX, int lineIndex);
