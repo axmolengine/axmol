@@ -1346,7 +1346,7 @@ void Label::setBMFontSizeInternal(float fontSize)
     }
 }
 
-void Label::scaleFontSizeDown(float fontSize)
+void Label::scaleFontSize(float fontSize)
 {
     bool shouldUpdateContent = true;
     if (_currentLabelType == LabelType::TTF)
@@ -2608,7 +2608,7 @@ void Label::rescaleWithOriginalFontSize()
     auto renderingFontSize = this->getRenderingFontSize();
     if (_originalFontSize - renderingFontSize >= 1)
     {
-        this->scaleFontSizeDown(_originalFontSize);
+        this->scaleFontSize(_originalFontSize);
     }
 }
 
