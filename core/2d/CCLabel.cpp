@@ -1346,7 +1346,7 @@ void Label::setBMFontSizeInternal(float fontSize)
     }
 }
 
-void Label::scaleFontSizeDown(float fontSize)
+void Label::scaleFontSize(float fontSize)
 {
     bool shouldUpdateContent = true;
     if (_currentLabelType == LabelType::TTF)
@@ -2023,6 +2023,10 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
 
     if (_systemFontDirty || _contentDirty)
     {
+        // Label overflow shrink fix #566
+        if (_overflow == Overflow::SHRINK && this->getRenderingFontSize() < _originalFontSize)
+            rescaleWithOriginalFontSize();
+     
         updateContent();
     }
 
@@ -2604,7 +2608,7 @@ void Label::rescaleWithOriginalFontSize()
     auto renderingFontSize = this->getRenderingFontSize();
     if (_originalFontSize - renderingFontSize >= 1)
     {
-        this->scaleFontSizeDown(_originalFontSize);
+        this->scaleFontSize(_originalFontSize);
     }
 }
 
