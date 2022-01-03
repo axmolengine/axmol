@@ -2023,10 +2023,6 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
 
     if (_systemFontDirty || _contentDirty)
     {
-        // Label overflow shrink fix #566 
-        if (_overflow == Overflow::SHRINK && this->getRenderingFontSize() < _originalFontSize)
-            rescaleWithOriginalFontSize();
-     
         updateContent();
     }
 
