@@ -66,7 +66,7 @@ static int lua_cocos2dx_WebView_setOnShouldStartLoading(lua_State* L)
         std::function<bool(ui::WebView * sender, std::string_view url)> callback =
             [L, handler](ui::WebView* sender, std::string_view url) -> bool {
             toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "ccui.WebView");
-            tolua_pushcppstring(L, url);
+            tolua_pushsv(L, url);
             return LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
         };
 
@@ -122,7 +122,7 @@ static int lua_cocos2dx_WebView_setOnDidFinishLoading(lua_State* L)
         std::function<void(ui::WebView * sender, std::string_view url)> callback = [L, handler](ui::WebView* sender,
                                                                                                 std::string_view url) {
             toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "ccui.WebView");
-            tolua_pushcppstring(L, url);
+            tolua_pushsv(L, url);
             LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
         };
 
@@ -177,7 +177,7 @@ static int lua_cocos2dx_WebView_setOnDidFailLoading(lua_State* L)
         std::function<void(ui::WebView * sender, std::string_view url)> callback = [L, handler](ui::WebView* sender,
                                                                                                 std::string_view url) {
             toluafix_pushusertype_ccobject(L, sender->_ID, &(sender->_luaID), (void*)sender, "ccui.WebView");
-            tolua_pushcppstring(L, url);
+            tolua_pushsv(L, url);
             LuaEngine::getInstance()->getLuaStack()->executeFunctionByHandler(handler, 2);
         };
 
