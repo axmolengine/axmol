@@ -22,5 +22,8 @@ target_include_directories(${target_name}
   PRIVATE ${lua_header}
   PRIVATE ${tolua_header}
   PRIVATE ../../../../core
+  PRIVATE ../../../../thirdparty
+  PRIVATE ../../../../thirdparty/robin-map/include
+  PRIVATE ../../../../thirdparty/jni.hpp/include
 )
 

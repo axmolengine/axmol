@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include <android/api-level.h>
 #include <jni.h>
 
-#include "jni/jni.hpp"
 
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
