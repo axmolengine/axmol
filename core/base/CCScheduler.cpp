@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/ccMacros.h"
 #include "base/CCDirector.h"
-#include "base/utlist.h"
+#include "uthash/utlist.h"
 #include "base/ccCArray.h"
 #include "base/CCScriptSupport.h"
 
