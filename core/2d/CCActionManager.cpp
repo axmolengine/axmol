@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/ccMacros.h"
 #include "base/ccCArray.h"
-#include "base/uthash.h"
+#include "uthash/uthash.h"
 
 NS_CC_BEGIN
 //

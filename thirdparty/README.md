@@ -208,6 +208,11 @@
 - Version: 1.2 with bugfixs & improvements
 - License: zlib
 
+## uthash 
+- Upstream: https://github.com/troydhanson/uthash
+- Version: 2.3.0
+- License: BSD license (https://troydhanson.github.io/uthash/license.html)
+
 ## webp
 - Upstream: https://github.com/webmproject/libwebp
 - Version: 1.2.1
