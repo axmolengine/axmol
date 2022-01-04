@@ -24,13 +24,7 @@
 
 #include "lua_assetsmanager_test_sample.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "scripting/lua-bindings/manual/tolua_fix.h"
-#ifdef __cplusplus
-}
-#endif
 
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
