@@ -96,20 +96,21 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    include "png.h"
 #endif  // CC_USE_PNG
 
-#include "base/etc1.h"
-#include "base/etc2.h"
-
-#include "base/astc.h"
-
 #if CC_USE_JPEG
 #    include "jpeglib.h"
 #    include <setjmp.h>
 #endif  // CC_USE_JPEG
-}
+} /* extern "C" */
+
 #include "base/s3tc.h"
 #include "base/atitc.h"
 #include "base/pvr.h"
 #include "base/TGAlib.h"
+
+#include "base/etc1.h"
+#include "base/etc2.h"
+
+#include "base/astc.h"
 
 #if CC_USE_WEBP
 #    include "decode.h"
@@ -1918,9 +1919,9 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
     _width                = header->ddsd.width;
     _height               = header->ddsd.height;
     _numberOfMipmaps      = MAX(
-             1,
-             header->ddsd.DUMMYUNIONNAMEN2
-                 .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
+        1,
+        header->ddsd.DUMMYUNIONNAMEN2
+            .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
     _dataLen      = 0;
     int blockSize = (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC) ? 8 : 16;
 

@@ -53,9 +53,7 @@ typedef unsigned int etc2_uint32;
 #define ETC2_RGBA_NO_MIPMAPS 3
 
 // Check if a PKM header is correctly formatted.
-#if defined(__cplusplus)
-extern "C" {
-#endif
+
 etc2_bool etc2_pkm_is_valid(const etc2_byte* pHeader);
 
 // Read the image width from a PKM header
@@ -78,10 +76,6 @@ etc2_uint32 etc2_pkm_get_format(const etc2_byte* pHeader);
 /// <param name="height">pixelsWidth</param>
 /// <returns>0: success, -1: failed</returns>
 int etc2_decode_image(int format, const etc2_byte* input, etc2_byte* output, etc2_uint32 width, etc2_uint32 height);
-
-#if defined(__cplusplus)
-}
-#endif
 
 /// @endcond
 #endif
