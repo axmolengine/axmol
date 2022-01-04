@@ -27,10 +27,6 @@ typedef unsigned char etc1_byte;
 typedef int etc1_bool;
 typedef unsigned int etc1_uint32;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // Size of a PKM header, in bytes.
 
 #define ETC_PKM_HEADER_SIZE 16
@@ -50,10 +46,6 @@ etc1_uint32 etc1_pkm_get_width(const etc1_byte* pHeader);
 // Read the image height from a PKM header
 
 etc1_uint32 etc1_pkm_get_height(const etc1_byte* pHeader);
-
-#ifdef __cplusplus
-}
-#endif
 
 /// @endcond
 #endif
