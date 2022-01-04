@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2020 c4games.com.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Purpose: Make bitmask operators could be use at different namespace,
           the other implementation CCEnumClass.h can't handle.
