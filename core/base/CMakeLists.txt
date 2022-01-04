@@ -50,7 +50,6 @@ set(COCOS_BASE_HEADER
     base/CCNinePatchImageParser.h
     base/CCEventListenerCustom.h
     base/CCEventDispatcher.h
-    base/uthash.h
     base/ccUtils.h
     base/CCEventController.h
     base/CCRefPtr.h
