@@ -367,7 +367,9 @@ void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*>& renderComma
 
 void Renderer::render()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     if (_commandBuffer == nullptr) return;
+#endif
 
     // TODO: setup camera or MVP
     _isRendering = true;
@@ -387,12 +389,18 @@ void Renderer::render()
 
 bool Renderer::beginFrame()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     return _commandBuffer == nullptr ? false : _commandBuffer->beginFrame();
+#else
+    return _commandBuffer->beginFrame();
+#endif
 }
 
 void Renderer::endFrame()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     if (_commandBuffer == nullptr) return;
+#endif
 
     _commandBuffer->endFrame();
 
