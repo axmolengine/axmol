@@ -20,7 +20,6 @@ set(COCOS_BASE_HEADER
     base/CCValue.h
     base/CCEventListenerMouse.h
     base/atitc.h
-    base/utlist.h
     base/CCEventTouch.h
     base/CCData.h
     base/ccMacros.h

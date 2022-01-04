@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2014 GamePlay3D team
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
 
  Licensed under the Apache License, Version 2.0 (the "License");
