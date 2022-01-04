@@ -367,6 +367,8 @@ void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*>& renderComma
 
 void Renderer::render()
 {
+    if (_commandBuffer == nullptr) return;
+
     // TODO: setup camera or MVP
     _isRendering = true;
     //    if (_glViewAssigned)
@@ -385,11 +387,13 @@ void Renderer::render()
 
 bool Renderer::beginFrame()
 {
-    return _commandBuffer->beginFrame();
+    return _commandBuffer == nullptr ? false : _commandBuffer->beginFrame();
 }
 
 void Renderer::endFrame()
 {
+    if (_commandBuffer == nullptr) return;
+
     _commandBuffer->endFrame();
 
 #ifdef CC_USE_METAL

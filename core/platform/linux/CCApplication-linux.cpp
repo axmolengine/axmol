@@ -74,14 +74,16 @@ int Application::run()
     auto glview   = director->getOpenGLView();
 
     // Retain glview to avoid glview being released in the while loop
-    glview->retain();
+    if (glview)
+        glview->retain();
 
-    while (!glview->windowShouldClose())
+    bool flag = glview == nullptr ? false : glview->windowShouldClose();
+    while (!flag)
     {
         lastTime = getCurrentMillSecond();
 
         director->mainLoop();
-        glview->pollEvents();
+        if (glview) glview->pollEvents();
 
         curTime = getCurrentMillSecond();
         if (curTime - lastTime < _animationInterval)
@@ -94,13 +96,17 @@ int Application::run()
      *  when we want to close the window, we should call Director::end();
      *  then call Director::mainLoop to do release of internal resources
      */
-    if (glview->isOpenGLReady())
+    if (glview)
     {
-        director->end();
-        director->mainLoop();
-        director = nullptr;
+        if (glview->isOpenGLReady())
+        {
+            director->end();
+            director->mainLoop();
+            director = nullptr;
+        }
+        glview->release();
     }
-    glview->release();
+
     return EXIT_SUCCESS;
 }
 
