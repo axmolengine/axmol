@@ -139,6 +139,7 @@ https://github.com/adxeproject/adxe/discussions/411
 
 ### Fully changes since cocos2d-x-4.0
 
+- [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
 - [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
 - [HIGHLIGHT] Windows x64 build support
 - [HIGHLIGHT] Support custom texture atlas formats, thanks to @rh101
@@ -168,7 +169,9 @@ https://github.com/adxeproject/adxe/discussions/411
 - [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
 - [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
+- [HIGHLIGHT] Use c++17 string_view instead `const std::string&`
 - [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
+- [Fix] Fix Label overflow shrink bug
 - [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 - [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
 - [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
@@ -182,6 +185,7 @@ https://github.com/adxeproject/adxe/discussions/411
 - [FIX] Fix crash on AudioEngine::end after the `Director` was destroyed
 - [FIX] Fix font atlas will leak when it does not exist in the atlas cache, thanks to @rh101
 - [FIX] Fix ScrollView shows incorrect position in vertical direction some time, thanks to @wzhengsen
+- [FIX] Fix Spine ClippingAttachment doesn't work
 - [REFINE] CCValue move construct and assign with std::string support
 - [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
 - [REFINE] Add lua debug project file to lua project template
@@ -206,3 +210,4 @@ https://github.com/adxeproject/adxe/discussions/411
 - [REFINE] Always enable string pooling for msvc on cmake
 - [REFINE] Change DrawNode api color parameters from `Color4F` to low `Color4B`
 - [REFINE] Improve DrawNode GC allocs
+- [REFINE] Use `jni.hpp` to improve jni call without method signature GC allocs
