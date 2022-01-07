@@ -68,6 +68,12 @@ function build_android()
     echo "Building Android samples ..."
     source ../environment.sh
 
+    # build fairygui-tests
+    pushd $ADXE_ROOT/tests/fairygui-tests/proj.android
+    
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
+    popd
+
     # build cpp-tests
     pushd $ADXE_ROOT/tests/cpp-tests/proj.android
     
