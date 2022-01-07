@@ -13,6 +13,7 @@ on:
       - thirdparty/**/*
       - CMakeLists.txt
       - .github/workflows/android-ci.yml
+      - tools/unix-ci/**/*
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
