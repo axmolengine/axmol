@@ -21,6 +21,11 @@
  ****************************************************************************/
 #ifndef ADXE_FORMAT_H
 #define ADXE_FORMAT_H
+
+#ifndef FMT_HEADER_ONLY
+#  define FMT_HEADER_ONLY
+#endif
+
 #include "fmt/format.h"
 
 namespace fmt
