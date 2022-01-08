@@ -88,6 +88,7 @@ endif()
 
 if(BUILD_EXTENSION_FAIRYGUI)
   add_subdirectory(fairygui)
+  target_link_libraries(fairygui fmt-header-only)
   if(BUILD_SHARED_LIBS)
     target_link_libraries(fairygui spine)
   else()
