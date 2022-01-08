@@ -338,11 +338,6 @@ endif()
 
 # fmt-lib
 add_subdirectory(fmt)
-if (ANDROID OR LINUX)
-    target_link_libraries(thirdparty INTERFACE fmt-header-only)
-else()
-    target_link_libraries(thirdparty fmt-header-only)
-endif()
 configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too
