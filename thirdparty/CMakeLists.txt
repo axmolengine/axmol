@@ -66,8 +66,10 @@ endif()
 add_library(thirdparty STATIC empty.cpp)
 
 # header only libs
+target_compile_definitions(thirdparty INTERFACE FMT_HEADER_ONLY=1)
 target_include_directories(thirdparty
-	INTERFACE "robin-map/include"
+    INTERFACE "fmt/include"
+    INTERFACE "robin-map/include"
 )
 
 if (ANDROID)
@@ -335,10 +337,6 @@ if(BUILD_DEP_KCP)
     target_link_libraries(thirdparty kcp)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
 endif()
-
-# fmt-lib
-add_subdirectory(fmt)
-configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)
