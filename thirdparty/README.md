@@ -56,7 +56,7 @@
 
 ## {fmt}
 - Upstream: https://github.com/fmtlib/fmt
-- Version: 8.0.1-2038bf6
+- Version: git 8.1.1-9ff91b1 (5518)
 - License: MIT
 
 ## FreeType
