@@ -46,7 +46,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.80.0
+- Version: 7.81.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
