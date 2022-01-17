@@ -111,11 +111,11 @@ class adxetools {
                 def foundNdkVer = properties['Pkg.Revision']
                 def ret = adxetools.compareVersion(foundNdkVer, ndkVer)
                 if(ret == 0) {
-                    println("Using found ndk revision=$foundNdkVer")
+                    println("Using found ndk (revision=$foundNdkVer,path=$ndkRoot)")
                 }
                 else if(ret > 0){
                     if(allowNewerNdk) {
-                        println("Using found newer ndk revision=$foundNdkVer, required is: ${ndkVer}")
+                        println("Using found newer ndk (revision=$foundNdkVer,path=$ndkRoot), (minimum required is: ${ndkVer})")
                         ndkVer = foundNdkVer
                     }
                     else {
@@ -129,7 +129,7 @@ class adxetools {
         }
         else {
             ndkRoot = null
-            println("The gradle will install ndk: $ndkVer automatically")
+            println("No installed ndk found, the gradle will install ndk: $ndkVer automatically")
         }
 
         def rets = new String[2]
