@@ -228,10 +228,12 @@ function(cocos_copy_target_dll cocos_target)
 endfunction()
 
 function(cocos_copy_lua_dlls cocos_target)
-    add_custom_command(TARGET ${cocos_target} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/plainlua.dll"
-         $<TARGET_FILE_DIR:${cocos_target}>)
+    if(LUA_ENGINE STREQUAL "plainlua")
+        add_custom_command(TARGET ${cocos_target} POST_BUILD
+           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/plainlua.dll"
+             $<TARGET_FILE_DIR:${cocos_target}>)
+    endif()
 endfunction()
 
 # mark `FILES` as resources, files will be put into sub-dir tree depend on its absolute path
