@@ -100,7 +100,7 @@ public:
     void getByteData(unsigned char* byteData) const;
 
     inline const char* getData() { return !_data.empty() ? _data.data() : ""; }
-    inline size_t getDataSize() const { return _dataSize; }
+    inline size_t getDataSize() const { return _data.size(); }
 
     inline void setErrorFlag(bool errorFlag) { _errorFlag = errorFlag; }
     inline bool getErrorFlag() const { return _errorFlag; }
@@ -113,7 +113,6 @@ private:
     std::string _meth;
     std::string _type;
     yasio::sbyte_buffer _data;
-    size_t _dataSize;
     int _readyState;
     int _status;
     std::string _statusText;
@@ -133,7 +132,6 @@ LuaMinXmlHttpRequest::LuaMinXmlHttpRequest()
     : _url("")
     , _meth("")
     , _type("")
-    , _dataSize(0)
     , _readyState(UNSENT)
     , _status(0)
     , _statusText("")
@@ -254,7 +252,6 @@ void LuaMinXmlHttpRequest::_sendRequest()
                 _status     = 200;
                 _readyState = DONE;
                 _data       = std::move(*buffer);
-                _dataSize   = buffer->size();
             }
             else
             {
@@ -279,8 +276,8 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
 void LuaMinXmlHttpRequest::getByteData(unsigned char* byteData) const
 {
-    if (_dataSize > 0)
-        memcpy((char*)byteData, _data.data(), _dataSize);
+    if (!_data.empty())
+        memcpy((char*)byteData, _data.data(), _data.size());
 }
 
 /* function to regType */
