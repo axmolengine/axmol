@@ -173,6 +173,14 @@ public:
             _checksumFileName = _tempFileName + ".chksum";
 
             _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::OVERLAPPED);
+            if(!_fsMd5) {
+                _errCode         = DownloadTask::ERROR_OPEN_FILE_FAILED;
+                _errCodeInternal = 0;
+                _errDescription  = "Can't open checksum file:";
+                _errDescription.append(_checksumFileName);
+                break;
+            }
+            
             _fsMd5->seek(0, SEEK_END);
             if (_fsMd5->tell() != sizeof(_md5State))
             {
@@ -939,9 +947,9 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
     else
     {
-        task.reset();
         cocos2d::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
                      coTask->_errDescription.c_str());
+        task.reset();
     }
 }
 
