@@ -562,9 +562,17 @@ private:
 
         curl_easy_setopt(handle, CURLOPT_LOW_SPEED_LIMIT, 1L);
         curl_easy_setopt(handle, CURLOPT_LOW_SPEED_TIME, 10L);
-
-        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
-        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
+        
+        if(task->cacertPath.empty())
+        {
+            curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
+            curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
+        }
+        else {
+            curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1L);
+            curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2L);
+            curl_easy_setopt(handle, CURLOPT_CAINFO, task->cacertPath.c_str());
+        }
 
         curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(handle, CURLOPT_MAXREDIRS, 5L);

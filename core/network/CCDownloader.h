@@ -60,6 +60,8 @@ public:
     std::string identifier;
     std::string requestURL;
     std::string storagePath;
+    
+    std::string cacertPath;
 
     struct
     {
@@ -77,7 +79,8 @@ public:
                  std::string_view storagePath,
                  std::string_view checksum,  // currently is MD5
                  std::string_view identifier,
-                 bool background);
+                 bool background,
+                 std::string_view cacertPath);
 
     virtual ~DownloadTask();
 
@@ -140,7 +143,8 @@ public:
                                                          std::string_view storagePath,
                                                          std::string_view identifier = "",
                                                          std::string_view checksum   = "",
-                                                         bool background             = false);
+                                                         bool background             = false,
+                                                         std::string_view cacertPath = "");
 
 private:
     std::unique_ptr<IDownloaderImpl> _impl;
