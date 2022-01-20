@@ -50,13 +50,15 @@ DownloadTask::DownloadTask(std::string_view srcUrl,
                            std::string_view storagePath,
                            std::string_view checksum,
                            std::string_view identifier,
-                           bool background)
+                           bool background,
+                           std::string_view cacertPath)
 {
     this->requestURL  = srcUrl;
     this->storagePath = storagePath;
     this->checksum    = checksum;
     this->identifier  = identifier;
     this->background  = background;
+    this->cacertPath = cacertPath;
 }
 
 DownloadTask::~DownloadTask()
@@ -147,9 +149,10 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(std::string_vie
                                                                  std::string_view storagePath,
                                                                  std::string_view identifier,
                                                                  std::string_view md5checksum,
-                                                                 bool background)
+                                                                 bool background,
+                                                                 std::string_view cacertPath)
 {
-    auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier, background);
+    auto task = std::make_shared<DownloadTask>(srcUrl, storagePath, md5checksum, identifier, background, cacertPath);
     do
     {
         if (srcUrl.empty() || storagePath.empty())
