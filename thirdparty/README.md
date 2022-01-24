@@ -225,7 +225,7 @@
 
 ## xxHash
 - Upstream: https://github.com/Cyan4973/xxHash
-- Version: 0.8.0
+- Version: 0.8.1
 - License: BSD-2-Clause
 
 ## yaml-cpp
