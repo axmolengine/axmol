@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
-Copyright (c) 2012-2021 HALX99
+Copyright (c) 2012-2022 HALX99
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -34,6 +34,13 @@ using namespace yasio;
 
 namespace lyasio
 {
+enum
+{
+  BUFFER_DEFAULT,
+  BUFFER_RAW,
+  BUFFER_FAST,
+};
+
 template <typename _Stream>
 static void obstream_write_v(_Stream* obs, cxx17::string_view val, int length_field_bits)
 {
@@ -154,14 +161,22 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
 #  endif
   yasio_lib.new_usertype<io_event>(
       "io_event", "kind", &io_event::kind, "status", &io_event::status, "passive", [](io_event* e) { return !!e->passive(); }, "packet",
-      [](io_event* ev, sol::variadic_args args) {
-        bool copy = false;
-        if (args.size() >= 2)
-          copy = args[1];
+      [](io_event* ev, sol::variadic_args args, sol::this_state s) {
+        sol::state_view L(s);
         auto& pkt = ev->packet();
-        return !is_packet_empty(pkt)
-                   ? std::unique_ptr<yasio::ibstream>(!copy ? new yasio::ibstream(forward_packet((packet_t &&) pkt)) : new yasio::ibstream(forward_packet(pkt)))
-                   : std::unique_ptr<yasio::ibstream>{};
+        if (pkt.empty())
+          return sol::make_object(L, sol::lua_nil);
+
+        int buffer_type = (args.size() >= 1) ? static_cast<int>(args[0]) : static_cast<int>(lyasio::BUFFER_DEFAULT);
+        switch (buffer_type)
+        {
+          case lyasio::BUFFER_RAW:
+            return sol::make_object(L, cxx17::string_view{pkt.data(), pkt.size()});
+          case lyasio::BUFFER_FAST:
+            return sol::make_object(L, cxx14::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt)));
+          default:
+            return sol::make_object(L, cxx14::make_unique<yasio::ibstream>(forward_packet((packet_t &&) pkt)));
+        }
       },
       "cindex", &io_event::cindex, "transport", &io_event::transport
 #  if !defined(YASIO_MINIFY_EVENT)
@@ -205,6 +220,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           case YOPT_C_LOCAL_PORT:
           case YOPT_C_REMOTE_PORT:
           case YOPT_C_KCP_CONV:
+          case YOPT_C_UNPACK_NO_BSWAP:
             service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]));
             break;
           case YOPT_C_ENABLE_MCAST:
@@ -309,6 +325,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_NO_BSWAP);
   YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
 
   YASIO_EXPORT_ENUM(YCF_REUSEADDR);
@@ -324,6 +341,11 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(SEEK_CUR);
   YASIO_EXPORT_ENUM(SEEK_SET);
   YASIO_EXPORT_ENUM(SEEK_END);
+
+  using namespace lyasio;
+  YASIO_EXPORT_ENUM(BUFFER_DEFAULT);
+  YASIO_EXPORT_ENUM(BUFFER_RAW);
+  YASIO_EXPORT_ENUM(BUFFER_FAST);
 
   return yasio_lib.push(); /* return 'yasio' table */
 }
@@ -556,18 +578,49 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                                      .addFunction("kind", &io_event::kind)
                                      .addFunction("status", &io_event::status)
                                      .addStaticFunction("passive", [](io_event* ev) { return !!ev->passive(); })
-                                     .addStaticFunction("packet",
-                                                        [](io_event* ev, bool /*raw*/, bool copy) {
+                                     .addStaticFunction("default_packet",
+                                                        [](io_event* ev) {
                                                           auto& pkt = ev->packet();
-                                                          return !is_packet_empty(pkt) ? std::unique_ptr<yasio::ibstream>(
-                                                                                             !copy ? new yasio::ibstream(forward_packet((packet_t &&) pkt))
-                                                                                                   : new yasio::ibstream(forward_packet(pkt)))
-                                                                                       : std::unique_ptr<yasio::ibstream>{};
+                                                          if (pkt.empty())
+                                                            return std::unique_ptr<yasio::ibstream>{};
+                                                          return cxx14::make_unique<yasio::ibstream>(forward_packet((packet_t &&) pkt));
+                                                        })
+                                     .addStaticFunction("raw_packet",
+                                                        [](io_event* ev) {
+                                                          auto& pkt = ev->packet();
+                                                          if (pkt.empty())
+                                                            return cxx17::string_view{""};
+                                                          return cxx17::string_view{pkt.data(), pkt.size()};
+                                                        })
+                                     .addStaticFunction("fast_packet",
+                                                        [](io_event* ev) {
+                                                          auto& pkt = ev->packet();
+                                                          if (pkt.empty())
+                                                            return std::unique_ptr<yasio::fast_ibstream>{};
+                                                          return cxx14::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt));
                                                         })
                                      .addFunction("cindex", &io_event::cindex)
                                      .addFunction("transport", &io_event::transport)
                                      .addFunction("timestamp", &io_event::timestamp));
-
+#  if !YASIO_LUA_ENABLE_GLOBAL
+  state["yasio"] = yasio_lib;
+#  endif
+  bool succeed   = state.dostring(R"(
+local yasio = yasio;
+yasio.io_event.packet = function(self, buffer_type)
+    if buffer_type == yasio.BUFFER_RAW then
+         return yasio.io_event.raw_packet(self)
+    elseif buffer_type == yasio.BUFFER_FAST then
+         return yasio.io_event.fast_packet(self)
+    else 
+         return yasio.io_event.default_packet(self)
+    end
+end
+)");
+  assert(succeed);
+#  if !YASIO_LUA_ENABLE_GLOBAL
+  state["yasio"] = kaguya::NilValue{};
+#  endif
   yasio_lib["io_service"].setClass(
       kaguya::UserdataMetatable<io_service>()
           .setConstructors<io_service(), io_service(int), io_service(const std::vector<io_hostent>&)>()
@@ -612,6 +665,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                                  case YOPT_C_LOCAL_PORT:
                                  case YOPT_C_REMOTE_PORT:
                                  case YOPT_C_KCP_CONV:
+                                 case YOPT_C_UNPACK_NO_BSWAP:
                                    service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]));
                                    break;
                                  case YOPT_C_ENABLE_MCAST:
@@ -703,6 +757,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_NO_BSWAP);
   YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
 
   YASIO_EXPORT_ENUM(YCF_REUSEADDR);
@@ -718,6 +773,11 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(SEEK_CUR);
   YASIO_EXPORT_ENUM(SEEK_SET);
   YASIO_EXPORT_ENUM(SEEK_END);
+
+  using namespace lyasio;
+  YASIO_EXPORT_ENUM(BUFFER_DEFAULT);
+  YASIO_EXPORT_ENUM(BUFFER_RAW);
+  YASIO_EXPORT_ENUM(BUFFER_FAST);
 
   return yasio_lib.push(); /* return 'yasio' table */
 }

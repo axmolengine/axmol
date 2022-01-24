@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 HALX99
+Copyright (c) 2012-2022 HALX99
 Copyright (c) 2016 Matthew Rodusek(matthew.rodusek@gmail.com) <http://rodusek.me>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1385,7 +1385,7 @@ template <class _Elem> struct hash<cxx17::basic_string_view<_Elem>>
   size_t operator()(const _Kty& _Keyval) const
   { // hash _Keyval to size_t value by pseudorandomizing transform
 #  if defined(_LIBCPP_VERSION)
-    __do_string_hash(_Keyval.data(), _Keyval.data() + _Keyval.size());
+    return __do_string_hash(_Keyval.data(), _Keyval.data() + _Keyval.size());
 #  elif defined(__GLIBCXX__)
     return _Hash_impl::hash(_Keyval.data(), _Keyval.size() * sizeof(_Elem));
 #  else // msvc++ or other compiler without stable hash bytes function exists

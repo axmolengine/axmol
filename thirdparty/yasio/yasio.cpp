@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 HALX99
+Copyright (c) 2012-2022 HALX99
 
 HAL: Hardware Abstraction Layer
 X99: Intel X99 Mainboard Platform
@@ -330,7 +330,8 @@ int io_channel::__builtin_decode_len(void* d, int n)
     if (n >= (loffset + lsize))
     {
       ::memcpy(&len, (uint8_t*)d + loffset, lsize);
-      len = yasio::network_to_host(len, lsize);
+      if (!uparams_.no_bswap)
+        len = yasio::network_to_host(len, lsize);
       len += uparams_.length_adjustment;
       if (len > uparams_.max_frame_length)
         len = -1;
@@ -2281,6 +2282,12 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
         channel->uparams_.initial_bytes_to_strip = yasio::clamp(va_arg(ap, int), 0, YASIO_UNPACK_MAX_STRIP);
+      break;
+    }
+    case YOPT_C_UNPACK_NO_BSWAP: {
+      auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
+      if (channel)
+        channel->uparams_.no_bswap = va_arg(ap, int);
       break;
     }
     case YOPT_S_EVENT_CB:

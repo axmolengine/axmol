@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 HALX99
+Copyright (c) 2012-2022 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ SOFTWARE.
 ** Uncomment or add compiler flag -DYASIO_HEADER_ONLY to enable yasio core implementation header
 ** only
 */
-#define YASIO_HEADER_ONLY 1
+// #define YASIO_HEADER_ONLY 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_VERBOSE_LOG to enable verbose log
@@ -83,7 +83,7 @@ SOFTWARE.
 ** 1. -DYASIO_SSL_BACKEND=1: OpenSSL
 ** 2. -DYASIO_SSL_BACKEND=2: mbedtls
 */
-#define YASIO_SSL_BACKEND 1
+// #define YASIO_SSL_BACKEND 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_DISABLE_CONCURRENT_SINGLETON to disable concurrent
@@ -192,7 +192,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x033902
+#define YASIO_VERSION_NUM 0x033903
 
 /*
 ** The macros used by io_service.
