@@ -15,7 +15,7 @@
 
 ### View code with vscode online: 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/adxeproject/adxe)
-- [![github1s](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/adxeproject/adxe)
+- [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/adxeproject/adxe)
   
   
 **[简体中文](README_CN.md)**
@@ -136,6 +136,8 @@ https://github.com/adxeproject/adxe/discussions/411
 - @rh101
 - @aismann
 - @weiwest
+
+![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")
 
 ### Fully changes since cocos2d-x-4.0
 
