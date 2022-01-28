@@ -189,54 +189,11 @@ class adxetools {
 
         return foundCMakeVer
     }
-
-    static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("windows");
-    }
-
-    static String getCMakeProgramName() {
-        return isWindows() ? "cmake.exe" : "cmake"
-    }
-
-    static String getCMakeBinFromLocal(rootProject) {
-        String programName = getCMakeProgramName();
-        Properties properties = new Properties()
-        try {
-            properties.load(rootProject.file("local.properties"))
-            def cmakeDir = properties.getProperty("cmake.dir")
-            if(cmakeDir != null) {
-                def cmakeBin = "$cmakeDir/bin"
-                if(new File("$cmakeBin/$programName").isFile())
-                    return cmakeBin;
-            }
-        }
-        catch(Exception) {
-        }
-
-        return null
-    }
-
-    static String getCMakeBinFromPath() {
-        String cmakeExecName = getCMakeProgramName();
-        def foundBinPath = null
-        Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
-                .map(Paths::get)
-                .anyMatch(path -> {
-                    def programPath = path.resolve(cmakeExecName);
-                    boolean fileExist = Files.exists(path.resolve(cmakeExecName))
-                    if(fileExist) {
-                        foundBinPath = path.toAbsolutePath().toString()
-                    }
-                    return fileExist
-                });
-
-        return foundBinPath
-    }
-
+    
     static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
         def foundCMakeVer = null
         
-        String ninjaPath = cmakeBin + File.separator + isWindows() ? "ninja.exe" : "ninja"
+        String ninjaPath = cmakeBin + File.separator + getNinjaProgramName()
         if(!new File(ninjaPath).isFile()) {
             println("The required ninja program is not present in cmake bin dir!")
             return null
@@ -279,6 +236,53 @@ class adxetools {
         }
 
         return foundCMakeVer
+    }
+
+    static String getCMakeBinFromLocal(rootProject) {
+        String programName = getCMakeProgramName();
+        Properties properties = new Properties()
+        try {
+            properties.load(rootProject.file("local.properties"))
+            def cmakeDir = properties.getProperty("cmake.dir")
+            if(cmakeDir != null) {
+                def cmakeBin = "$cmakeDir/bin"
+                if(new File("$cmakeBin/$programName").isFile())
+                    return cmakeBin;
+            }
+        }
+        catch(Exception) {
+        }
+
+        return null
+    }
+
+    static String getCMakeBinFromPath() {
+        String cmakeExecName = getCMakeProgramName();
+        def foundBinPath = null
+        Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
+                .map(Paths::get)
+                .anyMatch(path -> {
+                    def programPath = path.resolve(cmakeExecName);
+                    boolean fileExist = Files.exists(path.resolve(cmakeExecName))
+                    if(fileExist) {
+                        foundBinPath = path.toAbsolutePath().toString()
+                    }
+                    return fileExist
+                });
+
+        return foundBinPath
+    }
+
+    static String getCMakeProgramName() {
+        return isWindows() ? "cmake.exe" : "cmake"
+    }
+    
+    static String getNinjaProgramName() {
+        return isWindows() ? "ninja.exe" : "ninja"
+    } 
+    
+    static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
     }
 }
 
