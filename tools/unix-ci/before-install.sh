@@ -16,6 +16,7 @@ function install_android_sdk()
     curl https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz -o ./openjdk-17.0.2_linux-x64_bin.tar.gz
     tar xzvf openjdk-17.0.2_linux-x64_bin.tar.gz
     export JAVA_HOME=`pwd`/jdk-17.0.2
+    export PATH="$JAVA_HOME:$PATH"
 
     echo "Installing android ndk ..."
     # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
