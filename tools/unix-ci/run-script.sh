@@ -64,6 +64,10 @@ function build_ios()
 
 function build_android()
 {
+    # print jdk detail
+    echo "JAVA_HOME=$JAVA_HOME"
+    java -version
+    
     # Build all samples
     echo "Building Android samples ..."
     source ../environment.sh
