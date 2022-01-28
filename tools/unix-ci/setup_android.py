@@ -27,6 +27,9 @@ COCOS2D_X = os.path.abspath(os.path.join(DIR_PATH, "../.."))
 # ROOT_DIR/cocos2d-x
 ROOT_DIR = os.path.abspath(os.path.join(COCOS2D_X, ".."))
 
+# cmdlinetools download page: https://developer.android.com/studio#command-tools
+# commandlinetools-linux-8092744_latest.zip
+CMDLINETOOLS_REV = "8092744"
 NDK_VER = "19.2.5345600" # "r19c"
 
 # ANDROID_NDK = os.path.join(ROOT_DIR, "android-ndk-" + NDK_VER)
@@ -91,7 +94,7 @@ def install_android_cmdline_tools():
     file_plat = platform.system().lower()
     if file_plat == "darwin":
         file_plat = "mac"
-    file_name = "commandlinetools-{system}-7302050_latest.zip".format(system=file_plat)
+    file_name = "commandlinetools-{system}-{rev}_latest.zip".format(system=file_plat, rev=CMDLINETOOLS_REV)
     url = "https://dl.google.com/android/repository/" + file_name
     zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name)) # folder is cmdline-tools
 
