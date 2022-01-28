@@ -1,5 +1,7 @@
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.regex.Pattern
+import java.util.stream.Stream
 
 class VersionComparator implements Comparator<String> {
 
@@ -119,11 +121,11 @@ class adxetools {
                         ndkVer = foundNdkVer
                     }
                     else {
-                        throw new GradleException("${ndkVer} is required, but $foundNdkVer found!")
+                        throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
                     }
                 }
                 else {
-                    throw new GradleException("${ndkVer}+ is required, but $foundNdkVer found!")
+                    throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
                 }
             }
         }
@@ -136,6 +138,158 @@ class adxetools {
         rets[0] = ndkVer
         rets[1] = ndkRoot
         return rets
+    }
+
+    static String findCMake(String cmakeVer, rootProject) {
+        def allowNewerCMake = false
+        if(cmakeVer.endsWith('+')) {
+            allowNewerCMake = true
+            cmakeVer = cmakeVer.substring(0, cmakeVer.length() - 1)
+        }
+
+        def cmakeBinDirs = []
+
+        def cmakeBinDir = getCMakeBinFromLocal(rootProject)
+        if(cmakeBinDir != null) {
+            cmakeBinDirs.add(cmakeBinDir);
+        }
+
+        def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
+
+        if(Files.exists(sdkRoot)) {
+            sdkRoot = sdkRoot.toAbsolutePath().toString()
+            def verList = ["3.10.2.4988404", "3.18.1"]
+            for(foundVer in verList){
+                cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + foundVer + File.separator + "bin"
+                if(new File(cmakeBinDir).isDirectory()) {
+                    cmakeBinDirs.add(cmakeBinDir)
+                }
+            }
+        }
+
+        cmakeBinDir = getCMakeBinFromPath()
+        if(cmakeBinDir != null) {
+            cmakeBinDirs.add(cmakeBinDir)
+        }
+
+        // find in cmakeBinDirs
+        def foundCMakeVer = null
+        for(item in cmakeBinDirs) {
+            foundCMakeVer = findCMakeFromBinDir(cmakeVer, item, allowNewerCMake)
+            if(foundCMakeVer != null) {
+                break
+            }
+        }
+
+        if(foundCMakeVer == null) {
+            println("No suitable cmake found, required $cmakeVer")
+        }
+
+        return foundCMakeVer
+    }
+
+
+    static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
+    }
+
+    static String getCMakeProgramName() {
+        return isWindows() ? "cmake.exe" : "cmake"
+    }
+
+    static String getCMakeBinFromLocal(rootProject) {
+        String programName = getCMakeProgramName();
+        Properties properties = new Properties()
+        try {
+            properties.load(rootProject.file("local.properties"))
+            def cmakeDir = properties.getProperty("cmake.dir")
+            if(cmakeDir != null) {
+                def cmakeBin = "$cmakeDir/bin"
+                if(new File("$cmakeBin/$programName").isFile())
+                    return cmakeBin;
+            }
+        }
+        catch(Exception) {
+        }
+
+        return null
+    }
+
+    static String getCMakeBinFromPath() {
+        String cmakeExecName = getCMakeProgramName();
+        def foundBinPath = null
+        Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
+                .map(Paths::get)
+                .anyMatch(path -> {
+                    def programPath = path.resolve(cmakeExecName);
+                    boolean fileExist = Files.exists(path.resolve(cmakeExecName))
+                    if(fileExist) {
+                        foundBinPath = path.toAbsolutePath().toString()
+                    }
+                    return fileExist
+                });
+
+        return foundBinPath
+    }
+
+    static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
+        def foundCMakeVer = null
+
+        String ninjaName = isWindows() ? "ninja.exe" : "ninja"
+        String ninjaPath = cmakeBin + File.separator + ninjaName
+        if(!new File(ninjaPath).isFile()) {
+            // check whether ninja in other location and in path
+            def ninjaInstalled = false
+            try {
+                Process proc = Runtime.getRuntime().exec("ninja --version")
+                proc.waitFor()
+
+                int exitVal = proc.exitValue()
+                ninjaInstalled = exitVal == 0
+            } catch(Exception) {
+            }
+
+            if (!ninjaInstalled) {
+                throw new GradleException("Required $ninjaPath exists!")
+            }
+        }
+
+        try {
+            def programPath = cmakeBin + File.separator + getCMakeProgramName()
+            Process proc = Runtime.getRuntime().exec("\"$programPath\" --version")
+            proc.waitFor()
+            int exitVal = proc.exitValue()
+            if (exitVal == 0) {
+                InputStream stdIn = proc.getInputStream();
+                InputStreamReader isr = new InputStreamReader(stdIn);
+                BufferedReader br = new BufferedReader(isr);
+                String verLine = br.readLine();
+                def verInfo = verLine.split("\\s")
+                if (verInfo.length >= 3) {
+                    def foundVer = verInfo[2]
+                    def minusIdx = foundVer.indexOf('-')
+                    def canonVer = minusIdx == -1 ? foundVer : foundVer.substring(0, minusIdx)
+                    def ret = adxetools.compareVersion(canonVer, cmakeVer)
+                    if (ret == 0) {
+                        println("Using found cmake version: $canonVer")
+                        foundCMakeVer = canonVer
+                    }
+                    else if(ret > 0) {
+                        if(allowNewerCMake) {
+                            println("Using found newer cmake (version=$canonVer,path=$programPath), (minimum required is: ${cmakeVer})")
+                            foundCMakeVer = canonVer
+                        }
+                        else {
+                            println("The cmake ${cmakeVer} is required, but $canonVer found!")
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception ex) {
+        }
+
+        return foundCMakeVer
     }
 }
 
