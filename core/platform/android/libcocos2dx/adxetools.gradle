@@ -161,6 +161,7 @@ class adxetools {
             def verList = ["3.10.2.4988404", "3.18.1"]
             for(foundVer in verList){
                 cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + foundVer + File.separator + "bin"
+
                 if(new File(cmakeBinDir).isDirectory()) {
                     cmakeBinDirs.add(cmakeBinDir)
                 }
@@ -182,12 +183,12 @@ class adxetools {
         }
 
         if(foundCMakeVer == null) {
-            println("No suitable cmake found, required $cmakeVer")
+            println("No suitable cmake found, required $cmakeVer, the gradle will install it")
+            foundCMakeVer = cmakeVer
         }
 
         return foundCMakeVer
     }
-
 
     static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("windows");
@@ -234,7 +235,7 @@ class adxetools {
 
     static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
         def foundCMakeVer = null
-
+        
         String ninjaName = isWindows() ? "ninja.exe" : "ninja"
         String ninjaPath = cmakeBin + File.separator + ninjaName
         if(!new File(ninjaPath).isFile()) {
@@ -256,7 +257,7 @@ class adxetools {
 
         try {
             def programPath = cmakeBin + File.separator + getCMakeProgramName()
-            Process proc = Runtime.getRuntime().exec("\"$programPath\" --version")
+            Process proc = isWindows() ? Runtime.getRuntime().exec("\"$programPath\" --version") : Runtime.getRuntime().exec("$programPath --version")
             proc.waitFor()
             int exitVal = proc.exitValue()
             if (exitVal == 0) {
@@ -287,6 +288,7 @@ class adxetools {
             }
         }
         catch(Exception ex) {
+            println("Execute cmake failed: " + ex.message)
         }
 
         return foundCMakeVer
