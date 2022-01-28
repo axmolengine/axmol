@@ -84,7 +84,7 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
     ```msbuild .\build\adxe.sln -target:cpp-tests -maxCpuCount```
 
 #### Android
-  1. Install Android Studio 4.2+
+  1. Install Android Studio 2021.1.1+
   2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
   3. Start Android and choose [Open an existing Android Studio Project] to open ```adxe\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
