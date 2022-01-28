@@ -10,7 +10,7 @@ CURL="curl --retry 999 --retry-max-time 0"
 
 function install_android_sdk()
 {
-    echo "Installing android ndk ..."
+    echo "Installing android sdk,ndk ..."
     # sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     # sudo python get-pip.py
     # sudo python -m pip install retry
