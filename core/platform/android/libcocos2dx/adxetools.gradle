@@ -236,23 +236,10 @@ class adxetools {
     static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
         def foundCMakeVer = null
         
-        String ninjaName = isWindows() ? "ninja.exe" : "ninja"
-        String ninjaPath = cmakeBin + File.separator + ninjaName
+        String ninjaPath = cmakeBin + File.separator + isWindows() ? "ninja.exe" : "ninja"
         if(!new File(ninjaPath).isFile()) {
-            // check whether ninja in other location and in path
-            def ninjaInstalled = false
-            try {
-                Process proc = Runtime.getRuntime().exec("ninja --version")
-                proc.waitFor()
-
-                int exitVal = proc.exitValue()
-                ninjaInstalled = exitVal == 0
-            } catch(Exception) {
-            }
-
-            if (!ninjaInstalled) {
-                throw new GradleException("Required $ninjaPath exists!")
-            }
+            println("The required ninja program is not present in cmake bin dir!")
+            return null
         }
 
         try {
