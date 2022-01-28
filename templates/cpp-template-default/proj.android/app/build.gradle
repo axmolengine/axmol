@@ -15,6 +15,9 @@ android {
         ndkPath = ndkInfo[1]
     }
 
+    // setup cmake
+    def cmakeVer = adxetools.findCMake("3.10.2+", project.rootProject)
+
     defaultConfig {
         applicationId "org.cocos2dx.hellocpp"
         minSdkVersion PROP_MIN_SDK_VERSION
@@ -44,7 +47,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            version "3.10.2"
+            version "$cmakeVer"
             path "../../CMakeLists.txt"
         }
     }
