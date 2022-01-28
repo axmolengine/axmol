@@ -79,16 +79,6 @@ def download(url, zip_file):
     else:
         urllib.urlretrieve(url, zip_file)
 
-
-@retry(Exception, tries=5, delay=1, backoff=1)
-def install_android_ndk():
-    file_name = "android-ndk-" + NDK_VER + "-" + SYSTEM + "-x86_64.zip"
-    url = "https://dl.google.com/android/repository/" + file_name
-    zip_file = os.path.abspath(os.path.join(ROOT_DIR, file_name))
-
-    download(url, zip_file)
-    unzip(zip_file, ROOT_DIR)
-
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_cmdline_tools():
     file_plat = platform.system().lower()
@@ -105,7 +95,7 @@ def install_android_cmdline_tools():
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_sdk():
     # list packages
-    # run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
+    run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
     
     switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
     cmd_base = SDK_MANAGER + switches
@@ -137,10 +127,8 @@ def export_environment(ndk_only):
         myfile.write("$env:ANDROID_NDK=\"" + ANDROID_NDK + "\"\n")
 
 def main(ndk_only):
-    # if not ndk_only:
     install_android_cmdline_tools()
     install_android_sdk()
-    # install_android_ndk()
     export_environment(ndk_only)
 
 
