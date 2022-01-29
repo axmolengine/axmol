@@ -41,11 +41,7 @@ NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized = false;
-#if !defined(__ANDROID__)
 bool FontFreeType::_streamParsingEnabled = true;
-#else
-bool FontFreeType::_streamParsingEnabled = false;
-#endif
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 6;
 

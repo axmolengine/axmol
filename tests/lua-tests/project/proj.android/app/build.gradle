@@ -84,6 +84,10 @@ android {
             renderscriptDebuggable true
         }
     }
+
+    aaptOptions {
+       noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
+    }
 }
 
 android.applicationVariants.all { variant ->
