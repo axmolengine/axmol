@@ -32,7 +32,7 @@ function build_linux()
     # source ../environment.sh
     cd $ADXE_ROOT
     set -x
-    cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release
+    cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_EXTENSION_IMGUIEXT=ON
     cmake --build build --target cpp-tests -- -j `nproc`
     set +x
 }
