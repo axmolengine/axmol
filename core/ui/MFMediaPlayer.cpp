@@ -67,7 +67,7 @@ HRESULT MFMediaPlayer::CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer)
 
     HRESULT hr = S_OK;
 
-    TComPtr<MFMediaPlayer> pPlayer = new MFMediaPlayer(hEvent);
+    auto pPlayer = new MFMediaPlayer(hEvent);
 
     if (pPlayer == NULL)
     {
@@ -77,16 +77,9 @@ HRESULT MFMediaPlayer::CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer)
     hr = pPlayer->Initialize();
 
     if (SUCCEEDED(hr))
-    {
         *ppPlayer = pPlayer;
-        (*ppPlayer)->AddRef();
-    }
-
-    // The MFMediaPlayer constructor sets the ref count to 1.
-    // If the method succeeds, the caller receives an AddRef'd pointer.
-    // Whether the method succeeds or fails, we must release the pointer.
-
-    // SAFE_RELEASE(pPlayer);
+    else
+        pPlayer->Release();
 
     return hr;
 }
