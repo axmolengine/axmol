@@ -89,7 +89,7 @@ HRESULT MFMediaPlayer::CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer)
 /////////////////////////////////////////////////////////////////////////
 
 MFMediaPlayer::MFMediaPlayer(HWND hEvent)
-    : m_pSession(NULL), m_pSource(NULL), m_hwndEvent(hEvent), m_state(Ready), m_hCloseEvent(NULL), m_nRefCount(1)
+    : m_pSession(), m_pSource(), m_hwndEvent(hEvent), m_state(Ready), m_hCloseEvent(NULL), m_nRefCount(1)
 {}
 
 ///////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@ HRESULT MFMediaPlayer::OpenURL(const WCHAR* sURL)
     CHECK_HR(hr = CreateTopologyFromSource(&pTopology));
 
     // Set the topology on the media session.
-    CHECK_HR(hr = m_pSession->SetTopology(0, pTopology));
+    CHECK_HR(hr = m_pSession->SetTopology(0, pTopology.Get()));
 
     // If SetTopology succeeded, the media session will queue an
     // MESessionTopologySet event.
@@ -243,9 +243,9 @@ HRESULT MFMediaPlayer::OpenURL(const WCHAR* sURL)
         CHECK_HR(hr = pClock->QueryInterface(IID_PPV_ARGS(&m_pClock)));
 
     // Get the rate control interface (optional)
-    CHECK_HR(hr = MFGetService(m_pSession, MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateControl)));
+    CHECK_HR(hr = MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateControl)));
 
-    CHECK_HR(hr = MFGetService(m_pSession, MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateSupport)));
+    CHECK_HR(hr = MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateSupport)));
 
     // Check if rate 0 (scrubbing) is supported.
     auto hrTmp = m_RateSupport->IsRateSupported(TRUE, 0, NULL);
@@ -385,7 +385,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
             switch (TopoStatus)
             {
             case MF_TOPOSTATUS_READY:
-                hr = OnTopologyReady(pEvent);
+                hr = OnTopologyReady(pEvent.Get());
                 break;
             default:
                 // Nothing to do.
@@ -393,7 +393,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
             }
             break;
         case MEEndOfPresentation:
-            CHECK_HR(hr = OnPlayEnded(pEvent));
+            CHECK_HR(hr = OnPlayEnded(pEvent.Get()));
             break;
         case MESessionStarted:
             OnSessionStart(hrStatus);
@@ -429,7 +429,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
 
         case MESessionCapabilitiesChanged:
             // The session capabilities changed. Get the updated capabilities.
-            m_caps = MFGetAttributeUINT32(pEvent, MF_EVENT_SESSIONCAPS, m_caps);
+            m_caps = MFGetAttributeUINT32(pEvent.Get(), MF_EVENT_SESSIONCAPS, m_caps);
             break;
         }
     }
@@ -1180,7 +1180,7 @@ HRESULT MFMediaPlayer::CreateSession()
 		&pEnablerActivate
 	));
 #endif
-    CHECK_HR(hr = MFCreateMediaSession(pAttributes, &m_pSession));
+    CHECK_HR(hr = MFCreateMediaSession(pAttributes.Get(), &m_pSession));
 
     // TODO:
 
@@ -1346,13 +1346,13 @@ HRESULT MFMediaPlayer::CreateTopologyFromSource(IMFTopology** ppTopology)
     // For each stream, create the topology nodes and add them to the topology.
     for (DWORD i = 0; i < cSourceStreams; ++i)
     {
-        CHECK_HR(hr = AddBranchToPartialTopology(pTopology, m_PresentDescriptor, i));
+        CHECK_HR(hr = AddBranchToPartialTopology(pTopology.Get(), m_PresentDescriptor.Get(), i));
     }
 
     // Return the IMFTopology pointer to the caller.
     if (SUCCEEDED(hr))
     {
-        *ppTopology = pTopology;
+        *ppTopology = pTopology.Get();
         (*ppTopology)->AddRef();
     }
 
@@ -1403,18 +1403,18 @@ HRESULT MFMediaPlayer::AddBranchToPartialTopology(IMFTopology* pTopology,
     if (fSelected)
     {
         // Create a source node for this stream.
-        CHECK_HR(hr = CreateSourceStreamNode(m_pSource, pSourcePD, pSourceSD, &pSourceNode));
+        CHECK_HR(hr = CreateSourceStreamNode(m_pSource.Get(), pSourcePD, pSourceSD.Get(), &pSourceNode));
 
         // Create the output node for the renderer.
-        CHECK_HR(hr = CreateOutputNode(pSourceSD, &pOutputNode));
+        CHECK_HR(hr = CreateOutputNode(pSourceSD.Get(), &pOutputNode));
 
         // Add both nodes to the topology.
-        CHECK_HR(hr = pTopology->AddNode(pSourceNode));
+        CHECK_HR(hr = pTopology->AddNode(pSourceNode.Get()));
 
-        CHECK_HR(hr = pTopology->AddNode(pOutputNode));
+        CHECK_HR(hr = pTopology->AddNode(pOutputNode.Get()));
 
         // Connect the source node to the output node.
-        CHECK_HR(hr = pSourceNode->ConnectOutput(0, pOutputNode, 0));
+        CHECK_HR(hr = pSourceNode->ConnectOutput(0, pOutputNode.Get(), 0));
     }
 
 done:
@@ -1463,7 +1463,7 @@ HRESULT CreateSourceStreamNode(IMFMediaSource* pSource,
     CHECK_HR(hr = SourceNode->SetUnknown(MF_TOPONODE_STREAM_DESCRIPTOR, pSourceSD));
 
     // Return the IMFTopologyNode pointer to the caller.
-    *ppNode = SourceNode;
+    *ppNode = SourceNode.Get();
     (*ppNode)->AddRef();
 
 done:
@@ -1472,44 +1472,23 @@ done:
 }
 
 /**
- * Implements a callback object for the WMF sample grabber sink.
+ * Implements a callback object for the MF video sample grabber sink.
  */
-class FWmfMediaSampler : public IMFSampleGrabberSinkCallback
+class MFVideoSampler : public IMFSampleGrabberSinkCallback
 {
 public:
     /** Default constructor. */
-    FWmfMediaSampler() : RefCount(0) {}
+    MFVideoSampler() : RefCount(1) {}
 
-public:
-    /** Get an event that gets fired when the sampler's presentation clock changed its state. */
-    // DECLARE_EVENT_OneParam(FWmfMediaSampler, FOnClock, EWmfMediaSamplerClockEvent /*Event*/)
-    // FOnClock& OnClock()
-    //{
-    //    return ClockEvent;
-    //}
-
-    /** Get an event that gets fired when a new sample is ready (handler must be thread-safe). */
-    // DECLARE_EVENT_FourParams(FWmfMediaSampler, FOnSample, const uint8* /*Buffer*/, uint32 /*Size*/, FTimespan
-    // /*Duration*/, FTimespan /*Time*/)
-    // FOnSample& OnSample()
-    //{
-    //    return SampleEvent;
-    //}
-
-public:
     //~ IMFSampleGrabberSinkCallback interface
 
     STDMETHODIMP OnClockPause(MFTIME SystemTime)
     {
-        // ClockEvent.Broadcast(EWmfMediaSamplerClockEvent::Paused);
-
         return S_OK;
     }
 
     STDMETHODIMP OnClockRestart(MFTIME SystemTime)
     {
-        // ClockEvent.Broadcast(EWmfMediaSamplerClockEvent::Restarted);
-
         return S_OK;
     }
 
@@ -1517,15 +1496,11 @@ public:
 
     STDMETHODIMP OnClockStart(MFTIME SystemTime, LONGLONG llClockStartOffset)
     {
-        // ClockEvent.Broadcast(EWmfMediaSamplerClockEvent::Started);
-
         return S_OK;
     }
 
     STDMETHODIMP OnClockStop(MFTIME SystemTime)
     {
-        // ClockEvent.Broadcast(EWmfMediaSamplerClockEvent::Stopped);
-
         return S_OK;
     }
 
@@ -1536,8 +1511,6 @@ public:
                                  const BYTE* SampleBuffer,
                                  DWORD SampleSize)
     {
-        // SampleEvent.Broadcast((uint8*)SampleBuffer, (uint32)SampleSize, FTimespan(SampleDuration),
-        // FTimespan(SampleTime));
         if (SampleEvent)
             SampleEvent((uint8_t*)SampleBuffer, SampleSize);
         return S_OK;
@@ -1559,7 +1532,7 @@ public:
 
     STDMETHODIMP QueryInterface(REFIID RefID, void** Object)
     {
-        static const QITAB QITab[] = {QITABENT(FWmfMediaSampler, IMFSampleGrabberSinkCallback), {0}};
+        static const QITAB QITab[] = {QITABENT(MFVideoSampler, IMFSampleGrabberSinkCallback), {0}};
 
         return QISearch(this, QITab, RefID, Object);
     }
@@ -1582,17 +1555,11 @@ public:
 
 private:
     /** Hidden destructor (this class is reference counted). */
-    virtual ~FWmfMediaSampler() { assert(RefCount == 0); }
+    virtual ~MFVideoSampler() { assert(RefCount == 0); }
 
 private:
-    /** Event that gets fired when the sampler's presentation clock changed state. */
-    // FOnClock ClockEvent;
-
     /** Holds a reference counter for this instance. */
     long RefCount;
-
-    /** Event that gets fired when a new sample is ready. */
-    // FOnSample SampleEvent;
 
 public:
     SampleEventCallback SampleEvent;
@@ -1619,29 +1586,29 @@ HRESULT CopyAttribute(IMFAttributes* Src, IMFAttributes* Dest, const GUID& Key)
     return Result;
 }
 
-static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
+static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
                                        bool AllowNonStandardCodecs = true,
                                        bool IsVideoDevice          = false)
 {
     GUID MajorType;
     {
-        const HRESULT Result = InputType.GetGUID(MF_MT_MAJOR_TYPE, &MajorType);
+        const HRESULT Result = InputType->GetGUID(MF_MT_MAJOR_TYPE, &MajorType);
 
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to get major type: %s"), ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
     }
 
     GUID SubType;
     {
-        const HRESULT Result = InputType.GetGUID(MF_MT_SUBTYPE, &SubType);
+        const HRESULT Result = InputType->GetGUID(MF_MT_SUBTYPE, &SubType);
 
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to get sub-type: %s"), ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
     }
 
@@ -1653,7 +1620,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
         {
             TRACE(LogWmfMedia, Warning, ("Failed to create %s output type: %s"), MajorTypeToString(MajorType),
                    ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
 
         Result = OutputType->SetUINT32(MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
@@ -1662,7 +1629,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
         {
             TRACE(LogWmfMedia, Warning, ("Failed to initialize %s output type: %s"), MajorTypeToString(MajorType),
                    ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
     }
 
@@ -1692,7 +1659,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
                 {
                     TRACE(LogWmfMedia, Warning, ("Skipping non-standard MP4 audio type %s (%s) \"%s\""),
                            SubTypeToString(SubType), *GuidToString(SubType), *FourccToString(SubType.Data1));
-                    return NULL;
+                    return TComPtr<IMFMediaType>{};
                 }
             }
         }
@@ -1707,7 +1674,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
             {
                 TRACE(LogWmfMedia, Warning, ("Skipping non-standard audio type %s (%s) \"%s\""),
                        SubTypeToString(SubType), *GuidToString(SubType), *FourccToString(SubType.Data1));
-                return NULL;
+                return TComPtr<IMFMediaType>{};
             }
         }
 
@@ -1717,15 +1684,15 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
             FAILED(OutputType->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16u)))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to initialize audio output type"));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
 
         // copy media type attributes
-        if (FAILED(CopyAttribute(&InputType, OutputType, MF_MT_AUDIO_NUM_CHANNELS)) ||
-            FAILED(CopyAttribute(&InputType, OutputType, MF_MT_AUDIO_SAMPLES_PER_SECOND)))
+        if (FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_AUDIO_NUM_CHANNELS)) ||
+            FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_AUDIO_SAMPLES_PER_SECOND)))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to copy audio output type attributes"));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
     }
     else if (MajorType == MFMediaType_Binary)
@@ -1735,7 +1702,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to initialize binary output type: %s"), ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
     }
     else if (MajorType == MFMediaType_SAMI)
@@ -1746,7 +1713,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, TEXT("Failed to initialize caption output type: %s"), ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
     }
     else if (MajorType == MFMediaType_Video)
@@ -1763,7 +1730,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
             {
                 TRACE(LogWmfMedia, Warning, TEXT("Skipping non-standard video type %s (%s) \"%s\""),
                        SubTypeToString(SubType), *GuidToString(SubType), *FourccToString(SubType.Data1));
-                return NULL;
+                return TComPtr<IMFMediaType>{};
             }
         }
 
@@ -1773,7 +1740,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
             {
                 TRACE(LogWmfMedia, Warning, TEXT("H264 video type requires Windows 8 or newer (your version is %s)"),
                        GetOSVersion());
-                return NULL;
+                return TComPtr<IMFMediaType>{};
             }
         }
 
@@ -1787,7 +1754,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, TEXT("Failed to set video output type: %s"), ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
 
         TRACE(LogWmfMedia, Verbose,
@@ -1814,7 +1781,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, TEXT("Failed to set video output sub-type: %s"), ResultToString(Result));
-            return NULL;
+            return TComPtr<IMFMediaType>{};
         }
 
         // copy media type attributes
@@ -1824,17 +1791,17 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType& InputType,
             // but we generally don't want to copy these for any other media sources
             // and let the WMF topology resolver pick optimal defaults instead.
 
-            if (FAILED(CopyAttribute(&InputType, OutputType, MF_MT_FRAME_RATE)) ||
-                FAILED(CopyAttribute(&InputType, OutputType, MF_MT_FRAME_SIZE)))
+            if (FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_FRAME_RATE)) ||
+                FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_FRAME_SIZE)))
             {
                 TRACE(LogWmfMedia, Warning, TEXT("Failed to copy video output type attributes"));
-                return NULL;
+                return TComPtr<IMFMediaType>{};
             }
         }
     }
     else
     {
-        return NULL;  // unsupported input type
+        return TComPtr<IMFMediaType>{};  // unsupported input type
     }
 
     return OutputType;
@@ -1884,7 +1851,7 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
         // Create the video renderer.
         TRACE((L"Stream %d: video stream\n", streamID));
         // CHECK_HR(hr = MFCreateVideoRendererActivate(hwndVideo, &pRendererActivate));
-        TComPtr<FWmfMediaSampler> Sampler = new FWmfMediaSampler();
+        auto Sampler = TComPtr<MFVideoSampler>::MakeObject();
         TComPtr<IMFMediaType> InputType;
         hr = pHandler->GetCurrentMediaType(&InputType);
 
@@ -1893,11 +1860,11 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
         // auto strSubType = SubTypeToString(SubType);
 
         // UINT32 Width = 0, Height = 0;
-        hr = MFGetAttributeSize(InputType, MF_MT_FRAME_SIZE, &m_uVideoWidth, &m_uVideoHeight);
+        hr = MFGetAttributeSize(InputType.Get(), MF_MT_FRAME_SIZE, &m_uVideoWidth, &m_uVideoHeight);
 
-        auto OutputType = CreateOutputType(*InputType);
+        auto OutputType = CreateOutputType(InputType.Get());
 
-        hr = ::MFCreateSampleGrabberSinkActivate(OutputType, Sampler, &pRendererActivate);
+        hr = ::MFCreateSampleGrabberSinkActivate(OutputType.Get(), Sampler.Get(), &pRendererActivate);
         CHECK_HR(hr);
 
         Sampler->SampleEvent = this->SampleEvent;
@@ -1918,11 +1885,11 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
     }
 
     // Set the IActivate object on the output node.
-    CHECK_HR(hr = OutputNode->SetObject(pRendererActivate));
+    CHECK_HR(hr = OutputNode->SetObject(pRendererActivate.Get()));
     CHECK_HR(hr = OutputNode->SetUINT32(MF_TOPONODE_STREAMID, 0));
 
     // Return the IMFTopologyNode pointer to the caller.
-    *ppNode = OutputNode;
+    *ppNode = OutputNode.Get();
     (*ppNode)->AddRef();
 
 done:

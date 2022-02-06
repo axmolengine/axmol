@@ -145,6 +145,8 @@ VideoPlayer::~VideoPlayer()
 {
     auto pvd = (PrivateVideoDescriptor*)_videoView;
 
+    removeAllProtectedChildren();
+
     if (pvd->_vplayer)
     {
         pvd->_vplayer->Shutdown();
