@@ -164,7 +164,6 @@ bool Texture2D::initWithData(const void* data,
                              backend::PixelFormat renderFormat,
                              int pixelsWide,
                              int pixelsHigh,
-                             const Vec2& /*contentSize*/,
                              bool preMultipliedAlpha)
 {
     CCASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
@@ -215,7 +214,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     }
 
     unsigned char* tempData               = image->getData();
-    Vec2 imageSize                        = Vec2((float)imageWidth, (float)imageHeight);
+    // Vec2 imageSize                        = Vec2((float)imageWidth, (float)imageHeight);
     backend::PixelFormat renderFormat     = (PixelFormat::NONE == format) ? image->getPixelFormat() : format;
     backend::PixelFormat imagePixelFormat = image->getPixelFormat();
     size_t tempDataLen                    = image->getDataLen();
@@ -250,30 +249,21 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
         // it will be done later
-        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), image->getPixelFormat(), renderFormat,
-                          imageWidth, imageHeight, image->hasPremultipliedAlpha(), index);
+        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), image->getPixelFormat(), renderFormat, imageHeight, image->hasPremultipliedAlpha(), index);
     }
     else if (image->isCompressed())
     {  // !Only hardware support texture will be compression PixelFormat, otherwise, will convert to RGBA8 duraing image
        // load
         renderFormat = imagePixelFormat;
-        updateWithData(tempData, tempDataLen, image->getPixelFormat(), image->getPixelFormat(), imageWidth, imageHeight,
-                       imageSize, image->hasPremultipliedAlpha(), index);
+        updateWithData(tempData, tempDataLen, image->getPixelFormat(), image->getPixelFormat(), imageWidth, imageHeight, image->hasPremultipliedAlpha(), index);
     }
     else
     {
         // after conversion, renderFormat == pixelFormat of data
-        updateWithData(tempData, tempDataLen, imagePixelFormat, renderFormat, imageWidth, imageHeight, imageSize,
+        updateWithData(tempData, tempDataLen, imagePixelFormat, renderFormat, imageWidth, imageHeight,
                        image->hasPremultipliedAlpha(), index);
     }
 
-    // pitfall: we do merge RGB+A at at dual sampler shader, so must mark as _hasPremultipliedAlpha = true to makesure
-    // alpha blend works well.
-    if (index > 0)
-    {
-        setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::DUAL_SAMPLER));
-        _samplerFlags |= TextureSamplerFlag::DUAL_SAMPLER;
-    }
     return true;
 }
 
@@ -283,7 +273,6 @@ bool Texture2D::updateWithData(const void* data,
                                backend::PixelFormat renderFormat,
                                int pixelsWide,
                                int pixelsHigh,
-                               const Vec2& /*contentSize*/,
                                bool preMultipliedAlpha,
                                int index)
 {
@@ -425,6 +414,14 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         setPremultipliedAlpha(preMultipliedAlpha);
     }
 
+    // pitfall: we do merge RGB+A at at dual sampler shader, so must mark as _hasPremultipliedAlpha = true to makesure
+    // alpha blend works well.
+    if (index > 0)
+    {
+        setPremultipliedAlpha(Image::isCompressedImageHavePMA(Image::CompressedImagePMAFlag::DUAL_SAMPLER));
+        _samplerFlags |= TextureSamplerFlag::DUAL_SAMPLER;
+    }
+
     return true;
 }
 
@@ -552,7 +549,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
         backend::PixelFormatUtils::convertDataToFormat(outData.getBytes(), imageWidth * imageHeight * 4,
                                                        PixelFormat::RGBA8, pixelFormat, &outTempData, &outTempDataLen);
 
-    ret = initWithData(outTempData, outTempDataLen, pixelFormat, imageWidth, imageHeight, imageSize);
+    ret = initWithData(outTempData, outTempDataLen, pixelFormat, imageWidth, imageHeight);
 
     if (outTempData != nullptr && outTempData != outData.getBytes())
     {

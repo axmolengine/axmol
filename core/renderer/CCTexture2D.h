@@ -147,10 +147,9 @@ public:
                       backend::PixelFormat pixelFormat,
                       int pixelsWide,
                       int pixelsHigh,
-                      const Vec2& contentSize,
                       bool preMultipliedAlpha = false)
     {
-        return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh, contentSize,
+        return initWithData(data, dataLen, pixelFormat, pixelFormat, pixelsWide, pixelsHigh,
                             preMultipliedAlpha);
     }
 
@@ -173,7 +172,6 @@ public:
                       backend::PixelFormat renderFormat,
                       int pixelsWide,
                       int pixelsHigh,
-                      const Vec2& contentSize,
                       bool preMultipliedAlpha = false);
 
     /** Initializes with mipmaps.
@@ -208,7 +206,6 @@ public:
                         backend::PixelFormat renderFormat,
                         int pixelsWide,
                         int pixelsHigh,
-                        const Vec2& /*contentSize*/,
                         bool preMultipliedAlpha,
                         int index = 0);
     bool updateWithMipmaps(MipmapInfo* mipmaps,
