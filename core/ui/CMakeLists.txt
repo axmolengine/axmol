@@ -4,6 +4,7 @@ if(WINDOWS)
             ui/UIEditBox/UIEditBoxImpl-win32.h
             ui/UIWebView/UIWebViewImpl-win32.h
             ui/UIWebView/UIWebView.h
+            
             )
         set(COCOS_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
@@ -16,6 +17,19 @@ if(WINDOWS)
             )
         set(COCOS_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
+            )
+    endif()
+    
+    if (ADXE_ENABLE_MFMEDIA)
+        set(COCOS_UI_SPECIFIC_HEADER ${COCOS_UI_SPECIFIC_HEADER}
+            ui/MFUtils.h
+            ui/MFMediaPlayer.h
+            ui/UIVideoPlayer.h
+            )
+        set(COCOS_UI_SPECIFIC_SRC ${COCOS_UI_SPECIFIC_SRC}
+            ui/MFUtils.cpp
+            ui/MFMediaPlayer.cpp
+            ui/UIVideoPlayer-win.cpp
             )
     endif()
 elseif(APPLE)

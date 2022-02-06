@@ -24,9 +24,11 @@
  ****************************************************************************/
 #pragma once
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+#if defined(_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
      CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
     !defined(CC_PLATFORM_OS_TVOS)
+
+#    undef ERROR
 
 #    include "ui/UIWidget.h"
 
