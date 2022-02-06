@@ -151,6 +151,8 @@ VideoPlayer::~VideoPlayer()
         pvd->_vrender->release();
     if (pvd->_vtexture)
         pvd->_vtexture->release();
+
+    delete pvd;
 }
 
 void VideoPlayer::setFileName(std::string_view fileName)
