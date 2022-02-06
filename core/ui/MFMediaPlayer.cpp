@@ -1597,7 +1597,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to get major type: %s"), ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
     }
 
@@ -1608,7 +1608,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to get sub-type: %s"), ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
     }
 
@@ -1620,7 +1620,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         {
             TRACE(LogWmfMedia, Warning, ("Failed to create %s output type: %s"), MajorTypeToString(MajorType),
                    ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
 
         Result = OutputType->SetUINT32(MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
@@ -1629,7 +1629,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         {
             TRACE(LogWmfMedia, Warning, ("Failed to initialize %s output type: %s"), MajorTypeToString(MajorType),
                    ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
     }
 
@@ -1659,7 +1659,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
                 {
                     TRACE(LogWmfMedia, Warning, ("Skipping non-standard MP4 audio type %s (%s) \"%s\""),
                            SubTypeToString(SubType), *GuidToString(SubType), *FourccToString(SubType.Data1));
-                    return TComPtr<IMFMediaType>{};
+                    return {};
                 }
             }
         }
@@ -1674,7 +1674,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
             {
                 TRACE(LogWmfMedia, Warning, ("Skipping non-standard audio type %s (%s) \"%s\""),
                        SubTypeToString(SubType), *GuidToString(SubType), *FourccToString(SubType.Data1));
-                return TComPtr<IMFMediaType>{};
+                return {};
             }
         }
 
@@ -1684,7 +1684,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
             FAILED(OutputType->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16u)))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to initialize audio output type"));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
 
         // copy media type attributes
@@ -1692,7 +1692,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
             FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_AUDIO_SAMPLES_PER_SECOND)))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to copy audio output type attributes"));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
     }
     else if (MajorType == MFMediaType_Binary)
@@ -1702,7 +1702,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, ("Failed to initialize binary output type: %s"), ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
     }
     else if (MajorType == MFMediaType_SAMI)
@@ -1713,7 +1713,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, TEXT("Failed to initialize caption output type: %s"), ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
     }
     else if (MajorType == MFMediaType_Video)
@@ -1730,7 +1730,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
             {
                 TRACE(LogWmfMedia, Warning, TEXT("Skipping non-standard video type %s (%s) \"%s\""),
                        SubTypeToString(SubType), *GuidToString(SubType), *FourccToString(SubType.Data1));
-                return TComPtr<IMFMediaType>{};
+                return {};
             }
         }
 
@@ -1740,7 +1740,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
             {
                 TRACE(LogWmfMedia, Warning, TEXT("H264 video type requires Windows 8 or newer (your version is %s)"),
                        GetOSVersion());
-                return TComPtr<IMFMediaType>{};
+                return {};
             }
         }
 
@@ -1754,7 +1754,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, TEXT("Failed to set video output type: %s"), ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
 
         TRACE(LogWmfMedia, Verbose,
@@ -1781,7 +1781,7 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
         if (FAILED(Result))
         {
             TRACE(LogWmfMedia, Warning, TEXT("Failed to set video output sub-type: %s"), ResultToString(Result));
-            return TComPtr<IMFMediaType>{};
+            return {};
         }
 
         // copy media type attributes
@@ -1795,13 +1795,13 @@ static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
                 FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_FRAME_SIZE)))
             {
                 TRACE(LogWmfMedia, Warning, TEXT("Failed to copy video output type attributes"));
-                return TComPtr<IMFMediaType>{};
+                return {};
             }
         }
     }
     else
     {
-        return TComPtr<IMFMediaType>{};  // unsupported input type
+        return {};  // unsupported input type
     }
 
     return OutputType;
