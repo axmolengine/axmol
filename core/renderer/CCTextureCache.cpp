@@ -843,7 +843,7 @@ void VolatileTextureMgr::reloadAllTextures()
         case VolatileTexture::kImageData:
         {
             vt->_texture->initWithData(vt->_textureData, vt->_dataLen, vt->_pixelFormat, vt->_textureSize.width,
-                                       vt->_textureSize.height, vt->_textureSize);
+                                       vt->_textureSize.height);
         }
         break;
         case VolatileTexture::kString:
