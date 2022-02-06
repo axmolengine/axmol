@@ -1259,11 +1259,13 @@ HRESULT MFMediaPlayer::CloseSession()
         m_pSession->Shutdown();
     }
 
+    m_PresentDescriptor.Reset();
+    m_RateControl.Reset();
+    m_RateSupport.Reset();
+    m_pClock.Reset();
+
     m_pSource.Reset();
     m_pSession.Reset();
-    // SAFE_RELEASE(m_pSource);
-    // SAFE_RELEASE(m_pSession);
-    // SAFE_RELEASE(m_pContentProtectionManager);
 
     m_state = Closed;
 

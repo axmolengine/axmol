@@ -146,7 +146,10 @@ VideoPlayer::~VideoPlayer()
     auto pvd = (PrivateVideoDescriptor*)_videoView;
 
     if (pvd->_vplayer)
+    {
+        pvd->_vplayer->Shutdown();
         pvd->_vplayer->Release();
+    }
     if (pvd->_vrender)
         pvd->_vrender->release();
     if (pvd->_vtexture)
