@@ -7,20 +7,29 @@ namespace MFUtils
 {
 
 template <typename _Ty>
-class TComPtr : public Microsoft::WRL::ComPtr<_Ty>
+using TComPtr = Microsoft::WRL::ComPtr<_Ty>;
+
+template <typename _Ty>
+inline TComPtr<_Ty> MakeComInstance()
 {
-    using _Mytype = TComPtr<InterfaceType>;
-public:
-    static _Mytype MakeObject()
-    {
-        _Mytype ptr;
-        InterfaceType** pp = &ptr;
-        *(pp)              = new InterfaceType();
-        return ptr;
-    }
-};
+    TComPtr<_Ty> obj;
+    _Ty** ppv = &obj;
+    *ppv      = new _Ty();
+    return obj;
+}
+
+template <typename _Ty>
+inline TComPtr<_Ty> ReferencedPtrToComPtr(_Ty* ptr)
+{
+    TComPtr<_Ty> obj;
+    _Ty** ppv = &obj;
+    *ppv      = ptr;
+    return obj;
+}
 
 const char* SubTypeToString(const GUID& SubType);
 const char* MajorTypeToString(const GUID& MajorType);
-const char* ResultToString(HRESULT hr);
+std::string ResultToString(HRESULT hr);
+std::string GuidToString(const GUID&);
+std::string FourccToString(unsigned long);
 }  // namespace MFUtils
