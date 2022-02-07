@@ -79,6 +79,7 @@ void main()
     // refer to: 
     // a. https://gist.github.com/crearo/0d50442145b63c6c288d1c1675909990
     // b. https://github.com/tqk2811/TqkLibrary.Media.VideoPlayer/blob/38a2dce908215045cc27cffb741a6e4b8492c9cd/TqkLibrary.Media.VideoPlayer.OpenGl/Renders/NV12Render.cs#L14
+    // c. https://www.cnblogs.com/nanqiang/p/10224867.html
     
     float cy = v_texCoord.y + 0.01625; // why needs adjust?
     vec4 uvColor = texture2D(u_texture1, vec2(v_texCoord.x, cy));
@@ -212,7 +213,6 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
         auto w = pvd->_frameWidth = pvd->_vplayer->GetVideoWidth();
         auto h = pvd->_frameHeight = pvd->_vplayer->GetVideoHeight();
 
-        // refer to: https://www.cnblogs.com/nanqiang/p/10224867.html
         bool needsInit = !pvd->_vtexture;
         if (!pvd->_vtexture)
             pvd->_vtexture = new Texture2D();
