@@ -1,8 +1,8 @@
 #/****************************************************************************
 # Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2021 Bytedance Inc.
+# Copyright (c) 2021-2022 Bytedance Inc.
 #
-# https://adxe.org
+# https://adxeproject.github.io
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     
     # config quick starter batch script run.bat for windows
     if(WIN32)
+        file(RELATIVE_PATH CMAKE_BUILD_RELATIVE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
         configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
     endif()
 
