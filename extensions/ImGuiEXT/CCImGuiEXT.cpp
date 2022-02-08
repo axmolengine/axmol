@@ -3,6 +3,13 @@
 #include "imgui_impl_adxe.h"
 #include "imgui_internal.h"
 
+// TODO: mac metal
+#if (defined(CC_USE_GL) || defined(CC_USE_GLES))
+#    define CC_IMGUI_ENABLE_MULTI_VIEWPORT 1
+#else
+#    define CC_IMGUI_ENABLE_MULTI_VIEWPORT 0
+#endif
+
 NS_CC_EXT_BEGIN
 
 static uint32_t fourccValue(std::string_view str)
@@ -156,7 +163,44 @@ void ImGuiEXT::destroyInstance()
 
 void ImGuiEXT::init()
 {
-    ImGui_ImplAdxe_Init(true);
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
+
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+#endif
+    // io.ConfigViewportsNoAutoMerge = true;
+    // io.ConfigViewportsNoTaskBarIcon = true;
+    // io.ConfigViewportsNoDefaultParent = true;
+    // io.ConfigDockingAlwaysTabBar = true;
+    // io.ConfigDockingTransparentPayload = true;
+    // io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T
+    // WORK AS EXPECTED. DON'T USE IN USER APP! io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; //
+    // FIXME-DPI: Experimental.
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    // ImGui::StyleColorsClassic();
+
+    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular
+    // ones.
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding              = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    auto window = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView())->getWindow();
+    ImGui_ImplGlfw_InitForAdxe(window, true);
+    ImGui_ImplAdxe_Init();
+
     ImGui_ImplAdxe_SetCustomFontLoader(&ImGuiEXT::loadCustomFonts, this);
 
     ImGui::StyleColorsClassic();
@@ -174,8 +218,11 @@ void ImGuiEXT::cleanup()
 
     ImGui_ImplAdxe_SetCustomFontLoader(nullptr, nullptr);
     ImGui_ImplAdxe_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
 
     CC_SAFE_RELEASE_NULL(_fontsTexture);
+
+    ImGui::DestroyContext();
 }
 
 void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
@@ -293,6 +340,8 @@ void ImGuiEXT::beginFrame()
     {
         // create frame
         ImGui_ImplAdxe_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         // move to endFrame?
         _fontsTexture = (Texture2D*)ImGui_ImplAdxe_GetFontsTexture();
