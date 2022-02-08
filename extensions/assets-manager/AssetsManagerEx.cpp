@@ -803,7 +803,7 @@ void AssetsManagerEx::startUpdate()
                 Manifest::AssetDiff diff = it->second;
                 if (diff.type != Manifest::DiffType::DELETED)
                 {
-                    const std::string& path = diff.asset.path;
+                    auto& path = diff.asset.path;
                     DownloadUnit unit;
                     unit.customId = it->first;
                     unit.srcUrl   = packageUrl;
