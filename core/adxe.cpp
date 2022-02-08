@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -33,7 +33,7 @@ NS_CC_BEGIN
 
 CC_DLL const char* adxeVersion()
 {
-    return "adxe-1.0.0b5";
+    return "adxe-1.0.0b6";
 }
 
 NS_CC_END
