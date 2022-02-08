@@ -249,7 +249,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
         // it will be done later
-        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), image->getPixelFormat(), renderFormat, imageHeight, image->hasPremultipliedAlpha(), index);
+        updateWithMipmaps(image->getMipmaps(), image->getNumberOfMipmaps(), image->getPixelFormat(), renderFormat, imageHeight, imageWidth, image->hasPremultipliedAlpha(), index);
     }
     else if (image->isCompressed())
     {  // !Only hardware support texture will be compression PixelFormat, otherwise, will convert to RGBA8 duraing image
