@@ -10,7 +10,7 @@ cd /d %myDir%
 echo The working directory is: %cd%
 
 set APP_NAME=@APP_NAME@
-set BUILD_DIR=@CMAKE_BUILD_RELATIVE_DIR@
+set BUILD_DIR=%myDir%@CMAKE_BUILD_RELATIVE_DIR@
 set BUILD_CFG=%1
 
 rem Determine which build config to run
