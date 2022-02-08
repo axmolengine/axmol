@@ -116,20 +116,6 @@ public:
     static void mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end);
     int getCCRefId(Ref* p);
 
-#if defined(HAVE_IMGUI_MARKDOWN)
-    // markdown
-
-    using MdLinkCallback = std::function<void(const std::string&, const std::string&, bool)>;
-    using MdImageCallback =
-        std::function<std::tuple<Sprite*, ImVec2, ImVec4, ImVec4>(const std::string&, const std::string&)>;
-
-    void setMarkdownLinkCallback(const MdLinkCallback& f);
-    void setMarkdownImageCallback(const MdImageCallback& f);
-    void setMarkdownFont(int index, ImFont* font, bool seperator, float scale = 1.f);
-    void setMarkdownLinkIcon(std::string_view icon);
-    void markdown(std::string_view content);
-#endif
-
 private:
     static void loadCustomFonts(void*);
 
