@@ -52,7 +52,7 @@
   * Chipmunk2D 
 * Supported 3D physics engines:
   * Bullet Physics SDK
-* **ImGui integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
+* **ImGui 1.87 integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
 
 Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed feature too.
 
