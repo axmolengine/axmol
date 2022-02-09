@@ -71,7 +71,7 @@
 
 ## glfw
 - Upstream: https://github.com/glfw/glfw
-- Version: git df8d7bc (4389)
+- Version: git df8d7bc on 31 Dec 2021 (4398)
 - License: zlib
 
 ## glsl-optimizer

@@ -1053,7 +1053,27 @@ namespace pugi
 	{
 		xml_attribute_struct(impl::xml_memory_page* page): header(page, 0), namevalue_base(0)
 		{
-			PUGI__STATIC_ASSERT(sizeof(xml_attribute_struct) == 8);
+			PUGI__STATIC_ASSERT(sizeof(xml_attribute_struct) == 8 + 8);
+		}
+
+		inline string_view_t unsafe_name_sv() const {
+			return string_view_t(name, name_len);
+		}
+
+		inline string_view_t unsafe_value_sv() const {
+			return string_view_t(value, value_len);
+		}
+
+		inline string_view_t value_sv() const {
+			return value ? unsafe_value_sv() : PUGIXML_EMPTY_SV;
+		}
+
+		inline bool equals_name(string_view_t rhs) const {
+			return name && unsafe_name_sv() == rhs;
+		}
+
+		inline bool equals_value(string_view_t rhs) const {
+			return value_sv() == rhs;
 		}
 
 		impl::compact_header header;
@@ -1065,13 +1085,32 @@ namespace pugi
 
 		impl::compact_pointer<xml_attribute_struct, 6> prev_attribute_c;
 		impl::compact_pointer<xml_attribute_struct, 7, 0> next_attribute;
+
+		int name_len;
+		int value_len;
 	};
 
 	struct xml_node_struct
 	{
 		xml_node_struct(impl::xml_memory_page* page, xml_node_type type): header(page, type), namevalue_base(0)
 		{
-			PUGI__STATIC_ASSERT(sizeof(xml_node_struct) == 12);
+			PUGI__STATIC_ASSERT(sizeof(xml_node_struct) == 12 + 8);
+		}
+
+		inline string_view_t unsafe_name_sv() const {
+			return string_view_t(name, name_len);
+		}
+
+		inline string_view_t unsafe_value_sv() const {
+			return string_view_t(value, value_len);
+		}
+
+		inline string_view_t value_sv() const {
+			return value ? unsafe_value_sv() : PUGIXML_EMPTY_SV;
+		}
+
+		inline bool equals_name(string_view_t rhs) const {
+			return name && unsafe_name_sv() == rhs;
 		}
 
 		impl::compact_header header;
@@ -1089,6 +1128,9 @@ namespace pugi
 		impl::compact_pointer<xml_node_struct, 10, 0> next_sibling;
 
 		impl::compact_pointer<xml_attribute_struct, 11, 0> first_attribute;
+
+		int name_len;
+		int value_len;
 	};
 }
 #else
@@ -2409,7 +2451,7 @@ PUGI__NS_BEGIN
 			if (header & header_mask) alloc->deallocate_string(dest);
 
 			// mark the string as not allocated
-			dest = source_length == 0 ? NULL : const_cast<String>(source);
+			dest = source_length == 0 ? NULL : const_cast<char_t*>(source);
 			header &= ~header_mask;
 
 			// mark dest as shared to avoid reuse document buffer memory
@@ -7398,28 +7440,16 @@ namespace pugi
 	}
 
 #ifndef PUGIXML_NO_STL
-	PUGI__FN std::string PUGIXML_FUNCTION as_utf8(const wchar_t* str)
+	PUGI__FN std::string PUGIXML_FUNCTION as_utf8(const pugi::wstring_view& str)
 	{
-		assert(str);
-
-		return impl::as_utf8_impl(str, impl::strlength_wide(str));
+		return impl::as_utf8_impl(str.data(), str.length());
 	}
 
-	PUGI__FN std::string PUGIXML_FUNCTION as_utf8(const std::basic_string<wchar_t>& str)
+	PUGI__FN std::wstring PUGIXML_FUNCTION as_wide(const pugi::string_view& str)
 	{
-		return impl::as_utf8_impl(str.c_str(), str.size());
-	}
+		assert(str.data());
 
-	PUGI__FN std::basic_string<wchar_t> PUGIXML_FUNCTION as_wide(const char* str)
-	{
-		assert(str);
-
-		return impl::as_wide_impl(str, strlen(str));
-	}
-
-	PUGI__FN std::basic_string<wchar_t> PUGIXML_FUNCTION as_wide(const std::string& str)
-	{
-		return impl::as_wide_impl(str.c_str(), str.size());
+		return impl::as_wide_impl(str.data(), str.length());
 	}
 #endif
 

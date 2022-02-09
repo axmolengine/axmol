@@ -3,6 +3,13 @@
 #include "imgui_impl_adxe.h"
 #include "imgui_internal.h"
 
+// TODO: mac metal
+#if (defined(CC_USE_GL) || defined(CC_USE_GLES))
+#    define CC_IMGUI_ENABLE_MULTI_VIEWPORT 1
+#else
+#    define CC_IMGUI_ENABLE_MULTI_VIEWPORT 0
+#endif
+
 NS_CC_EXT_BEGIN
 
 static uint32_t fourccValue(std::string_view str)
@@ -156,7 +163,44 @@ void ImGuiEXT::destroyInstance()
 
 void ImGuiEXT::init()
 {
-    ImGui_ImplAdxe_Init(true);
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+    // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // Enable Docking
+
+#if CC_IMGUI_ENABLE_MULTI_VIEWPORT
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // Enable Multi-Viewport / Platform Windows
+#endif
+    // io.ConfigViewportsNoAutoMerge = true;
+    // io.ConfigViewportsNoTaskBarIcon = true;
+    // io.ConfigViewportsNoDefaultParent = true;
+    // io.ConfigDockingAlwaysTabBar = true;
+    // io.ConfigDockingTransparentPayload = true;
+    // io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleFonts;     // FIXME-DPI: Experimental. THIS CURRENTLY DOESN'T
+    // WORK AS EXPECTED. DON'T USE IN USER APP! io.ConfigFlags |= ImGuiConfigFlags_DpiEnableScaleViewports; //
+    // FIXME-DPI: Experimental.
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    // ImGui::StyleColorsClassic();
+
+    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular
+    // ones.
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding              = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    auto window = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView())->getWindow();
+    ImGui_ImplGlfw_InitForAdxe(window, true);
+    ImGui_ImplAdxe_Init();
+
     ImGui_ImplAdxe_SetCustomFontLoader(&ImGuiEXT::loadCustomFonts, this);
 
     ImGui::StyleColorsClassic();
@@ -174,8 +218,11 @@ void ImGuiEXT::cleanup()
 
     ImGui_ImplAdxe_SetCustomFontLoader(nullptr, nullptr);
     ImGui_ImplAdxe_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
 
     CC_SAFE_RELEASE_NULL(_fontsTexture);
+
+    ImGui::DestroyContext();
 }
 
 void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
@@ -293,6 +340,8 @@ void ImGuiEXT::beginFrame()
     {
         // create frame
         ImGui_ImplAdxe_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
         // move to endFrame?
         _fontsTexture = (Texture2D*)ImGui_ImplAdxe_GetFontsTexture();
@@ -650,79 +699,5 @@ int ImGuiEXT::getCCRefId(Ref* p)
         hash = hash * seed + ((const char*)&id)[i];
     return (int)hash;
 }
-
-#if defined(HAVE_IMGUI_MARKDOWN)
-#    include "imgui_markdown/imgui_markdown.h"
-
-static ImGuiEXT::MdLinkCallback ImGuiMarkdownLinkCallback     = nullptr;
-static ImGuiEXT::MdImageCallback ImGuiMarkdownImageCallback   = nullptr;
-static ImGui::MarkdownImageData ImGuiMarkdownInvalidImageData = {false, false, nullptr, {0.f, 0.f}};
-
-void MarkdownLinkCallback(ImGui::MarkdownLinkCallbackData data)
-{
-    if (ImGuiMarkdownLinkCallback)
-    {
-        ImGuiMarkdownLinkCallback({data.text, (size_t)data.textLength}, {data.link, (size_t)data.linkLength},
-                                  data.isImage);
-    }
-}
-
-ImGui::MarkdownImageData MarkdownImageCallback(ImGui::MarkdownLinkCallbackData data)
-{
-    if (!data.isImage || !ImGuiMarkdownImageCallback)
-        return ImGuiMarkdownInvalidImageData;
-    Sprite* sp;
-    ImVec2 size;
-    ImVec4 tint_col;
-    ImVec4 border_col;
-    std::tie(sp, size, tint_col, border_col) =
-        ImGuiMarkdownImageCallback({data.text, (size_t)data.textLength}, {data.link, (size_t)data.linkLength});
-    if (!sp || !sp->getTexture())
-        return ImGuiMarkdownInvalidImageData;
-    auto size_      = size;
-    const auto rect = sp->getTextureRect();
-    if (size_.x <= 0.f)
-        size_.x = rect.size.width;
-    if (size_.y <= 0.f)
-        size_.y = rect.size.height;
-    ImVec2 uv0, uv1;
-    std::tie(uv0, uv1) = getTextureUV(sp);
-    ImGuiEXT::getInstance()->getCCRefId(sp);
-    return {true, true, (ImTextureID)sp->getTexture(), size_, uv0, uv1, tint_col, border_col};
-}
-
-static std::string ImGuiMarkdownLinkIcon;
-static ImGui::MarkdownConfig ImGuiMarkdownConfig = {MarkdownLinkCallback, MarkdownImageCallback, ""};
-
-void ImGuiEXT::setMarkdownLinkCallback(const MdLinkCallback& f)
-{
-    ImGuiMarkdownLinkCallback = f;
-}
-
-void ImGuiEXT::setMarkdownImageCallback(const MdImageCallback& f)
-{
-    ImGuiMarkdownImageCallback = f;
-}
-
-void ImGuiEXT::setMarkdownFont(int index, ImFont* font, bool seperator, float scale)
-{
-    if (index < 0 || index >= ImGui::MarkdownConfig::NUMHEADINGS)
-        return;
-    ImGuiMarkdownConfig.headingFormats[index] = {font, seperator};
-    ImGuiMarkdownConfig.headingScales[index]  = scale;
-}
-
-void ImGuiEXT::setMarkdownLinkIcon(std::string_view icon)
-{
-    ImGuiMarkdownLinkIcon        = icon;
-    ImGuiMarkdownConfig.linkIcon = ImGuiMarkdownLinkIcon.c_str();
-}
-
-void ImGuiEXT::markdown(std::string_view content)
-{
-    ImGui::Markdown(content.c_str(), content.size(), ImGuiMarkdownConfig);
-}
-
-#endif
 
 NS_CC_EXT_END
