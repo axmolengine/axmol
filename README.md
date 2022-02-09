@@ -11,7 +11,7 @@
 [![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
-**This is another more radical fork of *Cocos2d-x-4.0*, uses OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and more! (see 'Highlighted Features' for more info).**  
+**This is another more radical fork of *Cocos2d-x-4.0*, it uses OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and more! (see 'Highlighted Features' for more info).**  
 
 ### View code with vscode online: 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/adxeproject/adxe)
@@ -22,7 +22,7 @@
   
 ### Purpose Summary
 * C++ 17
-* Focuses on native game dev (quick starting, easy to use, fast)
+* Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
   
 ### Highlight Features
