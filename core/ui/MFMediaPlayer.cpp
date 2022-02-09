@@ -35,30 +35,6 @@
 
 #define TRACE(...)
 
-#define FourccToStringCstr(v) MFUtils::FourccToString(v).c_str()
-#define GuidToStringCstr(v) MFUtils::GuidToString(v).c_str()
-
-static bool IsFormatFamily(const GUID& lhs, const GUID& rhs)
-{
-    return memcmp(&lhs.Data2, &rhs.Data2, 12) == 0;  //-V512
-}
-
-static HRESULT CopyAttribute(IMFAttributes* Src, IMFAttributes* Dest, const GUID& Key)
-{
-    PROPVARIANT var;
-    PropVariantInit(&var);
-
-    HRESULT Result = Src->GetItem(Key, &var);
-
-    if (SUCCEEDED(Result))
-    {
-        Result = Dest->SetItem(Key, var);
-        PropVariantClear(&var);
-    }
-
-    return Result;
-}
-
 //-------------------------------------------------------------------
 //  Name: CreateSourceStreamNode
 //  Description:  Creates a source-stream node for a stream.
@@ -69,9 +45,9 @@ static HRESULT CopyAttribute(IMFAttributes* Src, IMFAttributes* Dest, const GUID
 //  ppNode: Receives a pointer to the new node.
 //-------------------------------------------------------------------
 static HRESULT CreateSourceStreamNode(IMFMediaSource* pSource,
-                               IMFPresentationDescriptor* pSourcePD,
-                               IMFStreamDescriptor* pSourceSD,
-                               IMFTopologyNode** ppNode)
+                                      IMFPresentationDescriptor* pSourcePD,
+                                      IMFStreamDescriptor* pSourceSD,
+                                      IMFTopologyNode** ppNode)
 {
     if (!pSource || !pSourcePD || !pSourceSD || !ppNode)
     {
@@ -99,227 +75,6 @@ static HRESULT CreateSourceStreamNode(IMFMediaSource* pSource,
 
 done:
     return hr;
-}
-
-static TComPtr<IMFMediaType> CreateOutputType(IMFMediaType* InputType,
-                                              bool AllowNonStandardCodecs = true,
-                                              bool IsVideoDevice          = false)
-{
-    GUID MajorType;
-    {
-        const HRESULT Result = InputType->GetGUID(MF_MT_MAJOR_TYPE, &MajorType);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to get major type: %s"), ResultToString(Result));
-            return {};
-        }
-    }
-
-    GUID SubType;
-    {
-        const HRESULT Result = InputType->GetGUID(MF_MT_SUBTYPE, &SubType);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to get sub-type: %s"), ResultToString(Result));
-            return {};
-        }
-    }
-
-    TComPtr<IMFMediaType> OutputType;
-    {
-        HRESULT Result = ::MFCreateMediaType(&OutputType);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to create %s output type: %s"), MajorTypeToString(MajorType),
-                  ResultToString(Result));
-            return {};
-        }
-
-        Result = OutputType->SetUINT32(MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to initialize %s output type: %s"), MajorTypeToString(MajorType),
-                  ResultToString(Result));
-            return {};
-        }
-    }
-
-    if (MajorType == MFMediaType_Audio)
-    {
-        // filter unsupported audio formats
-        if (IsFormatFamily(SubType, MFMPEG4Format_Base))
-        {
-            if (AllowNonStandardCodecs)
-            {
-                TRACE(LogWmfMedia, Verbose, ("Allowing non-standard MP4 audio type %s (%s) \"%s\""),
-                      SubTypeToString(SubType), GuidToStringCstr(SubType), FourccToStringCstr(SubType.Data1));
-            }
-            else
-            {
-                const bool DocumentedFormat =
-                    (SubType.Data1 == WAVE_FORMAT_ADPCM) || (SubType.Data1 == WAVE_FORMAT_ALAW) ||
-                    (SubType.Data1 == WAVE_FORMAT_MULAW) || (SubType.Data1 == WAVE_FORMAT_IMA_ADPCM) ||
-                    (SubType.Data1 == MFAudioFormat_AAC.Data1) || (SubType.Data1 == MFAudioFormat_MP3.Data1) ||
-                    (SubType.Data1 == MFAudioFormat_PCM.Data1);
-
-                const bool UndocumentedFormat = (SubType.Data1 == WAVE_FORMAT_WMAUDIO2) ||
-                                                (SubType.Data1 == WAVE_FORMAT_WMAUDIO3) ||
-                                                (SubType.Data1 == WAVE_FORMAT_WMAUDIO_LOSSLESS);
-
-                if (!DocumentedFormat && !UndocumentedFormat)
-                {
-                    TRACE(LogWmfMedia, Warning, ("Skipping non-standard MP4 audio type %s (%s) \"%s\""),
-                          SubTypeToString(SubType), GuidToStringCstr(SubType), FourccToStringCstr(SubType.Data1));
-                    return {};
-                }
-            }
-        }
-        else if (!IsFormatFamily(SubType, MFAudioFormat_Base))
-        {
-            if (AllowNonStandardCodecs)
-            {
-                TRACE(LogWmfMedia, Verbose, ("Allowing non-standard audio type %s (%s) \"%s\""),
-                      SubTypeToString(SubType), GuidToStringCstr(SubType), FourccToStringCstr(SubType.Data1));
-            }
-            else
-            {
-                TRACE(LogWmfMedia, Warning, ("Skipping non-standard audio type %s (%s) \"%s\""),
-                      SubTypeToString(SubType), GuidToStringCstr(SubType), FourccToStringCstr(SubType.Data1));
-                return {};
-            }
-        }
-
-        // configure audio output
-        if (FAILED(OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio)) ||
-            FAILED(OutputType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM)) ||
-            FAILED(OutputType->SetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, 16u)))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to initialize audio output type"));
-            return {};
-        }
-
-        // copy media type attributes
-        if (FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_AUDIO_NUM_CHANNELS)) ||
-            FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_AUDIO_SAMPLES_PER_SECOND)))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to copy audio output type attributes"));
-            return {};
-        }
-    }
-    else if (MajorType == MFMediaType_Binary)
-    {
-        const HRESULT Result = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Binary);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, ("Failed to initialize binary output type: %s"), ResultToString(Result));
-            return {};
-        }
-    }
-    else if (MajorType == MFMediaType_SAMI)
-    {
-        // configure caption output
-        const HRESULT Result = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_SAMI);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, TEXT("Failed to initialize caption output type: %s"), ResultToString(Result));
-            return {};
-        }
-    }
-    else if (MajorType == MFMediaType_Video)
-    {
-        // filter unsupported video types
-        if (!IsFormatFamily(SubType, MFVideoFormat_Base))
-        {
-            if (AllowNonStandardCodecs)
-            {
-                TRACE(LogWmfMedia, Verbose, TEXT("Allowing non-standard video type %s (%s) \"%s\""),
-                      SubTypeToString(SubType), GuidToStringCstr(SubType), FourccToStringCstr(SubType.Data1));
-            }
-            else
-            {
-                TRACE(LogWmfMedia, Warning, TEXT("Skipping non-standard video type %s (%s) \"%s\""),
-                      SubTypeToString(SubType), GuidToStringCstr(SubType), FourccToStringCstr(SubType.Data1));
-                return {};
-            }
-        }
-
-        if ((SubType == MFVideoFormat_H264) || (SubType == MFVideoFormat_H264_ES))
-        {
-            if (IsVideoDevice)
-            {
-                TRACE(LogWmfMedia, Warning, TEXT("H264 video type requires Windows 8 or newer (your version is %s)"),
-                      GetOSVersion());
-                return {};
-            }
-        }
-
-        // if ((SubType == MFVideoFormat_HEVC) || (SubType == MFVideoFormat_HEVC_ES))
-        //{
-        //}
-
-        // configure video output
-        HRESULT Result = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video);
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, TEXT("Failed to set video output type: %s"), ResultToString(Result));
-            return {};
-        }
-
-        TRACE(LogWmfMedia, Verbose,
-              TEXT("SubType: { 0x%08X, 0x%04X, 0x%04X, { 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, 0x%02X, "
-                   "0x%02X } };"),
-              SubType.Data1, SubType.Data2, SubType.Data3, SubType.Data4[0], SubType.Data4[1], SubType.Data4[2],
-              SubType.Data4[3], SubType.Data4[4], SubType.Data4[5], SubType.Data4[6], SubType.Data4[7]);
-
-        if ((SubType == MFVideoFormat_HEVC) || (SubType == MFVideoFormat_HEVC_ES) || (SubType == MFVideoFormat_NV12) ||
-            (SubType == MFVideoFormat_IYUV))
-        {
-            Result = OutputType->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_NV12);
-        }
-        else
-        {
-            const bool Uncompressed = (SubType == MFVideoFormat_RGB555) || (SubType == MFVideoFormat_RGB565) ||
-                                      (SubType == MFVideoFormat_RGB24) || (SubType == MFVideoFormat_RGB32) ||
-                                      (SubType == MFVideoFormat_ARGB32);
-
-            Result = OutputType->SetGUID(
-                MF_MT_SUBTYPE, Uncompressed ? MFVideoFormat_RGB32 : MFVideoFormat_NV12 /*MFVideoFormat_YUY2*/);
-        }
-
-        if (FAILED(Result))
-        {
-            TRACE(LogWmfMedia, Warning, TEXT("Failed to set video output sub-type: %s"), ResultToString(Result));
-            return {};
-        }
-
-        // copy media type attributes
-        if (IsVideoDevice)
-        {
-            // the following attributes seem to help with web cam issues on Windows 7,
-            // but we generally don't want to copy these for any other media sources
-            // and let the WMF topology resolver pick optimal defaults instead.
-
-            if (FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_FRAME_RATE)) ||
-                FAILED(CopyAttribute(InputType, OutputType.Get(), MF_MT_FRAME_SIZE)))
-            {
-                TRACE(LogWmfMedia, Warning, TEXT("Failed to copy video output type attributes"));
-                return {};
-            }
-        }
-    }
-    else
-    {
-        return {};  // unsupported input type
-    }
-
-    return OutputType;
 }
 
 /**
@@ -1681,8 +1436,8 @@ done:
 /////////////////////////////////////////////////////////////////////////
 
 HRESULT MFMediaPlayer::AddBranchToPartialTopology(IMFTopology* pTopology,
-                                                   IMFPresentationDescriptor* pSourcePD,
-                                                   DWORD iStream)
+                                                  IMFPresentationDescriptor* pSourcePD,
+                                                  DWORD iStream)
 {
     TRACE((L"MFMediaPlayer::AddBranchToPartialTopology\n"));
 
@@ -1768,19 +1523,25 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
         // CHECK_HR(hr = MFCreateVideoRendererActivate(hwndVideo, &pRendererActivate));
         auto Sampler = MFUtils::MakeComInstance<MFVideoSampler>();
         TComPtr<IMFMediaType> InputType;
-        hr = pHandler->GetCurrentMediaType(&InputType);
+        CHECK_HR(hr = pHandler->GetCurrentMediaType(&InputType));
 
-        // GUID SubType;
-        // InputType->GetGUID(MF_MT_SUBTYPE, &SubType);
-        // auto strSubType = SubTypeToString(SubType);
+        // Get video dim
+        CHECK_HR(hr = MFGetAttributeSize(InputType.Get(), MF_MT_FRAME_SIZE, &m_uVideoWidth, &m_uVideoHeight));
 
-        // UINT32 Width = 0, Height = 0;
-        hr = MFGetAttributeSize(InputType.Get(), MF_MT_FRAME_SIZE, &m_uVideoWidth, &m_uVideoHeight);
+        // Create output type
+        GUID SubType;
+        CHECK_HR(hr = InputType->GetGUID(MF_MT_SUBTYPE, &SubType));
 
-        auto OutputType = CreateOutputType(InputType.Get());
+        TComPtr<IMFMediaType> OutputType;
+        CHECK_HR(hr = ::MFCreateMediaType(&OutputType));
 
-        hr = ::MFCreateSampleGrabberSinkActivate(OutputType.Get(), Sampler.Get(), &pRendererActivate);
-        CHECK_HR(hr);
+        const bool Uncompressed = (SubType == MFVideoFormat_RGB555) || (SubType == MFVideoFormat_RGB565) ||
+                                  (SubType == MFVideoFormat_RGB24) || (SubType == MFVideoFormat_RGB32) ||
+                                  (SubType == MFVideoFormat_ARGB32);
+        CHECK_HR(hr = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video));
+        CHECK_HR(hr = OutputType->SetGUID(MF_MT_SUBTYPE, Uncompressed ? MFVideoFormat_RGB32 : MFVideoFormat_NV12));
+
+        CHECK_HR(hr = ::MFCreateSampleGrabberSinkActivate(OutputType.Get(), Sampler.Get(), &pRendererActivate));
 
         Sampler->SampleEvent = this->SampleEvent;
 

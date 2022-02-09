@@ -27,9 +27,4 @@ inline TComPtr<_Ty> ReferencedPtrToComPtr(_Ty* ptr)
     return obj;
 }
 
-const char* SubTypeToString(const GUID& SubType);
-const char* MajorTypeToString(const GUID& MajorType);
-std::string ResultToString(HRESULT hr);
-std::string GuidToString(const GUID&);
-std::string FourccToString(unsigned long);
 }  // namespace MFUtils
