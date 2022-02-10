@@ -246,8 +246,7 @@ VideoPlayer::VideoPlayer()
     if (SUCCEEDED(hr))
     {
         /// create video render sprite
-        pvd->_vrender     = new Sprite();
-
+        pvd->_vrender = new Sprite();
         this->addProtectedChild(pvd->_vrender);
 
         /// setup media session callbacks
@@ -342,7 +341,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
         bool needsInit = !pvd->_vtexture;
         if (!pvd->_vtexture)
         {
-            pvd->_vtexture = new Texture2D();
+            pvd->_vtexture    = new Texture2D();
             auto programCache = backend::ProgramCache::getInstance();
 
             auto& sampleOutFormat = pvd->_vplayer->GetVideoOutputFormat();
@@ -394,16 +393,14 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
         {
             pvd->_vrender->initWithTexture(pvd->_vtexture);
 
-            auto ps = pvd->_vrender->getProgramState();
-
             if (pvd->_sampleFormat == VideoSampleFormat::YUY2)
             {
+                auto ps = pvd->_vrender->getProgramState();
                 PS_SET_UNIFORM(ps, "tex_w", (float)w);
                 PS_SET_UNIFORM(ps, "tex_h", (float)h);
+                auto scale = Vec2(1.0, 2.0);
+                pvd->_vrender->setScale(scale.x, scale.y);
             }
-
-            auto scale = Vec2(1.0, 2.0);
-            pvd->_vrender->setScale(scale.x, scale.y);
         }
     }
     if (flags & FLAGS_TRANSFORM_DIRTY)
