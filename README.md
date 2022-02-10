@@ -11,7 +11,7 @@
 [![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
-**This is another more radical fork of *Cocos2d-x-4.0*, use OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and some more (see 'Highlight Features' for more info).**  
+**This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and more! (see 'Highlighted Features' for more info).**  
 
 ### View code with vscode online: 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/adxeproject/adxe)
@@ -22,39 +22,39 @@
   
 ### Purpose Summary
 * C++ 17
-* Focus on native game dev (quick starting, easy to use, fast)
+* Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
   
-### Highlight Features
+### Highlighted Features
 * Windows x64 build support
-* Reimplement HttpClient based on yasio for process http request concorrently.
-* **More clearly third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easy to publish your commercial apps based on adxe. Also some links to third party libs which supporting adxe too.**
+* Reimplement HttpClient based on yasio for concorrent http requests processing.
+* **clearer third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easier publishing of your commercial apps based on adxe. Also some links to third party libs which support adxe too.**
 * Refactor AudioEngine, OpenAL for all platforms
-  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still available.
+  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enabling it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even though it was marked as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
-* Modularize all optional extension, move from engine core to folder extensions
+* Modularize all optional extensions, move from engine core folder to an extensions folder
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
-* Use modern GL loader ```Glad```
+* Use a modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
 * C++ 17 standard
 * IOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
-* Use SAX parser for all plist file
+* Use SAX parser for all plist files
 * Spine-3.8 support
 * Extension ```FairyGUI``` support
-* ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
-* ETC2 RGB/RGBA support    (if hardware decoder not present, use software decoder)
+* ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
+* ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
 * Supported 2D physics engines (see also [Wiki](https://github.com/adxeproject/adxe-wiki)):
   * Box2D
   * Box2D-optimized
   * Chipmunk2D 
 * Supported 3D physics engines:
   * Bullet Physics SDK
-* **ImGui 1.87 integrated, easy to write game embedded tools, very ease to use, please read [ImGuiEXT](extensions/ImGuiEXT/README.md)**
+* **ImGui 1.87 integrated, easy to write game embedded tools, very easy to use, read [ImGuiEXT](extensions/ImGuiEXT/README.md) for more info**
 
-Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed feature too.
+Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed features too.
 
 ### Quick Start
 
@@ -63,12 +63,12 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
 
 #### Prerequisites
   1. Enter ```adxe``` root directory
-  2. Run ```python setup.py```, restart console after finish
+  2. Run ```python setup.py```, restart the console after it has finished for environment variables to take effect
 
 #### Windows (64/32 bit  Visual Studio 2019/2022)
   1. Install [CMake](https://cmake.org/) 3.14+  
-  2. Install Visual Studio 2019/2022 (it's recommend you use only this versions)  
-  3. Execute follow command at command line (Console, Window Terminal or Powershell)
+  2. Install Visual Studio 2019/2022 (it's recommended that you only use these versions)  
+  3. Execute the following commands in a command line (Console, Window Terminal or Powershell)
   
      ```cd adxe ```
      - for 32 bit Visual Studio 2019:
@@ -80,24 +80,24 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
      - for 64 bit Visual Studio 2022:
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
   
-  Build excecutable on command line (e.g. cpp-tests):
+  Build excecutable in a command line (e.g. cpp-tests):
     ```msbuild .\build\adxe.sln -target:cpp-tests -maxCpuCount```
 
 #### Android
   1. Install Android Studio 2021.1.1+
-  2. When first start Android Studio, It will guide you to install sdk and other tools, just install them
-  3. Start Android and choose [Open an existing Android Studio Project] to open ```adxe\tests\cpp-tests\proj.android```
-  4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose follow tools and click the button ```Apply``` to install them:  
+  2. When starting Android Studio for the first time, It will guide you to install the SDK and other tools, just install them
+  3. Start Android and choose [Open an existing Android Studio Project] and select ```adxe\tests\cpp-tests\proj.android```
+  4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 29 r5  
      * Android SDK Build-Tools 29.0.2  
      * NDK r19c+  
      * CMake 3.10+  
-  5. Waiting for ```Gradle sync``` finish.
-  6. Remark: If you use non-sdk provided CMake edition, you need download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
+  5. Wait for ```Gradle sync``` finish.
+  6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
-  2. Execute follow command   
+  1. Ensure xcode11+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  2. Execute the following command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
      - for any device   
@@ -109,10 +109,10 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
      - for simulator x86_64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
 
-  4. After cmake generate finish, you can open xcode project at ```build``` folder and run cpp-tests or other test targets.  
+  4. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
-     - **The code sign required to run ios app on device, just change bundle identifier until the auto manage signing solved**  
-     - **adxe only provide armv7, arm64, x86_64 prebuilt libraries for ios**
+     - **The code signing is required to run the ios app on your device, just change the bundle identifier until the auto manage signing is solved**  
+     - **adxe only provides armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### New Project
 - Cpp: `adxe new -p org.adxe.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
@@ -122,10 +122,10 @@ Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information
   * ThreadLocalStorage (TLS) 
     - ios x86 simulator ios>=10 and adxe no longer provide x86 libraries
     - ios x64 or devices (armv7, arm64) ios sdk>=9.0
-    - the 'OpenAL Soft' maintained by kcat use TLS
+    - the 'OpenAL Soft' maintained by kcat uses TLS
 
 ### Reference links
-  * Official Cocos2d-x: https://github.com/cocos2d/cocos2d-x
+  * Official Cocos2d-x Repo: https://github.com/cocos2d/cocos2d-x
 
 ### Contributing guide
 https://github.com/adxeproject/adxe/discussions/411
@@ -139,77 +139,77 @@ https://github.com/adxeproject/adxe/discussions/411
 
 ![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")
 
-### Fully changes since cocos2d-x-4.0
+### Full changes since cocos2d-x-4.0
 
-- [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
+- [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling is enabled
 - [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
 - [HIGHLIGHT] Windows x64 build support
 - [HIGHLIGHT] Support custom texture atlas formats, thanks to @rh101
 - [HIGHLIGHT] Downloader realtime md5 checksum calculation support
 - [HIGHLIGHT] Decompress astc parallel support
 - [HIGHLIGHT] Reimplement HttpClient based on yasio for concurrent http request support
-- [HIGHLIGHT] Improve Lua RTTI performance and less memory cost
+- [HIGHLIGHT] Improve Lua RTTI performance and increase memory efficiency
 - [HIGHLIGHT] Virtual File System support, thanks to @rh101 
-- [HIGHLIGHT] Refactor lua loader, speed up 30%+
+- [HIGHLIGHT] Refactor lua loader, gain 30%+ speed
 - [HIGHLIGHT] Update plainlua version to 5.4.3
-- [HIGHLIGHT] Use Openal-Soft for all platform
-- [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
+- [HIGHLIGHT] Use Openal-Soft for all platforms
+- [HIGHLIGHT] Refactor UserDefault with mio, gain 100x+ speed
 - [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
-- [HIGHLIGHT] Use modern GL loader Glad
+- [HIGHLIGHT] Use a modern GL loader Glad
 - [HIGHLIGHT] Google angle renderer backend support
 - [HIGHLIGHT] Update codebase to C++ 17 standard
 - [HIGHLIGHT] Remove tinyxml2
 - [HIGHLIGHT] Use fast pugixml
 - [HIGHLIGHT] Spine-3.6~4.0 support
-- [HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
-- [HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoder not present, use software decoder)
+- [HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoding is not present, software decoding will be used instead)
+- [HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoding is not present, software decoding will be used instead)
 - [HIGHLIGHT] ImGui integrated for PC platforms
 - [HIGHLIGHT] Extension FairyGUI support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
-- [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
-- [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
-- [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
+- [HIGHLIGHT] Modularize all optional extension, move from engine core folder to an extensions folder
+- [HIGHLIGHT] Improve thirdparty library building, 99% of builds are from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
+- [HIGHLIGHT] Added a new API `Director::setChildrenIndexerEnabled` for speeding up getChildByTag & getChildByName support
+- [HIGHLIGHT] Added a new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reducing memory cost when loading a large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
 - [HIGHLIGHT] Use c++17 string_view instead `const std::string&`
-- [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
-- [Fix] Fix Label overflow shrink bug
-- [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
-- [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
-- [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
-- [FIX] Use TTF scaled metrics to calculate line height, thanks to @rh101
-- [FIX] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
-- [FIX] Fix console output text encoding for win32
-- [FIX] Fix charset process for fontName on win32
-- [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
-- [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
-- [FIX] Fix Lua can't get `unsigned char` or `unsigned int` values of `ValueMap`
-- [FIX] Fix crash on AudioEngine::end after the `Director` was destroyed
-- [FIX] Fix font atlas will leak when it does not exist in the atlas cache, thanks to @rh101
-- [FIX] Fix ScrollView shows incorrect position in vertical direction some time, thanks to @wzhengsen
-- [FIX] Fix Spine ClippingAttachment doesn't work
+- [NEW] Added int64_t/uint64_t support for `cocos2d::Value`
+- [Fix] Fixed Label overflow shrink bug
+- [FIX] Fixed uniform location mismatch when having more than 1 spine with different shaders  
+- [FIX] Fixed imgui draw frame cause afterimage when game scene nothing to draw
+- [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issues
+- [FIX] Using TTF scaled metrics to calculate line height, thanks to @rh101
+- [FIX] Fixed Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
+- [FIX] Fixed console output text encoding for win32
+- [FIX] Fixed charset processing for fontName on win32
+- [FIX] Fixed A crash on ParticleBatchNode::updateProgramStateTexture() 
+- [FIX] Fixed A crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
+- [FIX] Fixed A bug where Lua can't get `unsigned char` or `unsigned int` values of a `ValueMap`
+- [FIX] Fixed A crash on AudioEngine::end after the `Director` has been destroyed
+- [FIX] Fixed font atlas memory leaking when it doesn't exist in the atlas cache, thanks to @rh101
+- [FIX] Fixed A bug where ScrollView randomly shows in an incorrect position vertically, thanks to @wzhengsen
+- [FIX] Fixed Spine ClippingAttachment not working
 - [REFINE] CCValue move construct and assign with std::string support
-- [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
+- [REFINE] Improve windows dev workflow, use working directory instead of copying resources to build binary directory manually
 - [REFINE] Add lua debug project file to lua project template
 - [REFINE] Remove lua 64bit spec search path, since we can compile compatible bytecode for both plainlua and luajit
-- [REFINE] Put stats labels to safe origin to make sure we can see it integral at some mobile device
+- [REFINE] Put stats labels to a safe origin to make sure we can see it integral at some mobile device
 - [REFINE] Improve cmake scripts
 - [REFINE] Replace deprecated repo `jcenter` with `mavenCentral`
 - [REFINE] Lua-5.4 compatible
 - [REFINE] Improve cmdline-tools
-- [REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
+- [REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issues when global Z value is not 0
 - [REFINE] Improve android astc support check
 - [REFINE] Improve the "Physics part" (#379), thanks to @aismann 
-- [REFINE] Rename command line to to `adxe`
+- [REFINE] Rename command line to `adxe`
 - [REFINE] Update imgui to 1.84 WIP
 - [REFINE] Rename thirdparty folder `external` to `thirdparty`
-- [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
-- [REFINE] Fix some audio test case can't hear sound
+- [REFINE] Force building plainlua as dll on windows for the debugger, better for debuging apps quickly
+- [REFINE] Fix some audio test cases where sound can't be heard
 - [REFINE] Avoid OS_WINDOWS conflict with system macro
 - [REFINE] Update OpenSSL to v3.0.1
 - [REFINE] Update FreeType to latest
-- [REFINE] Use Freetype SDF render when label distance field enabled
-- [REFINE] Always enable string pooling for msvc on cmake
+- [REFINE] Use Freetype SDF rendering when label distance field is enabled
+- [REFINE] Force enable string pooling for msvc on cmake
 - [REFINE] Change DrawNode api color parameters from `Color4F` to low `Color4B`
-- [REFINE] Improve DrawNode GC allocs
-- [REFINE] Use `jni.hpp` to improve jni call without method signature GC allocs
+- [REFINE] Improve DrawNode GC allocations
+- [REFINE] Use `jni.hpp` to improve jni calls without method signature GC allocations
