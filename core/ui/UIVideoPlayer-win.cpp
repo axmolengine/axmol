@@ -45,23 +45,40 @@ USING_NS_CC;
 
 //-----------------------------------------------------------------------------------------------------------
 
+#    define PS_SET_UNIFORM(ps, name, value)                       \
+        do                                                        \
+        {                                                         \
+            decltype(value) __v = value;                          \
+            auto __loc          = (ps)->getUniformLocation(name); \
+            (ps)->setUniform(__loc, &__v, sizeof(__v));           \
+        } while (false)
+
 using namespace cocos2d::ui;
 
 namespace
 {
+enum class VideoSampleFormat
+{
+    UNKNOWN,
+    RGB32,
+    YUY2,
+    NV12,
+};
 struct PrivateVideoDescriptor
 {
     MFMediaPlayer* _vplayer = nullptr;
     Texture2D* _vtexture    = nullptr;
     Sprite* _vrender        = nullptr;
 
-    yasio::byte_buffer _frameData;
-    std::recursive_mutex _frameDataMtx;
-    bool _frameDataDirty = false;
+    VideoSampleFormat _sampleFormat = VideoSampleFormat::UNKNOWN;
+    yasio::byte_buffer _sampleBuffer;
+    std::recursive_mutex _sampleBufferMtx;
+    bool _sampleDirty = false;
 
-    int _frameWidth  = 0;
-    int _frameHeight = 0;
+    int _videoWidth  = 0;
+    int _videoHeight = 0;
 };
+
 std::string_view NV12_FRAG = R"(
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
@@ -92,10 +109,118 @@ void main()
     gl_FragColor = v_fragmentColor * vec4(rgb, 1.0);
 }
 )"sv;
+
+std::string_view YUY2_FRAG = R"(
+// refer to: https://github.com/TheRealNox/glsl-shaders/blob/master/glsl/colourConverter.f.glsl
+
+#ifdef GL_ES
+varying lowp vec4 v_fragmentColor;
+varying mediump vec2 v_texCoord;
+#else
+varying vec4 v_fragmentColor;
+varying vec2 v_texCoord;
+#endif
+
+uniform sampler2D u_texture; // Y sample
+uniform float tex_w; // texture width
+uniform float tex_h; // texture height
+
+vec4 inYUY2(vec4 tempyuv, float isOdd)
+{
+	if (isOdd > 0.0)
+		return vec4(tempyuv.b, tempyuv.g, tempyuv.a, 255.0);
+	else
+		return vec4(tempyuv.r, tempyuv.g, tempyuv.a, 255.0);
+}
+
+vec4 limitedYCbCrToComputerRGBNormalized(vec4 yuv)
+{
+	vec4 rgb = vec4(0.0);
+	float scale = 1.0f / 256.0f;
+	
+	yuv = yuv * 255.0;
+	
+	yuv.r -= 16.0;
+	yuv.g -= 128.0;
+	yuv.b -= 128.0;
+	
+	rgb.r = scale * ((298.082 * yuv.r) + (458.942 * yuv.b));
+	rgb.g = scale * ((298.082 * yuv.r) + (-54.592 * yuv.g) + (-136.425 * yuv.b));
+	rgb.b = scale * ((298.082 * yuv.r) + (540.775 * yuv.g));
+	
+	rgb.a = 255.0f;
+	
+	rgb = rgb / 255.0f;
+	
+	return rgb;
+}
+
+vec4 convertLimitedYUY2toComputerRGB()
+{
+	vec4 tempyuv = vec4(0.0);
+	vec2 textureRealSize = vec2(tex_w, tex_h);
+	
+	vec2 pixelPos = vec2(textureRealSize.x * v_texCoord.x, textureRealSize.y * v_texCoord.y);
+	
+	float isOdd = floor(mod(pixelPos.x, 2.0));
+	
+	vec2 packedCoor = vec2(v_texCoord.x/2.0, v_texCoord.y);
+	
+	tempyuv = inYUY2(texture(u_texture, packedCoor), isOdd);
+	
+	return limitedYCbCrToComputerRGBNormalized(tempyuv);
+}
+
+vec4 fullYCbCrToComputerRGBNormalized(vec4 yuv)
+{
+	vec4 rgb = vec4(0.0);
+	float scale = 1.0 / 256.0;
+	
+	yuv = yuv * 255.0;
+	
+	yuv.g -= 128.0;
+	yuv.b -= 128.0;
+	
+	rgb.r = scale * ((256.0 * yuv.r) + (403.1488 * yuv.b));
+	rgb.g = scale * ((256.0 * yuv.r) + (-47.954944 * yuv.g) + (-119.839744 * yuv.b));
+	rgb.b = scale * ((256.0 * yuv.r) + (475.0336 * yuv.g));
+	
+	rgb.a = 255.0f;
+	
+	rgb = rgb / 255.0f;
+	
+	return rgb;
+}
+
+vec4 convertFullYUY2toComputerRGB()
+{
+	vec4 tempyuv = vec4(0.0);
+	// vec2 textureRealSize = textureSize(u_texture, 0);
+    vec2 textureRealSize = vec2(tex_w, tex_h);
+	
+	vec2 pixelPos = vec2(textureRealSize.x * v_texCoord.x, textureRealSize.y * v_texCoord.y);
+	
+	float isOdd = floor(mod(pixelPos.x, 2.0));
+	
+	vec2 packedCoor = vec2(v_texCoord.x/2.0, v_texCoord.y);
+	
+	tempyuv = inYUY2(texture(u_texture, packedCoor), isOdd);
+	
+	return fullYCbCrToComputerRGBNormalized(tempyuv);
+}
+
+void main()
+{
+  vec3 rgb = convertFullYUY2toComputerRGB();
+  gl_FragColor = v_fragmentColor * vec4(rgb, 1.0);
+}
+)"sv;
+
 enum
 {
-    VIDEO_PROGRAM_ID = 0x00fe2bc98,
+    VIDEO_PROGRAM_ID = 0x0fe2bc98,
 };
+
 }  // namespace
 
 VideoPlayer::VideoPlayer()
@@ -122,18 +247,15 @@ VideoPlayer::VideoPlayer()
     {
         /// create video render sprite
         pvd->_vrender     = new Sprite();
-        auto programCache = backend::ProgramCache::getInstance();
-        programCache->registerCustomProgramFactory(VIDEO_PROGRAM_ID, positionTextureColor_vert, std::string{NV12_FRAG});
-        auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
-        pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
+
         this->addProtectedChild(pvd->_vrender);
 
         /// setup media session callbacks
         // Invoke at system media session thread
         pvd->_vplayer->SampleEvent = [=](uint8_t* sampleBuffer, size_t len) {
-            std::lock_guard<std::recursive_mutex> lck(pvd->_frameDataMtx);
-            pvd->_frameData.assign(sampleBuffer, sampleBuffer + len);
-            pvd->_frameDataDirty = true;
+            std::lock_guard<std::recursive_mutex> lck(pvd->_sampleBufferMtx);
+            pvd->_sampleBuffer.assign(sampleBuffer, sampleBuffer + len);
+            pvd->_sampleDirty = true;
         };
     }
     else
@@ -167,7 +289,7 @@ void VideoPlayer::setFileName(std::string_view fileName)
     _videoSource = VideoPlayer::Source::FILENAME;
 
     auto pvd = (PrivateVideoDescriptor*)_videoView;
-    if (pvd)
+    if (pvd->_vplayer)
         pvd->_vplayer->OpenURL(ntcvt::from_chars(_videoURL).c_str());
 }
 
@@ -175,6 +297,10 @@ void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;
+
+    auto pvd = (PrivateVideoDescriptor*)_videoView;
+    if (pvd->_vplayer)
+        pvd->_vplayer->OpenURL(ntcvt::from_chars(_videoURL).c_str());
 }
 
 void VideoPlayer::setLooping(bool looping)
@@ -182,7 +308,7 @@ void VideoPlayer::setLooping(bool looping)
     _isLooping = looping;
 
     auto pvd = (PrivateVideoDescriptor*)_videoView;
-    if (pvd && pvd->_vplayer)
+    if (pvd->_vplayer)
         pvd->_vplayer->SetLooping(looping);
 }
 
@@ -201,29 +327,84 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     cocos2d::ui::Widget::draw(renderer, transform, flags);
 
     auto pvd = (PrivateVideoDescriptor*)_videoView;  //
-    if (pvd && pvd->_frameDataDirty)
+    if (pvd && pvd->_sampleDirty)
     {
-        pvd->_frameDataDirty = false;
+        pvd->_sampleDirty = false;
 
         auto& vrender = pvd->_vrender;
 
-        std::lock_guard<std::recursive_mutex> lck(pvd->_frameDataMtx);
-        uint8_t* nv12Data  = pvd->_frameData.data();
-        size_t nv12DataLen = pvd->_frameData.size();
-        auto w = pvd->_frameWidth = pvd->_vplayer->GetVideoWidth();
-        auto h = pvd->_frameHeight = pvd->_vplayer->GetVideoHeight();
+        std::lock_guard<std::recursive_mutex> lck(pvd->_sampleBufferMtx);
+        uint8_t* sampleData  = pvd->_sampleBuffer.data();
+        size_t sampleDataLen = pvd->_sampleBuffer.size();
+        auto w = pvd->_videoWidth = pvd->_vplayer->GetVideoWidth();
+        auto h = pvd->_videoHeight = pvd->_vplayer->GetVideoHeight();
 
         bool needsInit = !pvd->_vtexture;
         if (!pvd->_vtexture)
+        {
             pvd->_vtexture = new Texture2D();
+            auto programCache = backend::ProgramCache::getInstance();
 
-        size_t ySampleSize = w * h;
-        pvd->_vtexture->updateWithData(nv12Data, ySampleSize, PixelFormat::L8, PixelFormat::L8, w, h, false, 0);
-        pvd->_vtexture->updateWithData(nv12Data + ySampleSize, nv12DataLen - ySampleSize, PixelFormat::LA8,
-                                       PixelFormat::LA8, w >> 1, h >> 1, false, 1);
+            auto& sampleOutFormat = pvd->_vplayer->GetVideoOutputFormat();
 
+            if (sampleOutFormat == MFVideoFormat_YUY2)
+                pvd->_sampleFormat = VideoSampleFormat::YUY2;
+            else if (sampleOutFormat == MFVideoFormat_NV12)
+                pvd->_sampleFormat = VideoSampleFormat::NV12;
+            else if (sampleOutFormat == MFVideoFormat_RGB32)
+                pvd->_sampleFormat = VideoSampleFormat::RGB32;
+
+            switch (pvd->_sampleFormat)
+            {
+            case VideoSampleFormat::YUY2:
+            case VideoSampleFormat::NV12:
+            {
+                programCache->registerCustomProgramFactory(
+                    VIDEO_PROGRAM_ID, positionTextureColor_vert,
+                    std::string{pvd->_sampleFormat == VideoSampleFormat::YUY2 ? YUY2_FRAG : NV12_FRAG});
+                auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
+                pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
+                break;
+            }
+            default:;
+            }
+        }
+
+        switch (pvd->_sampleFormat)
+        {
+        case VideoSampleFormat::YUY2:
+            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w, h / 2,
+                                           false, 0);
+            break;
+        case VideoSampleFormat::NV12:
+        {
+            const size_t ySampleSize = w * h;
+            pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, w, h, false, 0);
+            pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
+                                           PixelFormat::LA8, w >> 1, h >> 1, false, 1);
+            break;
+        }
+        case VideoSampleFormat::RGB32:
+            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w, h,
+                                           false, 0);
+            break;
+        default:;
+        }
         if (needsInit)
+        {
             pvd->_vrender->initWithTexture(pvd->_vtexture);
+
+            auto ps = pvd->_vrender->getProgramState();
+
+            if (pvd->_sampleFormat == VideoSampleFormat::YUY2)
+            {
+                PS_SET_UNIFORM(ps, "tex_w", (float)w);
+                PS_SET_UNIFORM(ps, "tex_h", (float)h);
+            }
+
+            auto scale = Vec2(1.0, 2.0);
+            pvd->_vrender->setScale(scale.x, scale.y);
+        }
     }
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {

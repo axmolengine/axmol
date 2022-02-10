@@ -125,6 +125,8 @@ public:
     UINT32 GetVideoWidth() const { return m_uVideoWidth; }
     UINT32 GetVideoHeight() const { return m_uVideoHeight; }
 
+    const GUID& GetVideoOutputFormat() const { return m_VideoOutputFormat; }
+
     // Video functionality
     void SetLooping(BOOL bLooping) { m_bLooping = bLooping; }
 
@@ -222,4 +224,6 @@ protected:
 
     BOOL m_bLooping = FALSE;
     BOOL m_bPlayOnOpen = TRUE;
+
+    GUID m_VideoOutputFormat{};
 };

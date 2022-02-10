@@ -1534,17 +1534,31 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
 
         TComPtr<IMFMediaType> OutputType;
         CHECK_HR(hr = ::MFCreateMediaType(&OutputType));
-
-        const bool Uncompressed = (SubType == MFVideoFormat_RGB555) || (SubType == MFVideoFormat_RGB565) ||
-                                  (SubType == MFVideoFormat_RGB24) || (SubType == MFVideoFormat_RGB32) ||
-                                  (SubType == MFVideoFormat_ARGB32);
+        CHECK_HR(hr = OutputType->SetUINT32(MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE));
         CHECK_HR(hr = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video));
-        CHECK_HR(hr = OutputType->SetGUID(MF_MT_SUBTYPE, Uncompressed ? MFVideoFormat_RGB32 : MFVideoFormat_NV12));
+
+        GUID VideoOutputFormat = {};
+        if ((SubType == MFVideoFormat_HEVC) || (SubType == MFVideoFormat_HEVC_ES) || (SubType == MFVideoFormat_NV12) ||
+            (SubType == MFVideoFormat_IYUV))
+        {
+            VideoOutputFormat = MFVideoFormat_NV12;
+        }
+        else
+        {
+            const bool Uncompressed = (SubType == MFVideoFormat_RGB555) || (SubType == MFVideoFormat_RGB565) ||
+                                      (SubType == MFVideoFormat_RGB24) || (SubType == MFVideoFormat_RGB32) ||
+                                      (SubType == MFVideoFormat_ARGB32);
+
+            VideoOutputFormat = Uncompressed ? MFVideoFormat_RGB32 : MFVideoFormat_YUY2;
+        }
+
+        CHECK_HR(hr = OutputType->SetGUID(MF_MT_SUBTYPE, VideoOutputFormat));
 
         CHECK_HR(hr = ::MFCreateSampleGrabberSinkActivate(OutputType.Get(), Sampler.Get(), &pRendererActivate));
 
         Sampler->SampleEvent = this->SampleEvent;
 
+        m_VideoOutputFormat = VideoOutputFormat;
         // To run as fast as possible, set this attribute (requires Windows 7):
         // CHECK_HR(hr = pRendererActivate->SetUINT32(MF_SAMPLEGRABBERSINK_IGNORE_CLOCK, TRUE));
     }
