@@ -44,8 +44,8 @@
 * Use SAX parser for all plist files
 * Spine-3.8 support
 * Extension ```FairyGUI``` support
-* ASTC 4x4/6x6/8x8 support (if hardware decoding is not present, software decoding will be used instead)
-* ETC2 RGB/RGBA support    (if hardware decoding is not present, software decoding will be used instead)
+* ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
+* ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
 * Supported 2D physics engines (see also [Wiki](https://github.com/adxeproject/adxe-wiki)):
   * Box2D
   * Box2D-optimized
