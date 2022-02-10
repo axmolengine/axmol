@@ -25,7 +25,7 @@
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
   
-### Highlight Features
+### Highlighted Features
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
 * **clearer third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easier publishing of your commercial apps based on adxe. Also some links to third party libs which support adxe too.**
