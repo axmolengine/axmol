@@ -541,12 +541,6 @@ public:
     void attachWithIME();
 
     /**
-     * @brief Detach the IME from inputing.
-     *
-     */
-    void detachWithIME();
-
-    /**
      * @brief Change the text area size.
      *
      * @param size A delimitation zone.
