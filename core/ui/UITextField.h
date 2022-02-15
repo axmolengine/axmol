@@ -541,7 +541,7 @@ public:
     void attachWithIME();
 
     /**
-     * @brief Detach the IME for inputing.
+     * @brief Detach the IME from inputing.
      *
      */
     void detachWithIME();
