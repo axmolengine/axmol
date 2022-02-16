@@ -432,33 +432,33 @@ std::string WidgetPropertiesReader::getWidgetReaderClassName(std::string_view cl
 {
     // create widget reader to parse properties of widget
     std::string readerName;
-    if (readerName == "Panel")
+    if (classname == "Panel"sv)
     {
-        readerName = "Layout";
+        readerName = "Layout"sv;
     }
-    else if (readerName == "TextArea")
+    else if (classname == "TextArea"sv)
     {
-        readerName = "Text";
+        readerName = "Text"sv;
     }
-    else if (readerName == "TextButton")
+    else if (classname == "TextButton"sv)
     {
-        readerName = "Button";
+        readerName = "Button"sv;
     }
-    else if (readerName == "Label")
+    else if (classname == "Label"sv)
     {
-        readerName = "Text";
+        readerName = "Text"sv;
     }
-    else if (readerName == "LabelAtlas")
+    else if (classname == "LabelAtlas"sv)
     {
-        readerName = "TextAtlas";
+        readerName = "TextAtlas"sv;
     }
-    else if (readerName == "LabelBMFont")
+    else if (classname == "LabelBMFont"sv)
     {
-        readerName = "TextBMFont";
+        readerName = "TextBMFont"sv;
     }
     else
         readerName = classname;
-    readerName.append("Reader");
+    readerName.append("Reader"sv);
     return readerName;
 }
 
