@@ -54,6 +54,8 @@
 
 #    include "platform/CCPlatformConfig.h"
 
+#    include "ntcvt/ntcvt.hpp"
+
 USING_NS_CC;
 using namespace rapidjson;
 
@@ -311,9 +313,15 @@ private:
         GetModuleFileNameA(NULL, currentExePath, MAX_PATH);
         char* currentExeName = PathFindFileNameA(currentExePath);
 
-        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> wideCharConverter;
-        std::wstring userDataFolder  = wideCharConverter.from_bytes(std::getenv("APPDATA"));
-        std::wstring currentExeNameW = wideCharConverter.from_bytes(currentExeName);
+        /*
+        * Note: New OS feature 'Beta: Use Unicode UTF-8 for worldwide language support' since win10/win11 
+        *   - OFF: GetACP() equal to current system locale, such as chinese simplified is 936, english is 437
+        *   - ON: GetACP() always equal to 65001(UTF-8)
+        * Remark: 
+        *   The macro CP_ACP for ntcvt::from_chars works for converting chraset from current code page(936,437,65001) to utf-16
+        */
+        std::wstring userDataFolder  = ntcvt::from_chars(std::getenv("APPDATA"), CP_ACP);
+        std::wstring currentExeNameW = ntcvt::from_chars(currentExeName, CP_ACP);
 
         HRESULT res = CreateCoreWebView2EnvironmentWithOptions(
             nullptr, (userDataFolder + L"/" + currentExeNameW).c_str(), nullptr,
