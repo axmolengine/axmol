@@ -162,7 +162,7 @@ function(copy_thirdparty_dlls cocos_target destDir)
 #        list(APPEND DEPENDENCIES ${INTERFACE_LINK_LIBRARIES})
 #     endif()
 
-    if(BUILD_LUA_LIBS) # TODO: rename to BUILD_EXTENSION_LUA
+    if(BUILD_LUA_LIBS) # TODO: rename to AX_ENABLE_EXT_LUA
         list(APPEND DEPENDENCIES ${LUA_ENGINE})
         list(APPEND DEPENDENCIES tolua)
     endif()
@@ -336,7 +336,7 @@ function(setup_cocos_app_config app_name)
     endif()
     target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
 
-    if(XCODE AND BUILD_DEP_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
+    if(XCODE AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework
         # XCODE_LINK_BUILD_PHASE_MODE BUILT_ONLY
         # ???CMake BUG: XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY works for first app

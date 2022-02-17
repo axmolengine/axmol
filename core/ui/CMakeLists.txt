@@ -1,5 +1,5 @@
 if(WINDOWS)
-    if(ADXE_ENABLE_WEBVIEW2)
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
         set(COCOS_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-win32.h
             ui/UIWebView/UIWebViewImpl-win32.h
