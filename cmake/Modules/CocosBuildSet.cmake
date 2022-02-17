@@ -29,7 +29,7 @@ message(STATUS "PYTHON_PATH:"  ${PYTHON_COMMAND})
 message(STATUS "COCOS_COMMAND_PATH:"  ${COCOS_COMMAND})
 message(STATUS "HOST_SYSTEM:" ${CMAKE_HOST_SYSTEM_NAME})
 # the default behavior of build module
-option(BUILD_LUA_LIBS "Build lua libraries" OFF)
+option(AX_ENABLE_EXT_LUA "Build lua libraries" OFF)
 
 # hold the extensions list to auto link to app
 set(CC_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")

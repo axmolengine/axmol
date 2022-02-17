@@ -45,16 +45,16 @@ include(PreventInSourceBuilds)
 # works before build libcocos2d
 include(CocosBuildSet)
 
-option(BUILD_TESTS "Build cpp & lua tests" ON)
+option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
 
-set(BUILD_LUA_LIBS ON) 
+set(AX_ENABLE_EXT_LUA ON) 
 
 add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
 
 # prevent tests project to build "adxe/core" again
 set(BUILD_ENGINE_DONE ON)
 
-if(BUILD_TESTS)
+if(AX_BUILD_TESTS)
     # add cpp-template-default into project(adxe) for tmp test
     add_subdirectory(${ADXE_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
 	
@@ -66,9 +66,9 @@ if(BUILD_TESTS)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
 
-    if(BUILD_LUA_LIBS)
+    if(AX_ENABLE_EXT_LUA)
       add_subdirectory(${ADXE_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
-    endif(BUILD_LUA_LIBS)
+    endif(AX_ENABLE_EXT_LUA)
 
 endif()

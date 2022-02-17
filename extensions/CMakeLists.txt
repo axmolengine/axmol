@@ -117,7 +117,7 @@ if(AX_ENABLE_EXT_COCOSTUDIO)
   endif()
 endif()
 
-if(BUILD_LUA_LIBS) # TODO: rename to AX_ENABLE_EXT_LUA
+if(AX_ENABLE_EXT_LUA)
   add_subdirectory(scripting/lua-bindings)
 endif()
 

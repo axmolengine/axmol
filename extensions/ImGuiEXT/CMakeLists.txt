@@ -33,7 +33,7 @@ set(SOURCE
     #~ implot/implot_demo.cpp
 )
 
-#~ if(BUILD_LUA_LIBS)
+#~ if(AX_ENABLE_EXT_LUA)
 #~     include_directories(
 #~         lua-bindings
 #~         ${ADXE_ROOT_PATH}/thirdparty/lua/luajit/include
