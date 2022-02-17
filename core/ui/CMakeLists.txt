@@ -20,7 +20,7 @@ if(WINDOWS)
             )
     endif()
     
-    if (ADXE_ENABLE_MFMEDIA)
+    if (AX_ENABLE_MFMEDIA)
         set(COCOS_UI_SPECIFIC_HEADER ${COCOS_UI_SPECIFIC_HEADER}
             ui/MFUtils.h
             ui/MFMediaPlayer.h
