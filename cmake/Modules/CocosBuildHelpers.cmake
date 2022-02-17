@@ -228,7 +228,7 @@ function(cocos_copy_target_dll cocos_target)
 endfunction()
 
 function(cocos_copy_lua_dlls cocos_target)
-    if(LUA_ENGINE STREQUAL "plainlua")
+    if(NOT AX_USE_LUAJIT)
         add_custom_command(TARGET ${cocos_target} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/plainlua.dll"
