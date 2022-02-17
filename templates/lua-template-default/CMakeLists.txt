@@ -52,7 +52,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
-    set(BUILD_LUA_LIBS ON)
+    set(AX_ENABLE_EXT_LUA ON)
     add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
 endif()
 

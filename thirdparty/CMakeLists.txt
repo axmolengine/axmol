@@ -66,7 +66,8 @@ add_library(thirdparty STATIC empty.cpp)
 
 # header only libs
 target_include_directories(thirdparty
-	INTERFACE "robin-map/include"
+    INTERFACE "fmt/include"
+    INTERFACE "robin-map/include"
 )
 
 if (ANDROID)
@@ -207,7 +208,7 @@ if(AX_WITH_ASTC)
 endif(AX_WITH_ASTC)
 
 # use lua/js specific libs by property to prevent conflict
-if(BUILD_LUA_LIBS)
+if(AX_ENABLE_EXT_LUA)
     add_subdirectory(lua/${AX_LUA_ENGINE})
     add_subdirectory(lua/tolua)
     add_subdirectory(lua/lua-cjson)
@@ -334,11 +335,6 @@ if(AX_WITH_KCP)
     target_link_libraries(thirdparty kcp)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
 endif()
-
-# fmt-lib
-add_subdirectory(fmt)
-target_link_libraries(thirdparty fmt-header-only)
-configure_target_outdir(fmt)
 
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)

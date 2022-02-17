@@ -162,7 +162,7 @@ function(copy_thirdparty_dlls cocos_target destDir)
 #        list(APPEND DEPENDENCIES ${INTERFACE_LINK_LIBRARIES})
 #     endif()
 
-    if(BUILD_LUA_LIBS) # TODO: rename to AX_ENABLE_EXT_LUA
+    if(AX_ENABLE_EXT_LUA)
         list(APPEND DEPENDENCIES ${LUA_ENGINE})
         list(APPEND DEPENDENCIES tolua)
     endif()

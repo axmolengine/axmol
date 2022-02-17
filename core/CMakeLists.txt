@@ -27,7 +27,7 @@
 
 # this CMakeLists is to generate Cocos2d-x Engine Library
 # build adxe
-# build adxelua if BUILD_LUA_LIBS=ON
+# build adxelua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
 set(ADXE_VERSION 1.0)
@@ -149,7 +149,7 @@ set_target_properties(${ADXE_CORE_LIB}
                       )
 
 ## Lua bindings lib
-# if(BUILD_LUA_LIBS)
+# if(AX_ENABLE_EXT_LUA)
 #     add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
 # endif()
 
