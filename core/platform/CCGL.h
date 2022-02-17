@@ -37,11 +37,11 @@ THE SOFTWARE.
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 #    include "platform/linux/CCGL-linux.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-#    if CC_COMPAT_GL
+#    if AX_USE_COMPAT_GL
 #        include "platform/ios/CCGL-ios.h"
 #    endif
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_MAC
-#    if CC_COMPAT_GL
+#    if AX_USE_COMPAT_GL
 #        include "platform/mac/CCGL-mac.h"
 #    endif
 #endif

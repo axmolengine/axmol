@@ -30,8 +30,8 @@
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
 * **clearer third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easier publishing of your commercial apps based on adxe. Also some links to third party libs which support adxe too.**
 * Refactor AudioEngine, OpenAL for all platforms
-  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enabling it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even though it was marked as deprecated, but still available.
+  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even though it was marked as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extensions, move from engine core folder to an extensions folder
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...

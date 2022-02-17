@@ -62,7 +62,7 @@ if(BUILD_TESTS)
     add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
     
 	# add fairygui tests when fairygui extension is enabled
-    if(BUILD_EXTENSION_FAIRYGUI)
+    if(AX_ENABLE_EXT_FAIRYGUI)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
 
