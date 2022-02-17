@@ -102,7 +102,7 @@
 ## lua
 - plainlua
   - Upstream: http://www.lua.org/
-  - Version: 5.4.3
+  - Version: 5.4.4
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
@@ -173,7 +173,7 @@
 
 ## pugixml
 - Upstream: https://github.com/zeux/pugixml
-- Version: 1.11
+- Version: 1.12.1
 - License: MIT
 
 ## rapidjson

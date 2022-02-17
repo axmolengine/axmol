@@ -110,8 +110,8 @@ mac: GL
 iOS: GLES
 other: GL
 */
-#ifndef CC_COMPAT_GL
-#    define CC_COMPAT_GL 0
+#ifndef AX_USE_COMPAT_GL
+#    define AX_USE_COMPAT_GL 0
 #endif
 
 #if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
@@ -121,13 +121,13 @@ other: GL
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-#    if !CC_COMPAT_GL
+#    if !AX_USE_COMPAT_GL
 #        define CC_USE_METAL
 #    else
 #        define CC_USE_GL
 #    endif
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#    if !CC_COMPAT_GL
+#    if !AX_USE_COMPAT_GL
 #        define CC_USE_METAL
 #    else
 #        define CC_USE_GLES
@@ -135,7 +135,7 @@ other: GL
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    define CC_USE_GLES
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#    if !CC_COMPAT_GL
+#    if !AX_USE_COMPAT_GL
 #        define CC_USE_GL
 #    else
 #        define CC_USE_GLES

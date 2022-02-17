@@ -36,12 +36,12 @@ if(NOT DEFINED ADXE_CORE_LIB)
     set(ADXE_CORE_LIB adxe CACHE INTERNAL "The adxe core lib name" )
 endif()
 
-if (NOT DEFINED CC_COMPAT_GL)
-    set(CC_COMPAT_GL FALSE CACHE INTERNAL "Enabling CC_COMPAT_GL" )
+if (NOT DEFINED AX_USE_COMPAT_GL)
+    set(AX_USE_COMPAT_GL FALSE CACHE INTERNAL "Enabling AX_USE_COMPAT_GL" )
 endif()
 
-if (NOT DEFINED ADXE_ENABLE_WEBVIEW2)
-    set(ADXE_ENABLE_WEBVIEW2 TRUE CACHE INTERNAL "Enabling windows webview2" )
+if (NOT DEFINED AX_ENABLE_MSEDGE_WEBVIEW2)
+    set(AX_ENABLE_MSEDGE_WEBVIEW2 TRUE CACHE INTERNAL "Enabling windows webview2" )
 endif()
 
 project(adxe_libs)
@@ -165,7 +165,7 @@ if(WINDOWS)
     # compile c as c++. needed for precompiled header
     set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
     
-    if(ADXE_ENABLE_WEBVIEW2)
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
             PATHS ${ADXE_ROOT_PATH}/tools/external/nuget)
             
