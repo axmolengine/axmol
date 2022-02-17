@@ -16,10 +16,10 @@ add_library(${target_name} STATIC
   ${${target_name}_src}
 )
 
-if(LUA_ENGINE STREQUAL "plainlua")
-  target_include_directories(${target_name} PRIVATE ../${LUA_ENGINE}/lua-${LUA_VERSION}/src)
+if(NOT AX_USE_LUAJIT)
+  target_include_directories(${target_name} PRIVATE ../${AX_LUA_ENGINE})
 else()
-  target_include_directories(${target_name} PRIVATE ../${LUA_ENGINE}/include)
+  target_include_directories(${target_name} PRIVATE ../${AX_LUA_ENGINE}/include)
 endif()
 target_include_directories(${target_name} PUBLIC .)
 

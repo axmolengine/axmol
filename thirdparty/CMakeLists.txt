@@ -50,19 +50,16 @@ function(configure_target_outdir target)
     )
 endfunction()
 
-if(NOT DEFINED LUA_ENGINE)
-    set(LUA_ENGINE "plainlua" CACHE INTERNAL "The lua core lib, luajit or plainlua")
+if(NOT DEFINED AX_USE_LUAJIT)
+    set(AX_USE_LUAJIT FALSE CACHE INTERNAL "Use luajit instead plainlua")
 endif()
 
-if(LUA_ENGINE STREQUAL "plainlua")
-    if(NOT DEFINED LUA_VERSION)
-        set(LUA_VERSION "5.4.3" CACHE INTERNAL "The plainlua version")
-    endif()
-    message(STATUS "Using plainlua: ${LUA_VERSION}")
-elseif(LUA_ENGINE STREQUAL "luajit")
-    message(STATUS "Using luajit")
+if(NOT AX_USE_LUAJIT)
+    message(STATUS "Using plainlua https://lua.org")
+    set (AX_LUA_ENGINE "plainlua"  CACHE INTERNAL "")
 else()
-    message(FATAL_ERROR "Invalid lua engine: ${LUA_ENGINE}, must be plainlua or luajit")
+    message(STATUS "Using luajit https://luajit.org")
+    set (AX_LUA_ENGINE "luajit"  CACHE INTERNAL "")
 endif()
 
 add_library(thirdparty STATIC empty.cpp)
@@ -211,11 +208,11 @@ endif(AX_WITH_ASTC)
 
 # use lua/js specific libs by property to prevent conflict
 if(BUILD_LUA_LIBS)
-    add_subdirectory(lua/${LUA_ENGINE})
+    add_subdirectory(lua/${AX_LUA_ENGINE})
     add_subdirectory(lua/tolua)
     add_subdirectory(lua/lua-cjson)
     set_property(TARGET thirdparty APPEND PROPERTY 
-        CC_LUA_DEPEND ${LUA_ENGINE} tolua lua-cjson
+        CC_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
     )
 endif()
 

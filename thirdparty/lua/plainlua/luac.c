@@ -155,6 +155,7 @@ static const Proto* combine(lua_State* L, int n)
    f->p[i]=toproto(L,i-n-1);
    if (f->p[i]->sizeupvalues>0) f->p[i]->upvalues[0].instack=0;
   }
+  luaM_freearray(L,f->lineinfo,f->sizelineinfo);
   f->sizelineinfo=0;
   return f;
  }
@@ -349,9 +350,9 @@ static void PrintCode(const Proto* f)
   int sc=GETARG_sC(i);
   int sbx=GETARG_sBx(i);
   int isk=GETARG_k(i);
-  //int line=luaG_getfuncline(f,pc);
+  int line=luaG_getfuncline(f,pc);
   printf("\t%d\t",pc+1);
-  //if (line>0) printf("[%d]\t",line); else printf("[-]\t");
+  if (line>0) printf("[%d]\t",line); else printf("[-]\t");
   printf("%-9s\t",opnames[o]);
   switch (o)
   {
@@ -600,11 +601,11 @@ static void PrintCode(const Proto* f)
 	if (c==0) printf("all out"); else printf("%d out",c-1);
 	break;
    case OP_TAILCALL:
-	printf("%d %d %d",a,b,c);
+	printf("%d %d %d%s",a,b,c,ISK);
 	printf(COMMENT "%d in",b-1);
 	break;
    case OP_RETURN:
-	printf("%d %d %d",a,b,c);
+	printf("%d %d %d%s",a,b,c,ISK);
 	printf(COMMENT);
 	if (b==0) printf("all out"); else printf("%d out",b-1);
 	break;
@@ -619,7 +620,7 @@ static void PrintCode(const Proto* f)
 	break;
    case OP_FORPREP:
 	printf("%d %d",a,bx);
-	printf(COMMENT "to %d",pc+bx+2);
+	printf(COMMENT "exit to %d",pc+bx+3);
 	break;
    case OP_TFORPREP:
 	printf("%d %d",a,bx);
