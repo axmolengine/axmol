@@ -17,7 +17,7 @@ set(LUA_BUILD_AS_DLL ${BUILD_SHARED_LIBS})
 
 if(WIN32)
     set(LUA_BUILD_AS_DLL TRUE)
-    add_library(${target_name} SHARED ${LUA_CORE})
+    add_library(${target_name} SHARED ${LUA_CORE} ${LUA_SRC_PATH}/plainlua.def)
 else()
     add_library(${target_name} ${LUA_CORE})
 endif()
