@@ -350,9 +350,9 @@ static void PrintCode(const Proto* f)
   int sc=GETARG_sC(i);
   int sbx=GETARG_sBx(i);
   int isk=GETARG_k(i);
-  int line=luaG_getfuncline(f,pc);
+  //int line=luaG_getfuncline(f,pc);
   printf("\t%d\t",pc+1);
-  if (line>0) printf("[%d]\t",line); else printf("[-]\t");
+  //if (line>0) printf("[%d]\t",line); else printf("[-]\t");
   printf("%-9s\t",opnames[o]);
   switch (o)
   {
