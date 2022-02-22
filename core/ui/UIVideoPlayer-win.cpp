@@ -38,6 +38,7 @@
 #    include "renderer/backend/ProgramCache.h"
 #    include "yasio/detail/byte_buffer.hpp"
 #    include "ntcvt/ntcvt.hpp"
+#    include "ui/LayoutHelper.h"
 
 //-----------------------------------------------------------------------------------------------------------
 
@@ -77,6 +78,28 @@ struct PrivateVideoDescriptor
 
     int _videoWidth  = 0;
     int _videoHeight = 0;
+
+    void rescaleTo(Node* videoView)
+    {
+        auto& videoSize  = _vrender->getContentSize();
+        if (videoSize.x > 0 && videoSize.y > 0)
+        {  // rescale video to view node
+            auto& viewSize = videoView->getContentSize();
+            if (viewSize.x > 0 && viewSize.y > 0)
+            {
+                Vec2 originalScale = _sampleFormat == VideoSampleFormat::YUY2 ? Vec2{1.0, 2.0} : Vec2{1.0, 1.0};
+                auto scaleX        = viewSize.x / videoSize.x;
+                auto scaleY        = viewSize.y / videoSize.y;
+
+                _vrender->setScale(scaleX, scaleY);
+                LayoutHelper::centerNode(_vrender);
+
+                _vrender->setVisible(true);
+            }
+            else
+                _vrender->setVisible(false);
+        }
+    }
 };
 
 std::string_view NV12_FRAG = R"(
@@ -325,96 +348,98 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 {
     cocos2d::ui::Widget::draw(renderer, transform, flags);
 
-    auto pvd = (PrivateVideoDescriptor*)_videoView;  //
-    if (pvd && pvd->_sampleDirty)
+    auto pvd     = (PrivateVideoDescriptor*)_videoView;  //
+    auto vrender = pvd->_vrender;
+    if (!vrender)
+        return;
+    if (pvd->_sampleDirty)
     {
         pvd->_sampleDirty = false;
-
-        auto& vrender = pvd->_vrender;
-
-        std::lock_guard<std::recursive_mutex> lck(pvd->_sampleBufferMtx);
-        uint8_t* sampleData  = pvd->_sampleBuffer.data();
-        size_t sampleDataLen = pvd->_sampleBuffer.size();
-        auto w = pvd->_videoWidth = pvd->_vplayer->GetVideoWidth();
-        auto h = pvd->_videoHeight = pvd->_vplayer->GetVideoHeight();
-
-        bool needsInit = !pvd->_vtexture;
-        if (!pvd->_vtexture)
+        if (vrender->isVisible())
         {
-            pvd->_vtexture    = new Texture2D();
-            auto programCache = backend::ProgramCache::getInstance();
+            std::lock_guard<std::recursive_mutex> lck(pvd->_sampleBufferMtx);
+            uint8_t* sampleData  = pvd->_sampleBuffer.data();
+            size_t sampleDataLen = pvd->_sampleBuffer.size();
+            auto w = pvd->_videoWidth = pvd->_vplayer->GetVideoWidth();
+            auto h = pvd->_videoHeight = pvd->_vplayer->GetVideoHeight();
 
-            auto& sampleOutFormat = pvd->_vplayer->GetVideoOutputFormat();
+            bool needsInit = !pvd->_vtexture;
+            if (!pvd->_vtexture)
+            {
+                pvd->_vtexture    = new Texture2D();
+                auto programCache = backend::ProgramCache::getInstance();
 
-            if (sampleOutFormat == MFVideoFormat_YUY2)
-                pvd->_sampleFormat = VideoSampleFormat::YUY2;
-            else if (sampleOutFormat == MFVideoFormat_NV12)
-                pvd->_sampleFormat = VideoSampleFormat::NV12;
-            else if (sampleOutFormat == MFVideoFormat_RGB32)
-                pvd->_sampleFormat = VideoSampleFormat::RGB32;
+                auto& sampleOutFormat = pvd->_vplayer->GetVideoOutputFormat();
+
+                if (sampleOutFormat == MFVideoFormat_YUY2)
+                    pvd->_sampleFormat = VideoSampleFormat::YUY2;
+                else if (sampleOutFormat == MFVideoFormat_NV12)
+                    pvd->_sampleFormat = VideoSampleFormat::NV12;
+                else if (sampleOutFormat == MFVideoFormat_RGB32)
+                    pvd->_sampleFormat = VideoSampleFormat::RGB32;
+
+                switch (pvd->_sampleFormat)
+                {
+                case VideoSampleFormat::YUY2:
+                case VideoSampleFormat::NV12:
+                {
+                    programCache->registerCustomProgramFactory(
+                        VIDEO_PROGRAM_ID, positionTextureColor_vert,
+                        std::string{pvd->_sampleFormat == VideoSampleFormat::YUY2 ? YUY2_FRAG : NV12_FRAG});
+                    auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
+                    pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
+                    break;
+                }
+                default:;
+                }
+            }
 
             switch (pvd->_sampleFormat)
             {
             case VideoSampleFormat::YUY2:
+                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w,
+                                               h / 2, false, 0);
+                break;
             case VideoSampleFormat::NV12:
             {
-                programCache->registerCustomProgramFactory(
-                    VIDEO_PROGRAM_ID, positionTextureColor_vert,
-                    std::string{pvd->_sampleFormat == VideoSampleFormat::YUY2 ? YUY2_FRAG : NV12_FRAG});
-                auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
-                pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
+                const size_t ySampleSize = w * h;
+                pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, w, h, false,
+                                               0);
+                pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
+                                               PixelFormat::LA8, w >> 1, h >> 1, false, 1);
                 break;
             }
+            case VideoSampleFormat::RGB32:
+                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w, h,
+                                               false, 0);
+                break;
             default:;
             }
-        }
-
-        switch (pvd->_sampleFormat)
-        {
-        case VideoSampleFormat::YUY2:
-            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w, h / 2,
-                                           false, 0);
-            break;
-        case VideoSampleFormat::NV12:
-        {
-            const size_t ySampleSize = w * h;
-            pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, w, h, false, 0);
-            pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
-                                           PixelFormat::LA8, w >> 1, h >> 1, false, 1);
-            break;
-        }
-        case VideoSampleFormat::RGB32:
-            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w, h,
-                                           false, 0);
-            break;
-        default:;
-        }
-        if (needsInit)
-        {
-            pvd->_vrender->initWithTexture(pvd->_vtexture);
-
-            if (pvd->_sampleFormat == VideoSampleFormat::YUY2)
+            if (needsInit)
             {
-                auto ps = pvd->_vrender->getProgramState();
-                PS_SET_UNIFORM(ps, "tex_w", (float)w);
-                PS_SET_UNIFORM(ps, "tex_h", (float)h);
-                auto scale = Vec2(1.0, 2.0);
-                pvd->_vrender->setScale(scale.x, scale.y);
+                pvd->_vrender->initWithTexture(pvd->_vtexture);
+
+                if (pvd->_sampleFormat == VideoSampleFormat::YUY2)
+                {
+                    auto ps = pvd->_vrender->getProgramState();
+                    PS_SET_UNIFORM(ps, "tex_w", (float)w);
+                    PS_SET_UNIFORM(ps, "tex_h", (float)h);
+                }
+
+                pvd->rescaleTo(this);
             }
         }
     }
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
-        auto uiRect = cocos2d::ui::Helper::convertBoundingBoxToScreen(this);
-        /*JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, (int)uiRect.origin.x,
-                                        (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);*/
+        pvd->rescaleTo(this);
     }
 
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
     auto size         = getContentSize();
     Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
-    _debugdrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
+    _debugDrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
 #    endif
 }
 
@@ -443,25 +468,6 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
         // JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoKeepRatioEnabled", _videoPlayerIndex, enable);
     }
 }
-
-#    if CC_VIDEOPLAYER_DEBUG_DRAW
-void VideoPlayer::drawDebugData()
-{
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
-    auto size = getContentSize();
-
-    Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
-
-    DrawPrimitives::drawPoly(vertices, 4, true);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-#    endif
 
 void VideoPlayer::play()
 {
