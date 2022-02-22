@@ -58,50 +58,6 @@ using namespace cocos2d::ui;
 
 namespace
 {
-enum class VideoSampleFormat
-{
-    UNKNOWN,
-    RGB32,
-    YUY2,
-    NV12,
-};
-struct PrivateVideoDescriptor
-{
-    MFMediaPlayer* _vplayer = nullptr;
-    Texture2D* _vtexture    = nullptr;
-    Sprite* _vrender        = nullptr;
-
-    VideoSampleFormat _sampleFormat = VideoSampleFormat::UNKNOWN;
-    yasio::byte_buffer _sampleBuffer;
-    std::recursive_mutex _sampleBufferMtx;
-    bool _sampleDirty = false;
-
-    int _videoWidth  = 0;
-    int _videoHeight = 0;
-
-    void rescaleTo(Node* videoView)
-    {
-        auto& videoSize  = _vrender->getContentSize();
-        if (videoSize.x > 0 && videoSize.y > 0)
-        {  // rescale video to view node
-            auto& viewSize = videoView->getContentSize();
-            if (viewSize.x > 0 && viewSize.y > 0)
-            {
-                Vec2 originalScale = _sampleFormat == VideoSampleFormat::YUY2 ? Vec2{1.0, 2.0} : Vec2{1.0, 1.0};
-                auto scaleX        = viewSize.x / videoSize.x;
-                auto scaleY        = viewSize.y / videoSize.y;
-
-                _vrender->setScale(scaleX, scaleY);
-                LayoutHelper::centerNode(_vrender);
-
-                _vrender->setVisible(true);
-            }
-            else
-                _vrender->setVisible(false);
-        }
-    }
-};
-
 std::string_view NV12_FRAG = R"(
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
@@ -243,7 +199,49 @@ enum
 {
     VIDEO_PROGRAM_ID = 0x0fe2bc98,
 };
+enum class VideoSampleFormat
+{
+    UNKNOWN,
+    RGB32,
+    YUY2,
+    NV12,
+};
+struct PrivateVideoDescriptor
+{
+    MFMediaPlayer* _vplayer = nullptr;
+    Texture2D* _vtexture    = nullptr;
+    Sprite* _vrender        = nullptr;
 
+    VideoSampleFormat _sampleFormat = VideoSampleFormat::UNKNOWN;
+    yasio::byte_buffer _sampleBuffer;
+    std::recursive_mutex _sampleBufferMtx;
+    bool _sampleDirty = false;
+
+    int _videoWidth  = 0;
+    int _videoHeight = 0;
+
+    void rescaleTo(Node* videoView)
+    {
+        auto& videoSize  = _vrender->getContentSize();
+        if (videoSize.x > 0 && videoSize.y > 0)
+        {  // rescale video to view node
+            auto& viewSize = videoView->getContentSize();
+            if (viewSize.x > 0 && viewSize.y > 0)
+            {
+                // Vec2 originalScale = _sampleFormat == VideoSampleFormat::YUY2 ? Vec2{1.0, 2.0} : Vec2{1.0, 1.0};
+                auto scaleX        = viewSize.x / videoSize.x;
+                auto scaleY        = viewSize.y / videoSize.y;
+
+                _vrender->setScale(scaleX, scaleY);
+                LayoutHelper::centerNode(_vrender);
+
+                _vrender->setVisible(true);
+            }
+            else
+                _vrender->setVisible(false);
+        }
+    }
+};
 }  // namespace
 
 VideoPlayer::VideoPlayer()
@@ -449,7 +447,7 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
     {
         _fullScreenEnabled = enabled;
 
-        auto frameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
+        // auto frameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
         // JniHelper::callStaticVoidMethod(videoHelperClassName, "setFullScreenEnabled", _videoPlayerIndex, enabled,
         //                                (int)frameSize.width, (int)frameSize.height);
     }
