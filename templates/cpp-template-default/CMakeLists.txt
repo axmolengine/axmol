@@ -181,6 +181,9 @@ endif()
 
 if(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    if(NOT DEFINED BUILD_ENGINE_DONE)
+        set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+    endif()
 elseif(LINUX)
     cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
@@ -300,10 +303,14 @@ if (_AX_USE_PREBUILT) # support windows only
     # Copy dlls to app bin dir
         # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${APP_NAME} $<TARGET_FILE_DIR:${APP_NAME}>)
+    set(ssl_dll_suffix "")
+    if(WIN64)
+        set(ssl_dll_suffix "-${ARCH_ALIAS}")
+    endif()
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3.dll"
-        "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3.dll"
+        "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
+        "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
         "${ADXE_ROOT_PATH}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
         "${ADXE_ROOT_PATH}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
         "${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
