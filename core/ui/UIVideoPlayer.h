@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -257,7 +258,7 @@ protected:
     int _videoPlayerIndex                = -1;
     ccVideoPlayerCallback _eventCallback = nullptr;
 
-    void* _videoView = nullptr;
+    void* _videoContext = nullptr;
 };
 }  // namespace ui
 
