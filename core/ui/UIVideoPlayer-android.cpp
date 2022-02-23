@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -352,7 +353,6 @@ void VideoPlayer::copySpecialProperties(Widget* widget)
         _videoSource            = videoPlayer->_videoSource;
         _videoPlayerIndex       = videoPlayer->_videoPlayerIndex;
         _eventCallback          = videoPlayer->_eventCallback;
-        _videoView              = videoPlayer->_videoView;
     }
 }
 
