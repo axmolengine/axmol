@@ -33,6 +33,10 @@
 
 #    include "ui/UIWidget.h"
 
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
+#        include "2d/CCDrawNode.h"
+#    endif
+
 /**
  * @addtogroup ui
  * @{
