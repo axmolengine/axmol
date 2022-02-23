@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -280,7 +281,7 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
 
 VideoPlayer::VideoPlayer()
 {
-    _videoView = [[UIVideoViewWrapperIos alloc] init:this];
+    _videoContext = [[UIVideoViewWrapperIos alloc] init:this];
 
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
@@ -290,9 +291,9 @@ VideoPlayer::VideoPlayer()
 
 VideoPlayer::~VideoPlayer()
 {
-    if (_videoView)
+    if (_videoContext)
     {
-        [((UIVideoViewWrapperIos*)_videoView) dealloc];
+        [((UIVideoViewWrapperIos*)_videoContext) dealloc];
     }
 }
 
@@ -300,26 +301,26 @@ void VideoPlayer::setFileName(std::string_view fileName)
 {
     _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
-    [((UIVideoViewWrapperIos*)_videoView) setURL:(int) _videoSource:_videoURL];
+    [((UIVideoViewWrapperIos*)_videoContext) setURL:(int) _videoSource:_videoURL];
 }
 
 void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;
-    [((UIVideoViewWrapperIos*)_videoView) setURL:(int) _videoSource:_videoURL];
+    [((UIVideoViewWrapperIos*)_videoContext) setURL:(int) _videoSource:_videoURL];
 }
 
 void VideoPlayer::setLooping(bool looping)
 {
     _isLooping = looping;
-    [((UIVideoViewWrapperIos*)_videoView) setRepeatEnabled:_isLooping];
+    [((UIVideoViewWrapperIos*)_videoContext) setRepeatEnabled:_isLooping];
 }
 
 void VideoPlayer::setUserInputEnabled(bool enableInput)
 {
     _isUserInputEnabled = enableInput;
-    [((UIVideoViewWrapperIos*)_videoView) setUserInteractionEnabled:enableInput];
+    [((UIVideoViewWrapperIos*)_videoContext) setUserInteractionEnabled:enableInput];
 }
 
 void VideoPlayer::setStyle(StyleType style)
@@ -329,11 +330,11 @@ void VideoPlayer::setStyle(StyleType style)
     switch (style)
     {
     case StyleType::DEFAULT:
-        [((UIVideoViewWrapperIos*)_videoView) showPlaybackControls:TRUE];
+        [((UIVideoViewWrapperIos*)_videoContext) showPlaybackControls:TRUE];
         break;
 
     case StyleType::NONE:
-        [((UIVideoViewWrapperIos*)_videoView) showPlaybackControls:FALSE];
+        [((UIVideoViewWrapperIos*)_videoContext) showPlaybackControls:FALSE];
         break;
     }
 }
@@ -357,7 +358,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
         auto uiLeft = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX()) / scaleFactor;
         auto uiTop  = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY()) / scaleFactor;
 
-        [((UIVideoViewWrapperIos*)_videoView) setFrame:
+        [((UIVideoViewWrapperIos*)_videoContext) setFrame:
                                                 uiLeft:uiTop:(rightTop.x - leftBottom.x) * glView->getScaleX() /
                                            scaleFactor:((rightTop.y - leftBottom.y) * glView->getScaleY() /
                                                         scaleFactor)];
@@ -373,12 +374,12 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
 bool VideoPlayer::isFullScreenEnabled() const
 {
-    return [((UIVideoViewWrapperIos*)_videoView) isFullScreenEnabled];
+    return [((UIVideoViewWrapperIos*)_videoContext) isFullScreenEnabled];
 }
 
 void VideoPlayer::setFullScreenEnabled(bool enabled)
 {
-    [((UIVideoViewWrapperIos*)_videoView) setFullScreenEnabled:enabled];
+    [((UIVideoViewWrapperIos*)_videoContext) setFullScreenEnabled:enabled];
 }
 
 void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
@@ -386,7 +387,7 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     if (_keepAspectRatioEnabled != enable)
     {
         _keepAspectRatioEnabled = enable;
-        [((UIVideoViewWrapperIos*)_videoView) setKeepRatioEnabled:enable];
+        [((UIVideoViewWrapperIos*)_videoContext) setKeepRatioEnabled:enable];
     }
 }
 
@@ -394,7 +395,7 @@ void VideoPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        [((UIVideoViewWrapperIos*)_videoView) play];
+        [((UIVideoViewWrapperIos*)_videoContext) play];
     }
 }
 
@@ -402,7 +403,7 @@ void VideoPlayer::pause()
 {
     if (!_videoURL.empty())
     {
-        [((UIVideoViewWrapperIos*)_videoView) pause];
+        [((UIVideoViewWrapperIos*)_videoContext) pause];
     }
 }
 
@@ -410,7 +411,7 @@ void VideoPlayer::resume()
 {
     if (!_videoURL.empty())
     {
-        [((UIVideoViewWrapperIos*)_videoView) resume];
+        [((UIVideoViewWrapperIos*)_videoContext) resume];
     }
 }
 
@@ -418,7 +419,7 @@ void VideoPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        [((UIVideoViewWrapperIos*)_videoView) stop];
+        [((UIVideoViewWrapperIos*)_videoContext) stop];
     }
 }
 
@@ -426,7 +427,7 @@ void VideoPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        [((UIVideoViewWrapperIos*)_videoView) seekTo:sec];
+        [((UIVideoViewWrapperIos*)_videoContext) seekTo:sec];
     }
 }
 
@@ -451,11 +452,11 @@ void VideoPlayer::setVisible(bool visible)
 
     if (!visible)
     {
-        [((UIVideoViewWrapperIos*)_videoView) setVisible:NO];
+        [((UIVideoViewWrapperIos*)_videoContext) setVisible:NO];
     }
     else if (isRunning())
     {
-        [((UIVideoViewWrapperIos*)_videoView) setVisible:YES];
+        [((UIVideoViewWrapperIos*)_videoContext) setVisible:YES];
     }
 }
 
@@ -464,14 +465,14 @@ void VideoPlayer::onEnter()
     Widget::onEnter();
     if (isVisible())
     {
-        [((UIVideoViewWrapperIos*)_videoView) setVisible:YES];
+        [((UIVideoViewWrapperIos*)_videoContext) setVisible:YES];
     }
 }
 
 void VideoPlayer::onExit()
 {
     Widget::onExit();
-    [((UIVideoViewWrapperIos*)_videoView) setVisible:NO];
+    [((UIVideoViewWrapperIos*)_videoContext) setVisible:NO];
 }
 
 void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback)
@@ -517,7 +518,6 @@ void VideoPlayer::copySpecialProperties(Widget* widget)
         _videoSource            = videoPlayer->_videoSource;
         _videoPlayerIndex       = videoPlayer->_videoPlayerIndex;
         _eventCallback          = videoPlayer->_eventCallback;
-        _videoView              = videoPlayer->_videoView;
     }
 }
 
