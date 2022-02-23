@@ -203,25 +203,6 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     }
 }
 
-#    if CC_VIDEOPLAYER_DEBUG_DRAW
-void VideoPlayer::drawDebugData()
-{
-    Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-
-    auto size = getContentSize();
-
-    Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};
-
-    DrawPrimitives::drawPoly(vertices, 4, true);
-
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
-#    endif
-
 void VideoPlayer::play()
 {
     if (!_videoURL.empty())
