@@ -43,7 +43,11 @@
 
 using namespace MFUtils;
 
-enum PlayerState
+#define CMD_PENDING 0x01
+#define CMD_PENDING_SEEK 0x02
+#define CMD_PENDING_RATE 0x04
+
+enum class MFPlayerState
 {
     Closed = 0,   // No session.
     Ready,        // Session was created, ready to open a file.
@@ -54,11 +58,8 @@ enum PlayerState
     Closing       // Application has closed the session, but is waiting for MESessionClosed.
 };
 
-#define CMD_PENDING 0x01
-#define CMD_PENDING_SEEK 0x02
-#define CMD_PENDING_RATE 0x04
-
 using SampleEventCallback = std::function<void(uint8_t* buffer, size_t size)>;
+using SessionEventCallback = std::function<void(int ev)>;
 
 class MFMediaPlayer : public IMFAsyncCallback
 {
@@ -99,8 +100,9 @@ class MFMediaPlayer : public IMFAsyncCallback
 
 public:
     SampleEventCallback SampleEvent;
+    SessionEventCallback SessionEvent;
 
-    static HRESULT CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer);
+    static HRESULT CreateInstance(MFMediaPlayer** ppPlayer, HWND hwndEvent = NULL);
 
     // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
@@ -120,7 +122,7 @@ public:
     HRESULT OpenURL(const WCHAR* sURL);
     HRESULT Shutdown();
     HRESULT HandleEvent(UINT_PTR pUnkPtr);
-    PlayerState GetState() const { return m_state; }
+    MFPlayerState GetState() const { return m_state; }
 
     UINT32 GetVideoWidth() const { return m_uVideoWidth; }
     UINT32 GetVideoHeight() const { return m_uVideoHeight; }
@@ -130,11 +132,14 @@ public:
     // Video functionality
     void SetLooping(BOOL bLooping) { m_bLooping = bLooping; }
 
+    void SetPlayOnOpen(BOOL bPlayOnOpen) { m_bPlayOnOpen = bPlayOnOpen; }
+
     BOOL CanSeek() const;
     MFTIME GetDuration() const;
     MFTIME GetCurrentPosition() const;
 
-    // will reply if play ended
+    // Set position in 100ns units, will reply if play ended
+    // see: https://docs.microsoft.com/en-us/windows/win32/medfound/mf-pd-duration-attribute
     HRESULT SetPosition(MFTIME hnsPosition);
 
     BOOL CanScrub() const;
@@ -160,7 +165,7 @@ protected:
 
 protected:
     // Constructor is private. Use static CreateInstance method to instantiate.
-    MFMediaPlayer(HWND hEvent);
+    MFMediaPlayer(HWND hwndEvent);
 
     // Destructor is private. Caller should call Release.
     virtual ~MFMediaPlayer();
@@ -216,7 +221,7 @@ protected:
     mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
 
     HWND m_hwndEvent;      // App window to receive events.
-    PlayerState m_state;   // Current state of the media session.
+    MFPlayerState m_state;  // Current state of the media session.
     HANDLE m_hCloseEvent;  // Event to wait on while closing
 
     UINT32 m_uVideoWidth  = 0;

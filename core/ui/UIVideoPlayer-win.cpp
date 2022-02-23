@@ -222,15 +222,15 @@ struct PrivateVideoDescriptor
 
     void rescaleTo(Node* videoView)
     {
-        auto& videoSize  = _vrender->getContentSize();
+        auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
         {  // rescale video to view node
             auto& viewSize = videoView->getContentSize();
             if (viewSize.x > 0 && viewSize.y > 0)
             {
                 // Vec2 originalScale = _sampleFormat == VideoSampleFormat::YUY2 ? Vec2{1.0, 2.0} : Vec2{1.0, 1.0};
-                auto scaleX        = viewSize.x / videoSize.x;
-                auto scaleY        = viewSize.y / videoSize.y;
+                auto scaleX = viewSize.x / videoSize.x;
+                auto scaleY = viewSize.y / videoSize.y;
 
                 _vrender->setScale(scaleX, scaleY);
                 LayoutHelper::centerNode(_vrender);
@@ -255,27 +255,56 @@ VideoPlayer::VideoPlayer()
     , _isUserInputEnabled(true)
     , _styleType(StyleType::DEFAULT)
 {
-    auto pvd   = new PrivateVideoDescriptor{};
-    _videoView = pvd;
+    auto pvd      = new PrivateVideoDescriptor{};
+    _videoContext = pvd;
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
 #    endif
 
     // Initialize mediaPlayer backend
-    auto hr = MFMediaPlayer::CreateInstance(Director::getInstance()->getOpenGLView()->getWin32Window(), &pvd->_vplayer);
+    auto hr = MFMediaPlayer::CreateInstance(&pvd->_vplayer);
     if (SUCCEEDED(hr))
     {
         /// create video render sprite
         pvd->_vrender = new Sprite();
         this->addProtectedChild(pvd->_vrender);
-
         /// setup media session callbacks
         // Invoke at system media session thread
         pvd->_vplayer->SampleEvent = [=](uint8_t* sampleBuffer, size_t len) {
             std::lock_guard<std::recursive_mutex> lck(pvd->_sampleBufferMtx);
             pvd->_sampleBuffer.assign(sampleBuffer, sampleBuffer + len);
             pvd->_sampleDirty = true;
+        };
+        pvd->_vplayer->SessionEvent = [=](int event) {
+            switch (event)
+            {
+            case MESessionStarted:
+                if (!isPlaying())
+                    onPlayEvent((int)EventType::PLAYING);
+                break;
+
+            case MESessionPaused:
+                onPlayEvent((int)EventType::PAUSED);
+                break;
+
+            case MESessionStopped:
+                onPlayEvent((int)EventType::STOPPED);
+                break;
+
+            /* Raised by a media source when a presentation ends. This event signals that all streams in the
+            presentation are complete. The Media Session forwards this event to the application. */
+            // case MEEndOfPresentation:
+            //    onPlayEvent((int)EventType::COMPLETED);
+            //    break;
+
+            /* Raised by the Media Session when it has finished playing the last presentation in the playback queue.
+             * We send complete event at this case
+             */
+            case MESessionEnded:
+                onPlayEvent((int)EventType::COMPLETED);
+                break;
+            }
         };
     }
     else
@@ -286,7 +315,7 @@ VideoPlayer::VideoPlayer()
 
 VideoPlayer::~VideoPlayer()
 {
-    auto pvd = (PrivateVideoDescriptor*)_videoView;
+    auto pvd = (PrivateVideoDescriptor*)_videoContext;
 
     removeAllProtectedChildren();
 
@@ -307,27 +336,19 @@ void VideoPlayer::setFileName(std::string_view fileName)
 {
     _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
-
-    auto pvd = (PrivateVideoDescriptor*)_videoView;
-    if (pvd->_vplayer)
-        pvd->_vplayer->OpenURL(ntcvt::from_chars(_videoURL).c_str());
 }
 
 void VideoPlayer::setURL(std::string_view videoUrl)
 {
     _videoURL    = videoUrl;
     _videoSource = VideoPlayer::Source::URL;
-
-    auto pvd = (PrivateVideoDescriptor*)_videoView;
-    if (pvd->_vplayer)
-        pvd->_vplayer->OpenURL(ntcvt::from_chars(_videoURL).c_str());
 }
 
 void VideoPlayer::setLooping(bool looping)
 {
     _isLooping = looping;
 
-    auto pvd = (PrivateVideoDescriptor*)_videoView;
+    auto pvd = (PrivateVideoDescriptor*)_videoContext;
     if (pvd->_vplayer)
         pvd->_vplayer->SetLooping(looping);
 }
@@ -346,7 +367,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 {
     cocos2d::ui::Widget::draw(renderer, transform, flags);
 
-    auto pvd     = (PrivateVideoDescriptor*)_videoView;  //
+    auto pvd     = (PrivateVideoDescriptor*)_videoContext;  //
     auto vrender = pvd->_vrender;
     if (!vrender)
         return;
@@ -446,10 +467,6 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
     if (_fullScreenEnabled != enabled)
     {
         _fullScreenEnabled = enabled;
-
-        // auto frameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "setFullScreenEnabled", _videoPlayerIndex, enabled,
-        //                                (int)frameSize.width, (int)frameSize.height);
     }
 }
 
@@ -463,7 +480,6 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     if (_keepAspectRatioEnabled != enable)
     {
         _keepAspectRatioEnabled = enable;
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoKeepRatioEnabled", _videoPlayerIndex, enable);
     }
 }
 
@@ -471,7 +487,21 @@ void VideoPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "startVideo", _videoPlayerIndex);
+        auto pvd     = (PrivateVideoDescriptor*)_videoContext;
+        auto vplayer = pvd->_vplayer;
+        if (vplayer)
+        {
+            switch (vplayer->GetState())
+            {
+            case MFPlayerState::Closed:
+            case MFPlayerState::Ready:
+                vplayer->SetPlayOnOpen(TRUE);
+                vplayer->OpenURL(ntcvt::from_chars(_videoURL).c_str());
+                break;
+            default:
+                vplayer->Play();
+            }
+        }
     }
 }
 
@@ -479,7 +509,9 @@ void VideoPlayer::pause()
 {
     if (!_videoURL.empty())
     {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "pauseVideo", _videoPlayerIndex);
+        auto pvd = (PrivateVideoDescriptor*)_videoContext;
+        if (pvd->_vplayer)
+            pvd->_vplayer->Pause();
     }
 }
 
@@ -487,7 +519,9 @@ void VideoPlayer::resume()
 {
     if (!_videoURL.empty())
     {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "resumeVideo", _videoPlayerIndex);
+        auto pvd = (PrivateVideoDescriptor*)_videoContext;
+        if (pvd->_vplayer)
+            pvd->_vplayer->Play();
     }
 }
 
@@ -495,7 +529,9 @@ void VideoPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "stopVideo", _videoPlayerIndex);
+        auto pvd = (PrivateVideoDescriptor*)_videoContext;
+        if (pvd->_vplayer)
+            pvd->_vplayer->Stop();
     }
 }
 
@@ -503,7 +539,9 @@ void VideoPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "seekVideoTo", _videoPlayerIndex, int(sec * 1000));
+        auto pvd = (PrivateVideoDescriptor*)_videoContext;
+        if (pvd->_vplayer)
+            pvd->_vplayer->SetPosition((std::nano::den / 100) * sec);
     }
 }
 
@@ -525,26 +563,16 @@ bool VideoPlayer::isUserInputEnabled() const
 void VideoPlayer::setVisible(bool visible)
 {
     cocos2d::ui::Widget::setVisible(visible);
-
-    if (!visible || isRunning())
-    {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible", _videoPlayerIndex, visible);
-    }
 }
 
 void VideoPlayer::onEnter()
 {
     Widget::onEnter();
-    if (isVisible() && !_videoURL.empty())
-    {
-        // JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible", _videoPlayerIndex, true);
-    }
 }
 
 void VideoPlayer::onExit()
 {
     Widget::onExit();
-    // JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoVisible", _videoPlayerIndex, false);
 }
 
 void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback)
@@ -554,18 +582,12 @@ void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& cal
 
 void VideoPlayer::onPlayEvent(int event)
 {
-    if (event == (int)VideoPlayer::EventType::PLAYING)
-    {
-        _isPlaying = true;
-    }
-    else
-    {
-        _isPlaying = false;
-    }
+    _isPlaying = (event == (int)VideoPlayer::EventType::PLAYING);
 
     if (_eventCallback)
     {
-        _eventCallback(this, (VideoPlayer::EventType)event);
+        _director->getScheduler()->performFunctionInCocosThread(
+            std::bind(_eventCallback, this, (VideoPlayer::EventType)event));
     }
 }
 
@@ -590,7 +612,6 @@ void VideoPlayer::copySpecialProperties(Widget* widget)
         _videoSource            = videoPlayer->_videoSource;
         _videoPlayerIndex       = videoPlayer->_videoPlayerIndex;
         _eventCallback          = videoPlayer->_eventCallback;
-        _videoView              = videoPlayer->_videoView;
     }
 }
 

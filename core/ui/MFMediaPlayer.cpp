@@ -35,6 +35,8 @@
 
 #define TRACE(...)
 
+// const UINT WM_APP_PLAYER_EVENT = ::RegisterWindowMessageW(L"mfmedia-event");
+
 //-------------------------------------------------------------------
 //  Name: CreateSourceStreamNode
 //  Description:  Creates a source-stream node for a stream.
@@ -169,11 +171,9 @@ public:
 //            The caller must release the pointer.
 /////////////////////////////////////////////////////////////////////////
 
-HRESULT MFMediaPlayer::CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer)
+HRESULT MFMediaPlayer::CreateInstance(MFMediaPlayer** ppPlayer, HWND hwndEvent)
 {
     TRACE((L"MFMediaPlayer::Create\n"));
-
-    assert(hEvent != NULL);
 
     if (ppPlayer == NULL)
     {
@@ -182,7 +182,7 @@ HRESULT MFMediaPlayer::CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer)
 
     HRESULT hr = S_OK;
 
-    auto pPlayer = new MFMediaPlayer(hEvent);
+    auto pPlayer = new MFMediaPlayer(hwndEvent);
 
     if (pPlayer == NULL)
     {
@@ -203,8 +203,13 @@ HRESULT MFMediaPlayer::CreateInstance(HWND hEvent, MFMediaPlayer** ppPlayer)
 //  MFMediaPlayer constructor
 /////////////////////////////////////////////////////////////////////////
 
-MFMediaPlayer::MFMediaPlayer(HWND hEvent)
-    : m_pSession(), m_pSource(), m_hwndEvent(hEvent), m_state(Ready), m_hCloseEvent(NULL), m_nRefCount(1)
+MFMediaPlayer::MFMediaPlayer(HWND hwndEvent)
+    : m_pSession()
+    , m_pSource()
+    , m_hwndEvent(hwndEvent)
+    , m_state(MFPlayerState::Ready)
+    , m_hCloseEvent(NULL)
+    , m_nRefCount(1)
 {}
 
 ///////////////////////////////////////////////////////////////////////
@@ -371,12 +376,12 @@ HRESULT MFMediaPlayer::OpenURL(const WCHAR* sURL)
     assert(m_RateControl || !m_bCanScrub);
 
     // Set our state to "open pending"
-    m_state = OpenPending;
+    m_state = MFPlayerState::OpenPending;
 
 done:
     if (FAILED(hr))
     {
-        m_state = Closed;
+        m_state = MFPlayerState::Closed;
     }
 
     // SAFE_RELEASE(pTopology);
@@ -430,13 +435,17 @@ HRESULT MFMediaPlayer::Invoke(IMFAsyncResult* pResult)
     // NOTE: When IMFMediaSession::Close is called, MESessionClosed is NOT
     // necessarily the next event that we will receive. We may receive
     // any number of other events before receiving MESessionClosed.
-    if (m_state != Closing)
+    if (m_state != MFPlayerState::Closing)
     {
         // Leave a reference count on the event.
         pEvent->AddRef();
-        // PostMessage(m_hwndEvent, WM_APP_PLAYER_EVENT, (WPARAM)pEvent.Get(), (LPARAM)0);
-        // OnPlayerEvent(hwnd, wParam);
-        HRESULT hr = HandleEvent((WPARAM)pEvent.Get());
+
+        HandleEvent((WPARAM)pEvent.Get());
+
+        // if (!m_hwndEvent)
+        //    HandleEvent((WPARAM)pEvent.Get());
+        //else
+        //    PostMessage(m_hwndEvent, WM_APP_PLAYER_EVENT, (WPARAM)pEvent.Get(), (LPARAM)0);
     }
 
 done:
@@ -505,7 +514,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
             }
             break;
         case MEEndOfPresentation:
-            CHECK_HR(hr = OnPlayEnded(pEvent.Get()));
+            OnPlayEnded(pEvent.Get());
             break;
         case MESessionStarted:
             OnSessionStart(hrStatus);
@@ -544,6 +553,9 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
             m_caps = MFGetAttributeUINT32(pEvent.Get(), MF_EVENT_SESSIONCAPS, m_caps);
             break;
         }
+
+        if (this->SessionEvent)
+            this->SessionEvent(meType);
     }
     else
     {
@@ -620,7 +632,7 @@ HRESULT MFMediaPlayer::Play()
 
     TRACE((L"MFMediaPlayer::Play\n"));
 
-    if (m_state != Paused && m_state != Stopped)
+    if (m_state != MFPlayerState::Paused && m_state != MFPlayerState::Stopped)
     {
         return MF_E_INVALIDREQUEST;
     }
@@ -671,7 +683,7 @@ HRESULT MFMediaPlayer::Pause()
     }
 
     if (SUCCEEDED(hr))
-        m_state = Paused;
+        m_state = MFPlayerState::Paused;
 
     return hr;
 }
@@ -697,6 +709,10 @@ HRESULT MFMediaPlayer::Stop()
         m_nominal.command = CmdStop;
         m_bPending        = CMD_PENDING;
     }
+
+    if (SUCCEEDED(hr))
+        m_state = MFPlayerState::Stopped;
+
     return hr;
 }
 
@@ -940,7 +956,7 @@ HRESULT MFMediaPlayer::SetPositionInternal(const MFTIME& hnsPosition)
         m_nominal.hnsStart = hnsPosition;
         m_bPending         = CMD_PENDING_SEEK;
 
-        m_state = Started;
+        m_state = MFPlayerState::Started;
     }
     return hr;
 }
@@ -976,7 +992,7 @@ HRESULT MFMediaPlayer::StartPlayback(const MFTIME* hnsPosition)
     // fails later, we'll get an MESessionStarted event with
     // an error code, and we will update our state then.
     if (SUCCEEDED(hr))
-        m_state = Started;
+        m_state = MFPlayerState::Started;
     return hr;
 }
 
@@ -1141,7 +1157,7 @@ HRESULT MFMediaPlayer::OnPlayEnded(IMFMediaEvent* pEvent)
 
     // The session puts itself into the stopped state autmoatically.
 
-    m_state = Stopped;
+    m_state = MFPlayerState::Stopped;
 
     if (m_bLooping)
     {
@@ -1231,7 +1247,7 @@ HRESULT MFMediaPlayer::CreateSession()
     // Close the old session, if any.
     CHECK_HR(hr = CloseSession());
 
-    assert(m_state == Closed);
+    assert(m_state == MFPlayerState::Closed);
 
     // Create a new attribute store.
     CHECK_HR(hr = MFCreateAttributes(&pAttributes, 2));
@@ -1279,7 +1295,7 @@ HRESULT MFMediaPlayer::CloseSession()
     {
         DWORD dwWaitResult = 0;
 
-        m_state = Closing;
+        m_state = MFPlayerState::Closing;
 
         CHECK_HR(hr = m_pSession->Close());
 
@@ -1317,7 +1333,7 @@ HRESULT MFMediaPlayer::CloseSession()
     m_pSource.Reset();
     m_pSession.Reset();
 
-    m_state = Closed;
+    m_state = MFPlayerState::Closed;
 
 done:
     return hr;
