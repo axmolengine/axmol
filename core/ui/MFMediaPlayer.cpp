@@ -389,6 +389,18 @@ done:
     return hr;
 }
 
+HRESULT MFMediaPlayer::Close()
+{
+    HRESULT hr = S_OK;
+    auto state = GetState();
+    if (state > MFPlayerState::Ready && state < MFPlayerState::Closing)
+    {
+        Stop();
+        hr = CloseSession();
+    }
+    return hr;
+}
+
 ///////////////////////////////////////////////////////////////////////
 //  Name: Invoke
 //  Description:  Callback for asynchronous BeginGetEvent method.

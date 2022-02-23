@@ -220,6 +220,12 @@ struct PrivateVideoDescriptor
     int _videoWidth  = 0;
     int _videoHeight = 0;
 
+    void closePlayer()
+    {
+        if (_vplayer)
+            _vplayer->Close();
+    }
+
     void rescaleTo(Node* videoView)
     {
         auto& videoSize = _vrender->getContentSize();
@@ -334,13 +340,22 @@ VideoPlayer::~VideoPlayer()
 
 void VideoPlayer::setFileName(std::string_view fileName)
 {
-    _videoURL    = FileUtils::getInstance()->fullPathForFilename(fileName);
+    auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
+    if (fullPath != _videoURL)
+    {
+        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
+        _videoURL = FileUtils::getInstance()->fullPathForFilename(fileName);
+    }
     _videoSource = VideoPlayer::Source::FILENAME;
 }
 
 void VideoPlayer::setURL(std::string_view videoUrl)
 {
-    _videoURL    = videoUrl;
+    if (_videoURL != videoUrl)
+    {
+        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
+        _videoURL = videoUrl;
+    }
     _videoSource = VideoPlayer::Source::URL;
 }
 

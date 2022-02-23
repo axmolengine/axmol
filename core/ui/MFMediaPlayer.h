@@ -120,6 +120,7 @@ public:
 
     // Playback
     HRESULT OpenURL(const WCHAR* sURL);
+    HRESULT Close();
     HRESULT Shutdown();
     HRESULT HandleEvent(UINT_PTR pUnkPtr);
     MFPlayerState GetState() const { return m_state; }
