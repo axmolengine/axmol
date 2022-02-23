@@ -344,7 +344,7 @@ void VideoPlayer::setFileName(std::string_view fileName)
     if (fullPath != _videoURL)
     {
         reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
-        _videoURL = FileUtils::getInstance()->fullPathForFilename(fileName);
+        _videoURL = std::move(fullPath);
     }
     _videoSource = VideoPlayer::Source::FILENAME;
 }
