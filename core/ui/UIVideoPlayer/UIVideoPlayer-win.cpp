@@ -557,8 +557,15 @@ void VideoPlayer::resume()
     if (!_videoURL.empty())
     {
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer && vplayer->GetState() == MFPlayerState::Paused)
-            vplayer->Play();
+        if (vplayer)
+        {
+            switch (vplayer->GetState())
+            {
+            case MFPlayerState::Stopped:
+            case MFPlayerState::Paused:
+                vplayer->Play();
+            }
+        }
     }
 }
 
@@ -578,7 +585,7 @@ void VideoPlayer::seekTo(float sec)
     {
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
-            vplayer->SetPosition((std::nano::den / 100) * sec);
+            vplayer->SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec));
     }
 }
 
