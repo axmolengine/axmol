@@ -44,6 +44,10 @@ if (NOT DEFINED AX_ENABLE_MSEDGE_WEBVIEW2)
     set(AX_ENABLE_MSEDGE_WEBVIEW2 TRUE CACHE INTERNAL "Enabling windows webview2" )
 endif()
 
+if (NOT DEFINED AX_ENABLE_MFMEDIA)
+    set(AX_ENABLE_MFMEDIA TRUE CACHE INTERNAL "Enabling microsoft media foundation for windows video player" )
+endif()
+
 project(adxe_libs)
 
 if(XCODE)

@@ -23,6 +23,7 @@
 * Review PR ASAP
   
 ### 主要特性:
+* Windows 视频播放支持
 * Windows x64编译支持
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
@@ -43,6 +44,7 @@
 * 新增硬件压缩纹理格式ASTC 4x4/6x6/8x8支持，支持软解
 * 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
 * **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGuiEXT](extensions/ImGuiEXT/README.md)**
+* 完整改动列表，请查看[CHANGELOG](CHANGELOG)
   
 ### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
   
@@ -114,78 +116,3 @@
 - @rh101
 - @aismann
 - @weiwest
-
-### 自Cocos2d-x-4.0以来完整改动列表
-
-- [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
-- [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
-- [HIGHLIGHT] Windows x64 build support
-- [HIGHLIGHT] Support custom texture atlas formats, thanks to @rh101
-- [HIGHLIGHT] Downloader realtime md5 checksum calculation support
-- [HIGHLIGHT] Decompress astc parallel support
-- [HIGHLIGHT] Reimplement HttpClient based on yasio for concurrent http request support
-- [HIGHLIGHT] Improve Lua RTTI performance and less memory cost
-- [HIGHLIGHT] Virtual File System support, thanks to @rh101 
-- [HIGHLIGHT] Refactor lua loader, speed up 30%+
-- [HIGHLIGHT] Update plainlua version to 5.4.3
-- [HIGHLIGHT] Use Openal-Soft for all platform
-- [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
-- [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
-- [HIGHLIGHT] Use modern GL loader Glad
-- [HIGHLIGHT] Google angle renderer backend support
-- [HIGHLIGHT] Update codebase to C++ 17 standard
-- [HIGHLIGHT] Remove tinyxml2
-- [HIGHLIGHT] Use fast pugixml
-- [HIGHLIGHT] Spine-3.6~4.0 support
-- [HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
-- [HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoder not present, use software decoder)
-- [HIGHLIGHT] ImGui integrated for PC platforms
-- [HIGHLIGHT] Extension FairyGUI support
-- [HIGHLIGHT] Use curl for transferring data with URL syntax
-- [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
-- [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
-- [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
-- [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
-- [HIGHLIGHT] Use c++17 string_view instead `const std::string&`
-- [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
-- [Fix] Fix Label overflow shrink bug
-- [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
-- [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
-- [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
-- [FIX] Use TTF scaled metrics to calculate line height, thanks to @rh101
-- [FIX] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
-- [FIX] Fix console output text encoding for win32
-- [FIX] Fix charset process for fontName on win32
-- [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
-- [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
-- [FIX] Fix Lua can't get `unsigned char` or `unsigned int` values of `ValueMap`
-- [FIX] Fix crash on AudioEngine::end after the `Director` was destroyed
-- [FIX] Fix font atlas will leak when it does not exist in the atlas cache, thanks to @rh101
-- [FIX] Fix ScrollView shows incorrect position in vertical direction some time, thanks to @wzhengsen
-- [FIX] Fix Spine ClippingAttachment doesn't work
-- [REFINE] CCValue move construct and assign with std::string support
-- [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
-- [REFINE] Add lua debug project file to lua project template
-- [REFINE] Remove lua 64bit spec search path, since we can compile compatible bytecode for both plainlua and luajit
-- [REFINE] Put stats labels to safe origin to make sure we can see it integral at some mobile device
-- [REFINE] Improve cmake scripts
-- [REFINE] Replace deprecated repo `jcenter` with `mavenCentral`
-- [REFINE] Lua-5.4 compatible
-- [REFINE] Improve cmdline-tools
-- [REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
-- [REFINE] Improve android astc support check
-- [REFINE] Improve the "Physics part" (#379), thanks to @aismann 
-- [REFINE] Rename command line to to `adxe`
-- [REFINE] Update imgui to 1.84 WIP
-- [REFINE] Rename thirdparty folder `external` to `thirdparty`
-- [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
-- [REFINE] Fix some audio test case can't hear sound
-- [REFINE] Avoid OS_WINDOWS conflict with system macro
-- [REFINE] Update OpenSSL to v3.0.1
-- [REFINE] Update FreeType to latest
-- [REFINE] Use Freetype SDF render when label distance field enabled
-- [REFINE] Always enable string pooling for msvc on cmake
-- [REFINE] Change DrawNode api color parameters from `Color4F` to low `Color4B`
-- [REFINE] Improve DrawNode GC allocs
-- [REFINE] Use `jni.hpp` to improve jni call without method signature GC allocs
