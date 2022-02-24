@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer/UIVideoPlayer.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include <unordered_map>

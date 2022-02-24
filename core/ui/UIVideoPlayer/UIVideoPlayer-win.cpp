@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer/UIVideoPlayer.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    include <unordered_map>
@@ -34,7 +34,7 @@
 #    include "base/CCEventListenerKeyboard.h"
 #    include "platform/CCFileUtils.h"
 #    include "ui/UIHelper.h"
-#    include "ui/MFMediaPlayer.h"
+#    include "ui/UIVideoPlayer/MFMediaPlayer.h"
 #    include "renderer/backend/ProgramCache.h"
 #    include "yasio/detail/byte_buffer.hpp"
 #    include "ntcvt/ntcvt.hpp"
