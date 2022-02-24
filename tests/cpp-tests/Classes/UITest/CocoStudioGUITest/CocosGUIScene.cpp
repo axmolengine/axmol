@@ -44,7 +44,8 @@
 #include "UIFocusTest/UIFocusTest.h"
 #include "UITabControlTest/UITabControlTest.h"
 
-#if !defined(CC_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) !defined(CC_TARGET_OS_TVOS)
 #    include "UIVideoPlayerTest/UIVideoPlayerTest.h"
 #endif
 
@@ -62,7 +63,8 @@
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
-#if !defined(CC_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) !defined(CC_TARGET_OS_TVOS)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && \
