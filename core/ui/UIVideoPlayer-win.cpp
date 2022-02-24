@@ -217,8 +217,12 @@ struct PrivateVideoDescriptor
     std::recursive_mutex _sampleBufferMtx;
     bool _sampleDirty = false;
 
+    bool _scaleDirty = false;
+
     int _videoWidth  = 0;
     int _videoHeight = 0;
+
+    Vec2 _originalViewSize;
 
     void closePlayer()
     {
@@ -226,7 +230,7 @@ struct PrivateVideoDescriptor
             _vplayer->Close();
     }
 
-    void rescaleTo(Node* videoView)
+    void rescaleTo(VideoPlayer* videoView)
     {
         auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
@@ -234,11 +238,20 @@ struct PrivateVideoDescriptor
             auto& viewSize = videoView->getContentSize();
             if (viewSize.x > 0 && viewSize.y > 0)
             {
-                // Vec2 originalScale = _sampleFormat == VideoSampleFormat::YUY2 ? Vec2{1.0, 2.0} : Vec2{1.0, 1.0};
-                auto scaleX = viewSize.x / videoSize.x;
-                auto scaleY = viewSize.y / videoSize.y;
+                if (!videoView->isKeepAspectRatioEnabled())
+                {
+                    _vrender->setScale(viewSize.x / videoSize.x, viewSize.y / videoSize.y);
+                }
+                else
+                {
+                    const Vec2 originalScale{1.0f, _sampleFormat == VideoSampleFormat::YUY2 ? 2.0f : 1.0f};
 
-                _vrender->setScale(scaleX, scaleY);
+                    const auto aspectRatio =
+                        (std::min)(viewSize.x / videoSize.x, viewSize.y / (videoSize.y * originalScale.y));
+
+                    _vrender->setScale(originalScale.x * aspectRatio, originalScale.y * aspectRatio);
+                }
+
                 LayoutHelper::centerNode(_vrender);
 
                 _vrender->setVisible(true);
@@ -246,6 +259,8 @@ struct PrivateVideoDescriptor
             else
                 _vrender->setVisible(false);
         }
+
+        _scaleDirty = false;
     }
 };
 }  // namespace
@@ -460,14 +475,12 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
                     PS_SET_UNIFORM(ps, "tex_h", (float)h);
                 }
 
-                pvd->rescaleTo(this);
+                pvd->_scaleDirty = true;
             }
         }
     }
-    if (flags & FLAGS_TRANSFORM_DIRTY)
-    {
+    if (pvd->_scaleDirty || (flags & FLAGS_TRANSFORM_DIRTY))
         pvd->rescaleTo(this);
-    }
 
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
@@ -477,11 +490,20 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 #    endif
 }
 
+void VideoPlayer::setContentSize(const Size& contentSize)
+{
+    Widget::setContentSize(contentSize);
+    reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
+}
+
 void VideoPlayer::setFullScreenEnabled(bool enabled)
 {
     if (_fullScreenEnabled != enabled)
     {
         _fullScreenEnabled = enabled;
+
+        auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+        Widget::setContentSize(enabled ? _director->getOpenGLView()->getFrameSize() : pvd->_originalViewSize);
     }
 }
 
@@ -494,7 +516,8 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
 {
     if (_keepAspectRatioEnabled != enable)
     {
-        _keepAspectRatioEnabled = enable;
+        _keepAspectRatioEnabled                                               = enable;
+        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_scaleDirty = true;
     }
 }
 
