@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,15 +29,18 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-const char* sceneManifests[] = {"Manifests/AMTestScene1/project.manifest", "Manifests/AMTestScene2/project.manifest", "Manifests/AMTestScene3/project.manifest"};
-const char* storagePaths[] = {"CppTests/AssetsManagerExTest/scene1/", "CppTests/AssetsManagerExTest/scene2/", "CppTests/AssetsManagerExTest/scene3"};
-const char* backgroundPaths[] = {"Images/assetMgrBackground1.jpg", "Images/assetMgrBackground2.png", "Images/assetMgrBackground3.png"};
+const char* sceneManifests[]  = {"Manifests/AMTestScene1/project.manifest", "Manifests/AMTestScene2/project.manifest",
+                                "Manifests/AMTestScene3/project.manifest"};
+const char* storagePaths[]    = {"CppTests/AssetsManagerExTest/scene1/", "CppTests/AssetsManagerExTest/scene2/",
+                              "CppTests/AssetsManagerExTest/scene3"};
+const char* backgroundPaths[] = {"Images/assetMgrBackground1.jpg", "Images/assetMgrBackground2.png",
+                                 "Images/assetMgrBackground3.png"};
 
 AssetsManagerExTests::AssetsManagerExTests()
 {
-    addTestCase("AssetsManager Test1", [](){ return AssetsManagerExLoaderScene::create(0); });
-    addTestCase("AssetsManager Test2", [](){ return AssetsManagerExLoaderScene::create(1); });
-    addTestCase("AssetsManager Test3", [](){ return AssetsManagerExLoaderScene::create(2); });
+    addTestCase("AssetsManager Test1", []() { return AssetsManagerExLoaderScene::create(0); });
+    addTestCase("AssetsManager Test2", []() { return AssetsManagerExLoaderScene::create(1); });
+    addTestCase("AssetsManager Test3", []() { return AssetsManagerExLoaderScene::create(2); });
 }
 
 AssetsManagerExLoaderScene* AssetsManagerExLoaderScene::create(int testIndex)
@@ -57,15 +60,13 @@ AssetsManagerExLoaderScene* AssetsManagerExLoaderScene::create(int testIndex)
 }
 
 AssetsManagerExLoaderScene::AssetsManagerExLoaderScene(int testIndex)
-: _testIndex(testIndex)
-, _loadLayer(nullptr)
-, _downloadMenu(nullptr)
-, _am(nullptr)
-, _progress(nullptr)
-, _amListener(nullptr)
-{
-
-}
+    : _testIndex(testIndex)
+    , _loadLayer(nullptr)
+    , _downloadMenu(nullptr)
+    , _am(nullptr)
+    , _progress(nullptr)
+    , _amListener(nullptr)
+{}
 
 bool AssetsManagerExLoaderScene::init()
 {
@@ -75,7 +76,8 @@ bool AssetsManagerExLoaderScene::init()
     }
 
     auto downloadLabel = Label::createWithTTF("Start Download", "fonts/arial.ttf", 16);
-    auto downloadItem = MenuItemLabel::create(downloadLabel, CC_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
+    auto downloadItem =
+        MenuItemLabel::create(downloadLabel, CC_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
     downloadItem->setPosition(Vec2(VisibleRect::center().x, VisibleRect::bottom().y + 100));
     _downloadMenu = Menu::create(downloadItem, nullptr);
     _downloadMenu->setPosition(Vec2::ZERO);
@@ -86,14 +88,15 @@ bool AssetsManagerExLoaderScene::init()
 
     auto sprite = Sprite::create("Images/Icon.png");
     _loadLayer->addChild(sprite);
-    sprite->setPosition( VisibleRect::center() );
-    
+    sprite->setPosition(VisibleRect::center());
+
     TTFConfig config("fonts/tahoma.ttf", 30);
     _progress = Label::createWithTTF(config, "0%", TextHAlignment::CENTER);
-    _progress->setPosition( Vec2(VisibleRect::center().x, VisibleRect::center().y + 50) );
+    _progress->setPosition(Vec2(VisibleRect::center().x, VisibleRect::center().y + 50));
     _loadLayer->addChild(_progress);
-    
-    std::string manifestPath = sceneManifests[_testIndex], storagePath = FileUtils::getInstance()->getWritablePath() + storagePaths[_testIndex];
+
+    std::string manifestPath = sceneManifests[_testIndex],
+                storagePath  = FileUtils::getInstance()->getWritablePath() + storagePaths[_testIndex];
     CCLOG("Storage path for this test : %s", storagePath.c_str());
     _am = AssetsManagerEx::create(manifestPath, storagePath);
     _am->retain();
@@ -123,83 +126,84 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
     }
     else
     {
-        _amListener = cocos2d::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event){
-            static int failCount = 0;
-            switch (event->getEventCode())
-            {
-            case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
-            {
-                CCLOG("No local manifest file found, skip assets update.");
-                this->onLoadEnd();
-            }
-            break;
-            case EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION:
-            {
-                std::string assetId = event->getAssetId();
-                float percent = event->getPercent();
-                std::string str;
-                if (assetId == AssetsManagerEx::VERSION_ID)
+        _amListener =
+            cocos2d::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
+                static int failCount = 0;
+                switch (event->getEventCode())
                 {
-                    str = StringUtils::format("Version file: %.2f", percent) + "%";
-                }
-                else if (assetId == AssetsManagerEx::MANIFEST_ID)
+                case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
                 {
-                    str = StringUtils::format("Manifest file: %.2f", percent) + "%";
-                }
-                else
-                {
-                    str = StringUtils::format("%.2f", percent) + "%";
-                    CCLOG("%.2f Percent", percent);
-                }
-                if (this->_progress != nullptr)
-                    this->_progress->setString(str);
-            }
-            break;
-            case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
-            case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
-            {
-                CCLOG("Fail to download manifest file, update skipped.");
-                this->onLoadEnd();
-            }
-            break;
-            case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
-            case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
-            {
-                CCLOG("Update finished. %s", event->getMessage().c_str());
-                this->onLoadEnd();
-            }
-            break;
-            case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
-            {
-                CCLOG("Update failed. %s", event->getMessage().c_str());
-
-                failCount++;
-                if (failCount < 5)
-                {
-                    _am->downloadFailedAssets();
-                }
-                else
-                {
-                    CCLOG("Reach maximum fail count, exit update process");
-                    failCount = 0;
+                    CCLOG("No local manifest file found, skip assets update.");
                     this->onLoadEnd();
                 }
-            }
-            break;
-            case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
-            {
-                CCLOG("Asset %s : %s", event->getAssetId().c_str(), event->getMessage().c_str());
-            }
-            break;
-            case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
-            {
-                CCLOG("%s", event->getMessage().c_str());
-            }
-            break;
-            default:
                 break;
-            }
-        });
+                case EventAssetsManagerEx::EventCode::UPDATE_PROGRESSION:
+                {
+                    std::string assetId = event->getAssetId();
+                    float percent       = event->getPercent();
+                    std::string str;
+                    if (assetId == AssetsManagerEx::VERSION_ID)
+                    {
+                        str = StringUtils::format("Version file: %.2f", percent) + "%";
+                    }
+                    else if (assetId == AssetsManagerEx::MANIFEST_ID)
+                    {
+                        str = StringUtils::format("Manifest file: %.2f", percent) + "%";
+                    }
+                    else
+                    {
+                        str = StringUtils::format("%.2f", percent) + "%";
+                        CCLOG("%.2f Percent", percent);
+                    }
+                    if (this->_progress != nullptr)
+                        this->_progress->setString(str);
+                }
+                break;
+                case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
+                case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
+                {
+                    CCLOG("Fail to download manifest file, update skipped.");
+                    this->onLoadEnd();
+                }
+                break;
+                case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
+                case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
+                {
+                    CCLOG("Update finished. %s", event->getMessage().c_str());
+                    this->onLoadEnd();
+                }
+                break;
+                case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
+                {
+                    CCLOG("Update failed. %s", event->getMessage().c_str());
+
+                    failCount++;
+                    if (failCount < 5)
+                    {
+                        _am->downloadFailedAssets();
+                    }
+                    else
+                    {
+                        CCLOG("Reach maximum fail count, exit update process");
+                        failCount = 0;
+                        this->onLoadEnd();
+                    }
+                }
+                break;
+                case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
+                {
+                    CCLOG("Asset %s : %s", event->getAssetId().c_str(), event->getMessage().c_str());
+                }
+                break;
+                case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
+                {
+                    CCLOG("%s", event->getMessage().c_str());
+                }
+                break;
+                default:
+                    break;
+                }
+            });
         Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_amListener, 1);
 
         _am->update();

@@ -74,15 +74,15 @@ public:
 
     CC_CONSTRUCTOR_ACCESS :
         /** Constructor */
-        EventAssetsManagerEx(const std::string& eventName,
+        EventAssetsManagerEx(std::string_view eventName,
                              cocos2d::extension::AssetsManagerEx* manager,
                              const EventCode& code,
-                             float percent              = 0,
-                             float percentByFile        = 0,
-                             const std::string& assetId = "",
-                             const std::string& message = "",
-                             int curle_code             = 0,
-                             int curlm_code             = 0);
+                             float percent            = 0,
+                             float percentByFile      = 0,
+                             std::string_view assetId = "",
+                             std::string_view message = "",
+                             int curle_code           = 0,
+                             int curlm_code           = 0);
 
 private:
     EventCode _code;

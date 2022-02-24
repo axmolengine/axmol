@@ -101,9 +101,9 @@ void TextFieldReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 
     textField->setFontSize(DICTOOL->getIntValue_json(options, P_FontSize, 20));
 
-    std::string jsonPath     = GUIReader::getInstance()->getFilePath();
-    std::string fontName     = DICTOOL->getStringValue_json(options, P_FontName, "");
-    std::string fontFilePath = jsonPath.append(fontName);
+    std::string fontFilePath{GUIReader::getInstance()->getFilePath()};
+    auto fontName = DICTOOL->getStringValue_json(options, P_FontName, "");
+    fontFilePath.append(fontName);
     if (FileUtils::getInstance()->isFileExist(fontFilePath))
         textField->setFontName(fontFilePath);
     else
@@ -168,8 +168,8 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "PlaceHolderText")
         {
@@ -185,7 +185,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
         }
         else if (name == "FontSize")
         {
-            fontSize = atoi(value.c_str());
+            fontSize = atoi(value.data());
         }
         else if (name == "FontName")
         {
@@ -197,7 +197,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
         }
         else if (name == "MaxLengthText")
         {
-            maxLength = atoi(value.c_str());
+            maxLength = atoi(value.data());
         }
         else if (name == "PasswordEnable")
         {
@@ -219,7 +219,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FontResource")
         {
@@ -228,7 +228,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

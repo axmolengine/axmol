@@ -73,11 +73,11 @@ Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     // inneraction speed
     while (objattri)
     {
-        std::string name  = objattri.name();
-        std::string value = objattri.value();
+        std::string_view name  = objattri.name();
+        std::string_view value = objattri.value();
         if (name == "InnerActionSpeed")
         {
-            innerspeed = atof(objattri.value());
+            innerspeed = atof(value.data());
             break;
         }
         objattri = objattri.next_attribute();
@@ -87,7 +87,7 @@ Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FileData")
         {
@@ -96,12 +96,12 @@ Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obj
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
                     size_t pos          = value.find_last_of('.');
-                    std::string convert = value.substr(0, pos).append(".csb");
+                    std::string convert = std::string{value.substr(0, pos)}.append(".csb");
                     filename            = convert;
                 }
 

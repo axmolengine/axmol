@@ -26,7 +26,7 @@
         "append_dir": [
             {
                 "from": "extensions/scripting/lua-bindings/script",
-                "to": "src/cocos",
+                "to": "src/core",
                 "exclude": []
             }
         ]

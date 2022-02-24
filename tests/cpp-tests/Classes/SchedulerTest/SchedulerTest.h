@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,7 +28,6 @@
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
 #include "../BaseTest.h"
-
 
 DEFINE_TEST_SUITE(SchedulerTests);
 
@@ -48,6 +47,7 @@ public:
 
     void autoremove(float dt);
     void tick(float dt);
+
 private:
     float accum;
 };
@@ -86,6 +86,7 @@ public:
     void pause(float dt);
     using SchedulerTestLayer::resume;
     void resume(float dt);
+
 private:
     std::set<void*> _pausedTargets;
 };
@@ -108,6 +109,7 @@ public:
     void pause(float dt);
     using SchedulerTestLayer::resume;
     void resume(float dt);
+
 private:
     std::set<void*> _pausedTargets;
 };
@@ -143,6 +145,7 @@ public:
     void tick3(float dt);
     void tick4(float dt);
     void unscheduleAll(float dt);
+
 private:
     bool _actionManagerActive;
 };
@@ -226,8 +229,9 @@ public:
 
     ~TestNode();
 
-    void initWithString(const std::string& str, int priority);
+    void initWithString(std::string_view str, int priority);
     virtual void update(float dt) override;
+
 private:
     std::string _string;
 };
@@ -242,9 +246,10 @@ public:
     virtual std::string subtitle() const override;
 
     void schedUpdate(float dt);
+
 private:
     float _interval;
-    int   _ticks;
+    int _ticks;
 };
 
 class SchedulerDelayAndRepeat : public SchedulerTestLayer
@@ -271,7 +276,6 @@ public:
     void sliderAction(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
     cocos2d::extension::ControlSlider* _sliderCtl;
 };
-
 
 class TwoSchedulers : public SchedulerTestLayer
 {
@@ -322,14 +326,14 @@ class ScheduleCallbackTest : public SchedulerTestLayer
 {
 public:
     CREATE_FUNC(ScheduleCallbackTest);
-    
+
     ~ScheduleCallbackTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onEnter() override;
-    
+
     void callback(float dt);
-    
+
 private:
 };
 
@@ -342,9 +346,9 @@ public:
     virtual std::string subtitle() const override;
     void onEnter() override;
     void onExit() override;
-    
+
     virtual void update(float dt) override;
-    
+
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 };
 
@@ -364,93 +368,94 @@ class SchedulerRemoveAllFunctionsToBePerformedInCocosThread : public SchedulerTe
 {
 public:
     CREATE_FUNC(SchedulerRemoveAllFunctionsToBePerformedInCocosThread);
-    
+
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onEnter() override;
     void onExit() override;
     void update(float dt) override;
-    
+
 private:
-    cocos2d::Sprite *_sprite;
+    cocos2d::Sprite* _sprite;
 };
 
-class SchedulerIssue17149: public SchedulerTestLayer
+class SchedulerIssue17149 : public SchedulerTestLayer
 {
 public:
     CREATE_FUNC(SchedulerIssue17149);
     SchedulerIssue17149();
     ~SchedulerIssue17149();
-    
+
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void update(float dt) override;
-    
+
 private:
     class ClassA
     {
     public:
         ClassA();
-        
+
         void update(float dt);
-        
+
         int _member1;
         int _member2;
         int _member3;
     };
-    
+
     class ClassB
     {
     public:
         ClassB();
         void update(float dt);
-        
+
         int _member1;
         int _member2;
         int _member3;
     };
-    
-    void *_memoryPool;
+
+    void* _memoryPool;
 };
 
-class SchedulerRemoveEntryWhileUpdate: public SchedulerTestLayer
+class SchedulerRemoveEntryWhileUpdate : public SchedulerTestLayer
 {
 public:
     CREATE_FUNC(SchedulerRemoveEntryWhileUpdate);
-    
+
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void onExit() override;
-    
+
 private:
     class TestClass
     {
     public:
-        TestClass(int index, TestClass *nextObj, cocos2d::Scheduler* scheduler);
+        TestClass(int index, TestClass* nextObj, cocos2d::Scheduler* scheduler);
         void update(float dt);
+
     private:
-        TestClass *_nextObj = nullptr;
-        int _index = 0;
-        cocos2d::Scheduler *_scheduler = nullptr;
-        bool _cleanedUp = false;
+        TestClass* _nextObj            = nullptr;
+        int _index                     = 0;
+        cocos2d::Scheduler* _scheduler = nullptr;
+        bool _cleanedUp                = false;
     };
-    std::vector<TestClass *> _testvector;
+    std::vector<TestClass*> _testvector;
 };
 
-class SchedulerRemoveSelectorDuringCall: public SchedulerTestLayer
+class SchedulerRemoveSelectorDuringCall : public SchedulerTestLayer
 {
 public:
     CREATE_FUNC(SchedulerRemoveSelectorDuringCall);
-    
+
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
     virtual void onExit() override;
-    
+
 private:
-    void callback( float );
+    void callback(float);
 
 private:
     bool _scheduled;

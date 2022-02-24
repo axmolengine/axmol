@@ -111,7 +111,7 @@ void ImageViewReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 
     const rapidjson::Value& imageFileNameDic = DICTOOL->getSubDictionary_json(options, P_FileNameData);
     int imageFileNameType                    = DICTOOL->getIntValue_json(imageFileNameDic, P_ResourceType);
-    const std::string& imageFilePath         = DICTOOL->getStringValue_json(imageFileNameDic, P_Path);
+    std::string_view imageFilePath           = DICTOOL->getStringValue_json(imageFileNameDic, P_Path);
 
     if (!imageFilePath.empty())
     {
@@ -164,8 +164,8 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "Scale9Enable")
         {
@@ -176,19 +176,19 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
         }
         else if (name == "Scale9OriginX")
         {
-            capInsets.origin.x = atof(value.c_str());
+            capInsets.origin.x = atof(value.data());
         }
         else if (name == "Scale9OriginY")
         {
-            capInsets.origin.y = atof(value.c_str());
+            capInsets.origin.y = atof(value.data());
         }
         else if (name == "Scale9Width")
         {
-            capInsets.size.width = atof(value.c_str());
+            capInsets.size.width = atof(value.data());
         }
         else if (name == "Scale9Height")
         {
-            capInsets.size.height = atof(value.c_str());
+            capInsets.size.height = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -198,7 +198,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "Size" && scale9Enabled)
         {
@@ -207,15 +207,15 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "X")
                 {
-                    scale9Size.width = atof(value.c_str());
+                    scale9Size.width = atof(value.data());
                 }
                 else if (name == "Y")
                 {
-                    scale9Size.height = atof(value.c_str());
+                    scale9Size.height = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -231,7 +231,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -369,7 +369,7 @@ Node* ImageViewReader::createNodeWithFlatBuffers(const flatbuffers::Table* image
     return imageView;
 }
 
-int ImageViewReader::getResourceType(std::string key)
+int ImageViewReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

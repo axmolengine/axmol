@@ -18,7 +18,7 @@ add_library(${target_name} STATIC
 target_include_directories(${target_name} PUBLIC .)
 
 if(MACOSX OR ANDROID OR WINDOWS)
-  get_target_property(zlib_header ext_zlib INTERFACE_INCLUDE_DIRECTORIES)
+  get_target_property(zlib_header dep_zlib INTERFACE_INCLUDE_DIRECTORIES)
   target_include_directories(${target_name} PRIVATE ${zlib_header}
 )
 endif()

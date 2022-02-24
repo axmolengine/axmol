@@ -1,5 +1,7 @@
 
-set(LUA_SRC_PATH ${CMAKE_CURRENT_LIST_DIR}/lua-${LUA_VERSION}/src)
+set (AX_LUA_VERSION "5.4.4")
+
+set(LUA_SRC_PATH ${CMAKE_CURRENT_LIST_DIR})
 
 set(lib_name plainlua)
 set(target_name ${lib_name})
@@ -15,7 +17,7 @@ set(LUA_BUILD_AS_DLL ${BUILD_SHARED_LIBS})
 
 if(WIN32)
     set(LUA_BUILD_AS_DLL TRUE)
-    add_library(${target_name} SHARED ${LUA_CORE})
+    add_library(${target_name} SHARED ${LUA_CORE} ${LUA_SRC_PATH}/plainlua.def)
 else()
     add_library(${target_name} ${LUA_CORE})
 endif()
@@ -25,15 +27,15 @@ target_compile_definitions(${target_name}
     PRIVATE _WINSOCK_DEPRECATED_NO_WARNINGS
     )
 
-if(${LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
+if(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
   target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_APIINTCASTS=1)
-elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
+elseif(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
   target_compile_definitions(${target_name} 
       PUBLIC LUA_COMPAT_5_1=1
       PUBLIC LUA_COMPAT_5_2=1
       PUBLIC LUA_COMPAT_MODULE=1
     )
-elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
+elseif(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
   target_compile_definitions(${target_name} 
       PUBLIC LUA_COMPAT_ALL=1
       PUBLIC LUA_COMPAT_MODULE=1
@@ -60,14 +62,14 @@ if(WIN32 OR MACOSX)
   
   function (add_lua_bin target_name src_files)
     add_executable(${target_name} ${src_files})
-    if(${LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
+    if(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
       target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_APIINTCASTS=1)
-    elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
+    elseif(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
       target_compile_definitions(${target_name} 
         PUBLIC LUA_COMPAT_5_1=1
         PUBLIC LUA_COMPAT_5_2=1
         )
-    elseif(${LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
+    elseif(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.2.0")
       target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_ALL=1)
     endif()
 

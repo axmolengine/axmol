@@ -44,7 +44,7 @@ NS_CC_BEGIN
 class LuaEventListenerCustom
 {
 public:
-    static EventListenerCustom* create(const std::string& eventName);
+    static EventListenerCustom* create(std::string_view eventName);
 };
 
 class LuaEventListenerAcceleration
@@ -57,8 +57,6 @@ NS_CC_END
 USING_NS_CC;
 
 TOLUA_API int register_all_cocos2dx_manual(lua_State* tolua_S);
-
-TOLUA_API int register_cocos2dx_event_releated(lua_State* tolua_S);
 
 TOLUA_API int register_all_cocos2dx_module_manual(lua_State* tolua_S);
 

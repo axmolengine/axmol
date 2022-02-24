@@ -4546,7 +4546,7 @@ EventListenerAcceleration* LuaEventListenerAcceleration::create()
     return eventAcceleration;
 }
 
-EventListenerCustom* LuaEventListenerCustom::create(const std::string& eventName)
+EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
 {
     EventListenerCustom* eventCustom = new EventListenerCustom();
     if (eventCustom->init(eventName, [=](EventCustom* event) {
@@ -6109,12 +6109,12 @@ static int lua_cocos2dx_Console_addCommand(lua_State* tolua_S)
             handler = (toluafix_ref_function(tolua_S, 3, 0));
             ScriptHandlerMgr::getInstance()->addCustomHandler((void*)cobj, handler);
 
-            Console::Command outValue = {name, help, [=](int fd, const std::string& args) {
+            Console::Command outValue = {name, help, [=](int fd, std::string_view args) {
                                              auto stack = LuaEngine::getInstance()->getLuaStack();
                                              auto Ls    = stack->getLuaState();
                                              // lua-callback, the third param;
                                              tolua_pushnumber(Ls, fd);
-                                             tolua_pushstring(Ls, args.c_str());
+                                             tolua_pushstring(Ls, args.data());
 
                                              stack->executeFunctionByHandler(handler, 2);
                                          }};
@@ -6928,7 +6928,7 @@ int lua_cocos2dx_get_PolygonInfo_filename(lua_State* tolua_S)
         return 0;
     }
 #endif
-    tolua_pushcppstring(tolua_S, cobj->getFilename());
+    tolua_pushstring(tolua_S, cobj->getFilename().data());
     return 1;
 
 #if COCOS2D_DEBUG >= 1
@@ -7430,11 +7430,11 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         std::string fileName = tolua_tocppstring(tolua_S, 3, "");
         cocos2d::utils::captureScreen(
-            [=](bool succeed, const std::string& name) {
+            [=](bool succeed, std::string_view name) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 auto Ls    = stack->getLuaState();
                 tolua_pushboolean(Ls, succeed);
-                tolua_pushstring(Ls, name.c_str());
+                tolua_pushstring(Ls, name.data());
                 stack->executeFunctionByHandler(handler, 2);
                 toluafix_remove_function_by_refid(tolua_S, handler);
             },
@@ -8188,6 +8188,23 @@ tolua_lerror:
 #endif
 }
 
+static int tolua_cocos2d_Vec2_new(lua_State* L)
+{
+    return vec2_to_luaval(L, Vec2{static_cast<float>(lua_tonumber(L, 1)), static_cast<float>(lua_tonumber(L, 2))});
+}
+
+static int tolua_cocos2d_Vec3_new(lua_State* L)
+{
+    return vec3_to_luaval(L, Vec3{static_cast<float>(lua_tonumber(L, 1)), static_cast<float>(lua_tonumber(L, 2)),
+                                  static_cast<float>(lua_tonumber(L, 3))});
+}
+
+static int tolua_cocos2d_Vec4_new(lua_State* L)
+{
+    return vec4_to_luaval(L, Vec4{static_cast<float>(lua_tonumber(L, 1)), static_cast<float>(lua_tonumber(L, 2)),
+                                  static_cast<float>(lua_tonumber(L, 3)), static_cast<float>(lua_tonumber(L, 4))});
+}
+
 int register_all_cocos2dx_math_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
@@ -8205,6 +8222,9 @@ int register_all_cocos2dx_math_manual(lua_State* tolua_S)
     tolua_function(tolua_S, "mat4_createTranslation", tolua_cocos2d_Mat4_createTranslation);
     tolua_function(tolua_S, "mat4_createRotation", tolua_cocos2d_Mat4_createRotation);
     tolua_function(tolua_S, "vec3_cross", tolua_cocos2d_Vec3_cross);
+    tolua_function(tolua_S, "vec2_new", tolua_cocos2d_Vec2_new);
+    tolua_function(tolua_S, "vec3_new", tolua_cocos2d_Vec3_new);
+    tolua_function(tolua_S, "vec4_new", tolua_cocos2d_Vec4_new);
     tolua_endmodule(tolua_S);
     return 0;
 }

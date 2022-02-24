@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,12 +28,12 @@
 
 USING_NS_CC;
 
-enum 
+enum
 {
     kTagNode,
     kTagGrossini,
     kTagSequence,
-}; 
+};
 
 ActionManagerTests::ActionManagerTests()
 {
@@ -53,13 +53,9 @@ ActionManagerTests::ActionManagerTests()
 //
 //------------------------------------------------------------------
 
-ActionManagerTest::ActionManagerTest()
-{
-}
+ActionManagerTest::ActionManagerTest() {}
 
-ActionManagerTest::~ActionManagerTest()
-{
-}
+ActionManagerTest::~ActionManagerTest() {}
 
 std::string ActionManagerTest::title() const
 {
@@ -81,30 +77,23 @@ void CrashTest::onEnter()
     ActionManagerTest::onEnter();
 
     auto child = Sprite::create(s_pathGrossini);
-    child->setPosition( VisibleRect::center() );
+    child->setPosition(VisibleRect::center());
     addChild(child, 1, kTagGrossini);
 
-    //Sum of all action's duration is 1.5 second.
+    // Sum of all action's duration is 1.5 second.
     child->runAction(RotateBy::create(1.5f, 90));
-    child->runAction(Sequence::create(
-                                            DelayTime::create(1.4f),
-                                            FadeOut::create(1.1f),
-                                            nullptr)
-                    );
-    
-    //After 1.5 second, self will be removed.
-    child->runAction(Sequence::create(
-                                    DelayTime::create(1.4f),
-                                    CallFunc::create( CC_CALLBACK_0(CrashTest::removeThis,this)),
-                                    nullptr)
-             );
+    child->runAction(Sequence::create(DelayTime::create(1.4f), FadeOut::create(1.1f), nullptr));
+
+    // After 1.5 second, self will be removed.
+    child->runAction(Sequence::create(DelayTime::create(1.4f),
+                                      CallFunc::create(CC_CALLBACK_0(CrashTest::removeThis, this)), nullptr));
 }
 
 void CrashTest::removeThis()
 {
     auto child = getChildByTag(kTagGrossini);
     child->removeChild(child, true);
-    
+
     getTestSuite()->enterNextTest();
 }
 
@@ -126,22 +115,19 @@ void LogicTest::onEnter()
     addChild(grossini, 0, 2);
     grossini->setPosition(VisibleRect::center());
 
-    grossini->runAction( Sequence::create( 
-                                                MoveBy::create(1, Vec2(150.0f,0.0f)),
-                                                CallFuncN::create(CC_CALLBACK_1(LogicTest::bugMe,this)),
-                                                nullptr) 
-                        );
+    grossini->runAction(Sequence::create(MoveBy::create(1, Vec2(150.0f, 0.0f)),
+                                         CallFuncN::create(CC_CALLBACK_1(LogicTest::bugMe, this)), nullptr));
 }
 
 void LogicTest::bugMe(Node* node)
 {
-    node->stopAllActions(); //After this stop next action not working, if remove this stop everything is working
+    node->stopAllActions();  // After this stop next action not working, if remove this stop everything is working
     node->runAction(ScaleTo::create(2, 2));
 }
 
 std::string LogicTest::subtitle() const
 {
-    return "Logic test"; 
+    return "Logic test";
 }
 
 //------------------------------------------------------------------
@@ -157,32 +143,30 @@ void PauseTest::onEnter()
     // otherwise the paused action will be resumed at 'onEnter' time
     //
     ActionManagerTest::onEnter();
-    
 
     auto l = Label::createWithTTF("After 5 seconds grossini should move", "fonts/Thonburi.ttf", 16.0f);
     addChild(l);
-    l->setPosition(VisibleRect::center().x, VisibleRect::top().y-75);
-    
-    
+    l->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
+
     //
     // Also, this test MUST be done, after [super onEnter]
     //
     auto grossini = Sprite::create(s_pathGrossini);
     addChild(grossini, 0, kTagGrossini);
-    grossini->setPosition(VisibleRect::center() );
-    
-    auto action = MoveBy::create(1, Vec2(150.0f,0.0f));
+    grossini->setPosition(VisibleRect::center());
+
+    auto action = MoveBy::create(1, Vec2(150.0f, 0.0f));
 
     auto director = Director::getInstance();
     director->getActionManager()->addAction(action, grossini, true);
 
-    schedule( CC_SCHEDULE_SELECTOR(PauseTest::unpause), 3); 
+    schedule(CC_SCHEDULE_SELECTOR(PauseTest::unpause), 3);
 }
 
 void PauseTest::unpause(float dt)
 {
-    unschedule( CC_SCHEDULE_SELECTOR(PauseTest::unpause) );
-    auto node = getChildByTag( kTagGrossini );
+    unschedule(CC_SCHEDULE_SELECTOR(PauseTest::unpause));
+    auto node     = getChildByTag(kTagGrossini);
     auto director = Director::getInstance();
     director->getActionManager()->resumeTarget(node);
 }
@@ -205,13 +189,13 @@ void StopActionTest::onEnter()
     addChild(l);
     l->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
 
-    auto pMove = MoveBy::create(2, Vec2(200.0f, 0.0f));
-    auto pCallback = CallFunc::create(CC_CALLBACK_0(StopActionTest::stopAction,this));
+    auto pMove     = MoveBy::create(2, Vec2(200.0f, 0.0f));
+    auto pCallback = CallFunc::create(CC_CALLBACK_0(StopActionTest::stopAction, this));
     auto pSequence = Sequence::create(pMove, pCallback, nullptr);
     pSequence->setTag(kTagSequence);
 
     auto pChild = Sprite::create(s_pathGrossini);
-    pChild->setPosition( VisibleRect::center() );
+    pChild->setPosition(VisibleRect::center());
 
     addChild(pChild, 1, kTagGrossini);
     pChild->runAction(pSequence);
@@ -236,29 +220,30 @@ std::string StopActionTest::subtitle() const
 void StopAllActionsTest::onEnter()
 {
     ActionManagerTest::onEnter();
-    
-    auto l = Label::createWithTTF("Should stop scale & move after 4 seconds but keep rotate", "fonts/Thonburi.ttf", 16.0f);
+
+    auto l =
+        Label::createWithTTF("Should stop scale & move after 4 seconds but keep rotate", "fonts/Thonburi.ttf", 16.0f);
     addChild(l);
-    l->setPosition( Vec2(VisibleRect::center().x, VisibleRect::top().y - 75) );
-    
-    auto pMove1 = MoveBy::create(2, Vec2(200.0f, 0.0f));
-    auto pMove2 = MoveBy::create(2, Vec2(-200.0f, 0.0f));
+    l->setPosition(Vec2(VisibleRect::center().x, VisibleRect::top().y - 75));
+
+    auto pMove1        = MoveBy::create(2, Vec2(200.0f, 0.0f));
+    auto pMove2        = MoveBy::create(2, Vec2(-200.0f, 0.0f));
     auto pSequenceMove = Sequence::createWithTwoActions(pMove1, pMove2);
-    auto pRepeatMove = RepeatForever::create(pSequenceMove);
+    auto pRepeatMove   = RepeatForever::create(pSequenceMove);
     pRepeatMove->setTag(kTagSequence);
-    
-    auto pScale1 = ScaleBy::create(2, 1.5f);
-    auto pScale2 = ScaleBy::create(2, 1.0f/1.5f);
+
+    auto pScale1        = ScaleBy::create(2, 1.5f);
+    auto pScale2        = ScaleBy::create(2, 1.0f / 1.5f);
     auto pSequenceScale = Sequence::createWithTwoActions(pScale1, pScale2);
-    auto pRepeatScale = RepeatForever::create(pSequenceScale);
+    auto pRepeatScale   = RepeatForever::create(pSequenceScale);
     pRepeatScale->setTag(kTagSequence);
-    
-    auto pRotate = RotateBy::create(2, 360);
+
+    auto pRotate       = RotateBy::create(2, 360);
     auto pRepeatRotate = RepeatForever::create(pRotate);
-    
+
     auto pChild = Sprite::create(s_pathGrossini);
-    pChild->setPosition( VisibleRect::center() );
-    
+    pChild->setPosition(VisibleRect::center());
+
     addChild(pChild, 1, kTagGrossini);
     pChild->runAction(pRepeatMove);
     pChild->runAction(pRepeatScale);
@@ -276,7 +261,6 @@ std::string StopAllActionsTest::subtitle() const
 {
     return "Stop All Action Test";
 }
-
 
 //------------------------------------------------------------------
 //
@@ -314,7 +298,7 @@ void ResumeTest::resumeGrossini(float time)
     this->unschedule(CC_SCHEDULE_SELECTOR(ResumeTest::resumeGrossini));
 
     auto pGrossini = getChildByTag(kTagGrossini);
-    auto director = Director::getInstance();
+    auto director  = Director::getInstance();
     director->getActionManager()->resumeTarget(pGrossini);
 }
 
@@ -327,28 +311,29 @@ void StopActionsByFlagsTest::onEnter()
 {
     ActionManagerTest::onEnter();
 
-    auto l = Label::createWithTTF("Should stop scale & move after 4 seconds but keep rotate", "fonts/Thonburi.ttf", 16.0f);
+    auto l =
+        Label::createWithTTF("Should stop scale & move after 4 seconds but keep rotate", "fonts/Thonburi.ttf", 16.0f);
     addChild(l);
-    l->setPosition( Vec2(VisibleRect::center().x, VisibleRect::top().y - 75) );
+    l->setPosition(Vec2(VisibleRect::center().x, VisibleRect::top().y - 75));
 
-    auto pMove1 = MoveBy::create(2, Vec2(200.0f, 0.0f));
-    auto pMove2 = MoveBy::create(2, Vec2(-200.0f, 0.0f));
+    auto pMove1        = MoveBy::create(2, Vec2(200.0f, 0.0f));
+    auto pMove2        = MoveBy::create(2, Vec2(-200.0f, 0.0f));
     auto pSequenceMove = Sequence::createWithTwoActions(pMove1, pMove2);
-    auto pRepeatMove = RepeatForever::create(pSequenceMove);
+    auto pRepeatMove   = RepeatForever::create(pSequenceMove);
     pRepeatMove->setFlags(kMoveFlag | kRepeatForeverFlag);
 
-    auto pScale1 = ScaleBy::create(2, 1.5f);
-    auto pScale2 = ScaleBy::create(2, 1.0f/1.5f);
+    auto pScale1        = ScaleBy::create(2, 1.5f);
+    auto pScale2        = ScaleBy::create(2, 1.0f / 1.5f);
     auto pSequenceScale = Sequence::createWithTwoActions(pScale1, pScale2);
-    auto pRepeatScale = RepeatForever::create(pSequenceScale);
+    auto pRepeatScale   = RepeatForever::create(pSequenceScale);
     pRepeatScale->setFlags(kScaleFlag | kRepeatForeverFlag);
 
-    auto pRotate = RotateBy::create(2, 360);
+    auto pRotate       = RotateBy::create(2, 360);
     auto pRepeatRotate = RepeatForever::create(pRotate);
     pRepeatRotate->setFlags(kRotateFlag | kRepeatForeverFlag);
 
     auto pChild = Sprite::create(s_pathGrossini);
-    pChild->setPosition( VisibleRect::center() );
+    pChild->setPosition(VisibleRect::center());
 
     addChild(pChild, 1, kTagGrossini);
     pChild->runAction(pRepeatMove);
@@ -373,17 +358,11 @@ std::string StopActionsByFlagsTest::subtitle() const
 // Issue14050Test
 //
 //------------------------------------------------------------------
-class SpriteIssue14050: public Sprite
+class SpriteIssue14050 : public Sprite
 {
 public:
-    SpriteIssue14050()
-    {
-        log("SpriteIssue14050::constructor");
-    }
-    virtual ~SpriteIssue14050()
-    {
-        log("SpriteIssue14050::destructor");
-    }
+    SpriteIssue14050() { log("SpriteIssue14050::constructor"); }
+    virtual ~SpriteIssue14050() { log("SpriteIssue14050::destructor"); }
 };
 
 void Issue14050Test::onEnter()

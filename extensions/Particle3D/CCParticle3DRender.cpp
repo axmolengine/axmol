@@ -51,7 +51,7 @@ Particle3DQuadRender::~Particle3DQuadRender()
     CC_SAFE_RELEASE(_indexBuffer);
 }
 
-Particle3DQuadRender* Particle3DQuadRender::create(const std::string& texFile)
+Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
 {
     auto ret = new Particle3DQuadRender();
     if (ret->initQuadRender(texFile))
@@ -185,7 +185,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     renderer->addCommand(&_afterCommand);
 }
 
-bool Particle3DQuadRender::initQuadRender(const std::string& texFile)
+bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
 {
     CC_SAFE_RELEASE_NULL(_programState);
 
@@ -285,7 +285,7 @@ Particle3DModelRender::~Particle3DModelRender()
     }
 }
 
-Particle3DModelRender* Particle3DModelRender::create(const std::string& modelFile, const std::string& texFile)
+Particle3DModelRender* Particle3DModelRender::create(std::string_view modelFile, std::string_view texFile)
 {
     auto ret        = new Particle3DModelRender();
     ret->_modelFile = modelFile;

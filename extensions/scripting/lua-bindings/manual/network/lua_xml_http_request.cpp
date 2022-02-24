@@ -76,16 +76,16 @@ public:
     inline int getReadyState() const { return _readyState; }
 
     inline cocos2d::network::HttpRequest* getHttpRequest() const { return _httpRequest; }
-    inline const std::string& getStatusText() const { return _statusText; }
+    inline std::string_view getStatusText() const { return _statusText; }
 
     inline void setStatus(int status) { _status = status; }
     inline int getStatus() { return _status; }
 
-    inline const std::string& getUrl() { return _url; }
-    inline void setUrl(const std::string& url) { _url = url; }
+    inline std::string_view getUrl() { return _url; }
+    inline void setUrl(std::string_view url) { _url = url; }
 
-    inline const std::string& getMethod() const { return _meth; }
-    inline void setMethod(const std::string& meth) { _meth = meth; }
+    inline std::string_view getMethod() const { return _meth; }
+    inline void setMethod(std::string_view meth) { _meth = meth; }
 
     inline void setAsync(bool isAsync) { _isAsync = isAsync; }
     inline void setIsNetWork(bool isNetWork) { _isNetwork = isNetWork; }
@@ -100,7 +100,7 @@ public:
     void getByteData(unsigned char* byteData) const;
 
     inline const char* getData() { return !_data.empty() ? _data.data() : ""; }
-    inline size_t getDataSize() const { return _dataSize; }
+    inline size_t getDataSize() const { return _data.size(); }
 
     inline void setErrorFlag(bool errorFlag) { _errorFlag = errorFlag; }
     inline bool getErrorFlag() const { return _errorFlag; }
@@ -113,7 +113,6 @@ private:
     std::string _meth;
     std::string _type;
     yasio::sbyte_buffer _data;
-    size_t _dataSize;
     int _readyState;
     int _status;
     std::string _statusText;
@@ -133,7 +132,6 @@ LuaMinXmlHttpRequest::LuaMinXmlHttpRequest()
     : _url("")
     , _meth("")
     , _type("")
-    , _dataSize(0)
     , _readyState(UNSENT)
     , _status(0)
     , _statusText("")
@@ -254,7 +252,6 @@ void LuaMinXmlHttpRequest::_sendRequest()
                 _status     = 200;
                 _readyState = DONE;
                 _data       = std::move(*buffer);
-                _dataSize   = buffer->size();
             }
             else
             {
@@ -279,8 +276,8 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
 void LuaMinXmlHttpRequest::getByteData(unsigned char* byteData) const
 {
-    if (_dataSize > 0)
-        memcpy((char*)byteData, _data.data(), _dataSize);
+    if (!_data.empty())
+        memcpy((char*)byteData, _data.data(), _data.size());
 }
 
 /* function to regType */
@@ -621,7 +618,7 @@ static int lua_get_XMLHttpRequest_statusText(lua_State* L)
     }
 #endif
 
-    lua_pushstring(L, self->getStatusText().c_str());
+    tolua_pushsv(L, self->getStatusText());
 
     return 1;
 

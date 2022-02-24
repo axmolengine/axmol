@@ -184,11 +184,11 @@ void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNod
     }
 }
 
-int ActionObject::valueToInt(const std::string& value)
+int ActionObject::valueToInt(std::string_view value)
 {
-    return atoi(value.c_str());
+    return atoi(value.data());
 }
-bool ActionObject::valueToBool(const std::string& value)
+bool ActionObject::valueToBool(std::string_view value)
 {
     int intValue = valueToInt(value);
     if (1 == intValue)
@@ -200,9 +200,9 @@ bool ActionObject::valueToBool(const std::string& value)
         return false;
     }
 }
-float ActionObject::valueToFloat(const std::string& value)
+float ActionObject::valueToFloat(std::string_view value)
 {
-    return utils::atof(value.c_str());
+    return utils::atof(value.data());
 }
 
 void ActionObject::addActionNode(ActionNode* node)

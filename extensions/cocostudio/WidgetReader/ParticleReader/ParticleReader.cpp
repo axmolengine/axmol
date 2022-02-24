@@ -82,7 +82,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "FileData")
         {
@@ -91,7 +91,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -116,15 +116,15 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Src")
                 {
-                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.data()));
                 }
                 else if (name == "Dst")
                 {
-                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.data()));
                 }
 
                 attribute = attribute.next_attribute();

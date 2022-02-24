@@ -1,0 +1,39 @@
+name: genbindings
+
+on: 
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - core/**/*
+      - extensions/**/*
+      - .github/workflows/genbindings-ci.yml
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+
+    - uses: ilammy/msvc-dev-cmd@v1.10.0
+      with: 
+        arch: ${{ env.BUILD_ARCH }}
+
+    - name: Build
+      run: tools\win-ci\genbindings.ps1
+      
+    - name: Commit genbindings changes
+      uses: EndBug/add-and-commit@v7.5.0
+      with:
+        committer_name: GitHub Actions
+        committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+        message: 'Committing genbindings changes [skip ci]'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

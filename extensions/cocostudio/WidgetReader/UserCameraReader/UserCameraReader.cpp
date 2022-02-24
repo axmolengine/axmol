@@ -79,15 +79,15 @@ Vec2 UserCameraReader::getVec2Attribute(pugi::xml_attribute attribute) const
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "X")
         {
-            ret.x = atof(value.c_str());
+            ret.x = atof(value.data());
         }
         else if (attriname == "Y")
         {
-            ret.y = atof(value.c_str());
+            ret.y = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -112,11 +112,11 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "Fov")
         {
-            fov = atof(value.c_str());
+            fov = atof(value.data());
         }
         else if (attriname == "UserCameraFlagMode")
         {
@@ -136,7 +136,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
         }
         else if (attriname == "CameraFlagData")
         {
-            int flag = atoi(value.c_str());
+            int flag = atoi(value.data());
             if (flag != 0)
                 cameraFlag = flag;
         }
@@ -185,7 +185,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "ClipPlane")
         {
@@ -199,7 +199,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -230,7 +230,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -261,7 +261,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -292,7 +292,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -323,7 +323,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -354,7 +354,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -458,7 +458,7 @@ Node* UserCameraReader::createNodeWithFlatBuffers(const flatbuffers::Table* user
     return camera;
 }
 
-int UserCameraReader::getResourceType(std::string key)
+int UserCameraReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

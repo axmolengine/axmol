@@ -1,7 +1,7 @@
 # The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4515 branch on chromium/4515 @Google Chrome 92.0.4515.131
+- Version: 2.1.0.4692 branch on chromium/4692 @Google Chrome 97.0.4692.71
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -46,7 +46,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.80.0
+- Version: 7.81.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -56,7 +56,7 @@
 
 ## {fmt}
 - Upstream: https://github.com/fmtlib/fmt
-- Version: 8.0.1-2038bf6
+- Version: git 8.1.1-9ff91b1 (5518)
 - License: MIT
 
 ## FreeType
@@ -71,13 +71,18 @@
 
 ## glfw
 - Upstream: https://github.com/glfw/glfw
-- Version: git 6876cf8 (4261)
+- Version: git df8d7bc on 31 Dec 2021 (4398)
 - License: zlib
 
 ## glsl-optimizer
 - Upstream: https://github.com/aras-p/glsl-optimizer
 - Version: git d78c3d2
 - License: MIT
+
+## jni.hpp
+- Upstream: https://github.com/mapbox/jni.hpp
+- Version: v4.0.0
+- License: MIT-like
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
@@ -97,7 +102,7 @@
 ## lua
 - plainlua
   - Upstream: http://www.lua.org/
-  - Version: 5.4.3
+  - Version: 5.4.4
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
@@ -168,7 +173,7 @@
 
 ## pugixml
 - Upstream: https://github.com/zeux/pugixml
-- Version: 1.11
+- Version: 1.12.1
 - License: MIT
 
 ## rapidjson
@@ -181,6 +186,13 @@
 - Version: git 65b314a (747) with dtCrowd::getEditableAgentAnim
 - License: zlib
 
+## robin-map
+- Upstream: https://github.com/Tessil/robin-map
+- Version: git 0.6.3-84c1bee (101) with modified for more compatible with stl
+    - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
+    - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
+- License: MIT
+
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
 - Version: 2.27
@@ -191,15 +203,15 @@
 - Version: git 1.2.4-ec6bff2 (168)
 - License: BSD-2-Clause
 
-## tsl (robin-map)
-- Upstream: https://github.com/Tessil/robin-map
-- Version: git 0.6.3-84c1bee (100)
-- License: MIT
-
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12
 - Version: 1.2 with bugfixs & improvements
 - License: zlib
+
+## uthash 
+- Upstream: https://github.com/troydhanson/uthash
+- Version: 2.3.0
+- License: BSD license (https://troydhanson.github.io/uthash/license.html)
 
 ## webp
 - Upstream: https://github.com/webmproject/libwebp
@@ -213,7 +225,7 @@
 
 ## xxHash
 - Upstream: https://github.com/Cyan4973/xxHash
-- Version: 0.8.0
+- Version: 0.8.1
 - License: BSD-2-Clause
 
 ## yaml-cpp
@@ -223,7 +235,7 @@
 
 ## yasio
 - Upstream: https://github.com/yasio/yasio
-- Version: 3.39.2
+- Version: 3.39.3
 - License: MIT WITH Anti-996
 
 ## zlib

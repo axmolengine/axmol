@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 #include "CocoStudio.h"
 #include "ui/CocosGUI.h"
-// #include "audio/include/SimpleAudioEngine.h"
 #include "base/ObjectFactory.h"
 #include "base/ccUtils.h"
 #include "platform/CCFileUtils.h"
@@ -54,7 +53,7 @@ const char* SceneReader::sceneReaderVersion()
 }
 
 cocos2d::Node* SceneReader::createNodeWithSceneFile(
-    const std::string& fileName,
+    std::string_view fileName,
     AttachComponentType attachComponent /*= AttachComponentType::EMPTY_NODE*/)
 {
     std::string fileExtension = cocos2d::FileUtils::getInstance()->getFileExtension(fileName);
@@ -161,12 +160,12 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(
     }
     else
     {
-        log("read file [%s] error!\n", fileName.c_str());
+        log("read file [%s] error!\n", fileName.data());
     }
     return nullptr;
 }
 
-bool SceneReader::readJson(const std::string& fileName, rapidjson::Document& doc)
+bool SceneReader::readJson(std::string_view fileName, rapidjson::Document& doc)
 {
     bool ret = false;
     do
@@ -210,14 +209,14 @@ Node* SceneReader::nodeByTag(Node* parent, int tag)
     return _retNode;
 }
 
-cocos2d::Component* SceneReader::createComponent(const std::string& classname)
+cocos2d::Component* SceneReader::createComponent(std::string_view classname)
 {
     std::string name = this->getComponentClassName(classname);
     Ref* object      = ObjectFactory::getInstance()->createObject(name);
 
     return dynamic_cast<Component*>(object);
 }
-std::string SceneReader::getComponentClassName(const std::string& name)
+std::string SceneReader::getComponentClassName(std::string_view name)
 {
     std::string comName;
     if (name == "CCSprite" || name == "CCTMXTiledMap" || name == "CCParticleSystemQuad" || name == "CCArmature" ||
@@ -512,35 +511,35 @@ void SceneReader::setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode*
 
         if (key == "x")
         {
-            node->setPositionX(utils::atof(value.c_str()));
+            node->setPositionX(utils::atof(value.data()));
         }
         else if (key == "y")
         {
-            node->setPositionY(utils::atof(value.c_str()));
+            node->setPositionY(utils::atof(value.data()));
         }
         else if (key == "visible")
         {
-            node->setVisible(atoi(value.c_str()) != 0);
+            node->setVisible(atoi(value.data()) != 0);
         }
         else if (key == "objecttag")
         {
-            node->setTag(atoi(value.c_str()));
+            node->setTag(atoi(value.data()));
         }
         else if (key == "zorder")
         {
-            node->setLocalZOrder(atoi(value.c_str()));
+            node->setLocalZOrder(atoi(value.data()));
         }
         else if (key == "scalex")
         {
-            node->setScaleX(utils::atof(value.c_str()));
+            node->setScaleX(utils::atof(value.data()));
         }
         else if (key == "scaley")
         {
-            node->setScaleY(atof(value.c_str()));
+            node->setScaleY(atof(value.data()));
         }
         else if (key == "rotation")
         {
-            node->setRotation(utils::atof(value.c_str()));
+            node->setRotation(utils::atof(value.data()));
         }
         else if (key == "name")
         {

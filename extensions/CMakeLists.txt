@@ -3,23 +3,23 @@
 # currently 7 extensions
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
-option(BUILD_EXTENSION_GUI "Build extension GUI" ON)
+option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
 
-option(BUILD_EXTENSION_ASSETMANAGER "Build extension asset-manager" ON)
-option(BUILD_EXTENSION_PARTICLE3D "Build extension Particle3D" ON)
-option(BUILD_EXTENSION_PHYSICS_NODE "Build extension physics-nodes" ON)
+option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
+option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON)
+option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON)
 
-option(BUILD_EXTENSION_SPINE "Build extension spine" ON)
-option(BUILD_EXTENSION_DRAGONBONES "Build extension DragonBones" ON)
+option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
+option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
 
-option(BUILD_EXTENSION_COCOSTUDIO "Build extension cocostudio" ON)
+option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
 
-option(BUILD_EXTENSION_FAIRYGUI "Build extension FairyGUI" ON)
+option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 
 if(WINDOWS OR MACOSX OR LINUX)
-  option(BUILD_EXTENSION_IMGUIEXT "Build extension ImGuiEXT" ON)
+  option(AX_ENABLE_EXT_IMGUI "Build extension ImGuiEXT" ON)
 else()
-  set(BUILD_EXTENSION_IMGUIEXT OFF)
+  set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
 
 if(BUILD_SHARED_LIBS)
@@ -62,31 +62,31 @@ function(setup_cocos_extension_config target_name)
 
 endfunction()
 
-if(BUILD_EXTENSION_GUI)
+if(AX_ENABLE_EXT_GUI)
   add_subdirectory(GUI)
 endif()
 
-if(BUILD_EXTENSION_ASSETMANAGER)
+if(AX_ENABLE_EXT_ASSETMANAGER)
   add_subdirectory(assets-manager)
 endif()
 
-if(BUILD_EXTENSION_PARTICLE3D)
+if(AX_ENABLE_EXT_PARTICLE3D)
   add_subdirectory(Particle3D)
 endif()
 
-if(BUILD_EXTENSION_PHYSICS_NODE)
+if(AX_ENABLE_EXT_PHYSICS_NODE)
   add_subdirectory(physics-nodes)
 endif()
 
-if(BUILD_EXTENSION_SPINE)
+if(AX_ENABLE_EXT_SPINE)
   add_subdirectory(spine)
 endif()
 
-if(BUILD_EXTENSION_DRAGONBONES)
+if(AX_ENABLE_EXT_DRAGONBONES)
   add_subdirectory(DragonBones)
 endif()
 
-if(BUILD_EXTENSION_FAIRYGUI)
+if(AX_ENABLE_EXT_FAIRYGUI)
   add_subdirectory(fairygui)
   if(BUILD_SHARED_LIBS)
     target_link_libraries(fairygui spine)
@@ -95,13 +95,13 @@ if(BUILD_EXTENSION_FAIRYGUI)
   endif()
 endif()
 
-if(BUILD_EXTENSION_IMGUIEXT)
+if(AX_ENABLE_EXT_IMGUI)
   add_subdirectory(ImGuiEXT)
 endif()
 
-if(BUILD_EXTENSION_COCOSTUDIO)
+if(AX_ENABLE_EXT_COCOSTUDIO)
   add_subdirectory(cocostudio)
-  if(BUILD_EXTENSION_SPINE)
+  if(AX_ENABLE_EXT_SPINE)
     target_compile_definitions(cocostudio PUBLIC CC_BUILD_WITH_SPINE=1)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio spine particle3d)
@@ -109,7 +109,7 @@ if(BUILD_EXTENSION_COCOSTUDIO)
       target_include_directories(cocostudio PUBLIC ${CMAKE_CURRENT_LIST_DIR}/spine/runtime/include)
     endif()
   endif()
-  if(BUILD_EXTENSION_DRAGONBONES)
+  if(AX_ENABLE_EXT_DRAGONBONES)
     target_compile_definitions(cocostudio PRIVATE CC_BUILD_WITH_DRANGBONES=1)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio DragonBones)
@@ -117,8 +117,9 @@ if(BUILD_EXTENSION_COCOSTUDIO)
   endif()
 endif()
 
-if(BUILD_LUA_LIBS) # TODO: rename to BUILD_EXTENSION_LUA
+if(AX_ENABLE_EXT_LUA)
   add_subdirectory(scripting/lua-bindings)
 endif()
+
 
 message(STATUS "CC_EXTENSION_LIBS:${CC_EXTENSION_LIBS}")

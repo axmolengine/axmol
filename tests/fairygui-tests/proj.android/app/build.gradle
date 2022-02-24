@@ -15,6 +15,9 @@ android {
         ndkPath = ndkInfo[1]
     }
 
+    // setup cmake
+    def cmakeVer = adxetools.findCMake("3.10.2+", project.rootProject)
+
     defaultConfig {
         applicationId "org.cocos2dx.fairygui_tests"
         minSdkVersion PROP_MIN_SDK_VERSION
@@ -46,7 +49,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            version "3.10.2"
+            version "$cmakeVer"
             path "../../CMakeLists.txt"
         }
     }
@@ -81,6 +84,10 @@ android {
             jniDebuggable true
             renderscriptDebuggable true
         }
+    }
+
+    aaptOptions {
+       noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
     }
 }
 

@@ -76,19 +76,19 @@ Vec3 Node3DReader::getVec3Attribute(pugi::xml_attribute attribute) const
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "X")
         {
-            ret.x = atof(value.c_str());
+            ret.x = atof(value.data());
         }
         else if (attriname == "Y")
         {
-            ret.y = atof(value.c_str());
+            ret.y = atof(value.data());
         }
         else if (attriname == "Z")
         {
-            ret.z = atof(value.c_str());
+            ret.z = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -141,8 +141,8 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "Name")
         {
@@ -150,7 +150,7 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
         }
         else if (attriname == "ActionTag")
         {
-            actionTag = atol(value.c_str());
+            actionTag = atol(value.data());
         }
         else if (attriname == "VisibleForFrame")
         {
@@ -158,11 +158,11 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
         }
         else if (attriname == "Alpha")
         {
-            alpha = atoi(value.c_str());
+            alpha = atoi(value.data());
         }
         else if (attriname == "Tag")
         {
-            tag = atoi(value.c_str());
+            tag = atoi(value.data());
         }
         else if (attriname == "UserData")
         {
@@ -179,7 +179,7 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
     auto child = objectData.first_child();
     while (child)
     {
-        std::string attriname = child.name();
+        std::string_view attriname = child.name();
         if (attriname == "Position3D")
         {
             attribute = child.first_attribute();
@@ -187,15 +187,15 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "X")
                 {
-                    position.x = atof(value.c_str());
+                    position.x = atof(value.data());
                 }
                 else if (attriname == "Y")
                 {
-                    position.y = atof(value.c_str());
+                    position.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -208,15 +208,15 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "X")
                 {
-                    scale.x = atof(value.c_str());
+                    scale.x = atof(value.data());
                 }
                 else if (attriname == "Y")
                 {
-                    scale.y = atof(value.c_str());
+                    scale.y = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -229,23 +229,23 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffersForNode(pugi::xml_node o
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "A")
                 {
-                    color.a = atoi(value.c_str());
+                    color.a = atoi(value.data());
                 }
                 else if (attriname == "R")
                 {
-                    color.r = atoi(value.c_str());
+                    color.r = atoi(value.data());
                 }
                 else if (attriname == "G")
                 {
-                    color.g = atoi(value.c_str());
+                    color.g = atoi(value.data());
                 }
                 else if (attriname == "B")
                 {
-                    color.b = atoi(value.c_str());
+                    color.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -293,11 +293,11 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "CameraFlagMode")
         {
-            cameraMask = atoi(value.c_str());
+            cameraMask = atoi(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -307,7 +307,7 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
 
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "Position3D")
         {

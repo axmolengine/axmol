@@ -148,7 +148,7 @@ NS_CC_BEGIN
 //
 //	/**
 //	*/
-//	const std::string& getMeshName() const;
+//	std::string_view getMeshName() const;
 //
 //	/**
 //	*/
@@ -156,7 +156,7 @@ NS_CC_BEGIN
 //
 //	/**
 //	*/
-//	void setMeshName(const std::string& meshName);
+//	void setMeshName(std::string_view meshName);
 //
 //	/**
 //	*/

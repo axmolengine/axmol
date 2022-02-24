@@ -209,7 +209,7 @@ class TemplateGenerator(adxe.CCPlugin):
 
     def get_version_from_source(self):
         src_engine_path = self.engine_path
-        version_file_path = os.path.join(src_engine_path, "cocos/adxe.cpp")
+        version_file_path = os.path.join(src_engine_path, "core/adxe.cpp")
         pattern = r".*return[ \t]+\"(.*)\";"
 
         # restore the version of engine

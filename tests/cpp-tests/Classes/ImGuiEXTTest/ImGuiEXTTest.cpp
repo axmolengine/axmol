@@ -8,15 +8,15 @@ USING_NS_CC_EXT;
 
 #if defined(CC_PLATFORM_PC)
 
-static bool show_test_window = true;
+static bool show_test_window    = true;
 static bool show_another_window = true;
-static ImVec4 clear_color = ImColor(114, 144, 154);
+static ImVec4 clear_color       = ImColor(114, 144, 154);
 
 ImGuiEXTTests::ImGuiEXTTests()
 {
-    // Resize (expand) window 
+    // Resize (expand) window
     static Size resourceSize(1280, 720);
-    auto director = Director::getInstance();
+    auto director    = Director::getInstance();
     GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
     view->setWindowed(resourceSize.width, resourceSize.height);
 
@@ -50,9 +50,12 @@ void ImGuiEXTTest::onDrawImGui()
         ImGui::Text("Hello, world!");
         ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
         ImGui::ColorEdit3("clear color", (float*)&clear_color);
-        if (ImGui::Button("Test Window")) show_test_window ^= 1;
-        if (ImGui::Button("Another Window")) show_another_window ^= 1;
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        if (ImGui::Button("Test Window"))
+            show_test_window ^= 1;
+        if (ImGui::Button("Another Window"))
+            show_another_window ^= 1;
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
+                    ImGui::GetIO().Framerate);
     }
 
     // 2. Show another simple window, this time using an explicit Begin/End pair

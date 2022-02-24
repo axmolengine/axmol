@@ -294,9 +294,9 @@ void LuaStack::pushBoolean(bool boolValue)
     lua_pushboolean(_state, boolValue);
 }
 
-void LuaStack::pushString(const char* stringValue)
+void LuaStack::pushString(std::string_view stringValue)
 {
-    lua_pushstring(_state, stringValue);
+    lua_pushlstring(_state, stringValue.data(), stringValue.length());
 }
 
 void LuaStack::pushString(const char* stringValue, int length)
@@ -331,7 +331,7 @@ void LuaStack::pushLuaValue(const LuaValue& value)
     }
     else if (type == LuaValueTypeString)
     {
-        return pushString(value.stringValue().c_str());
+        return pushString(value.stringValue());
     }
     else if (type == LuaValueTypeDict)
     {
@@ -343,7 +343,7 @@ void LuaStack::pushLuaValue(const LuaValue& value)
     }
     else if (type == LuaValueTypeObject)
     {
-        pushObject(value.ccobjectValue(), value.getObjectTypename().c_str());
+        pushObject(value.ccobjectValue(), value.getObjectTypename().data());
     }
 }
 
@@ -352,9 +352,9 @@ void LuaStack::pushLuaValueDict(const LuaValueDict& dict)
     lua_newtable(_state); /* L: table */
     for (LuaValueDictIterator it = dict.begin(); it != dict.end(); ++it)
     {
-        lua_pushstring(_state, it->first.c_str()); /* L: table key */
-        pushLuaValue(it->second);                  /* L: table key value */
-        lua_rawset(_state, -3);                    /* table.key = value, L: table */
+        lua_pushlstring(_state, it->first.c_str(), it->first.length()); /* L: table key */
+        pushLuaValue(it->second);                                       /* L: table key value */
+        lua_rawset(_state, -3);                                         /* table.key = value, L: table */
     }
 }
 

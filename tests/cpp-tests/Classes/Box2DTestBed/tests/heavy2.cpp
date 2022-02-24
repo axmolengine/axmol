@@ -25,34 +25,33 @@
 class Heavy2 : public Test
 {
 public:
-    
     Heavy2()
-	{
-		{
-			b2BodyDef bd;
-			b2Body* ground = m_world->CreateBody(&bd);
-            
-			b2EdgeShape shape;
-			shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
-			ground->CreateFixture(&shape, 0.0f);
-		}
-        
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position.Set(0.0f, 2.5f);
-		b2Body* body = m_world->CreateBody(&bd);
-        
-		b2CircleShape shape;
-		shape.m_radius = 0.5f;
+    {
+        {
+            b2BodyDef bd;
+            b2Body* ground = m_world->CreateBody(&bd);
+
+            b2EdgeShape shape;
+            shape.SetTwoSided(b2Vec2(-40.0f, 0.0f), b2Vec2(40.0f, 0.0f));
+            ground->CreateFixture(&shape, 0.0f);
+        }
+
+        b2BodyDef bd;
+        bd.type = b2_dynamicBody;
+        bd.position.Set(0.0f, 2.5f);
+        b2Body* body = m_world->CreateBody(&bd);
+
+        b2CircleShape shape;
+        shape.m_radius = 0.5f;
         body->CreateFixture(&shape, 10.0f);
-        
+
         bd.position.Set(0.0f, 3.5f);
         body = m_world->CreateBody(&bd);
         body->CreateFixture(&shape, 10.0f);
-        
+
         m_heavy = NULL;
-	}
-    
+    }
+
     void ToggleHeavy()
     {
         if (m_heavy)
@@ -66,29 +65,26 @@ public:
             bd.type = b2_dynamicBody;
             bd.position.Set(0.0f, 9.0f);
             m_heavy = m_world->CreateBody(&bd);
-            
+
             b2CircleShape shape;
             shape.m_radius = 5.0f;
             m_heavy->CreateFixture(&shape, 10.0f);
         }
     }
-    
-	void Keyboard(int key) override
-	{
-		switch (key)
-		{
+
+    void Keyboard(int key) override
+    {
+        switch (key)
+        {
         case GLFW_KEY_H:
             ToggleHeavy();
             break;
-		}
-	}
-    
-	static Test* Create()
-	{
-		return new Heavy2;
-	}
-    
-	b2Body* m_heavy;
+        }
+    }
+
+    static Test* Create() { return new Heavy2; }
+
+    b2Body* m_heavy;
 };
 
 static int testIndex = RegisterTest("Solver", "Heavy 2", Heavy2::Create);

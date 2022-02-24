@@ -82,7 +82,7 @@ void TextBMFontReader::setPropsFromJsonDictionary(Widget* widget, const rapidjso
 {
     WidgetReader::setPropsFromJsonDictionary(widget, options);
 
-    std::string jsonPath = GUIReader::getInstance()->getFilePath();
+    std::string_view jsonPath = GUIReader::getInstance()->getFilePath();
 
     TextBMFont* labelBMFont = static_cast<TextBMFont*>(widget);
 
@@ -92,7 +92,7 @@ void TextBMFontReader::setPropsFromJsonDictionary(Widget* widget, const rapidjso
     {
     case 0:
     {
-        std::string tp_c    = jsonPath;
+        std::string tp_c{jsonPath};
         const char* cmfPath = DICTOOL->getStringValue_json(cmftDic, P_Path);
         const char* cmf_tp  = tp_c.append(cmfPath).c_str();
         labelBMFont->setFntFile(cmf_tp);
@@ -128,8 +128,8 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "LabelText")
         {
@@ -147,7 +147,7 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "LabelBMFontFile_CNB")
         {
@@ -156,7 +156,7 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

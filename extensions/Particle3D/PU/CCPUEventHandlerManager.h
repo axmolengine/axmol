@@ -45,8 +45,8 @@ public:
 
     /**
      */
-    PUScriptTranslator* getTranslator(const std::string& type);
-    PUEventHandler* createEventHandler(const std::string& type);
+    PUScriptTranslator* getTranslator(std::string_view type);
+    PUEventHandler* createEventHandler(std::string_view type);
 
     CC_CONSTRUCTOR_ACCESS :
 

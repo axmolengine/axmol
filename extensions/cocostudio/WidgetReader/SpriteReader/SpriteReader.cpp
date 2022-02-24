@@ -90,8 +90,8 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "IntelliShadingEnabled")
         {
@@ -106,7 +106,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
         pugi::xml_attribute attribute;
         if (name == "FileData")
         {
@@ -118,7 +118,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -149,15 +149,15 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Src")
                 {
-                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.data()));
                 }
                 else if (name == "Dst")
                 {
-                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.data()));
                 }
 
                 attribute = attribute.next_attribute();
@@ -169,19 +169,19 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "X")
                 {
-                    hsv.x = atof(value.c_str());
+                    hsv.x = atof(value.data());
                 }
                 else if (name == "Y")
                 {
-                    hsv.y = atof(value.c_str());
+                    hsv.y = atof(value.data());
                 }
                 else if (name == "Z")
                 {
-                    hsv.z = atof(value.c_str());
+                    hsv.z = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -193,19 +193,19 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "X")
                 {
-                    filter.x = atof(value.c_str());
+                    filter.x = atof(value.data());
                 }
                 else if (name == "Y")
                 {
-                    filter.y = atof(value.c_str());
+                    filter.y = atof(value.data());
                 }
                 else if (name == "Z")
                 {
-                    filter.z = atof(value.c_str());
+                    filter.z = atof(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -341,7 +341,7 @@ Node* SpriteReader::createNodeWithFlatBuffers(const flatbuffers::Table* spriteOp
     return sprite;
 }
 
-int SpriteReader::getResourceType(std::string key)
+int SpriteReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

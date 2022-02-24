@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
  http://www.cocos2d-x.org
@@ -51,7 +51,7 @@ public:
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* userCameraOptions);
 
 protected:
-    int getResourceType(std::string key);
+    int getResourceType(std::string_view key);
     cocos2d::Vec2 getVec2Attribute(pugi::xml_attribute attribute) const;
 };
 }  // namespace cocostudio

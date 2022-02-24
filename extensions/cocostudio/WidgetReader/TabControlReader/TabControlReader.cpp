@@ -74,12 +74,12 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "HeaderPlace")
         {
-            auto placeStr = value.c_str();
+            auto placeStr = value.data();
             if (strcmp(placeStr, "TOP") == 0)
                 headerPlace = 0;
             else if (strcmp(placeStr, "LEFT") == 0)
@@ -91,19 +91,19 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
         }
         else if (attriname == "HeaderWidth")
         {
-            headerWidth = atoi(value.c_str());
+            headerWidth = atoi(value.data());
         }
         else if (attriname == "HeaderHeight")
         {
-            headerHeight = atoi(value.c_str());
+            headerHeight = atoi(value.data());
         }
         else if (attriname == "SelectedTabZoom")
         {
-            selectedTabZoom = atof(value.c_str());
+            selectedTabZoom = atof(value.data());
         }
         else if (attriname == "SelectedTabIndex")
         {
-            selectedIndex = atoi(value.c_str());
+            selectedIndex = atoi(value.data());
         }
         else if (attriname == "IgnoreHeaderTextureSize")
         {
@@ -116,7 +116,7 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
     auto child                  = objectData.first_child();
     while (child)
     {
-        if (strcmp("Children", child.name()) == 0)
+        if ("Children"sv == child.name())
         {
             containChildrenElement = true;
             break;
@@ -134,8 +134,8 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
             pugi::xml_attribute childattribute = child.first_attribute();
             while (childattribute)
             {
-                std::string attriname = childattribute.name();
-                std::string value     = childattribute.value();
+                auto attriname = childattribute.name();
+                auto value     = childattribute.value();
 
                 if (attriname == "ctype")
                 {
@@ -259,12 +259,12 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname.compare("FontSize") == 0)
         {
-            fontsize = atoi(value.c_str());
+            fontsize = atoi(value.data());
         }
         else if (attriname.compare("TitleText") == 0)
         {
@@ -276,7 +276,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "TextColor")
         {
@@ -284,19 +284,19 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "R")
                 {
-                    textColor.r = atoi(value.c_str());
+                    textColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    textColor.g = atoi(value.c_str());
+                    textColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    textColor.b = atoi(value.c_str());
+                    textColor.b = atoi(value.data());
                 }
 
                 attribute = attribute.next_attribute();
@@ -312,7 +312,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -347,7 +347,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -382,7 +382,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -417,7 +417,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -452,7 +452,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -484,7 +484,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {
@@ -867,7 +867,7 @@ cocos2d::Node* TabHeaderReader::createNodeWithFlatBuffers(const flatbuffers::Tab
     return node;
 }
 
-int TabHeaderReader::getResourceType(std::string key)
+int TabHeaderReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {
@@ -916,16 +916,16 @@ flatbuffers::Offset<flatbuffers::TabItemOption> TabItemReader::createTabItemOpti
     auto child = objectData.first_child();
     while (child)
     {
-        std::string attriName = child.name();
-        if (attriName.compare("Children") == 0)
+        std::string_view attriname = child.name();
+        if (attriname.compare("Children"sv) == 0)
         {
             containerChildrenData = child;
         }
-        if (attriName.compare("Header") == 0)
+        if (attriname.compare("Header"sv) == 0)
         {
             header = TabHeaderReader::getInstance()->createOptionsWithFlatBuffers(child, builder);
         }
-        else if (attriName.compare("Container") == 0)
+        else if (attriname.compare("Container"sv) == 0)
         {
             containerData = child;
         }

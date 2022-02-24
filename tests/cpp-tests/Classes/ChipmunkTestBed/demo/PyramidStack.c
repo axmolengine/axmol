@@ -23,11 +23,13 @@
 #include "chipmunk/chipmunk_unsafe.h"
 #include "ChipmunkDemo.h"
 
-static void update(cpSpace* space, double dt) {
+static void update(cpSpace* space, double dt)
+{
     cpSpaceStep(space, dt);
 }
 
-static cpSpace* init(void) {
+static cpSpace* init(void)
+{
     cpSpace* space = cpSpaceNew();
     cpSpaceSetIterations(space, 30);
     cpSpaceSetGravity(space, cpv(0, -100));
@@ -54,8 +56,10 @@ static cpSpace* init(void) {
     cpShapeSetFilter(shape, NOT_GRABBABLE_FILTER);
 
     // Add lots of boxes.
-    for (int i = 0; i < 14; i++) {
-        for (int j = 0; j <= i; j++) {
+    for (int i = 0; i < 14; i++)
+    {
+        for (int j = 0; j <= i; j++)
+        {
             body = cpSpaceAddBody(space, cpBodyNew(1.0f, cpMomentForBox(1.0f, 30.0f, 30.0f)));
             cpBodySetPosition(body, cpv(j * 32 - i * 16, 300 - i * 32));
 
@@ -77,16 +81,12 @@ static cpSpace* init(void) {
     return space;
 }
 
-static void destroy(cpSpace* space) {
+static void destroy(cpSpace* space)
+{
     ChipmunkDemoFreeSpaceChildren(space);
     cpSpaceFree(space);
 }
 
 ChipmunkDemo PyramidStack = {
-    "Pyramid Stack",
-    1.0 / 180.0,
-    init,
-    update,
-    ChipmunkDemoDefaultDrawImpl,
-    destroy,
+    "Pyramid Stack", 1.0 / 180.0, init, update, ChipmunkDemoDefaultDrawImpl, destroy,
 };

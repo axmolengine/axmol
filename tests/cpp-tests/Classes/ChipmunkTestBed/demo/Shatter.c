@@ -29,7 +29,8 @@
 
 #define MAX_VERTEXES_PER_VORONOI 16
 
-struct WorleyContex {
+struct WorleyContex
+{
     uint32_t seed;
     cpFloat cellSize;
     int width, height;
@@ -37,16 +38,18 @@ struct WorleyContex {
     cpVect focus;
 };
 
-static inline cpVect HashVect(uint32_t x, uint32_t y, uint32_t seed) {
+static inline cpVect HashVect(uint32_t x, uint32_t y, uint32_t seed)
+{
     //	cpFloat border = 0.21f;
     cpFloat border = 0.05f;
     uint32_t h     = (x * 1640531513 ^ y * 2654435789) + seed;
 
-    return cpv(cpflerp(border, 1.0f - border, (cpFloat)(h & 0xFFFF) / (cpFloat) 0xFFFF),
-        cpflerp(border, 1.0f - border, (cpFloat)((h >> 16) & 0xFFFF) / (cpFloat) 0xFFFF));
+    return cpv(cpflerp(border, 1.0f - border, (cpFloat)(h & 0xFFFF) / (cpFloat)0xFFFF),
+               cpflerp(border, 1.0f - border, (cpFloat)((h >> 16) & 0xFFFF) / (cpFloat)0xFFFF));
 }
 
-static cpVect WorleyPoint(int i, int j, struct WorleyContex* context) {
+static cpVect WorleyPoint(int i, int j, struct WorleyContex* context)
+{
     cpFloat size = context->cellSize;
     int width    = context->width;
     int height   = context->height;
@@ -56,18 +59,28 @@ static cpVect WorleyPoint(int i, int j, struct WorleyContex* context) {
     cpVect fv = HashVect(i, j, context->seed);
 
     return cpv(cpflerp(bb.l, bb.r, 0.5f) + size * (i + fv.x - width * 0.5f),
-        cpflerp(bb.b, bb.t, 0.5f) + size * (j + fv.y - height * 0.5f));
+               cpflerp(bb.b, bb.t, 0.5f) + size * (j + fv.y - height * 0.5f));
 }
 
-static int ClipCell(cpShape* shape, cpVect center, int i, int j, struct WorleyContex* context, cpVect* verts,
-    cpVect* clipped, int count) {
+static int ClipCell(cpShape* shape,
+                    cpVect center,
+                    int i,
+                    int j,
+                    struct WorleyContex* context,
+                    cpVect* verts,
+                    cpVect* clipped,
+                    int count)
+{
     cpVect other = WorleyPoint(i, j, context);
     //	printf("  other %dx%d: (% 5.2f, % 5.2f) ", i, j, other.x, other.y);
-    if (cpShapePointQuery(shape, other, NULL) > 0.0f) {
+    if (cpShapePointQuery(shape, other, NULL) > 0.0f)
+    {
         //		printf("excluded\n");
         memcpy(clipped, verts, count * sizeof(cpVect));
         return count;
-    } else {
+    }
+    else
+    {
         //		printf("clipped\n");
     }
 
@@ -75,11 +88,13 @@ static int ClipCell(cpShape* shape, cpVect center, int i, int j, struct WorleyCo
     cpFloat dist = cpvdot(n, cpvlerp(center, other, 0.5f));
 
     int clipped_count = 0;
-    for (int j = 0, i = count - 1; j < count; i = j, j++) {
+    for (int j = 0, i = count - 1; j < count; i = j, j++)
+    {
         cpVect a       = verts[i];
         cpFloat a_dist = cpvdot(a, n) - dist;
 
-        if (a_dist <= 0.0) {
+        if (a_dist <= 0.0)
+        {
             clipped[clipped_count] = a;
             clipped_count++;
         }
@@ -87,7 +102,8 @@ static int ClipCell(cpShape* shape, cpVect center, int i, int j, struct WorleyCo
         cpVect b       = verts[j];
         cpFloat b_dist = cpvdot(b, n) - dist;
 
-        if (a_dist * b_dist < 0.0f) {
+        if (a_dist * b_dist < 0.0f)
+        {
             cpFloat t = cpfabs(a_dist) / (cpfabs(a_dist) + cpfabs(b_dist));
 
             clipped[clipped_count] = cpvlerp(a, b, t);
@@ -98,25 +114,34 @@ static int ClipCell(cpShape* shape, cpVect center, int i, int j, struct WorleyCo
     return clipped_count;
 }
 
-static void ShatterCell(
-    cpSpace* space, cpShape* shape, cpVect cell, int cell_i, int cell_j, struct WorleyContex* context) {
+static void ShatterCell(cpSpace* space,
+                        cpShape* shape,
+                        cpVect cell,
+                        int cell_i,
+                        int cell_j,
+                        struct WorleyContex* context)
+{
     //	printf("cell %dx%d: (% 5.2f, % 5.2f)\n", cell_i, cell_j, cell.x, cell.y);
 
     cpBody* body = cpShapeGetBody(shape);
 
-    cpVect* ping = (cpVect*) alloca(MAX_VERTEXES_PER_VORONOI * sizeof(cpVect));
-    cpVect* pong = (cpVect*) alloca(MAX_VERTEXES_PER_VORONOI * sizeof(cpVect));
+    cpVect* ping = (cpVect*)alloca(MAX_VERTEXES_PER_VORONOI * sizeof(cpVect));
+    cpVect* pong = (cpVect*)alloca(MAX_VERTEXES_PER_VORONOI * sizeof(cpVect));
 
     int count = cpPolyShapeGetCount(shape);
     count     = (count > MAX_VERTEXES_PER_VORONOI ? MAX_VERTEXES_PER_VORONOI : count);
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++)
+    {
         ping[i] = cpBodyLocalToWorld(body, cpPolyShapeGetVert(shape, i));
     }
 
-    for (int i = 0; i < context->width; i++) {
-        for (int j = 0; j < context->height; j++) {
-            if (!(i == cell_i && j == cell_j) && cpShapePointQuery(shape, cell, NULL) < 0.0f) {
+    for (int i = 0; i < context->width; i++)
+    {
+        for (int j = 0; j < context->height; j++)
+        {
+            if (!(i == cell_i && j == cell_j) && cpShapePointQuery(shape, cell, NULL) < 0.0f)
+            {
                 count = ClipCell(shape, cell, i, j, context, ping, pong, count);
                 memcpy(ping, pong, count * sizeof(cpVect));
             }
@@ -138,20 +163,24 @@ static void ShatterCell(
     cpShapeSetFriction(new_shape, cpShapeGetFriction(shape));
 }
 
-static void ShatterShape(cpSpace* space, cpShape* shape, cpFloat cellSize, cpVect focus) {
+static void ShatterShape(cpSpace* space, cpShape* shape, cpFloat cellSize, cpVect focus)
+{
     cpSpaceRemoveShape(space, shape);
     cpSpaceRemoveBody(space, cpShapeGetBody(shape));
 
     cpBB bb    = cpShapeGetBB(shape);
-    int width  = (int) ((bb.r - bb.l) / cellSize) + 1;
-    int height = (int) ((bb.t - bb.b) / cellSize) + 1;
+    int width  = (int)((bb.r - bb.l) / cellSize) + 1;
+    int height = (int)((bb.t - bb.b) / cellSize) + 1;
     //	printf("Splitting as %dx%d\n", width, height);
     struct WorleyContex context = {(uint32_t)rand(), cellSize, width, height, bb, focus};
 
-    for (int i = 0; i < context.width; i++) {
-        for (int j = 0; j < context.height; j++) {
+    for (int i = 0; i < context.width; i++)
+    {
+        for (int j = 0; j < context.height; j++)
+        {
             cpVect cell = WorleyPoint(i, j, &context);
-            if (cpShapePointQuery(shape, cell, NULL) < 0.0f) {
+            if (cpShapePointQuery(shape, cell, NULL) < 0.0f)
+            {
                 ShatterCell(space, shape, cell, i, j, &context);
             }
         }
@@ -161,17 +190,23 @@ static void ShatterShape(cpSpace* space, cpShape* shape, cpFloat cellSize, cpVec
     cpShapeFree(shape);
 }
 
-static void update(cpSpace* space, double dt) {
+static void update(cpSpace* space, double dt)
+{
     cpSpaceStep(space, dt);
 
-    if (ChipmunkDemoRightDown) {
+    if (ChipmunkDemoRightDown)
+    {
         cpPointQueryInfo info;
-        if (cpSpacePointQueryNearest(space, ChipmunkDemoMouse, 0, GRAB_FILTER, &info)) {
+        if (cpSpacePointQueryNearest(space, ChipmunkDemoMouse, 0, GRAB_FILTER, &info))
+        {
             cpBB bb           = cpShapeGetBB(info.shape);
             cpFloat cell_size = cpfmax(bb.r - bb.l, bb.t - bb.b) / 5.0f;
-            if (cell_size > 5.0f) {
-                ShatterShape(space, (cpShape*) info.shape, cell_size, ChipmunkDemoMouse);
-            } else {
+            if (cell_size > 5.0f)
+            {
+                ShatterShape(space, (cpShape*)info.shape, cell_size, ChipmunkDemoMouse);
+            }
+            else
+            {
                 //				printf("Too small to splinter %f\n", cell_size);
             }
         }
@@ -179,7 +214,8 @@ static void update(cpSpace* space, double dt) {
     }
 }
 
-static cpSpace* init(void) {
+static cpSpace* init(void)
+{
     ChipmunkDemoMessageString = "Right click something to shatter it.";
 
     cpSpace* space = cpSpaceNew();
@@ -210,16 +246,12 @@ static cpSpace* init(void) {
     return space;
 }
 
-static void destroy(cpSpace* space) {
+static void destroy(cpSpace* space)
+{
     ChipmunkDemoFreeSpaceChildren(space);
     cpSpaceFree(space);
 }
 
 ChipmunkDemo Shatter = {
-    "Shatter.",
-    1.0f / 60.0f,
-    init,
-    update,
-    ChipmunkDemoDefaultDrawImpl,
-    destroy,
+    "Shatter.", 1.0f / 60.0f, init, update, ChipmunkDemoDefaultDrawImpl, destroy,
 };

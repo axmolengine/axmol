@@ -138,7 +138,7 @@ TOLUA_API void tolua_pushfieldstring (lua_State* L, int lo, int index, const cha
 TOLUA_API void tolua_pushfielduserdata (lua_State* L, int lo, int index, void* v);
 TOLUA_API void tolua_pushfieldusertype (lua_State* L, int lo, int index, void* v, const char* type);
 TOLUA_API void tolua_pushfieldusertype_and_takeownership (lua_State* L, int lo, int index, void* v, const char* type);
-    
+
 TOLUA_API void tolua_pushusertype_and_addtoroot (lua_State* L, void* value, const char* type);
 TOLUA_API void tolua_add_value_to_root (lua_State* L,void* value);
 TOLUA_API void tolua_remove_value_from_root (lua_State* L, void* value);

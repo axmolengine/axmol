@@ -50,7 +50,8 @@ if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "x86_64")
 endif() 
 
 # Sets CMAKE_SYSTEM_PROCESSOR for iphoneos and iphonesimulator
-if("${CMAKE_OSX_SYSROOT}" MATCHES "iphonesimulator")
+string(TOLOWER "${CMAKE_OSX_SYSROOT}" lowercase_CMAKE_OSX_SYSROOT)
+if("${lowercase_CMAKE_OSX_SYSROOT}" MATCHES "iphonesimulator")
     if("${CMAKE_OSX_ARCHITECTURES}" MATCHES "i386")
         set(CMAKE_SYSTEM_PROCESSOR i386)
     elseif("${CMAKE_OSX_ARCHITECTURES}" MATCHES "x86_64")

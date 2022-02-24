@@ -1,8 +1,9 @@
 # adxe
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
-[![dev](https://img.shields.io/badge/v1.0.0-beta4-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-beta6-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
   
 [![Windows Build Status](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml)
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
@@ -11,29 +12,28 @@
 [![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
 
-**这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++14/17...**
+**这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17...**
   
 **[English](README.md)**
   
 ### 宗旨:
-* C++14/17
+* C++17
 * Focus on native game dev only
 * Fix bugs ASAP
 * Review PR ASAP
-* Excellent PRs from any guys are welcome, we will review & merge ASAP
   
 ### 主要特性:
 * Windows x64编译支持
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
-  * [openal-soft](https://github.com/kcat/openal-soft), pass -DBUILD_DEP_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```BUILD_DEP_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
+  * [openal-soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enable it
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
 * 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
 * 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
 * 使用现代化的GL加载器glad代替glew
 * 增加google angle渲染后端支持
-* 设置默认C++标准为C++14
+* C++最低标准要求: C++17
 * 设置ios下最低目标平台为ios9.0
 * 使用更快的xml解析库pugixml代替tinyxml2
 * Downloader全平台统一实现，均基于curl
@@ -66,7 +66,7 @@
   4. 之后就可以用vs打开```adxe/build/adxe.sln```启动cpp-tests等测试工程了
 
 #### Android
-  1. 安装 Android Studio 4.2或更高版本
+  1. 安装 Android Studio 2021.1.1+
   2. 第一次启动Android Studio, 会引导安装一些工具，默认安装即可，如果不需要模拟器可以把```Virutal Device```勾选去掉
   2. 启动 Android Studio并打开adxe\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
@@ -114,3 +114,78 @@
 - @rh101
 - @aismann
 - @weiwest
+
+### 自Cocos2d-x-4.0以来完整改动列表
+
+- [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
+- [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
+- [HIGHLIGHT] Windows x64 build support
+- [HIGHLIGHT] Support custom texture atlas formats, thanks to @rh101
+- [HIGHLIGHT] Downloader realtime md5 checksum calculation support
+- [HIGHLIGHT] Decompress astc parallel support
+- [HIGHLIGHT] Reimplement HttpClient based on yasio for concurrent http request support
+- [HIGHLIGHT] Improve Lua RTTI performance and less memory cost
+- [HIGHLIGHT] Virtual File System support, thanks to @rh101 
+- [HIGHLIGHT] Refactor lua loader, speed up 30%+
+- [HIGHLIGHT] Update plainlua version to 5.4.3
+- [HIGHLIGHT] Use Openal-Soft for all platform
+- [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
+- [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
+- [HIGHLIGHT] Use modern GL loader Glad
+- [HIGHLIGHT] Google angle renderer backend support
+- [HIGHLIGHT] Update codebase to C++ 17 standard
+- [HIGHLIGHT] Remove tinyxml2
+- [HIGHLIGHT] Use fast pugixml
+- [HIGHLIGHT] Spine-3.6~4.0 support
+- [HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
+- [HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoder not present, use software decoder)
+- [HIGHLIGHT] ImGui integrated for PC platforms
+- [HIGHLIGHT] Extension FairyGUI support
+- [HIGHLIGHT] Use curl for transferring data with URL syntax
+- [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
+- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
+- [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
+- [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
+- [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
+- [HIGHLIGHT] Use c++17 string_view instead `const std::string&`
+- [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
+- [Fix] Fix Label overflow shrink bug
+- [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
+- [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
+- [FIX] Set global Z value of label debug layer to be the same as the parent label to fix display issue
+- [FIX] Use TTF scaled metrics to calculate line height, thanks to @rh101
+- [FIX] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
+- [FIX] Fix console output text encoding for win32
+- [FIX] Fix charset process for fontName on win32
+- [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
+- [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
+- [FIX] Fix Lua can't get `unsigned char` or `unsigned int` values of `ValueMap`
+- [FIX] Fix crash on AudioEngine::end after the `Director` was destroyed
+- [FIX] Fix font atlas will leak when it does not exist in the atlas cache, thanks to @rh101
+- [FIX] Fix ScrollView shows incorrect position in vertical direction some time, thanks to @wzhengsen
+- [FIX] Fix Spine ClippingAttachment doesn't work
+- [REFINE] CCValue move construct and assign with std::string support
+- [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
+- [REFINE] Add lua debug project file to lua project template
+- [REFINE] Remove lua 64bit spec search path, since we can compile compatible bytecode for both plainlua and luajit
+- [REFINE] Put stats labels to safe origin to make sure we can see it integral at some mobile device
+- [REFINE] Improve cmake scripts
+- [REFINE] Replace deprecated repo `jcenter` with `mavenCentral`
+- [REFINE] Lua-5.4 compatible
+- [REFINE] Improve cmdline-tools
+- [REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
+- [REFINE] Improve android astc support check
+- [REFINE] Improve the "Physics part" (#379), thanks to @aismann 
+- [REFINE] Rename command line to to `adxe`
+- [REFINE] Update imgui to 1.84 WIP
+- [REFINE] Rename thirdparty folder `external` to `thirdparty`
+- [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
+- [REFINE] Fix some audio test case can't hear sound
+- [REFINE] Avoid OS_WINDOWS conflict with system macro
+- [REFINE] Update OpenSSL to v3.0.1
+- [REFINE] Update FreeType to latest
+- [REFINE] Use Freetype SDF render when label distance field enabled
+- [REFINE] Always enable string pooling for msvc on cmake
+- [REFINE] Change DrawNode api color parameters from `Color4F` to low `Color4B`
+- [REFINE] Improve DrawNode GC allocs
+- [REFINE] Use `jni.hpp` to improve jni call without method signature GC allocs

@@ -241,7 +241,7 @@ def rmdir(folder):
         else:
             shutil.rmtree(folder)
 
-VERSION_FILE_PATH = 'cocos/adxe.cpp'
+VERSION_FILE_PATH = 'core/adxe.cpp'
 VERSION_PATTERN = r".*return[ \t]+\"(.*)\";"
 def get_engine_version(engine_path):
     ret = None

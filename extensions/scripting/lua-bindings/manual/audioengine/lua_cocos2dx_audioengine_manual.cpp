@@ -27,7 +27,7 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "audio/include/AudioEngine.h"
+#include "audio/AudioEngine.h"
 
 static int lua_get_AudioProfile_name(lua_State* L)
 {
@@ -269,11 +269,11 @@ int lua_cocos2dx_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
 
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 3, 0));
 
-        cocos2d::AudioEngine::setFinishCallback(arg0, [=](int audioID, std::string filePath) {
+        cocos2d::AudioEngine::setFinishCallback(arg0, [=](int audioID, std::string_view filePath) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
             stack->pushInt(audioID);
-            stack->pushString(filePath.c_str());
+            stack->pushString(filePath);
 
             stack->executeFunctionByHandler(handler, 2);
 

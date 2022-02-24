@@ -48,7 +48,7 @@ const bool PURibbonTrailRender::DEFAULT_RANDOM_INITIAL_COLOUR = true;
 const Vec4 PURibbonTrailRender::DEFAULT_INITIAL_COLOUR(1, 1, 1, 1);
 const Vec4 PURibbonTrailRender::DEFAULT_COLOUR_CHANGE(0.5, 0.5, 0.5, 0.5);
 
-PURibbonTrailRender* PURibbonTrailRender::create(const std::string& texFile)
+PURibbonTrailRender* PURibbonTrailRender::create(std::string_view texFile)
 {
     auto br = new PURibbonTrailRender();
     br->autorelease();
@@ -233,7 +233,7 @@ void PURibbonTrailRender::prepare()
         ss << this;
         std::string childNodeNodeName = "ParticleUniverse" + ss.str();
         //_childNode =
-        //mParentTechnique->getParentSystem()->getParentSceneNode()->createChildSceneNode(childNodeNodeName);
+        // mParentTechnique->getParentSystem()->getParentSceneNode()->createChildSceneNode(childNodeNodeName);
         //_childNode->setInheritOrientation(false);
         auto parent = _particleSystem->getParent();
         if (parent)
@@ -270,7 +270,7 @@ void PURibbonTrailRender::prepare()
             // sceneNodeName = "ParticleUniverse" + ss.str() + StringConverter::toString(i);
             // RibbonTrailRendererVisualData* visualData =
             //	PU_NEW_T(RibbonTrailRendererVisualData,
-            //MEMCATEGORY_SCENE_OBJECTS)(_childNode->createChildSceneNode(sceneNodeName), _trail);
+            // MEMCATEGORY_SCENE_OBJECTS)(_childNode->createChildSceneNode(sceneNodeName), _trail);
             // visualData->node->setInheritOrientation(false);
             auto node = Node::create();
             _childNode->addChild(node);

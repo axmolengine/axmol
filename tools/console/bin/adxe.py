@@ -550,7 +550,7 @@ class CCPlugin(object):
         #
         # 3: Templates can be in ~/.cocos2d/templates as well
         #
-        user_path = os.path.expanduser("~/.cocos/templates")
+        user_path = os.path.expanduser("~/.adxe/templates")
         if os.path.isdir(user_path):
             paths.append(user_path)
 
@@ -571,10 +571,10 @@ class CCPlugin(object):
 
     @staticmethod
     def _log_path():
-        log_dir = os.path.expanduser("~/.cocos")
+        log_dir = os.path.expanduser("~/.adxe")
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
-        return os.path.join(log_dir, "cocos.log")
+        return os.path.join(log_dir, "adxe.log")
 
     # the list of plugins this plugin needs to run before itself.
     # ie: if it returns ('a', 'b'), the plugin 'a' will run first, then 'b'

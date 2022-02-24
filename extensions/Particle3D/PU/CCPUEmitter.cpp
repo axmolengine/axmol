@@ -497,7 +497,7 @@ void PUEmitter::setParticleTextureCoordsRangeEnd(const unsigned short& particleT
 }
 
 //-----------------------------------------------------------------------
-void PUEmitter::setEmitsName(const std::string& emitsName)
+void PUEmitter::setEmitsName(std::string_view emitsName)
 {
     _emitsName   = emitsName;
     _emitsEntity = nullptr;

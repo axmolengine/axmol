@@ -67,12 +67,12 @@ public:
     PUScriptLexer();
     ~PUScriptLexer();
 
-    void openLexer(const std::string& str, const std::string& source, PUScriptTokenList& tokenList);
+    void openLexer(std::string_view str, std::string_view source, PUScriptTokenList& tokenList);
 
     /** Tokenizes the given input and returns the list of tokens found */
     // tokenize(const std::string &str, const std::string &source);
 private:  // Private utility operations
-    void setToken(const std::string& lexeme, int line, const std::string& source, PUScriptTokenList* tokens);
+    void setToken(std::string_view lexeme, int line, std::string_view source, PUScriptTokenList* tokens);
     bool isWhitespace(char c) const;
     bool isNewline(char c) const;
 };

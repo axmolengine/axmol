@@ -1,4 +1,4 @@
-﻿#include "ArmatureData.h"
+#include "ArmatureData.h"
 #include "UserData.h"
 #include "DragonBonesData.h"
 #include "ConstraintData.h"
@@ -264,9 +264,9 @@ void ArmatureData::addAction(ActionData* value, bool isDefault)
     }
 }
 
-MeshDisplayData* ArmatureData::getMesh(const std::string& skinName,
-                                       const std::string& slotName,
-                                       const std::string& meshName) const
+MeshDisplayData* ArmatureData::getMesh(std::string_view skinName,
+                                       std::string_view slotName,
+                                       std::string_view meshName) const
 {
     const auto skin = getSkin(skinName);
     if (skin == nullptr)

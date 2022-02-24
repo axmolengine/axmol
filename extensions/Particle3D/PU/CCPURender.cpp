@@ -56,7 +56,7 @@ void PURender::copyAttributesTo(PURender* render)
 //     return left->depthInView > right->depthInView;
 // }
 
-PUParticle3DQuadRender* PUParticle3DQuadRender::create(const std::string& texFile)
+PUParticle3DQuadRender* PUParticle3DQuadRender::create(std::string_view texFile)
 {
     auto ret = new PUParticle3DQuadRender();
     if (ret->initRender(texFile))
@@ -227,25 +227,25 @@ void PUParticle3DQuadRender::render(Renderer* renderer, const Mat4& transform, P
 
         //_posuvcolors[vertexindex].position = (position + (- halfwidth - halfheight + halfwidth * offsetX + halfheight
         //* offsetY)); _posuvcolors[vertexindex].color = particle->color; _posuvcolors[vertexindex].uv.set(val.x +
-        //texOffset.x, val.y + texOffset.y);
+        // texOffset.x, val.y + texOffset.y);
 
         // val.set(particle->rt_uv.x - texOffset.x, particle->lb_uv.y - texOffset.y);
         // val.set(val.x * costheta - val.y * sintheta, val.x * sintheta + val.y * costheta);
         //_posuvcolors[vertexindex + 1].position = (position + (halfwidth - halfheight + halfwidth * offsetX +
-        //halfheight * offsetY)); _posuvcolors[vertexindex + 1].color = particle->color; _posuvcolors[vertexindex +
-        //1].uv.set(val.x + texOffset.x, val.y + texOffset.y);
+        // halfheight * offsetY)); _posuvcolors[vertexindex + 1].color = particle->color; _posuvcolors[vertexindex +
+        // 1].uv.set(val.x + texOffset.x, val.y + texOffset.y);
         //
         // val.set(particle->lb_uv.x - texOffset.x, particle->rt_uv.y - texOffset.y);
         // val.set(val.x * costheta - val.y * sintheta, val.x * sintheta + val.y * costheta);
         //_posuvcolors[vertexindex + 2].position = (position + (- halfwidth + halfheight + halfwidth * offsetX +
-        //halfheight * offsetY)); _posuvcolors[vertexindex + 2].color = particle->color; _posuvcolors[vertexindex +
-        //2].uv.set(val.x + texOffset.x, val.y + texOffset.y);
+        // halfheight * offsetY)); _posuvcolors[vertexindex + 2].color = particle->color; _posuvcolors[vertexindex +
+        // 2].uv.set(val.x + texOffset.x, val.y + texOffset.y);
         //
         // val.set(particle->rt_uv.x - texOffset.x, particle->rt_uv.y - texOffset.y);
         // val.set(val.x * costheta - val.y * sintheta, val.x * sintheta + val.y * costheta);
         //_posuvcolors[vertexindex + 3].position = (position + (halfwidth + halfheight + halfwidth * offsetX +
-        //halfheight * offsetY)); _posuvcolors[vertexindex + 3].color = particle->color; _posuvcolors[vertexindex +
-        //3].uv.set(val.x + texOffset.x, val.y + texOffset.y);
+        // halfheight * offsetY)); _posuvcolors[vertexindex + 3].color = particle->color; _posuvcolors[vertexindex +
+        // 3].uv.set(val.x + texOffset.x, val.y + texOffset.y);
         //
         //
         //_indexData[index] = vertexindex;
@@ -488,8 +488,7 @@ PUParticle3DQuadRender* PUParticle3DQuadRender::clone()
     return render;
 }
 
-PUParticle3DModelRender* PUParticle3DModelRender::create(const std::string& modelFile,
-                                                         const std::string& texFile /*= ""*/)
+PUParticle3DModelRender* PUParticle3DModelRender::create(std::string_view modelFile, std::string_view texFile /*= ""*/)
 {
     auto ret        = new PUParticle3DModelRender();
     ret->_modelFile = modelFile;
@@ -614,7 +613,7 @@ PUParticle3DEntityRender::~PUParticle3DEntityRender()
     CC_SAFE_RELEASE(_indexBuffer);
 }
 
-bool PUParticle3DEntityRender::initRender(const std::string& texFile)
+bool PUParticle3DEntityRender::initRender(std::string_view texFile)
 {
     CC_SAFE_RELEASE_NULL(_programState);
     if (!texFile.empty())
@@ -693,7 +692,7 @@ PUParticle3DBoxRender::PUParticle3DBoxRender()
 
 PUParticle3DBoxRender::~PUParticle3DBoxRender() {}
 
-PUParticle3DBoxRender* PUParticle3DBoxRender::create(const std::string& texFile)
+PUParticle3DBoxRender* PUParticle3DBoxRender::create(std::string_view texFile)
 {
     auto ret = new PUParticle3DBoxRender();
     if (ret->initRender(texFile))
@@ -883,7 +882,7 @@ PUParticle3DBoxRender* PUParticle3DBoxRender::clone()
     return render;
 }
 
-PUSphereRender* PUSphereRender::create(const std::string& texFile)
+PUSphereRender* PUSphereRender::create(std::string_view texFile)
 {
     auto ret = new PUSphereRender();
     if (ret->initRender(texFile))

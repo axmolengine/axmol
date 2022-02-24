@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 '''
 This script will install environment variables needed to by adxe. It will set these envrironment variables:
-* ADXE_CONSOLE_ROOT: used to run cocos console tools
+* ADXE_CONSOLE_ROOT: used to run adxe console tools
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK: used to generate applicatoin on Android through commands
 * ADXE_ROOT: path where adxe is installed

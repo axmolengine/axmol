@@ -84,7 +84,7 @@ Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
     while (attribute)
     {
         attriname         = attribute.name();
-        std::string value = attribute.value();
+        std::string_view value = attribute.value();
 
         if (attriname == "Type")
         {
@@ -128,15 +128,15 @@ Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
         }
         else if (attriname == "Intensity")
         {
-            intensity = atof(value.c_str());
+            intensity = atof(value.data());
         }
         else if (attriname == "Range")
         {
-            range = atof(value.c_str());
+            range = atof(value.data());
         }
         else if (attriname == "OuterAngle")
         {
-            outerAngle = atof(value.c_str());
+            outerAngle = atof(value.data());
         }
         else if (attriname == "Enable")
         {

@@ -119,8 +119,8 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "ClipAble")
         {
@@ -128,11 +128,11 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
         }
         else if (name == "ComboBoxIndex")
         {
-            colorType = atoi(value.c_str());
+            colorType = atoi(value.data());
         }
         else if (name == "BackColorAlpha")
         {
-            bgColorOpacity = atoi(value.c_str());
+            bgColorOpacity = atoi(value.data());
         }
         else if (name == "Scale9Enable")
         {
@@ -143,19 +143,19 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
         }
         else if (name == "Scale9OriginX")
         {
-            capInsets.origin.x = atof(value.c_str());
+            capInsets.origin.x = atof(value.data());
         }
         else if (name == "Scale9OriginY")
         {
-            capInsets.origin.y = atof(value.c_str());
+            capInsets.origin.y = atof(value.data());
         }
         else if (name == "Scale9Width")
         {
-            capInsets.size.width = atof(value.c_str());
+            capInsets.size.width = atof(value.data());
         }
         else if (name == "Scale9Height")
         {
-            capInsets.size.height = atof(value.c_str());
+            capInsets.size.height = atof(value.data());
         }
         else if (name == "DirectionType")
         {
@@ -175,7 +175,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
         }
         else if (name == "ItemMargin")
         {
-            itemMargin = atoi(value.c_str());
+            itemMargin = atoi(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -185,7 +185,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "InnerNodeSize")
         {
@@ -193,15 +193,15 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeInnerNodeSize)
             {
                 name              = attributeInnerNodeSize.name();
-                std::string value = attributeInnerNodeSize.value();
+                auto value = attributeInnerNodeSize.value();
 
                 if (name == "Width")
                 {
-                    innerSize.width = atof(value.c_str());
+                    innerSize.width = atof(value.data());
                 }
                 else if (name == "Height")
                 {
-                    innerSize.height = atof(value.c_str());
+                    innerSize.height = atof(value.data());
                 }
 
                 attributeInnerNodeSize = attributeInnerNodeSize.next_attribute();
@@ -214,15 +214,15 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeSize)
             {
                 name              = attributeSize.name();
-                std::string value = attributeSize.value();
+                auto value = attributeSize.value();
 
                 if (name == "X")
                 {
-                    scale9Size.width = atof(value.c_str());
+                    scale9Size.width = atof(value.data());
                 }
                 else if (name == "Y")
                 {
-                    scale9Size.height = atof(value.c_str());
+                    scale9Size.height = atof(value.data());
                 }
 
                 attributeSize = attributeSize.next_attribute();
@@ -235,19 +235,19 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeSingleColor)
             {
                 name              = attributeSingleColor.name();
-                std::string value = attributeSingleColor.value();
+                auto value = attributeSingleColor.value();
 
                 if (name == "R")
                 {
-                    bgColor.r = atoi(value.c_str());
+                    bgColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    bgColor.g = atoi(value.c_str());
+                    bgColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    bgColor.b = atoi(value.c_str());
+                    bgColor.b = atoi(value.data());
                 }
 
                 attributeSingleColor = attributeSingleColor.next_attribute();
@@ -260,19 +260,19 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeEndColor)
             {
                 name              = attributeEndColor.name();
-                std::string value = attributeEndColor.value();
+                auto value = attributeEndColor.value();
 
                 if (name == "R")
                 {
-                    bgEndColor.r = atoi(value.c_str());
+                    bgEndColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    bgEndColor.g = atoi(value.c_str());
+                    bgEndColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    bgEndColor.b = atoi(value.c_str());
+                    bgEndColor.b = atoi(value.data());
                 }
 
                 attributeEndColor = attributeEndColor.next_attribute();
@@ -285,19 +285,19 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeFirstColor)
             {
                 name              = attributeFirstColor.name();
-                std::string value = attributeFirstColor.value();
+                auto value = attributeFirstColor.value();
 
                 if (name == "R")
                 {
-                    bgStartColor.r = atoi(value.c_str());
+                    bgStartColor.r = atoi(value.data());
                 }
                 else if (name == "G")
                 {
-                    bgStartColor.g = atoi(value.c_str());
+                    bgStartColor.g = atoi(value.data());
                 }
                 else if (name == "B")
                 {
-                    bgStartColor.b = atoi(value.c_str());
+                    bgStartColor.b = atoi(value.data());
                 }
 
                 attributeFirstColor = attributeFirstColor.next_attribute();
@@ -309,15 +309,15 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeColorVector)
             {
                 name              = attributeColorVector.name();
-                std::string value = attributeColorVector.value();
+                auto value = attributeColorVector.value();
 
                 if (name == "ScaleX")
                 {
-                    colorVector.x = atof(value.c_str());
+                    colorVector.x = atof(value.data());
                 }
                 else if (name == "ScaleY")
                 {
-                    colorVector.y = atof(value.c_str());
+                    colorVector.y = atof(value.data());
                 }
 
                 attributeColorVector = attributeColorVector.next_attribute();
@@ -333,7 +333,7 @@ Offset<Table> ListViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
             while (attributeFileData)
             {
                 name              = attributeFileData.name();
-                std::string value = attributeFileData.value();
+                auto value = attributeFileData.value();
 
                 if (name == "Path")
                 {
@@ -564,7 +564,7 @@ Node* ListViewReader::createNodeWithFlatBuffers(const flatbuffers::Table* listVi
     return listView;
 }
 
-int ListViewReader::getResourceType(std::string key)
+int ListViewReader::getResourceType(std::string_view key)
 {
     if (key == "Normal" || key == "Default")
     {

@@ -47,11 +47,11 @@ public:
 
     /** Get the name of the component that must be enabled or disabled.
      */
-    const std::string& getComponentName() const { return _componentName; };
+    std::string_view getComponentName() const { return _componentName; };
 
     /** Set the name of the component that must be enabled or disables.
      */
-    void setComponentName(const std::string& componentName) { _componentName = componentName; };
+    void setComponentName(std::string_view componentName) { _componentName = componentName; };
 
     /** Get the value that identifies whether the component must be enabled or disabled.
      */

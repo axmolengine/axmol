@@ -2,7 +2,7 @@ macro(cocos2dx_depend)
     # confim the libs, prepare to link
     set(PLATFORM_SPECIFIC_LIBS)
 
-    message(STATUS "BUILD_DEP_ALSOFT=${BUILD_DEP_ALSOFT}")
+    message(STATUS "AX_USE_ALSOFT=${AX_USE_ALSOFT}")
 
     if(WINDOWS)
         list(APPEND PLATFORM_SPECIFIC_LIBS ws2_32 userenv psapi winmm Version Iphlpapi opengl32)
@@ -39,7 +39,7 @@ macro(cocos2dx_depend)
             ${METAL_LIBRARY}
             )
 
-        if(NOT BUILD_DEP_ALSOFT)
+        if(NOT AX_USE_ALSOFT)
             find_library(OPENAL_LIBRARY OpenAL)
             set(COCOS_APPLE_LIBS 
             ${OPENAL_LIBRARY}

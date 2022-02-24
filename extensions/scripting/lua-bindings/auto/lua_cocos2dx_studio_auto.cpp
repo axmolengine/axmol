@@ -3232,8 +3232,8 @@ int lua_cocos2dx_studio_DisplayData_changeDisplayToTexture(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string arg0;
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.DisplayData:changeDisplayToTexture");
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.DisplayData:changeDisplayToTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayData_changeDisplayToTexture'", nullptr);
@@ -4039,9 +4039,9 @@ int lua_cocos2dx_studio_ArmatureData_getBoneData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureData:getBoneData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureData:getBoneData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureData_getBoneData'", nullptr);
@@ -4569,9 +4569,9 @@ int lua_cocos2dx_studio_MovementData_getMovementBoneData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.MovementData:getMovementBoneData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.MovementData:getMovementBoneData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_MovementData_getMovementBoneData'", nullptr);
@@ -4763,9 +4763,9 @@ int lua_cocos2dx_studio_AnimationData_getMovement(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.AnimationData:getMovement");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.AnimationData:getMovement");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_AnimationData_getMovement'", nullptr);
@@ -6407,10 +6407,10 @@ int lua_cocos2dx_studio_DisplayManager_changeDisplayWithName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         bool arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.DisplayManager:changeDisplayWithName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.DisplayManager:changeDisplayWithName");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.DisplayManager:changeDisplayWithName");
         if(!ok)
@@ -7577,9 +7577,9 @@ int lua_cocos2dx_studio_Bone_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Bone:init");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Bone:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Bone_init'", nullptr);
@@ -8031,10 +8031,10 @@ int lua_cocos2dx_studio_Bone_changeDisplayWithName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         bool arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Bone:changeDisplayWithName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Bone:changeDisplayWithName");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.Bone:changeDisplayWithName");
         if(!ok)
@@ -8465,8 +8465,8 @@ int lua_cocos2dx_studio_Bone_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Bone:create");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Bone:create");
             if (!ok) { break; }
             cocostudio::Bone* ret = cocostudio::Bone::create(arg0);
             object_to_luaval<cocostudio::Bone>(tolua_S, "ccs.Bone",(cocostudio::Bone*)ret);
@@ -8712,9 +8712,9 @@ int lua_cocos2dx_studio_ArmatureAnimation_play(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureAnimation_play'", nullptr);
@@ -8726,10 +8726,10 @@ int lua_cocos2dx_studio_ArmatureAnimation_play(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         int arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:play");
         if(!ok)
@@ -8743,11 +8743,11 @@ int lua_cocos2dx_studio_ArmatureAnimation_play(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        std::string arg0;
+        std::string_view arg0;
         int arg1;
         int arg2;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureAnimation:play");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ArmatureAnimation:play");
 
@@ -9558,9 +9558,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_removeAnimationData(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeAnimationData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeAnimationData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_removeAnimationData'", nullptr);
@@ -9608,10 +9608,10 @@ int lua_cocos2dx_studio_ArmatureDataManager_addArmatureData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::ArmatureData* arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureData");
 
         ok &= luaval_to_object<cocostudio::ArmatureData>(tolua_S, 3, "ccs.ArmatureData",&arg1, "ccs.ArmatureDataManager:addArmatureData");
         if(!ok)
@@ -9625,15 +9625,15 @@ int lua_cocos2dx_studio_ArmatureDataManager_addArmatureData(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::ArmatureData* arg1;
-        std::string arg2;
+        std::string_view arg2;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureData");
 
         ok &= luaval_to_object<cocostudio::ArmatureData>(tolua_S, 3, "ccs.ArmatureData",&arg1, "ccs.ArmatureDataManager:addArmatureData");
 
-        ok &= luaval_to_std_string(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addArmatureData");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addArmatureData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_addArmatureData'", nullptr);
@@ -9676,16 +9676,16 @@ int lua_cocos2dx_studio_ArmatureDataManager_addArmatureFileInfo(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 3) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureFileInfo");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureFileInfo");
 
             if (!ok) { break; }
-            std::string arg1;
-            ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ArmatureDataManager:addArmatureFileInfo");
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ArmatureDataManager:addArmatureFileInfo");
 
             if (!ok) { break; }
-            std::string arg2;
-            ok &= luaval_to_std_string(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addArmatureFileInfo");
+            std::string_view arg2;
+            ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addArmatureFileInfo");
 
             if (!ok) { break; }
             cobj->addArmatureFileInfo(arg0, arg1, arg2);
@@ -9696,8 +9696,8 @@ int lua_cocos2dx_studio_ArmatureDataManager_addArmatureFileInfo(lua_State* tolua
     ok  = true;
     do{
         if (argc == 1) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureFileInfo");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addArmatureFileInfo");
 
             if (!ok) { break; }
             cobj->addArmatureFileInfo(arg0);
@@ -9744,9 +9744,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_removeArmatureFileInfo(lua_State* to
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeArmatureFileInfo");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeArmatureFileInfo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_removeArmatureFileInfo'", nullptr);
@@ -9799,7 +9799,7 @@ int lua_cocos2dx_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getTextureDatas'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::TextureData *>& ret = cobj->getTextureDatas();
+        const cocos2d::Map<std::string, cocostudio::TextureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getTextureDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9841,9 +9841,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_getTextureData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getTextureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getTextureData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getTextureData'", nullptr);
@@ -9891,9 +9891,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_getArmatureData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getArmatureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getArmatureData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getArmatureData'", nullptr);
@@ -9941,9 +9941,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_getAnimationData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getAnimationData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getAnimationData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getAnimationData'", nullptr);
@@ -9991,10 +9991,10 @@ int lua_cocos2dx_studio_ArmatureDataManager_addAnimationData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::AnimationData* arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addAnimationData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addAnimationData");
 
         ok &= luaval_to_object<cocostudio::AnimationData>(tolua_S, 3, "ccs.AnimationData",&arg1, "ccs.ArmatureDataManager:addAnimationData");
         if(!ok)
@@ -10008,15 +10008,15 @@ int lua_cocos2dx_studio_ArmatureDataManager_addAnimationData(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::AnimationData* arg1;
-        std::string arg2;
+        std::string_view arg2;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addAnimationData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addAnimationData");
 
         ok &= luaval_to_object<cocostudio::AnimationData>(tolua_S, 3, "ccs.AnimationData",&arg1, "ccs.ArmatureDataManager:addAnimationData");
 
-        ok &= luaval_to_std_string(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addAnimationData");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addAnimationData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_addAnimationData'", nullptr);
@@ -10111,9 +10111,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_removeArmatureData(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeArmatureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeArmatureData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_removeArmatureData'", nullptr);
@@ -10166,7 +10166,7 @@ int lua_cocos2dx_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getArmatureDatas'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::ArmatureData *>& ret = cobj->getArmatureDatas();
+        const cocos2d::Map<std::string, cocostudio::ArmatureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getArmatureDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10208,9 +10208,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_addRelativeData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addRelativeData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addRelativeData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_addRelativeData'", nullptr);
@@ -10258,9 +10258,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_removeTextureData(lua_State* tolua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeTextureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:removeTextureData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_removeTextureData'", nullptr);
@@ -10308,9 +10308,9 @@ int lua_cocos2dx_studio_ArmatureDataManager_getRelativeData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getRelativeData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:getRelativeData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getRelativeData'", nullptr);
@@ -10358,10 +10358,10 @@ int lua_cocos2dx_studio_ArmatureDataManager_addTextureData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::TextureData* arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addTextureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addTextureData");
 
         ok &= luaval_to_object<cocostudio::TextureData>(tolua_S, 3, "ccs.TextureData",&arg1, "ccs.ArmatureDataManager:addTextureData");
         if(!ok)
@@ -10375,15 +10375,15 @@ int lua_cocos2dx_studio_ArmatureDataManager_addTextureData(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::TextureData* arg1;
-        std::string arg2;
+        std::string_view arg2;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addTextureData");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addTextureData");
 
         ok &= luaval_to_object<cocostudio::TextureData>(tolua_S, 3, "ccs.TextureData",&arg1, "ccs.ArmatureDataManager:addTextureData");
 
-        ok &= luaval_to_std_string(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addTextureData");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addTextureData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_addTextureData'", nullptr);
@@ -10436,7 +10436,7 @@ int lua_cocos2dx_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getAnimationDatas'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::AnimationData *>& ret = cobj->getAnimationDatas();
+        const cocos2d::Map<std::string, cocostudio::AnimationData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAnimationDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10525,12 +10525,12 @@ int lua_cocos2dx_studio_ArmatureDataManager_addSpriteFrameFromFile(lua_State* to
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
-        std::string arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_addSpriteFrameFromFile'", nullptr);
@@ -10542,15 +10542,15 @@ int lua_cocos2dx_studio_ArmatureDataManager_addSpriteFrameFromFile(lua_State* to
     }
     if (argc == 3) 
     {
-        std::string arg0;
-        std::string arg1;
-        std::string arg2;
+        std::string_view arg0;
+        std::string_view arg1;
+        std::string_view arg2;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
 
-        ok &= luaval_to_std_string(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
+        ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "ccs.ArmatureDataManager:addSpriteFrameFromFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_addSpriteFrameFromFile'", nullptr);
@@ -10706,9 +10706,9 @@ int lua_cocos2dx_studio_Armature_getBone(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Armature:getBone");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:getBone");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_getBone'", nullptr);
@@ -10757,11 +10757,11 @@ int lua_cocos2dx_studio_Armature_changeBoneParent(lua_State* tolua_S)
     if (argc == 2) 
     {
         cocostudio::Bone* arg0;
-        std::string arg1;
+        std::string_view arg1;
 
         ok &= luaval_to_object<cocostudio::Bone>(tolua_S, 2, "ccs.Bone",&arg0, "ccs.Armature:changeBoneParent");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.Armature:changeBoneParent");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.Armature:changeBoneParent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_changeBoneParent'", nullptr);
@@ -11198,8 +11198,8 @@ int lua_cocos2dx_studio_Armature_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Armature:init");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:init");
 
             if (!ok) { break; }
             cocostudio::Bone* arg1;
@@ -11214,8 +11214,8 @@ int lua_cocos2dx_studio_Armature_init(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Armature:init");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:init");
 
             if (!ok) { break; }
             bool ret = cobj->init(arg0);
@@ -11460,11 +11460,11 @@ int lua_cocos2dx_studio_Armature_addBone(lua_State* tolua_S)
     if (argc == 2) 
     {
         cocostudio::Bone* arg0;
-        std::string arg1;
+        std::string_view arg1;
 
         ok &= luaval_to_object<cocostudio::Bone>(tolua_S, 2, "ccs.Bone",&arg0, "ccs.Armature:addBone");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.Armature:addBone");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.Armature:addBone");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_addBone'", nullptr);
@@ -11755,7 +11755,7 @@ int lua_cocos2dx_studio_Armature_getBoneDic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_getBoneDic'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::Bone *>& ret = cobj->getBoneDic();
+        const cocos2d::Map<std::string, cocostudio::Bone *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getBoneDic();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11787,8 +11787,8 @@ int lua_cocos2dx_studio_Armature_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Armature:create");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:create");
             if (!ok) { break; }
             cocostudio::Armature* ret = cocostudio::Armature::create(arg0);
             object_to_luaval<cocostudio::Armature>(tolua_S, "ccs.Armature",(cocostudio::Armature*)ret);
@@ -11810,8 +11810,8 @@ int lua_cocos2dx_studio_Armature_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Armature:create");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Armature:create");
             if (!ok) { break; }
             cocostudio::Bone* arg1;
             ok &= luaval_to_object<cocostudio::Bone>(tolua_S, 3, "ccs.Bone",&arg1, "ccs.Armature:create");
@@ -12037,8 +12037,8 @@ int lua_cocos2dx_studio_Skin_getDisplayName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Skin_getDisplayName'", nullptr);
             return 0;
         }
-        const std::string& ret = cobj->getDisplayName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getDisplayName();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:getDisplayName",argc, 0);
@@ -12166,8 +12166,8 @@ int lua_cocos2dx_studio_Skin_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Skin:create");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Skin:create");
             if (!ok) { break; }
             cocostudio::Skin* ret = cocostudio::Skin::create(arg0);
             object_to_luaval<cocostudio::Skin>(tolua_S, "ccs.Skin",(cocostudio::Skin*)ret);
@@ -12210,8 +12210,8 @@ int lua_cocos2dx_studio_Skin_createWithSpriteFrameName(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string arg0;
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.Skin:createWithSpriteFrameName");
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.Skin:createWithSpriteFrameName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Skin_createWithSpriteFrameName'", nullptr);
@@ -12321,9 +12321,9 @@ int lua_cocos2dx_studio_ComAttribute_getFloat(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getFloat");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getFloat");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_getFloat'", nullptr);
@@ -12335,10 +12335,10 @@ int lua_cocos2dx_studio_ComAttribute_getFloat(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         double arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getFloat");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getFloat");
 
         ok &= luaval_to_number(tolua_S, 3,&arg1, "ccs.ComAttribute:getFloat");
         if(!ok)
@@ -12388,9 +12388,9 @@ int lua_cocos2dx_studio_ComAttribute_getString(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getString");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_getString'", nullptr);
@@ -12402,12 +12402,12 @@ int lua_cocos2dx_studio_ComAttribute_getString(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
-        std::string arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getString");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getString");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ComAttribute:getString");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ComAttribute:getString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_getString'", nullptr);
@@ -12455,10 +12455,10 @@ int lua_cocos2dx_studio_ComAttribute_setFloat(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         double arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:setFloat");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setFloat");
 
         ok &= luaval_to_number(tolua_S, 3,&arg1, "ccs.ComAttribute:setFloat");
         if(!ok)
@@ -12508,12 +12508,12 @@ int lua_cocos2dx_studio_ComAttribute_setString(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
-        std::string arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:setString");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setString");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ComAttribute:setString");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ComAttribute:setString");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_setString'", nullptr);
@@ -12561,9 +12561,9 @@ int lua_cocos2dx_studio_ComAttribute_getBool(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getBool");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getBool");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_getBool'", nullptr);
@@ -12575,10 +12575,10 @@ int lua_cocos2dx_studio_ComAttribute_getBool(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         bool arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getBool");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getBool");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ComAttribute:getBool");
         if(!ok)
@@ -12628,10 +12628,10 @@ int lua_cocos2dx_studio_ComAttribute_setInt(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         int arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:setInt");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setInt");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ComAttribute:setInt");
         if(!ok)
@@ -12681,9 +12681,9 @@ int lua_cocos2dx_studio_ComAttribute_parse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:parse");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:parse");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_parse'", nullptr);
@@ -12731,9 +12731,9 @@ int lua_cocos2dx_studio_ComAttribute_getInt(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getInt");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getInt");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_getInt'", nullptr);
@@ -12745,10 +12745,10 @@ int lua_cocos2dx_studio_ComAttribute_getInt(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         int arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:getInt");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:getInt");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.ComAttribute:getInt");
         if(!ok)
@@ -12798,10 +12798,10 @@ int lua_cocos2dx_studio_ComAttribute_setBool(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         bool arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComAttribute:setBool");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComAttribute:setBool");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ccs.ComAttribute:setBool");
         if(!ok)
@@ -14785,9 +14785,9 @@ int lua_cocos2dx_studio_GUIReader_setFilePath(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.GUIReader:setFilePath");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.GUIReader:setFilePath");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_GUIReader_setFilePath'", nullptr);
@@ -14890,8 +14890,8 @@ int lua_cocos2dx_studio_GUIReader_getFilePath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_GUIReader_getFilePath'", nullptr);
             return 0;
         }
-        const std::string& ret = cobj->getFilePath();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getFilePath();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:getFilePath",argc, 0);
@@ -15180,9 +15180,9 @@ int lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.SceneReader:createNodeWithSceneFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SceneReader:createNodeWithSceneFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile'", nullptr);
@@ -15194,10 +15194,10 @@ int lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         cocostudio::SceneReader::AttachComponentType arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.SceneReader:createNodeWithSceneFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SceneReader:createNodeWithSceneFile");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccs.SceneReader:createNodeWithSceneFile");
         if(!ok)
@@ -15472,9 +15472,9 @@ int lua_cocos2dx_studio_ActionTimelineCache_createActionFromJson(lua_State* tolu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionFromJson");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionFromJson");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_createActionFromJson'", nullptr);
@@ -15522,9 +15522,9 @@ int lua_cocos2dx_studio_ActionTimelineCache_createActionWithFlatBuffersFile(lua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionWithFlatBuffersFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionWithFlatBuffersFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_createActionWithFlatBuffersFile'", nullptr);
@@ -15572,9 +15572,9 @@ int lua_cocos2dx_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFi
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:loadAnimationActionWithFlatBuffersFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:loadAnimationActionWithFlatBuffersFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile'", nullptr);
@@ -15622,12 +15622,12 @@ int lua_cocos2dx_studio_ActionTimelineCache_createActionFromContent(lua_State* t
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
-        std::string arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionFromContent");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionFromContent");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ActionTimelineCache:createActionFromContent");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ActionTimelineCache:createActionFromContent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_createActionFromContent'", nullptr);
@@ -15769,12 +15769,12 @@ int lua_cocos2dx_studio_ActionTimelineCache_loadAnimationActionWithContent(lua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
-        std::string arg1;
+        std::string_view arg0;
+        std::string_view arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:loadAnimationActionWithContent");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:loadAnimationActionWithContent");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ActionTimelineCache:loadAnimationActionWithContent");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ActionTimelineCache:loadAnimationActionWithContent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_loadAnimationActionWithContent'", nullptr);
@@ -15822,9 +15822,9 @@ int lua_cocos2dx_studio_ActionTimelineCache_loadAnimationActionWithFile(lua_Stat
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:loadAnimationActionWithFile");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:loadAnimationActionWithFile");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_loadAnimationActionWithFile'", nullptr);
@@ -15872,9 +15872,9 @@ int lua_cocos2dx_studio_ActionTimelineCache_removeAction(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:removeAction");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:removeAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_removeAction'", nullptr);
@@ -15922,9 +15922,9 @@ int lua_cocos2dx_studio_ActionTimelineCache_createActionWithFlatBuffersForSimula
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionWithFlatBuffersForSimulator");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createActionWithFlatBuffersForSimulator");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator'", nullptr);
@@ -15995,8 +15995,8 @@ int lua_cocos2dx_studio_ActionTimelineCache_createAction(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        std::string arg0;
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createAction");
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimelineCache:createAction");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineCache_createAction'", nullptr);
@@ -17029,8 +17029,8 @@ int lua_cocos2dx_studio_TextureFrame_getTextureName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_TextureFrame_getTextureName'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getTextureName();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getTextureName();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureFrame:getTextureName",argc, 0);
@@ -17071,9 +17071,9 @@ int lua_cocos2dx_studio_TextureFrame_setTextureName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.TextureFrame:setTextureName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.TextureFrame:setTextureName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_TextureFrame_setTextureName'", nullptr);
@@ -19147,9 +19147,9 @@ int lua_cocos2dx_studio_InnerActionFrame_setAnimationName(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.InnerActionFrame:setAnimationName");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.InnerActionFrame:setAnimationName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_InnerActionFrame_setAnimationName'", nullptr);
@@ -19681,9 +19681,9 @@ int lua_cocos2dx_studio_EventFrame_setEvent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.EventFrame:setEvent");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.EventFrame:setEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_EventFrame_setEvent'", nullptr);
@@ -19783,8 +19783,8 @@ int lua_cocos2dx_studio_EventFrame_getEvent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_EventFrame_getEvent'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getEvent();
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getEvent();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:getEvent",argc, 0);
@@ -22120,9 +22120,9 @@ int lua_cocos2dx_studio_ActionTimeline_getAnimationInfo(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimeline:getAnimationInfo");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimeline:getAnimationInfo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimeline_getAnimationInfo'", nullptr);
@@ -22218,12 +22218,12 @@ int lua_cocos2dx_studio_ActionTimeline_addFrameEndCallFunc(lua_State* tolua_S)
     if (argc == 3) 
     {
         int arg0;
-        std::string arg1;
+        std::string_view arg1;
         std::function<void ()> arg2;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:addFrameEndCallFunc");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ActionTimeline:addFrameEndCallFunc");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ActionTimeline:addFrameEndCallFunc");
 
         do {
 			// Lambda binding for lua is not supported.
@@ -22721,9 +22721,9 @@ int lua_cocos2dx_studio_ActionTimeline_IsAnimationInfoExists(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ActionTimeline:IsAnimationInfoExists");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ActionTimeline:IsAnimationInfoExists");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimeline_IsAnimationInfoExists'", nullptr);
@@ -23016,11 +23016,11 @@ int lua_cocos2dx_studio_ActionTimeline_removeFrameEndCallFunc(lua_State* tolua_S
     if (argc == 2) 
     {
         int arg0;
-        std::string arg1;
+        std::string_view arg1;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.ActionTimeline:removeFrameEndCallFunc");
 
-        ok &= luaval_to_std_string(tolua_S, 3,&arg1, "ccs.ActionTimeline:removeFrameEndCallFunc");
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ccs.ActionTimeline:removeFrameEndCallFunc");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimeline_removeFrameEndCallFunc'", nullptr);
@@ -23916,8 +23916,8 @@ int lua_cocos2dx_studio_BoneNode_displaySkin(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.BoneNode:displaySkin");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.BoneNode:displaySkin");
 
             if (!ok) { break; }
             bool arg1;
@@ -24605,9 +24605,9 @@ int lua_cocos2dx_studio_SkeletonNode_getBoneNode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.SkeletonNode:getBoneNode");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SkeletonNode:getBoneNode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SkeletonNode_getBoneNode'", nullptr);
@@ -24650,8 +24650,8 @@ int lua_cocos2dx_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            std::string arg0;
-            ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.SkeletonNode:changeSkins");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SkeletonNode:changeSkins");
 
             if (!ok) { break; }
             cobj->changeSkins(arg0);
@@ -24662,7 +24662,7 @@ int lua_cocos2dx_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            std::map<std::string, std::string> arg0;
+            tsl::robin_map<std::string, std::string, hlookup::string_hash, hlookup::equal_to> arg0;
             ok &= luaval_to_std_map_string_string(tolua_S, 2, &arg0, "ccs.SkeletonNode:changeSkins");
 
             if (!ok) { break; }
@@ -24711,7 +24711,7 @@ int lua_cocos2dx_studio_SkeletonNode_addSkinGroup(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string arg0;
-        std::map<std::string, std::string> arg1;
+        tsl::robin_map<std::string, std::string, hlookup::string_hash, hlookup::equal_to> arg1;
 
         ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.SkeletonNode:addSkinGroup");
 
@@ -24768,7 +24768,7 @@ int lua_cocos2dx_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SkeletonNode_getAllSubBonesMap'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::timeline::BoneNode *>& ret = cobj->getAllSubBonesMap();
+        const cocos2d::Map<std::string, cocostudio::timeline::BoneNode *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAllSubBonesMap();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25050,9 +25050,9 @@ int lua_cocos2dx_studio_ComExtensionData_setCustomProperty(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::string arg0;
+        std::string_view arg0;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.ComExtensionData:setCustomProperty");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.ComExtensionData:setCustomProperty");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComExtensionData_setCustomProperty'", nullptr);

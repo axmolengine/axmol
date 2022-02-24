@@ -48,7 +48,7 @@ PUObserverManager* PUObserverManager::Instance()
     return &pem;
 }
 
-PUScriptTranslator* PUObserverManager::getTranslator(const std::string& type)
+PUScriptTranslator* PUObserverManager::getTranslator(std::string_view type)
 {
     if (type == "OnClear")
     {
@@ -97,7 +97,7 @@ PUScriptTranslator* PUObserverManager::getTranslator(const std::string& type)
     return nullptr;
 }
 
-PUObserver* PUObserverManager::createObserver(const std::string& type)
+PUObserver* PUObserverManager::createObserver(std::string_view type)
 {
     if (type == "OnClear")
     {

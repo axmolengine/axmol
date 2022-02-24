@@ -11,7 +11,7 @@ LOCAL_SRC_FILES := \
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/.. 
 
 LOCAL_C_INCLUDES := $(LOCAL_EXPORT_C_INCLUDES) \
-                    $(LOCAL_PATH)/../../../frameworks/cocos2d-x/cocos \
-                    $(LOCAL_PATH)/../../../frameworks/cocos2d-x/external
+                    $(LOCAL_PATH)/../../../frameworks/adxe/core \
+                    $(LOCAL_PATH)/../../../frameworks/adxe/thirdparty
 
 include $(BUILD_STATIC_LIBRARY)

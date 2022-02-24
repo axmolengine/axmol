@@ -97,7 +97,7 @@ void TextAtlasReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
 {
     WidgetReader::setPropsFromJsonDictionary(widget, options);
 
-    std::string jsonPath = GUIReader::getInstance()->getFilePath();
+    std::string_view jsonPath = GUIReader::getInstance()->getFilePath();
 
     TextAtlas* labelAtlas = static_cast<TextAtlas*>(widget);
     //        bool sv = DICTOOL->checkObjectExist_json(options, P_StringValue);
@@ -112,7 +112,7 @@ void TextAtlasReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
     {
     case 0:
     {
-        std::string tp_c    = jsonPath;
+        std::string tp_c{jsonPath};
         const char* cmfPath = DICTOOL->getStringValue_json(cmftDic, P_Path);
         const char* cmf_tp  = tp_c.append(cmfPath).c_str();
         labelAtlas->setProperty(DICTOOL->getStringValue_json(options, P_StringValue, "12345678"), cmf_tp,
@@ -150,8 +150,8 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string name  = attribute.name();
-        std::string value = attribute.value();
+        std::string_view name  = attribute.name();
+        std::string_view value = attribute.value();
 
         if (name == "LabelText")
         {
@@ -159,11 +159,11 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
         }
         else if (name == "CharWidth")
         {
-            itemWidth = atoi(value.c_str());
+            itemWidth = atoi(value.data());
         }
         else if (name == "CharHeight")
         {
-            itemHeight = atoi(value.c_str());
+            itemHeight = atoi(value.data());
         }
         else if (name == "StartChar")
         {
@@ -177,7 +177,7 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     auto child = objectData.first_child();
     while (child)
     {
-        std::string name = child.name();
+        std::string_view name = child.name();
 
         if (name == "LabelAtlasFileImage_CNB")
         {
@@ -189,7 +189,7 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
             while (attribute)
             {
                 name              = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (name == "Path")
                 {

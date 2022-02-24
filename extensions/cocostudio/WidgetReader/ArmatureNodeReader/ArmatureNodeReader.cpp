@@ -61,8 +61,8 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     auto attribute = objectData.first_attribute();
     while (attribute)
     {
-        std::string attriname = attribute.name();
-        std::string value     = attribute.value();
+        std::string_view attriname = attribute.name();
+        std::string_view value     = attribute.value();
 
         if (attriname == "IsLoop")
         {
@@ -82,11 +82,11 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
         }
         else if (attriname == "ArmatureScale")
         {
-            armatureScale = atof(value.c_str());
+            armatureScale = atof(value.data());
         }
         else if (attriname == "TimeScale")
         {
-            timeScale = atof(value.c_str());
+            timeScale = atof(value.data());
         }
 
         attribute = attribute.next_attribute();
@@ -95,7 +95,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     auto child = objectData.first_child();
     while (child)
     {
-        std::string attriname = child.name();
+        std::string_view attriname = child.name();
         if (attriname == "FileData")
         {
             attribute = child.first_attribute();
@@ -103,7 +103,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
             while (attribute)
             {
                 attriname         = attribute.name();
-                std::string value = attribute.value();
+                std::string_view value = attribute.value();
 
                 if (attriname == "Type")
                 {
@@ -145,7 +145,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flat
 #if defined(CC_BUILD_WITH_DRANGBONES) && CC_BUILD_WITH_DRANGBONES
         auto filep = filepath.rfind('.');
         if (filep != std::string::npos && strcmp(&filepath[filep], ".json") == 0)
-        {   // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
+        {  // Currently, adjust by file ext, regard as DragonBones 4.5/5.0
             // 4.5 texture info is fixed as texture.png, texture.json
             // 5.o texture info is _tex.json _tex.png
             auto sharedFactory         = dragonBones::CCFactory::getFactory();
@@ -230,7 +230,7 @@ cocos2d::Node* ArmatureNodeReader::createNodeWithFlatBuffers(const flatbuffers::
     return node;
 }
 
-std::string ArmatureNodeReader::getArmatureName(const std::string& exporJsonPath)
+std::string ArmatureNodeReader::getArmatureName(std::string_view exporJsonPath)
 {
     // FileUtils.getFileData(exporJsonPath, "r", size)   // need read armature name in exportJsonPath
     size_t end    = exporJsonPath.find_last_of(".");
@@ -241,5 +241,5 @@ std::string ArmatureNodeReader::getArmatureName(const std::string& exporJsonPath
 
     if (start == -1)
         start = 0;
-    return exporJsonPath.substr(start, end - start);
+    return std::string{exporJsonPath.substr(start, end - start)};
 }

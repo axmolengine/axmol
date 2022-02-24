@@ -66,8 +66,8 @@ public:
 
     /**
      */
-    PUScriptTranslator* getTranslator(const std::string& type);
-    PUAffector* createAffector(const std::string& type);
+    PUScriptTranslator* getTranslator(std::string_view type);
+    PUAffector* createAffector(std::string_view type);
 
     CC_CONSTRUCTOR_ACCESS : PUAffectorManager();
     ~PUAffectorManager();
