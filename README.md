@@ -54,7 +54,7 @@
   * Bullet Physics SDK
 * **ImGui 1.87 integrated, easy to write game embedded tools, very easy to use, read [ImGuiEXT](extensions/ImGuiEXT/README.md) for more info**
 
-Read Full changes since cocos2d-x-4.0 [CHANGELOG]
+(Read Full changes since cocos2d-x-4.0)[CHANGELOG]
 
 Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed features too.
 
