@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * http://www.cocos2d-x.org
+ * https://adxeproject.github.io/
  *
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  *
