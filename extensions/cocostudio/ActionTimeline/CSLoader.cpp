@@ -937,9 +937,9 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
             CCASSERT(readerVersion >= writterVersion,
                      StringUtils::format(
                          "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                         ") and the reader build id in your Cocos2d-x(", loader->_csBuildID.c_str(),
+                         ") and the reader build id in your adxe(", loader->_csBuildID.c_str(),
                          ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                         "http://www.cocos2d-x.org/filedown/cocos-reader", " and replace it in your Cocos2d-x")
+                         "https://github.com/adxeproject/adxe", " and replace it in your adxe")
                          .c_str());
         }
 
@@ -1054,9 +1054,9 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
         CCASSERT(readerVersion >= writterVersion,
                  StringUtils::format(
                      "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                     ") and the reader build id in your Cocos2d-x(", _csBuildID.c_str(), ") are not match.\n",
+                     ") and the reader build id in your adxe(", _csBuildID.c_str(), ") are not match.\n",
                      "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                     "http://www.cocos2d-x.org/filedown/cocos-reader", " and replace it in your Cocos2d-x")
+                     "https://github.com/adxeproject/adxe", " and replace it in your adxe")
                      .c_str());
 
         if (readerVersion < writterVersion)
