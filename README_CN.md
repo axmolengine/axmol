@@ -23,6 +23,7 @@
 * Review PR ASAP
   
 ### 主要特性:
+* Windows 视频播放支持
 * Windows x64编译支持
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
 * 重构AudioEngine, 全平台OpenAL
