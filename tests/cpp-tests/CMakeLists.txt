@@ -339,13 +339,16 @@ list(APPEND GAME_SOURCE
      Classes/ZipTest/ZipTests.cpp
      )
 
+list(APPEND GAME_HEADER
+         Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
+list(APPEND GAME_SOURCE
+         Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
+
 if(ANDROID OR IOS)
     list(APPEND GAME_HEADER
-         Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h
          Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
          )
     list(APPEND GAME_SOURCE
-         Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp
          Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
          )
 endif()
