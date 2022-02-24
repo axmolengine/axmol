@@ -8,7 +8,6 @@ on:
     paths:
       - core/**/*
       - extensions/**/*
-      - tools/tolua/*
       - .github/workflows/genbindings-ci.yml
 
 jobs:
