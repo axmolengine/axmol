@@ -10,7 +10,7 @@ adxe is based on cocos2d-x-4.0, cocos2d-x is a open source project is designed t
 It runs on top of OpenGL 2.0 and OpenGL ES 2.0 and is written in C++.\n
 This project is based on the famous <A HREF="http://www.cocos2d-iphone.org">"cocos2d-iphone"</A> project.\n
 
-- website:                          https://adxeproject.github.io/
+- website:                          https://adxe.org/
 
 - <A HREF="https://github.com/adxeproject/adxe/issues">FAQ</A>
 

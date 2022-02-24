@@ -1,6 +1,5 @@
 adxe-1.0  ??
 
-- [HIGHLIGHT] Add build project with prebuilt engine libs support
 - [HIGHLIGHT] Implement Windows video player using microsoft media foundation
 - [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
 - [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
