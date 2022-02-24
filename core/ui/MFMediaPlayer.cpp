@@ -645,14 +645,11 @@ HRESULT MFMediaPlayer::Play()
     TRACE((L"MFMediaPlayer::Play\n"));
 
     if (m_state != MFPlayerState::Paused && m_state != MFPlayerState::Stopped)
-    {
         return MF_E_INVALIDREQUEST;
-    }
-    if (m_pSession == NULL || m_pSource == NULL)
-    {
-        return E_UNEXPECTED;
-    }
 
+    if (m_pSession == NULL || m_pSource == NULL)
+        return E_UNEXPECTED;
+    
     AutoLock lock(m_critsec);
 
     // If another operation is pending, cache the request.
@@ -677,6 +674,9 @@ HRESULT MFMediaPlayer::Play()
 HRESULT MFMediaPlayer::Pause()
 {
     HRESULT hr = S_OK;
+
+    if (m_pSession == NULL || m_pSource == NULL)
+        return E_UNEXPECTED;
 
     AutoLock lock(m_critsec);
 
@@ -705,6 +705,9 @@ HRESULT MFMediaPlayer::Pause()
 HRESULT MFMediaPlayer::Stop()
 {
     HRESULT hr = S_OK;
+
+    if (m_pSession == NULL || m_pSource == NULL)
+        return E_UNEXPECTED;
 
     AutoLock lock(m_critsec);
 

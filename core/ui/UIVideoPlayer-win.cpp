@@ -525,8 +525,7 @@ void VideoPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        auto pvd     = (PrivateVideoDescriptor*)_videoContext;
-        auto vplayer = pvd->_vplayer;
+        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
         {
             switch (vplayer->GetState())
@@ -547,9 +546,9 @@ void VideoPlayer::pause()
 {
     if (!_videoURL.empty())
     {
-        auto pvd = (PrivateVideoDescriptor*)_videoContext;
-        if (pvd->_vplayer)
-            pvd->_vplayer->Pause();
+        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
+        if (vplayer)
+            vplayer->Pause();
     }
 }
 
@@ -557,9 +556,9 @@ void VideoPlayer::resume()
 {
     if (!_videoURL.empty())
     {
-        auto pvd = (PrivateVideoDescriptor*)_videoContext;
-        if (pvd->_vplayer)
-            pvd->_vplayer->Play();
+        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
+        if (vplayer && vplayer->GetState() == MFPlayerState::Paused)
+            vplayer->Play();
     }
 }
 
@@ -567,9 +566,9 @@ void VideoPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        auto pvd = (PrivateVideoDescriptor*)_videoContext;
-        if (pvd->_vplayer)
-            pvd->_vplayer->Stop();
+        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
+        if (vplayer)
+            vplayer->Stop();
     }
 }
 
@@ -577,9 +576,9 @@ void VideoPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        auto pvd = (PrivateVideoDescriptor*)_videoContext;
-        if (pvd->_vplayer)
-            pvd->_vplayer->SetPosition((std::nano::den / 100) * sec);
+        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
+        if (vplayer)
+            vplayer->SetPosition((std::nano::den / 100) * sec);
     }
 }
 
