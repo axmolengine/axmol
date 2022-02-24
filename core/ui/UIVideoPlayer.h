@@ -25,9 +25,11 @@
  ****************************************************************************/
 #pragma once
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
-     CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
-    !defined(CC_PLATFORM_OS_TVOS)
+#if defined(_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+                        CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
+                           !defined(CC_PLATFORM_OS_TVOS)
+
+#    undef ERROR
 
 #    include "ui/UIWidget.h"
 
@@ -226,6 +228,10 @@ public:
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     virtual void onEnter() override;
     virtual void onExit() override;
+
+#    if defined(_WIN32)
+    void setContentSize(const Size& contentSize) override;
+#    endif
 
 protected:
     virtual cocos2d::ui::Widget* createCloneInstance() override;

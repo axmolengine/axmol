@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -46,8 +47,8 @@ THE SOFTWARE.
 #include "ui/UIHBox.h"
 #include "ui/UIVBox.h"
 #include "ui/UIRelativeBox.h"
+#include "ui/UIVideoPlayer.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#    include "ui/UIVideoPlayer.h"
 #    include "ui/UIWebView/UIWebView.h"
 #endif
 #include "ui/GUIExport.h"
