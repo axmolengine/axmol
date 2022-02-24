@@ -47,7 +47,7 @@
 * Extension ```FairyGUI``` support
 * ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
 * ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
-* Supported 2D physics engines (see also [Wiki](https://github.com/adxeproject/adxe-wiki)):
+* Supported 2D physics engines (see also [APPENDIX.md](APPENDIX.md)):
   * Box2D
   * Box2D-optimized
   * Chipmunk2D 
@@ -57,7 +57,7 @@
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
-Open [Wiki](https://github.com/adxeproject/adxe-wiki) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed features too.
+Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed features too.
 
 ### Quick Start
 
