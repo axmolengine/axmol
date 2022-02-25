@@ -1,9 +1,9 @@
-set(target_name ImGuiEXT)
+set(target_name ImGui)
 
 include_directories(imgui)
 
 set(HEADER
-    CCImGuiEXT.h
+    ImGuiPresenter.h
     # CCImGuiColorTextEdit.h
     imgui_impl_adxe.h
     imgui/imconfig.h
@@ -19,7 +19,7 @@ set(HEADER
 )
 
 set(SOURCE
-    CCImGuiEXT.cpp
+    ImGuiPresenter.cpp
     # CCImGuiColorTextEdit.cpp
     imgui_impl_adxe.cpp
     imgui/imgui.cpp

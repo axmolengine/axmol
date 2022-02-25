@@ -12,10 +12,10 @@
 
 NS_CC_EXT_BEGIN
 
-class ImGuiEXTEventTracker;
-class ImGuiEXT
+class ImGuiEventTracker;
+class ImGuiPresenter
 {
-    friend class ImGuiEXTRenderer;
+    friend class ImGuiRenderer;
     void init();
     void cleanup();
 
@@ -32,9 +32,9 @@ public:
         DEFAULT_FONT_SIZE = 13  // see imgui.cpp
     };
 
-    static ImGuiEXT* getInstance();
+    static ImGuiPresenter* getInstance();
     static void destroyInstance();
-    static void setOnInit(const std::function<void(ImGuiEXT*)>& callBack);
+    static void setOnInit(const std::function<void(ImGuiPresenter*)>& callBack);
 
     /// <summary>
     /// Scale ImGui with majorMoniter DPI scaling
@@ -127,11 +127,11 @@ private:
     static void deactiveImGuiViewports();
 
 private:
-    static std::function<void(ImGuiEXT*)> _onInit;
+    static std::function<void(ImGuiPresenter*)> _onInit;
 
     struct RenderPipline
     {
-        ImGuiEXTEventTracker* tracker;
+        ImGuiEventTracker* tracker;
         std::function<void()> frame;
     };
 

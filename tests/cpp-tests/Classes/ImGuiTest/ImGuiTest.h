@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 c4games.com
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -31,14 +32,14 @@
 
 #if defined(CC_PLATFORM_PC)
 
-DEFINE_TEST_SUITE(ImGuiEXTTests);
+DEFINE_TEST_SUITE(ImGuiTests);
 
-class ImGuiEXTTest : public TestCase
+class ImGuiTest : public TestCase
 {
 public:
-    CREATE_FUNC(ImGuiEXTTest);
+    CREATE_FUNC(ImGuiTest);
 
-    std::string title() const override { return "ImGuiEXT Test"; }
+    std::string title() const override { return "ImGui Test"; }
 
     void onEnter() override;
     void onDrawImGui();

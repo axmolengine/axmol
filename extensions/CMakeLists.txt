@@ -17,7 +17,7 @@ option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 
 if(WINDOWS OR MACOSX OR LINUX)
-  option(AX_ENABLE_EXT_IMGUI "Build extension ImGuiEXT" ON)
+  option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
@@ -96,7 +96,7 @@ if(AX_ENABLE_EXT_FAIRYGUI)
 endif()
 
 if(AX_ENABLE_EXT_IMGUI)
-  add_subdirectory(ImGuiEXT)
+  add_subdirectory(ImGui)
 endif()
 
 if(AX_ENABLE_EXT_COCOSTUDIO)
