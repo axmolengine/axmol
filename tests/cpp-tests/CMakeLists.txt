@@ -108,7 +108,7 @@ list(APPEND GAME_HEADER
      Classes/VibrateTest/VibrateTest.h
      Classes/ClippingNodeTest/ClippingNodeTest.h
      Classes/UserDefaultTest/UserDefaultTest.h
-     Classes/ImGuiEXTTest/ImGuiEXTTest.h
+     Classes/ImGuiTest/ImGuiTest.h
      Classes/tests.h
      Classes/DataVisitorTest/DataVisitorTest.h
      Classes/NewAudioEngineTest/NewAudioEngineTest.h
@@ -330,7 +330,7 @@ list(APPEND GAME_SOURCE
 #     Classes/UnitTest/RefPtrTest.cpp
      Classes/UnitTest/UnitTest.cpp
      Classes/UserDefaultTest/UserDefaultTest.cpp
-     Classes/ImGuiEXTTest/ImGuiEXTTest.cpp
+     Classes/ImGuiTest/ImGuiTest.cpp
      Classes/VisibleRect.cpp
      Classes/VibrateTest/VibrateTest.cpp
      Classes/ZwoptexTest/ZwoptexTest.cpp

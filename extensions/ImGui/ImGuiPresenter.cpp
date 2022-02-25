@@ -1,4 +1,4 @@
-#include "CCImGuiEXT.h"
+#include "ImGuiPresenter.h"
 #include <assert.h>
 #include "imgui_impl_adxe.h"
 #include "imgui_internal.h"
@@ -21,14 +21,14 @@ static uint32_t fourccValue(std::string_view str)
     return value;
 }
 
-class ImGuiEXTEventTracker
+class ImGuiEventTracker
 {
 public:
-    virtual ~ImGuiEXTEventTracker() {}
+    virtual ~ImGuiEventTracker() {}
 };
 
 // Track scene event and check whether routed to the scene graph
-class ImGuiEXTSceneEventTracker : public ImGuiEXTEventTracker
+class ImGuiSceneEventTracker : public ImGuiEventTracker
 {
 public:
     bool initWithScene(Scene* scene)
@@ -73,7 +73,7 @@ public:
         return true;
     }
 
-    ~ImGuiEXTSceneEventTracker()
+    ~ImGuiSceneEventTracker()
     {
 #ifdef CC_PLATFORM_PC
         if (_trackLayer)
@@ -89,7 +89,7 @@ private:
     Layer* _trackLayer = nullptr;
 };
 
-class ImGuiEXTGlobalEventTracker : public ImGuiEXTEventTracker
+class ImGuiGlobalEventTracker : public ImGuiEventTracker
 {
     static const int highestPriority = (std::numeric_limits<int>::min)();
 
@@ -120,7 +120,7 @@ public:
         return true;
     }
 
-    ~ImGuiEXTGlobalEventTracker()
+    ~ImGuiGlobalEventTracker()
     {
 #ifdef CC_PLATFORM_PC
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -136,14 +136,14 @@ public:
     EventListenerMouse* _mouseListener         = nullptr;
 };
 
-static ImGuiEXT* _instance = nullptr;
-std::function<void(ImGuiEXT*)> ImGuiEXT::_onInit;
+static ImGuiPresenter* _instance = nullptr;
+std::function<void(ImGuiPresenter*)> ImGuiPresenter::_onInit;
 
-ImGuiEXT* ImGuiEXT::getInstance()
+ImGuiPresenter* ImGuiPresenter::getInstance()
 {
     if (_instance == nullptr)
     {
-        _instance = new ImGuiEXT();
+        _instance = new ImGuiPresenter();
         _instance->init();
         if (_onInit)
             _onInit(_instance);
@@ -151,7 +151,7 @@ ImGuiEXT* ImGuiEXT::getInstance()
     return _instance;
 }
 
-void ImGuiEXT::destroyInstance()
+void ImGuiPresenter::destroyInstance()
 {
     if (_instance)
     {
@@ -161,7 +161,7 @@ void ImGuiEXT::destroyInstance()
     }
 }
 
-void ImGuiEXT::init()
+void ImGuiPresenter::init()
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -201,7 +201,7 @@ void ImGuiEXT::init()
     ImGui_ImplGlfw_InitForAdxe(window, true);
     ImGui_ImplAdxe_Init();
 
-    ImGui_ImplAdxe_SetCustomFontLoader(&ImGuiEXT::loadCustomFonts, this);
+    ImGui_ImplAdxe_SetCustomFontLoader(&ImGuiPresenter::loadCustomFonts, this);
 
     ImGui::StyleColorsClassic();
 
@@ -210,7 +210,7 @@ void ImGuiEXT::init()
     eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
 }
 
-void ImGuiEXT::cleanup()
+void ImGuiPresenter::cleanup()
 {
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
     eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
@@ -225,14 +225,14 @@ void ImGuiEXT::cleanup()
     ImGui::DestroyContext();
 }
 
-void ImGuiEXT::setOnInit(const std::function<void(ImGuiEXT*)>& callBack)
+void ImGuiPresenter::setOnInit(const std::function<void(ImGuiPresenter*)>& callBack)
 {
     _onInit = callBack;
 }
 
-void ImGuiEXT::loadCustomFonts(void* ud)
+void ImGuiPresenter::loadCustomFonts(void* ud)
 {
-    auto thiz = (ImGuiEXT*)ud;
+    auto thiz = (ImGuiPresenter*)ud;
 
     auto imFonts = ImGui::GetIO().Fonts;
     imFonts->Clear();
@@ -263,7 +263,7 @@ void ImGuiEXT::loadCustomFonts(void* ud)
     }
 }
 
-float ImGuiEXT::scaleAllByDPI(float userScale)
+float ImGuiPresenter::scaleAllByDPI(float userScale)
 {
     // Gets scale
     float xscale = 1.0f;
@@ -293,7 +293,7 @@ float ImGuiEXT::scaleAllByDPI(float userScale)
     return zoomFactor;
 }
 
-void ImGuiEXT::addFont(std::string_view fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
+void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
 {
     if (FileUtils::getInstance()->isFileExistInternal(fontFile))
     {
@@ -302,7 +302,7 @@ void ImGuiEXT::addFont(std::string_view fontFile, float fontSize, CHS_GLYPH_RANG
     }
 }
 
-void ImGuiEXT::removeFont(std::string_view fontFile)
+void ImGuiPresenter::removeFont(std::string_view fontFile)
 {
     auto count = _fontsInfoMap.size();
     _fontsInfoMap.erase(fontFile);
@@ -310,7 +310,7 @@ void ImGuiEXT::removeFont(std::string_view fontFile)
         ImGui_ImplAdxe_SetDeviceObjectsDirty();
 }
 
-void ImGuiEXT::clearFonts()
+void ImGuiPresenter::clearFonts()
 {
     bool haveCustomFonts = !_fontsInfoMap.empty();
     _fontsInfoMap.clear();
@@ -321,7 +321,7 @@ void ImGuiEXT::clearFonts()
     // if(drawData) drawData->Clear();
 }
 
-void ImGuiEXT::end()
+void ImGuiPresenter::end()
 {
     _purgeNextLoop = true;
 }
@@ -329,7 +329,7 @@ void ImGuiEXT::end()
 /*
  * begin ImGui frame and draw ImGui stubs
  */
-void ImGuiEXT::beginFrame()
+void ImGuiPresenter::beginFrame()
 {  // drived by event Director::EVENT_BEFORE_DRAW from engine mainLoop
     if (_purgeNextLoop)
     {
@@ -358,7 +358,7 @@ void ImGuiEXT::beginFrame()
 /*
  * flush ImGui draw data to engine
  */
-void ImGuiEXT::endFrame()
+void ImGuiPresenter::endFrame()
 {
     if (_beginFrames > 0)
     {
@@ -376,7 +376,7 @@ void ImGuiEXT::endFrame()
     }
 }
 
-void ImGuiEXT::update()
+void ImGuiPresenter::update()
 {
     // clear things from last frame
     usedCCRefIdMap.clear();
@@ -388,7 +388,7 @@ void ImGuiEXT::update()
     // commands will be processed after update
 }
 
-bool ImGuiEXT::addRenderLoop(std::string_view id, std::function<void()> func, Scene* target)
+bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> func, Scene* target)
 {
     // TODO: check whether exist
     auto fourccId = fourccValue(id);
@@ -397,11 +397,11 @@ bool ImGuiEXT::addRenderLoop(std::string_view id, std::function<void()> func, Sc
         return false;
     }
 
-    ImGuiEXTEventTracker* tracker;
+    ImGuiEventTracker* tracker;
     if (target)
-        tracker = utils::newInstance<ImGuiEXTSceneEventTracker>(&ImGuiEXTSceneEventTracker::initWithScene, target);
+        tracker = utils::newInstance<ImGuiSceneEventTracker>(&ImGuiSceneEventTracker::initWithScene, target);
     else
-        tracker = utils::newInstance<ImGuiEXTGlobalEventTracker>();
+        tracker = utils::newInstance<ImGuiGlobalEventTracker>();
 
     if (tracker)
     {
@@ -411,7 +411,7 @@ bool ImGuiEXT::addRenderLoop(std::string_view id, std::function<void()> func, Sc
     return false;
 }
 
-void ImGuiEXT::removeRenderLoop(std::string_view id)
+void ImGuiPresenter::removeRenderLoop(std::string_view id)
 {
     auto fourccId   = fourccValue(id);
     const auto iter = _renderPiplines.find(fourccId);
@@ -426,7 +426,7 @@ void ImGuiEXT::removeRenderLoop(std::string_view id)
         deactiveImGuiViewports();
 }
 
-void ImGuiEXT::deactiveImGuiViewports()
+void ImGuiPresenter::deactiveImGuiViewports()
 {
     ImGuiContext& g = *GImGui;
     if (!(g.ConfigFlagsCurrFrame & ImGuiConfigFlags_ViewportsEnable))
@@ -457,7 +457,7 @@ static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
     return std::tuple<ImVec2, ImVec2>{uv0, uv1};
 }
 
-void ImGuiEXT::image(Texture2D* tex,
+void ImGuiPresenter::image(Texture2D* tex,
                      const ImVec2& size,
                      const ImVec2& uv0,
                      const ImVec2& uv1,
@@ -476,7 +476,7 @@ void ImGuiEXT::image(Texture2D* tex,
     ImGui::PopID();
 }
 
-void ImGuiEXT::image(Sprite* sprite, const ImVec2& size, const ImVec4& tint_col, const ImVec4& border_col)
+void ImGuiPresenter::image(Sprite* sprite, const ImVec2& size, const ImVec4& tint_col, const ImVec4& border_col)
 {
     if (!sprite || !sprite->getTexture())
         return;
@@ -493,7 +493,7 @@ void ImGuiEXT::image(Sprite* sprite, const ImVec2& size, const ImVec4& tint_col,
     ImGui::PopID();
 }
 
-bool ImGuiEXT::imageButton(Texture2D* tex,
+bool ImGuiPresenter::imageButton(Texture2D* tex,
                            const ImVec2& size,
                            const ImVec2& uv0,
                            const ImVec2& uv1,
@@ -514,7 +514,7 @@ bool ImGuiEXT::imageButton(Texture2D* tex,
     return ret;
 }
 
-bool ImGuiEXT::imageButton(Sprite* sprite,
+bool ImGuiPresenter::imageButton(Sprite* sprite,
                            const ImVec2& size,
                            int frame_padding,
                            const ImVec4& bg_col,
@@ -537,7 +537,7 @@ bool ImGuiEXT::imageButton(Sprite* sprite,
     return ret;
 }
 
-void ImGuiEXT::node(Node* node, const ImVec4& tint_col, const ImVec4& border_col)
+void ImGuiPresenter::node(Node* node, const ImVec4& tint_col, const ImVec4& border_col)
 {
     if (!node)
         return;
@@ -558,7 +558,7 @@ void ImGuiEXT::node(Node* node, const ImVec4& tint_col, const ImVec4& border_col
     ImGui::PopID();
 }
 
-bool ImGuiEXT::nodeButton(Node* node, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
+bool ImGuiPresenter::nodeButton(Node* node, int frame_padding, const ImVec4& bg_col, const ImVec4& tint_col)
 {
     if (!node)
         return false;
@@ -586,14 +586,14 @@ bool ImGuiEXT::nodeButton(Node* node, int frame_padding, const ImVec4& bg_col, c
     return ret;
 }
 
-std::tuple<ImTextureID, int> ImGuiEXT::useTexture(Texture2D* texture)
+std::tuple<ImTextureID, int> ImGuiPresenter::useTexture(Texture2D* texture)
 {
     if (!texture)
         return std::tuple<ImTextureID, int>{nullptr, 0};
     return std::tuple<ImTextureID, int>{(ImTextureID)texture, getCCRefId(texture)};
 }
 
-std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiEXT::useSprite(Sprite* sprite)
+std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiPresenter::useSprite(Sprite* sprite)
 {
     if (!sprite || !sprite->getTexture())
         return std::tuple<ImTextureID, ImVec2, ImVec2, int>{nullptr, {}, {}, 0};
@@ -603,7 +603,7 @@ std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiEXT::useSprite(Sprite* sprite)
                                                         getCCRefId(sprite)};
 }
 
-std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiEXT::useNode(Node* node, const ImVec2& pos)
+std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiPresenter::useNode(Node* node, const ImVec2& pos)
 {
     if (!node)
         return std::tuple<ImTextureID, ImVec2, ImVec2, int>{nullptr, {}, {}, 0};
@@ -617,7 +617,7 @@ std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiEXT::useNode(Node* node, const
         (ImTextureID)node, pos, ImVec2(pos.x + size.width, pos.y + size.height), getCCRefId(node)};
 }
 
-void ImGuiEXT::setNodeColor(Node* node, const ImVec4& col)
+void ImGuiPresenter::setNodeColor(Node* node, const ImVec4& col)
 {
     if (node)
     {
@@ -626,13 +626,13 @@ void ImGuiEXT::setNodeColor(Node* node, const ImVec4& col)
     }
 }
 
-void ImGuiEXT::setNodeColor(Node* node, ImGuiCol col)
+void ImGuiPresenter::setNodeColor(Node* node, ImGuiCol col)
 {
     if (node && 0 <= col && col < ImGuiCol_COUNT)
         setNodeColor(node, ImGui::GetStyleColorVec4(col));
 }
 
-void ImGuiEXT::setLabelColor(Label* label, const ImVec4& col)
+void ImGuiPresenter::setLabelColor(Label* label, const ImVec4& col)
 {
     if (label)
     {
@@ -640,19 +640,19 @@ void ImGuiEXT::setLabelColor(Label* label, const ImVec4& col)
     }
 }
 
-void ImGuiEXT::setLabelColor(Label* label, bool disabled)
+void ImGuiPresenter::setLabelColor(Label* label, bool disabled)
 {
     if (label)
         setLabelColor(label, ImGui::GetStyleColorVec4(disabled ? ImGuiCol_TextDisabled : ImGuiCol_Text));
 }
 
-void ImGuiEXT::setLabelColor(Label* label, ImGuiCol col)
+void ImGuiPresenter::setLabelColor(Label* label, ImGuiCol col)
 {
     if (label && 0 <= col && col < ImGuiCol_COUNT)
         setLabelColor(label, ImGui::GetStyleColorVec4(col));
 }
 
-ImWchar* ImGuiEXT::addGlyphRanges(std::string_view key, const std::vector<ImWchar>& ranges)
+ImWchar* ImGuiPresenter::addGlyphRanges(std::string_view key, const std::vector<ImWchar>& ranges)
 {
     auto it = glyphRanges.find(key);
     // the pointer must be persistant, do not replace
@@ -664,7 +664,7 @@ ImWchar* ImGuiEXT::addGlyphRanges(std::string_view key, const std::vector<ImWcha
     return it->second.data();
 }
 
-void ImGuiEXT::mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end)
+void ImGuiPresenter::mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar end)
 {
     if (!dst || !src || start > end)
         return;
@@ -679,7 +679,7 @@ void ImGuiEXT::mergeFontGlyphs(ImFont* dst, ImFont* src, ImWchar start, ImWchar 
     dst->BuildLookupTable();
 }
 
-int ImGuiEXT::getCCRefId(Ref* p)
+int ImGuiPresenter::getCCRefId(Ref* p)
 {
     int id        = 0;
     const auto it = usedCCRefIdMap.find(p);

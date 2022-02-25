@@ -45,7 +45,7 @@ public:
     {
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(CC_PLATFORM_PC)
-        addTest("ImGuiEXT", []() { return new ImGuiEXTTests(); });
+        addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
         addTest("ActionManager", []() { return new ActionManagerTests(); });

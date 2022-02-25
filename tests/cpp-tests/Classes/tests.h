@@ -120,6 +120,6 @@
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
 #if defined(CC_PLATFORM_PC)
-#    include "ImGuiEXTTest/ImGuiEXTTest.h"
+#    include "ImGuiTest/ImGuiTest.h"
 #endif
 #endif
