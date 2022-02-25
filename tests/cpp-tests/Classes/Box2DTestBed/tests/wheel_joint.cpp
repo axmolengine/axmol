@@ -22,7 +22,7 @@
 
 #include "settings.h"
 #include "test.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 
 // Test the wheel joint with motor, spring, and limit options.
 class WheelJoint : public Test

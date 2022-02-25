@@ -22,7 +22,7 @@
 
 #include "settings.h"
 #include "test.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 
 class RevoluteJoint : public Test
 {

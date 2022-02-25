@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "test.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 
 // This tests distance joints, body destruction, and joint destruction.
 class DistanceJoint : public Test
