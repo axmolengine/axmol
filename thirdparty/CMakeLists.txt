@@ -66,7 +66,6 @@ add_library(thirdparty STATIC empty.cpp)
 
 # header only libs
 target_include_directories(thirdparty
-    INTERFACE "fmt/include"
     INTERFACE "robin-map/include"
 )
 
@@ -327,6 +326,11 @@ if(AX_WITH_YAML_CPP)
     configure_target_outdir(yaml-cpp)
     # target_link_libraries(thirdparty yaml-cpp)
 endif()
+
+# fmtlib
+add_subdirectory(fmt)
+target_link_libraries(thirdparty fmt-header-only)
+configure_target_outdir(fmt)
 
 # kcp
 if(AX_WITH_KCP)
