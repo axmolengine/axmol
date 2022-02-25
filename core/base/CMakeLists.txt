@@ -17,6 +17,7 @@ endif()
 set(COCOS_BASE_HEADER
     base/astc.h
     base/pvr.h
+    base/format.h
     base/CCValue.h
     base/CCEventListenerMouse.h
     base/atitc.h
