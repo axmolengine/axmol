@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "test.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 
 // This shows how to use sensor shapes. Sensors don't have collision, but report overlap events.
 class Sensors : public Test
