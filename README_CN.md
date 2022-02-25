@@ -46,8 +46,6 @@
 * **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGuiEXT](extensions/ImGuiEXT/README.md)**
 * 完整改动列表，请查看[CHANGELOG](CHANGELOG)
   
-### [Roadmap](https://github.com/adxeproject/adxe/issues/1)
-  
 ### 快速开始
 
 #### 必要工具 [python](https://www.python.org/downloads/)
@@ -108,7 +106,7 @@
   
 ### 参考链接
   * official v4: https://gitee.com/mirrors/cocos2d-x
-  * Git快速手册: https://github.com/adxeproject/adxe/wiki/Git-Guides
+  * Git快速手册: https://github.com/adxeproject/adxe/discussions/411
 
 ### adxe项目的活跃贡献者
 
