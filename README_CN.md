@@ -23,7 +23,7 @@
 * Review PR ASAP
   
 ### 主要特性:
-* 增强Windows开发环境，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
+* 增强Windows下工作流，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 * Windows 视频播放支持
 * Windows x64编译支持
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
