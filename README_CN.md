@@ -23,6 +23,7 @@
 * Review PR ASAP
   
 ### 主要特性:
+* 增强Windows开发环境，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 * Windows 视频播放支持
 * Windows x64编译支持
 * 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
@@ -43,7 +44,7 @@
 * 新增FairyGUI支持
 * 新增硬件压缩纹理格式ASTC 4x4/6x6/8x8支持，支持软解
 * 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
-* **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGuiEXT](extensions/ImGuiEXT/README.md)**
+* **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGui](extensions/ImGui/README.md)**
 * 完整改动列表，请查看[CHANGELOG](CHANGELOG)
   
 ### 快速开始

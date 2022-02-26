@@ -26,6 +26,7 @@
 * Bugfixes ASAP
   
 ### Highlighted Features
+* Improve windows dev environment, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
@@ -53,7 +54,7 @@
   * Chipmunk2D 
 * Supported 3D physics engines:
   * Bullet Physics SDK
-* **ImGui 1.87 integrated, easy to write game embedded tools, very easy to use, read [ImGuiEXT](extensions/ImGuiEXT/README.md) for more info**
+* **ImGui 1.87 integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
