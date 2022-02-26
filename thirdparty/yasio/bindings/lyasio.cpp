@@ -234,7 +234,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           case YOPT_S_TCP_KEEPALIVE:
             service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]));
             break;
-          case YOPT_C_LFBFD_PARAMS:
+          case YOPT_C_UNPACK_PARAMS:
             service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]), static_cast<int>(args[3]),
                                 static_cast<int>(args[4]));
             break;
@@ -315,7 +315,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YOPT_S_DNS_QUERIES_TIMEOUT);
   YASIO_EXPORT_ENUM(YOPT_S_TCP_KEEPALIVE);
   YASIO_EXPORT_ENUM(YOPT_S_EVENT_CB);
-  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS); // alias for YOPT_C_UNPACK_PARAMS
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_HOST);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_PORT);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_ENDPOINT);
@@ -679,7 +680,7 @@ end
                                  case YOPT_S_TCP_KEEPALIVE:
                                    service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]));
                                    break;
-                                 case YOPT_C_LFBFD_PARAMS:
+                                 case YOPT_C_UNPACK_PARAMS:
                                    service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]),
                                                        static_cast<int>(args[3]), static_cast<int>(args[4]));
                                    break;
@@ -747,7 +748,8 @@ end
   YASIO_EXPORT_ENUM(YOPT_S_DNS_QUERIES_TIMEOUT);
   YASIO_EXPORT_ENUM(YOPT_S_TCP_KEEPALIVE);
   YASIO_EXPORT_ENUM(YOPT_S_EVENT_CB);
-  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS); // alias for YOPT_C_UNPACK_PARAMS
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_HOST);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_PORT);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_ENDPOINT);
