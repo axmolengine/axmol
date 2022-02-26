@@ -36,4 +36,3 @@ The goals where:
 ## TTF font resources
 
 - https://fonts.google.com/
-- 

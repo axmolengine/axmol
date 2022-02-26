@@ -26,7 +26,7 @@
 * Bugfixes ASAP
   
 ### Highlighted Features
-* Improve windows dev environment, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
+* Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
