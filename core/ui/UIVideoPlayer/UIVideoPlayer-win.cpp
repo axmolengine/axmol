@@ -145,7 +145,7 @@ vec4 convertLimitedYUY2toComputerRGB()
 	
 	vec2 packedCoor = vec2(v_texCoord.x/2.0, v_texCoord.y);
 	
-	tempyuv = inYUY2(texture(u_texture, packedCoor), isOdd);
+	tempyuv = inYUY2(texture2D(u_texture, packedCoor), isOdd);
 	
 	return limitedYCbCrToComputerRGBNormalized(tempyuv);
 }
@@ -183,15 +183,15 @@ vec4 convertFullYUY2toComputerRGB()
 	
 	vec2 packedCoor = vec2(v_texCoord.x/2.0, v_texCoord.y);
 	
-	tempyuv = inYUY2(texture(u_texture, packedCoor), isOdd);
+	tempyuv = inYUY2(texture2D(u_texture, packedCoor), isOdd);
 	
 	return fullYCbCrToComputerRGBNormalized(tempyuv);
 }
 
 void main()
 {
-  vec3 rgb = convertFullYUY2toComputerRGB();
-  gl_FragColor = v_fragmentColor * vec4(rgb, 1.0);
+  vec4 color = convertFullYUY2toComputerRGB();
+  gl_FragColor = v_fragmentColor * vec4(color.rgb, 1.0);
 }
 )"sv;
 
