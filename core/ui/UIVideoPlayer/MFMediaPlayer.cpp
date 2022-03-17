@@ -368,8 +368,7 @@ HRESULT MFMediaPlayer::OpenURL(const WCHAR* sURL)
     CHECK_HR(hr = MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateSupport)));
 
     // Check if rate 0 (scrubbing) is supported.
-    auto hrTmp = m_RateSupport->IsRateSupported(TRUE, 0, NULL);
-    if (SUCCEEDED(hrTmp))
+    if (SUCCEEDED(m_RateSupport->IsRateSupported(TRUE, 0, NULL)))
         m_bCanScrub = TRUE;
 
     // if m_pRate is NULL, m_bCanScrub must be FALSE.
