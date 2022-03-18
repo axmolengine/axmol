@@ -67,7 +67,7 @@ public:
 
     virtual void copyAttributesTo(PUEventHandler* eventHandler);
 
-    CC_CONSTRUCTOR_ACCESS : PUEventHandler();
+    PUEventHandler();
     virtual ~PUEventHandler();
 
 protected:

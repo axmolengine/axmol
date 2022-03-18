@@ -94,7 +94,7 @@ public:
     /** synchronize parameter to node. */
     void syncToNode();
 
-    CC_CONSTRUCTOR_ACCESS : NavMeshObstacle();
+    NavMeshObstacle();
     virtual ~NavMeshObstacle();
 
     bool initWith(float radius, float height);

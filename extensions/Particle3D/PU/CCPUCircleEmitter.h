@@ -76,7 +76,7 @@ public:
     virtual PUCircleEmitter* clone() override;
     virtual void copyAttributesTo(PUEmitter* emitter) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUCircleEmitter();
+    PUCircleEmitter();
     virtual ~PUCircleEmitter(){};
 
 protected:

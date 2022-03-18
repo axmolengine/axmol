@@ -47,7 +47,7 @@ public:
      */
     virtual bool observe(PUParticle3D* particle, float timeElapsed) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUOnExpireObserver() : PUObserver() {}
+    PUOnExpireObserver() : PUObserver() {}
     virtual ~PUOnExpireObserver(){};
 };
 

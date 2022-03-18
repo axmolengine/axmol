@@ -44,7 +44,7 @@ public:
     PUScriptTranslator* getTranslator(std::string_view type);
     PUBehaviour* createBehaviour(std::string_view type);
 
-    CC_CONSTRUCTOR_ACCESS : PUBehaviourManager();
+    PUBehaviourManager();
     ~PUBehaviourManager();
 
 protected:

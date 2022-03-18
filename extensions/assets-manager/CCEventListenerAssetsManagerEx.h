@@ -66,9 +66,8 @@ public:
     virtual bool checkAvailable() override;
     virtual EventListenerAssetsManagerEx* clone() override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /** Constructor */
-        EventListenerAssetsManagerEx();
+    /** Constructor */
+    EventListenerAssetsManagerEx();
 
     /** Initializes event with type and callback function */
     bool init(const AssetsManagerEx* AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback);

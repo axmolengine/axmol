@@ -157,11 +157,10 @@ public:
     virtual void setOpacity(uint8_t opacity) override;
     virtual uint8_t getOpacity() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ProgressTimer() = default;
+    /**
+     * @js ctor
+     */
+    ProgressTimer() = default;
     /**
      * @js NA
      * @lua NA

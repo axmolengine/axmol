@@ -147,11 +147,10 @@ public:
      */
     virtual const BlendFunc& getBlendFunc() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleBatchNode();
+    /**
+     * @js ctor
+     */
+    ParticleBatchNode();
     /**
      * @js NA
      * @lua NA

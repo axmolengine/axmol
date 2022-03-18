@@ -209,11 +209,10 @@ public:
 
     std::string_view getResourceFile() const { return _tmxFile; }
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        FastTMXTiledMap();
+    /**
+     * @js ctor
+     */
+    FastTMXTiledMap();
     /**
      * @js NA
      * @lua NA

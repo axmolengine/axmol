@@ -515,11 +515,10 @@ public:
     int getResourceType() const { return _fileType; }
     std::string_view getResourceName() const { return _fileName; }
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        Sprite();
+    /**
+     * @js ctor
+     */
+    Sprite();
     virtual ~Sprite();
 
     /* Initializes an empty sprite with no parameters. */

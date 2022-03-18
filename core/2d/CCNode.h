@@ -1824,9 +1824,8 @@ public:
      */
     void resetChild(Node* child, bool cleanup);
 
-    CC_CONSTRUCTOR_ACCESS :
-        // Nodes should be created using create();
-        Node();
+    // Nodes should be created using create();
+    Node();
     virtual ~Node();
 
     virtual bool init();

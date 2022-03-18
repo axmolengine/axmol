@@ -147,7 +147,7 @@ public:
      */
     void onTouchEnded();
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
 private:
     float calculateLength(float innerContainerMeasure, float scrollViewMeasure, float outOfBoundaryValue);

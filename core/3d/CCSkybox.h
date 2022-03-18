@@ -74,11 +74,10 @@ public:
     /** reload sky box after GLESContext reconstructed.*/
     void reload();
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * Constructor.
-         */
-        Skybox();
+    /**
+     * Constructor.
+     */
+    Skybox();
 
     /**
      * Destructor.

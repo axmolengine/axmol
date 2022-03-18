@@ -79,9 +79,7 @@ public:
     /**get end time*/
     float getEndTime() const;
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        AnimationCurve();
+    AnimationCurve();
     virtual ~AnimationCurve();
 
     /**

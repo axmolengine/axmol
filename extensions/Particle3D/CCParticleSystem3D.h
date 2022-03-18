@@ -276,7 +276,7 @@ public:
      */
     bool isEnabled() const { return _isEnabled; }
 
-    CC_CONSTRUCTOR_ACCESS : ParticleSystem3D();
+    ParticleSystem3D();
     virtual ~ParticleSystem3D();
 
 protected:

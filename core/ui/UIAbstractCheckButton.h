@@ -173,7 +173,7 @@ public:
     ResourceData getCrossNormalFile();
     ResourceData getCrossDisabledFile();
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
     virtual bool init(std::string_view backGround,
                       std::string_view backGroundSelected,
                       std::string_view cross,

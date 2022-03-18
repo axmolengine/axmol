@@ -106,7 +106,6 @@ public:
 	AnimationState* getState() const;
 	void setUpdateOnlyIfVisible(bool status);
 
-CC_CONSTRUCTOR_ACCESS:
 	SkeletonAnimation ();
 	virtual ~SkeletonAnimation ();
 	virtual void initialize () override;

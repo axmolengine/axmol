@@ -65,12 +65,10 @@ public:
     virtual bool serialize(void* r) override;
     virtual cocos2d::Node* getNode();
     virtual void setNode(cocos2d::Node* node);
-
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         *  @js ctor
-         */
-        ComRender();
+    /**
+     *  @js ctor
+     */
+    ComRender();
     ComRender(cocos2d::Node* node, const char* comName);
     /**
      * @js NA

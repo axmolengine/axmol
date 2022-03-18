@@ -313,7 +313,7 @@ public:
     ResourceData getPressedFile();
     ResourceData getDisabledFile();
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
     virtual bool init(std::string_view normalImage,
                       std::string_view selectedImage = "",
                       std::string_view disableImage  = "",

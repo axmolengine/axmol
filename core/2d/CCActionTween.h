@@ -101,17 +101,15 @@ public:
     ActionTween* reverse() const override;
     ActionTween* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @brief Initializes the action with the property name (key), and the from and to parameters.
-         * @param duration The duration of the ActionTween. It's a value in seconds.
-         * @param key The key of property which should be updated.
-         * @param from The value of the specified property when the action begin.
-         * @param to The value of the specified property when the action end.
-         * @return If the initialization success, return true; otherwise, return false.
-         */
-        bool
-        initWithDuration(float duration, std::string_view key, float from, float to);
+    /**
+     * @brief Initializes the action with the property name (key), and the from and to parameters.
+     * @param duration The duration of the ActionTween. It's a value in seconds.
+     * @param key The key of property which should be updated.
+     * @param from The value of the specified property when the action begin.
+     * @param to The value of the specified property when the action end.
+     * @return If the initialization success, return true; otherwise, return false.
+     */
+    bool initWithDuration(float duration, std::string_view key, float from, float to);
 
 protected:
     std::string _key;

@@ -72,7 +72,7 @@ public:
 
     cocos2d::Rect getBoundingBox() const override;
 
-    CC_CONSTRUCTOR_ACCESS : SkeletonNode();
+    SkeletonNode();
     virtual ~SkeletonNode();
     virtual bool init() override;
 

@@ -97,7 +97,7 @@ public:
     const cocos2d::MenuItemImage* getRestartTestItem() const { return _restartTestItem; }
 
     virtual void onEnter() override;
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
 protected:
     cocos2d::MenuItemImage* _priorTestItem;

@@ -56,12 +56,10 @@ public:
      */
     static ParticleFire* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleFire()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleFire() {}
     /**
      * @js NA
      * @lua NA
@@ -94,12 +92,10 @@ public:
      */
     static ParticleFireworks* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleFireworks()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleFireworks() {}
     /**
      * @js NA
      * @lua NA
@@ -132,12 +128,10 @@ public:
      */
     static ParticleSun* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleSun()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleSun() {}
     /**
      * @js NA
      * @lua NA
@@ -170,12 +164,10 @@ public:
      */
     static ParticleGalaxy* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleGalaxy()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleGalaxy() {}
     /**
      * @js NA
      * @lua NA
@@ -208,12 +200,10 @@ public:
      */
     static ParticleFlower* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleFlower()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleFlower() {}
     /**
      * @js NA
      * @lua NA
@@ -246,12 +236,10 @@ public:
      */
     static ParticleMeteor* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleMeteor()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleMeteor() {}
     /**
      * @js NA
      * @lua NA
@@ -284,12 +272,10 @@ public:
      */
     static ParticleSpiral* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleSpiral()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleSpiral() {}
     /**
      * @js NA
      * @lua NA
@@ -322,12 +308,10 @@ public:
      */
     static ParticleExplosion* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleExplosion()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleExplosion() {}
     /**
      * @js NA
      * @lua NA
@@ -360,12 +344,10 @@ public:
      */
     static ParticleSmoke* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleSmoke()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleSmoke() {}
     /**
      * @js NA
      * @lua NA
@@ -398,12 +380,10 @@ public:
      */
     static ParticleSnow* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleSnow()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleSnow() {}
     /**
      * @js NA
      * @lua NA
@@ -436,12 +416,10 @@ public:
      */
     static ParticleRain* createWithTotalParticles(int numberOfParticles);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleRain()
-    {}
+    /**
+     * @js ctor
+     */
+    ParticleRain() {}
     /**
      * @js NA
      * @lua NA

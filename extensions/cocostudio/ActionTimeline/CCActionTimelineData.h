@@ -14,7 +14,7 @@ public:
 
     virtual void setActionTag(int actionTag) { _actionTag = actionTag; }
     virtual int getActionTag() const { return _actionTag; }
-    CC_CONSTRUCTOR_ACCESS : ActionTimelineData();
+    ActionTimelineData();
     virtual bool init(int actionTag);
 
 protected:

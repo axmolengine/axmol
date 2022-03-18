@@ -775,11 +775,10 @@ public:
     }
     bool isSourcePositionCompatible() const { return _sourcePositionCompatible; }
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleSystem();
+    /**
+     * @js ctor
+     */
+    ParticleSystem();
     /**
      * @js NA
      * @lua NA

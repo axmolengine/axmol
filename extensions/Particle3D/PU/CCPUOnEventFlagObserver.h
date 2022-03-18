@@ -59,7 +59,7 @@ public:
 
     virtual void copyAttributesTo(PUObserver* observer) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUOnEventFlagObserver();
+    PUOnEventFlagObserver();
     virtual ~PUOnEventFlagObserver(){};
 };
 

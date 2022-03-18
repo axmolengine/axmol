@@ -227,6 +227,12 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
 
+    /**
+     * Default constructor.
+     */
+    WebView();
+    virtual ~WebView();
+
 protected:
     virtual cocos2d::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
@@ -235,17 +241,6 @@ protected:
     ccWebViewCallback _onDidFinishLoading                                            = nullptr;
     ccWebViewCallback _onDidFailLoading                                              = nullptr;
     ccWebViewCallback _onJSCallback                                                  = nullptr;
-
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * Default constructor.
-         */
-        WebView();
-
-    /**
-     * Default destructor.
-     */
-    virtual ~WebView();
 
 private:
     WebViewImpl* _impl = nullptr;

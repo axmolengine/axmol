@@ -76,7 +76,7 @@ public:
 
     virtual void copyAttributesTo(PUEventHandler* eventHandler) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUDoScaleEventHandler();
+    PUDoScaleEventHandler();
     virtual ~PUDoScaleEventHandler(){};
 
 protected:

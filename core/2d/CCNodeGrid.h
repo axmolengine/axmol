@@ -88,7 +88,7 @@ public:
     // overrides
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    CC_CONSTRUCTOR_ACCESS : NodeGrid();
+    NodeGrid();
     virtual ~NodeGrid();
 
 protected:

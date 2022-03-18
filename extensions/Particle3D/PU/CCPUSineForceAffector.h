@@ -56,7 +56,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUSineForceAffector();
+    PUSineForceAffector();
     virtual ~PUSineForceAffector();
 
 protected:

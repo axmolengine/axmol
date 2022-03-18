@@ -48,7 +48,7 @@ public:
      */
     virtual void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUDoFreezeEventHandler() : PUEventHandler() {}
+    PUDoFreezeEventHandler() : PUEventHandler() {}
     virtual ~PUDoFreezeEventHandler(){};
 };
 

@@ -191,11 +191,10 @@ public:
     std::string_view getCurrentTitle() const { return _currentTitle; };
     std::string getCurrentTitle() { return _currentTitle; };
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ControlButton();
+    /**
+     * @js ctor
+     */
+    ControlButton();
     /**
      * @js NA
      * @lua NA

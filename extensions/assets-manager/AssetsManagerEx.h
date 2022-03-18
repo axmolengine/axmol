@@ -134,9 +134,7 @@ public:
         _verifyCallback = callback;
     };
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        AssetsManagerEx(std::string_view manifestUrl, std::string_view storagePath);
+    AssetsManagerEx(std::string_view manifestUrl, std::string_view storagePath);
 
     virtual ~AssetsManagerEx();
 

@@ -111,7 +111,7 @@ public:
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 #endif
 
-    CC_CONSTRUCTOR_ACCESS : LabelAtlas() : _string("")
+    LabelAtlas()
     {
 #if CC_LABELATLAS_DEBUG_DRAW
         _debugDrawNode = DrawNode::create();

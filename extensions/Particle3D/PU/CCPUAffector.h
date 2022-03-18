@@ -110,7 +110,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector);
 
-    CC_CONSTRUCTOR_ACCESS : PUAffector();
+    PUAffector();
     virtual ~PUAffector();
 
 protected:
