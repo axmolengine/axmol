@@ -6917,41 +6917,6 @@ int lua_cocos2dx_3d_Bundle3D_parseGLDataType(lua_State* tolua_S)
 #endif
     return 0;
 }
-int lua_cocos2dx_3d_Bundle3D_constructor(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::Bundle3D* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_Bundle3D_constructor'", nullptr);
-            return 0;
-        }
-        cobj = new cocos2d::Bundle3D();
-        tolua_pushusertype(tolua_S,(void*)cobj,"cc.Bundle3D");
-        tolua_register_gc(tolua_S,lua_gettop(tolua_S));
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Bundle3D:Bundle3D",argc, 0);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_Bundle3D_constructor'.",&tolua_err);
-#endif
-
-    return 0;
-}
-
 static int lua_cocos2dx_3d_Bundle3D_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (Bundle3D)");
@@ -6964,7 +6929,6 @@ int lua_register_cocos2dx_3d_Bundle3D(lua_State* tolua_S)
     tolua_cclass(tolua_S,"Bundle3D","cc.Bundle3D","",nullptr);
 
     tolua_beginmodule(tolua_S,"Bundle3D");
-        tolua_function(tolua_S,"new",lua_cocos2dx_3d_Bundle3D_constructor);
         tolua_function(tolua_S,"load",lua_cocos2dx_3d_Bundle3D_load);
         tolua_function(tolua_S,"loadSkinData",lua_cocos2dx_3d_Bundle3D_loadSkinData);
         tolua_function(tolua_S,"clear",lua_cocos2dx_3d_Bundle3D_clear);
