@@ -117,7 +117,7 @@ public:
     /** Get the mask of Physics3DObject. */
     unsigned int getMask() const { return _mask; };
 
-    CC_CONSTRUCTOR_ACCESS : Physics3DObject()
+    Physics3DObject()
         : _isEnabled(true), _type(PhysicsObjType::UNKNOWN), _userData(nullptr), _physicsWorld(nullptr), _mask(-1)
     {}
     virtual ~Physics3DObject() {}
@@ -331,7 +331,7 @@ public:
     /** Active or inactive. */
     void setActive(bool active);
 
-    CC_CONSTRUCTOR_ACCESS : Physics3DRigidBody();
+    Physics3DRigidBody();
     virtual ~Physics3DRigidBody();
 
     bool init(Physics3DRigidBodyDes* info);
@@ -480,7 +480,7 @@ public:
     /** Set a callback when trigger exit. */
     std::function<void(Physics3DObject* otherObject)> onTriggerExit;
 
-    CC_CONSTRUCTOR_ACCESS : Physics3DCollider();
+    Physics3DCollider();
     virtual ~Physics3DCollider();
 
     bool init(Physics3DColliderDes* info);

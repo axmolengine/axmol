@@ -69,7 +69,7 @@ public:
     PUScriptTranslator* getTranslator(std::string_view type);
     PUAffector* createAffector(std::string_view type);
 
-    CC_CONSTRUCTOR_ACCESS : PUAffectorManager();
+    PUAffectorManager();
     ~PUAffectorManager();
 
 protected:

@@ -83,7 +83,7 @@ public:
 
     void setIndexData(const MeshData::IndexArray& indexdata);
 
-    CC_CONSTRUCTOR_ACCESS : MeshIndexData();
+    MeshIndexData();
     virtual ~MeshIndexData();
 
 protected:
@@ -138,7 +138,7 @@ public:
 
     void setVertexData(const std::vector<float>& vertexData);
 
-    CC_CONSTRUCTOR_ACCESS : MeshVertexData();
+    MeshVertexData();
     virtual ~MeshVertexData();
 
 protected:

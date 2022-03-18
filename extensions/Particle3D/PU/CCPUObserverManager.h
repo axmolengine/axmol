@@ -53,9 +53,7 @@ public:
     PUScriptTranslator* getTranslator(std::string_view type);
     PUObserver* createObserver(std::string_view type);
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        PUObserverManager();
+    PUObserverManager();
     ~PUObserverManager();
 
 protected:

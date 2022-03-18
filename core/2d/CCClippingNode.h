@@ -135,7 +135,7 @@ public:
 
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
 
-    CC_CONSTRUCTOR_ACCESS : ClippingNode();
+    ClippingNode();
 
     /**
      * @js NA

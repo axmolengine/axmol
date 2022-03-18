@@ -157,13 +157,10 @@ public:
 
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        Menu()
-        : _selectedItem(nullptr), _selectedWithCamera(nullptr)
-    {}
+    /**
+     * @js ctor
+     */
+    Menu() : _selectedItem(nullptr), _selectedWithCamera(nullptr) {}
     virtual ~Menu();
 
     /** initializes an empty Menu */

@@ -61,7 +61,7 @@ public:
     virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
 
-    CC_CONSTRUCTOR_ACCESS : ProgressTo() {}
+    ProgressTo() {}
     virtual ~ProgressTo() {}
 
     /**
@@ -104,7 +104,7 @@ public:
     virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
 
-    CC_CONSTRUCTOR_ACCESS : ProgressFromTo() {}
+    ProgressFromTo() {}
     virtual ~ProgressFromTo() {}
 
     /**

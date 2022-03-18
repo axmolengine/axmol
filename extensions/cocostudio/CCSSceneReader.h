@@ -66,7 +66,7 @@ public:
     void setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)>& selector);
     cocos2d::Node* getNodeByTag(int nTag);
     inline AttachComponentType getAttachComponentType() { return _attachComponent; }
-    CC_CONSTRUCTOR_ACCESS : SceneReader();
+    SceneReader();
     virtual ~SceneReader();
 
 private:

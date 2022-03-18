@@ -233,14 +233,13 @@ public:
     void setContentSize(const Size& contentSize) override;
 #    endif
 
+    VideoPlayer();
+    virtual ~VideoPlayer();
+
 protected:
     virtual cocos2d::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
-    CC_CONSTRUCTOR_ACCESS : VideoPlayer();
-    virtual ~VideoPlayer();
-
-protected:
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
     DrawNode* _debugDrawNode;
 #    endif

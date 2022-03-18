@@ -74,11 +74,10 @@ public:
     virtual void onAdd();
     virtual void onRemove();
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        Component();
+    /**
+     * @js ctor
+     */
+    Component();
 
 protected:
     Node* _owner;

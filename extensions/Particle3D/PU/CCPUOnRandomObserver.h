@@ -64,7 +64,7 @@ public:
 
     virtual void copyAttributesTo(PUObserver* observer) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUOnRandomObserver();
+    PUOnRandomObserver();
     virtual ~PUOnRandomObserver(){};
 
 protected:

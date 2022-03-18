@@ -427,7 +427,7 @@ public:
 
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
 protected:
     virtual void handleReleaseLogic(Touch* touch) override;

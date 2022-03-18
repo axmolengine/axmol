@@ -63,7 +63,7 @@ public:
     virtual GridAction* reverse() const override;
     virtual void startWithTarget(Node* target) override;
 
-    CC_CONSTRUCTOR_ACCESS : GridAction() {}
+    GridAction() {}
     virtual ~GridAction() {}
     /**
      * @brief Initializes the action with size and duration.
@@ -217,7 +217,7 @@ public:
     virtual AccelDeccelAmplitude* clone() const override;
     virtual AccelDeccelAmplitude* reverse() const override;
 
-    CC_CONSTRUCTOR_ACCESS : AccelDeccelAmplitude() {}
+    AccelDeccelAmplitude() {}
     virtual ~AccelDeccelAmplitude();
 
     /**
@@ -268,7 +268,7 @@ public:
     virtual AccelAmplitude* clone() const override;
     virtual AccelAmplitude* reverse() const override;
 
-    CC_CONSTRUCTOR_ACCESS : AccelAmplitude() {}
+    AccelAmplitude() {}
     virtual ~AccelAmplitude();
 
     bool initWithAction(Action* action, float duration);
@@ -313,7 +313,7 @@ public:
     virtual DeccelAmplitude* clone() const override;
     virtual DeccelAmplitude* reverse() const override;
 
-    CC_CONSTRUCTOR_ACCESS : DeccelAmplitude() {}
+    DeccelAmplitude() {}
     virtual ~DeccelAmplitude();
 
     /**
@@ -354,7 +354,7 @@ public:
     virtual StopGrid* clone() const override;
     virtual StopGrid* reverse() const override;
 
-    CC_CONSTRUCTOR_ACCESS : StopGrid() {}
+    StopGrid() {}
     virtual ~StopGrid() {}
 
 protected:
@@ -384,7 +384,7 @@ public:
     virtual ReuseGrid* clone() const override;
     virtual ReuseGrid* reverse() const override;
 
-    CC_CONSTRUCTOR_ACCESS : ReuseGrid() {}
+    ReuseGrid() {}
     virtual ~ReuseGrid() {}
 
     /**

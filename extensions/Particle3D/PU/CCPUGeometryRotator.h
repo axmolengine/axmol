@@ -78,7 +78,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUGeometryRotator();
+    PUGeometryRotator();
     virtual ~PUGeometryRotator();
 
 protected:

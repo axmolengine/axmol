@@ -68,12 +68,11 @@ public:
 
     typedef std::string ListenerID;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * Constructor
-         * @js ctor
-         */
-        EventListener();
+    /**
+     * Constructor
+     * @js ctor
+     */
+    EventListener();
 
     /**
      * Initializes event with type and callback function

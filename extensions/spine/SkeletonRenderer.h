@@ -114,7 +114,6 @@ namespace spine {
 		void setOpacityModifyRGB (bool value) override;
 		bool isOpacityModifyRGB () const override;
 
-	CC_CONSTRUCTOR_ACCESS:
 		SkeletonRenderer ();
 		SkeletonRenderer(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false, bool ownsAtlas = false);
 		SkeletonRenderer (SkeletonData* skeletonData, bool ownsSkeletonData = false);

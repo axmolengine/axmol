@@ -362,7 +362,7 @@ public:
 
     bool isIsolated() const { return _isolated; }
 
-    CC_CONSTRUCTOR_ACCESS : DrawNode(float lineWidth = DEFAULT_LINE_WIDTH);
+    DrawNode(float lineWidth = DEFAULT_LINE_WIDTH);
     virtual ~DrawNode();
     virtual bool init() override;
 

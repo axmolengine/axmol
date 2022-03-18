@@ -56,7 +56,7 @@ public:
      */
     virtual void handle(PUParticleSystem3D* particleSystem, PUParticle3D* particle, float timeElapsed) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUDoExpireEventHandler() : PUEventHandler() {}
+    PUDoExpireEventHandler() : PUEventHandler() {}
     virtual ~PUDoExpireEventHandler(){};
 };
 

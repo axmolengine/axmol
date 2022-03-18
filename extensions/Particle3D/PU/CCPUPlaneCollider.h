@@ -58,7 +58,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUPlaneCollider();
+    PUPlaneCollider();
     virtual ~PUPlaneCollider();
 
 protected:

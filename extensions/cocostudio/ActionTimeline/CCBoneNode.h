@@ -162,7 +162,7 @@ public:
     virtual bool isPointOnRack(const cocos2d::Vec2& bonePoint);
 #endif
 
-    CC_CONSTRUCTOR_ACCESS : BoneNode() = default;
+    BoneNode() = default;
     virtual ~BoneNode();
     virtual bool init() override;
 

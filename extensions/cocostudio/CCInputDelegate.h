@@ -46,17 +46,15 @@ namespace cocostudio
  */
 class CCS_DLL InputDelegate
 {
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        InputDelegate(void);
+public:
+    /**
+     * @js ctor
+     */
+    InputDelegate(void);
     /**
      * @js NA
      */
     virtual ~InputDelegate(void);
-
-public:
     virtual bool isTouchEnabled() const;
     virtual void setTouchEnabled(bool value);
     virtual bool isAccelerometerEnabled() const;

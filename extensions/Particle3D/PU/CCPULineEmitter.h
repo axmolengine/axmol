@@ -90,7 +90,7 @@ public:
     virtual PULineEmitter* clone() override;
     virtual void copyAttributesTo(PUEmitter* emitter) override;
 
-    CC_CONSTRUCTOR_ACCESS : PULineEmitter();
+    PULineEmitter();
     virtual ~PULineEmitter(){};
 
 protected:

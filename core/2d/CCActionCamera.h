@@ -147,11 +147,10 @@ public:
     virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        OrbitCamera();
+    /**
+     * @js ctor
+     */
+    OrbitCamera();
     /**
      * @js NA
      * @lua NA

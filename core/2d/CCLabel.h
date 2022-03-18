@@ -700,12 +700,11 @@ public:
     virtual void removeChild(Node* child, bool cleanup = true) override;
     virtual void setGlobalZOrder(float globalZOrder) override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * Constructor of Label.
-         * @js NA
-         */
-        Label(TextHAlignment hAlignment = TextHAlignment::LEFT, TextVAlignment vAlignment = TextVAlignment::TOP);
+    /**
+     * Constructor of Label.
+     * @js NA
+     */
+    Label(TextHAlignment hAlignment = TextHAlignment::LEFT, TextVAlignment vAlignment = TextVAlignment::TOP);
 
     /**
      * Destructor of Label.

@@ -229,11 +229,11 @@ public:
      If the current capacity is bigger, nothing happens.
      otherwise, a new capacity is allocated */
     void reserveCapacity(ssize_t newCapacity);
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        SpriteBatchNode();
+
+    /**
+     * @js ctor
+     */
+    SpriteBatchNode();
     /**
      * @js NA
      * @lua NA

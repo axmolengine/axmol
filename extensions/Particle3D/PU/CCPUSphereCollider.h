@@ -70,7 +70,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUSphereCollider();
+    PUSphereCollider();
     virtual ~PUSphereCollider();
 
 protected:

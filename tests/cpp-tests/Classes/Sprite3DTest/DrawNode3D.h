@@ -82,7 +82,7 @@ public:
     // Overrides
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 
-    CC_CONSTRUCTOR_ACCESS : DrawNode3D();
+    DrawNode3D();
     virtual ~DrawNode3D();
     virtual bool init() override;
 

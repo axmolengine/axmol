@@ -84,7 +84,7 @@ public:
     /**get the bone Curves set*/
     const hlookup::string_map<Curve*>& getBoneCurves() const { return _boneCurves; }
 
-    CC_CONSTRUCTOR_ACCESS : Animation3D();
+    Animation3D();
     virtual ~Animation3D();
     /**init Animation3D from bundle data*/
     bool init(const Animation3DData& data);

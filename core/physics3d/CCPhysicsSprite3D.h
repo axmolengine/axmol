@@ -71,7 +71,7 @@ public:
     /** synchronize physics transformation to node. */
     void syncPhysicsToNode();
 
-    CC_CONSTRUCTOR_ACCESS : PhysicsSprite3D();
+    PhysicsSprite3D();
     virtual ~PhysicsSprite3D();
 
 protected:

@@ -78,7 +78,7 @@ public:
     // Overrides
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    CC_CONSTRUCTOR_ACCESS : DrawNode3D();
+    DrawNode3D();
     virtual ~DrawNode3D();
     virtual bool init() override;
 

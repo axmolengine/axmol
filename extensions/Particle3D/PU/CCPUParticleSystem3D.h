@@ -348,7 +348,7 @@ public:
 
     bool initSystem(std::string_view filePath);
 
-    CC_CONSTRUCTOR_ACCESS : PUParticleSystem3D();
+    PUParticleSystem3D();
     virtual ~PUParticleSystem3D();
 
     bool initWithFilePath(std::string_view filePath);

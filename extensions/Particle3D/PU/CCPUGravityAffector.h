@@ -50,7 +50,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUGravityAffector();
+    PUGravityAffector();
     virtual ~PUGravityAffector();
 
 protected:

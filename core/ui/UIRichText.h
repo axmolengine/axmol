@@ -582,7 +582,7 @@ public:
      */
     void setOpenUrlHandler(const OpenUrlHandler& handleOpenUrl);
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
     bool initWithXML(std::string_view xml,
                      const ValueMap& defaults            = ValueMap(),

@@ -42,7 +42,7 @@ public:
 
     virtual void copyAttributesTo(PUAffector* affector) override;
 
-    CC_CONSTRUCTOR_ACCESS : PULinearForceAffector(){};
+    PULinearForceAffector(){};
     virtual ~PULinearForceAffector(){};
 };
 NS_CC_END

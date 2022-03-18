@@ -61,7 +61,7 @@ public:
 
     virtual void copyAttributesTo(PUObserver* observer) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUOnVelocityObserver();
+    PUOnVelocityObserver();
     virtual ~PUOnVelocityObserver(){};
 
 protected:

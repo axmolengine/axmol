@@ -464,10 +464,8 @@ public:
 
     ResourceData getRenderFile();
 
-    CC_CONSTRUCTOR_ACCESS :
-        // override "init" method of widget.
-        virtual bool
-        init() override;
+    // override "init" method of widget.
+    virtual bool init() override;
 
 protected:
     // override "onSizeChanged" method of widget.

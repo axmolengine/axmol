@@ -79,7 +79,7 @@ public:
 
     virtual void reset() {}
 
-    CC_CONSTRUCTOR_ACCESS : Particle3DRender();
+    Particle3DRender();
     virtual ~Particle3DRender();
 
 protected:
@@ -100,7 +100,7 @@ public:
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     virtual void reset() override;
-    CC_CONSTRUCTOR_ACCESS : Particle3DQuadRender();
+    Particle3DQuadRender();
     virtual ~Particle3DQuadRender();
 
 protected:
@@ -150,7 +150,7 @@ public:
     virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
 
     virtual void reset() override;
-    CC_CONSTRUCTOR_ACCESS : Particle3DModelRender();
+    Particle3DModelRender();
     virtual ~Particle3DModelRender();
 
 protected:

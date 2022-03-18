@@ -73,7 +73,7 @@ public:
     virtual PUPositionEmitter* clone() override;
     virtual void copyAttributesTo(PUEmitter* emitter) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUPositionEmitter();
+    PUPositionEmitter();
     virtual ~PUPositionEmitter(){};
 
 protected:

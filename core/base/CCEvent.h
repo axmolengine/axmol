@@ -56,9 +56,8 @@ public:
         CUSTOM
     };
 
-    CC_CONSTRUCTOR_ACCESS :
-        /** Constructor */
-        Event(Type type);
+    /** Constructor */
+    Event(Type type);
 
 public:
     /** Destructor.

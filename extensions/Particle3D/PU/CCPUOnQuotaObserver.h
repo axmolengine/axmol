@@ -48,7 +48,7 @@ public:
     /** @copydoc ParticleObserver::_notifyStart */
     virtual void postUpdateObserver(float deltaTime) override;
 
-    CC_CONSTRUCTOR_ACCESS : PUOnQuotaObserver() : PUObserver(), _result(false) {}
+    PUOnQuotaObserver() : PUObserver(), _result(false) {}
     virtual ~PUOnQuotaObserver(){};
 
 protected:

@@ -73,7 +73,7 @@ public:
     void translateMaterialSystem(PUMaterialCache* ms, const PUAbstractNodeList* alist);
     virtual PUScriptTranslator* getTranslator(PUAbstractNode* node);
 
-    CC_CONSTRUCTOR_ACCESS : PUTranslateManager();
+    PUTranslateManager();
     virtual ~PUTranslateManager();
 };
 

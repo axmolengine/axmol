@@ -202,9 +202,7 @@ public:
     /**refresh bone world matrix*/
     void updateBoneMatrix();
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        Skeleton3D();
+    Skeleton3D();
 
     ~Skeleton3D();
 

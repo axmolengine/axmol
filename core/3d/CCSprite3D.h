@@ -207,9 +207,7 @@ public:
      */
     const Vector<Mesh*>& getMeshes() const { return _meshes; }
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        Sprite3D();
+    Sprite3D();
     virtual ~Sprite3D();
 
     virtual bool init() override;
@@ -331,7 +329,7 @@ public:
     /**remove all the SpriteData from Sprite3D*/
     void removeAllSprite3DData();
 
-    CC_CONSTRUCTOR_ACCESS : Sprite3DCache();
+    Sprite3DCache();
     ~Sprite3DCache();
 
 protected:

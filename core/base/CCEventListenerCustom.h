@@ -72,9 +72,8 @@ public:
     virtual bool checkAvailable() override;
     virtual EventListenerCustom* clone() override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /** Constructor */
-        EventListenerCustom();
+    /** Constructor */
+    EventListenerCustom();
 
     /** Initializes event with type and callback function */
     bool init(std::string_view listenerId, const std::function<void(EventCustom*)>& callback);

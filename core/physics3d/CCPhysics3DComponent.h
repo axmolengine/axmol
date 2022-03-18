@@ -125,7 +125,7 @@ public:
      */
     void syncPhysicsToNode();
 
-    CC_CONSTRUCTOR_ACCESS : Physics3DComponent();
+    Physics3DComponent();
 
 protected:
     void preSimulate();

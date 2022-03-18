@@ -66,7 +66,7 @@ class CC_EX_DLL PUParticle3DEntityRender : public PURender
 public:
     void copyAttributesTo(PUParticle3DEntityRender* render);
     virtual void reset() override;
-    CC_CONSTRUCTOR_ACCESS : PUParticle3DEntityRender();
+    PUParticle3DEntityRender();
     virtual ~PUParticle3DEntityRender();
 
 protected:
@@ -165,7 +165,7 @@ public:
     virtual PUParticle3DQuadRender* clone() override;
     void copyAttributesTo(PUParticle3DQuadRender* render);
 
-    CC_CONSTRUCTOR_ACCESS : PUParticle3DQuadRender();
+    PUParticle3DQuadRender();
     virtual ~PUParticle3DQuadRender();
 
 protected:
@@ -199,7 +199,7 @@ public:
     void copyAttributesTo(PUParticle3DModelRender* render);
 
     virtual void reset() override;
-    CC_CONSTRUCTOR_ACCESS : PUParticle3DModelRender();
+    PUParticle3DModelRender();
     virtual ~PUParticle3DModelRender();
 
 protected:
@@ -218,7 +218,7 @@ public:
 
     virtual PUParticle3DBoxRender* clone() override;
 
-    CC_CONSTRUCTOR_ACCESS : PUParticle3DBoxRender();
+    PUParticle3DBoxRender();
     virtual ~PUParticle3DBoxRender();
 
 protected:
@@ -235,7 +235,7 @@ public:
     virtual PUSphereRender* clone() override;
     void copyAttributesTo(PUSphereRender* render);
 
-    CC_CONSTRUCTOR_ACCESS : PUSphereRender();
+    PUSphereRender();
     virtual ~PUSphereRender();
 
 protected:

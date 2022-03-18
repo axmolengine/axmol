@@ -155,7 +155,7 @@ public:
      */
     const Vec3& getSweepAxis() const { return _sweepAxis; }
 
-    CC_CONSTRUCTOR_ACCESS : MotionStreak3D();
+    MotionStreak3D();
     virtual ~MotionStreak3D();
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename

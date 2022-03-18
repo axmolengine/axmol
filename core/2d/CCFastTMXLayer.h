@@ -292,7 +292,7 @@ public:
 
     TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
 
-    CC_CONSTRUCTOR_ACCESS : bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo,
+    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo,
                                                      TMXLayerInfo* layerInfo,
                                                      TMXMapInfo* mapInfo);
 

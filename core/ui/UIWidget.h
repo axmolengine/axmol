@@ -716,9 +716,7 @@ public:
      */
     bool isLayoutComponentEnabled() const;
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        friend class PageView;
+    friend class PageView;
 
     // initializes state of widget.
     virtual bool init() override;

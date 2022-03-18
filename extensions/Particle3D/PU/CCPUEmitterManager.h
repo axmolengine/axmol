@@ -51,7 +51,7 @@ public:
     PUScriptTranslator* getTranslator(std::string_view type);
     PUEmitter* createEmitter(std::string_view type);
 
-    CC_CONSTRUCTOR_ACCESS : PUEmitterManager();
+    PUEmitterManager();
     ~PUEmitterManager();
 
 protected:
