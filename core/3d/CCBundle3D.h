@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -114,6 +115,8 @@ public:
     // calculate aabb
     static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
 
+    Bundle3D();
+    virtual ~Bundle3D();
 protected:
     bool loadJson(std::string_view path);
     bool loadBinary(std::string_view path);
@@ -176,9 +179,6 @@ protected:
      * @param The data id
      */
     Reference* seekToFirstType(unsigned int type, std::string_view id = "");
-
-    Bundle3D();
-    virtual ~Bundle3D();
 
 protected:
     std::string _modelPath;
