@@ -46,7 +46,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.81.0
+- Version: 7.82.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -86,7 +86,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.2
+- Version: 2.1.3
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -158,7 +158,7 @@
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 3.0.1
+- Version: 3.0.2
 - License: Apache-2.0
 
 ## png
