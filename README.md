@@ -5,6 +5,11 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
   
+![issues](https://img.shields.io/github/issues/adxeproject/adxe?style=plastic)
+![forks](https://img.shields.io/github/forks/adxeproject/adxe?style=plastic)
+![stars](https://img.shields.io/github/stars/adxeproject/adxe?style=plastic)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/adxeproject/adxe?style=plastic)  
+  
 [![Windows Build Status](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml)
 [![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
 [![iOS Build Status](https://github.com/adxeproject/adxe/workflows/ios/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aios)
