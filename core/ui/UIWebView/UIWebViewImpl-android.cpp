@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -41,7 +41,7 @@ static const char* className = "org.cocos2dx.lib.Cocos2dxWebViewHelper";
 
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "", __VA_ARGS__)
 
-static constexpr std::string_view s_defaultBaseUrl = "file:///android_asset/"sv;
+static constexpr std::string_view s_assetsBaseUrl = "file:///android_asset/"sv;
 static constexpr std::string_view s_sdRootBaseUrl  = "file://"sv;
 
 static std::string getFixedBaseUrl(std::string_view baseUrl)
@@ -49,7 +49,7 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
     std::string fixedBaseUrl;
     if (baseUrl.empty())
     {
-        fixedBaseUrl = s_defaultBaseUrl;
+        fixedBaseUrl = s_assetsBaseUrl;
     }
     else if (baseUrl.find(s_sdRootBaseUrl) != std::string::npos)
     {
@@ -60,11 +60,11 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
         using namespace cxx17;  // for cxx17::string_view literal
         if (cxx20::starts_with(baseUrl, "assets/"_sv))
         {
-            fixedBaseUrl.assign(s_defaultBaseUrl).push_back(baseUrl[7]);
+            fixedBaseUrl.assign(s_assetsBaseUrl).push_back(baseUrl[7]);
         }
         else
         {
-            fixedBaseUrl.assign(s_defaultBaseUrl).append(baseUrl);
+            fixedBaseUrl.assign(s_assetsBaseUrl).append(baseUrl);
         }
     }
     else
@@ -168,27 +168,16 @@ int createWebViewJNI()
 std::string getUrlStringByFileName(std::string_view fileName)
 {
     // LOGD("error: %s,%d",__func__,__LINE__);
-    const std::string basePath("file:///android_asset/");
-
-    using namespace cxx17;  // for cxx17::string_view literal
-    std::string fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
-    std::string urlString;
-    if (fullPath.empty())
-    {
+    std::string urlString = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
+    if (urlString.empty())
         return urlString;
-    }
-    else if (fullPath[0] == '/')
-    {
-        urlString.append("file://").append(fullPath);
-    }
-    else if (cxx20::starts_with(cxx17::string_view{fullPath}, "assets/"_sv))
-    {
-        urlString = fullPath;
-    }
+
+    if (urlString[0] == '/')
+        urlString.insert(urlString.begin(), s_sdRootBaseUrl.begin(), s_sdRootBaseUrl.end());
+    else if (cxx20::starts_with(cxx17::string_view{urlString}, "assets/"sv))
+        urlString.replace(0, sizeof("assets/") - 1, s_assetsBaseUrl);
     else
-    {
-        urlString.append(basePath).append(fullPath);
-    }
+        urlString.insert(urlString.begin(), s_assetsBaseUrl.begin(), s_assetsBaseUrl.end());
 
     return urlString;
 }
