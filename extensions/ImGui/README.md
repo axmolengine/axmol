@@ -21,6 +21,11 @@ public:
     void onEnter() override
     {
         Scene::onEnter();
+        ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)");
+        /* For Simplified Chinese support, please use:
+        ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
+                                           ImGuiPresenter::CHS_GLYPH_RANGE::GENERAL);
+        */
         ImGuiPresenter::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(GameScene::onImGuiDraw, this), this);
     }
     void onExit() override
