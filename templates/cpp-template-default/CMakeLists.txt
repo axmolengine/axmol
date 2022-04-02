@@ -189,6 +189,12 @@ elseif(LINUX)
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()
 
+# The optional thirdparties(not dependent by engine)
+if (AX_WITH_YAML_CPP)
+    target_include_directories(${APP_NAME} PRIVATE ${ADXE_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_link_libraries(${APP_NAME} yaml-cpp)
+endif()
+
 if (_AX_USE_PREBUILT) # support windows only
 
     option(AX_ENABLE_MSEDGE_WEBVIEW2 "Enable msedge webview2" TRUE)
@@ -331,11 +337,5 @@ if (_AX_USE_PREBUILT) # support windows only
     
     if (AX_ENABLE_MSEDGE_WEBVIEW2)
         target_link_libraries(${APP_NAME} ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets) 
-    endif()
-    
-    # The optional thirdparties(not dependent by engine) for linking prebuilt only
-    if (AX_WITH_YAML_CPP)
-        target_include_directories(${APP_NAME} PRIVATE ${ADXE_ROOT_PATH}/thirdparty/yaml-cpp/include)
-        target_link_libraries(${APP_NAME} yaml-cpp)
     endif()
 endif()
