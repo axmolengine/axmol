@@ -328,7 +328,7 @@ if(AX_WITH_YAML_CPP)
     # set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     add_subdirectory(yaml-cpp)
     configure_target_outdir(yaml-cpp)
-    # target_link_libraries(thirdparty yaml-cpp)
+    add_dependencies(thirdparty yaml-cpp)
 endif()
 
 # kcp
