@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -28,6 +29,7 @@
 #include "ui/GUIExport.h"
 #include "base/CCData.h"
 
+#if defined(_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 /**
  * @addtogroup ui
  * @{
@@ -249,6 +251,8 @@ private:
 
 }  // namespace ui
 }  // namespace cocos2d
+
+#endif
 
 // end group
 /// @}
