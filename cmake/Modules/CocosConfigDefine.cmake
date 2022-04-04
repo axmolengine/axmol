@@ -89,6 +89,12 @@ endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 
+# set hash style to both for android old device compatible
+# see also: https://github.com/adxeproject/adxe/discussions/614
+if (ANDROID)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
+endif()
+
 # check visual studio version
 if(WINDOWS)
     # not support other compile tools except MSVC for now
