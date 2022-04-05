@@ -42,9 +42,6 @@ static const char* className = "org.cocos2dx.lib.Cocos2dxHelper";
 static EditTextCallback s_editTextCallback = nullptr;
 static void* s_ctx                         = nullptr;
 
-static int __deviceSampleRate              = 44100;
-static int __deviceAudioBufferSizeInFrames = 192;
-
 static std::string g_apkPath;
 
 using namespace cocos2d;
@@ -59,18 +56,6 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetContext(JNI
 {
     JniHelper::setClassLoaderFrom(context);
     FileUtilsAndroid::setassetmanager(AAssetManager_fromJava(env, assetManager));
-}
-
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetAudioDeviceInfo(JNIEnv*,
-                                                                                     jclass,
-                                                                                     jboolean isSupportLowLatency,
-                                                                                     jint deviceSampleRate,
-                                                                                     jint deviceAudioBufferSizeInFrames)
-{
-    __deviceSampleRate              = deviceSampleRate;
-    __deviceAudioBufferSizeInFrames = deviceAudioBufferSizeInFrames;
-    LOGD("nativeSetAudioDeviceInfo: sampleRate: %d, bufferSizeInFrames: %d", __deviceSampleRate,
-         __deviceAudioBufferSizeInFrames);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeSetEditTextDialogResult(JNIEnv* env,
@@ -164,16 +149,6 @@ int getObbAssetFileDescriptorJNI(const char* path, int64_t* startOffset, int64_t
     }
 
     return fd;
-}
-
-int getDeviceSampleRate()
-{
-    return __deviceSampleRate;
-}
-
-int getDeviceAudioBufferSizeInFrames()
-{
-    return __deviceAudioBufferSizeInFrames;
 }
 
 void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharset, char* dst, const char* newCharset)
