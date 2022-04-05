@@ -154,7 +154,7 @@ set(EXPORT_DECL "")
 
 
 # Require C++14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 # Prefer C11, but support C99 and C90 too.
