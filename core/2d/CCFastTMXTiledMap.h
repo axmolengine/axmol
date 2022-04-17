@@ -226,8 +226,7 @@ public:
     bool initWithXML(std::string_view tmxString, std::string_view resourcePath);
 
 protected:
-    FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
-    TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+	FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo);
 
     /** the map's size property measured in tiles */
@@ -252,10 +251,9 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(FastTMXTiledMap);
 };
 
-// end of tilemap_parallax_nodes group
-/** @} */
-
 // @API compatible
 typedef FastTMXTiledMap TMXTiledMap;
 
+// end of tilemap_parallax_nodes group
+/** @} */
 NS_CC_END
