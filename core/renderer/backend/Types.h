@@ -402,7 +402,9 @@ struct ProgramType
         POSITION_UCOLOR,                      // positionUColor_vert,          positionUColor_frag
         POSITION_TEXTURE,                     // positionTexture_vert,         positionTexture_frag
         POSITION_TEXTURE_COLOR,               // positionTextureColor_vert,    positionTextureColor_frag
-        POSITION_TEXTURE_COLOR_ALPHA_TEST,    // positionTextureColor_vert,    positionTextureColorAlphaTest_frag
+		POSITION_COLOR_TEXTUREIDX,   		  // positionTextureColor_vert,    positionTextureColor_frag
+		POSITION_TEXTURE_COLOR_ALPHA_TEST,    // positionTextureColor_vert,    positionTextureColorAlphaTest_frag
+		POSITION_COLOR_ALPHA_TEST_TEXTUREIDX, // positionTextureColor_vert,    positionTextureColorAlphaTest_frag
         LABEL_NORMAL,                         // positionTextureColor_vert,    label_normal_frag
         LABLE_OUTLINE,                        // positionTextureColor_vert,    labelOutline_frag
         LABLE_DISTANCEFIELD_GLOW,             // positionTextureColor_vert,    labelDistanceFieldGlow_frag
