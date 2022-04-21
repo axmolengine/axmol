@@ -20,10 +20,10 @@ if(MACOSX OR ANDROID)
     IMPORTED_LOCATION "${platform_spec_path}/libz.a"
   )
 elseif(WINDOWS)
-  set(ZLIB_LIBRARY "${platform_spec_path}/libzlib.lib" CACHE STRING "zlib library" FORCE)
+  set(ZLIB_LIBRARY "${platform_spec_path}/zlib.lib" CACHE STRING "zlib library" FORCE)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${platform_spec_path}/zlib1.dll"
-    IMPORTED_IMPLIB "${platform_spec_path}/libzlib.lib"
+    IMPORTED_IMPLIB "${platform_spec_path}/zlib.lib"
   )
 endif()
 
