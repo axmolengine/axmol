@@ -240,7 +240,7 @@
 
 ## zlib
 - Upstream: https://github.com/madler/zlib
-- Version: 1.2.11
+- Version: 1.2.12
 - License: zlib
 
 ## libiconv
