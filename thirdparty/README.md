@@ -1,7 +1,7 @@
 # The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4692 branch on chromium/4692 @Google Chrome 97.0.4692.71
+- Version: 2.1.0.4896 branch on chromium/4896 @Google Chrome 100.0.4896.127
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
