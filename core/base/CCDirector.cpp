@@ -4,7 +4,7 @@ Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -222,6 +222,10 @@ void Director::setDefaultValues()
     // PVR v2 has alpha premultiplied ?
     bool pvr_alpha_premultiplied = conf->getValue("adxe.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
+
+    // !!!NEW since adxe 1.0b6, all compressed image should do PMA at texture convert tools(such as astcenc-2.3+ with -pp-premultiply) or GPU fragment shader
+    bool compressed_image_has_pma = conf->getValue("adxe.texture.compressed_image_has_pma", Value{true}).asBool();
+    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ALL, compressed_image_has_pma);
 }
 
 void Director::setGLDefaultValues()
