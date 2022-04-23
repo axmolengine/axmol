@@ -219,10 +219,6 @@ void Director::setDefaultValues()
     else if (pixel_format == "rgba5551")
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB5A1);
 
-    // PVR v2 has alpha premultiplied ?
-    bool pvr_alpha_premultiplied = conf->getValue("adxe.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
-    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
-
     // !!!NEW since adxe 1.0b6, all compressed image should do PMA at texture convert tools(such as astcenc-2.3+ with -pp-premultiply) or GPU fragment shader
     bool compressed_image_has_pma = conf->getValue("adxe.texture.compressed_image_has_pma", Value{true}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ALL, compressed_image_has_pma);
