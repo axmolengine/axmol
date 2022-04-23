@@ -102,7 +102,7 @@ int Application::run()
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
 
-    while (!(glview == nullptr ? false : glview->windowShouldClose()))
+    while (glview == nullptr ? true : !glview->windowShouldClose())
     {
         QueryPerformanceCounter(&nNow);
         interval = nNow.QuadPart - nLast.QuadPart;
