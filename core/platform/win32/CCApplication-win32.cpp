@@ -102,8 +102,7 @@ int Application::run()
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
 
-    bool flag = glview == nullptr ? false : glview->windowShouldClose();
-    while (!flag)
+    while (!(glview == nullptr ? false : glview->windowShouldClose()))
     {
         QueryPerformanceCounter(&nNow);
         interval = nNow.QuadPart - nLast.QuadPart;
@@ -111,7 +110,8 @@ int Application::run()
         {
             nLast.QuadPart = nNow.QuadPart;
             director->mainLoop();
-            if (glview) glview->pollEvents();
+            if (glview)
+                glview->pollEvents();
         }
         else
         {
