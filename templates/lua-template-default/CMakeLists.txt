@@ -297,7 +297,7 @@ if (_AX_USE_PREBUILT) # support windows only
         box2d.lib
         chipmunk.lib
         freetype.lib
-        libzlib.lib
+        zlib.lib
         recast.lib
         bullet.lib
         jpeg-static.lib
