@@ -1798,6 +1798,7 @@ public:
      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
      */
     unsigned short getCameraMask() const { return _cameraMask; }
+
     /**
      * Modify the camera mask for current node.
      * If applyChildren is true, then it will modify the camera mask of its children recursively.
@@ -1807,10 +1808,10 @@ public:
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true);
 
     /**
-    * Should addChild() make the child follow it's parent's mask?
-    * If applyChildren is true, then it will modify the camera mask of its children recursively when a child is added.
-    * @param applyChildren A boolean value to determine whether the mask bit should apply to its children or not.
-    */
+     * Should addChild() make the child follow it's parent's mask?
+     * If applyChildren is true, then it will modify the camera mask of its children recursively when a child is added.
+     * @param applyChildren A boolean value to determine whether the mask bit should apply to its children or not.
+     */
     void applyMaskOnEnter(bool applyChildren);
     
     virtual void setProgramState(uint32_t programType) { setProgramStateWithRegistry(programType, nullptr); }
