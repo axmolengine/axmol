@@ -1,6 +1,6 @@
 /******************************************************************************
 
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  ASTC Texture Decompression.
 
@@ -53,7 +53,7 @@ struct astc_decompress_task
 #if ASTCDEC_NO_CONTEXT
     unsigned int _block_x, _block_y;
     ParallelManager _decompress_pm{};
-    block_size_descriptor _bsd{};
+    block_size_descriptor _bsd;
 #else
     astcenc_config _config{};
     astcenc_context* _context = nullptr;
