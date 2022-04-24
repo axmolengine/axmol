@@ -2,7 +2,7 @@
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
-# Copyright (c) 2021 Bytedance Inc.
+# Copyright (c) 2021-2022 Bytedance Inc.
 # 
 # https://adxeproject.github.io/
 #
@@ -191,6 +191,7 @@ add_subdirectory(${ADXE_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 if(MSVC_IDE)
     target_sources(${ADXE_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
     target_sources(${ADXE_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
+    target_compile_options(${ADXE_CORE_LIB} PRIVATE "/Zm2000")
 endif()
 
 # copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
