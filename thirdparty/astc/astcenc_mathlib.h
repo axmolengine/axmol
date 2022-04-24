@@ -458,21 +458,18 @@ struct processed_line2
 {
 	vfloat4 amod;
 	vfloat4 bs;
-	vfloat4 bis;
 };
 
 struct processed_line3
 {
 	vfloat4 amod;
 	vfloat4 bs;
-	vfloat4 bis;
 };
 
 struct processed_line4
 {
 	vfloat4 amod;
 	vfloat4 bs;
-	vfloat4 bis;
 };
 
 #endif

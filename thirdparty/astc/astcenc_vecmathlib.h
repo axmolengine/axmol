@@ -243,7 +243,8 @@ static ASTCENC_SIMD_INLINE vfloat4 unit4()
  */
 static ASTCENC_SIMD_INLINE vfloat4 unit3()
 {
-	return vfloat4(0.57735f, 0.57735f, 0.57735f, 0.0f);
+	float val = 0.577350258827209473f;
+	return vfloat4(val, val, val, 0.0f);
 }
 
 /**
@@ -251,7 +252,8 @@ static ASTCENC_SIMD_INLINE vfloat4 unit3()
  */
 static ASTCENC_SIMD_INLINE vfloat4 unit2()
 {
-	return vfloat4(0.70711f, 0.70711f, 0.0f, 0.0f);
+	float val = 0.707106769084930420f;
+	return vfloat4(val, val, 0.0f, 0.0f);
 }
 
 /**

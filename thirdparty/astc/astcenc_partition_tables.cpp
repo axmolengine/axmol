@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2021 Arm Limited
+// Copyright 2011-2022 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -33,12 +33,12 @@
  * @param[out] bit_pattern           The output bit pattern representation.
  */
 static void generate_canonical_partitioning(
-	int texel_count,
+	unsigned int texel_count,
 	const uint8_t* partition_of_texel,
 	uint64_t bit_pattern[7]
 ) {
 	// Clear the pattern
-	for (int i = 0; i < 7; i++)
+	for (unsigned int i = 0; i < 7; i++)
 	{
 		bit_pattern[i] = 0;
 	}
@@ -54,11 +54,10 @@ static void generate_canonical_partitioning(
 		mapped_index[i] = -1;
 	}
 
-	for (int i = 0; i < texel_count; i++)
+	for (unsigned int i = 0; i < texel_count; i++)
 	{
 		int index = partition_of_texel[i];
-
-		if (mapped_index[index] == -1)
+		if (mapped_index[index] < 0)
 		{
 			mapped_index[index] = map_weight_count++;
 		}
@@ -84,37 +83,6 @@ static bool compare_canonical_partitionings(
 	       (part1[2] == part2[2]) && (part1[3] == part2[3]) &&
 	       (part1[4] == part2[4]) && (part1[5] == part2[5]) &&
 	       (part1[6] == part2[6]);
-}
-
-/**
- * @brief Compare all partition patterns and remove duplicates.
- *
- * The partitioning algorithm uses a hash function for texel assignment that can produce partitions
- * which have the same texel assignment groupings. It is only useful for the compressor to test one
- * of each, so we mark duplicates as invalid.
- *
- * @param         texel_count   The first canonical bit pattern to check.
- * @param[in,out] pt            The table of partitioning information entries.
- */
-static void remove_duplicate_partitionings(
-	int texel_count,
-	partition_info pt[BLOCK_MAX_PARTITIONINGS]
-) {
-	uint64_t bit_patterns[BLOCK_MAX_PARTITIONINGS * 7];
-
-	for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONINGS; i++)
-	{
-		generate_canonical_partitioning(texel_count, pt[i].partition_of_texel, bit_patterns + i * 7);
-
-		for (unsigned int j = 0; j < i; j++)
-		{
-			if (compare_canonical_partitionings(bit_patterns + 7 * i, bit_patterns + 7 * j))
-			{
-				pt[i].partition_count = 0;
-				break;
-			}
-		}
-	}
 }
 
 /**
@@ -278,15 +246,19 @@ static uint8_t select_partition(
 /**
  * @brief Generate a single partition info structure.
  *
- * @param      bsd               The block size information.
- * @param      partition_count   The partition count of this partitioning.
- * @param      partition_index   The partition index / see of this partitioning.
- * @param[out] pi                The partition info structure to populate.
+ * @param[out] bsd                     The block size information.
+ * @param      partition_count         The partition count of this partitioning.
+ * @param      partition_index         The partition index / seed of this partitioning.
+ * @param      partition_remap_index   The remapped partition index of this partitioning.
+ * @param[out] pi                      The partition info structure to populate.
+ *
+ * @return True if this is a useful partition index, False if we can skip it.
  */
-static void generate_one_partition_info_entry(
-	const block_size_descriptor& bsd,
-	int partition_count,
-	int partition_index,
+static bool generate_one_partition_info_entry(
+	block_size_descriptor& bsd,
+	unsigned int partition_count,
+	unsigned int partition_index,
+	unsigned int partition_remap_index,
 	partition_info& pi
 ) {
 	int texels_per_block = bsd.texel_count;
@@ -311,7 +283,7 @@ static void generate_one_partition_info_entry(
 	}
 
 	// Fill loop tail so we can overfetch later
-	for (int i = 0; i < partition_count; i++)
+	for (unsigned int i = 0; i < partition_count; i++)
 	{
 		int ptex_count = counts[i];
 		int ptex_count_simd = round_up_to_simd_multiple_vla(ptex_count);
@@ -321,6 +293,7 @@ static void generate_one_partition_info_entry(
 		}
 	}
 
+	// Populate the actual procedural partition count
 	if (counts[0] == 0)
 	{
 		pi.partition_count = 0;
@@ -342,38 +315,160 @@ static void generate_one_partition_info_entry(
 		pi.partition_count = 4;
 	}
 
+	// Populate the partition index
+	pi.partition_index = partition_index;
+
+	// Populate the coverage bitmaps for 2/3/4 partitions
+	uint64_t* bitmaps { nullptr };
+	uint8_t* valids { nullptr };
+	if (partition_count == 2)
+	{
+		bitmaps = bsd.coverage_bitmaps_2[partition_remap_index];
+		valids = bsd.partitioning_valid_2;
+	}
+	else if (partition_count == 3)
+	{
+		bitmaps = bsd.coverage_bitmaps_3[partition_remap_index];
+		valids = bsd.partitioning_valid_3;
+	}
+	else if (partition_count == 4)
+	{
+		bitmaps = bsd.coverage_bitmaps_4[partition_remap_index];
+		valids = bsd.partitioning_valid_4;
+	}
+
 	for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONS; i++)
 	{
 		pi.partition_texel_count[i] = static_cast<uint8_t>(counts[i]);
-		pi.coverage_bitmaps[i] = 0ULL;
 	}
 
-	unsigned int texels_to_process = astc::min(bsd.texel_count, BLOCK_MAX_KMEANS_TEXELS);
-	for (unsigned int i = 0; i < texels_to_process; i++)
+	// Valid partitionings have texels in all of the requested partitions
+	bool valid = pi.partition_count == partition_count;
+
+	if (bitmaps)
 	{
-		unsigned int idx = bsd.kmeans_texels[i];
-		pi.coverage_bitmaps[pi.partition_of_texel[idx]] |= 1ULL << i;
+		// Populate the bitmap validity mask
+		valids[partition_remap_index] = valid ? 0 : 255;
+
+		for (unsigned int i = 0; i < partition_count; i++)
+		{
+			bitmaps[i] = 0ULL;
+		}
+
+		unsigned int texels_to_process = astc::min(bsd.texel_count, BLOCK_MAX_KMEANS_TEXELS);
+		for (unsigned int i = 0; i < texels_to_process; i++)
+		{
+			unsigned int idx = bsd.kmeans_texels[i];
+			bitmaps[pi.partition_of_texel[idx]] |= 1ULL << i;
+		}
+	}
+
+	return valid;
+}
+
+static void build_partition_table_for_one_partition_count(
+	block_size_descriptor& bsd,
+	bool can_omit_partitionings,
+	unsigned int partition_count_cutoff,
+	unsigned int partition_count,
+	partition_info* ptab,
+	uint64_t* canonical_patterns
+) {
+	uint8_t* partitioning_valid[3] {
+		bsd.partitioning_valid_2,
+		bsd.partitioning_valid_3,
+		bsd.partitioning_valid_4
+	};
+
+	unsigned int next_index = 0;
+	bsd.partitioning_count_selected[partition_count - 1] = 0;
+	bsd.partitioning_count_all[partition_count - 1] = 0;
+
+	// Skip tables larger than config max partition count if we can omit modes
+	if (can_omit_partitionings && (partition_count > partition_count_cutoff))
+	{
+		return;
+	}
+
+	// Iterate through twice
+	//   - Pass 0: Keep selected partitionings
+	//   - Pass 1: Keep non-selected partitionings (skip if in omit mode)
+	unsigned int max_iter = can_omit_partitionings ? 1 : 2;
+
+	// Tracker for things we built in the first iteration
+	uint8_t build[BLOCK_MAX_PARTITIONINGS] { 0 };
+		for (unsigned int x = 0; x < max_iter; x++)
+	{
+		for (unsigned int i = 0; i < BLOCK_MAX_PARTITIONINGS; i++)
+		{
+			// Don't include things we built in the first pass
+			if ((x == 1) && build[i])
+			{
+				continue;
+			}
+
+			bool keep_useful = generate_one_partition_info_entry(bsd, partition_count, i, next_index, ptab[next_index]);
+			if ((x == 0) && !keep_useful)
+			{
+				continue;
+			}
+
+			generate_canonical_partitioning(bsd.texel_count, ptab[next_index].partition_of_texel, canonical_patterns + next_index * 7);
+			bool keep_canonical = true;
+			for (unsigned int j = 0; j < next_index; j++)
+			{
+				bool match = compare_canonical_partitionings(canonical_patterns + 7 * next_index, canonical_patterns + 7 * j);
+				if (match)
+				{
+					keep_canonical = false;
+					break;
+				}
+			}
+
+			if (keep_useful && keep_canonical)
+			{
+				if (x == 0)
+				{
+					bsd.partitioning_packed_index[partition_count - 2][i] = next_index;
+					bsd.partitioning_count_selected[partition_count - 1]++;
+					bsd.partitioning_count_all[partition_count - 1]++;
+					build[i] = 1;
+					next_index++;
+				}
+			}
+			else
+			{
+				if (x == 1)
+				{
+					bsd.partitioning_packed_index[partition_count - 2][i] = next_index;
+					bsd.partitioning_count_all[partition_count - 1]++;
+					partitioning_valid[partition_count - 2][next_index] = 255;
+					next_index++;
+				}
+			}
+		}
 	}
 }
 
 /* See header for documentation. */
 void init_partition_tables(
-	block_size_descriptor& bsd
+	block_size_descriptor& bsd,
+	bool can_omit_partitionings,
+	unsigned int partition_count_cutoff
 ) {
-	partition_info *par_tab2 = bsd.partitions;
-	partition_info *par_tab3 = par_tab2 + BLOCK_MAX_PARTITIONINGS;
-	partition_info *par_tab4 = par_tab3 + BLOCK_MAX_PARTITIONINGS;
-	partition_info *par_tab1 = par_tab4 + BLOCK_MAX_PARTITIONINGS;
+	partition_info* par_tab2 = bsd.partitionings;
+	partition_info* par_tab3 = par_tab2 + BLOCK_MAX_PARTITIONINGS;
+	partition_info* par_tab4 = par_tab3 + BLOCK_MAX_PARTITIONINGS;
+	partition_info* par_tab1 = par_tab4 + BLOCK_MAX_PARTITIONINGS;
 
-	generate_one_partition_info_entry(bsd, 1, 0, *par_tab1);
-	for (int i = 0; i < 1024; i++)
-	{
-		generate_one_partition_info_entry(bsd, 2, i, par_tab2[i]);
-		generate_one_partition_info_entry(bsd, 3, i, par_tab3[i]);
-		generate_one_partition_info_entry(bsd, 4, i, par_tab4[i]);
-	}
+	generate_one_partition_info_entry(bsd, 1, 0, 0, *par_tab1);
+	bsd.partitioning_count_selected[0] = 1;
+	bsd.partitioning_count_all[0] = 1;
 
-	remove_duplicate_partitionings(bsd.texel_count, par_tab2);
-	remove_duplicate_partitionings(bsd.texel_count, par_tab3);
-	remove_duplicate_partitionings(bsd.texel_count, par_tab4);
+	uint64_t* canonical_patterns = new uint64_t[BLOCK_MAX_PARTITIONINGS * 7];
+	build_partition_table_for_one_partition_count(bsd, can_omit_partitionings, partition_count_cutoff, 2, par_tab2, canonical_patterns);
+	build_partition_table_for_one_partition_count(bsd, can_omit_partitionings, partition_count_cutoff, 3, par_tab3, canonical_patterns);
+	build_partition_table_for_one_partition_count(bsd, can_omit_partitionings, partition_count_cutoff, 4, par_tab4, canonical_patterns);
+
+	delete[] canonical_patterns;
 }

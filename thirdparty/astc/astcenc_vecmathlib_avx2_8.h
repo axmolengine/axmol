@@ -964,6 +964,14 @@ ASTCENC_SIMD_INLINE vint8 float_to_int(vfloat8 a)
 }
 
 /**
+ * @brief Return a float value for an integer vector.
+ */
+ASTCENC_SIMD_INLINE vfloat8 int_to_float(vint8 a)
+{
+	return vfloat8(_mm256_cvtepi32_ps(a.m));
+}
+
+/**
  * @brief Return a float value as an integer bit pattern (i.e. no conversion).
  *
  * It is a common trick to convert floats into integer bit patterns, perform
