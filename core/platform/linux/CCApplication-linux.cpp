@@ -77,8 +77,7 @@ int Application::run()
     if (glview)
         glview->retain();
 
-    bool flag = glview == nullptr ? false : glview->windowShouldClose();
-    while (!flag)
+    while (glview == nullptr ? true : !glview->windowShouldClose())
     {
         lastTime = getCurrentMillSecond();
 
