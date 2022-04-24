@@ -490,6 +490,7 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, 
         }
         else
         {
+            // don't add it again
             return;
         }
     }
