@@ -32,9 +32,7 @@ struct astc_decompress_task
     astc_decompress_task() {}
     ~astc_decompress_task()
     {
-#if ASTCDEC_NO_CONTEXT
-        term_block_size_descriptor(_bsd);
-#else
+#if !ASTCDEC_NO_CONTEXT
         if (_context)
             astcenc_context_free(this->_context);
 #endif
@@ -160,7 +158,7 @@ private:
 
         task->_block_x = block_x;
         task->_block_y = block_y;
-        init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, task->_bsd);
+        init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, 0, task->_bsd);
         task->_decompress_pm.init(total_blocks);
 #else
         (void)astcenc_config_init(ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
