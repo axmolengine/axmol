@@ -131,9 +131,6 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    include "platform/CCGL.h"
 #endif
 
-#define CC_GL_ATC_RGB_AMD 0x8C92
-#define CC_GL_ATC_RGBA_EXPLICIT_ALPHA_AMD 0x8C93
-#define CC_GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD 0x87EE
 
 NS_CC_BEGIN
 
@@ -1926,9 +1923,9 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
     _width                = header->ddsd.width;
     _height               = header->ddsd.height;
     _numberOfMipmaps      = MAX(
-        1,
-        header->ddsd.DUMMYUNIONNAMEN2
-            .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
+             1,
+             header->ddsd.DUMMYUNIONNAMEN2
+                 .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
     _dataLen      = 0;
     int blockSize = (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC) ? 8 : 16;
 
@@ -2052,13 +2049,13 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
     int blockSize = 0;
     switch (header->glInternalFormat)
     {
-    case CC_GL_ATC_RGB_AMD:
+    case KTXv1Header::InternalFormat::ATC_RGB_AMD:
         blockSize = 8;
         break;
-    case CC_GL_ATC_RGBA_EXPLICIT_ALPHA_AMD:
+    case KTXv1Header::InternalFormat::ATC_RGBA_EXPLICIT_ALPHA_AMD:
         blockSize = 16;
         break;
-    case CC_GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD:
+    case KTXv1Header::InternalFormat::ATC_RGBA_INTERPOLATED_ALPHA_AMD:
         blockSize = 16;
         break;
     default:
@@ -2080,13 +2077,13 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         switch (header->glInternalFormat)
         {
-        case CC_GL_ATC_RGB_AMD:
+        case KTXv1Header::InternalFormat::ATC_RGB_AMD:
             _pixelFormat = backend::PixelFormat::ATC_RGB;
             break;
-        case CC_GL_ATC_RGBA_EXPLICIT_ALPHA_AMD:
+        case KTXv1Header::InternalFormat::ATC_RGBA_EXPLICIT_ALPHA_AMD:
             _pixelFormat = backend::PixelFormat::ATC_EXPLICIT_ALPHA;
             break;
-        case CC_GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD:
+        case KTXv1Header::InternalFormat::ATC_RGBA_INTERPOLATED_ALPHA_AMD:
             _pixelFormat = backend::PixelFormat::ATC_INTERPOLATED_ALPHA;
             break;
         default:
@@ -2144,14 +2141,14 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
             std::vector<uint8_t> decodeImageData(stride * height);
             switch (header->glInternalFormat)
             {
-            case CC_GL_ATC_RGB_AMD:
+            case KTXv1Header::InternalFormat::ATC_RGB_AMD:
                 atitc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height, ATITCDecodeFlag::ATC_RGB);
                 break;
-            case CC_GL_ATC_RGBA_EXPLICIT_ALPHA_AMD:
+            case KTXv1Header::InternalFormat::ATC_RGBA_EXPLICIT_ALPHA_AMD:
                 atitc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height,
                              ATITCDecodeFlag::ATC_EXPLICIT_ALPHA);
                 break;
-            case CC_GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD:
+            case KTXv1Header::InternalFormat::ATC_RGBA_INTERPOLATED_ALPHA_AMD:
                 atitc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height,
                              ATITCDecodeFlag::ATC_INTERPOLATED_ALPHA);
                 break;
