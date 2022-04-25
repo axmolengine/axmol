@@ -1,5 +1,5 @@
 /****************************************************************************
-Copyright (c) 2020 c4games.com.
+Copyright (c) 2020 C4games Ltd.
 
  https://adxeproject.github.io/
 
