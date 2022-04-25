@@ -261,7 +261,6 @@ protected:
     bool isEtc1(const uint8_t* data, ssize_t dataLen);
     bool isEtc2(const uint8_t* data, ssize_t dataLen);
     bool isS3TC(const uint8_t* data, ssize_t dataLen);
-    bool isATITC(const uint8_t* data, ssize_t dataLen);
     bool isASTC(const uint8_t* data, ssize_t dataLen);
 };
 

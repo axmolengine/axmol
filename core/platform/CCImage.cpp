@@ -103,6 +103,8 @@ struct dirent* readdir$INODE64(DIR* dir)
 #endif  // CC_USE_JPEG
 } /* extern "C" */
 
+#include "base/ktxspec_v1.h"
+
 #include "base/s3tc.h"
 #include "base/atitc.h"
 #include "base/pvr.h"
@@ -411,32 +413,6 @@ struct S3TCTexHeader
 
 }  // namespace
 // s3tc struct end
-
-//////////////////////////////////////////////////////////////////////////
-
-// struct and data for atitc(ktx) struct
-namespace
-{
-struct ATITCTexHeader
-{
-    // HEADER
-    char identifier[12];
-    uint32_t endianness;
-    uint32_t glType;
-    uint32_t glTypeSize;
-    uint32_t glFormat;
-    uint32_t glInternalFormat;
-    uint32_t glBaseInternalFormat;
-    uint32_t pixelWidth;
-    uint32_t pixelHeight;
-    uint32_t pixelDepth;
-    uint32_t numberOfArrayElements;
-    uint32_t numberOfFaces;
-    uint32_t numberOfMipmapLevels;
-    uint32_t bytesOfKeyValueData;
-};
-}  // namespace
-// atitc struct end
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -801,13 +777,6 @@ bool Image::isS3TC(const uint8_t* data, ssize_t /*dataLen*/)
     return (strncmp(header->fileCode, "DDS", 3) == 0);
 }
 
-bool Image::isATITC(const uint8_t* data, ssize_t /*dataLen*/)
-{
-    ATITCTexHeader* header = (ATITCTexHeader*)data;
-
-    return (strncmp(&header->identifier[1], "KTX", 3) == 0);
-}
-
 bool Image::isASTC(const uint8_t* data, ssize_t /*dataLen*/)
 {
     astc_header* hdr = (astc_header*)data;
@@ -890,18 +859,32 @@ Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
     {
         return Format::S3TC;
     }
-    else if (isATITC(data, dataLen))
-    {
-        return Format::ATITC;
-    }
     else if (isASTC(data, dataLen))
     {
         return Format::ASTC;
     }
-    else
-    {
-        return Format::UNKNOWN;
+    else if (dataLen >= KTX_V1_HEADER_SIZE)
+    {  // Check whether ktxspec v1.1 file format
+        auto header = (KTXv1Header*)data;
+        if (memcmp(&header->identifier[1], KTX_V1_MAGIC, sizeof(KTX_V1_MAGIC) - 1) == 0)
+        {
+            switch (header->glInternalFormat)
+            {
+            case KTXv1Header::InternalFormat::ATC_RGB_AMD:
+            case KTXv1Header::InternalFormat::ATC_RGBA_INTERPOLATED_ALPHA_AMD:
+            case KTXv1Header::InternalFormat::ATC_RGBA_EXPLICIT_ALPHA_AMD:
+                return Format::ATITC;
+            case KTXv1Header::InternalFormat::ETC2_RGB8:
+            case KTXv1Header::InternalFormat::ETC2_RGBA8:
+                return Format::ETC2;
+            case KTXv1Header::InternalFormat::ETC1_RGB8:
+                return Format::ETC1;
+            default:;
+            }
+        }
     }
+
+    return Format::UNKNOWN;
 }
 
 int Image::getBitPerPixel()
@@ -1715,19 +1698,26 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
 bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     const etc1_byte* header = static_cast<const etc1_byte*>(data);
-
+    uint32_t pixelOffset;
     // check the data
-    if (!etc1_pkm_is_valid(header))
+    if (etc1_pkm_is_valid(header))
     {
-        return false;
+        _width  = etc1_pkm_get_width(header);
+        _height = etc1_pkm_get_height(header);
+
+        if (0 == _width || 0 == _height)
+            return false;
+        pixelOffset = ETC_PKM_HEADER_SIZE;
     }
+    else
+    {  // we can safe trait as KTX v1 header
+        auto header = (KTXv1Header*)data;
+        _width      = header->pixelWidth;
+        _height     = header->pixelHeight;
 
-    _width  = etc1_pkm_get_width(header);
-    _height = etc1_pkm_get_height(header);
-
-    if (0 == _width || 0 == _height)
-    {
-        return false;
+        if (0 == _width || 0 == _height)
+            return false;
+        pixelOffset = KTX_V1_HEADER_SIZE + header->bytesOfKeyValueData + 4;
     }
 
     // GL_ETC1_RGB8_OES is not available in any desktop GL extension but the compression
@@ -1743,7 +1733,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     if (compressedFormat != backend::PixelFormat::NONE)
     {
         _pixelFormat = compressedFormat;
-        forwardPixels(data, dataLen, ETC_PKM_HEADER_SIZE, ownData);
+        forwardPixels(data, dataLen, pixelOffset, ownData);
         return true;
     }
     else
@@ -1752,7 +1742,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         _dataLen = _width * _height * 4;
         _data    = static_cast<uint8_t*>(malloc(_dataLen));
-        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE,
+        if (etc2_decode_image(ETC2_RGB_NO_MIPMAPS, static_cast<const uint8_t*>(data) + pixelOffset,
                               static_cast<etc2_byte*>(_data), _width, _height) == 0)
         {  // if it is not gles or device do not support ETC1, decode texture by software
            // directly decode ETC1_RGB to RGBA8888
@@ -1773,17 +1763,33 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
     do
     {
+        uint32_t format, pixelOffset;
         // check the data
-        if (!etc2_pkm_is_valid(header))
-            break;
+        if (etc2_pkm_is_valid(header))
+        {
 
-        _width  = etc2_pkm_get_width(header);
-        _height = etc2_pkm_get_height(header);
+            _width  = etc2_pkm_get_width(header);
+            _height = etc2_pkm_get_height(header);
 
-        if (0 == _width || 0 == _height)
-            break;
+            if (0 == _width || 0 == _height)
+                break;
 
-        etc2_uint32 format = etc2_pkm_get_format(header);
+            format      = etc2_pkm_get_format(header);
+            pixelOffset = ETC2_PKM_HEADER_SIZE;
+        }
+        else
+        {  // we can safe trait as KTX v1 header
+            auto header = (KTXv1Header*)data;
+            _width      = header->pixelWidth;
+            _height     = header->pixelHeight;
+
+            if (0 == _width || 0 == _height)
+                break;
+
+            format      = header->glInternalFormat == KTXv1Header::InternalFormat::ETC2_RGBA8 ? ETC2_RGBA_NO_MIPMAPS
+                                                                                              : ETC2_RGB_NO_MIPMAPS;
+            pixelOffset = KTX_V1_HEADER_SIZE + header->bytesOfKeyValueData + 4;
+        }
 
         // We only support ETC2_RGBA_NO_MIPMAPS and ETC2_RGB_NO_MIPMAPS
         assert(format == ETC2_RGBA_NO_MIPMAPS || format == ETC2_RGB_NO_MIPMAPS);
@@ -1793,7 +1799,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             _pixelFormat =
                 format == ETC2_RGBA_NO_MIPMAPS ? backend::PixelFormat::ETC2_RGBA : backend::PixelFormat::ETC2_RGB;
 
-            forwardPixels(data, dataLen, ETC2_PKM_HEADER_SIZE, ownData);
+            forwardPixels(data, dataLen, pixelOffset, ownData);
         }
         else
         {
@@ -1803,7 +1809,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
             // etc2_decode_image always decode to RGBA8888
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
-            if (UTILS_UNLIKELY(etc2_decode_image(format, static_cast<const uint8_t*>(data) + ETC2_PKM_HEADER_SIZE,
+            if (UTILS_UNLIKELY(etc2_decode_image(format, static_cast<const uint8_t*>(data) + pixelOffset,
                                                  static_cast<etc2_byte*>(_data), _width, _height) != 0))
             {
                 // software decode fail, release pixels data
@@ -2038,10 +2044,10 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
 bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
 {
     /* load the .ktx file */
-    ATITCTexHeader* header = (ATITCTexHeader*)data;
-    _width                 = header->pixelWidth;
-    _height                = header->pixelHeight;
-    _numberOfMipmaps       = header->numberOfMipmapLevels;
+    KTXv1Header* header = (KTXv1Header*)data;
+    _width              = header->pixelWidth;
+    _height             = header->pixelHeight;
+    _numberOfMipmaps    = header->numberOfMipmapLevels;
 
     int blockSize = 0;
     switch (header->glInternalFormat)
@@ -2060,7 +2066,7 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
     }
 
     /* pixelData point to the compressed data address */
-    int pixelOffset    = sizeof(ATITCTexHeader) + header->bytesOfKeyValueData + 4;
+    int pixelOffset    = KTX_V1_HEADER_SIZE + header->bytesOfKeyValueData + 4;
     uint8_t* pixelData = (uint8_t*)data + pixelOffset;
 
     /* calculate the dataLen */
