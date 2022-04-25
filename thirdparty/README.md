@@ -153,7 +153,7 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: git 1.21.1-4733c9f (7628)
+- Version: 1.22.0
 - License: LGPL-2.1
 
 ## OpenSSL

@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <utility>
 
+#include "opthelpers.h"
+
 
 template<typename T>
 class ComPtr {
@@ -42,26 +44,22 @@ public:
     }
     ComPtr& operator=(ComPtr&& rhs)
     {
-        if(mPtr)
-            mPtr->Release();
-        mPtr = rhs.mPtr;
-        rhs.mPtr = nullptr;
+        if(likely(&rhs != this))
+        {
+            if(mPtr) mPtr->Release();
+            mPtr = std::exchange(rhs.mPtr, nullptr);
+        }
         return *this;
     }
 
-    operator bool() const noexcept { return mPtr != nullptr; }
+    explicit operator bool() const noexcept { return mPtr != nullptr; }
 
     T& operator*() const noexcept { return *mPtr; }
     T* operator->() const noexcept { return mPtr; }
     T* get() const noexcept { return mPtr; }
     T** getPtr() noexcept { return &mPtr; }
 
-    T* release() noexcept
-    {
-        T *ret{mPtr};
-        mPtr = nullptr;
-        return ret;
-    }
+    T* release() noexcept { return std::exchange(mPtr, nullptr); }
 
     void swap(ComPtr &rhs) noexcept { std::swap(mPtr, rhs.mPtr); }
     void swap(ComPtr&& rhs) noexcept { std::swap(mPtr, rhs.mPtr); }

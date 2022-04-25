@@ -23,6 +23,7 @@
 #include "albyte.h"
 #include "alfstream.h"
 #include "almalloc.h"
+#include "alnumbers.h"
 #include "alnumeric.h"
 #include "aloptional.h"
 #include "alspan.h"
@@ -30,7 +31,6 @@
 #include "filters/splitter.h"
 #include "helpers.h"
 #include "logging.h"
-#include "math_defs.h"
 #include "mixer/hrtfdefs.h"
 #include "opthelpers.h"
 #include "polyphase_resampler.h"
@@ -79,7 +79,7 @@ constexpr char magicMarker03[8]{'M','i','n','P','H','R','0','3'};
 
 /* First value for pass-through coefficients (remaining are 0), used for omni-
  * directional sounds. */
-constexpr float PassthruCoeff{0.707106781187f/*sqrt(0.5)*/};
+constexpr auto PassthruCoeff = static_cast<float>(1.0/al::numbers::sqrt2);
 
 std::mutex LoadedHrtfLock;
 al::vector<LoadedHrtf> LoadedHrtfs;
@@ -164,8 +164,8 @@ struct IdxBlend { uint idx; float blend; };
  */
 IdxBlend CalcEvIndex(uint evcount, float ev)
 {
-    ev = (al::MathDefs<float>::Pi()*0.5f + ev) * static_cast<float>(evcount-1) /
-        al::MathDefs<float>::Pi();
+    ev = (al::numbers::pi_v<float>*0.5f + ev) * static_cast<float>(evcount-1) /
+        al::numbers::pi_v<float>;
     uint idx{float2uint(ev)};
 
     return IdxBlend{minu(idx, evcount-1), ev-static_cast<float>(idx)};
@@ -176,8 +176,8 @@ IdxBlend CalcEvIndex(uint evcount, float ev)
  */
 IdxBlend CalcAzIndex(uint azcount, float az)
 {
-    az = (al::MathDefs<float>::Tau()+az) * static_cast<float>(azcount) /
-        al::MathDefs<float>::Tau();
+    az = (al::numbers::pi_v<float>*2.0f + az) * static_cast<float>(azcount) /
+        (al::numbers::pi_v<float>*2.0f);
     uint idx{float2uint(az)};
 
     return IdxBlend{idx%azcount, az-static_cast<float>(idx)};
@@ -192,7 +192,7 @@ IdxBlend CalcAzIndex(uint azcount, float az)
 void GetHrtfCoeffs(const HrtfStore *Hrtf, float elevation, float azimuth, float distance,
     float spread, HrirArray &coeffs, const al::span<uint,2> delays)
 {
-    const float dirfact{1.0f - (spread / al::MathDefs<float>::Tau())};
+    const float dirfact{1.0f - (al::numbers::inv_pi_v<float>/2.0f * spread)};
 
     const auto *field = Hrtf->field;
     const auto *field_end = field + Hrtf->fdCount-1;
@@ -368,19 +368,18 @@ std::unique_ptr<HrtfStore> CreateHrtfStore(uint rate, ushort irSize,
     const al::span<const HrtfStore::Elevation> elevs, const HrirArray *coeffs,
     const ubyte2 *delays, const char *filename)
 {
-    std::unique_ptr<HrtfStore> Hrtf;
-
     const size_t irCount{size_t{elevs.back().azCount} + elevs.back().irOffset};
     size_t total{sizeof(HrtfStore)};
     total  = RoundUp(total, alignof(HrtfStore::Field)); /* Align for field infos */
-    total += sizeof(HrtfStore::Field)*fields.size();
+    total += sizeof(std::declval<HrtfStore&>().field[0])*fields.size();
     total  = RoundUp(total, alignof(HrtfStore::Elevation)); /* Align for elevation infos */
-    total += sizeof(Hrtf->elev[0])*elevs.size();
+    total += sizeof(std::declval<HrtfStore&>().elev[0])*elevs.size();
     total  = RoundUp(total, 16); /* Align for coefficients using SIMD */
-    total += sizeof(Hrtf->coeffs[0])*irCount;
-    total += sizeof(Hrtf->delays[0])*irCount;
+    total += sizeof(std::declval<HrtfStore&>().coeffs[0])*irCount;
+    total += sizeof(std::declval<HrtfStore&>().delays[0])*irCount;
 
-    Hrtf.reset(new (al_calloc(16, total)) HrtfStore{});
+    void *ptr{al_calloc(16, total)};
+    std::unique_ptr<HrtfStore> Hrtf{al::construct_at(static_cast<HrtfStore*>(ptr))};
     if(!Hrtf)
         ERR("Out of memory allocating storage for %s.\n", filename);
     else
@@ -409,13 +408,14 @@ std::unique_ptr<HrtfStore> CreateHrtfStore(uint rate, ushort irSize,
         auto delays_ = reinterpret_cast<ubyte2*>(base + offset);
         offset += sizeof(delays_[0])*irCount;
 
-        assert(offset == total);
+        if(unlikely(offset != total))
+            throw std::runtime_error{"HrtfStore allocation size mismatch"};
 
         /* Copy input data to storage. */
-        std::copy(fields.cbegin(), fields.cend(), field_);
-        std::copy(elevs.cbegin(), elevs.cend(), elev_);
-        std::copy_n(coeffs, irCount, coeffs_);
-        std::copy_n(delays, irCount, delays_);
+        std::uninitialized_copy(fields.cbegin(), fields.cend(), field_);
+        std::uninitialized_copy(elevs.cbegin(), elevs.cend(), elev_);
+        std::uninitialized_copy_n(coeffs, irCount, coeffs_);
+        std::uninitialized_copy_n(delays, irCount, delays_);
 
         /* Finally, assign the storage pointers. */
         Hrtf->field = field_;
@@ -448,32 +448,47 @@ void MirrorLeftHrirs(const al::span<const HrtfStore::Elevation> elevs, HrirArray
 }
 
 
+template<size_t num_bits, typename T>
+constexpr std::enable_if_t<std::is_signed<T>::value && num_bits < sizeof(T)*8,
+T> fixsign(T value) noexcept
+{
+    constexpr auto signbit = static_cast<T>(1u << (num_bits-1));
+    return static_cast<T>((value^signbit) - signbit);
+}
+
+template<size_t num_bits, typename T>
+constexpr std::enable_if_t<!std::is_signed<T>::value || num_bits == sizeof(T)*8,
+T> fixsign(T value) noexcept
+{ return value; }
+
 template<typename T, size_t num_bits=sizeof(T)*8>
-inline T readle(std::istream &data)
+inline std::enable_if_t<al::endian::native == al::endian::little,
+T> readle(std::istream &data)
 {
     static_assert((num_bits&7) == 0, "num_bits must be a multiple of 8");
     static_assert(num_bits <= sizeof(T)*8, "num_bits is too large for the type");
 
     T ret{};
-    if_constexpr(al::endian::native == al::endian::little)
-    {
-        if(!data.read(reinterpret_cast<char*>(&ret), num_bits/8))
-            return static_cast<T>(EOF);
-    }
-    else
-    {
-        al::byte b[sizeof(T)]{};
-        if(!data.read(reinterpret_cast<char*>(b), num_bits/8))
-            return static_cast<T>(EOF);
-        std::reverse_copy(std::begin(b), std::end(b), reinterpret_cast<al::byte*>(&ret));
-    }
+    if(!data.read(reinterpret_cast<char*>(&ret), num_bits/8))
+        return static_cast<T>(EOF);
 
-    if_constexpr(std::is_signed<T>::value && num_bits < sizeof(T)*8)
-    {
-        constexpr auto signbit = static_cast<T>(1u << (num_bits-1));
-        return static_cast<T>((ret^signbit) - signbit);
-    }
-    return ret;
+    return fixsign<num_bits>(ret);
+}
+
+template<typename T, size_t num_bits=sizeof(T)*8>
+inline std::enable_if_t<al::endian::native == al::endian::big,
+T> readle(std::istream &data)
+{
+    static_assert((num_bits&7) == 0, "num_bits must be a multiple of 8");
+    static_assert(num_bits <= sizeof(T)*8, "num_bits is too large for the type");
+
+    T ret{};
+    al::byte b[sizeof(T)]{};
+    if(!data.read(reinterpret_cast<char*>(b), num_bits/8))
+        return static_cast<T>(EOF);
+    std::reverse_copy(std::begin(b), std::end(b), reinterpret_cast<al::byte*>(&ret));
+
+    return fixsign<num_bits>(ret);
 }
 
 template<>

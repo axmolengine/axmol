@@ -5,6 +5,10 @@
 
 #include "core/except.h"
 
+#ifdef ALSOFT_EAX
+#include "al/eax_effect.h"
+#endif // ALSOFT_EAX
+
 union EffectProps;
 
 
@@ -79,5 +83,10 @@ extern const EffectVtable PshifterEffectVtable;
 extern const EffectVtable VmorpherEffectVtable;
 extern const EffectVtable DedicatedEffectVtable;
 extern const EffectVtable ConvolutionEffectVtable;
+
+
+#ifdef ALSOFT_EAX
+EaxEffectUPtr eax_create_eax_effect(ALenum al_effect_type);
+#endif // ALSOFT_EAX
 
 #endif /* AL_EFFECTS_EFFECTS_H */

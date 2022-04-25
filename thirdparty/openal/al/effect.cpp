@@ -51,6 +51,11 @@
 #include "opthelpers.h"
 #include "vector.h"
 
+#ifdef ALSOFT_EAX
+#include <cassert>
+
+#include "eax_exception.h"
+#endif // ALSOFT_EAX
 
 const EffectList gEffectList[16]{
     { "eaxreverb",   EAXREVERB_EFFECT,   AL_EFFECT_EAXREVERB },
@@ -182,12 +187,12 @@ ALeffect *AllocEffect(ALCdevice *device)
 {
     auto sublist = std::find_if(device->EffectList.begin(), device->EffectList.end(),
         [](const EffectSubList &entry) noexcept -> bool
-        { return entry.FreeMask != 0; }
-    );
+        { return entry.FreeMask != 0; });
     auto lidx = static_cast<ALuint>(std::distance(device->EffectList.begin(), sublist));
     auto slidx = static_cast<ALuint>(al::countr_zero(sublist->FreeMask));
+    ASSUME(slidx < 64);
 
-    ALeffect *effect{::new (sublist->Effects + slidx) ALeffect{}};
+    ALeffect *effect{al::construct_at(sublist->Effects + slidx)};
     InitEffectParams(effect, AL_EFFECT_NULL);
 
     /* Add 1 to avoid effect ID 0. */
@@ -744,4 +749,17 @@ void LoadReverbPreset(const char *name, ALeffect *effect)
     }
 
     WARN("Reverb preset '%s' not found\n", name);
+}
+
+bool IsValidEffectType(ALenum type) noexcept
+{
+    if(type == AL_EFFECT_NULL)
+        return true;
+
+    for(const auto &effect_item : gEffectList)
+    {
+        if(type == effect_item.val && !DisabledEffects[effect_item.type])
+            return true;
+    }
+    return false;
 }

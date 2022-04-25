@@ -28,6 +28,7 @@
 #include <string>
 
 #include "almalloc.h"
+#include "alnumeric.h"
 #include "core/device.h"
 #include "core/logging.h"
 
@@ -98,7 +99,7 @@ void Sdl2Backend::open(const char *name)
     case DevFmtFloat: want.format = AUDIO_F32; break;
     }
     want.channels = (mDevice->FmtChans == DevFmtMono) ? 1 : 2;
-    want.samples = static_cast<Uint16>(mDevice->UpdateSize);
+    want.samples = static_cast<Uint16>(minu(mDevice->UpdateSize, 8192));
     want.callback = &Sdl2Backend::audioCallbackC;
     want.userdata = this;
 
@@ -121,10 +122,10 @@ void Sdl2Backend::open(const char *name)
         throw al::backend_exception{al::backend_error::NoDevice, "%s", SDL_GetError()};
 
     DevFmtChannels devchans{};
-    if(have.channels == 1)
-        devchans = DevFmtMono;
-    else if(have.channels == 2)
+    if(have.channels >= 2)
         devchans = DevFmtStereo;
+    else if(have.channels == 1)
+        devchans = DevFmtMono;
     else
     {
         SDL_CloseAudioDevice(devid);
@@ -135,12 +136,12 @@ void Sdl2Backend::open(const char *name)
     DevFmtType devtype{};
     switch(have.format)
     {
-    case AUDIO_U8:     mDevice->FmtType = DevFmtUByte;  break;
-    case AUDIO_S8:     mDevice->FmtType = DevFmtByte;   break;
-    case AUDIO_U16SYS: mDevice->FmtType = DevFmtUShort; break;
-    case AUDIO_S16SYS: mDevice->FmtType = DevFmtShort;  break;
-    case AUDIO_S32SYS: mDevice->FmtType = DevFmtInt;    break;
-    case AUDIO_F32SYS: mDevice->FmtType = DevFmtFloat;  break;
+    case AUDIO_U8:     devtype = DevFmtUByte;  break;
+    case AUDIO_S8:     devtype = DevFmtByte;   break;
+    case AUDIO_U16SYS: devtype = DevFmtUShort; break;
+    case AUDIO_S16SYS: devtype = DevFmtShort;  break;
+    case AUDIO_S32SYS: devtype = DevFmtInt;    break;
+    case AUDIO_F32SYS: devtype = DevFmtFloat;  break;
     default:
         SDL_CloseAudioDevice(devid);
         throw al::backend_exception{al::backend_error::DeviceError, "Unhandled SDL format: 0x%04x",
@@ -151,7 +152,7 @@ void Sdl2Backend::open(const char *name)
         SDL_CloseAudioDevice(mDeviceID);
     mDeviceID = devid;
 
-    mFrameSize = FrameSizeFromDevFmt(devchans, devtype, 0);
+    mFrameSize = BytesFromDevFmt(devtype) * have.channels;
     mFrequency = static_cast<uint>(have.freq);
     mFmtChans = devchans;
     mFmtType = devtype;

@@ -101,7 +101,7 @@ float *Resample_<LerpTag,NEONTag>(const InterpState*, float *RESTRICT src, uint 
         frac = static_cast<uint>(vgetq_lane_s32(frac4, 0));
 
         do {
-            *(dst_iter++) = lerp(src[0], src[1], static_cast<float>(frac) * (1.0f/MixerFracOne));
+            *(dst_iter++) = lerpf(src[0], src[1], static_cast<float>(frac) * (1.0f/MixerFracOne));
 
             frac += increment;
             src  += frac>>MixerFracBits;
@@ -245,7 +245,7 @@ void Mix_<NEONTag>(const al::span<const float> InSamples, const al::span<FloatBu
         {
             float step_count{0.0f};
             /* Mix with applying gain steps in aligned multiples of 4. */
-            if(size_t todo{(min_len-pos) >> 2})
+            if(size_t todo{min_len >> 2})
             {
                 const float32x4_t four4{vdupq_n_f32(4.0f)};
                 const float32x4_t step4{vdupq_n_f32(step)};

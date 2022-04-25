@@ -19,8 +19,8 @@
 
 #include "albyte.h"
 #include "alcomplex.h"
-#include "alc/effectslot.h"
 #include "almalloc.h"
+#include "alnumbers.h"
 #include "alnumeric.h"
 #include "alspan.h"
 #include "base.h"
@@ -30,11 +30,11 @@
 #include "core/context.h"
 #include "core/devformat.h"
 #include "core/device.h"
+#include "core/effectslot.h"
 #include "core/filters/splitter.h"
 #include "core/fmt_traits.h"
 #include "core/mixer.h"
 #include "intrusive_ptr.h"
-#include "math_defs.h"
 #include "polyphase_resampler.h"
 #include "vector.h"
 
@@ -91,8 +91,13 @@ void LoadSamples(double *RESTRICT dst, const al::byte *src, const size_t srcstep
 
 inline auto& GetAmbiScales(AmbiScaling scaletype) noexcept
 {
-    if(scaletype == AmbiScaling::FuMa) return AmbiScale::FromFuMa();
-    if(scaletype == AmbiScaling::SN3D) return AmbiScale::FromSN3D();
+    switch(scaletype)
+    {
+    case AmbiScaling::FuMa: return AmbiScale::FromFuMa();
+    case AmbiScaling::SN3D: return AmbiScale::FromSN3D();
+    case AmbiScaling::UHJ: return AmbiScale::FromUHJ();
+    case AmbiScaling::N3D: break;
+    }
     return AmbiScale::FromN3D();
 }
 
@@ -114,6 +119,10 @@ struct ChanMap {
     float angle;
     float elevation;
 };
+
+constexpr float Deg2Rad(float x) noexcept
+{ return static_cast<float>(al::numbers::pi / 180.0 * x); }
+
 
 using complex_d = std::complex<double>;
 
@@ -340,7 +349,7 @@ void ConvolutionState::update(const ContextBase *context, const EffectSlot *slot
      * to have its own output target since the main mixing buffer won't have an
      * LFE channel (due to being B-Format).
      */
-    static const ChanMap MonoMap[1]{
+    static constexpr ChanMap MonoMap[1]{
         { FrontCenter, 0.0f, 0.0f }
     }, StereoMap[2]{
         { FrontLeft,  Deg2Rad(-45.0f), Deg2Rad(0.0f) },
@@ -405,7 +414,7 @@ void ConvolutionState::update(const ContextBase *context, const EffectSlot *slot
         (*mChans)[0].Target[lidx] = gain;
         (*mChans)[1].Target[ridx] = gain;
     }
-    else if(mChannels == FmtBFormat3D || mChannels == FmtBFormat2D)
+    else if(IsBFormat(mChannels))
     {
         DeviceBase *device{context->mDevice};
         if(device->mAmbiOrder > mAmbiOrder)
@@ -439,6 +448,7 @@ void ConvolutionState::update(const ContextBase *context, const EffectSlot *slot
         switch(mChannels)
         {
         case FmtMono: chanmap = MonoMap; break;
+        case FmtSuperStereo:
         case FmtStereo: chanmap = StereoMap; break;
         case FmtRear: chanmap = RearMap; break;
         case FmtQuad: chanmap = QuadMap; break;
@@ -458,9 +468,10 @@ void ConvolutionState::update(const ContextBase *context, const EffectSlot *slot
         {
             auto ScaleAzimuthFront = [](float azimuth, float scale) -> float
             {
+                constexpr float half_pi{al::numbers::pi_v<float>*0.5f};
                 const float abs_azi{std::fabs(azimuth)};
-                if(!(abs_azi >= al::MathDefs<float>::Pi()*0.5f))
-                    return std::copysign(minf(abs_azi*scale, al::MathDefs<float>::Pi()*0.5f), azimuth);
+                if(!(abs_azi >= half_pi))
+                    return std::copysign(minf(abs_azi*scale, half_pi), azimuth);
                 return azimuth;
             };
 

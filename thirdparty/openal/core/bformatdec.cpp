@@ -9,78 +9,16 @@
 #include <utility>
 
 #include "almalloc.h"
-#include "ambdec.h"
+#include "alnumbers.h"
 #include "filters/splitter.h"
 #include "front_stablizer.h"
-#include "math_defs.h"
 #include "mixer.h"
 #include "opthelpers.h"
 
 
-namespace {
-
-inline auto& GetAmbiScales(AmbDecScale scaletype) noexcept
-{
-    if(scaletype == AmbDecScale::FuMa) return AmbiScale::FromFuMa();
-    if(scaletype == AmbDecScale::SN3D) return AmbiScale::FromSN3D();
-    return AmbiScale::FromN3D();
-}
-
-} // namespace
-
-
-BFormatDec::BFormatDec(const AmbDecConf *conf, const bool allow_2band, const size_t inchans,
-    const uint srate, const uint (&chanmap)[MAX_OUTPUT_CHANNELS],
-    std::unique_ptr<FrontStablizer> stablizer)
-    : mStablizer{std::move(stablizer)}, mDualBand{allow_2band && (conf->FreqBands == 2)}
-    , mChannelDec{inchans}
-{
-    const bool periphonic{(conf->ChanMask&AmbiPeriphonicMask) != 0};
-    auto&& coeff_scale = GetAmbiScales(conf->CoeffScale);
-
-    if(!mDualBand)
-    {
-        for(size_t j{0},k{0};j < mChannelDec.size();++j)
-        {
-            const size_t acn{periphonic ? j : AmbiIndex::FromACN2D()[j]};
-            if(!(conf->ChanMask&(1u<<acn))) continue;
-            const size_t order{AmbiIndex::OrderFromChannel()[acn]};
-            const float gain{conf->HFOrderGain[order] / coeff_scale[acn]};
-            for(size_t i{0u};i < conf->NumSpeakers;++i)
-            {
-                const size_t chanidx{chanmap[i]};
-                mChannelDec[j].mGains.Single[chanidx] = conf->Matrix[i][k] * gain;
-            }
-            ++k;
-        }
-    }
-    else
-    {
-        mChannelDec[0].mXOver.init(conf->XOverFreq / static_cast<float>(srate));
-        for(size_t j{1};j < mChannelDec.size();++j)
-            mChannelDec[j].mXOver = mChannelDec[0].mXOver;
-
-        const float ratio{std::pow(10.0f, conf->XOverRatio / 40.0f)};
-        for(size_t j{0},k{0};j < mChannelDec.size();++j)
-        {
-            const size_t acn{periphonic ? j : AmbiIndex::FromACN2D()[j]};
-            if(!(conf->ChanMask&(1u<<acn))) continue;
-            const size_t order{AmbiIndex::OrderFromChannel()[acn]};
-            const float hfGain{conf->HFOrderGain[order] * ratio / coeff_scale[acn]};
-            const float lfGain{conf->LFOrderGain[order] / ratio / coeff_scale[acn]};
-            for(size_t i{0u};i < conf->NumSpeakers;++i)
-            {
-                const size_t chanidx{chanmap[i]};
-                mChannelDec[j].mGains.Dual[sHFBand][chanidx] = conf->HFMatrix[i][k] * hfGain;
-                mChannelDec[j].mGains.Dual[sLFBand][chanidx] = conf->LFMatrix[i][k] * lfGain;
-            }
-            ++k;
-        }
-    }
-}
-
 BFormatDec::BFormatDec(const size_t inchans, const al::span<const ChannelDec> coeffs,
-    const al::span<const ChannelDec> coeffslf, std::unique_ptr<FrontStablizer> stablizer)
+    const al::span<const ChannelDec> coeffslf, const float xover_f0norm,
+    std::unique_ptr<FrontStablizer> stablizer)
     : mStablizer{std::move(stablizer)}, mDualBand{!coeffslf.empty()}, mChannelDec{inchans}
 {
     if(!mDualBand)
@@ -94,6 +32,10 @@ BFormatDec::BFormatDec(const size_t inchans, const al::span<const ChannelDec> co
     }
     else
     {
+        mChannelDec[0].mXOver.init(xover_f0norm);
+        for(size_t j{1};j < mChannelDec.size();++j)
+            mChannelDec[j].mXOver = mChannelDec[0].mXOver;
+
         for(size_t j{0};j < mChannelDec.size();++j)
         {
             float *outcoeffs{mChannelDec[j].mGains.Dual[sHFBand]};
@@ -191,41 +133,35 @@ void BFormatDec::processStablize(const al::span<FloatBufferLine> OutBuffer,
     for(size_t i{0};i < SamplesToDo;++i)
         side[FrontStablizer::DelayLength+i] += OutBuffer[lidx][i] - OutBuffer[ridx][i];
 
-    /* Combine the delayed mid signal with the decoded mid signal. Note that
-     * the samples are stored and combined in reverse, so the newest samples
-     * are at the front and the oldest at the back.
-     */
-    al::span<float> tmpbuf{mStablizer->TempBuf.data(), SamplesToDo+FrontStablizer::DelayLength};
-    auto tmpiter = tmpbuf.begin() + SamplesToDo;
-    std::copy(mStablizer->MidDelay.cbegin(), mStablizer->MidDelay.cend(), tmpiter);
-    for(size_t i{0};i < SamplesToDo;++i)
-        *--tmpiter = OutBuffer[lidx][i] + OutBuffer[ridx][i];
+    /* Combine the delayed mid signal with the decoded mid signal. */
+    float *tmpbuf{mStablizer->TempBuf.data()};
+    auto tmpiter = std::copy(mStablizer->MidDelay.cbegin(), mStablizer->MidDelay.cend(), tmpbuf);
+    for(size_t i{0};i < SamplesToDo;++i,++tmpiter)
+        *tmpiter = OutBuffer[lidx][i] + OutBuffer[ridx][i];
     /* Save the newest samples for next time. */
-    std::copy_n(tmpbuf.cbegin(), mStablizer->MidDelay.size(), mStablizer->MidDelay.begin());
+    std::copy_n(tmpbuf+SamplesToDo, mStablizer->MidDelay.size(), mStablizer->MidDelay.begin());
 
-    /* Apply an all-pass on the reversed signal, then reverse the samples to
-     * get the forward signal with a reversed phase shift. The future samples
-     * are included with the all-pass to reduce the error in the output
-     * samples (the smaller the delay, the more error is introduced).
+    /* Apply an all-pass on the signal in reverse. The future samples are
+     * included with the all-pass to reduce the error in the output samples
+     * (the smaller the delay, the more error is introduced).
      */
-    mStablizer->MidFilter.applyAllpass(tmpbuf);
-    tmpbuf = tmpbuf.subspan<FrontStablizer::DelayLength>();
-    std::reverse(tmpbuf.begin(), tmpbuf.end());
+    mStablizer->MidFilter.applyAllpassRev({tmpbuf, SamplesToDo+FrontStablizer::DelayLength});
 
     /* Now apply the band-splitter, combining its phase shift with the reversed
      * phase shift, restoring the original phase on the split signal.
      */
-    mStablizer->MidFilter.process(tmpbuf, mStablizer->MidHF.data(), mStablizer->MidLF.data());
+    mStablizer->MidFilter.process({tmpbuf, SamplesToDo}, mStablizer->MidHF.data(),
+        mStablizer->MidLF.data());
 
     /* This pans the separate low- and high-frequency signals between being on
      * the center channel and the left+right channels. The low-frequency signal
      * is panned 1/3rd toward center and the high-frequency signal is panned
      * 1/4th toward center. These values can be tweaked.
      */
-    const float cos_lf{std::cos(1.0f/3.0f * (al::MathDefs<float>::Pi()*0.5f))};
-    const float cos_hf{std::cos(1.0f/4.0f * (al::MathDefs<float>::Pi()*0.5f))};
-    const float sin_lf{std::sin(1.0f/3.0f * (al::MathDefs<float>::Pi()*0.5f))};
-    const float sin_hf{std::sin(1.0f/4.0f * (al::MathDefs<float>::Pi()*0.5f))};
+    const float cos_lf{std::cos(1.0f/3.0f * (al::numbers::pi_v<float>*0.5f))};
+    const float cos_hf{std::cos(1.0f/4.0f * (al::numbers::pi_v<float>*0.5f))};
+    const float sin_lf{std::sin(1.0f/3.0f * (al::numbers::pi_v<float>*0.5f))};
+    const float sin_hf{std::sin(1.0f/4.0f * (al::numbers::pi_v<float>*0.5f))};
     for(size_t i{0};i < SamplesToDo;i++)
     {
         const float m{mStablizer->MidLF[i]*cos_lf + mStablizer->MidHF[i]*cos_hf + mid[i]};
@@ -247,17 +183,10 @@ void BFormatDec::processStablize(const al::span<FloatBufferLine> OutBuffer,
 }
 
 
-std::unique_ptr<BFormatDec> BFormatDec::Create(const AmbDecConf *conf, const bool allow_2band,
-    const size_t inchans, const uint srate, const uint (&chanmap)[MAX_OUTPUT_CHANNELS],
-    std::unique_ptr<FrontStablizer> stablizer)
-{
-    return std::unique_ptr<BFormatDec>{new(FamCount(inchans))
-        BFormatDec{conf, allow_2band, inchans, srate, chanmap, std::move(stablizer)}};
-}
 std::unique_ptr<BFormatDec> BFormatDec::Create(const size_t inchans,
     const al::span<const ChannelDec> coeffs, const al::span<const ChannelDec> coeffslf,
-    std::unique_ptr<FrontStablizer> stablizer)
+    const float xover_f0norm, std::unique_ptr<FrontStablizer> stablizer)
 {
-    return std::unique_ptr<BFormatDec>{new(FamCount(inchans))
-        BFormatDec{inchans, coeffs, coeffslf, std::move(stablizer)}};
+    return std::make_unique<BFormatDec>(inchans, coeffs, coeffslf, xover_f0norm,
+        std::move(stablizer));
 }
