@@ -163,7 +163,7 @@
 
 ## png
 - Upstream: https://github.com/glennrp/libpng
-- Version: git 1.6.38-dbe3e0c (4088) with arm64 neon detect fix
+- Version: git 1.6.38-a37d483 (4098) with arm64 neon detect fix
 - License: PNG Reference Library License version 2
 
 ## poly2tri
