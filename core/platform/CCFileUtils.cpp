@@ -49,6 +49,7 @@ THE SOFTWARE.
 
 #if defined(_WIN32)
 #    include "ntcvt/ntcvt.hpp"
+#    include "yasio/cxx17/string_view.hpp"
 #endif
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS

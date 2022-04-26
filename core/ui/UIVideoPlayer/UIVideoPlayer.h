@@ -29,13 +29,13 @@
                         CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
                            !defined(CC_PLATFORM_OS_TVOS)
 
-#    undef ERROR
-
 #    include "ui/UIWidget.h"
 
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
 #        include "2d/CCDrawNode.h"
 #    endif
+
+#    undef ERROR
 
 /**
  * @addtogroup ui

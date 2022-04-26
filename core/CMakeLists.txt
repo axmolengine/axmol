@@ -65,6 +65,7 @@ if (WIN32)
     else()
         add_definitions(-DNTCVT_CP_DEFAULT=CP_ACP)
     endif()
+    add_definitions(-D_WINSOCKAPI_)
 endif()
 
 include(2d/CMakeLists.txt)
@@ -180,7 +181,13 @@ if(WINDOWS)
      
         exec_program(${NUGET_EXE}
             ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
-        target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+
+        if(CMAKE_GENERATOR STREQUAL "Ninja")
+            target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+            target_include_directories(${ADXE_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+        else()
+            target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+        endif()
         target_compile_definitions(${ADXE_CORE_LIB} PUBLIC ADXE_HAVE_WEBVIEW2)
     endif()
 endif()
