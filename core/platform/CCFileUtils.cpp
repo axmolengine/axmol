@@ -31,8 +31,6 @@ THE SOFTWARE.
 #include <sstream>
 #include <algorithm>
 
-#include "yasio/cxx17/string_view.hpp"
-
 #include "base/CCData.h"
 #include "base/ccMacros.h"
 #include "base/CCDirector.h"
