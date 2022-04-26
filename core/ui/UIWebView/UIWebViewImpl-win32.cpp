@@ -36,6 +36,7 @@
 #    include "rapidjson/document.h"
 #    include "rapidjson/stringbuffer.h"
 #    include "rapidjson/writer.h"
+#    include "base/ccUtils.h"
 
 #    define WIN32_LEAN_AND_MEAN
 #    include <Shlwapi.h>
