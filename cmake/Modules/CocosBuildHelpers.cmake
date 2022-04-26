@@ -212,9 +212,12 @@ function(cocos_copy_target_dll cocos_target)
 
     # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${cocos_target} $<TARGET_FILE_DIR:${cocos_target}>)
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+        set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+    endif()
     add_custom_command(TARGET ${cocos_target} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
+        "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
          $<TARGET_FILE_DIR:${cocos_target}>)
 
     # Copy windows angle binaries
@@ -229,9 +232,12 @@ endfunction()
 
 function(cocos_copy_lua_dlls cocos_target)
     if(NOT AX_USE_LUAJIT)
+        if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+            set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+        endif()
         add_custom_command(TARGET ${cocos_target} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/plainlua.dll"
+            "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
              $<TARGET_FILE_DIR:${cocos_target}>)
     endif()
 endfunction()

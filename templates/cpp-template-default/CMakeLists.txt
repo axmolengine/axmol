@@ -179,14 +179,14 @@ elseif(WINDOWS)
     endif()
 endif()
 
-if(WINDOWS)
+if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+    cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
+    cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+elseif(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
     if(NOT DEFINED BUILD_ENGINE_DONE)
         set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
     endif()
-elseif(LINUX)
-    cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
-    cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 # The optional thirdparties(not dependent by engine)
@@ -315,13 +315,16 @@ if (_AX_USE_PREBUILT) # support windows only
     if(WIN64)
         set(ssl_dll_suffix "-${ARCH_ALIAS}")
     endif()
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+        set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+    endif()
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
         "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
         "${ADXE_ROOT_PATH}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
         "${ADXE_ROOT_PATH}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
-        "${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
+        "${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
          $<TARGET_FILE_DIR:${APP_NAME}>)
 
     # Copy windows angle binaries
@@ -336,6 +339,11 @@ if (_AX_USE_PREBUILT) # support windows only
     endif()
     
     if (AX_ENABLE_MSEDGE_WEBVIEW2)
-        target_link_libraries(${APP_NAME} ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets) 
+        if(CMAKE_GENERATOR STREQUAL "Ninja")
+            target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+            target_include_directories(${ADXE_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+        else()
+            target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+        endif()
     endif()
 endif()
