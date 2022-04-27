@@ -19,9 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 #include <stdlib.h>
 #include <stdio.h>
+#if !defined(_USE_MATH_DEFINES)
+#    define _USE_MATH_DEFINES
+#endif
 #include <math.h>
 #include <string.h>
 
