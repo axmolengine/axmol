@@ -998,7 +998,10 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_vie
     child->setParent(this);
     
     if (_childFollowCameraMask)
+    {
         child->setCameraMask(this->getCameraMask());
+        child->applyMaskOnEnter(true);
+    }
     
     if (setTag)
     {
