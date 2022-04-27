@@ -228,6 +228,14 @@ function(cocos_copy_target_dll cocos_target)
         ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
         $<TARGET_FILE_DIR:${cocos_target}>
     )
+
+    # Copy webview2 for ninja
+    if(CMAKE_GENERATOR STREQUAL "Ninja")
+        add_custom_command(TARGET ${cocos_target} POST_BUILD
+           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+           "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+           $<TARGET_FILE_DIR:${cocos_target}>)
+    endif()
 endfunction()
 
 function(cocos_copy_lua_dlls cocos_target)
