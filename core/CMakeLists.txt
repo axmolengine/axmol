@@ -65,7 +65,6 @@ if (WIN32)
     else()
         add_definitions(-DNTCVT_CP_DEFAULT=CP_ACP)
     endif()
-    add_definitions(-D_WINSOCKAPI_)
 endif()
 
 include(2d/CMakeLists.txt)
@@ -163,10 +162,12 @@ if(XCODE OR VS)
 endif()
 
 if(WINDOWS)
-    # precompiled header. Compilation time speedup ~4x.
-    target_sources(${ADXE_CORE_LIB} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
-    set_target_properties(${ADXE_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
+    # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+        target_sources(${ADXE_CORE_LIB} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
+        set_target_properties(${ADXE_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
+        set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
+    endif()
     # compile c as c++. needed for precompiled header
     set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
     
