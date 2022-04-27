@@ -27,7 +27,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/CCImage.h"
-#include "renderer/backend/TextureUtils.h"
+#include "renderer/backend/PixelFormatUtils.h"
 
 #include <string>
 #include <ctype.h>
