@@ -10,6 +10,9 @@
 
  @Description  PVRTC Texture Decompression.
 
+ @Compression  https://developer.imaginationtech.com/pvrtextool/
+               https://cdn.imgtec.com/sdk/OFFLINE/PVRTexToolSetup-2021_R2.exe
+
  ******************************************************************************/
 
 #ifndef __PVR_H__

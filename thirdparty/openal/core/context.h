@@ -10,7 +10,7 @@
 #include "almalloc.h"
 #include "alspan.h"
 #include "atomic.h"
-#include "core/bufferline.h"
+#include "bufferline.h"
 #include "threads.h"
 #include "vecmat.h"
 #include "vector.h"
@@ -27,6 +27,8 @@ using uint = unsigned int;
 
 
 constexpr float SpeedOfSoundMetersPerSec{343.3f};
+
+constexpr float AirAbsorbGainHF{0.99426f}; /* -0.05dB */
 
 enum class DistanceModel : unsigned char {
     Disable,
@@ -50,6 +52,14 @@ using WetBufferPtr = std::unique_ptr<WetBuffer>;
 
 
 struct ContextProps {
+    std::array<float,3> Position;
+    std::array<float,3> Velocity;
+    std::array<float,3> OrientAt;
+    std::array<float,3> OrientUp;
+    float Gain;
+    float MetersPerUnit;
+    float AirAbsorptionGainHF;
+
     float DopplerFactor;
     float DopplerVelocity;
     float SpeedOfSound;
@@ -61,32 +71,20 @@ struct ContextProps {
     DEF_NEWDEL(ContextProps)
 };
 
-struct ListenerProps {
-    std::array<float,3> Position;
-    std::array<float,3> Velocity;
-    std::array<float,3> OrientAt;
-    std::array<float,3> OrientUp;
-    float Gain;
-    float MetersPerUnit;
-
-    std::atomic<ListenerProps*> next;
-
-    DEF_NEWDEL(ListenerProps)
-};
-
 struct ContextParams {
     /* Pointer to the most recent property values that are awaiting an update. */
     std::atomic<ContextProps*> ContextUpdate{nullptr};
-    std::atomic<ListenerProps*> ListenerUpdate{nullptr};
 
+    alu::Vector Position{};
     alu::Matrix Matrix{alu::Matrix::Identity()};
     alu::Vector Velocity{};
 
     float Gain{1.0f};
     float MetersPerUnit{1.0f};
+    float AirAbsorptionGainHF{AirAbsorbGainHF};
 
     float DopplerFactor{1.0f};
-    float SpeedOfSound{343.3f}; /* in units per sec! */
+    float SpeedOfSound{SpeedOfSoundMetersPerSec}; /* in units per sec! */
 
     bool SourceDistanceModel{false};
     DistanceModel mDistanceModel{};
@@ -108,7 +106,6 @@ struct ContextBase {
      * updates.
      */
     std::atomic<ContextProps*> mFreeContextProps{nullptr};
-    std::atomic<ListenerProps*> mFreeListenerProps{nullptr};
     std::atomic<VoicePropsItem*> mFreeVoiceProps{nullptr};
     std::atomic<EffectSlotProps*> mFreeEffectslotProps{nullptr};
 
@@ -120,7 +117,8 @@ struct ContextBase {
     VoiceChange *mVoiceChangeTail{};
     std::atomic<VoiceChange*> mCurrentVoiceChange{};
 
-    void allocVoiceChanges(size_t addcount);
+    void allocVoiceChanges();
+    void allocVoiceProps();
 
 
     ContextParams mParams;
@@ -160,6 +158,9 @@ struct ContextBase {
 
     using VoiceCluster = std::unique_ptr<Voice[]>;
     al::vector<VoiceCluster> mVoiceClusters;
+
+    using VoicePropsCluster = std::unique_ptr<VoicePropsItem[]>;
+    al::vector<VoicePropsCluster> mVoicePropClusters;
 
 
     ContextBase(DeviceBase *device);

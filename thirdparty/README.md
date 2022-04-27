@@ -21,7 +21,7 @@
 
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: 3.21
+- Version: 3.23
 - License: zlib
 
 ## c-ares
@@ -153,7 +153,7 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: git 1.21.1-4733c9f (7628)
+- Version: 1.22.0
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -163,7 +163,7 @@
 
 ## png
 - Upstream: https://github.com/glennrp/libpng
-- Version: git 1.6.38-dbe3e0c (4088) with arm64 neon detect fix
+- Version: git 1.6.38-a37d483 (4098) with arm64 neon detect fix
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -188,7 +188,7 @@
 
 ## robin-map
 - Upstream: https://github.com/Tessil/robin-map
-- Version: git 0.6.3-84c1bee (101) with modified for more compatible with stl
+- Version: 1.0.1 with modified for more compatible with stl
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
 - License: MIT

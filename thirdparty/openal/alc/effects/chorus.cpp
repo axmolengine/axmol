@@ -27,19 +27,19 @@
 #include <iterator>
 
 #include "alc/effects/base.h"
-#include "alc/effectslot.h"
 #include "almalloc.h"
+#include "alnumbers.h"
 #include "alnumeric.h"
 #include "alspan.h"
 #include "core/bufferline.h"
 #include "core/context.h"
 #include "core/devformat.h"
 #include "core/device.h"
+#include "core/effectslot.h"
 #include "core/mixer.h"
 #include "core/mixer/defs.h"
 #include "core/resampler_limits.h"
 #include "intrusive_ptr.h"
-#include "math_defs.h"
 #include "opthelpers.h"
 #include "vector.h"
 
@@ -150,7 +150,7 @@ void ChorusState::update(const ContextBase *Context, const EffectSlot *Slot,
             mLfoScale = 4.0f / static_cast<float>(mLfoRange);
             break;
         case ChorusWaveform::Sinusoid:
-            mLfoScale = al::MathDefs<float>::Tau() / static_cast<float>(mLfoRange);
+            mLfoScale = al::numbers::pi_v<float>*2.0f / static_cast<float>(mLfoRange);
             break;
         }
 

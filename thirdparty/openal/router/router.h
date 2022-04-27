@@ -7,10 +7,11 @@
 
 #include <stdio.h>
 
-#include <vector>
-#include <string>
 #include <atomic>
 #include <mutex>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "AL/alc.h"
 #include "AL/al.h"
@@ -122,42 +123,9 @@ struct DriverIface {
     LPALSPEEDOFSOUND alSpeedOfSound{nullptr};
     LPALDISTANCEMODEL alDistanceModel{nullptr};
 
-    LPALGENFILTERS alGenFilters{nullptr};
-    LPALDELETEFILTERS alDeleteFilters{nullptr};
-    LPALISFILTER alIsFilter{nullptr};
-    LPALFILTERF alFilterf{nullptr};
-    LPALFILTERFV alFilterfv{nullptr};
-    LPALFILTERI alFilteri{nullptr};
-    LPALFILTERIV alFilteriv{nullptr};
-    LPALGETFILTERF alGetFilterf{nullptr};
-    LPALGETFILTERFV alGetFilterfv{nullptr};
-    LPALGETFILTERI alGetFilteri{nullptr};
-    LPALGETFILTERIV alGetFilteriv{nullptr};
-    LPALGENEFFECTS alGenEffects{nullptr};
-    LPALDELETEEFFECTS alDeleteEffects{nullptr};
-    LPALISEFFECT alIsEffect{nullptr};
-    LPALEFFECTF alEffectf{nullptr};
-    LPALEFFECTFV alEffectfv{nullptr};
-    LPALEFFECTI alEffecti{nullptr};
-    LPALEFFECTIV alEffectiv{nullptr};
-    LPALGETEFFECTF alGetEffectf{nullptr};
-    LPALGETEFFECTFV alGetEffectfv{nullptr};
-    LPALGETEFFECTI alGetEffecti{nullptr};
-    LPALGETEFFECTIV alGetEffectiv{nullptr};
-    LPALGENAUXILIARYEFFECTSLOTS alGenAuxiliaryEffectSlots{nullptr};
-    LPALDELETEAUXILIARYEFFECTSLOTS alDeleteAuxiliaryEffectSlots{nullptr};
-    LPALISAUXILIARYEFFECTSLOT alIsAuxiliaryEffectSlot{nullptr};
-    LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf{nullptr};
-    LPALAUXILIARYEFFECTSLOTFV alAuxiliaryEffectSlotfv{nullptr};
-    LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti{nullptr};
-    LPALAUXILIARYEFFECTSLOTIV alAuxiliaryEffectSlotiv{nullptr};
-    LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf{nullptr};
-    LPALGETAUXILIARYEFFECTSLOTFV alGetAuxiliaryEffectSlotfv{nullptr};
-    LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti{nullptr};
-    LPALGETAUXILIARYEFFECTSLOTIV alGetAuxiliaryEffectSlotiv{nullptr};
-
-    DriverIface(std::wstring name, HMODULE mod)
-      : Name(std::move(name)), Module(mod)
+    template<typename T>
+    DriverIface(T&& name, HMODULE mod)
+      : Name(std::forward<T>(name)), Module(mod)
     { }
     ~DriverIface()
     {
@@ -171,6 +139,17 @@ extern std::vector<DriverIface> DriverList;
 
 extern thread_local DriverIface *ThreadCtxDriver;
 extern std::atomic<DriverIface*> CurrentCtxDriver;
+
+/* HACK: MinGW generates bad code when accessing an extern thread_local object.
+ * Add a wrapper function for it that only accesses it where it's defined.
+ */
+#ifdef __MINGW32__
+DriverIface *GetThreadDriver() noexcept;
+void SetThreadDriver(DriverIface *driver) noexcept;
+#else
+inline DriverIface *GetThreadDriver() noexcept { return ThreadCtxDriver; }
+inline void SetThreadDriver(DriverIface *driver) noexcept { ThreadCtxDriver = driver; }
+#endif
 
 
 class PtrIntMap {

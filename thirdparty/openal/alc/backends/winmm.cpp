@@ -181,8 +181,6 @@ FORCE_ALIGN int WinMMPlayback::mixerProc()
     SetRTPriority();
     althrd_setname(MIXER_THREAD_NAME);
 
-    const size_t frame_step{mDevice->channelsFromFmt()};
-
     while(!mKillNow.load(std::memory_order_acquire)
         && mDevice->Connected.load(std::memory_order_acquire))
     {
@@ -196,9 +194,9 @@ FORCE_ALIGN int WinMMPlayback::mixerProc()
         size_t widx{mIdx};
         do {
             WAVEHDR &waveHdr = mWaveBuffer[widx];
-            widx = (widx+1) % mWaveBuffer.size();
+            if(++widx == mWaveBuffer.size()) widx = 0;
 
-            mDevice->renderSamples(waveHdr.lpData, mDevice->UpdateSize, frame_step);
+            mDevice->renderSamples(waveHdr.lpData, mDevice->UpdateSize, mFormat.nChannels);
             mWritable.fetch_sub(1, std::memory_order_acq_rel);
             waveOutWrite(mOutHdl, &waveHdr, sizeof(WAVEHDR));
         } while(--todo);
@@ -223,9 +221,10 @@ void WinMMPlayback::open(const char *name)
             name};
     auto DeviceID = static_cast<UINT>(std::distance(PlaybackDevices.cbegin(), iter));
 
+    DevFmtType fmttype{mDevice->FmtType};
 retry_open:
     WAVEFORMATEX format{};
-    if(mDevice->FmtType == DevFmtFloat)
+    if(fmttype == DevFmtFloat)
     {
         format.wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
         format.wBitsPerSample = 32;
@@ -233,7 +232,7 @@ retry_open:
     else
     {
         format.wFormatTag = WAVE_FORMAT_PCM;
-        if(mDevice->FmtType == DevFmtUByte || mDevice->FmtType == DevFmtByte)
+        if(fmttype == DevFmtUByte || fmttype == DevFmtByte)
             format.wBitsPerSample = 8;
         else
             format.wBitsPerSample = 16;
@@ -250,9 +249,9 @@ retry_open:
         reinterpret_cast<DWORD_PTR>(this), CALLBACK_FUNCTION)};
     if(res != MMSYSERR_NOERROR)
     {
-        if(mDevice->FmtType == DevFmtFloat)
+        if(fmttype == DevFmtFloat)
         {
-            mDevice->FmtType = DevFmtShort;
+            fmttype = DevFmtShort;
             goto retry_open;
         }
         throw al::backend_exception{al::backend_error::DeviceError, "waveOutOpen failed: %u", res};
@@ -303,7 +302,7 @@ bool WinMMPlayback::reset()
     }
 
     uint chanmask{};
-    if(mFormat.nChannels == 2)
+    if(mFormat.nChannels >= 2)
     {
         mDevice->FmtChans = DevFmtStereo;
         chanmask = SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT;
@@ -320,7 +319,7 @@ bool WinMMPlayback::reset()
     }
     setChannelOrderFromWFXMask(chanmask);
 
-    uint BufferSize{mDevice->UpdateSize * mDevice->frameSizeFromFmt()};
+    uint BufferSize{mDevice->UpdateSize * mFormat.nChannels * mDevice->bytesFromFmt()};
 
     al_free(mWaveBuffer[0].lpData);
     mWaveBuffer[0] = WAVEHDR{};
@@ -340,9 +339,8 @@ bool WinMMPlayback::reset()
 void WinMMPlayback::start()
 {
     try {
-        std::for_each(mWaveBuffer.begin(), mWaveBuffer.end(),
-            [this](WAVEHDR &waveHdr) -> void
-            { waveOutPrepareHeader(mOutHdl, &waveHdr, sizeof(WAVEHDR)); });
+        for(auto &waveHdr : mWaveBuffer)
+            waveOutPrepareHeader(mOutHdl, &waveHdr, sizeof(WAVEHDR));
         mWritable.store(static_cast<uint>(mWaveBuffer.size()), std::memory_order_release);
 
         mKillNow.store(false, std::memory_order_release);
@@ -362,9 +360,8 @@ void WinMMPlayback::stop()
 
     while(mWritable.load(std::memory_order_acquire) < mWaveBuffer.size())
         mSem.wait();
-    std::for_each(mWaveBuffer.begin(), mWaveBuffer.end(),
-        [this](WAVEHDR &waveHdr) -> void
-        { waveOutUnprepareHeader(mOutHdl, &waveHdr, sizeof(WAVEHDR)); });
+    for(auto &waveHdr : mWaveBuffer)
+        waveOutUnprepareHeader(mOutHdl, &waveHdr, sizeof(WAVEHDR));
     mWritable.store(0, std::memory_order_release);
 }
 
@@ -477,7 +474,6 @@ void WinMMCapture::open(const char *name)
 
     case DevFmtQuad:
     case DevFmtX51:
-    case DevFmtX51Rear:
     case DevFmtX61:
     case DevFmtX71:
     case DevFmtAmbi3D:
