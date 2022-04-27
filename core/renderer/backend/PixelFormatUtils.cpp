@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -23,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "TextureUtils.h"
+#include "PixelFormatUtils.h"
 #include "Macros.h"
 
 NS_CC_BEGIN

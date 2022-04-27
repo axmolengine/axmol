@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 C4games Ltd
+ Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -27,7 +28,7 @@
 #include "ProgramGL.h"
 #include "TextureGL.h"
 #include "renderer/backend/Types.h"
-#include "renderer/backend/TextureUtils.h"
+#include "renderer/backend/PixelFormatUtils.h"
 #include "platform/CCGL.h"
 
 // In desktop OpenGL 4+ and OpenGL ES 3.0+, specific GL formats GL_x_INTEGER are used for integer textures.

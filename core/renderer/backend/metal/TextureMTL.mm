@@ -1,5 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -25,7 +27,7 @@
 #include "TextureMTL.h"
 #include "UtilsMTL.h"
 #include "base/ccMacros.h"
-#include "../TextureUtils.h"
+#include "../PixelFormatUtils.h"
 
 CC_BACKEND_BEGIN
 

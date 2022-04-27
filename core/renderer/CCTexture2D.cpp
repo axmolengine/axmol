@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -47,7 +47,7 @@ THE SOFTWARE.
 #include "renderer/backend/Device.h"
 #include "renderer/backend/ProgramState.h"
 #include "renderer/ccShaders.h"
-#include "renderer/backend/TextureUtils.h"
+#include "renderer/backend/PixelFormatUtils.h"
 #include "renderer/CCRenderer.h"
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
