@@ -68,10 +68,10 @@ static void _checkWorkingPath()
 {
     if (s_workingDir.empty())
     {
-        WCHAR utf16Path[AX_MAX_PATH] = {0};
-        size_t nNum                  = GetCurrentDirectoryW(AX_MAX_PATH - 2, utf16Path);
-        utf16Path[nNum++]              = '\\';
-        s_workingDir                 = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
+        WCHAR utf16Path[AX_MAX_PATH + 2] = {0};
+        size_t nNum                      = GetCurrentDirectoryW(AX_MAX_PATH, utf16Path);
+        utf16Path[nNum++]                = '\\';
+        s_workingDir                     = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
         std::replace(s_workingDir.begin(), s_workingDir.end(), '\\', '/');
     }
 }
@@ -80,8 +80,8 @@ static void _checkExePath()
 {
     if (s_exeDir.empty())
     {
-        WCHAR utf16Path[AX_MAX_PATH] = {0};
-        size_t nNum                  = GetModuleFileNameW(NULL, utf16Path, AX_MAX_PATH - 1);
+        WCHAR utf16Path[AX_MAX_PATH + 1] = {0};
+        size_t nNum                      = GetModuleFileNameW(NULL, utf16Path, AX_MAX_PATH);
         std::wstring_view u16pathsv{utf16Path, nNum};
         u16pathsv.remove_suffix(u16pathsv.length() - u16pathsv.find_last_of('\\') - 1);
         s_exeDir = ntcvt::from_chars(u16pathsv);
