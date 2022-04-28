@@ -40,12 +40,12 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-#define CC_MAX_PATH 512
+#define AX_MAX_PATH 512
 
 // The root path of resources, the character encoding is UTF-8.
 // UTF-8 is the only encoding supported by adxe API by default.
-static std::wstring s_workingDir;
-static std::wstring s_exeDir;
+static std::string s_workingDir;
+static std::string s_exeDir;
 
 // D:\aaa\bbb\ccc\ddd\abc.txt --> D:/aaa/bbb/ccc/ddd/abc.txt
 static std::string convertPathFormatToUnixStyle(const std::string_view& path)
@@ -68,13 +68,11 @@ static void _checkWorkingPath()
 {
     if (s_workingDir.empty())
     {
-        WCHAR utf16Path[CC_MAX_PATH] = {0};
-        size_t nNum                  = GetCurrentDirectoryW(CC_MAX_PATH - 2, utf16Path);
-
-        s_workingDir.reserve(nNum + 1);
-        s_workingDir.assign(utf16Path, nNum);
-        s_workingDir.push_back('/');
-        std::replace(s_workingDir.begin(), s_workingDir.end(), L'\\', L'/');
+        WCHAR utf16Path[AX_MAX_PATH] = {0};
+        size_t nNum                  = GetCurrentDirectoryW(AX_MAX_PATH - 2, utf16Path);
+        utf16Path[nNum++]              = '\\';
+        s_workingDir                 = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
+        std::replace(s_workingDir.begin(), s_workingDir.end(), '\\', '/');
     }
 }
 
@@ -82,14 +80,11 @@ static void _checkExePath()
 {
     if (s_exeDir.empty())
     {
-        WCHAR utf16Path[CC_MAX_PATH] = {0};
-        GetModuleFileNameW(NULL, utf16Path, CC_MAX_PATH - 1);
-        WCHAR* pUtf16ExePath = &(utf16Path[0]);
-
-        // We need only directory part without exe
-        WCHAR* pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
-
-        s_exeDir.assign(pUtf16ExePath, static_cast<size_t>(pUtf16DirEnd - pUtf16ExePath + 1));
+        WCHAR utf16Path[AX_MAX_PATH] = {0};
+        size_t nNum                  = GetModuleFileNameW(NULL, utf16Path, AX_MAX_PATH - 1);
+        std::wstring_view u16pathsv{utf16Path, nNum};
+        u16pathsv.remove_suffix(u16pathsv.length() - u16pathsv.find_last_of('\\') - 1);
+        s_exeDir = ntcvt::from_chars(u16pathsv);
         std::replace(s_exeDir.begin(), s_exeDir.end(), '\\', '/');
     }
 }
@@ -118,15 +113,18 @@ bool FileUtilsWin32::init()
 
     bool startedFromSelfLocation = s_workingDir == s_exeDir;
     if (!startedFromSelfLocation)
-        _defaultResRootPath = ntcvt::from_chars(s_workingDir);
+        _defaultResRootPath = s_workingDir;
     else
-        _defaultResRootPath.assign(ntcvt::from_chars(s_exeDir)).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
+    {
+        _defaultResRootPath.reserve(s_exeDir.size() + AX_PC_RESOURCES_DIR_LEN);
+        _defaultResRootPath.append(s_exeDir).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
+    }
 
     bool bRet = FileUtils::init();
 
     // make sure any path relative to exe dir can be found when app working directory location not exe path
     if (!startedFromSelfLocation)
-        addSearchPath(ntcvt::from_chars(s_exeDir));
+        addSearchPath(s_exeDir);
 
     return bRet;
 }
@@ -231,8 +229,8 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
     }
 
     // Get full path of executable, e.g. c:\Program Files (x86)\My Game Folder\MyGame.exe
-    WCHAR full_path[CC_MAX_PATH + 1] = {0};
-    ::GetModuleFileNameW(nullptr, full_path, CC_MAX_PATH + 1);
+    WCHAR full_path[AX_MAX_PATH + 1] = {0};
+    ::GetModuleFileNameW(nullptr, full_path, AX_MAX_PATH + 1);
 
     // Debug app uses executable directory; Non-debug app uses local app data directory
     //#ifndef _DEBUG
@@ -241,7 +239,7 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
     std::wstring retPath;
     if (base_name)
     {
-        WCHAR app_data_path[CC_MAX_PATH + 1];
+        WCHAR app_data_path[AX_MAX_PATH + 1];
 
         // Get local app data directory, e.g. C:\Documents and Settings\username\Local Settings\Application Data
         if (SUCCEEDED(SHGetFolderPathW(nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, app_data_path)))
