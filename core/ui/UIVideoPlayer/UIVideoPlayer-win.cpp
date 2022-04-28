@@ -521,6 +521,16 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     }
 }
 
+void VideoPlayer::setPlayRate(float fRate)
+{
+    if (!_videoURL.empty())
+    {
+        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
+        if (vplayer)
+            vplayer->SetRate(fRate);
+    }
+}
+
 void VideoPlayer::play()
 {
     if (!_videoURL.empty())

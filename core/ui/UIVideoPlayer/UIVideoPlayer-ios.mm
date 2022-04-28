@@ -339,6 +339,8 @@ void VideoPlayer::setStyle(StyleType style)
     }
 }
 
+void VideoPlayer::setPlayRate(float fRate) {}
+
 void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     cocos2d::ui::Widget::draw(renderer, transform, flags);
@@ -359,9 +361,9 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
         auto uiTop  = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY()) / scaleFactor;
 
         [((UIVideoViewWrapperIos*)_videoContext) setFrame:
-                                                uiLeft:uiTop:(rightTop.x - leftBottom.x) * glView->getScaleX() /
-                                           scaleFactor:((rightTop.y - leftBottom.y) * glView->getScaleY() /
-                                                        scaleFactor)];
+                                                   uiLeft:uiTop:(rightTop.x - leftBottom.x) * glView->getScaleX() /
+                                              scaleFactor:((rightTop.y - leftBottom.y) * glView->getScaleY() /
+                                                           scaleFactor)];
     }
 
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
