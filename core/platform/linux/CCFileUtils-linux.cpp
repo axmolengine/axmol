@@ -2,7 +2,7 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io
 
@@ -33,10 +33,6 @@ THE SOFTWARE.
 #include <sys/stat.h>
 #include <stdio.h>
 #include <errno.h>
-
-#ifndef CC_RESOURCE_FOLDER_LINUX
-#    define CC_RESOURCE_FOLDER_LINUX ("/Resources/")
-#endif
 
 using namespace std;
 
@@ -75,8 +71,8 @@ bool FileUtilsLinux::init()
 
     fullpath[length]    = '\0';
     std::string appPath = fullpath;
-    _defaultResRootPath = appPath.substr(0, appPath.find_last_of('/'));
-    _defaultResRootPath += CC_RESOURCE_FOLDER_LINUX;
+    _defaultResRootPath = appPath.substr(0, appPath.find_last_of('/') + 1);
+    _defaultResRootPath += AX_PC_RESOURCES_DIR;
 
     // Set writable path to $XDG_CONFIG_HOME or ~/.config/<app name>/ if $XDG_CONFIG_HOME not exists.
     const char* xdg_config_path = getenv("XDG_CONFIG_HOME");
@@ -105,7 +101,6 @@ string FileUtilsLinux::getWritablePath() const
 
 std::string FileUtilsLinux::getNativeWritableAbsolutePath() const
 {
-    DECLARE_GUARD;
     struct stat st;
     stat(_writablePath.c_str(), &st);
     if (!S_ISDIR(st.st_mode))
@@ -118,19 +113,6 @@ std::string FileUtilsLinux::getNativeWritableAbsolutePath() const
 
 bool FileUtilsLinux::isFileExistInternal(std::string_view path) const
 {
-    DECLARE_GUARD;
-    if (path.empty())
-    {
-        return false;
-    }
-
-    std::string strPath;
-    if (!isAbsolutePath(path))
-    {  // Not absolute path, add the default root path at the beginning.
-        strPath.assign(_defaultResRootPath).append(path);
-        path = strPath;
-    }
-
     struct stat sts;
     return (stat(path.data(), &sts) == 0) && S_ISREG(sts.st_mode);
 }

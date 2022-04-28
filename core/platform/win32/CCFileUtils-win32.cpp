@@ -2,7 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -44,54 +44,43 @@ NS_CC_BEGIN
 
 // The root path of resources, the character encoding is UTF-8.
 // UTF-8 is the only encoding supported by adxe API by default.
-static std::wstring s_workingPath;
-static std::string s_exePath;
+static std::wstring s_workingDir;
+static std::wstring s_exeDir;
 
 // D:\aaa\bbb\ccc\ddd\abc.txt --> D:/aaa/bbb/ccc/ddd/abc.txt
-static std::string convertPathFormatToUnixStyle(std::string_view path)
+static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 {
     std::string ret{path};
     int len = ret.length();
-    for (int i = 0; i < len; ++i)
-    {
-        if (ret[i] == '\\')
-        {
-            ret[i] = '/';
-        }
-    }
+    std::replace(ret.begin(), ret.end(), '\\', '/');
     return ret;
 }
 
-static std::string convertPathFormatToWinStyle(std::string_view path)
+static std::string convertPathFormatToWinStyle(const std::string_view& path)
 {
     std::string ret{path};
     int len = ret.length();
-    for (int i = 0; i < len; ++i)
-    {
-        if (ret[i] == '/')
-        {
-            ret[i] = '\\';
-        }
-    }
+    std::replace(ret.begin(), ret.end(), '/', '\\');
     return ret;
 }
 
 static void _checkWorkingPath()
 {
-    if (s_workingPath.empty())
+    if (s_workingDir.empty())
     {
         WCHAR utf16Path[CC_MAX_PATH] = {0};
-        int nNum                     = GetCurrentDirectoryW(CC_MAX_PATH - 2, utf16Path);
+        size_t nNum                  = GetCurrentDirectoryW(CC_MAX_PATH - 2, utf16Path);
 
-        s_workingPath.reserve(nNum + 1);
-        s_workingPath.assign(utf16Path, nNum);
-        s_workingPath.push_back('\\');
+        s_workingDir.reserve(nNum + 1);
+        s_workingDir.assign(utf16Path, nNum);
+        s_workingDir.push_back('/');
+        std::replace(s_workingDir.begin(), s_workingDir.end(), L'\\', L'/');
     }
 }
 
 static void _checkExePath()
 {
-    if (s_exePath.empty())
+    if (s_exeDir.empty())
     {
         WCHAR utf16Path[CC_MAX_PATH] = {0};
         GetModuleFileNameW(NULL, utf16Path, CC_MAX_PATH - 1);
@@ -100,9 +89,8 @@ static void _checkExePath()
         // We need only directory part without exe
         WCHAR* pUtf16DirEnd = wcsrchr(pUtf16ExePath, L'\\');
 
-        auto utf8ExeDir = ntcvt::wcbs2a<std::string>(pUtf16ExePath, pUtf16DirEnd - pUtf16ExePath + 1);
-
-        s_exePath = convertPathFormatToUnixStyle(utf8ExeDir);
+        s_exeDir.assign(pUtf16ExePath, static_cast<size_t>(pUtf16DirEnd - pUtf16ExePath + 1));
+        std::replace(s_exeDir.begin(), s_exeDir.end(), '\\', '/');
     }
 }
 
@@ -125,18 +113,20 @@ FileUtilsWin32::FileUtilsWin32() {}
 
 bool FileUtilsWin32::init()
 {
-    DECLARE_GUARD;
-
     _checkWorkingPath();
-    _defaultResRootPath      = ntcvt::from_chars(s_workingPath);
-    _defaultResRootPathUtf16 = s_workingPath;
+    _checkExePath();
+
+    bool startedFromSelfLocation = s_workingDir == s_exeDir;
+    if (!startedFromSelfLocation)
+        _defaultResRootPath = ntcvt::from_chars(s_workingDir);
+    else
+        _defaultResRootPath.assign(ntcvt::from_chars(s_exeDir)).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
 
     bool bRet = FileUtils::init();
 
-    _checkExePath();
-
-    if (_defaultResRootPath != s_exePath)
-        addSearchPath(s_exePath);
+    // make sure any path relative to exe dir can be found when app working directory location not exe path
+    if (!startedFromSelfLocation)
+        addSearchPath(ntcvt::from_chars(s_exeDir));
 
     return bRet;
 }
@@ -149,21 +139,7 @@ bool FileUtilsWin32::isDirectoryExistInternal(std::string_view dirPath) const
 
 bool FileUtilsWin32::isFileExistInternal(std::string_view strFilePath) const
 {
-    DECLARE_GUARD;
-    if (strFilePath.empty())
-    {
-        return false;
-    }
-
-    std::wstring strPathUtf16;
-    if (!isAbsolutePath(strFilePath))
-    {  // Not absolute path, add the default root path at the beginning.
-        strPathUtf16.insert(0, _defaultResRootPathUtf16);
-    }
-    else
-        strPathUtf16 = ntcvt::from_chars(strFilePath);
-
-    DWORD attr = GetFileAttributesW(strPathUtf16.c_str());
+    DWORD attr = GetFileAttributesW(ntcvt::from_chars(strFilePath).c_str());
     return (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY));
 }
 

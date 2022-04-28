@@ -342,6 +342,11 @@ if (_AX_USE_PREBUILT) # support windows only
         if(CMAKE_GENERATOR STREQUAL "Ninja")
             target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
             target_include_directories(${ADXE_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+            add_custom_command(TARGET ${cocos_target} POST_BUILD
+               COMMAND ${CMAKE_COMMAND} -E copy_if_different
+               "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+                $<TARGET_FILE_DIR:${APP_NAME}>
+            )
         else()
             target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
