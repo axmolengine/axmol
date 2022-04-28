@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -53,11 +54,14 @@ public:
 
     void videoEventCallback(cocos2d::Ref* sender, cocos2d::ui::VideoPlayer::EventType eventType);
 
+    void onEnter() override;
+    void onExit() override;
+
 private:
     void createVideo();
     void createSlider();
 
-    cocos2d::ui::VideoPlayer* _videoPlayer;
+    cocos2d::ui::VideoPlayer* _videoPlayer = nullptr;
     cocos2d::Label* _videoStateLabel;
     cocos2d::Label* _loopStatusLabel;
     cocos2d::Rect _visibleRect;
@@ -76,11 +80,14 @@ public:
     void switchStyleCallback(cocos2d::Ref* sender);
     void switchUserInputCallback(cocos2d::Ref* sender);
 
+    void onEnter() override;
+    void onExit() override;
+
 private:
     void createVideo();
 
     cocos2d::Rect _visibleRect;
-    cocos2d::ui::VideoPlayer* _videoPlayer;
+    cocos2d::ui::VideoPlayer* _videoPlayer = nullptr;
 
     cocos2d::MenuItemFont* _switchUserInputEnabled;
     cocos2d::MenuItemFont* _switchStyle;
