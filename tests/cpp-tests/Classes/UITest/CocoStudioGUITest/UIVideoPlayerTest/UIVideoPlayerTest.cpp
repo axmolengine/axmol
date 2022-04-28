@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -41,10 +42,6 @@ bool VideoPlayerTest::init()
     }
 
     _visibleRect = Director::getInstance()->getOpenGLView()->getVisibleRect();
-
-    // Should create video first to make sure video is destryed first. If not, then may crash.
-    // Because when destroying video, it will stop video which may trigger stopped event listener.
-    createVideo();
 
     MenuItemFont::setFontSize(16);
 
@@ -107,6 +104,21 @@ bool VideoPlayerTest::init()
 
     return true;
 }
+
+void VideoPlayerTest::onEnter() {
+    UIScene::onEnter();
+
+    createVideo();
+}
+
+void VideoPlayerTest::onExit()
+{
+    if (_videoPlayer)
+        _videoPlayer->removeFromParent();
+
+    UIScene::onExit();
+}
+
 
 void VideoPlayerTest::menuCloseCallback(Ref* sender)
 {
@@ -190,6 +202,8 @@ void VideoPlayerTest::menuHintCallback(Ref* sender)
 
 void VideoPlayerTest::createVideo()
 {
+    if (_videoPlayer)
+        return;
     auto centerPos =
         Vec2(_visibleRect.origin.x + _visibleRect.size.width / 2, _visibleRect.origin.y + _visibleRect.size.height / 2);
 
@@ -334,10 +348,24 @@ bool SimpleVideoPlayerTest::init()
     menu->setPosition(Vec2::ZERO);
     _uiLayer->addChild(menu);
 
-    createVideo();
     updateButtonsTexts();
 
     return true;
+}
+
+void SimpleVideoPlayerTest::onEnter()
+{
+    UIScene::onEnter();
+
+    createVideo();
+}
+
+void SimpleVideoPlayerTest::onExit()
+{
+    if (_videoPlayer)
+        _videoPlayer->removeFromParent();
+
+    UIScene::onExit();
 }
 
 void SimpleVideoPlayerTest::menuCloseCallback(Ref* sender)
@@ -370,7 +398,6 @@ void SimpleVideoPlayerTest::switchStyleCallback(Ref* sender)
         _videoPlayer->setStyle(_style);
     }
 
-    // createVideo();
     updateButtonsTexts();
 }
 
@@ -382,7 +409,6 @@ void SimpleVideoPlayerTest::switchUserInputCallback(Ref* sender)
         _videoPlayer->setUserInputEnabled(_userInputEnabled);
     }
 
-    // createVideo();
     updateButtonsTexts();
 }
 
