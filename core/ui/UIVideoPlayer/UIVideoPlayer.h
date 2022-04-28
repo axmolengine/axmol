@@ -136,6 +136,13 @@ public:
     virtual void setStyle(StyleType style);
 
     /**
+     * Sets play rate, currently, only supported by windows 
+     *
+     * @param fRate   the rate for play, default 1.0
+     */
+    virtual void setPlayRate(float fRate);
+
+    /**
      * Starts playback.
      */
     virtual void play();

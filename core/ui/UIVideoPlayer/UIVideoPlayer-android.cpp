@@ -203,6 +203,8 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     }
 }
 
+void VideoPlayer::setPlayRate(float fRate) {}
+
 void VideoPlayer::play()
 {
     if (!_videoURL.empty())
