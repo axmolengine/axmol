@@ -63,7 +63,7 @@ static void brent_kung_prefix_sum(
 		size_t iters = items >> log2_stride;
 
 		vfloat4 *da = d + (start * stride);
-		ptrdiff_t ofs = -(ptrdiff_t)(step * stride);
+		ptrdiff_t ofs = -static_cast<ptrdiff_t>(step * stride);
 		size_t ofs_stride = stride << log2_stride;
 
 		while (iters)
@@ -87,7 +87,7 @@ static void brent_kung_prefix_sum(
 		size_t iters = (items - step) >> log2_stride;
 
 		vfloat4 *da = d + (start * stride);
-		ptrdiff_t ofs = -(ptrdiff_t)(step * stride);
+		ptrdiff_t ofs = -static_cast<ptrdiff_t>(step * stride);
 		size_t ofs_stride = stride << log2_stride;
 
 		while (iters)
@@ -169,18 +169,18 @@ static void compute_pixel_region_variance(
 		for (int z = zd_start; z < padsize_z; z++)
 		{
 			int z_src = (z - zd_start) + offset_z - kernel_radius_z;
-			z_src = astc::clamp(z_src, 0, (int)(img->dim_z - 1));
+			z_src = astc::clamp(z_src, 0, static_cast<int>(img->dim_z - 1));
 			uint8_t* data8 = static_cast<uint8_t*>(img->data[z_src]);
 
 			for (int y = 1; y < padsize_y; y++)
 			{
 				int y_src = (y - 1) + offset_y - kernel_radius_xy;
-				y_src = astc::clamp(y_src, 0, (int)(img->dim_y - 1));
+				y_src = astc::clamp(y_src, 0, static_cast<int>(img->dim_y - 1));
 
 				for (int x = 1; x < padsize_x; x++)
 				{
 					int x_src = (x - 1) + offset_x - kernel_radius_xy;
-					x_src = astc::clamp(x_src, 0, (int)(img->dim_x - 1));
+					x_src = astc::clamp(x_src, 0, static_cast<int>(img->dim_x - 1));
 
 					data[0] = data8[(4 * img->dim_x * y_src) + (4 * x_src    )];
 					data[1] = data8[(4 * img->dim_x * y_src) + (4 * x_src + 1)];
@@ -213,18 +213,18 @@ static void compute_pixel_region_variance(
 		for (int z = zd_start; z < padsize_z; z++)
 		{
 			int z_src = (z - zd_start) + offset_z - kernel_radius_z;
-			z_src = astc::clamp(z_src, 0, (int)(img->dim_z - 1));
+			z_src = astc::clamp(z_src, 0, static_cast<int>(img->dim_z - 1));
 			uint16_t* data16 = static_cast<uint16_t*>(img->data[z_src]);
 
 			for (int y = 1; y < padsize_y; y++)
 			{
 				int y_src = (y - 1) + offset_y - kernel_radius_xy;
-				y_src = astc::clamp(y_src, 0, (int)(img->dim_y - 1));
+				y_src = astc::clamp(y_src, 0, static_cast<int>(img->dim_y - 1));
 
 				for (int x = 1; x < padsize_x; x++)
 				{
 					int x_src = (x - 1) + offset_x - kernel_radius_xy;
-					x_src = astc::clamp(x_src, 0, (int)(img->dim_x - 1));
+					x_src = astc::clamp(x_src, 0, static_cast<int>(img->dim_x - 1));
 
 					data[0] = data16[(4 * img->dim_x * y_src) + (4 * x_src    )];
 					data[1] = data16[(4 * img->dim_x * y_src) + (4 * x_src + 1)];
@@ -252,18 +252,18 @@ static void compute_pixel_region_variance(
 		for (int z = zd_start; z < padsize_z; z++)
 		{
 			int z_src = (z - zd_start) + offset_z - kernel_radius_z;
-			z_src = astc::clamp(z_src, 0, (int)(img->dim_z - 1));
+			z_src = astc::clamp(z_src, 0, static_cast<int>(img->dim_z - 1));
 			float* data32 = static_cast<float*>(img->data[z_src]);
 
 			for (int y = 1; y < padsize_y; y++)
 			{
 				int y_src = (y - 1) + offset_y - kernel_radius_xy;
-				y_src = astc::clamp(y_src, 0, (int)(img->dim_y - 1));
+				y_src = astc::clamp(y_src, 0, static_cast<int>(img->dim_y - 1));
 
 				for (int x = 1; x < padsize_x; x++)
 				{
 					int x_src = (x - 1) + offset_x - kernel_radius_xy;
-					x_src = astc::clamp(x_src, 0, (int)(img->dim_x - 1));
+					x_src = astc::clamp(x_src, 0, static_cast<int>(img->dim_x - 1));
 
 					data[0] = data32[(4 * img->dim_x * y_src) + (4 * x_src    )];
 					data[1] = data32[(4 * img->dim_x * y_src) + (4 * x_src + 1)];
@@ -345,18 +345,17 @@ static void compute_pixel_region_variance(
 		}
 	}
 
-	int alpha_kdim = 2 * alpha_kernel_radius + 1;
-
 	// Compute a few constants used in the variance-calculation.
+	float alpha_kdim = static_cast<float>(2 * alpha_kernel_radius + 1);
 	float alpha_rsamples;
 
 	if (have_z)
 	{
-		alpha_rsamples = 1.0f / (float)(alpha_kdim * alpha_kdim * alpha_kdim);
+		alpha_rsamples = 1.0f / (alpha_kdim * alpha_kdim * alpha_kdim);
 	}
 	else
 	{
-		alpha_rsamples = 1.0f / (float)(alpha_kdim * alpha_kdim);
+		alpha_rsamples = 1.0f / (alpha_kdim * alpha_kdim);
 	}
 
 	// Use the summed-area tables to compute variance for each neighborhood

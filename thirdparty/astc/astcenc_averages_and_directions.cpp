@@ -24,6 +24,366 @@
 
 #include <cassert>
 
+/**
+ * @brief Compute the average RGB color of each partition.
+ *
+ * The algorithm here uses a vectorized sequential scan and per-partition
+ * color accumulators, using select() to mask texel lanes in other partitions.
+ *
+ * We only accumulate sums for N-1 partitions during the scan; the value for
+ * the last partition can be computed given that we know the block-wide average
+ * already.
+ *
+ * Because of this we could reduce the loop iteration count so it "just" spans
+ * the max texel index needed for the N-1 partitions, which could need fewer
+ * iterations than the full block texel count. However, this makes the loop
+ * count erratic and causes more branch mispredictions so is a net loss.
+ *
+ * @param      pi         The partitioning to use.
+ * @param      blk        The block data to process.
+ * @param[out] averages   The output averages. Unused partition indices will
+ *                        not be initialized, and lane<3> will be zero.
+ */
+static void compute_partition_averages_rgb(
+	const partition_info& pi,
+	const image_block& blk,
+	vfloat4 averages[BLOCK_MAX_PARTITIONS]
+) {
+	unsigned int partition_count = pi.partition_count;
+	unsigned int texel_count = blk.texel_count;
+	promise(texel_count > 0);
+
+	// For 1 partition just use the precomputed mean
+	if (partition_count == 1)
+	{
+		averages[0] = blk.data_mean.swz<0, 1, 2>();
+	}
+	// For 2 partitions scan results for partition 0, compute partition 1
+	else if (partition_count == 2)
+	{
+		vfloatacc pp_avg_rgb[3] {};
+
+		vint lane_id = vint::lane_id();
+		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vint texel_partition(pi.partition_of_texel + i);
+
+			vmask lane_mask = lane_id < vint(texel_count);
+			lane_id += vint(ASTCENC_SIMD_WIDTH);
+
+			vmask p0_mask = lane_mask & (texel_partition == vint(0));
+
+			vfloat data_r = loada(blk.data_r + i);
+			haccumulate(pp_avg_rgb[0], data_r, p0_mask);
+
+			vfloat data_g = loada(blk.data_g + i);
+			haccumulate(pp_avg_rgb[1], data_g, p0_mask);
+
+			vfloat data_b = loada(blk.data_b + i);
+			haccumulate(pp_avg_rgb[2], data_b, p0_mask);
+		}
+
+		vfloat4 block_total = blk.data_mean.swz<0, 1, 2>() * static_cast<float>(blk.texel_count);
+
+		vfloat4 p0_total = vfloat3(hadd_s(pp_avg_rgb[0]),
+		                           hadd_s(pp_avg_rgb[1]),
+		                           hadd_s(pp_avg_rgb[2]));
+
+		vfloat4 p1_total = block_total - p0_total;
+
+		averages[0] = p0_total / static_cast<float>(pi.partition_texel_count[0]);
+		averages[1] = p1_total / static_cast<float>(pi.partition_texel_count[1]);
+	}
+	// For 3 partitions scan results for partition 0/1, compute partition 2
+	else if (partition_count == 3)
+	{
+		vfloatacc pp_avg_rgb[2][3] {};
+
+		vint lane_id = vint::lane_id();
+		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vint texel_partition(pi.partition_of_texel + i);
+
+			vmask lane_mask = lane_id < vint(texel_count);
+			lane_id += vint(ASTCENC_SIMD_WIDTH);
+
+			vmask p0_mask = lane_mask & (texel_partition == vint(0));
+			vmask p1_mask = lane_mask & (texel_partition == vint(1));
+
+			vfloat data_r = loada(blk.data_r + i);
+			haccumulate(pp_avg_rgb[0][0], data_r, p0_mask);
+			haccumulate(pp_avg_rgb[1][0], data_r, p1_mask);
+
+			vfloat data_g = loada(blk.data_g + i);
+			haccumulate(pp_avg_rgb[0][1], data_g, p0_mask);
+			haccumulate(pp_avg_rgb[1][1], data_g, p1_mask);
+
+			vfloat data_b = loada(blk.data_b + i);
+			haccumulate(pp_avg_rgb[0][2], data_b, p0_mask);
+			haccumulate(pp_avg_rgb[1][2], data_b, p1_mask);
+		}
+
+		vfloat4 block_total = blk.data_mean.swz<0, 1, 2>() * static_cast<float>(blk.texel_count);
+
+		vfloat4 p0_total = vfloat3(hadd_s(pp_avg_rgb[0][0]),
+		                           hadd_s(pp_avg_rgb[0][1]),
+		                           hadd_s(pp_avg_rgb[0][2]));
+
+		vfloat4 p1_total = vfloat3(hadd_s(pp_avg_rgb[1][0]),
+		                           hadd_s(pp_avg_rgb[1][1]),
+		                           hadd_s(pp_avg_rgb[1][2]));
+
+		vfloat4 p2_total = block_total - p0_total - p1_total;
+
+		averages[0] = p0_total / static_cast<float>(pi.partition_texel_count[0]);
+		averages[1] = p1_total / static_cast<float>(pi.partition_texel_count[1]);
+		averages[2] = p2_total / static_cast<float>(pi.partition_texel_count[2]);
+	}
+	else
+	{
+		// For 4 partitions scan results for partition 0/1/2, compute partition 3
+		vfloatacc pp_avg_rgb[3][3] {};
+
+		vint lane_id = vint::lane_id();
+		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vint texel_partition(pi.partition_of_texel + i);
+
+			vmask lane_mask = lane_id < vint(texel_count);
+			lane_id += vint(ASTCENC_SIMD_WIDTH);
+
+			vmask p0_mask = lane_mask & (texel_partition == vint(0));
+			vmask p1_mask = lane_mask & (texel_partition == vint(1));
+			vmask p2_mask = lane_mask & (texel_partition == vint(2));
+
+			vfloat data_r = loada(blk.data_r + i);
+			haccumulate(pp_avg_rgb[0][0], data_r, p0_mask);
+			haccumulate(pp_avg_rgb[1][0], data_r, p1_mask);
+			haccumulate(pp_avg_rgb[2][0], data_r, p2_mask);
+
+			vfloat data_g = loada(blk.data_g + i);
+			haccumulate(pp_avg_rgb[0][1], data_g, p0_mask);
+			haccumulate(pp_avg_rgb[1][1], data_g, p1_mask);
+			haccumulate(pp_avg_rgb[2][1], data_g, p2_mask);
+
+			vfloat data_b = loada(blk.data_b + i);
+			haccumulate(pp_avg_rgb[0][2], data_b, p0_mask);
+			haccumulate(pp_avg_rgb[1][2], data_b, p1_mask);
+			haccumulate(pp_avg_rgb[2][2], data_b, p2_mask);
+		}
+
+		vfloat4 block_total = blk.data_mean.swz<0, 1, 2>() * static_cast<float>(blk.texel_count);
+
+		vfloat4 p0_total = vfloat3(hadd_s(pp_avg_rgb[0][0]),
+		                           hadd_s(pp_avg_rgb[0][1]),
+		                           hadd_s(pp_avg_rgb[0][2]));
+
+		vfloat4 p1_total = vfloat3(hadd_s(pp_avg_rgb[1][0]),
+		                           hadd_s(pp_avg_rgb[1][1]),
+		                           hadd_s(pp_avg_rgb[1][2]));
+
+		vfloat4 p2_total = vfloat3(hadd_s(pp_avg_rgb[2][0]),
+		                           hadd_s(pp_avg_rgb[2][1]),
+		                           hadd_s(pp_avg_rgb[2][2]));
+
+		vfloat4 p3_total = block_total - p0_total - p1_total- p2_total;
+
+		averages[0] = p0_total / static_cast<float>(pi.partition_texel_count[0]);
+		averages[1] = p1_total / static_cast<float>(pi.partition_texel_count[1]);
+		averages[2] = p2_total / static_cast<float>(pi.partition_texel_count[2]);
+		averages[3] = p3_total / static_cast<float>(pi.partition_texel_count[3]);
+	}
+}
+
+/**
+ * @brief Compute the average RGBA color of each partition.
+ *
+ * The algorithm here uses a vectorized sequential scan and per-partition
+ * color accumulators, using select() to mask texel lanes in other partitions.
+ *
+ * We only accumulate sums for N-1 partitions during the scan; the value for
+ * the last partition can be computed given that we know the block-wide average
+ * already.
+ *
+ * Because of this we could reduce the loop iteration count so it "just" spans
+ * the max texel index needed for the N-1 partitions, which could need fewer
+ * iterations than the full block texel count. However, this makes the loop
+ * count erratic and causes more branch mispredictions so is a net loss.
+ *
+ * @param      pi         The partitioning to use.
+ * @param      blk        The block data to process.
+ * @param[out] averages   The output averages. Unused partition indices will
+ *                        not be initialized.
+ */
+static void compute_partition_averages_rgba(
+	const partition_info& pi,
+	const image_block& blk,
+	vfloat4 averages[BLOCK_MAX_PARTITIONS]
+) {
+	unsigned int partition_count = pi.partition_count;
+	unsigned int texel_count = blk.texel_count;
+	promise(texel_count > 0);
+
+	// For 1 partition just use the precomputed mean
+	if (partition_count == 1)
+	{
+		averages[0] = blk.data_mean;
+	}
+	// For 2 partitions scan results for partition 0, compute partition 1
+	else if (partition_count == 2)
+	{
+		vfloat4 pp_avg_rgba[4] {};
+
+		vint lane_id = vint::lane_id();
+		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vint texel_partition(pi.partition_of_texel + i);
+
+			vmask lane_mask = lane_id < vint(texel_count);
+			lane_id += vint(ASTCENC_SIMD_WIDTH);
+
+			vmask p0_mask = lane_mask & (texel_partition == vint(0));
+
+			vfloat data_r = loada(blk.data_r + i);
+			haccumulate(pp_avg_rgba[0], data_r, p0_mask);
+
+			vfloat data_g = loada(blk.data_g + i);
+			haccumulate(pp_avg_rgba[1], data_g, p0_mask);
+
+			vfloat data_b = loada(blk.data_b + i);
+			haccumulate(pp_avg_rgba[2], data_b, p0_mask);
+
+			vfloat data_a = loada(blk.data_a + i);
+			haccumulate(pp_avg_rgba[3], data_a, p0_mask);
+		}
+
+		vfloat4 block_total = blk.data_mean * static_cast<float>(blk.texel_count);
+
+		vfloat4 p0_total = vfloat4(hadd_s(pp_avg_rgba[0]),
+		                           hadd_s(pp_avg_rgba[1]),
+		                           hadd_s(pp_avg_rgba[2]),
+		                           hadd_s(pp_avg_rgba[3]));
+
+		vfloat4 p1_total = block_total - p0_total;
+
+		averages[0] = p0_total / static_cast<float>(pi.partition_texel_count[0]);
+		averages[1] = p1_total / static_cast<float>(pi.partition_texel_count[1]);
+	}
+	// For 3 partitions scan results for partition 0/1, compute partition 2
+	else if (partition_count == 3)
+	{
+		vfloat4 pp_avg_rgba[2][4] {};
+
+		vint lane_id = vint::lane_id();
+		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vint texel_partition(pi.partition_of_texel + i);
+
+			vmask lane_mask = lane_id < vint(texel_count);
+			lane_id += vint(ASTCENC_SIMD_WIDTH);
+
+			vmask p0_mask = lane_mask & (texel_partition == vint(0));
+			vmask p1_mask = lane_mask & (texel_partition == vint(1));
+
+			vfloat data_r = loada(blk.data_r + i);
+			haccumulate(pp_avg_rgba[0][0], data_r, p0_mask);
+			haccumulate(pp_avg_rgba[1][0], data_r, p1_mask);
+
+			vfloat data_g = loada(blk.data_g + i);
+			haccumulate(pp_avg_rgba[0][1], data_g, p0_mask);
+			haccumulate(pp_avg_rgba[1][1], data_g, p1_mask);
+
+			vfloat data_b = loada(blk.data_b + i);
+			haccumulate(pp_avg_rgba[0][2], data_b, p0_mask);
+			haccumulate(pp_avg_rgba[1][2], data_b, p1_mask);
+
+			vfloat data_a = loada(blk.data_a + i);
+			haccumulate(pp_avg_rgba[0][3], data_a, p0_mask);
+			haccumulate(pp_avg_rgba[1][3], data_a, p1_mask);
+		}
+
+		vfloat4 block_total = blk.data_mean * static_cast<float>(blk.texel_count);
+
+		vfloat4 p0_total = vfloat4(hadd_s(pp_avg_rgba[0][0]),
+		                           hadd_s(pp_avg_rgba[0][1]),
+		                           hadd_s(pp_avg_rgba[0][2]),
+		                           hadd_s(pp_avg_rgba[0][3]));
+
+		vfloat4 p1_total = vfloat4(hadd_s(pp_avg_rgba[1][0]),
+		                           hadd_s(pp_avg_rgba[1][1]),
+		                           hadd_s(pp_avg_rgba[1][2]),
+		                           hadd_s(pp_avg_rgba[1][3]));
+
+		vfloat4 p2_total = block_total - p0_total - p1_total;
+
+		averages[0] = p0_total / static_cast<float>(pi.partition_texel_count[0]);
+		averages[1] = p1_total / static_cast<float>(pi.partition_texel_count[1]);
+		averages[2] = p2_total / static_cast<float>(pi.partition_texel_count[2]);
+	}
+	else
+	{
+		// For 4 partitions scan results for partition 0/1/2, compute partition 3
+		vfloat4 pp_avg_rgba[3][4] {};
+
+		vint lane_id = vint::lane_id();
+		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vint texel_partition(pi.partition_of_texel + i);
+
+			vmask lane_mask = lane_id < vint(texel_count);
+			lane_id += vint(ASTCENC_SIMD_WIDTH);
+
+			vmask p0_mask = lane_mask & (texel_partition == vint(0));
+			vmask p1_mask = lane_mask & (texel_partition == vint(1));
+			vmask p2_mask = lane_mask & (texel_partition == vint(2));
+
+			vfloat data_r = loada(blk.data_r + i);
+			haccumulate(pp_avg_rgba[0][0], data_r, p0_mask);
+			haccumulate(pp_avg_rgba[1][0], data_r, p1_mask);
+			haccumulate(pp_avg_rgba[2][0], data_r, p2_mask);
+
+			vfloat data_g = loada(blk.data_g + i);
+			haccumulate(pp_avg_rgba[0][1], data_g, p0_mask);
+			haccumulate(pp_avg_rgba[1][1], data_g, p1_mask);
+			haccumulate(pp_avg_rgba[2][1], data_g, p2_mask);
+
+			vfloat data_b = loada(blk.data_b + i);
+			haccumulate(pp_avg_rgba[0][2], data_b, p0_mask);
+			haccumulate(pp_avg_rgba[1][2], data_b, p1_mask);
+			haccumulate(pp_avg_rgba[2][2], data_b, p2_mask);
+
+			vfloat data_a = loada(blk.data_a + i);
+			haccumulate(pp_avg_rgba[0][3], data_a, p0_mask);
+			haccumulate(pp_avg_rgba[1][3], data_a, p1_mask);
+			haccumulate(pp_avg_rgba[2][3], data_a, p2_mask);
+		}
+
+		vfloat4 block_total = blk.data_mean * static_cast<float>(blk.texel_count);
+
+		vfloat4 p0_total = vfloat4(hadd_s(pp_avg_rgba[0][0]),
+		                           hadd_s(pp_avg_rgba[0][1]),
+		                           hadd_s(pp_avg_rgba[0][2]),
+		                           hadd_s(pp_avg_rgba[0][3]));
+
+		vfloat4 p1_total = vfloat4(hadd_s(pp_avg_rgba[1][0]),
+		                           hadd_s(pp_avg_rgba[1][1]),
+		                           hadd_s(pp_avg_rgba[1][2]),
+		                           hadd_s(pp_avg_rgba[1][3]));
+
+		vfloat4 p2_total = vfloat4(hadd_s(pp_avg_rgba[2][0]),
+		                           hadd_s(pp_avg_rgba[2][1]),
+		                           hadd_s(pp_avg_rgba[2][2]),
+		                           hadd_s(pp_avg_rgba[2][3]));
+
+		vfloat4 p3_total = block_total - p0_total - p1_total- p2_total;
+
+		averages[0] = p0_total / static_cast<float>(pi.partition_texel_count[0]);
+		averages[1] = p1_total / static_cast<float>(pi.partition_texel_count[1]);
+		averages[2] = p2_total / static_cast<float>(pi.partition_texel_count[2]);
+		averages[3] = p3_total / static_cast<float>(pi.partition_texel_count[3]);
+	}
+}
+
 /* See header for documentation. */
 void compute_avgs_and_dirs_4_comp(
 	const partition_info& pi,
@@ -35,7 +395,9 @@ void compute_avgs_and_dirs_4_comp(
 	int partition_count = pi.partition_count;
 	promise(partition_count > 0);
 
-	vfloat4 average = blk.data_mean;
+	// Pre-compute partition_averages
+	vfloat4 partition_averages[BLOCK_MAX_PARTITIONS];
+	compute_partition_averages_rgba(pi, blk, partition_averages);
 
 	for (int partition = 0; partition < partition_count; partition++)
 	{
@@ -43,19 +405,7 @@ void compute_avgs_and_dirs_4_comp(
 		unsigned int texel_count = pi.partition_texel_count[partition];
 		promise(texel_count > 0);
 
-		// Only compute a partition mean if more than one partition
-		if (partition_count > 1)
-		{
-			average = vfloat4::zero();
-			for (unsigned int i = 0; i < texel_count; i++)
-			{
-				int iwt = texel_indexes[i];
-				average += blk.texel(iwt);
-			}
-
-			average = average * (1.0f / static_cast<float>(texel_count));
-		}
-
+		vfloat4 average = partition_averages[partition];
 		pm[partition].avg = average;
 
 		vfloat4 sum_xp = vfloat4::zero();
@@ -119,17 +469,25 @@ void compute_avgs_and_dirs_3_comp(
 	unsigned int omitted_component,
 	partition_metrics pm[BLOCK_MAX_PARTITIONS]
 ) {
-	float texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>()) / 3.0f;
-	vfloat4 average = blk.data_mean.swz<0, 1, 2>();
+	// Pre-compute partition_averages
+	vfloat4 partition_averages[BLOCK_MAX_PARTITIONS];
+	compute_partition_averages_rgba(pi, blk, partition_averages);
+
+	float texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>());
 
 	const float* data_vr = blk.data_r;
 	const float* data_vg = blk.data_g;
 	const float* data_vb = blk.data_b;
 
+	// TODO: Data-driven permute would be useful to avoid this ...
 	if (omitted_component == 0)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<1, 2, 3>()) / 3.0f;
-		average = blk.data_mean.swz<1, 2, 3>();
+		texel_weight = hadd_s(blk.channel_weight.swz<1, 2, 3>());
+
+		partition_averages[0] = partition_averages[0].swz<1, 2, 3>();
+		partition_averages[1] = partition_averages[1].swz<1, 2, 3>();
+		partition_averages[2] = partition_averages[2].swz<1, 2, 3>();
+		partition_averages[3] = partition_averages[3].swz<1, 2, 3>();
 
 		data_vr = blk.data_g;
 		data_vg = blk.data_b;
@@ -137,19 +495,36 @@ void compute_avgs_and_dirs_3_comp(
 	}
 	else if (omitted_component == 1)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<0, 2, 3>()) / 3.0f;
-		average = blk.data_mean.swz<0, 2, 3>();
+		texel_weight = hadd_s(blk.channel_weight.swz<0, 2, 3>());
+
+		partition_averages[0] = partition_averages[0].swz<0, 2, 3>();
+		partition_averages[1] = partition_averages[1].swz<0, 2, 3>();
+		partition_averages[2] = partition_averages[2].swz<0, 2, 3>();
+		partition_averages[3] = partition_averages[3].swz<0, 2, 3>();
 
 		data_vg = blk.data_b;
 		data_vb = blk.data_a;
 	}
 	else if (omitted_component == 2)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 3>()) / 3.0f;
-		average = blk.data_mean.swz<0, 1, 3>();
+		texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 3>());
+
+		partition_averages[0] = partition_averages[0].swz<0, 1, 3>();
+		partition_averages[1] = partition_averages[1].swz<0, 1, 3>();
+		partition_averages[2] = partition_averages[2].swz<0, 1, 3>();
+		partition_averages[3] = partition_averages[3].swz<0, 1, 3>();
 
 		data_vb = blk.data_a;
 	}
+	else
+	{
+		partition_averages[0] = partition_averages[0].swz<0, 1, 2>();
+		partition_averages[1] = partition_averages[1].swz<0, 1, 2>();
+		partition_averages[2] = partition_averages[2].swz<0, 1, 2>();
+		partition_averages[3] = partition_averages[3].swz<0, 1, 2>();
+	}
+
+ 	texel_weight = texel_weight * (1.0f / 3.0f);
 
 	unsigned int partition_count = pi.partition_count;
 	promise(partition_count > 0);
@@ -160,19 +535,7 @@ void compute_avgs_and_dirs_3_comp(
 		unsigned int texel_count = pi.partition_texel_count[partition];
 		promise(texel_count > 0);
 
-		// Only compute a partition mean if more than one partition
-		if (partition_count > 1)
-		{
-			average = vfloat4::zero();
-			for (unsigned int i = 0; i < texel_count; i++)
-			{
-				unsigned int iwt = texel_indexes[i];
-				average += vfloat3(data_vr[iwt], data_vg[iwt], data_vb[iwt]);
-			}
-
-			average = average * (1.0f / static_cast<float>(texel_count));
-		}
-
+		vfloat4 average = partition_averages[partition];
 		pm[partition].avg = average;
 
 		vfloat4 sum_xp = vfloat4::zero();
@@ -228,12 +591,14 @@ void compute_avgs_and_dirs_3_comp_rgb(
 	const image_block& blk,
 	partition_metrics pm[BLOCK_MAX_PARTITIONS]
 ) {
-	float texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>()) / 3;
+	float texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>()) * (1.0f / 3.0f);
 
 	unsigned int partition_count = pi.partition_count;
 	promise(partition_count > 0);
 
-	vfloat4 average = blk.data_mean.swz<0, 1, 2>();
+	// Pre-compute partition_averages
+	vfloat4 partition_averages[BLOCK_MAX_PARTITIONS];
+	compute_partition_averages_rgb(pi, blk, partition_averages);
 
 	for (unsigned int partition = 0; partition < partition_count; partition++)
 	{
@@ -241,19 +606,7 @@ void compute_avgs_and_dirs_3_comp_rgb(
 		unsigned int texel_count = pi.partition_texel_count[partition];
 		promise(texel_count > 0);
 
-		// Only compute a partition mean if more than one partition
-		if (partition_count > 1)
-		{
-			average = vfloat4::zero();
-			for (unsigned int i = 0; i < texel_count; i++)
-			{
-				unsigned int iwt = texel_indexes[i];
-				average += blk.texel3(iwt);
-			}
-
-			average = average * (1.0f / static_cast<float>(texel_count));
-		}
-
+		vfloat4 average = partition_averages[partition];
 		pm[partition].avg = average;
 
 		vfloat4 sum_xp = vfloat4::zero();
@@ -414,8 +767,8 @@ void compute_error_squared_rgba(
 	unsigned int partition_count = pi.partition_count;
 	promise(partition_count > 0);
 
-	uncor_error = 0.0f;
-	samec_error = 0.0f;
+	vfloatacc uncor_errorsumv = vfloatacc::zero();
+	vfloatacc samec_errorsumv = vfloatacc::zero();
 
 	for (unsigned int partition = 0; partition < partition_count; partition++)
 	{
@@ -453,11 +806,9 @@ void compute_error_squared_rgba(
 
 		vfloat uncor_loparamv(1e10f);
 		vfloat uncor_hiparamv(-1e10f);
-		vfloat4 uncor_errorsumv = vfloat4::zero();
 
 		vfloat samec_loparamv(1e10f);
 		vfloat samec_hiparamv(-1e10f);
-		vfloat4 samec_errorsumv = vfloat4::zero();
 
 		vfloat ew_r(blk.channel_weight.lane<0>());
 		vfloat ew_g(blk.channel_weight.lane<1>());
@@ -500,8 +851,7 @@ void compute_error_squared_rgba(
 			                 + (ew_b * uncor_dist2 * uncor_dist2)
 			                 + (ew_a * uncor_dist3 * uncor_dist3);
 
-			uncor_err = select(vfloat::zero(), uncor_err, mask);
-			haccumulate(uncor_errorsumv, uncor_err);
+			haccumulate(uncor_errorsumv, uncor_err, mask);
 
 			// Process samechroma data
 			vfloat samec_param = (data_r * l_samec_bs0)
@@ -522,8 +872,7 @@ void compute_error_squared_rgba(
 			                 + (ew_b * samec_dist2 * samec_dist2)
 			                 + (ew_a * samec_dist3 * samec_dist3);
 
-			samec_err = select(vfloat::zero(), samec_err, mask);
-			haccumulate(samec_errorsumv, samec_err);
+			haccumulate(samec_errorsumv, samec_err, mask);
 
 			lane_ids += vint(ASTCENC_SIMD_WIDTH);
 		}
@@ -534,10 +883,6 @@ void compute_error_squared_rgba(
 		samec_loparam = hmin_s(samec_loparamv);
 		samec_hiparam = hmax_s(samec_hiparamv);
 
-		// Resolve the final scalar accumulator sum
-		haccumulate(uncor_error, uncor_errorsumv);
-		haccumulate(samec_error, samec_errorsumv);
-
 		float uncor_linelen = uncor_hiparam - uncor_loparam;
 		float samec_linelen = samec_hiparam - samec_loparam;
 
@@ -545,6 +890,9 @@ void compute_error_squared_rgba(
 		uncor_lengths[partition] = astc::max(uncor_linelen, 1e-7f);
 		samec_lengths[partition] = astc::max(samec_linelen, 1e-7f);
 	}
+
+	uncor_error = hadd_s(uncor_errorsumv);
+	samec_error = hadd_s(samec_errorsumv);
 }
 
 /* See header for documentation. */
@@ -558,8 +906,8 @@ void compute_error_squared_rgb(
 	unsigned int partition_count = pi.partition_count;
 	promise(partition_count > 0);
 
-	uncor_error = 0.0f;
-	samec_error = 0.0f;
+	vfloatacc uncor_errorsumv = vfloatacc::zero();
+	vfloatacc samec_errorsumv = vfloatacc::zero();
 
 	for (unsigned int partition = 0; partition < partition_count; partition++)
 	{
@@ -598,11 +946,9 @@ void compute_error_squared_rgb(
 
 		vfloat uncor_loparamv(1e10f);
 		vfloat uncor_hiparamv(-1e10f);
-		vfloat4 uncor_errorsumv = vfloat4::zero();
 
 		vfloat samec_loparamv(1e10f);
 		vfloat samec_hiparamv(-1e10f);
-		vfloat4 samec_errorsumv = vfloat4::zero();
 
 		vfloat ew_r(blk.channel_weight.lane<0>());
 		vfloat ew_g(blk.channel_weight.lane<1>());
@@ -639,8 +985,7 @@ void compute_error_squared_rgb(
 			                 + (ew_g * uncor_dist1 * uncor_dist1)
 			                 + (ew_b * uncor_dist2 * uncor_dist2);
 
-			uncor_err = select(vfloat::zero(), uncor_err, mask);
-			haccumulate(uncor_errorsumv, uncor_err);
+			haccumulate(uncor_errorsumv, uncor_err, mask);
 
 			// Process samechroma data
 			vfloat samec_param = (data_r * l_samec_bs0)
@@ -658,8 +1003,7 @@ void compute_error_squared_rgb(
 			                 + (ew_g * samec_dist1 * samec_dist1)
 			                 + (ew_b * samec_dist2 * samec_dist2);
 
-			samec_err = select(vfloat::zero(), samec_err, mask);
-			haccumulate(samec_errorsumv, samec_err);
+			haccumulate(samec_errorsumv, samec_err, mask);
 
 			lane_ids += vint(ASTCENC_SIMD_WIDTH);
 		}
@@ -670,10 +1014,6 @@ void compute_error_squared_rgb(
 		samec_loparam = hmin_s(samec_loparamv);
 		samec_hiparam = hmax_s(samec_hiparamv);
 
-		// Resolve the final scalar accumulator sum
-		haccumulate(uncor_error, uncor_errorsumv);
-		haccumulate(samec_error, samec_errorsumv);
-
 		float uncor_linelen = uncor_hiparam - uncor_loparam;
 		float samec_linelen = samec_hiparam - samec_loparam;
 
@@ -681,6 +1021,9 @@ void compute_error_squared_rgb(
 		pl.uncor_line_len = astc::max(uncor_linelen, 1e-7f);
 		pl.samec_line_len = astc::max(samec_linelen, 1e-7f);
 	}
+
+	uncor_error = hadd_s(uncor_errorsumv);
+	samec_error = hadd_s(samec_errorsumv);
 }
 
 #endif

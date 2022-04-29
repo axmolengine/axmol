@@ -206,7 +206,7 @@ struct vint4
 	 */
 	ASTCENC_SIMD_INLINE explicit vint4(const int *p)
 	{
-		m = _mm_loadu_si128((const __m128i*)p);
+		m = _mm_loadu_si128(reinterpret_cast<const __m128i*>(p));
 	}
 
 	/**
@@ -215,7 +215,7 @@ struct vint4
 	ASTCENC_SIMD_INLINE explicit vint4(const uint8_t *p)
 	{
 		// _mm_loadu_si32 would be nicer syntax, but missing on older GCC
-		__m128i t = _mm_cvtsi32_si128(*(const int*)p);
+		__m128i t = _mm_cvtsi32_si128(*reinterpret_cast<const int*>(p));
 
 #if ASTCENC_SSE >= 41
 		m = _mm_cvtepu8_epi32(t);
@@ -270,9 +270,9 @@ struct vint4
 		m = _mm_insert_epi32(m, a, l);
 #else
 		alignas(16) int idx[4];
-		_mm_store_si128((__m128i*)idx, m);
+		_mm_store_si128(reinterpret_cast<__m128i*>(idx), m);
 		idx[l] = a;
-		m = _mm_load_si128((const __m128i*)idx);
+		m = _mm_load_si128(reinterpret_cast<const __m128i*>(idx));
 #endif
 	}
 
@@ -297,7 +297,7 @@ struct vint4
 	 */
 	static ASTCENC_SIMD_INLINE vint4 loada(const int* p)
 	{
-		return vint4(_mm_load_si128((const __m128i*)p));
+		return vint4(_mm_load_si128(reinterpret_cast<const __m128i*>(p)));
 	}
 
 	/**
@@ -613,7 +613,7 @@ ASTCENC_SIMD_INLINE int hadd_s(vint4 a)
  */
 ASTCENC_SIMD_INLINE void storea(vint4 a, int* p)
 {
-	_mm_store_si128((__m128i*)p, a.m);
+	_mm_store_si128(reinterpret_cast<__m128i*>(p), a.m);
 }
 
 /**
@@ -622,7 +622,7 @@ ASTCENC_SIMD_INLINE void storea(vint4 a, int* p)
 ASTCENC_SIMD_INLINE void store(vint4 a, int* p)
 {
 	// Cast due to missing intrinsics
-	_mm_storeu_ps((float*)p, _mm_castsi128_ps(a.m));
+	_mm_storeu_ps(reinterpret_cast<float*>(p), _mm_castsi128_ps(a.m));
 }
 
 /**
@@ -631,7 +631,7 @@ ASTCENC_SIMD_INLINE void store(vint4 a, int* p)
 ASTCENC_SIMD_INLINE void store_nbytes(vint4 a, uint8_t* p)
 {
 	// Cast due to missing intrinsics
-	_mm_store_ss((float*)p, _mm_castsi128_ps(a.m));
+	_mm_store_ss(reinterpret_cast<float*>(p), _mm_castsi128_ps(a.m));
 }
 
 /**
@@ -664,20 +664,16 @@ ASTCENC_SIMD_INLINE vint4 pack_low_bytes(vint4 a)
 }
 
 /**
- * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ * @brief Return lanes from @c b if @c cond is set, else @c a.
  */
 ASTCENC_SIMD_INLINE vint4 select(vint4 a, vint4 b, vmask4 cond)
 {
+	__m128i condi = _mm_castps_si128(cond.m);
+
 #if ASTCENC_SSE >= 41
-	// Don't use _mm_blendv_epi8 directly, as it doesn't give the select on
-	// float sign-bit in the mask behavior which is useful. Performance is the
-	// same, these casts are free.
-	__m128 av = _mm_castsi128_ps(a.m);
-	__m128 bv = _mm_castsi128_ps(b.m);
-	return vint4(_mm_castps_si128(_mm_blendv_ps(av, bv, cond.m)));
+	return vint4(_mm_blendv_epi8(a.m, b.m, condi));
 #else
-	__m128i d = _mm_srai_epi32(_mm_castps_si128(cond.m), 31);
-	return vint4(_mm_or_si128(_mm_and_si128(d, b.m), _mm_andnot_si128(d, a.m)));
+	return vint4(_mm_or_si128(_mm_and_si128(condi, b.m), _mm_andnot_si128(condi, a.m)));
 #endif
 }
 
@@ -863,9 +859,21 @@ ASTCENC_SIMD_INLINE vfloat4 sqrt(vfloat4 a)
 }
 
 /**
- * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ * @brief Return lanes from @c b if @c cond is set, else @c a.
  */
 ASTCENC_SIMD_INLINE vfloat4 select(vfloat4 a, vfloat4 b, vmask4 cond)
+{
+#if ASTCENC_SSE >= 41
+	return vfloat4(_mm_blendv_ps(a.m, b.m, cond.m));
+#else
+	return vfloat4(_mm_or_ps(_mm_and_ps(cond.m, b.m), _mm_andnot_ps(cond.m, a.m)));
+#endif
+}
+
+/**
+ * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ */
+ASTCENC_SIMD_INLINE vfloat4 select_msb(vfloat4 a, vfloat4 b, vmask4 cond)
 {
 #if ASTCENC_SSE >= 41
 	return vfloat4(_mm_blendv_ps(a.m, b.m, cond.m));
@@ -955,7 +963,7 @@ static inline uint16_t float_to_float16(float a)
 {
 #if ASTCENC_F16C >= 1
 	__m128i f16 = _mm_cvtps_ph(_mm_set1_ps(a), 0);
-	return  (uint16_t)_mm_cvtsi128_si32(f16);
+	return  static_cast<uint16_t>(_mm_cvtsi128_si32(f16));
 #else
 	return float_to_sf16(a);
 #endif
@@ -1016,5 +1024,61 @@ ASTCENC_SIMD_INLINE vfloat4 int_as_float(vint4 v)
 {
 	return vfloat4(_mm_castsi128_ps(v.m));
 }
+
+#if defined(ASTCENC_NO_INVARIANCE) && (ASTCENC_SSE >= 41)
+
+#define ASTCENC_USE_NATIVE_DOT_PRODUCT 1
+
+/**
+ * @brief Return the dot product for the full 4 lanes, returning scalar.
+ */
+ASTCENC_SIMD_INLINE float dot_s(vfloat4 a, vfloat4 b)
+{
+	return _mm_cvtss_f32(_mm_dp_ps(a.m, b.m, 0xFF));
+}
+
+/**
+ * @brief Return the dot product for the full 4 lanes, returning vector.
+ */
+ASTCENC_SIMD_INLINE vfloat4 dot(vfloat4 a, vfloat4 b)
+{
+	return vfloat4(_mm_dp_ps(a.m, b.m, 0xFF));
+}
+
+/**
+ * @brief Return the dot product for the bottom 3 lanes, returning scalar.
+ */
+ASTCENC_SIMD_INLINE float dot3_s(vfloat4 a, vfloat4 b)
+{
+	return _mm_cvtss_f32(_mm_dp_ps(a.m, b.m, 0x77));
+}
+
+/**
+ * @brief Return the dot product for the bottom 3 lanes, returning vector.
+ */
+ASTCENC_SIMD_INLINE vfloat4 dot3(vfloat4 a, vfloat4 b)
+{
+	return vfloat4(_mm_dp_ps(a.m, b.m, 0x77));
+}
+
+#endif // #if defined(ASTCENC_NO_INVARIANCE) && (ASTCENC_SSE >= 41)
+
+#if ASTCENC_POPCNT >= 1
+
+#define ASTCENC_USE_NATIVE_POPCOUNT 1
+
+/**
+ * @brief Population bit count.
+ *
+ * @param v   The value to population count.
+ *
+ * @return The number of 1 bits.
+ */
+ASTCENC_SIMD_INLINE int popcount(uint64_t v)
+{
+	return static_cast<int>(_mm_popcnt_u64(v));
+}
+
+#endif // ASTCENC_POPCNT >= 1
 
 #endif // #ifndef ASTC_VECMATHLIB_SSE_4_H_INCLUDED

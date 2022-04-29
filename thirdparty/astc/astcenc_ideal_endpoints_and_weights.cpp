@@ -302,21 +302,21 @@ static void compute_ideal_colors_and_weights_3_comp(
 	const float* data_vb = nullptr;
 	if (omitted_component == 0)
 	{
-		error_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>()) / 3.0f;
+		error_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>());
 		data_vr = blk.data_g;
 		data_vg = blk.data_b;
 		data_vb = blk.data_a;
 	}
 	else if (omitted_component == 1)
 	{
-		error_weight = hadd_s(blk.channel_weight.swz<0, 2, 3>()) / 3.0f;
+		error_weight = hadd_s(blk.channel_weight.swz<0, 2, 3>());
 		data_vr = blk.data_r;
 		data_vg = blk.data_b;
 		data_vb = blk.data_a;
 	}
 	else if (omitted_component == 2)
 	{
-		error_weight = hadd_s(blk.channel_weight.swz<0, 1, 3>()) / 3.0f;
+		error_weight = hadd_s(blk.channel_weight.swz<0, 1, 3>());
 		data_vr = blk.data_r;
 		data_vg = blk.data_g;
 		data_vb = blk.data_a;
@@ -325,13 +325,22 @@ static void compute_ideal_colors_and_weights_3_comp(
 	{
 		assert(omitted_component == 3);
 
-		error_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>()) / 3.0f;
+		error_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>());
 		data_vr = blk.data_r;
 		data_vg = blk.data_g;
 		data_vb = blk.data_b;
 	}
 
-	compute_avgs_and_dirs_3_comp(pi, blk, omitted_component, pms);
+	error_weight = error_weight * (1.0f / 3.0f);
+
+	if (omitted_component == 3)
+	{
+		compute_avgs_and_dirs_3_comp_rgb(pi, blk, pms);
+	}
+	else
+	{
+		compute_avgs_and_dirs_3_comp(pi, blk, omitted_component, pms);
+	}
 
 	bool is_constant_wes { true };
 	float partition0_len_sq { 0.0f };
@@ -611,7 +620,7 @@ float compute_error_of_weight_set_1plane(
 	const decimation_info& di,
 	const float* dec_weight_quant_uvalue
 ) {
-	vfloat4 error_summav = vfloat4::zero();
+	vfloatacc error_summav = vfloatacc::zero();
 	float error_summa = 0.0f;
 	unsigned int texel_count = di.texel_count;
 
@@ -666,9 +675,7 @@ float compute_error_of_weight_set_1plane(
 	}
 
 	// Resolve the final scalar accumulator sum
-	haccumulate(error_summa, error_summav);
-
-	return error_summa;
+	return error_summa = hadd_s(error_summav);
 }
 
 /* See header for documentation. */
@@ -679,8 +686,7 @@ float compute_error_of_weight_set_2planes(
 	const float* dec_weight_quant_uvalue_plane1,
 	const float* dec_weight_quant_uvalue_plane2
 ) {
-	vfloat4 error_summav = vfloat4::zero();
-	float error_summa = 0.0f;
+	vfloatacc error_summav = vfloatacc::zero();
 	unsigned int texel_count = di.texel_count;
 
 	// Process SIMD-width chunks, safe to over-fetch - the extra space is zero initialized
@@ -761,9 +767,7 @@ float compute_error_of_weight_set_2planes(
 	}
 
 	// Resolve the final scalar accumulator sum
-	haccumulate(error_summa, error_summav);
-
-	return error_summa;
+	return hadd_s(error_summav);
 }
 
 /* See header for documentation. */
@@ -795,7 +799,7 @@ void compute_ideal_weights_for_decimation(
 
 	// Transfer enough to also copy zero initialized SIMD over-fetch region
 	unsigned int texel_count_simd = round_up_to_simd_multiple_vla(texel_count);
-	for (unsigned int i = 0; i < texel_count_simd; i +=  ASTCENC_SIMD_WIDTH)
+	for (unsigned int i = 0; i < texel_count_simd; i += ASTCENC_SIMD_WIDTH)
 	{
 		vfloat weight(eai_in.weights + i);
 		vfloat weight_error_scale(eai_in.weight_error_scale + i);
@@ -1065,17 +1069,46 @@ void recompute_ideal_colors_1plane(
 	vfloat4 rgbo_vectors[BLOCK_MAX_PARTITIONS]
 ) {
 	unsigned int weight_count = di.weight_count;
+	unsigned int total_texel_count = blk.texel_count;
 	unsigned int partition_count = pi.partition_count;
 
 	promise(weight_count > 0);
+	promise(total_texel_count > 0);
 	promise(partition_count > 0);
 
 	const quantization_and_transfer_table& qat = quant_and_xfer_tables[weight_quant_mode];
 
-	float dec_weight_quant_uvalue[BLOCK_MAX_WEIGHTS];
+	float dec_weight[BLOCK_MAX_WEIGHTS];
 	for (unsigned int i = 0; i < weight_count; i++)
 	{
-		dec_weight_quant_uvalue[i] = qat.unquantized_value[dec_weights_quant_pvalue[i]] * (1.0f / 64.0f);
+		dec_weight[i] = qat.unquantized_value[dec_weights_quant_pvalue[i]] * (1.0f / 64.0f);
+	}
+
+	alignas(ASTCENC_VECALIGN) float undec_weight[BLOCK_MAX_TEXELS];
+	float* undec_weight_ref;
+	if (di.max_texel_weight_count == 1)
+	{
+		undec_weight_ref = dec_weight;
+	}
+	else if (di.max_texel_weight_count <= 2)
+	{
+		for (unsigned int i = 0; i < total_texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vfloat weight = bilinear_infill_vla_2(di, dec_weight, i);
+			storea(weight, undec_weight + i);
+		}
+
+		undec_weight_ref = undec_weight;
+	}
+	else
+	{
+		for (unsigned int i = 0; i < total_texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vfloat weight = bilinear_infill_vla(di, dec_weight, i);
+			storea(weight, undec_weight + i);
+		}
+
+		undec_weight_ref = undec_weight;
 	}
 
 	vfloat4 rgba_sum(blk.data_mean * static_cast<float>(blk.texel_count));
@@ -1127,20 +1160,7 @@ void recompute_ideal_colors_1plane(
 
 			vfloat4 rgba = blk.texel(tix);
 
-			float idx0;
-			if (di.max_texel_weight_count == 1)
-			{
-				assert(tix < BLOCK_MAX_WEIGHTS);
- 				idx0 = dec_weight_quant_uvalue[tix];
-			}
-			else if (di.max_texel_weight_count == 2)
-			{
-				idx0 = bilinear_infill_2(di, dec_weight_quant_uvalue, tix);
-			}
-			else
-			{
-				idx0 = bilinear_infill(di, dec_weight_quant_uvalue, tix);
-			}
+			float idx0 = undec_weight_ref[tix];
 
 			float om_idx0 = 1.0f - idx0;
 			wmin1 = astc::min(idx0, wmin1);
@@ -1273,18 +1293,61 @@ void recompute_ideal_colors_2planes(
 	int plane2_component
 ) {
 	unsigned int weight_count = di.weight_count;
+	unsigned int total_texel_count = blk.texel_count;
+
+	promise(total_texel_count > 0);
 	promise(weight_count > 0);
 
 	const quantization_and_transfer_table *qat = &(quant_and_xfer_tables[weight_quant_mode]);
 
-	float dec_weights_quant_uvalue_plane1[BLOCK_MAX_WEIGHTS_2PLANE];
-	float dec_weights_quant_uvalue_plane2[BLOCK_MAX_WEIGHTS_2PLANE];
+	float dec_weight_plane1[BLOCK_MAX_WEIGHTS_2PLANE];
+	float dec_weight_plane2[BLOCK_MAX_WEIGHTS_2PLANE];
 
 	assert(weight_count <= BLOCK_MAX_WEIGHTS_2PLANE);
 	for (unsigned int i = 0; i < weight_count; i++)
 	{
-		dec_weights_quant_uvalue_plane1[i] = qat->unquantized_value[dec_weights_quant_pvalue_plane1[i]] * (1.0f / 64.0f);
-		dec_weights_quant_uvalue_plane2[i] = qat->unquantized_value[dec_weights_quant_pvalue_plane2[i]] * (1.0f / 64.0f);
+		dec_weight_plane1[i] = qat->unquantized_value[dec_weights_quant_pvalue_plane1[i]] * (1.0f / 64.0f);
+		dec_weight_plane2[i] = qat->unquantized_value[dec_weights_quant_pvalue_plane2[i]] * (1.0f / 64.0f);
+	}
+
+	alignas(ASTCENC_VECALIGN) float undec_weight_plane1[BLOCK_MAX_TEXELS];
+	alignas(ASTCENC_VECALIGN) float undec_weight_plane2[BLOCK_MAX_TEXELS];
+
+	float* undec_weight_plane1_ref;
+	float* undec_weight_plane2_ref;
+
+	if (di.max_texel_weight_count == 1)
+	{
+		undec_weight_plane1_ref = dec_weight_plane1;
+		undec_weight_plane2_ref = dec_weight_plane2;
+	}
+	else if (di.max_texel_weight_count <= 2)
+	{
+		for (unsigned int i = 0; i < total_texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vfloat weight = bilinear_infill_vla_2(di, dec_weight_plane1, i);
+			storea(weight, undec_weight_plane1 + i);
+
+			weight = bilinear_infill_vla_2(di, dec_weight_plane2, i);
+			storea(weight, undec_weight_plane2 + i);
+		}
+
+		undec_weight_plane1_ref = undec_weight_plane1;
+		undec_weight_plane2_ref = undec_weight_plane2;
+	}
+	else
+	{
+		for (unsigned int i = 0; i < total_texel_count; i += ASTCENC_SIMD_WIDTH)
+		{
+			vfloat weight = bilinear_infill_vla(di, dec_weight_plane1, i);
+			storea(weight, undec_weight_plane1 + i);
+
+			weight = bilinear_infill_vla(di, dec_weight_plane2, i);
+			storea(weight, undec_weight_plane2 + i);
+		}
+
+		undec_weight_plane1_ref = undec_weight_plane1;
+		undec_weight_plane2_ref = undec_weight_plane2;
 	}
 
 	unsigned int texel_count = bsd.texel_count;
@@ -1323,20 +1386,7 @@ void recompute_ideal_colors_2planes(
 	{
 		vfloat4 rgba = blk.texel(j);
 
-		float idx0;
-		if (di.max_texel_weight_count == 1)
-		{
-			assert(j < BLOCK_MAX_WEIGHTS_2PLANE);
-		 	idx0 = dec_weights_quant_uvalue_plane1[j];
-		}
-		else if (di.max_texel_weight_count == 2)
-		{
-			idx0 = bilinear_infill_2(di, dec_weights_quant_uvalue_plane1, j);
-		}
-		else
-		{
-			idx0 = bilinear_infill(di, dec_weights_quant_uvalue_plane1, j);
-		}
+		float idx0 = undec_weight_plane1_ref[j];
 
 		float om_idx0 = 1.0f - idx0;
 		wmin1 = astc::min(idx0, wmin1);
@@ -1350,20 +1400,7 @@ void recompute_ideal_colors_2planes(
 		middle1_sum_s += om_idx0 * idx0;
 		right1_sum_s  += idx0 * idx0;
 
-		float idx1;
-		if (di.max_texel_weight_count == 1)
-		{
-			assert(j < BLOCK_MAX_WEIGHTS_2PLANE);
-			idx1 = dec_weights_quant_uvalue_plane2[j];
-		}
-		else if (di.max_texel_weight_count == 2)
-		{
-			idx1 = bilinear_infill_2(di, dec_weights_quant_uvalue_plane2, j);
-		}
-		else
-		{
-			idx1 = bilinear_infill(di, dec_weights_quant_uvalue_plane2, j);
-		}
+		float idx1 = undec_weight_plane2_ref[j];
 
 		float om_idx1 = 1.0f - idx1;
 		wmin2 = astc::min(idx1, wmin2);

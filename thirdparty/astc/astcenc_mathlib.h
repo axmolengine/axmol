@@ -308,7 +308,7 @@ static inline float flt_rd(float v)
 static inline int flt2int_rtn(float v)
 {
 
-	return (int)(v + 0.5f);
+	return static_cast<int>(v + 0.5f);
 }
 
 /**
@@ -320,32 +320,35 @@ static inline int flt2int_rtn(float v)
  */
 static inline int flt2int_rd(float v)
 {
-	return (int)(v);
+	return static_cast<int>(v);
 }
 
 /**
- * @brief Population bit count.
+ * @brief SP float bit-interpreted as an integer.
  *
- * @param v   The value to population count.
+ * @param v   The value to bitcast.
  *
- * @return The number of 1 bits.
+ * @return The converted value.
  */
-static inline int popcount(uint64_t v)
+static inline int float_as_int(float v)
 {
-#if ASTCENC_POPCNT >= 1
-	return (int)_mm_popcnt_u64(v);
-#else
-	uint64_t mask1 = 0x5555555555555555ULL;
-	uint64_t mask2 = 0x3333333333333333ULL;
-	uint64_t mask3 = 0x0F0F0F0F0F0F0F0FULL;
-	v -= (v >> 1) & mask1;
-	v = (v & mask2) + ((v >> 2) & mask2);
-	v += v >> 4;
-	v &= mask3;
-	v *= 0x0101010101010101ULL;
-	v >>= 56;
-	return (int)v;
-#endif
+	union { int a; float b; } u;
+	u.b = v;
+	return u.a;
+}
+
+/**
+ * @brief Integer bit-interpreted as an SP float.
+ *
+ * @param v   The value to bitcast.
+ *
+ * @return The converted value.
+ */
+static inline float int_as_float(int v)
+{
+	union { int a; float b; } u;
+	u.a = v;
+	return u.b;
 }
 
 /**

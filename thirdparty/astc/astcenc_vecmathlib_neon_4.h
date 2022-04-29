@@ -614,13 +614,11 @@ ASTCENC_SIMD_INLINE vint4 pack_low_bytes(vint4 a)
 }
 
 /**
- * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ * @brief Return lanes from @c b if @c cond is set, else @c a.
  */
 ASTCENC_SIMD_INLINE vint4 select(vint4 a, vint4 b, vmask4 cond)
 {
-	static const uint32x4_t msb = vdupq_n_u32(0x80000000u);
-	uint32x4_t mask = vcgeq_u32(cond.m, msb);
-	return vint4(vbslq_s32(mask, b.m, a.m));
+	return vint4(vbslq_s32(cond.m, b.m, a.m));
 }
 
 // ============================================================================
@@ -783,9 +781,17 @@ ASTCENC_SIMD_INLINE vfloat4 sqrt(vfloat4 a)
 }
 
 /**
- * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ * @brief Return lanes from @c b if @c cond is set, else @c a.
  */
 ASTCENC_SIMD_INLINE vfloat4 select(vfloat4 a, vfloat4 b, vmask4 cond)
+{
+	return vfloat4(vbslq_f32(cond.m, b.m, a.m));
+}
+
+/**
+ * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ */
+ASTCENC_SIMD_INLINE vfloat4 select_msb(vfloat4 a, vfloat4 b, vmask4 cond)
 {
 	static const uint32x4_t msb = vdupq_n_u32(0x80000000u);
 	uint32x4_t mask = vcgeq_u32(cond.m, msb);
@@ -916,6 +922,20 @@ ASTCENC_SIMD_INLINE vint4 float_as_int(vfloat4 a)
 ASTCENC_SIMD_INLINE vfloat4 int_as_float(vint4 v)
 {
 	return vfloat4(vreinterpretq_f32_s32(v.m));
+}
+
+#define ASTCENC_USE_NATIVE_POPCOUNT 1
+
+/**
+ * @brief Population bit count.
+ *
+ * @param v   The value to population count.
+ *
+ * @return The number of 1 bits.
+ */
+ASTCENC_SIMD_INLINE int popcount(uint64_t v)
+{
+	return static_cast<int>(vaddlv_u8(vcnt_u8(vcreate_u8(v))));
 }
 
 #endif // #ifndef ASTC_VECMATHLIB_NEON_4_H_INCLUDED

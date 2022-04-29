@@ -261,7 +261,7 @@ static astcenc_error validate_flags(
 ) {
 	// Flags field must not contain any unknown flag bits
 	unsigned int exMask = ~ASTCENC_ALL_FLAGS;
-	if (astc::popcount(flags & exMask) != 0)
+	if (popcount(flags & exMask) != 0)
 	{
 		return ASTCENC_ERR_BAD_FLAGS;
 	}
@@ -270,7 +270,7 @@ static astcenc_error validate_flags(
 	exMask = ASTCENC_FLG_MAP_MASK
 	       | ASTCENC_FLG_MAP_NORMAL
 	       | ASTCENC_FLG_MAP_RGBM;
-	if (astc::popcount(flags & exMask) > 1)
+	if (popcount(flags & exMask) > 1)
 	{
 		return ASTCENC_ERR_BAD_FLAGS;
 	}
@@ -423,7 +423,7 @@ static astcenc_error validate_config(
 	config.rgbm_m_scale = astc::max(config.rgbm_m_scale, 1.0f);
 
 	config.tune_partition_count_limit = astc::clamp(config.tune_partition_count_limit, 1u, 4u);
-	config.tune_partition_index_limit = astc::clamp(config.tune_partition_index_limit, 1u, (unsigned int)BLOCK_MAX_PARTITIONINGS);
+	config.tune_partition_index_limit = astc::clamp(config.tune_partition_index_limit, 1u, BLOCK_MAX_PARTITIONINGS);
 	config.tune_block_mode_limit = astc::clamp(config.tune_block_mode_limit, 1u, 100u);
 	config.tune_refinement_limit = astc::max(config.tune_refinement_limit, 1u);
 	config.tune_candidate_limit = astc::clamp(config.tune_candidate_limit, 1u, TUNE_MAX_TRIAL_CANDIDATES);
@@ -557,9 +557,9 @@ astcenc_error astcenc_config_init(
 
 		#define LERP(param) ((node_a.param * wt_node_a) + (node_b.param * wt_node_b))
 		#define LERPI(param) astc::flt2int_rtn(\
-		                         (((float)node_a.param) * wt_node_a) + \
-		                         (((float)node_b.param) * wt_node_b))
-		#define LERPUI(param) (unsigned int)LERPI(param)
+		                         (static_cast<float>(node_a.param) * wt_node_a) + \
+		                         (static_cast<float>(node_b.param) * wt_node_b))
+		#define LERPUI(param) static_cast<unsigned int>(LERPI(param))
 
 		config.tune_partition_count_limit = LERPI(tune_partition_count_limit);
 		config.tune_partition_index_limit = LERPI(tune_partition_index_limit);
@@ -894,7 +894,7 @@ static void compress_image(
 
 				int y_footprint = block_y + 2 * (ctx.config.a_scale_radius - 1);
 
-				float footprint = (float)(x_footprint * y_footprint);
+				float footprint = static_cast<float>(x_footprint * y_footprint);
 				float threshold = 0.9f / (255.0f * footprint);
 
 				// Do we have any alpha values?
@@ -1133,7 +1133,8 @@ astcenc_error astcenc_decompress_image(
 
 			unsigned int offset = (((z * yblocks + y) * xblocks) + x) * 16;
 			const uint8_t* bp = data + offset;
-			physical_compressed_block pcb = *(const physical_compressed_block*)bp;
+
+			const physical_compressed_block& pcb = *reinterpret_cast<const physical_compressed_block*>(bp);
 			symbolic_compressed_block scb;
 
 			physical_to_symbolic(*ctx->bsd, pcb, scb);
@@ -1173,7 +1174,7 @@ astcenc_error astcenc_get_block_info(
 	return ASTCENC_ERR_BAD_CONTEXT;
 #else
 	// Decode the compressed data into a symbolic form
-	physical_compressed_block pcb = *(const physical_compressed_block*)data;
+	const physical_compressed_block&pcb = *reinterpret_cast<const physical_compressed_block*>(data);
 	symbolic_compressed_block scb;
 	physical_to_symbolic(*ctx->bsd, pcb, scb);
 
@@ -1262,10 +1263,10 @@ astcenc_error astcenc_get_block_info(
 	unpack_weights(bsd, scb, di, bm.is_dual_plane, bm.get_weight_quant_mode(), weight_plane1, weight_plane2);
 	for (unsigned int i = 0; i < bsd.texel_count; i++)
 	{
-		info->weight_values_plane1[i] = (float)weight_plane1[i] * (1.0f / WEIGHTS_TEXEL_SUM);
+		info->weight_values_plane1[i] = static_cast<float>(weight_plane1[i]) * (1.0f / WEIGHTS_TEXEL_SUM);
 		if (info->is_dual_plane_block)
 		{
-			info->weight_values_plane2[i] = (float)weight_plane2[i] * (1.0f / WEIGHTS_TEXEL_SUM);
+			info->weight_values_plane2[i] = static_cast<float>(weight_plane2[i]) * (1.0f / WEIGHTS_TEXEL_SUM);
 		}
 	}
 

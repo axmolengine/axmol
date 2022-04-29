@@ -619,7 +619,7 @@ struct block_mode
 	 */
 	inline quant_method get_weight_quant_mode() const
 	{
-		return (quant_method)this->quant_mode;
+		return static_cast<quant_method>(this->quant_mode);
 	}
 };
 
@@ -979,7 +979,7 @@ struct image_block
 	 */
 	inline float get_default_alpha() const
 	{
-		return this->alpha_lns[0] ? (float)0x7800 : (float)0xFFFF;
+		return this->alpha_lns[0] ? static_cast<float>(0x7800) : static_cast<float>(0xFFFF);
 	}
 
 	/**
@@ -1511,16 +1511,20 @@ bool is_legal_3d_block_size(
 /**
  * @brief The precomputed table for quantizing color values.
  *
- * Indexed by [quant_mode][data_value].
+ * Returned value is in the ASTC BISE scrambled order.
+ *
+ * Indexed by [quant_mode - 4][data_value].
  */
-extern const uint8_t color_quant_tables[21][256];
+extern const uint8_t color_quant_tables[17][256];
 
 /**
  * @brief The precomputed table for unquantizing color values.
  *
- * Indexed by [quant_mode][data_value].
+ * Returned value is in the ASTC BISE scrambled order.
+ *
+ * Indexed by [quant_mode - 4][data_value].
  */
-extern const uint8_t color_unquant_tables[21][256];
+extern const uint8_t color_unquant_tables[17][256];
 
 /**
  * @brief The precomputed quant mode storage table.
@@ -1529,7 +1533,7 @@ extern const uint8_t color_unquant_tables[21][256];
  * number of compressed storage bits. Returns -1 for cases where the requested integer count cannot
  * ever fit in the supplied storage size.
  */
-extern const int8_t quant_mode_table[17][128];
+extern const int8_t quant_mode_table[10][128];
 
 /**
  * @brief Encode a packed string using BISE.
@@ -2464,9 +2468,9 @@ template<typename T>
 void aligned_free(T* ptr)
 {
 #if defined(_WIN32)
-	_aligned_free((void*)ptr);
+	_aligned_free(reinterpret_cast<void*>(ptr));
 #else
-	free((void*)ptr);
+	free(reinterpret_cast<void*>(ptr));
 #endif
 }
 

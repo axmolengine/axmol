@@ -176,7 +176,7 @@ void fetch_image_block(
 	vfloat4 data_mean(0.0f);
 	vfloat4 data_mean_scale(1.0f / static_cast<float>(bsd.texel_count));
 	vfloat4 data_max(-1e38f);
-	bool grayscale = true;
+	vmask4 grayscalev(true);
 
 	// This works because we impose the same choice everywhere during encode
 	uint8_t rgb_lns = (decode_mode == ASTCENC_PRF_HDR) ||
@@ -230,10 +230,7 @@ void fetch_image_block(
 				data_mean += datav * data_mean_scale;
 				data_max = max(data_max, datav);
 
-				if (grayscale && (datav.lane<0>() != datav.lane<1>() || datav.lane<0>() != datav.lane<2>()))
-				{
-					grayscale = false;
-				}
+				grayscalev = grayscalev & (datav.swz<0,0,0,0>() == datav.swz<1,1,2,2>());
 
 				blk.data_r[idx] = datav.lane<0>();
 				blk.data_g[idx] = datav.lane<1>();
@@ -264,7 +261,7 @@ void fetch_image_block(
 	blk.data_min = data_min;
 	blk.data_mean = data_mean;
 	blk.data_max = data_max;
-	blk.grayscale = grayscale;
+	blk.grayscale = all(grayscalev);
 }
 
 /* See header for documentation. */
@@ -291,7 +288,7 @@ void fetch_image_block_fast_ldr(
 	vfloat4 data_min(1e38f);
 	vfloat4 data_mean = vfloat4::zero();
 	vfloat4 data_max(-1e38f);
-	bool grayscale = true;
+	vmask4 grayscalev(true);
 	int idx = 0;
 
 	const uint8_t* plane = static_cast<const uint8_t*>(img.data[0]);
@@ -311,10 +308,7 @@ void fetch_image_block_fast_ldr(
 			data_mean += datav;
 			data_max = max(data_max, datav);
 
-			if (grayscale && (datav.lane<0>() != datav.lane<1>() || datav.lane<0>() != datav.lane<2>()))
-			{
-				grayscale = false;
-			}
+			grayscalev = grayscalev & (datav.swz<0,0,0,0>() == datav.swz<1,1,2,2>());
 
 			blk.data_r[idx] = datav.lane<0>();
 			blk.data_g[idx] = datav.lane<1>();
@@ -334,7 +328,7 @@ void fetch_image_block_fast_ldr(
 	blk.data_min = data_min;
 	blk.data_mean = data_mean / static_cast<float>(bsd.texel_count);
 	blk.data_max = data_max;
-	blk.grayscale = grayscale;
+	blk.grayscale = all(grayscalev);
 }
 
 /* See header for documentation. */
@@ -473,10 +467,10 @@ void write_image_block(
 						color = float_to_float16(colorf);
 					}
 
-					data16[(4 * xsize * y) + (4 * x    )] = (uint16_t)color.lane<0>();
-					data16[(4 * xsize * y) + (4 * x + 1)] = (uint16_t)color.lane<1>();
-					data16[(4 * xsize * y) + (4 * x + 2)] = (uint16_t)color.lane<2>();
-					data16[(4 * xsize * y) + (4 * x + 3)] = (uint16_t)color.lane<3>();
+					data16[(4 * xsize * y) + (4 * x    )] = static_cast<uint16_t>(color.lane<0>());
+					data16[(4 * xsize * y) + (4 * x + 1)] = static_cast<uint16_t>(color.lane<1>());
+					data16[(4 * xsize * y) + (4 * x + 2)] = static_cast<uint16_t>(color.lane<2>());
+					data16[(4 * xsize * y) + (4 * x + 3)] = static_cast<uint16_t>(color.lane<3>());
 
 					idx++;
 				}

@@ -1184,7 +1184,7 @@ const float *get_2d_percentile_table(
 			unsigned int idx = item & 0x7FF;
 			unsigned int weight = (item >> 11) & 0x1F;
 			accum += weight;
-			unpacked_table[idx] = (float)accum / (float)difscale;
+			unpacked_table[idx] = static_cast<float>(accum) / static_cast<float>(difscale);
 		}
 	}
 

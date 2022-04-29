@@ -130,7 +130,7 @@ static bool decode_block_mode_2d(
 	quant_mode = (base_quant_mode - 2) + 6 * H;
 	is_dual_plane = D != 0;
 
-	weight_bits = get_ise_sequence_bitcount(weight_count, (quant_method)quant_mode);
+	weight_bits = get_ise_sequence_bitcount(weight_count, static_cast<quant_method>(quant_mode));
 	return (weight_count <= BLOCK_MAX_WEIGHTS &&
 	        weight_bits >= BLOCK_MIN_WEIGHT_BITS &&
 	        weight_bits <= BLOCK_MAX_WEIGHT_BITS);
@@ -233,7 +233,7 @@ static bool decode_block_mode_3d(
 	quant_mode = (base_quant_mode - 2) + 6 * H;
 	is_dual_plane = D != 0;
 
-	weight_bits = get_ise_sequence_bitcount(weight_count, (quant_method)quant_mode);
+	weight_bits = get_ise_sequence_bitcount(weight_count, static_cast<quant_method>(quant_mode));
 	return (weight_count <= BLOCK_MAX_WEIGHTS &&
 	        weight_bits >= BLOCK_MIN_WEIGHT_BITS &&
 	        weight_bits <= BLOCK_MAX_WEIGHT_BITS);
@@ -331,7 +331,7 @@ static void init_decimation_info_2d(
 		for (unsigned int j = 0; j < wb.weight_count_of_texel[i]; j++)
 		{
 			di.texel_weights_int_4t[j][i] = wb.weights_of_texel[i][j];
-			di.texel_weights_float_4t[j][i] = ((float)wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
+			di.texel_weights_float_4t[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
 			di.texel_weights_4t[j][i] = wb.grid_weights_of_texel[i][j];
 		}
 
@@ -349,7 +349,7 @@ static void init_decimation_info_2d(
 	for (unsigned int i = 0; i < weights_per_block; i++)
 	{
 		unsigned int texel_count_wt = wb.texel_count_of_weight[i];
-		di.weight_texel_count[i] = (uint8_t)texel_count_wt;
+		di.weight_texel_count[i] = static_cast<uint8_t>(texel_count_wt);
 
 		for (unsigned int j = 0; j < texel_count_wt; j++)
 		{
@@ -357,7 +357,7 @@ static void init_decimation_info_2d(
 
 			// Create transposed versions of these for better vectorization
 			di.weight_texel[j][i] = texel;
-			di.weights_flt[j][i] = (float)wb.texel_weights_of_weight[i][j];
+			di.weights_flt[j][i] = static_cast<float>(wb.texel_weights_of_weight[i][j]);
 
 			// perform a layer of array unrolling. An aspect of this unrolling is that
 			// one of the texel-weight indexes is an identity-mapped index; we will use this
@@ -608,7 +608,7 @@ static void init_decimation_info_3d(
 		for (unsigned int j = 0; j < wb.weight_count_of_texel[i]; j++)
 		{
 			di.texel_weights_int_4t[j][i] = wb.weights_of_texel[i][j];
-			di.texel_weights_float_4t[j][i] = ((float)wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
+			di.texel_weights_float_4t[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
 			di.texel_weights_4t[j][i] = wb.grid_weights_of_texel[i][j];
 		}
 	}
@@ -618,7 +618,7 @@ static void init_decimation_info_3d(
 	for (unsigned int i = 0; i < weights_per_block; i++)
 	{
 		unsigned int texel_count_wt = wb.texel_count_of_weight[i];
-		di.weight_texel_count[i] = (uint8_t)texel_count_wt;
+		di.weight_texel_count[i] = static_cast<uint8_t>(texel_count_wt);
 
 		for (unsigned int j = 0; j < texel_count_wt; j++)
 		{
@@ -782,7 +782,7 @@ static void construct_dt_entry_2d(
 	int maxprec_2planes = -1;
 	for (int i = 0; i < 12; i++)
 	{
-		unsigned int bits_1plane = get_ise_sequence_bitcount(weight_count, (quant_method)i);
+		unsigned int bits_1plane = get_ise_sequence_bitcount(weight_count, static_cast<quant_method>(i));
 		if (bits_1plane >= BLOCK_MIN_WEIGHT_BITS && bits_1plane <= BLOCK_MAX_WEIGHT_BITS)
 		{
 			maxprec_1plane = i;
@@ -790,7 +790,7 @@ static void construct_dt_entry_2d(
 
 		if (try_2planes)
 		{
-			unsigned int bits_2planes = get_ise_sequence_bitcount(2 * weight_count, (quant_method)i);
+			unsigned int bits_2planes = get_ise_sequence_bitcount(2 * weight_count, static_cast<quant_method>(i));
 			if (bits_2planes >= BLOCK_MIN_WEIGHT_BITS && bits_2planes <= BLOCK_MAX_WEIGHT_BITS)
 			{
 				maxprec_2planes = i;
@@ -976,7 +976,7 @@ static void construct_block_size_descriptor_2d(
 	bsd.block_mode_count_1plane_always = bm_counts[0];
 	bsd.block_mode_count_1plane_selected = bm_counts[0] + bm_counts[1];
 	bsd.block_mode_count_1plane_2plane_selected = bm_counts[0] + bm_counts[1] + bm_counts[2];
-	bsd.block_mode_count_all =  bm_counts[0] + bm_counts[1] + bm_counts[2] + bm_counts[3];
+	bsd.block_mode_count_all = bm_counts[0] + bm_counts[1] + bm_counts[2] + bm_counts[3];
 
 	bsd.decimation_mode_count_always = dm_counts[0];
 	bsd.decimation_mode_count_selected = dm_counts[0] + dm_counts[1] + dm_counts[2];
@@ -1060,13 +1060,13 @@ static void construct_block_size_descriptor_3d(
 				int maxprec_2planes = -1;
 				for (unsigned int i = 0; i < 12; i++)
 				{
-					unsigned int bits_1plane = get_ise_sequence_bitcount(weight_count, (quant_method)i);
+					unsigned int bits_1plane = get_ise_sequence_bitcount(weight_count, static_cast<quant_method>(i));
 					if (bits_1plane >= BLOCK_MIN_WEIGHT_BITS && bits_1plane <= BLOCK_MAX_WEIGHT_BITS)
 					{
 						maxprec_1plane = i;
 					}
 
-					unsigned int bits_2planes = get_ise_sequence_bitcount(2 * weight_count, (quant_method)i);
+					unsigned int bits_2planes = get_ise_sequence_bitcount(2 * weight_count, static_cast<quant_method>(i));
 					if (bits_2planes >= BLOCK_MIN_WEIGHT_BITS && bits_2planes <= BLOCK_MAX_WEIGHT_BITS)
 					{
 						maxprec_2planes = i;
