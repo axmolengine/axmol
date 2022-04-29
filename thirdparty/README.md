@@ -1,7 +1,7 @@
 # The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4896 branch on chromium/4896 @Google Chrome 100.0.4896.127
+- Version: git 2.1-e37380e (18155) on branch `chromium/4951` @Google Chrome 101.0.4951.41
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -21,8 +21,9 @@
 
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: 3.23
+- Version: 3.24
 - License: zlib
+- Update method: Compare `adxe/thirdparty/bullet` with `bullet3/src`
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
