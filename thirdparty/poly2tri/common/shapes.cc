@@ -35,6 +35,10 @@
 
 namespace p2t {
 
+Point::Point(double x, double y) : x(x), y(y)
+{
+}
+
 std::ostream& operator<<(std::ostream& out, const Point& point) {
   return out << point.x << "," << point.y;
 }
@@ -82,13 +86,11 @@ void Triangle::MarkNeighbor(Triangle& t)
 void Triangle::Clear()
 {
     Triangle *t;
-    for( int i=0; i<3; i++ )
-    {
-        t = neighbors_[i];
-        if( t != nullptr )
-        {
-            t->ClearNeighbor( this );
-        }
+    for (auto& neighbor : neighbors_) {
+      t = neighbor;
+      if (t != nullptr) {
+        t->ClearNeighbor(this);
+      }
     }
     ClearNeighbors();
     points_[0]=points_[1]=points_[2] = nullptr;
@@ -406,4 +408,4 @@ bool IsDelaunay(const std::vector<p2t::Triangle*>& triangles)
   return true;
 }
 
-}
+} // namespace p2t
