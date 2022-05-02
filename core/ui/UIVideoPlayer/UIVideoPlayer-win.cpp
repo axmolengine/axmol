@@ -115,7 +115,7 @@ vec4 inYUY2(vec4 tempyuv, float isOdd)
 vec4 limitedYCbCrToComputerRGBNormalized(vec4 yuv)
 {
 	vec4 rgb = vec4(0.0);
-	float scale = 1.0f / 256.0f;
+	float scale = 1.0 / 256.0;
 	
 	yuv = yuv * 255.0;
 	
@@ -127,9 +127,9 @@ vec4 limitedYCbCrToComputerRGBNormalized(vec4 yuv)
 	rgb.g = scale * ((298.082 * yuv.r) + (-54.592 * yuv.g) + (-136.425 * yuv.b));
 	rgb.b = scale * ((298.082 * yuv.r) + (540.775 * yuv.g));
 	
-	rgb.a = 255.0f;
+	rgb.a = 255.0;
 	
-	rgb = rgb / 255.0f;
+	rgb = rgb / 255.0;
 	
 	return rgb;
 }
@@ -164,9 +164,9 @@ vec4 fullYCbCrToComputerRGBNormalized(vec4 yuv)
 	rgb.g = scale * ((256.0 * yuv.r) + (-47.954944 * yuv.g) + (-119.839744 * yuv.b));
 	rgb.b = scale * ((256.0 * yuv.r) + (475.0336 * yuv.g));
 	
-	rgb.a = 255.0f;
+	rgb.a = 255.0;
 	
-	rgb = rgb / 255.0f;
+	rgb = rgb / 255.0;
 	
 	return rgb;
 }
