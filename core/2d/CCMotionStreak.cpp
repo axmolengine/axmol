@@ -101,7 +101,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     _stroke    = stroke;
     _fadeDelta = 1.0f / fade;
 
-    // Fix animation interval 0 because of vsync being off
+    // Fix #629 Motion streak vsync off crash
     double interval = _director->getAnimationInterval();
     double fps      = 1 / interval;
     if (roundf(fps) == INFINITY)
