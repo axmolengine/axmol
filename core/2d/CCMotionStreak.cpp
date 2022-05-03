@@ -101,7 +101,12 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     _stroke    = stroke;
     _fadeDelta = 1.0f / fade;
 
-    double fps = 1 / _director->getAnimationInterval();
+    // Fix animation interval 0 because of vsync being off
+    double interval = _director->getAnimationInterval();
+    double fps      = 1 / interval;
+    if (roundf(fps) == (float)(1e+300 * 1e+300))
+        fps = 60.0;
+
     _maxPoints = (int)(fade * fps) + 2;
 
     _pointState    = (float*)malloc(sizeof(float) * _maxPoints);
