@@ -105,7 +105,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     double interval = _director->getAnimationInterval();
     double fps      = 1 / interval;
     if (roundf(fps) == INFINITY)
-        fps = 60.0;
+        fps = 240.0;
 
     _maxPoints = (int)(fade * fps) + 2;
 
