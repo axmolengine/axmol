@@ -109,9 +109,9 @@ void main()
     tXY.y += 0.015625; // why needs adjust 1.0/64 ?
     YUV.yz = texture2D(u_texture1, tXY).xw;
 
-	/* For single sampler */
+    /* For single sampler */
     //vec2 tXY = v_texCoord * uv_scale;
-	//YUV.x = texture2D(u_texture, tXY).x;
+    //YUV.x = texture2D(u_texture, tXY).x;
     //
     //tXY.y *= 0.5;
     //tXY.y += 2.0 / 3.0;
@@ -169,12 +169,12 @@ void main()
 
     vec3 YUV;
     
-	/* For dual sampler */
+    /* For dual sampler */
     YUV.yz = texture2D(u_texture1, tXY).yw;
     YUV.x = texture2D(u_texture, v_texCoord).x;
 	
-	/* For single sampler */
-	//YUV.yz = texture2D(u_texture, tXY).yw;
+    /* For single sampler */
+    //YUV.yz = texture2D(u_texture, tXY).yw;
     //
     //vec4 YUY2P = texture2D(u_texture, tXY);
     //float Pos = v_texCoord.x * out_w;
