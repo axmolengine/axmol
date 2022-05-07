@@ -39,7 +39,7 @@
 #    include "yasio/detail/byte_buffer.hpp"
 #    include "ntcvt/ntcvt.hpp"
 #    include "ui/LayoutHelper.h"
-
+#    include "yasio/detail/sz.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
 USING_NS_CC;
@@ -58,6 +58,19 @@ using namespace cocos2d::ui;
 
 namespace
 {
+/*
+* refer to: https://github.com/doyoulikerock/D3D11NV12Rendering/blob/master/D3D11NV12Rendering/PixelShader.hlsl
+// Converting 8-bit YUV to RGB888
+static const float3x3 YUVtoRGBCoeffMatrix =
+{
+    1.164383,  1.164383, 1.164383,
+    0.000000, -0.391762, 2.017232,
+    1.596027, -0.812968, 0.000000
+};
+*/
+
+// refer to:
+// https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering#nv12
 std::string_view NV12_FRAG = R"(
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
@@ -69,28 +82,59 @@ varying vec2 v_texCoord;
 
 uniform sampler2D u_texture; // Y sample
 uniform sampler2D u_texture1; // UV sample
+uniform vec2 uv_scale;
+uniform float out_w;
+
+const mat3 YUVtoRGBCoeff = mat3(
+    1.16438356, 1.16438356,  1.16438356,
+    0.00000000, -0.213237017, 2.11241937,
+    1.79265225, -0.533004045, 0.00000000
+);
+
+const vec3 YUVOffsets = vec3(0.0627451017, 0.501960814, 0.501960814);
+
+vec3 YuvToRgb(vec3 YUV)
+{
+    YUV -= YUVOffsets;
+    return YUVtoRGBCoeff * YUV;
+}
 
 void main()
 {
-    // refer to: 
-    // a. https://gist.github.com/crearo/0d50442145b63c6c288d1c1675909990
-    // b. https://github.com/tqk2811/TqkLibrary.Media.VideoPlayer/blob/38a2dce908215045cc27cffb741a6e4b8492c9cd/TqkLibrary.Media.VideoPlayer.OpenGl/Renders/NV12Render.cs#L14
-    // c. https://www.cnblogs.com/nanqiang/p/10224867.html
-    
-    float cy = v_texCoord.y + 0.01625; // why needs adjust?
-    vec4 uvColor = texture2D(u_texture1, vec2(v_texCoord.x, cy));
-    vec3 yuv = vec3(texture2D(u_texture, v_texCoord).r, uvColor.r - 0.5, uvColor.a - 0.5);
+    vec3 YUV;
 
-    vec3 rgb = mat3( 1.0,       1.0,       1.0,
-                     0,        -0.39465,   2.03211,
-                     1.13983,  -0.58060,   0 ) * yuv;
+    /* For dual sampler */
+    vec2 tXY = v_texCoord;
+    YUV.x = texture2D(u_texture, tXY).x;
+    tXY.y += 0.015625; // why needs adjust 1.0/64 ?
+    YUV.yz = texture2D(u_texture1, tXY).xw;
 
-    gl_FragColor = v_fragmentColor * vec4(rgb, 1.0);
+	/* For single sampler */
+    //vec2 tXY = v_texCoord * uv_scale;
+	//YUV.x = texture2D(u_texture, tXY).x;
+    //
+    //tXY.y *= 0.5;
+    //tXY.y += 2.0 / 3.0;
+    //
+    //float UVOffs = floor(v_texCoord.x * out_w / 2.0) * 2;
+    //float UPos = ((UVOffs * uv_scale.x) + 0.5) / out_w;
+    //float VPos = ((UVOffs * uv_scale.x) + 1.5) / out_w;
+    //
+    //YUV.y = texture2D(u_texture, vec2(UPos, tXY.y)).x;
+    //YUV.z = texture2D(u_texture, vec2(VPos, tXY.y)).x;
+
+    /* Convert YUV to RGB */
+    vec4 OutColor;
+    OutColor.xyz = YuvToRgb(YUV);
+    OutColor.w = 1.0;
+
+    gl_FragColor = v_fragmentColor * OutColor;
 }
 )"sv;
 
+// refer to:
+// https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering#yuy2
 std::string_view YUY2_FRAG = R"(
-// refer to: https://github.com/TheRealNox/glsl-shaders/blob/master/glsl/colourConverter.f.glsl
 
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
@@ -101,97 +145,47 @@ varying vec2 v_texCoord;
 #endif
 
 uniform sampler2D u_texture; // Y sample
-uniform float tex_w; // texture width
-uniform float tex_h; // texture height
+uniform sampler2D u_texture1; // UV sample
+uniform vec2 uv_scale;
+uniform float out_w; // texture width
 
-vec4 inYUY2(vec4 tempyuv, float isOdd)
-{
-	if (isOdd > 0.0)
-		return vec4(tempyuv.b, tempyuv.g, tempyuv.a, 255.0);
-	else
-		return vec4(tempyuv.r, tempyuv.g, tempyuv.a, 255.0);
-}
+const mat3 YUVtoRGBCoeff = mat3(
+    1.16438356, 1.16438356,  1.16438356,
+    0.00000000, -0.213237017, 2.11241937,
+    1.79265225, -0.533004045, 0.00000000
+);
 
-vec4 limitedYCbCrToComputerRGBNormalized(vec4 yuv)
-{
-	vec4 rgb = vec4(0.0);
-	float scale = 1.0 / 256.0;
-	
-	yuv = yuv * 255.0;
-	
-	yuv.r -= 16.0;
-	yuv.g -= 128.0;
-	yuv.b -= 128.0;
-	
-	rgb.r = scale * ((298.082 * yuv.r) + (458.942 * yuv.b));
-	rgb.g = scale * ((298.082 * yuv.r) + (-54.592 * yuv.g) + (-136.425 * yuv.b));
-	rgb.b = scale * ((298.082 * yuv.r) + (540.775 * yuv.g));
-	
-	rgb.a = 255.0;
-	
-	rgb = rgb / 255.0;
-	
-	return rgb;
-}
+const vec3 YUVOffsets = vec3(0.0627451017, 0.501960814, 0.501960814);
 
-vec4 convertLimitedYUY2toComputerRGB()
+vec3 YuvToRgb(vec3 YUV)
 {
-	vec4 tempyuv = vec4(0.0);
-	vec2 textureRealSize = vec2(tex_w, tex_h);
-	
-	vec2 pixelPos = vec2(textureRealSize.x * v_texCoord.x, textureRealSize.y * v_texCoord.y);
-	
-	float isOdd = floor(mod(pixelPos.x, 2.0));
-	
-	vec2 packedCoor = vec2(v_texCoord.x/2.0, v_texCoord.y);
-	
-	tempyuv = inYUY2(texture2D(u_texture, packedCoor), isOdd);
-	
-	return limitedYCbCrToComputerRGBNormalized(tempyuv);
-}
-
-vec4 fullYCbCrToComputerRGBNormalized(vec4 yuv)
-{
-	vec4 rgb = vec4(0.0);
-	float scale = 1.0 / 256.0;
-	
-	yuv = yuv * 255.0;
-	
-	yuv.g -= 128.0;
-	yuv.b -= 128.0;
-	
-	rgb.r = scale * ((256.0 * yuv.r) + (403.1488 * yuv.b));
-	rgb.g = scale * ((256.0 * yuv.r) + (-47.954944 * yuv.g) + (-119.839744 * yuv.b));
-	rgb.b = scale * ((256.0 * yuv.r) + (475.0336 * yuv.g));
-	
-	rgb.a = 255.0;
-	
-	rgb = rgb / 255.0;
-	
-	return rgb;
-}
-
-vec4 convertFullYUY2toComputerRGB()
-{
-	vec4 tempyuv = vec4(0.0);
-	// vec2 textureRealSize = textureSize(u_texture, 0);
-    vec2 textureRealSize = vec2(tex_w, tex_h);
-	
-	vec2 pixelPos = vec2(textureRealSize.x * v_texCoord.x, textureRealSize.y * v_texCoord.y);
-	
-	float isOdd = floor(mod(pixelPos.x, 2.0));
-	
-	vec2 packedCoor = vec2(v_texCoord.x/2.0, v_texCoord.y);
-	
-	tempyuv = inYUY2(texture2D(u_texture, packedCoor), isOdd);
-	
-	return fullYCbCrToComputerRGBNormalized(tempyuv);
+    YUV -= YUVOffsets;
+    return YUVtoRGBCoeff * YUV;
 }
 
 void main()
 {
-  vec4 color = convertFullYUY2toComputerRGB();
-  gl_FragColor = v_fragmentColor * vec4(color.rgb, 1.0);
+    vec2 tXY = v_texCoord * uv_scale;
+
+    vec3 YUV;
+    
+	/* For dual sampler */
+    YUV.yz = texture2D(u_texture1, tXY).yw;
+    YUV.x = texture2D(u_texture, v_texCoord).x;
+	
+	/* For single sampler */
+	//YUV.yz = texture2D(u_texture, tXY).yw;
+    //
+    //vec4 YUY2P = texture2D(u_texture, tXY);
+    //float Pos = v_texCoord.x * out_w;
+    //YUV.x = floor(mod(Pos, 2.0)) == 0.0 ? YUY2P.z : YUY2P.x;
+
+    /* Convert YUV to RGB */
+    vec4 OutColor;
+    OutColor.xyz = YuvToRgb(YUV);
+    OutColor.w = 1.0;
+
+    gl_FragColor = v_fragmentColor * OutColor;
 }
 )"sv;
 
@@ -244,7 +238,8 @@ struct PrivateVideoDescriptor
                 }
                 else
                 {
-                    const Vec2 originalScale{1.0f, _sampleFormat == VideoSampleFormat::YUY2 ? 2.0f : 1.0f};
+                    const Vec2 originalScale{static_cast<float>(_videoWidth) / _vtexture->getPixelsWide(),
+                                             static_cast<float>(_videoHeight) / _vtexture->getPixelsHigh()};
 
                     const auto aspectRatio =
                         (std::min)(viewSize.x / videoSize.x, viewSize.y / (videoSize.y * originalScale.y));
@@ -409,13 +404,16 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             std::lock_guard<std::recursive_mutex> lck(pvd->_sampleBufferMtx);
             uint8_t* sampleData  = pvd->_sampleBuffer.data();
             size_t sampleDataLen = pvd->_sampleBuffer.size();
-            auto w = pvd->_videoWidth = pvd->_vplayer->GetVideoWidth();
-            auto h = pvd->_videoHeight = pvd->_vplayer->GetVideoHeight();
+            auto rWidth = pvd->_videoWidth = pvd->_vplayer->GetVideoWidth();
+            auto rHeight = pvd->_videoHeight = pvd->_vplayer->GetVideoHeight();
+
+            Vec2 uvScale{1.0f, 1.0f};
 
             bool needsInit = !pvd->_vtexture;
             if (!pvd->_vtexture)
             {
-                pvd->_vtexture    = new Texture2D();
+                pvd->_vtexture = new Texture2D();
+
                 auto programCache = backend::ProgramCache::getInstance();
 
                 auto& sampleOutFormat = pvd->_vplayer->GetVideoOutputFormat();
@@ -434,7 +432,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
                 {
                     programCache->registerCustomProgramFactory(
                         VIDEO_PROGRAM_ID, positionTextureColor_vert,
-                        std::string{pvd->_sampleFormat == VideoSampleFormat::YUY2 ? YUY2_FRAG : NV12_FRAG});
+                        std::string{pvd->_sampleFormat == VideoSampleFormat::NV12 ? NV12_FRAG : YUY2_FRAG});
                     auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
                     pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
                     break;
@@ -445,22 +443,43 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
             switch (pvd->_sampleFormat)
             {
-            case VideoSampleFormat::YUY2:
-                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w,
-                                               h / 2, false, 0);
-                break;
             case VideoSampleFormat::NV12:
             {
-                const size_t ySampleSize = w * h;
-                pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, w, h, false,
-                                               0);
+                /* For single sampler */
+                // int texelWidth  = YASIO_SZ_ALIGN(rWidth, 16);
+                // int texelHeight = pvd->_vplayer->IsH264() ? YASIO_SZ_ALIGN(rHeight, 16) * 3 / 2 : rHeight * 3 / 2;
+                // uvScale.x       = rWidth / (float)texelWidth;
+                // uvScale.y       = rHeight / (float)texelHeight;
+                // pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::L8, PixelFormat::L8, texelWidth,
+                //                               texelHeight, false);
+
+                /* For dual sampler */
+                const int ySampleSize = rWidth * rHeight;
+                pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, rWidth,
+                                               rHeight, false, 0);
                 pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
-                                               PixelFormat::LA8, w >> 1, h >> 1, false, 1);
+                                               PixelFormat::LA8, rWidth >> 1, rHeight >> 1, false, 1);
+                break;
+            }
+            case VideoSampleFormat::YUY2:
+            {
+                int texelWidth = pvd->_vplayer->IsH264() ? (YASIO_SZ_ALIGN(rWidth, 16)) : (rWidth);
+                uvScale.x      = (float)rWidth / texelWidth;
+
+                /* For single sampler */
+                // pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
+                //                               texelWidth >> 1, rHeight, false, 0);
+
+                /* For dual sampler */
+                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::LA8, PixelFormat::LA8,
+                                               texelWidth, rHeight, false, 0);
+                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
+                                               texelWidth >> 1, rHeight, false, 1);
                 break;
             }
             case VideoSampleFormat::RGB32:
-                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, w, h,
-                                               false, 0);
+                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
+                                               rWidth, rHeight, false, 0);
                 break;
             default:;
             }
@@ -468,11 +487,11 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             {
                 pvd->_vrender->initWithTexture(pvd->_vtexture);
 
-                if (pvd->_sampleFormat == VideoSampleFormat::YUY2)
+                if (pvd->_sampleFormat == VideoSampleFormat::NV12 || pvd->_sampleFormat == VideoSampleFormat::YUY2)
                 {
                     auto ps = pvd->_vrender->getProgramState();
-                    PS_SET_UNIFORM(ps, "tex_w", (float)w);
-                    PS_SET_UNIFORM(ps, "tex_h", (float)h);
+                    PS_SET_UNIFORM(ps, "out_w", (float)rWidth);
+                    PS_SET_UNIFORM(ps, "uv_scale", uvScale);
                 }
 
                 pvd->_scaleDirty = true;
