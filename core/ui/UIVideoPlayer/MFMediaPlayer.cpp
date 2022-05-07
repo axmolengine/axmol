@@ -455,7 +455,7 @@ HRESULT MFMediaPlayer::Invoke(IMFAsyncResult* pResult)
 
         // if (!m_hwndEvent)
         //    HandleEvent((WPARAM)pEvent.Get());
-        //else
+        // else
         //    PostMessage(m_hwndEvent, WM_APP_PLAYER_EVENT, (WPARAM)pEvent.Get(), (LPARAM)0);
     }
 
@@ -648,7 +648,7 @@ HRESULT MFMediaPlayer::Play()
 
     if (m_pSession == NULL || m_pSource == NULL)
         return E_UNEXPECTED;
-    
+
     AutoLock lock(m_critsec);
 
     // If another operation is pending, cache the request.
@@ -1562,12 +1562,9 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
         GUID SubType;
         CHECK_HR(hr = InputType->GetGUID(MF_MT_SUBTYPE, &SubType));
 
-        TComPtr<IMFMediaType> OutputType;
-        CHECK_HR(hr = ::MFCreateMediaType(&OutputType));
-        CHECK_HR(hr = OutputType->SetUINT32(MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE));
-        CHECK_HR(hr = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video));
+        m_bIsH264 = SubType == MFVideoFormat_H264 || SubType == MFVideoFormat_H264_ES;
 
-        GUID VideoOutputFormat = {};
+        GUID VideoOutputFormat;
         if ((SubType == MFVideoFormat_HEVC) || (SubType == MFVideoFormat_HEVC_ES) || (SubType == MFVideoFormat_NV12) ||
             (SubType == MFVideoFormat_IYUV))
         {
@@ -1582,6 +1579,10 @@ HRESULT MFMediaPlayer::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopol
             VideoOutputFormat = Uncompressed ? MFVideoFormat_RGB32 : MFVideoFormat_YUY2;
         }
 
+        TComPtr<IMFMediaType> OutputType;
+        CHECK_HR(hr = ::MFCreateMediaType(&OutputType));
+        CHECK_HR(hr = OutputType->SetUINT32(MF_MT_ALL_SAMPLES_INDEPENDENT, TRUE));
+        CHECK_HR(hr = OutputType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video));
         CHECK_HR(hr = OutputType->SetGUID(MF_MT_SUBTYPE, VideoOutputFormat));
 
         CHECK_HR(hr = ::MFCreateSampleGrabberSinkActivate(OutputType.Get(), Sampler.Get(), &pRendererActivate));

@@ -156,6 +156,8 @@ public:
     HRESULT Pause();
     HRESULT Stop();
 
+    BOOL IsH264() const { return m_bIsH264; }
+
 protected:
     HRESULT SetPositionInternal(const MFTIME& hnsPosition);
     HRESULT StartPlayback(const MFTIME* hnsPosition);
@@ -231,5 +233,6 @@ protected:
     BOOL m_bLooping = FALSE;
     BOOL m_bPlayOnOpen = TRUE;
 
+    BOOL m_bIsH264 = FALSE;
     GUID m_VideoOutputFormat{};
 };
