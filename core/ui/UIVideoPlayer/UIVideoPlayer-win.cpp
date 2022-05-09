@@ -104,24 +104,24 @@ void main()
     vec3 YUV;
 
     /* For dual sampler */
-    vec2 tXY = v_texCoord;
-    YUV.x = texture2D(u_texture, tXY).x;
-    tXY.y += 0.015625; // why needs adjust 1.0/64 ?
-    YUV.yz = texture2D(u_texture1, tXY).xw;
+    //vec2 tXY = v_texCoord;
+    //YUV.x = texture2D(u_texture, tXY).x;
+    //tXY.y += 0.015625; // why needs adjust 1.0/64 ?
+    //YUV.yz = texture2D(u_texture1, tXY).xw;
 
     /* For single sampler */
-    //vec2 tXY = v_texCoord * uv_scale;
-    //YUV.x = texture2D(u_texture, tXY).x;
-    //
-    //tXY.y *= 0.5;
-    //tXY.y += 2.0 / 3.0;
-    //
-    //float UVOffs = floor(v_texCoord.x * out_w / 2.0) * 2;
-    //float UPos = ((UVOffs * uv_scale.x) + 0.5) / out_w;
-    //float VPos = ((UVOffs * uv_scale.x) + 1.5) / out_w;
-    //
-    //YUV.y = texture2D(u_texture, vec2(UPos, tXY.y)).x;
-    //YUV.z = texture2D(u_texture, vec2(VPos, tXY.y)).x;
+    vec2 tXY = v_texCoord * uv_scale;
+    YUV.x = texture2D(u_texture, tXY).x;
+    
+    tXY.y *= 0.5;
+    tXY.y += 2.0 / 3.0;
+    
+    float UVOffs = floor(v_texCoord.x * out_w / 2.0) * 2;
+    float UPos = ((UVOffs * uv_scale.x) + 0.5) / out_w;
+    float VPos = ((UVOffs * uv_scale.x) + 1.5) / out_w;
+    
+    YUV.y = texture2D(u_texture, vec2(UPos, tXY.y)).x;
+    YUV.z = texture2D(u_texture, vec2(VPos, tXY.y)).x;
 
     /* Convert YUV to RGB */
     vec4 OutColor;
@@ -171,7 +171,7 @@ void main()
     
     /* For dual sampler */
     YUV.yz = texture2D(u_texture1, tXY).yw;
-    YUV.x = texture2D(u_texture, v_texCoord).x;
+    YUV.x = texture2D(u_texture, tXY).x;
 	
     /* For single sampler */
     //YUV.yz = texture2D(u_texture, tXY).yw;
@@ -446,19 +446,19 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             case VideoSampleFormat::NV12:
             {
                 /* For single sampler */
-                // int texelWidth  = YASIO_SZ_ALIGN(rWidth, 16);
-                // int texelHeight = pvd->_vplayer->IsH264() ? YASIO_SZ_ALIGN(rHeight, 16) * 3 / 2 : rHeight * 3 / 2;
-                // uvScale.x       = rWidth / (float)texelWidth;
-                // uvScale.y       = rHeight / (float)texelHeight;
-                // pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::L8, PixelFormat::L8, texelWidth,
-                //                               texelHeight, false);
+                int texelWidth  = YASIO_SZ_ALIGN(rWidth, 16);
+                int texelHeight = pvd->_vplayer->IsH264() ? YASIO_SZ_ALIGN(rHeight, 16) * 3 / 2 : rHeight * 3 / 2;
+                uvScale.x       = rWidth / (float)texelWidth;
+                uvScale.y       = rHeight / (float)texelHeight;
+                pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::L8, PixelFormat::L8, texelWidth,
+                                              texelHeight, false);
 
                 /* For dual sampler */
-                const int ySampleSize = rWidth * rHeight;
-                pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, rWidth,
-                                               rHeight, false, 0);
-                pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
-                                               PixelFormat::LA8, rWidth >> 1, rHeight >> 1, false, 1);
+                // const int ySampleSize = rWidth * rHeight;
+                // pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, rWidth,
+                //                                rHeight, false, 0);
+                // pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
+                //                               PixelFormat::LA8, rWidth >> 1, rHeight >> 1, false, 1);
                 break;
             }
             case VideoSampleFormat::YUY2:
