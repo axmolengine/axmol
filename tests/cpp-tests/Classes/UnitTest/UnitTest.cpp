@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -27,6 +27,7 @@
 #include "ui/UIHelper.h"
 #include "network/Uri.h"
 #include "base/ccUtils.h"
+#include "yasio/detail/byte_buffer.hpp"
 
 USING_NS_CC;
 using namespace cocos2d::network;
@@ -1706,20 +1707,20 @@ void ResizableBufferAdapterTest::onEnter()
 {
     UnitTestDemo::onEnter();
 
-    Data data;
-    ResizableBufferAdapter<Data> buffer(&data);
+    
+    yasio::byte_buffer buffer;
 
     FileUtils::getInstance()->getContents("effect1.wav", &buffer);
-    EXPECT_EQ(data.getSize(), 10026);
+    EXPECT_EQ(buffer.size(), 10026);
 
     FileUtils::getInstance()->getContents("effect2.ogg", &buffer);
-    EXPECT_EQ(data.getSize(), 4278);
+    EXPECT_EQ(buffer.size(), 4278);
 
     FileUtils::getInstance()->getContents("effect1.wav", &buffer);
-    EXPECT_EQ(data.getSize(), 10026);
+    EXPECT_EQ(buffer.size(), 10026);
 }
 
 std::string ResizableBufferAdapterTest::subtitle() const
 {
-    return "ResiziableBufferAdapter<Data> Test";
+    return "ResiziableBufferAdapter<yasio::byte_buffer> Test";
 }
