@@ -96,12 +96,7 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
                 }
 #endif
 
-                cocos2d::Texture2D::setDefaultAlphaPixelFormat(pixelFormat);
-                texture = textureCache->addImage(textureAtlasData->imagePath);
-                if (texture != nullptr)
-                {
-                    cocos2d::Texture2D::setDefaultAlphaPixelFormat(defaultPixelFormat);
-                }
+                texture = textureCache->addImage(textureAtlasData->imagePath, pixelFormat);
             }
 
             static_cast<CCTextureAtlasData*>(textureAtlasData)->setRenderTexture(texture);

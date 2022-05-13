@@ -82,8 +82,8 @@ function BillBoardTest:init()
             cameraRightDir.y=0
 
             local cameraPos=  self._camera:getPosition3D()
-            cameraPos = cc.vec3add(cameraPos, cc.vec2mul(cameraDir, newPos.y * 0.5))
-            cameraPos = cc.vec3add(cameraPos, cc.vec2mul(cameraRightDir, newPos.x * 0.5))
+            cameraPos = cc.vec3add(cameraPos, cc.vec3mul(cameraDir, newPos.y * 0.5))
+            cameraPos = cc.vec3add(cameraPos, cc.vec3mul(cameraRightDir, newPos.x * 0.5))
             self._camera:setPosition3D(cameraPos)
         end
     end, cc.Handler.EVENT_TOUCHES_MOVED)
@@ -143,7 +143,7 @@ function BillBoardTest:init()
     self:addNewAniBillBoardWithCoords(cc.vec3(-140,0,0))
     self:addNewAniBillBoardWithCoords(cc.vec3(-180,0,0))
 
-    self._camera:setPosition(cc.vec3(0, 130, 230))
+    self._camera:setPosition3D(cc.vec3(0, 130, 230))
     self._camera:lookAt(cc.vec3(0, 0, 100), cc.vec3(0, 1, 0))
 
     local ttfConfig = {}

@@ -263,6 +263,20 @@ private:
     void copy(const LuaValue& rhs);
 };
 
+inline std::string adxelua_tostr(lua_State* L, int arg)
+{
+    size_t l      = 0;
+    const char* s = lua_tolstring(L, arg, &l);
+    return std::string{s, l};
+}
+
+inline std::string_view adxelua_tosv(lua_State* L, int arg)
+{
+    size_t l      = 0;
+    const char* s = lua_tolstring(L, arg, &l);
+    return std::string_view{s, l};
+}
+
 NS_CC_END
 
 // end group

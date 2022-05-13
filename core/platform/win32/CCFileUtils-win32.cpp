@@ -112,7 +112,7 @@ bool FileUtilsWin32::init()
     _checkExePath();
 
     bool startedFromSelfLocation = s_workingDir == s_exeDir;
-    if (!startedFromSelfLocation)
+    if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_PC_RESOURCES_DIR))
         _defaultResRootPath = s_workingDir;
     else
     {

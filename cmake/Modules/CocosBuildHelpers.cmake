@@ -348,7 +348,7 @@ function(setup_cocos_app_config app_name)
     if(BUILD_SHARED_LIBS)
         target_compile_definitions(${app_name} PRIVATE SPINEPLUGIN_API=DLLIMPORT) # spine dll
     endif()
-    target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
+    target_link_libraries(${app_name} ${_AX_EXTENSION_LIBS})
 
     if(XCODE AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework

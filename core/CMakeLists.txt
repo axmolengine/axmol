@@ -196,10 +196,10 @@ endif()
 # engine extensions
 add_subdirectory(${ADXE_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
-if(MSVC_IDE)
+if(MSVC)
     target_sources(${ADXE_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
     target_sources(${ADXE_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
-    target_compile_options(${ADXE_CORE_LIB} PRIVATE "/Zm2000")
+    target_compile_options(${ADXE_CORE_LIB} PUBLIC "/Zm2000")
 endif()
 
 # copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>

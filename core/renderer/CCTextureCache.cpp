@@ -4,7 +4,8 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 C4games Ltd
+Copyright (c) 2020 C4games Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -355,7 +356,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
                 // ETC1 ALPHA supports.
                 if (asyncStruct->imageAlpha.getFileType() == Image::Format::ETC1)
                 {
-                    texture->updateWithImage(&asyncStruct->imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1);
+                    texture->updateWithImage(&asyncStruct->imageAlpha, asyncStruct->pixelFormat, 1);
                 }
             }
             else
@@ -385,6 +386,11 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
 
 Texture2D* TextureCache::addImage(std::string_view path)
 {
+    return addImage(path, Texture2D::getDefaultAlphaPixelFormat());
+}
+
+Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
+{
     Texture2D* texture = nullptr;
     Image* image       = nullptr;
     // Split up directory and filename
@@ -412,7 +418,7 @@ Texture2D* TextureCache::addImage(std::string_view path)
 
             texture = new Texture2D();
 
-            if (texture->initWithImage(image))
+            if (texture->initWithImage(image, format))
             {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
                 // cache the texture file name
@@ -430,7 +436,7 @@ Texture2D* TextureCache::addImage(std::string_view path)
                     Image imageAlpha;
                     if (imageAlpha.initWithImageFile(alphaFullPath))
                     {
-                        texture->updateWithImage(&imageAlpha, Texture2D::getDefaultAlphaPixelFormat(), 1);
+                        texture->updateWithImage(&imageAlpha, format, 1);
                     }
                 }
 
@@ -463,6 +469,11 @@ void TextureCache::parseNinePatchImage(cocos2d::Image* image, cocos2d::Texture2D
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key)
 {
+    return addImage(image, key, Texture2D::getDefaultAlphaPixelFormat());
+}
+
+Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelFormat format)
+{
     CCASSERT(image != nullptr, "TextureCache: image MUST not be nil");
     CCASSERT(image->getData() != nullptr, "TextureCache: image MUST not be nil");
 
@@ -478,7 +489,7 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key)
         }
 
         texture = new Texture2D();
-        if (texture->initWithImage(image))
+        if (texture->initWithImage(image, format))
         {
             _textures.emplace(key, texture);
         }

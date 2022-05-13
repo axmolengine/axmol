@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -245,11 +245,11 @@ static int tolua_cocos2d_MenuItemImage_create(lua_State* tolua_S)
                 ok = true;
                 break;
             }
-            const std::string normalImage   = ((const std::string)tolua_tocppstring(tolua_S, 2, 0));
-            const std::string selectedImage = ((const std::string)tolua_tocppstring(tolua_S, 3, 0));
-            MenuItemImage* tolua_ret        = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage);
-            int nID                         = (tolua_ret) ? (int)tolua_ret->_ID : -1;
-            int* pLuaID                     = (tolua_ret) ? &tolua_ret->_luaID : NULL;
+            auto normalImage         = adxelua_tosv(tolua_S, 2);
+            auto selectedImage       = adxelua_tosv(tolua_S, 3);
+            MenuItemImage* tolua_ret = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage);
+            int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
+            int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
             toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "cc.MenuItemImage");
             return 1;
         }
@@ -266,9 +266,9 @@ static int tolua_cocos2d_MenuItemImage_create(lua_State* tolua_S)
                 break;
             }
 #endif
-            const std::string normalImage   = ((const std::string)tolua_tocppstring(tolua_S, 2, 0));
-            const std::string selectedImage = ((const std::string)tolua_tocppstring(tolua_S, 3, 0));
-            const std::string disabledImage = ((const std::string)tolua_tocppstring(tolua_S, 4, 0));
+            auto normalImage   = adxelua_tosv(tolua_S, 2);
+            auto selectedImage = adxelua_tosv(tolua_S, 3);
+            auto disabledImage = adxelua_tosv(tolua_S, 4);
 
             MenuItemImage* tolua_ret = (MenuItemImage*)MenuItemImage::create(normalImage, selectedImage, disabledImage);
             int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
@@ -352,7 +352,7 @@ static int tolua_cocos2d_MenuItemFont_create(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
-        const std::string value = ((const std::string)tolua_tocppstring(tolua_S, 2, 0));
+        auto value              = adxelua_tosv(tolua_S, 2);
         MenuItemFont* tolua_ret = (MenuItemFont*)MenuItemFont::create(value);
         int nID                 = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID             = (tolua_ret) ? &tolua_ret->_luaID : NULL;
@@ -2293,7 +2293,7 @@ static int lua_cocos2dx_Node_enumerateChildren(lua_State* tolua_S)
         }
 #endif
 
-        std::string name     = (std::string)tolua_tocppstring(tolua_S, 2, 0);
+        std::string name     = adxelua_tostr(tolua_S, 2);
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 3, 0);
 
         cobj->enumerateChildren(name, [=](Node* node) -> bool {
@@ -4631,7 +4631,7 @@ static int tolua_cocos2d_LuaEventListenerCustom_create(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
-        const std::string eventName             = ((const std::string)tolua_tocppstring(tolua_S, 2, 0));
+        auto eventName                          = adxelua_tosv(tolua_S, 2);
         LUA_FUNCTION handler                    = toluafix_ref_function(tolua_S, 3, 0);
         cocos2d::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
@@ -7428,7 +7428,7 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
 #endif
     {
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        std::string fileName = tolua_tocppstring(tolua_S, 3, "");
+        auto fileName        = adxelua_tosv(tolua_S, 3);
         cocos2d::utils::captureScreen(
             [=](bool succeed, std::string_view name) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
@@ -7460,7 +7460,7 @@ static int tolua_cocos2d_utils_findChildren(lua_State* tolua_S)
 #endif
     {
         cocos2d::Node* node         = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
-        std::string name            = tolua_tocppstring(tolua_S, 3, "");
+        auto name                   = adxelua_tosv(tolua_S, 3);
         std::vector<Node*> children = cocos2d::utils::findChildren(*node, name);
         lua_newtable(tolua_S);
         int index = 1;
@@ -7495,7 +7495,7 @@ static int tolua_cocos2d_utils_findChild(lua_State* tolua_S)
 #endif
     {
         cocos2d::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 1, nullptr));
-        std::string name    = tolua_tocppstring(tolua_S, 2, "");
+        auto name           = adxelua_tosv(tolua_S, 2);
         auto obj            = cocos2d::utils::findChild(node, name);
         int ID              = (obj) ? (int)obj->_ID : -1;
         int* luaID          = (obj) ? &obj->_luaID : NULL;
