@@ -76828,8 +76828,8 @@ int lua_cocos2dx_Sprite_initWithFile(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite:initWithFile");
 
             if (!ok) { break; }
-            cocos2d::Rect arg1;
-            ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.Sprite:initWithFile");
+            cocos2d::backend::PixelFormat arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.Sprite:initWithFile");
 
             if (!ok) { break; }
             bool ret = cobj->initWithFile(arg0, arg1);
@@ -76850,7 +76850,23 @@ int lua_cocos2dx_Sprite_initWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.Sprite:initWithFile",argc, 1);
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite:initWithFile");
+
+            if (!ok) { break; }
+            cocos2d::Rect arg1;
+            ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.Sprite:initWithFile");
+
+            if (!ok) { break; }
+            bool ret = cobj->initWithFile(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.Sprite:initWithFile",argc, 2);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -95285,12 +95301,12 @@ int lua_cocos2dx_TextureCache_addImage(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            cocos2d::Image* arg0;
-            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.TextureCache:addImage");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.TextureCache:addImage");
 
             if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCache:addImage");
+            cocos2d::backend::PixelFormat arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.TextureCache:addImage");
 
             if (!ok) { break; }
             cocos2d::Texture2D* ret = cobj->addImage(arg0, arg1);
@@ -95311,7 +95327,43 @@ int lua_cocos2dx_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.TextureCache:addImage",argc, 1);
+    do{
+        if (argc == 2) {
+            cocos2d::Image* arg0;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            cocos2d::Texture2D* ret = cobj->addImage(arg0, arg1);
+            object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            cocos2d::Image* arg0;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            cocos2d::backend::PixelFormat arg2;
+            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            cocos2d::Texture2D* ret = cobj->addImage(arg0, arg1, arg2);
+            object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.TextureCache:addImage",argc, 3);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
