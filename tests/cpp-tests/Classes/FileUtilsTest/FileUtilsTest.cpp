@@ -559,23 +559,6 @@ std::string TestWriteString::subtitle() const
     return "";
 }
 
-class CustomBuffer : public ResizableBuffer
-{};
-
-struct AlreadyExistsBuffer
-{};
-
-NS_CC_BEGIN
-template <>
-class ResizableBufferAdapter<AlreadyExistsBuffer> : public ResizableBuffer
-{
-public:
-    explicit ResizableBufferAdapter(AlreadyExistsBuffer* buffer) {}
-    virtual void resize(size_t size) override {}
-    virtual void* buffer() const override { return nullptr; }
-};
-NS_CC_END
-
 static void saveAsBinaryText(std::string_view filename, const std::vector<char>& binary)
 {
     auto fs = FileUtils::getInstance();
@@ -591,14 +574,6 @@ void TestGetContents::onEnter()
 {
     FileUtilsDemo::onEnter();
     auto fs = FileUtils::getInstance();
-
-    auto testIfCompiles = [fs]() {
-        fs->getContents("", (CustomBuffer*)(nullptr));
-        AlreadyExistsBuffer buf;
-        fs->getContents("", &buf);
-    };
-
-    (void)(testIfCompiles);
 
     auto winSize = Director::getInstance()->getWinSize();
 
