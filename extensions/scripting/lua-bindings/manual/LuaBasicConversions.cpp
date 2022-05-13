@@ -360,8 +360,8 @@ bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* f
     }
 
     // assertion: since we only have vec2, you should never passing rect as vec2 to native
-    const auto objlen = lua_objlen(L, -1);
-    assert(objlen == 2);
+    const auto objlen = lua_objlen(L, lo);
+    assert(objlen != 4);
 
     if (ok)
     {

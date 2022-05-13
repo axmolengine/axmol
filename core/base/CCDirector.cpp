@@ -1261,8 +1261,6 @@ void Director::createStatsLabel()
         FileUtils::getInstance()->purgeCachedEntries();
     }
 
-    backend::PixelFormat currentFormat = Texture2D::getDefaultAlphaPixelFormat();
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4);
     unsigned char* data = nullptr;
     ssize_t dataLength  = 0;
     getFPSImageData(&data, &dataLength);
@@ -1277,7 +1275,7 @@ void Director::createStatsLabel()
         return;
     }
 
-    texture = _textureCache->addImage(image, "/cc_fps_images");
+    texture = _textureCache->addImage(image, "/cc_fps_images", PixelFormat::RGBA4);
     CC_SAFE_RELEASE(image);
 
     /*
@@ -1304,8 +1302,6 @@ void Director::createStatsLabel()
     _drawnVerticesLabel->retain();
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
     _drawnVerticesLabel->setScale(scaleFactor);
-
-    Texture2D::setDefaultAlphaPixelFormat(currentFormat);
 
     auto safeOrigin          = getSafeAreaRect().origin;
     const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());

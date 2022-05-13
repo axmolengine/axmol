@@ -35,20 +35,6 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-static std::string adxelua_tostr(lua_State* L, int arg)
-{
-    size_t l      = 0;
-    const char* s = lua_tolstring(L, arg, &l);
-    return std::string{s, l};
-}
-
-static cxx17::string_view adxelua_tosv(lua_State* L, int arg)
-{
-    size_t l      = 0;
-    const char* s = lua_tolstring(L, arg, &l);
-    return cxx17::string_view{s, l};
-}
-
 extern "C" {
 int cocos2dx_lua_loader(lua_State* L)
 {

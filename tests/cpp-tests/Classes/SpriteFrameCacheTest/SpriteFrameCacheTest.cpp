@@ -2,6 +2,8 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -322,10 +324,7 @@ protected:
         if (pixelFormatIt != pixelFormats.end())
         {
             const backend::PixelFormat pixelFormat        = (*pixelFormatIt).second;
-            const backend::PixelFormat currentPixelFormat = Texture2D::getDefaultAlphaPixelFormat();
-            Texture2D::setDefaultAlphaPixelFormat(pixelFormat);
-            texture = Director::getInstance()->getTextureCache()->addImage(texturePath);
-            Texture2D::setDefaultAlphaPixelFormat(currentPixelFormat);
+            texture = Director::getInstance()->getTextureCache()->addImage(texturePath, pixelFormat);
         }
         else
         {

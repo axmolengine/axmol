@@ -4,7 +4,8 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2020 C4games Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -74,8 +75,13 @@ Sprite* Sprite::createWithTexture(Texture2D* texture, const Rect& rect, bool rot
 
 Sprite* Sprite::create(std::string_view filename)
 {
+    return Sprite::create(filename, Texture2D::getDefaultAlphaPixelFormat());
+}
+
+Sprite* Sprite::create(std::string_view filename, PixelFormat format)
+{
     Sprite* sprite = new Sprite();
-    if (sprite->initWithFile(filename))
+    if (sprite->initWithFile(filename, format))
     {
         sprite->autorelease();
         return sprite;
@@ -169,6 +175,11 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect)
 
 bool Sprite::initWithFile(std::string_view filename)
 {
+    return initWithFile(filename, Texture2D::getDefaultAlphaPixelFormat());
+}
+
+bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
+{
     if (filename.empty())
     {
         CCLOG("Call Sprite::initWithFile with blank resource filename.");
@@ -177,7 +188,7 @@ bool Sprite::initWithFile(std::string_view filename)
 
     _fileName = filename;
 
-    Texture2D* texture = _director->getTextureCache()->addImage(filename);
+    Texture2D* texture = _director->getTextureCache()->addImage(filename, format);
     if (texture)
     {
         Rect rect = Rect::ZERO;

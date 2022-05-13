@@ -2,6 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 
 set(APP_NAME cpp-tests)
 
+
+# "too large PDB" error often occurs in cpp-tests when using default "/Zi"
+if (MSVC)
+    string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+endif()
+
 project(${APP_NAME})
 
 if(NOT DEFINED BUILD_ENGINE_DONE)
@@ -503,15 +512,15 @@ if(WINDOWS OR MACOSX OR LINUX)
         Classes/ChipmunkTestBed/demo/Slice.c
         Classes/ChipmunkTestBed/demo/Unicycle.c
         Classes/ChipmunkTestBed/demo/Tumble.c)
-        if(WINDOWS)
-            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
-        else()
-            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
-        endif()
-		list(APPEND GAME_SOURCE
-			${TESTBED_C_SORUCES}
-			Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
-		)
+    if(WINDOWS)
+        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+    else()
+        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
+    endif()
+	list(APPEND GAME_SOURCE
+		${TESTBED_C_SORUCES}
+		Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
+	)
 endif()
 
 
@@ -566,8 +575,6 @@ if(APPLE)
     # For code-signing, set the DEVELOPMENT_TEAM:
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
-    # "too large PDB" error often occurs in cpp-tests when using default "/Zi"
-    target_compile_options(${APP_NAME} PRIVATE /Z7)
     cocos_copy_target_dll(${APP_NAME})
 endif()
 

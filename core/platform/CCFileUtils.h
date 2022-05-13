@@ -58,62 +58,22 @@ public:
     virtual ~ResizableBuffer() {}
     virtual void resize(size_t size) = 0;
     virtual void* buffer() const     = 0;
+    virtual size_t size() const      = 0;
 };
 
 template <typename T>
-class ResizableBufferAdapter
-{};
-
-template <typename CharT, typename Traits, typename Allocator>
-class ResizableBufferAdapter<std::basic_string<CharT, Traits, Allocator>> : public ResizableBuffer
+class ResizableBufferAdapter : public ResizableBuffer
 {
-    typedef std::basic_string<CharT, Traits, Allocator> BufferType;
-    BufferType* _buffer;
+    T* _buffer;
 
 public:
-    explicit ResizableBufferAdapter(BufferType* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override { _buffer->resize((size + sizeof(CharT) - 1) / sizeof(CharT)); }
-    virtual void* buffer() const override
+    explicit ResizableBufferAdapter(T* buffer) : _buffer(buffer) {}
+    virtual void resize(size_t size) override
     {
-        // can not invoke string::front() if it is empty
-
-        if (_buffer->empty())
-            return nullptr;
-        else
-            return &_buffer->front();
+        _buffer->resize((size + sizeof(typename T::value_type) - 1) / sizeof(typename T::value_type));
     }
-};
-
-template <typename T, typename Allocator>
-class ResizableBufferAdapter<std::vector<T, Allocator>> : public ResizableBuffer
-{
-    typedef std::vector<T, Allocator> BufferType;
-    BufferType* _buffer;
-
-public:
-    explicit ResizableBufferAdapter(BufferType* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override { _buffer->resize((size + sizeof(T) - 1) / sizeof(T)); }
-    virtual void* buffer() const override
-    {
-        // can not invoke vector::front() if it is empty
-
-        if (_buffer->empty())
-            return nullptr;
-        else
-            return &_buffer->front();
-    }
-};
-
-template <>
-class ResizableBufferAdapter<Data> : public ResizableBuffer
-{
-    typedef Data BufferType;
-    BufferType* _buffer;
-
-public:
-    explicit ResizableBufferAdapter(BufferType* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override { _buffer->resize(size); }
-    virtual void* buffer() const override { return _buffer->getBytes(); }
+    virtual void* buffer() const override { return _buffer->data(); }
+    virtual size_t size() const override { return _buffer->size() * sizeof(typename T::value_type); }
 };
 
 /** Helper class to handle file operations. */
@@ -240,7 +200,6 @@ public:
      *      virtual void* buffer() const override {
      *          // your code here
      *      }
-     *  };
      *  NS_CC_END
      *  @endcode
      *
@@ -255,13 +214,11 @@ public:
      *      - Status::TooLarge when there file to be read is too large (> 2^32-1), the buffer will not changed.
      *      - Status::ObtainSizeFailed when failed to obtain the file size, the buffer will not changed.
      */
-    template <typename T,
-              typename Enable =
-                  typename std::enable_if<std::is_base_of<ResizableBuffer, ResizableBufferAdapter<T>>::value>::type>
+    template <typename T>
     Status getContents(std::string_view filename, T* buffer) const
     {
         ResizableBufferAdapter<T> buf(buffer);
-        return getContents(filename, &buf);
+        return getContents(filename, static_cast<ResizableBuffer*>(&buf));
     }
     virtual Status getContents(std::string_view filename, ResizableBuffer* buffer) const;
 

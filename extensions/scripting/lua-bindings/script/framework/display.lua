@@ -378,7 +378,7 @@ function display.newSprite(source, x, y, params)
                 sprite = spriteClass:create(source, params.rect, params.capInsets)
             end
             if display.TEXTURES_PIXEL_FORMAT[source] then
-                cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE2_D_PIXEL_FORMAT_BGR_A8888)
+                cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_BGRA8)
             end
             break
         elseif sourceType ~= "userdata" then
@@ -503,7 +503,7 @@ function display.loadSpriteFrames(dataFilename, imageFilename, callback)
         spriteFrameCache:addSpriteFramesAsync(dataFilename, imageFilename, callback)
     end
     if display.TEXTURES_PIXEL_FORMAT[imageFilename] then
-        cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE2_D_PIXEL_FORMAT_BGR_A8888)
+        cc.Texture2D:setDefaultAlphaPixelFormat(cc.TEXTURE_PF_BGRA8)
     end
 end
 

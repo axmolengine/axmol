@@ -32,7 +32,7 @@ message(STATUS "HOST_SYSTEM:" ${CMAKE_HOST_SYSTEM_NAME})
 option(AX_ENABLE_EXT_LUA "Build lua libraries" OFF)
 
 # hold the extensions list to auto link to app
-set(CC_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
+set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
 # include helper functions
 include(CocosBuildHelpers)

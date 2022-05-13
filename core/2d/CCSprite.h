@@ -4,6 +4,8 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 C4games Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -130,6 +132,7 @@ public:
      * @return  An autoreleased sprite object.
      */
     static Sprite* create(std::string_view filename);
+    static Sprite* create(std::string_view filename, PixelFormat format);
 
     /**
      * Creates a polygon sprite with a polygon info.
@@ -601,6 +604,7 @@ public:
      * @lua     init
      */
     virtual bool initWithFile(std::string_view filename);
+    virtual bool initWithFile(std::string_view filename, PixelFormat format);
 
     /**
      * Initializes a sprite with an image filename, and a rect.

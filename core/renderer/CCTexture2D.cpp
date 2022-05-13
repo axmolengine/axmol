@@ -3,7 +3,7 @@ Copyright (c) 2008      Apple Inc. All Rights Reserved.
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 C4games Ltd
+Copyright (c) 2020 C4games Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
@@ -60,7 +60,7 @@ NS_CC_BEGIN
 
 // If the image has alpha, you can create RGBA8 (32-bit) or RGBA4 (16-bit) or RGB5A1 (16-bit)
 // Default is: RGBA8888 (32-bit textures)
-static backend::PixelFormat g_defaultAlphaPixelFormat = backend::PixelFormat::BGRA8;
+static backend::PixelFormat g_defaultAlphaPixelFormat = backend::PixelFormat::RGBA8;
 
 Texture2D::Texture2D()
     : _pixelFormat(backend::PixelFormat::NONE)
