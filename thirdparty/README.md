@@ -47,7 +47,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.82.0
+- Version: 7.83.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -113,7 +113,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-f2b37f5 (2560)
+  - Version: git 2.1.0-91bc6b8 (2562)
   - License: MIT
 
 - tolua
@@ -159,7 +159,7 @@
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 3.0.2
+- Version: 3.0.3
 - License: Apache-2.0
 
 ## png
