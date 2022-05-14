@@ -163,7 +163,7 @@ project(freetype C)
 
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "12")
-set(VERSION_PATCH "0")
+set(VERSION_PATCH "1")
 
 # Generate LIBRARY_VERSION and LIBRARY_SOVERSION.
 set(LIBTOOL_REGEX "version_info='([0-9]+):([0-9]+):([0-9]+)'")
@@ -491,46 +491,48 @@ if (BUILD_FRAMEWORK)
   )
   set_target_properties(freetype PROPERTIES
     FRAMEWORK TRUE
-    MACOSX_FRAMEWORK_INFO_PLIST builds/mac/freetype-Info.plist
+    MACOSX_FRAMEWORK_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/builds/mac/freetype-Info.plist
     PUBLIC_HEADER "${PUBLIC_HEADERS}"
     XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
   )
 endif ()
 
 
-set(PKG_CONFIG_REQUIRED_PRIVATE "")
-set(PKG_CONFIG_LIBS_PRIVATE "")
+set(PKGCONFIG_REQUIRES "")
+set(PKGCONFIG_REQUIRES_PRIVATE "")
+set(PKGCONFIG_LIBS "-L\${libdir} -lfreetype")
+set(PKGCONFIG_LIBS_PRIVATE "")
 
 if (ZLIB_FOUND)
   target_link_libraries(freetype PRIVATE ${ZLIB_LIBRARIES})
   target_include_directories(freetype PRIVATE ${ZLIB_INCLUDE_DIRS})
-  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "zlib")
+  list(APPEND PKGCONFIG_REQUIRES_PRIVATE "zlib")
 endif ()
 if (BZIP2_FOUND)
   target_link_libraries(freetype PRIVATE ${BZIP2_LIBRARIES})
   target_include_directories(freetype PRIVATE ${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
   if (PC_BZIP2_FOUND)
-    list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "bzip2")
+    list(APPEND PKGCONFIG_REQUIRES_PRIVATE "bzip2")
   else ()
-    list(APPEND PKG_CONFIG_LIBS_PRIVATE "-lbz2")
+    list(APPEND PKGCONFIG_LIBS_PRIVATE "-lbz2")
   endif ()
 endif ()
 if (PNG_FOUND)
   target_link_libraries(freetype PRIVATE ${PNG_LIBRARIES})
   target_compile_definitions(freetype PRIVATE ${PNG_DEFINITIONS})
   target_include_directories(freetype PRIVATE ${PNG_INCLUDE_DIRS})
-  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "libpng")
+  list(APPEND PKGCONFIG_REQUIRES_PRIVATE "libpng")
 endif ()
 if (HarfBuzz_FOUND)
   target_link_libraries(freetype PRIVATE ${HarfBuzz_LIBRARY})
   target_include_directories(freetype PRIVATE ${HarfBuzz_INCLUDE_DIRS})
-  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "harfbuzz >= ${HARFBUZZ_MIN_VERSION}")
+  list(APPEND PKGCONFIG_REQUIRES_PRIVATE "harfbuzz >= ${HARFBUZZ_MIN_VERSION}")
 endif ()
 if (BROTLIDEC_FOUND)
   target_link_libraries(freetype PRIVATE ${BROTLIDEC_LIBRARIES})
   target_compile_definitions(freetype PRIVATE ${BROTLIDEC_DEFINITIONS})
   target_include_directories(freetype PRIVATE ${BROTLIDEC_INCLUDE_DIRS})
-  list(APPEND PKG_CONFIG_REQUIRED_PRIVATE "libbrotlidec")
+  list(APPEND PKGCONFIG_REQUIRES_PRIVATE "libbrotlidec")
 endif ()
 
 
@@ -557,7 +559,7 @@ if (NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL)
   # Generate the pkg-config file
   file(READ "${PROJECT_SOURCE_DIR}/builds/unix/freetype2.in" FREETYPE2_PC_IN)
 
-  string(REPLACE ";" ", " PKG_CONFIG_REQUIRED_PRIVATE "${PKG_CONFIG_REQUIRED_PRIVATE}")
+  string(REPLACE ";" ", " PKGCONFIG_REQUIRES_PRIVATE "${PKGCONFIG_REQUIRES_PRIVATE}")
 
   string(REPLACE "%prefix%" ${CMAKE_INSTALL_PREFIX}
           FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
@@ -569,10 +571,26 @@ if (NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL)
           FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
   string(REPLACE "%ft_version%" "${LIBTOOL_CURRENT}.${LIBTOOL_REVISION}.${LIBTOOL_AGE}"
           FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
-  string(REPLACE "%REQUIRES_PRIVATE%" "${PKG_CONFIG_REQUIRED_PRIVATE}"
-          FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
-  string(REPLACE "%LIBS_PRIVATE%" "${PKG_CONFIG_LIBS_PRIVATE}"
-          FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+
+  if (BUILD_SHARED_LIBS)
+    string(REPLACE "%PKGCONFIG_REQUIRES%" "${PKGCONFIG_REQUIRES}"
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+    string(REPLACE "%PKGCONFIG_REQUIRES_PRIVATE%" "${PKGCONFIG_REQUIRES_PRIVATE}"
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+    string(REPLACE "%PKGCONFIG_LIBS%" "${PKGCONFIG_LIBS}"
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+    string(REPLACE "%PKGCONFIG_LIBS_PRIVATE%" "${PKGCONFIG_LIBS_PRIVATE}"
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+  else ()
+    string(REPLACE "%PKGCONFIG_REQUIRES%" "${PKGCONFIG_REQUIRES} ${PKGCONFIG_REQUIRES_PRIVATE}"
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+    string(REPLACE "%PKGCONFIG_REQUIRES_PRIVATE%" ""
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+    string(REPLACE "%PKGCONFIG_LIBS%" "${PKGCONFIG_LIBS} ${PKGCONFIG_LIBS_PRIVATE}"
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+    string(REPLACE "%PKGCONFIG_LIBS_PRIVATE%" ""
+            FREETYPE2_PC_IN ${FREETYPE2_PC_IN})
+  endif ()
 
   set(FREETYPE2_PC_IN_NAME "${PROJECT_BINARY_DIR}/freetype2.pc")
   if (EXISTS "${FREETYPE2_PC_IN_NAME}")

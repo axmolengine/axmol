@@ -25,7 +25,6 @@
 
 project('freetype2', 'c',
   meson_version: '>= 0.55.0',
-  default_options: ['default_library=both'],
   version: run_command('builds/meson/extract_freetype_version.py',
                        'include/freetype/freetype.h',
                        check: true).stdout().strip(),

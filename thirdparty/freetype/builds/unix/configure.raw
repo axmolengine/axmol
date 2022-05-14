@@ -17,7 +17,7 @@ AC_CONFIG_SRCDIR([ftconfig.h.in])
 
 # Don't forget to update `docs/VERSIONS.TXT'!
 
-version_info='24:2:18'
+version_info='24:3:18'
 AC_SUBST([version_info])
 ft_version=`echo $version_info | tr : .`
 AC_SUBST([ft_version])
@@ -530,16 +530,28 @@ AC_SEARCH_LIBS([clock_gettime],
                [test "$ac_cv_search_clock_gettime" = "none required" \
                 || LIB_CLOCK_GETTIME=$ac_cv_search_clock_gettime])
 
-# 'librsvg' is needed to demonstrate SVG support.
-PKG_CHECK_MODULES([LIBRSVG], [librsvg-2.0 >= 2.46.0],
-                  [have_librsvg="yes (pkg-config)"], [have_librsvg=no])
-
 FT_DEMO_CFLAGS=""
 FT_DEMO_LDFLAGS="$LIB_CLOCK_GETTIME"
 
-if test "$have_librsvg" != no; then
-  FT_DEMO_CFLAGS="$FT_DEMO_CFLAGS $LIBRSVG_CFLAGS -DHAVE_LIBRSVG"
-  FT_DEMO_LDFLAGS="$FT_DEMO_LDFLAGS $LIBRSVG_LIBS"
+# 'librsvg' is needed to demonstrate SVG support.
+AC_ARG_WITH([librsvg],
+  [AS_HELP_STRING([--with-librsvg=@<:@yes|no|auto@:>@],
+                  [support OpenType SVG fonts in FreeType demo programs @<:@default=auto@:>@])],
+  [], [with_librsvg=auto])
+
+have_librsvg=no
+if test x"$with_librsvg" = xyes -o x"$with_librsvg" = xauto; then
+  PKG_CHECK_MODULES([LIBRSVG], [librsvg-2.0 >= 2.46.0],
+                    [have_librsvg="yes (pkg-config)"], [:])
+
+  if test "$have_librsvg" != no; then
+    FT_DEMO_CFLAGS="$FT_DEMO_CFLAGS $LIBRSVG_CFLAGS -DHAVE_LIBRSVG"
+    FT_DEMO_LDFLAGS="$FT_DEMO_LDFLAGS $LIBRSVG_LIBS"
+  fi
+fi
+
+if test x"$with_librsvg" = xyes -a "$have_librsvg" = no; then
+  AC_MSG_ERROR([librsvg support requested but library not found])
 fi
 
 AC_SUBST([FT_DEMO_CFLAGS])
