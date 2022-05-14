@@ -61,6 +61,27 @@ public:
     virtual size_t size() const      = 0;
 };
 
+template <typename T, typename Enable = void>
+struct is_resizable_container : std::false_type
+{};
+
+template <typename... Ts>
+struct is_resizable_container_helper
+{};
+
+template <typename T>
+struct is_resizable_container<T,
+                              std::conditional_t<false,
+                                                 is_resizable_container_helper<typename T::value_type,
+                                                                               decltype(std::declval<T>().size()),
+                                                                               decltype(std::declval<T>().resize(0)),
+                                                                               decltype(std::declval<T>().data())>,
+                                                 void>> : public std::true_type
+{};
+
+template <typename _T>
+inline constexpr bool is_resizable_container_v = is_resizable_container<_T>::value;
+
 template <typename T>
 class ResizableBufferAdapter : public ResizableBuffer
 {
@@ -214,7 +235,7 @@ public:
      *      - Status::TooLarge when there file to be read is too large (> 2^32-1), the buffer will not changed.
      *      - Status::ObtainSizeFailed when failed to obtain the file size, the buffer will not changed.
      */
-    template <typename T>
+    template <typename T, typename Enable = std::enable_if_t<is_resizable_container_v<T>>>
     Status getContents(std::string_view filename, T* buffer) const
     {
         ResizableBufferAdapter<T> buf(buffer);
