@@ -33,15 +33,15 @@ THE SOFTWARE.
 #include "2d/CCFontAtlas.h"
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
-#include "freetype/internal/tttypes.h"
+#include "freetype/ftmodapi.h"
 #include "platform/CCFileUtils.h"
 #include "platform/CCFileStream.h"
 
 NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
-bool FontFreeType::_FTInitialized = false;
-bool FontFreeType::_streamParsingEnabled = true;
+bool FontFreeType::_FTInitialized           = false;
+bool FontFreeType::_streamParsingEnabled    = true;
 bool FontFreeType::_doNativeBytecodeHinting = true;
 const int FontFreeType::DistanceMapSpread   = 6;
 
@@ -263,9 +263,15 @@ bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
     //  truetype/ttdriver.c b. The TT spec always asks for ROUND, not FLOOR or CEIL, see also the function
     //  'tt_size_reset' in truetype/ttobjs.c
     // ** Please see description of FT_Size_Metrics_ in freetype.h about this solution
+    // FT_PIX_ROUND is copy from freetype/internal/ftobjs.h
     auto& size_metrics = _fontFace->size->metrics;
     if (_doNativeBytecodeHinting && !strcmp(FT_Get_Font_Format(face), "TrueType"))
     {
+#if !defined(FT_PIX_ROUND)
+#    define FT_TYPEOF(type)
+#    define FT_PIX_FLOOR(x) ((x) & ~FT_TYPEOF(x) 63)
+#    define FT_PIX_ROUND(x) FT_PIX_FLOOR((x) + 32)
+#endif
         _ascender  = FT_PIX_ROUND(FT_MulFix(face->ascender, size_metrics.y_scale));
         _descender = FT_PIX_ROUND(FT_MulFix(face->descender, size_metrics.y_scale));
     }
