@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -26,22 +26,13 @@
  ****************************************************************************/
 #pragma once
 
-#if !defined(CC_USE_MOJOAL)
-#    define CC_USE_MOJOAL 0
-#endif
-
 #if !defined(__APPLE__)
-#    if !defined(CC_USE_ALSOFT) && !CC_USE_MOJOAL
-#        define CC_USE_ALSOFT 1
+#    if !defined(AX_USE_ALSOFT)
+#        define AX_USE_ALSOFT 1
 #    endif
 #endif
 
-// if CC_USE_MOJOAL, force disable openal-soft
-#if CC_USE_MOJOAL
-#    define CC_USE_ALSOFT 0
-#endif
-
-#if !CC_USE_ALSOFT && !CC_USE_MOJOAL
+#if !AX_USE_ALSOFT
 #    import <OpenAL/al.h>
 #    import <OpenAL/alc.h>
 #    define MAX_AUDIOINSTANCES 24
@@ -49,8 +40,6 @@
 #    define AL_ALEXT_PROTOTYPES 1
 #    include "AL/al.h"
 #    include "AL/alc.h"
-#    if !CC_USE_MOJOAL
-#        include "AL/alext.h"
-#    endif
+#    include "AL/alext.h"
 #    define MAX_AUDIOINSTANCES 32
 #endif

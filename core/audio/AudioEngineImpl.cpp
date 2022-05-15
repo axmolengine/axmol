@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018-2020 HALX99.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -54,7 +54,7 @@ static AudioEngineImpl* s_instance = nullptr;
 static void ccALPauseDevice()
 {
     ALOGD("%s", "===> ccALPauseDevice");
-#if CC_USE_ALSOFT
+#if AX_USE_ALSOFT
     alcDevicePauseSOFT(s_ALDevice);
 #else
     if (alcGetCurrentContext())
@@ -65,7 +65,7 @@ static void ccALPauseDevice()
 static void ccALResumeDevice()
 {
     ALOGD("%s", "===> ccALResumeDevice");
-#if CC_USE_ALSOFT
+#if AX_USE_ALSOFT
     alcDeviceResumeSOFT(s_ALDevice);
 #else
     if (alcGetCurrentContext())
@@ -385,7 +385,7 @@ bool AudioEngineImpl::init()
             // Workaround is do an unused invocation in the mainthread right after OpenAL is initialized successfully
             // as bellow.
             // ================ Workaround begin ================ //
-#if !CC_USE_ALSOFT
+#if !AX_USE_ALSOFT
             ALuint unusedAlBufferId = 0;
             alGenBuffers(1, &unusedAlBufferId);
             alDeleteBuffers(1, &unusedAlBufferId);
