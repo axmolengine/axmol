@@ -235,7 +235,7 @@ void Director::setDefaultValues()
     // ETC2 has alpha premultiplied ?
     // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set etc2 PMA default to `false`
     bool etc2_alpha_premultiplied = conf->getValue("adxe.texture.etc2_has_pma", Value{false}).asBool();
-    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ASTC, etc2_alpha_premultiplied);
+    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ETC2, etc2_alpha_premultiplied);
 }
 
 void Director::setGLDefaultValues()

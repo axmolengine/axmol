@@ -4,7 +4,9 @@ set(APP_NAME lua-tests)
 
 project(${APP_NAME})
 
+set(_AX_TOP_LEVEL_APP FALSE)
 if(NOT DEFINED BUILD_ENGINE_DONE)
+    set(_AX_TOP_LEVEL_APP TRUE)
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
@@ -48,8 +50,11 @@ set(res_script_folders
 if(APPLE OR VS)
     cocos_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
     cocos_mark_multi_resources(res_src RES_TO "Resources/src" FOLDERS ${res_src_folders})
-    cocos_mark_multi_resources(res_script RES_TO "Resources/src/cocos" FOLDERS ${res_script_folders})
-    set(cc_common_res ${res_res} ${res_src} ${res_script})
+    set(cc_common_res ${res_res} ${res_src})
+    if (NOT _AX_TOP_LEVEL_APP)
+        cocos_mark_multi_resources(res_script RES_TO "Resources/src/cocos" FOLDERS ${res_script_folders})
+        set(cc_common_res ${cc_common_res} ${res_script})
+    endif()
 endif()
 
 if(ANDROID)
