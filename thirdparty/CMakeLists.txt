@@ -248,7 +248,7 @@ if(AX_WITH_ALSOFT)
     target_link_libraries(thirdparty
         OpenAL
     )
-    target_compile_definitions(thirdparty PUBLIC CC_USE_ALSOFT=1)
+    target_compile_definitions(thirdparty PUBLIC AX_USE_ALSOFT=1)
     
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )

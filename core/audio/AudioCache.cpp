@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018-2020 HALX99.
  Copyright (c) 2020 C4games Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -152,7 +152,7 @@ void AudioCache::readDataTask(unsigned int selfId)
         case AUDIO_SOURCE_FORMAT::PCM_U8:
             _format = channelCount > 1 ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8;  // bits depth: 8bits
             break;
-#if CC_USE_ALSOFT
+#if AX_USE_ALSOFT
         case AUDIO_SOURCE_FORMAT::PCM_FLT32:
             _format = channelCount > 1 ? AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT_MONO_FLOAT32;
             break;
@@ -232,14 +232,14 @@ void AudioCache::readDataTask(unsigned int selfId)
                        decoder->framesToBytes(totalFrames - _framesRead));
             }
 
-#if CC_USE_ALSOFT
+#if AX_USE_ALSOFT
             ALOGV("pcm buffer was loaded successfully, total frames: %u, total read frames: %u, remainingFrames: %u",
                   totalFrames, _framesRead, remainingFrames);
             if (sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
                 alBufferi(_alBufferId, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
             alBufferData(_alBufferId, _format, pcmData, (ALsizei)dataSize, (ALsizei)sampleRate);
 #else
-#    if !CC_USE_ALSOFT
+#    if !AX_USE_ALSOFT
             /// Apple OpenAL framework, try adjust frames
             /// May don't need, xcode11 sdk works well
             uint32_t adjustFrames = 0;

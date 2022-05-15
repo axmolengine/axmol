@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018-2020 HALX99.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -293,7 +293,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
         uint32_t framesRead         = 0;
         const uint32_t framesToRead = _audioCache->_queBufferFrames;
         const uint32_t bufferSize   = decoder->framesToBytes(framesToRead);
-#if CC_USE_ALSOFT
+#if AX_USE_ALSOFT
         const auto sourceFormat = decoder->getSourceFormat();
 #endif
         tmpBuffer = (char*)malloc(bufferSize);
@@ -362,7 +362,7 @@ void AudioPlayer::rotateBufferThread(int offsetFrame)
                      */
                     ALuint bid;
                     alSourceUnqueueBuffers(_alSource, 1, &bid);
-#if CC_USE_ALSOFT
+#if AX_USE_ALSOFT
                     if (sourceFormat == AUDIO_SOURCE_FORMAT::ADPCM || sourceFormat == AUDIO_SOURCE_FORMAT::IMA_ADPCM)
                         alBufferi(bid, AL_UNPACK_BLOCK_ALIGNMENT_SOFT, decoder->getSamplesPerBlock());
 #endif

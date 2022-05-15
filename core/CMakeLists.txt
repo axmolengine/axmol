@@ -114,10 +114,6 @@ list(APPEND COCOS_SRC ${COCOS_HEADER})
 
 add_library(${ADXE_CORE_LIB} ${COCOS_SRC})
 
-# if (NOT APPLE)
-#   set_source_files_properties("audio/src/AudioEngineImpl.mm" PROPERTIES LANGUAGE CXX)
-# endif()
-
 # use thirdparty libs
 add_subdirectory(${ADXE_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${ADXE_CORE_LIB} thirdparty)
