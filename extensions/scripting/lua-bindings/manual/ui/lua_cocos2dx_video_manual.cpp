@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -23,7 +24,7 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/ui/lua_cocos2dx_video_manual.hpp"
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer/UIVideoPlayer.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
