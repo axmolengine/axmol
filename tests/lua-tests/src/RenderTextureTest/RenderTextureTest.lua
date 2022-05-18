@@ -47,7 +47,7 @@ local function RenderTextureSave()
     ret:registerScriptHandler(onNodeEvent)
 
     -- create a render texture, this is what we are going to draw into
-    target = cc.RenderTexture:create(s.width, s.height, cc.TEXTURE2_D_PIXEL_FORMAT_RGB_A8888)
+    target = cc.RenderTexture:create(s.width, s.height, cc.TEXTURE_PF_RGBA8)
     target:retain()
     target:setPosition(cc.p(s.width / 2, s.height / 2))
 
@@ -148,7 +148,7 @@ end
 
 
 --     /* A2 & B2 setup */
---     local rend = cc.RenderTexture:create(32, 64, cc.TEXTURE2_D_PIXEL_FORMAT_RGB_A8888)
+--     local rend = cc.RenderTexture:create(32, 64, cc.TEXTURE_PF_RGBA8)
 
 --     if (NULL == rend)
 
@@ -498,7 +498,7 @@ end
 
 --     local s = cc.Director:getInstance():getWinSize()
 --     rt = new cc.RenderTexture()
---     rt:initWithWidthAndHeight(s.width, s.height, cc.TEXTURE2_D_PIXEL_FORMAT_RGB_A8888)
+--     rt:initWithWidthAndHeight(s.width, s.height, cc.TEXTURE_PF_RGBA8)
 -- end
 -- rt:beginWithClear(0.0, 0.0, 0.0, 1.0)
 -- rt:end()

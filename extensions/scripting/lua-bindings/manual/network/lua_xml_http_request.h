@@ -24,12 +24,6 @@
  ****************************************************************************/
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "tolua++.h"
-#ifdef __cplusplus
-}
-#endif
 
 TOLUA_API int register_xml_http_request(lua_State* L);

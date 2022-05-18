@@ -25,11 +25,6 @@
 #ifndef __COCOS_SCRIPTING_LUA_BINDING_MANUAL_COCOSTUDIO_LUA_STUDIO_CONVERSIONS_H__
 #define __COCOS_SCRIPTING_LUA_BINDING_MANUAL_COCOSTUDIO_LUA_STUDIO_CONVERSIONS_H__
 
-extern "C" {
-#include "lua.h"
-#include "tolua++.h"
-}
-
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 
 namespace cocostudio

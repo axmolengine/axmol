@@ -211,7 +211,7 @@ function CreateTestMenu()
         if obj.name == "WebViewTest" 
         or obj.name == "VibrateTest"
         or obj.name == "VideoPlayerTest" then
-            if cc.PLATFORM_OS_IPHONE ~= targetPlatform and cc.PLATFORM_OS_ANDROID ~= targetPlatform then
+            if cc.PLATFORM_OS_IPHONE ~= targetPlatform and cc.PLATFORM_OS_ANDROID ~= targetPlatform and cc.PLATFORM_OS_WINDOWS ~= targetPlatform then 
                 testMenuItem:setEnabled(false)
             end
         end

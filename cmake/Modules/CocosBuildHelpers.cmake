@@ -486,3 +486,10 @@ function(cocos_use_pkg target pkg)
     endif()
 
 endfunction()
+
+# The adxe preprocessors config helper macro
+macro(adxe_config_pred target_name pred)
+    if(${pred})
+        target_compile_definitions(${target_name} PUBLIC ${pred}=1)
+    endif()
+endmacro()

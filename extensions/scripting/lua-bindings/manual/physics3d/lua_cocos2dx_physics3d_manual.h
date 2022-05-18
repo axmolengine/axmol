@@ -27,13 +27,7 @@
 
 #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
 
-#    ifdef __cplusplus
-extern "C" {
-#    endif
-#    include "tolua++.h"
-#    ifdef __cplusplus
-}
-#    endif
+#include "tolua++.h"
 
 /**
  * @addtogroup lua
