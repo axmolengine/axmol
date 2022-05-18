@@ -29,6 +29,15 @@
 #    include "scripting/lua-bindings/manual/ui/lua_cocos2dx_video_manual.hpp"
 #    include "scripting/lua-bindings/auto/lua_cocos2dx_webview_auto.hpp"
 #    include "scripting/lua-bindings/manual/ui/lua_cocos2dx_webview_manual.hpp"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#    if defined(AX_ENABLE_MFMEDIA)
+#        include "scripting/lua-bindings/auto/lua_cocos2dx_video_auto.hpp"
+#        include "scripting/lua-bindings/manual/ui/lua_cocos2dx_video_manual.hpp"
+#    endif
+#    if defined(AX_ENABLE_MSEDGE_WEBVIEW2)
+#        include "scripting/lua-bindings/auto/lua_cocos2dx_webview_auto.hpp"
+#        include "scripting/lua-bindings/manual/ui/lua_cocos2dx_webview_manual.hpp"
+#    endif
 #endif
 
 #include "scripting/lua-bindings/manual/tolua_fix.h"
@@ -1239,6 +1248,15 @@ int register_ui_module(lua_State* L)
         register_all_cocos2dx_video_manual(L);
         register_all_cocos2dx_webview(L);
         register_all_cocos2dx_webview_manual(L);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#    if defined(AX_ENABLE_MFMEDIA)
+        register_all_cocos2dx_video(L);
+        register_all_cocos2dx_video_manual(L);
+#    endif
+#    if defined(AX_ENABLE_MSEDGE_WEBVIEW2)
+        register_all_cocos2dx_webview(L);
+        register_all_cocos2dx_webview_manual(L);
+#    endif
 #endif
         extendEventListenerFocusEvent(L);
     }

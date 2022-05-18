@@ -25,14 +25,7 @@
 #ifndef COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_COCOS3D_LUA_COCOS2DX_3D_MANUAL_H__
 #define COCOS_SCRIPTING_LUA_BINDINGS_MANUAL_COCOS3D_LUA_COCOS2DX_3D_MANUAL_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "tolua++.h"
-#ifdef __cplusplus
-}
-#endif
-
 /**
  * @addtogroup lua
  * @{

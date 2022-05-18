@@ -27,11 +27,6 @@
 
 #if CC_USE_NAVMESH
 
-extern "C" {
-#    include "lua.h"
-#    include "tolua++.h"
-}
-
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 
 namespace cocos2d

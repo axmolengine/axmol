@@ -27,13 +27,7 @@
 
 #if CC_USE_NAVMESH
 
-#    ifdef __cplusplus
-extern "C" {
-#    endif
-#    include "tolua++.h"
-#    ifdef __cplusplus
-}
-#    endif
+#include "tolua++.h"
 
 /**
  * @addtogroup lua

@@ -25,10 +25,7 @@
 #ifndef __LUA_SCRIPT_HANDLER_MGR_H__
 #define __LUA_SCRIPT_HANDLER_MGR_H__
 
-extern "C" {
 #include "tolua++.h"
-}
-
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
 #include "2d/CCActionInstant.h"

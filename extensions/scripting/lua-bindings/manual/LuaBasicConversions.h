@@ -28,10 +28,6 @@
 #include <unordered_map>
 #include <string>
 
-extern "C" {
-#include "lua.h"
-#include "tolua++.h"
-}
 #include <stdint.h>
 
 #include "scripting/lua-bindings/manual/tolua_fix.h"

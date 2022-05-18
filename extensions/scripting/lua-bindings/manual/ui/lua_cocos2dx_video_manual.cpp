@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -29,10 +29,6 @@
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
-     CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
-    !defined(CC_PLATFORM_OS_TVOS)
 
 static int lua_cocos2dx_video_VideoPlayer_addEventListener(lua_State* L)
 {
@@ -110,5 +106,3 @@ int register_all_cocos2dx_video_manual(lua_State* L)
 
     return 0;
 }
-
-#endif
