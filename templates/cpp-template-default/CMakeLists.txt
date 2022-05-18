@@ -150,7 +150,9 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
+if (WIN32 AND NOT _AX_USE_PREBUILT)
+    target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
+endif()
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
@@ -340,15 +342,15 @@ if (_AX_USE_PREBUILT) # support windows only
     
     if (AX_ENABLE_MSEDGE_WEBVIEW2)
         if(CMAKE_GENERATOR STREQUAL "Ninja")
-            target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
-            target_include_directories(${ADXE_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+            target_link_libraries(${APP_NAME} ${ADXE_ROOT_PATH}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+            target_include_directories(${APP_NAME} ${ADXE_ROOT_PATH}/build/packages/Microsoft.Web.WebView2/build/native/include)
             add_custom_command(TARGET ${cocos_target} POST_BUILD
                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-               "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+               "${ADXE_ROOT_PATH}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
         else()
-            target_link_libraries(${ADXE_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+            target_link_libraries(${APP_NAME} ${ADXE_ROOT_PATH}/build/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
     endif()
 endif()
