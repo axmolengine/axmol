@@ -62,7 +62,6 @@ RenderTexture::~RenderTexture()
 {
     CC_SAFE_RELEASE(_renderTarget);
     CC_SAFE_RELEASE(_sprite);
-    CC_SAFE_RELEASE(_texture2DCopy);
     CC_SAFE_RELEASE(_depthStencilTexture);
     CC_SAFE_RELEASE(_UITextureImage);
 }
@@ -82,12 +81,6 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
             const Vec2& s = _texture2D->getContentSizeInPixels();
             VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
                                                backend::PixelFormat::RGBA8, s);
-
-            if (_texture2DCopy)
-            {
-                VolatileTextureMgr::addDataTexture(_texture2DCopy, uiTextureImage->getData(), s.width * s.height * 4,
-                                                   backend::PixelFormat::RGBA8, s);
-            }
         }
         else
         {
@@ -112,10 +105,6 @@ void RenderTexture::listenToForeground(EventCustom* /*event*/)
     //    }
 
     _texture2D->setAntiAliasTexParameters();
-    if (_texture2DCopy)
-    {
-        _texture2DCopy->setAntiAliasTexParameters();
-    }
 #endif
 }
 
@@ -216,10 +205,6 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
         clearColorAttachment();
 
         _texture2D->setAntiAliasTexParameters();
-        if (_texture2DCopy)
-        {
-            _texture2DCopy->setAntiAliasTexParameters();
-        }
 
         // retained
         setSprite(Sprite::createWithTexture(_texture2D));
