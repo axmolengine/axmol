@@ -150,7 +150,7 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-if (WIN32 AND NOT _AX_USE_PREBUILT)
+if (NOT _AX_USE_PREBUILT)
     target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
 endif()
 
