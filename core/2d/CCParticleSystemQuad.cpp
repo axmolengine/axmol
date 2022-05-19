@@ -405,16 +405,47 @@ void ParticleSystemQuad::updateParticleQuads()
         }
     }
 
+    float texPixels = getAnimationPixels();
+    float cellPixels  = getAnimationCellUnifiedSize();
+
+    auto setTexCoords = [this, texPixels, cellPixels](V3F_C4B_T2F_Quad* quad, unsigned int* cellIndex) {
+
+        float left   = 0;
+        float right  = 1;
+        float top    = *cellIndex * cellPixels / texPixels;
+        float bottom = (*cellIndex * cellPixels + cellPixels) / texPixels;
+
+        if (_animDir == TexAnimDir::HORIZONTAL)
+        {
+            std::swap(top, right);
+            std::swap(left, bottom);
+        }
+
+        quad->bl.texCoords.u = left;
+        quad->bl.texCoords.v = bottom;
+
+        quad->br.texCoords.u = right;
+        quad->br.texCoords.v = bottom;
+
+        quad->tl.texCoords.u = left;
+        quad->tl.texCoords.v = top;
+
+        quad->tr.texCoords.u = right;
+        quad->tr.texCoords.v = top;
+
+    };
+
     // set color
     if (_opacityModifyRGB)
     {
-        V3F_C4B_T2F_Quad* quad = startQuad;
-        float* r               = _particleData.colorR;
-        float* g               = _particleData.colorG;
-        float* b               = _particleData.colorB;
-        float* a               = _particleData.colorA;
+        V3F_C4B_T2F_Quad* quad        = startQuad;
+        float* r                      = _particleData.colorR;
+        float* g                      = _particleData.colorG;
+        float* b                      = _particleData.colorB;
+        float* a                      = _particleData.colorA;
+        unsigned int* cellIndex       = _particleData.animCellIndex;
 
-        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++cellIndex)
         {
             uint8_t colorR = *r * *a * 255;
             uint8_t colorG = *g * *a * 255;
@@ -424,17 +455,21 @@ void ParticleSystemQuad::updateParticleQuads()
             quad->br.colors.set(colorR, colorG, colorB, colorA);
             quad->tl.colors.set(colorR, colorG, colorB, colorA);
             quad->tr.colors.set(colorR, colorG, colorB, colorA);
+
+            if (_isLifeAnimated || _isEmitterAnimated)
+                setTexCoords(quad, cellIndex);
         }
     }
     else
     {
-        V3F_C4B_T2F_Quad* quad = startQuad;
-        float* r               = _particleData.colorR;
-        float* g               = _particleData.colorG;
-        float* b               = _particleData.colorB;
-        float* a               = _particleData.colorA;
+        V3F_C4B_T2F_Quad* quad  = startQuad;
+        float* r                = _particleData.colorR;
+        float* g                = _particleData.colorG;
+        float* b                = _particleData.colorB;
+        float* a                = _particleData.colorA;
+        unsigned int* cellIndex = _particleData.animCellIndex;
 
-        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++cellIndex)
         {
             uint8_t colorR = *r * 255;
             uint8_t colorG = *g * 255;
@@ -444,6 +479,9 @@ void ParticleSystemQuad::updateParticleQuads()
             quad->br.colors.set(colorR, colorG, colorB, colorA);
             quad->tl.colors.set(colorR, colorG, colorB, colorA);
             quad->tr.colors.set(colorR, colorG, colorB, colorA);
+
+            if (_isLifeAnimated || _isEmitterAnimated)
+                setTexCoords(quad, cellIndex);
         }
     }
 }
