@@ -35,4 +35,4 @@ jobs:
         allow_empty_commit: false
         force_orphan: true
         publish_branch: gh-pages
-        cname: docs.adxe.org
+        # cname: docs.adxe.org
