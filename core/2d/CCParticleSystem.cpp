@@ -121,24 +121,26 @@ bool ParticleData::init(int count)
 {
     maxCount = count;
 
-    posx          = (float*)malloc(count * sizeof(float));
-    posy          = (float*)malloc(count * sizeof(float));
-    startPosX     = (float*)malloc(count * sizeof(float));
-    startPosY     = (float*)malloc(count * sizeof(float));
-    colorR        = (float*)malloc(count * sizeof(float));
-    colorG        = (float*)malloc(count * sizeof(float));
-    colorB        = (float*)malloc(count * sizeof(float));
-    colorA        = (float*)malloc(count * sizeof(float));
-    deltaColorR   = (float*)malloc(count * sizeof(float));
-    deltaColorG   = (float*)malloc(count * sizeof(float));
-    deltaColorB   = (float*)malloc(count * sizeof(float));
-    deltaColorA   = (float*)malloc(count * sizeof(float));
-    size          = (float*)malloc(count * sizeof(float));
-    deltaSize     = (float*)malloc(count * sizeof(float));
-    rotation      = (float*)malloc(count * sizeof(float));
-    deltaRotation = (float*)malloc(count * sizeof(float));
-    timeToLive    = (float*)malloc(count * sizeof(float));
-    atlasIndex    = (unsigned int*)malloc(count * sizeof(unsigned int));
+    posx               = (float*)malloc(count * sizeof(float));
+    posy               = (float*)malloc(count * sizeof(float));
+    startPosX          = (float*)malloc(count * sizeof(float));
+    startPosY          = (float*)malloc(count * sizeof(float));
+    colorR             = (float*)malloc(count * sizeof(float));
+    colorG             = (float*)malloc(count * sizeof(float));
+    colorB             = (float*)malloc(count * sizeof(float));
+    colorA             = (float*)malloc(count * sizeof(float));
+    deltaColorR        = (float*)malloc(count * sizeof(float));
+    deltaColorG        = (float*)malloc(count * sizeof(float));
+    deltaColorB        = (float*)malloc(count * sizeof(float));
+    deltaColorA        = (float*)malloc(count * sizeof(float));
+    size               = (float*)malloc(count * sizeof(float));
+    deltaSize          = (float*)malloc(count * sizeof(float));
+    rotation           = (float*)malloc(count * sizeof(float));
+    deltaRotation      = (float*)malloc(count * sizeof(float));
+    totalTimeToLive    = (float*)malloc(count * sizeof(float));
+    timeToLive         = (float*)malloc(count * sizeof(float));
+    animCellIndex      = (unsigned int*)malloc(count * sizeof(unsigned int));
+    atlasIndex         = (unsigned int*)malloc(count * sizeof(unsigned int));
 
     modeA.dirX            = (float*)malloc(count * sizeof(float));
     modeA.dirY            = (float*)malloc(count * sizeof(float));
@@ -151,9 +153,9 @@ bool ParticleData::init(int count)
     modeB.radius           = (float*)malloc(count * sizeof(float));
 
     return posx && posy && startPosY && startPosX && colorR && colorG && colorB && colorA && deltaColorR &&
-           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && deltaRotation && timeToLive &&
-           atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel && modeA.tangentialAccel && modeB.angle &&
-           modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
+           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && deltaRotation && totalTimeToLive &&
+           timeToLive && atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel && modeA.tangentialAccel &&
+           modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
 }
 
 void ParticleData::release()
@@ -174,7 +176,9 @@ void ParticleData::release()
     CC_SAFE_FREE(deltaSize);
     CC_SAFE_FREE(rotation);
     CC_SAFE_FREE(deltaRotation);
+    CC_SAFE_FREE(totalTimeToLive);
     CC_SAFE_FREE(timeToLive);
+    CC_SAFE_FREE(animCellIndex);
     CC_SAFE_FREE(atlasIndex);
 
     CC_SAFE_FREE(modeA.dirX);
@@ -223,6 +227,11 @@ ParticleSystem::ParticleSystem()
     , _texture(nullptr)
     , _blendFunc(BlendFunc::ALPHA_PREMULTIPLIED)
     , _opacityModifyRGB(false)
+    , _isLifeAnimated(false)
+    , _isEmitterAnimated(false)
+    , _animDir(TexAnimDir::VERTICAL)
+    , _animUnifiedSize(0)
+    , _isLifeAnimationReversed(false)
     , _yCoordFlipped(1)
     , _positionType(PositionType::FREE)
     , _paused(false)
@@ -607,11 +616,13 @@ ParticleSystem::~ParticleSystem()
     CC_SAFE_RELEASE(_texture);
 }
 
-void ParticleSystem::addParticles(int count)
+void ParticleSystem::addParticles(int count, int animationCellIndex)
 {
     if (_paused)
         return;
     uint32_t RANDSEED = rand();
+
+    animationCellIndex = MIN(animationCellIndex, getTotalAnimationCells() - 1);
 
     int start = _particleCount;
     _particleCount += count;
@@ -619,8 +630,9 @@ void ParticleSystem::addParticles(int count)
     // life
     for (int i = start; i < _particleCount; ++i)
     {
-        float theLife               = _life + _lifeVar * RANDOM_M11(&RANDSEED);
-        _particleData.timeToLive[i] = MAX(0, theLife);
+        float particleLife               = _life + _lifeVar * RANDOM_M11(&RANDSEED);
+        _particleData.totalTimeToLive[i] = MAX(0, particleLife);
+        _particleData.timeToLive[i]      = MAX(0, particleLife);
     }
 
     // position
@@ -632,6 +644,22 @@ void ParticleSystem::addParticles(int count)
     for (int i = start; i < _particleCount; ++i)
     {
         _particleData.posy[i] = _sourcePosition.y + _posVar.y * RANDOM_M11(&RANDSEED);
+    }
+
+    if (animationCellIndex == -1 && _isEmitterAnimated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.animCellIndex[i] = (int)abs(RANDOM_M11(&RANDSEED) * getTotalAnimationCells());
+        }
+    }
+
+    if (animationCellIndex != -1)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.animCellIndex[i] = animationCellIndex;
+        }
     }
 
     // color
@@ -880,6 +908,12 @@ void ParticleSystem::update(float dt)
         for (int i = 0; i < _particleCount; ++i)
         {
             _particleData.timeToLive[i] -= dt;
+            if (_isLifeAnimated)
+            {
+                float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
+                percent = _isLifeAnimationReversed ? 1 - percent : percent;
+                _particleData.animCellIndex[i] = (unsigned int)MIN((percent * getTotalAnimationCells()), getTotalAnimationCells() - 1);
+            }
         }
 
         for (int i = 0; i < _particleCount; ++i)
