@@ -786,7 +786,7 @@ public:
 
     /** Sets wether to start from first cell and go forward (normal)
     * or last cell and go backward (reversed) when using life animation */
-    void setAnimationLifeReverse(bool reverse) { _isLifeAnimationReversed = reverse; }
+    void setLifeAnimationReverse(bool reverse) { _isLifeAnimationReversed = reverse; }
     bool isAnimationLifeReversed() { return _isLifeAnimationReversed; }
 
     /** Gets the particles movement type: Free or Grouped.
