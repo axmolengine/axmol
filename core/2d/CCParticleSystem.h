@@ -74,9 +74,7 @@ public:
     float* deltaSize;
     float* rotation;
     float* deltaRotation;
-    float* totalTimeToLive;
     float* timeToLive;
-    unsigned int* animCellIndex;
     unsigned int* atlasIndex;
 
     //! Mode A: gravity, direction, radial accel, tangential accel
@@ -126,10 +124,8 @@ public:
         rotation[p1]      = rotation[p2];
         deltaRotation[p1] = deltaRotation[p2];
 
-        totalTimeToLive[p1] = totalTimeToLive[p2];
         timeToLive[p1] = timeToLive[p2];
 
-        animCellIndex[p1] = animCellIndex[p2];
         atlasIndex[p1] = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
@@ -206,7 +202,7 @@ public:
     };
 
     /** PositionType
-     Types of particle positioning.
+     Possible types of particle positions.
      * @js cc.ParticleSystem.TYPE_FREE
      */
     enum class PositionType
@@ -217,17 +213,6 @@ public:
                    Use case: Attach an emitter to an sprite, and you want that the emitter follows the sprite.*/
 
         GROUPED, /** Living particles are attached to the emitter and are translated along with it. */
-
-    };
-
-   /** TexAnimDir
-    Texture animation direction for the particles.
-    */
-    enum class TexAnimDir
-    {
-        VERTICAL, /** texture coordinates are read top to bottom within the texture */
-
-        HORIZONTAL, /** texture coordinates are read left to right within the texture */
 
     };
 
@@ -267,7 +252,7 @@ public:
     static Vector<ParticleSystem*>& getAllParticleSystems();
 
 public:
-    void addParticles(int count, int animationCellIndex = -1);
+    void addParticles(int count);
 
     void stopSystem();
     /** Kill all living particles.
@@ -743,52 +728,6 @@ public:
     void setOpacityModifyRGB(bool opacityModifyRGB) override { _opacityModifyRGB = opacityModifyRGB; }
     bool isOpacityModifyRGB() const override { return _opacityModifyRGB; }
 
-    /** Enables or disables tex coord animations that are set based on particle life. */
-    void setLifeAnimation(bool enabled) { _isLifeAnimated = enabled; }
-
-    /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. 
-    * WARNING: this won't matter if particle life animation is enabled ie. setLifeAnimation(true) */
-    void setEmitterAnimation(bool enabled) { _isEmitterAnimated = enabled; }
-
-    bool isLifeAnimated() { return _isLifeAnimated; }
-    bool isEmitterAnimated() { return _isEmitterAnimated; }
-
-    /** Sets texture animation direction for the particles */
-    void setAnimationTexDir(TexAnimDir dir = TexAnimDir::VERTICAL) { _animDir = dir; }
-
-    /** Gets texture animation direction for the particles */
-    TexAnimDir getAnimationTexDir() { return _animDir; }
-
-    /** Sets the width and height of a single animated cell *unified*
-    * Example: if a cell's size in the texture is 32 pixels wide and 32 pixel high then the unified size is 32 */
-    void setAnimationCellUnifiedSize(int unifiedSizeInPixels) { _animUnifiedSize = unifiedSizeInPixels; }
-
-    /** Gets the width and height of a single animated cell *unified*
-     * Example: if a cell's size in the texture is 32 pixels wide and 32 pixel high then the unified size is 32 */
-    int getAnimationCellUnifiedSize() { return _animUnifiedSize; }
-
-    /** Gets the total pixels in a texture based on the direction set */
-    int getAnimationPixels()
-    {
-        switch (_animDir)
-        {
-        case TexAnimDir::VERTICAL:
-            return _texture->getPixelsHigh();
-        case TexAnimDir::HORIZONTAL:
-            return _texture->getPixelsWide();
-        default: return 0;
-        }
-    }
-
-    /** Gets the total cells viewable in a texture by dividing texture height or width into animation cell size
-    * animation cell size can be changed using setAnimationCellUnifiedSize(int) */
-    int getTotalAnimationCells() {  return getAnimationPixels() / _animUnifiedSize; }
-
-    /** Sets wether to start from first cell and go forward (normal)
-    * or last cell and go backward (reversed) when using life animation */
-    void setLifeAnimationReverse(bool reverse) { _isLifeAnimationReversed = reverse; }
-    bool isAnimationLifeReversed() { return _isLifeAnimationReversed; }
-
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
      *
@@ -1036,16 +975,6 @@ protected:
     BlendFunc _blendFunc;
     /** does the alpha value modify color */
     bool _opacityModifyRGB;
-    /** is the particle system animated */
-    bool _isLifeAnimated;
-    /** is the emitter particle system animated */
-    bool _isEmitterAnimated;
-    /** tex coord animation direction for the system */
-    TexAnimDir _animDir;
-    /** the width and height of an animated cell unified */
-    int _animUnifiedSize;
-    /** wether to start from first or last when using life animation */
-    int _isLifeAnimationReversed;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
 
