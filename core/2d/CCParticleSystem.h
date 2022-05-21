@@ -915,6 +915,16 @@ public:
                                 std::vector<unsigned short> indices,
                                 bool reverse = false);
 
+    /** Add a particle animation descriptor with the index 0.
+     *
+     * @param indices An array of the indicies
+     * @param reverse Should the animation indicies be played backwards? (default: false)
+     */
+    void setAnimationDescriptor(std::vector<unsigned short> indices, bool reverse = false)
+    {
+        setAnimationDescriptor(0, 0, 0, indices, reverse);
+    };
+
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
      *
