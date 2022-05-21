@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "base/CCProtocols.h"
 #include "2d/CCNode.h"
 #include "base/CCValue.h"
+#include "2d/CCSpriteFrame.h"
 
 NS_CC_BEGIN
 
@@ -52,6 +53,9 @@ struct particle_point
     float y;
 };
 
+/** @struct ParticleAnimationDescriptor
+Structure that contains animation description
+*/
 struct ParticleAnimationDescriptor
 {
     float                       animationSpeed;
@@ -60,6 +64,9 @@ struct ParticleAnimationDescriptor
     bool                        reverseIndices;
 };
 
+/** @struct ParticleFrameDescriptor
+Structure that contains frame description
+*/
 struct ParticleFrameDescriptor
 {
     cocos2d::Rect rect;
