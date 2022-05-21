@@ -310,6 +310,7 @@ bool AudioEngineImpl::init()
 
         if (s_ALDevice)
         {
+            alGetError();
             s_ALContext = alcCreateContext(s_ALDevice, nullptr);
             alcMakeContextCurrent(s_ALContext);
 
