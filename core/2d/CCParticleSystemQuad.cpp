@@ -435,6 +435,8 @@ void ParticleSystemQuad::updateParticleQuads()
         }
         else
         {
+            // TODO: index.isRotated should be treated accordingly
+
             auto& index = _animationIndices.at(*cellIndex);
 
             auto texWidth  = _texture->getPixelsWide();
