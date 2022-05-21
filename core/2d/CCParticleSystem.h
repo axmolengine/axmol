@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "base/CCValue.h"
 #include "2d/CCSpriteFrame.h"
+#include "2d/CCSpriteFrameCache.h"
 
 NS_CC_BEGIN
 
