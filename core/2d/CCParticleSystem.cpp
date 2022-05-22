@@ -893,7 +893,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
 void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
                                             float time,
                                             float timeVariance,
-                                            std::vector<unsigned short> indices,
+                                            const std::vector<unsigned short> &indices,
                                             bool reverse)
 {
     auto iter = _animations.find(indexOfDescriptor);

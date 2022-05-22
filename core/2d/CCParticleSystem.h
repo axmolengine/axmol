@@ -831,7 +831,7 @@ public:
     * 
     * @param animations Array of specific animations to play at random
     */
-    void setMultiAnimationRandomSpecific(std::vector<unsigned short> animations) { _randomAnimations = animations; };
+    void setMultiAnimationRandomSpecific(const std::vector<unsigned short> &animations) { _randomAnimations = animations; };
 
     /** Choose ALL animation descriptors to be selected at random for particles.
      * This function should be called after you've inserted/overwritten any animation descriptors.
@@ -897,7 +897,7 @@ public:
     void setAnimationDescriptor(unsigned short indexOfDescriptor,
                                 float time,
                                 float timeVariance,
-                                std::vector<unsigned short> indices,
+                                const std::vector<unsigned short> &indices,
                                 bool reverse = false);
 
     /** Add a particle animation descriptor with the index 0.
@@ -905,7 +905,7 @@ public:
      * @param indices An array of the indicies
      * @param reverse Should the animation indicies be played backwards? (default: false)
      */
-    void setAnimationDescriptor(std::vector<unsigned short> indices, bool reverse = false)
+    void setAnimationDescriptor(const std::vector<unsigned short> &indices, bool reverse = false)
     {
         setAnimationDescriptor(0, 0, 0, indices, reverse);
     };
