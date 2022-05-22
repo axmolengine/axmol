@@ -140,8 +140,8 @@ bool ParticleData::init(int count)
     deltaRotation      = (float*)malloc(count * sizeof(float));
     totalTimeToLive    = (float*)malloc(count * sizeof(float));
     timeToLive         = (float*)malloc(count * sizeof(float));
-    animTimeDelta      = (float*)malloc(count * sizeof(float));
     animTimeLength     = (float*)malloc(count * sizeof(float));
+    animTimeDelta      = (float*)malloc(count * sizeof(float));
     animIndex          = (unsigned short*)malloc(count * sizeof(unsigned short));
     animCellIndex      = (unsigned short*)malloc(count * sizeof(unsigned short));
     atlasIndex         = (unsigned int*)malloc(count * sizeof(unsigned int));
@@ -156,9 +156,10 @@ bool ParticleData::init(int count)
     modeB.deltaRadius      = (float*)malloc(count * sizeof(float));
     modeB.radius           = (float*)malloc(count * sizeof(float));
 
-    return posx && posy && startPosY && startPosX && colorR && colorG && colorB && colorA && deltaColorR &&
-           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && deltaRotation && totalTimeToLive &&
-           timeToLive && atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel && modeA.tangentialAccel &&
+    return posx && posy && startPosX && startPosY && colorR && colorG && colorB && colorA && deltaColorR &&
+           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && staticRotation &&
+           deltaRotation && totalTimeToLive && timeToLive && animTimeLength && animTimeDelta && animIndex &&
+           animCellIndex && atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel && modeA.tangentialAccel &&
            modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
 }
 
@@ -183,8 +184,8 @@ void ParticleData::release()
     CC_SAFE_FREE(deltaRotation);
     CC_SAFE_FREE(totalTimeToLive);
     CC_SAFE_FREE(timeToLive);
-    CC_SAFE_FREE(animTimeDelta);
     CC_SAFE_FREE(animTimeLength);
+    CC_SAFE_FREE(animTimeDelta);
     CC_SAFE_FREE(animIndex);
     CC_SAFE_FREE(animCellIndex);
     CC_SAFE_FREE(atlasIndex);
@@ -230,6 +231,8 @@ ParticleSystem::ParticleSystem()
     , _startSpinVar(0)
     , _endSpin(0)
     , _endSpinVar(0)
+    , _staticRotation(0)
+    , _staticRotationVar(0)
     , _emissionRate(0)
     , _totalParticles(0)
     , _texture(nullptr)
@@ -995,30 +998,33 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
     }
 }
 
-void ParticleSystem::addAnimationIndex(std::string_view frameName)
+bool ParticleSystem::addAnimationIndex(std::string_view frameName)
 {
-    addAnimationIndex(_animIndexCount++, frameName);
+    return addAnimationIndex(_animIndexCount, frameName);
 }
 
-void ParticleSystem::addAnimationIndex(unsigned short index, std::string_view frameName)
+bool ParticleSystem::addAnimationIndex(unsigned short index, std::string_view frameName)
 {
     auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName);
 
     if (frame)
-        addAnimationIndex(index, frame);
+        return addAnimationIndex(index, frame);
+    return false;
  }
 
-void ParticleSystem::addAnimationIndex(cocos2d::SpriteFrame* frame)
+bool ParticleSystem::addAnimationIndex(cocos2d::SpriteFrame* frame)
 {
-    addAnimationIndex(_animIndexCount++, frame);
+    return addAnimationIndex(_animIndexCount, frame);
 }
 
-void ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame)
+bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame)
 {
-    addAnimationIndex(index, frame->getRect(), frame->isRotated());
+    if (frame)
+        return addAnimationIndex(index, frame->getRect(), frame->isRotated());
+    return false;
 }
 
-void ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated)
+bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated)
 {
     auto iter = _animationIndices.find(index);
     if (iter == _animationIndices.end())
@@ -1027,6 +1033,10 @@ void ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect,
     auto& desc     = iter->second;
     desc.rect      = rect;
     desc.isRotated = rotated;
+
+    ++_animIndexCount;
+
+    return true;
 }
 
 void ParticleSystem::onEnter()
