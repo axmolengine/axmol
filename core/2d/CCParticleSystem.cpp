@@ -711,7 +711,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         for (int i = start; i < _particleCount; ++i)
         {
             _particleData.animIndex[i] = animationIndex;
-            auto descriptor            = _animations.at(_particleData.animIndex[i]);
+            auto& descriptor            = _animations.at(_particleData.animIndex[i]);
             _particleData.animTimeLength[i] =
                 descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_M11(&RANDSEED);
         }
