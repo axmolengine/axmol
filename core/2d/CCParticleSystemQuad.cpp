@@ -105,6 +105,8 @@ ParticleSystemQuad* ParticleSystemQuad::create(std::string_view filename)
 
 ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfParticles)
 {
+    CCASSERT(numberOfParticles <= 10000, "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of U_SHORT (uint16_t)");
+
     ParticleSystemQuad* ret = new ParticleSystemQuad();
     if (ret->initWithTotalParticles(numberOfParticles))
     {
@@ -416,38 +418,18 @@ void ParticleSystemQuad::updateParticleQuads()
 
         float left = 0.0F, bottom = 0.0F, top = 1.0F, right = 1.0F;
 
-        if (_isAnimationAtlas)
-        {
-            float texPixels  = getAnimationPixels();
-            float cellPixels = getAnimationCellUnifiedSize();
+        // TODO: index.isRotated should be treated accordingly
 
-            left   = 0.0F;
-            right  = 1.0F;
-            top    = *cellIndex * cellPixels / texPixels;
-            bottom = (*cellIndex * cellPixels + cellPixels) / texPixels;
+        auto& index = _animationIndices.at(*cellIndex);
 
-            // Flip texture coords if direction of texture is horizontal
-            if (_animDir == TexAnimDir::HORIZONTAL)
-            {
-                std::swap(top, right);
-                std::swap(left, bottom);
-            }
-        }
-        else
-        {
-            // TODO: index.isRotated should be treated accordingly
+        auto texWidth  = _texture->getPixelsWide();
+        auto texHeight = _texture->getPixelsHigh();
 
-            auto& index = _animationIndices.at(*cellIndex);
+        left   = index.rect.origin.x / texWidth;
+        right  = (index.rect.origin.x + index.rect.size.x) / texWidth;
 
-            auto texWidth  = _texture->getPixelsWide();
-            auto texHeight = _texture->getPixelsHigh();
-
-            left   = index.rect.origin.x / texWidth;
-            right  = (index.rect.origin.x + index.rect.size.x) / texWidth;
-
-            top    = index.rect.origin.y / texHeight;
-            bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
-        }
+        top    = index.rect.origin.y / texHeight;
+        bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
 
         quad->bl.texCoords.u = left;
         quad->bl.texCoords.v = bottom;
