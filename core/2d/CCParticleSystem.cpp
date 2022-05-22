@@ -693,6 +693,9 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
 
     if (animationIndex == -1 && _isAnimationMulti && !_animations.empty())
     {
+        if (_randomAnimations.empty())
+            setMultiAnimationRandom();
+
         for (int i = start; i < _particleCount; ++i)
         {
             int rand0 = abs(RANDOM_M11(&RANDSEED) * _randomAnimations.size());
@@ -902,20 +905,15 @@ void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
                                             std::vector<unsigned short> indices,
                                             bool reverse)
 {
-    ParticleAnimationDescriptor desc{};
+    auto iter = _animations.find(indexOfDescriptor);
+    if (iter == _animations.end())
+        iter = _animations.emplace(indexOfDescriptor, ParticleAnimationDescriptor{}).first;
 
+    auto& desc                  = iter->second;
     desc.animationSpeed         = time;
     desc.animationSpeedVariance = timeVariance;
-    desc.animationIndices       = indices;
+    desc.animationIndices       = std::move(indices);
     desc.reverseIndices         = reverse;
-
-    if (_animations.find(indexOfDescriptor) == _animations.end())
-        _animations.insert({indexOfDescriptor, desc});
-    else
-    {
-        _animations.erase(indexOfDescriptor);
-        _animations.insert({indexOfDescriptor, desc});
-    }
 }
 
 void ParticleSystem::resetAnimationIndices()
@@ -1022,6 +1020,15 @@ bool ParticleSystem::isFull()
 void ParticleSystem::update(float dt)
 {
     CC_PROFILER_START_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
+
+    if (_componentContainer && !_componentContainer->isEmpty())
+    {
+        _componentContainer->visit(dt);
+    }
+
+    // Considerably reduces particle bursts when the game freezes or stutters for a moment.
+    if (dt > 1.0F / 3.0F)
+        dt = 1.0F / 3.0F;
 
     if (_isActive && _emissionRate)
     {
