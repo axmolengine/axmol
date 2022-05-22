@@ -852,10 +852,6 @@ public:
     void setAnimationAtlas(bool atlas) { _isAnimationAtlas = atlas; }
     bool isAnimationAtlas() { return _isAnimationAtlas; }
 
-    /** Sets wether to use multiable different index animations that can be randomly choosen for particles */
-    void setMultiAnimationParticles(bool multi) { _isAnimationMulti = multi; }
-    bool isMultiAnimationParticles() { return _isAnimationMulti; }
-
     /** Resets the count of indices to 0 and empties the index array */
     void resetAnimationIndices();
 
@@ -1195,8 +1191,6 @@ protected:
     bool _isLifeAnimationReversed;
     /** A map that stores particle animation index coords */
     std::unordered_map<unsigned short, ParticleFrameDescriptor> _animationIndices;
-    /** wether to start from first or last when using life animation */
-    int _isAnimationMulti;
     /** A map that stores particle animation descriptors */
     std::unordered_map<unsigned short, ParticleAnimationDescriptor> _animations;
     /** A vector that stores ids of animation descriptors that are choosen at random */

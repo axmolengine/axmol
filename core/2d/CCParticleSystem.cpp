@@ -243,7 +243,6 @@ ParticleSystem::ParticleSystem()
     , _animUnifiedSize(1)
     , _animIndexCount(0)
     , _isLifeAnimationReversed(false)
-    , _isAnimationMulti(false)
     , _yCoordFlipped(1)
     , _positionType(PositionType::FREE)
     , _paused(false)
@@ -680,18 +679,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         }
     }
 
-    if (animationIndex == -1 && !_isAnimationMulti && !_animations.empty())
-    {
-        for (int i = start; i < _particleCount; ++i)
-        {
-            _particleData.animIndex[i] = 0;
-            auto descriptor            = _animations.at(_particleData.animIndex[i]);
-            _particleData.animTimeLength[i] =
-                descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_M11(&RANDSEED);
-        }
-    }
-
-    if (animationIndex == -1 && _isAnimationMulti && !_animations.empty())
+    if (animationIndex == -1 && !_animations.empty())
     {
         if (_randomAnimations.empty())
             setMultiAnimationRandom();
@@ -707,7 +695,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         }
     }
 
-    if (_isLoopAnimated)
+    if (_isEmitterAnimated || _isLoopAnimated)
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -1060,6 +1048,21 @@ void ParticleSystem::update(float dt)
         for (int i = 0; i < _particleCount; ++i)
         {
             _particleData.timeToLive[i] -= dt;
+            if (_isEmitterAnimated && !_animations.empty())
+            {
+                _particleData.animTimeDelta[i] += dt;
+                if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
+                {
+                    auto& anim                     = _animations.at(_particleData.animIndex[i]);
+                    uint32_t RANDSEED              = rand();
+                    float percent                  = abs(RANDOM_M11(&RANDSEED));
+                    percent                        = anim.reverseIndices ? 1.0F - percent : percent;
+
+                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
+                                                                               anim.animationIndices.size() - 1)];
+                    _particleData.animTimeDelta[i] = 0;
+                }
+            }
             if (_isLifeAnimated && _animations.empty())
             {
                 float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
