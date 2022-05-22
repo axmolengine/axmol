@@ -743,16 +743,27 @@ public:
      */
     void setEndSpinVar(float endSpinVar) { _endSpinVar = endSpinVar; }
 
-    /** Sets the static rotation of each particle
+    /** Gets the fixed angle of each particle
      *
-     * @param angle The angle in degrees that the particle will exist with
+     * @return The angle in degrees of each particle.
      */
-    virtual void setStaticRotation(float angle) { _staticRotation = angle; };
-    /** Sets the static rotation variance of each particle.
+    float getSpawnRotation() { return _staticRotation; }
+    /** Sets the fixed angle of each particle
      *
-     * @param angle The angle in degrees variance
+     * @param angle The angle in degrees of each particle.
      */
-    virtual void setStaticRotationVar(float angle) { _staticRotationVar = angle; };
+    void setSpawnRotation(float angle) { _staticRotation = angle; }
+
+    /** Sets the fixed angle variance of each particle.
+     *
+     * @return The angle variance in degrees of each particle.
+     */
+    float getSpawnRotationVar() { return _staticRotationVar; }
+    /** Sets the fixed angle variance of each particle.
+     *
+     * @param angle The angle variance in degrees of each particle.
+     */
+    void setSpawnRotationVar(float angle) { _staticRotationVar = angle; }
 
     /** Gets the emission rate of the particles.
      *
@@ -788,8 +799,7 @@ public:
         _isLoopAnimated = false;
     }
 
-    /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. 
-    * WARNING: this won't matter if particle life animation is enabled ie. setLifeAnimation(true) */
+    /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. */
     void setEmitterAnimation(bool enabled)
     {
         _isEmitterAnimated = enabled;
@@ -797,10 +807,7 @@ public:
         _isLoopAnimated = false;
     }
 
-    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die
-    * This interduces a new concept of animation where you specify the indices and then specify animations descriptors that tell how these indices are used and what speed they're played at.
-    * Functions that effect this are: setMultiAnimationParticles(), resetAnimationDescriptors(), resetAnimationIndices(), addAnimationIndex(), setAnimationDescriptor(), setMultiAnimationRandom(), setMultiAnimationRandomSpecific(), 
-    */
+    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die */
     void setLoopAnimation(bool enabled)
     {
         _isLoopAnimated = enabled;
@@ -812,79 +819,94 @@ public:
     bool isEmitterAnimated() { return _isEmitterAnimated; }
     bool isLoopAnimated() { return _isLoopAnimated; }
 
-    /** Gets the total number of indices. */
+    /** Gets the total number of indices. 
+    *
+    * @return The size of the list holding animation indices.
+    */
     int getTotalAnimationIndices() { return _animIndexCount; }
 
-    /** Sets wether to start from first cell and go forward (normal)
-    * or last cell and go backward (reversed) when using life animation */
+    /** Sets wether to start from first cell and go forwards (normal) or last cell and go backwards (reversed) */
     void setAnimationReverse(bool reverse) { _isAnimationReversed = reverse; }
     bool isAnimationReversed() { return _isAnimationReversed; }
 
-    /** Resets the count of indices to 0 and empties the index array */
+    /** Resets the count of indices to 0 and empties the animation index array */
     void resetAnimationIndices();
 
-    /** Resets the container of animation descriptors empties the random array */
+    /** Empties the container of animation descriptors */
     void resetAnimationDescriptors();
 
-    /** Choose what animation descriptors are to be selected at random for particles
+    /** Choose what animation descriptors are to be selected at random for particles.
     * This function should be called after you've inserted/overwritten any animation descriptors.
     * 
-    * @param animations Array of specific animations to play at random
+    * @param animations Array of specific indices of animations to play at random
     */
     void setMultiAnimationRandomSpecific(const std::vector<unsigned short> &animations) { _randomAnimations = animations; };
 
     /** Choose ALL animation descriptors to be selected at random for particles.
-     * This function should be called after you've inserted/overwritten any animation descriptors.
-     */
+    * This function should be called after you've inserted/overwritten any animation descriptors.
+    */
     void setMultiAnimationRandom();
 
     /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
-     * will erase the array and add new indices from the atlas.
-     * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
+    * will erase the array and add new indices from the atlas.
+    * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
     void setAnimationIndicesAtlas();
 
-    /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
-     * will erase the array and add new indices from the atlas.
-     *
-     * @param unifiedCellSize The size of cell unified.
-     * @param direction What direction is the atlas
-     */
+    /** Add all particle animation indices based on cell size and direction spicified if the method of rendering preferred is texture atlas.
+    * will erase the array and add new indices from the atlas.
+    *
+    * @param unifiedCellSize The size of cell unified.
+    * @param direction What direction is the atlas
+    */
     void setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction = TexAnimDir::HORIZONTAL);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-     * The index is automatically incremented on each addition.
-     *
-     * @param frameName SpriteFrame name to search for
-     */
-    void addAnimationIndex(std::string_view frameName);
+    * The index is automatically incremented on each addition.
+    *
+    * @param frameName SpriteFrame name to search for
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(std::string_view frameName);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-     *
-     * @param frameName SpriteFrame name to search for
-     */
-    void addAnimationIndex(unsigned short index, std::string_view frameName);
+    *
+    * @param index Index id to add the frame to or override it with the new frame
+    * @param frameName SpriteFrame name to search for
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(unsigned short index, std::string_view frameName);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-     * The index is automatically incremented on each addition.
-     * 
-     * @param frame SpriteFrame containting data about tex coords
-     */
-    void addAnimationIndex(cocos2d::SpriteFrame* frame);
+    * The index is automatically incremented on each addition.
+    * 
+    * @param frame SpriteFrame containting data about tex coords
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(cocos2d::SpriteFrame* frame);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-     * you can specify which index you want to override in this function
-     * @param index Index id to override the index with
-     * @param frame SpriteFrame containting data about tex coords
-     */
-    void addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
+    * you can specify which index you want to override in this function
+    * 
+    * @param index Index id to add the frame to or override it with the new frame
+    * @param frame SpriteFrame containting data about tex coords
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
 
     /** Add a particle animation index based on tex coords spicified.
-     * you can specify which index you want to override in this function
-     * @param index Index id to override the index with
-     * @param rect Rect containting data about tex coords in pixels
-     * @param rotated Not implemented.
-     */
-    void addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
+    * you can specify which index you want to override in this function
+    * 
+    * @param index Index id to add the frame to or override it with the new rect
+    * @param rect Rect containting data about tex coords in pixels
+    * @param rotated Not implemented.
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
 
     /** Add a particle animation descriptor with an index.
     *
