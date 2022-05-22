@@ -238,11 +238,8 @@ ParticleSystem::ParticleSystem()
     , _isLifeAnimated(false)
     , _isEmitterAnimated(false)
     , _isLoopAnimated(false)
-    , _isAnimationAtlas(false)
-    , _animDir(TexAnimDir::VERTICAL)
-    , _animUnifiedSize(1)
     , _animIndexCount(0)
-    , _isLifeAnimationReversed(false)
+    , _isAnimationReversed(false)
     , _yCoordFlipped(1)
     , _positionType(PositionType::FREE)
     , _paused(false)
@@ -634,11 +631,9 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         return;
     uint32_t RANDSEED = rand();
 
-    if (_isAnimationAtlas)
-    {
-        animationCellIndex = MIN(animationCellIndex, getTotalAnimationCells() - 1);
-        animationIndex     = MIN(animationIndex, _animIndexCount - 1);
-    }
+
+    animationCellIndex = MIN(animationCellIndex, _animIndexCount - 1);
+    animationIndex     = MIN(animationIndex, _animIndexCount - 1);
 
     int start = _particleCount;
     _particleCount += count;
@@ -666,8 +661,8 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     {
         for (int i = start; i < _particleCount; ++i)
         {
-            int rand0                      = abs(RANDOM_M11(&RANDSEED) * getTotalAnimationCells());
-            _particleData.animCellIndex[i] = MIN(rand0, getTotalAnimationCells() - 1);
+            int rand0                      = abs(RANDOM_M11(&RANDSEED) * _animIndexCount);
+            _particleData.animCellIndex[i] = MIN(rand0, _animIndexCount - 1);
         }
     }
 
@@ -696,6 +691,14 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     }
 
     if (_isEmitterAnimated || _isLoopAnimated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.animTimeDelta[i] = 0;
+        }
+    }
+
+    if (_isLoopAnimated && _animations.empty())
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -923,6 +926,75 @@ void ParticleSystem::setMultiAnimationRandom()
         _randomAnimations.push_back(a.first);
 }
 
+void ParticleSystem::setAnimationIndicesAtlas()
+{
+    // VERTICAL
+    if (_texture->getPixelsHigh() > _texture->getPixelsWide())
+    {
+        setAnimationIndicesAtlas(_texture->getPixelsWide(),
+            ParticleSystem::TexAnimDir::VERTICAL);
+        return;
+    }
+
+    // HORIZONTAL
+    if (_texture->getPixelsWide() > _texture->getPixelsHigh())
+    {
+        setAnimationIndicesAtlas(_texture->getPixelsHigh(),
+            ParticleSystem::TexAnimDir::HORIZONTAL);
+        return;
+    }
+
+    CCASSERT(false, "Couldn't figure out the atlas size and direction.");
+}
+
+void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction)
+{
+    CCASSERT(unifiedCellSize > 0, "A cell cannot have a size of zero.");
+
+    resetAnimationIndices();
+    
+    auto texWidth  = _texture->getPixelsWide();
+    auto texHeight = _texture->getPixelsHigh();
+
+    switch (direction)
+    {
+    case TexAnimDir::VERTICAL:
+    {
+        for (short i = 0; i < short(texHeight / unifiedCellSize); i++)
+        {
+            Rect frame{};
+
+            frame.origin.x = 0;
+            frame.origin.y = unifiedCellSize * i;
+
+            frame.size.x = texWidth;
+            frame.size.y = unifiedCellSize;
+
+            addAnimationIndex(_animIndexCount++, frame);
+        }
+
+        break;
+    };
+    case TexAnimDir::HORIZONTAL:
+    {
+        for (short i = 0; i < short(texWidth / unifiedCellSize); i++)
+        {
+            Rect frame{};
+
+            frame.origin.x = unifiedCellSize * i;
+            frame.origin.y = 0;
+
+            frame.size.x   = unifiedCellSize;
+            frame.size.y   = texHeight;
+
+            addAnimationIndex(_animIndexCount++, frame);
+        }
+
+        break;
+    };
+    }
+}
+
 void ParticleSystem::addAnimationIndex(std::string_view frameName)
 {
     addAnimationIndex(_animIndexCount++, frameName);
@@ -943,21 +1015,18 @@ void ParticleSystem::addAnimationIndex(cocos2d::SpriteFrame* frame)
 
 void ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame)
 {
-    //Not sure how to check texture equality truly but it won't hurt to skip it
-    //CCASSERT(frame->getTexture() == _texture, "Sprite frame texture and particle system texture should match!");
+    addAnimationIndex(index, frame->getRect(), frame->isRotated());
+}
 
-    ParticleFrameDescriptor desc{};
+void ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated)
+{
+    auto iter = _animationIndices.find(index);
+    if (iter == _animationIndices.end())
+        iter = _animationIndices.emplace(index, ParticleFrameDescriptor{}).first;
 
-    desc.rect      = frame->getRect();
-    desc.isRotated = frame->isRotated();
-
-    if (_animationIndices.find(index) == _animationIndices.end())
-        _animationIndices.insert({index, desc});
-    else
-    {
-        _animationIndices.erase(index);
-        _animationIndices.insert({index, desc});
-    }
+    auto& desc     = iter->second;
+    desc.rect      = rect;
+    desc.isRotated = rotated;
 }
 
 void ParticleSystem::onEnter()
@@ -1014,10 +1083,6 @@ void ParticleSystem::update(float dt)
         _componentContainer->visit(dt);
     }
 
-    // Considerably reduces particle bursts when the game freezes or stutters for a moment.
-    if (dt > 1.0F / 3.0F)
-        dt = 1.0F / 3.0F;
-
     if (_isActive && _emissionRate)
     {
         float rate         = 1.0f / _emissionRate;
@@ -1066,8 +1131,8 @@ void ParticleSystem::update(float dt)
             if (_isLifeAnimated && _animations.empty())
             {
                 float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
-                percent = _isLifeAnimationReversed ? 1.0F - percent : percent;
-                _particleData.animCellIndex[i] = (unsigned short)MIN(percent * getTotalAnimationCells(), getTotalAnimationCells() - 1);
+                percent = _isAnimationReversed ? 1.0F - percent : percent;
+                _particleData.animCellIndex[i] = (unsigned short)MIN(percent * _animIndexCount, _animIndexCount - 1);
             }
             if (_isLifeAnimated && !_animations.empty())
             {
@@ -1075,12 +1140,12 @@ void ParticleSystem::update(float dt)
 
                 float percent =
                     (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
-                percent                        = (!!_isLifeAnimationReversed != !!anim.reverseIndices) ? 1.0F - percent : percent;
+                percent = (!!_isAnimationReversed != !!anim.reverseIndices) ? 1.0F - percent : percent;
 
                 _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
                                                                            anim.animationIndices.size() - 1)];
             }
-            if (_isLoopAnimated)
+            if (_isLoopAnimated && !_animations.empty())
             {
                 auto& anim = _animations.at(_particleData.animIndex[i]);
 
@@ -1093,6 +1158,10 @@ void ParticleSystem::update(float dt)
 
                 _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
                                                                            anim.animationIndices.size() - 1)];
+            }
+            if (_isLoopAnimated && _animations.empty())
+            {
+                _particleData.animCellIndex[i] = 0;
             }
         }
 

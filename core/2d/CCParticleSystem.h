@@ -810,47 +810,15 @@ public:
 
     bool isLifeAnimated() { return _isLifeAnimated; }
     bool isEmitterAnimated() { return _isEmitterAnimated; }
+    bool isLoopAnimated() { return _isLoopAnimated; }
 
-    /** Sets texture animation direction for the particles */
-    void setAnimationTexDir(TexAnimDir dir = TexAnimDir::VERTICAL) { _animDir = dir; }
-
-    /** Gets texture animation direction for the particles */
-    TexAnimDir getAnimationTexDir() { return _animDir; }
-
-    /** Sets the width and height of a single animated cell *unified*
-    * Example: if a cell's size in the texture is 32 pixels wide and 32 pixel high then the unified size is 32 */
-    void setAnimationCellUnifiedSize(int unifiedSizeInPixels) { _animUnifiedSize = unifiedSizeInPixels; }
-
-    /** Gets the width and height of a single animated cell *unified*
-     * Example: if a cell's size in the texture is 32 pixels wide and 32 pixel high then the unified size is 32 */
-    int getAnimationCellUnifiedSize() { return _animUnifiedSize; }
-
-    /** Gets the total pixels in a texture based on the direction set */
-    int getAnimationPixels()
-    {
-        switch (_animDir)
-        {
-        case TexAnimDir::VERTICAL:
-            return _texture->getPixelsHigh();
-        case TexAnimDir::HORIZONTAL:
-            return _texture->getPixelsWide();
-        default: return 0;
-        }
-    }
-
-    /** Gets the total cells viewable in a texture by dividing texture height or width into animation cell size
-    * animation cell size can be changed using setAnimationCellUnifiedSize(int)
-    * incase atlas animation is set off it will return the indices added through addAnimationIndex() */
-    int getTotalAnimationCells() {  return _isAnimationAtlas ? getAnimationPixels() / _animUnifiedSize : _animIndexCount; }
+    /** Gets the total number of indices. */
+    int getTotalAnimationIndices() { return _animIndexCount; }
 
     /** Sets wether to start from first cell and go forward (normal)
     * or last cell and go backward (reversed) when using life animation */
-    void setLifeAnimationReverse(bool reverse) { _isLifeAnimationReversed = reverse; }
-    bool isAnimationLifeReversed() { return _isLifeAnimationReversed; }
-
-    /** Sets wether to use atlas rendering or sprite frame rendering */
-    void setAnimationAtlas(bool atlas) { _isAnimationAtlas = atlas; }
-    bool isAnimationAtlas() { return _isAnimationAtlas; }
+    void setAnimationReverse(bool reverse) { _isAnimationReversed = reverse; }
+    bool isAnimationReversed() { return _isAnimationReversed; }
 
     /** Resets the count of indices to 0 and empties the index array */
     void resetAnimationIndices();
@@ -866,36 +834,57 @@ public:
     void setMultiAnimationRandomSpecific(std::vector<unsigned short> animations) { _randomAnimations = animations; };
 
     /** Choose ALL animation descriptors to be selected at random for particles.
-    * This function should be called after you've inserted/overwritten any animation descriptors.
-    */
+     * This function should be called after you've inserted/overwritten any animation descriptors.
+     */
     void setMultiAnimationRandom();
 
-    /** Add a particle animation index based on tex coords spicified using a sprite frame if atlas mode is off.
+    /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
+     * will erase the array and add new indices from the atlas.
+     * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
+    void setAnimationIndicesAtlas();
+
+    /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
+     * will erase the array and add new indices from the atlas.
+     *
+     * @param unifiedCellSize The size of cell unified.
+     * @param direction What direction is the atlas
+     */
+    void setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction = TexAnimDir::HORIZONTAL);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
      * The index is automatically incremented on each addition.
      *
      * @param frameName SpriteFrame name to search for
      */
     void addAnimationIndex(std::string_view frameName);
 
-    /** Add a particle animation index based on tex coords spicified using a sprite frame if atlas mode is off.
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
      *
      * @param frameName SpriteFrame name to search for
      */
     void addAnimationIndex(unsigned short index, std::string_view frameName);
 
-    /** Add a particle animation index based on tex coords spicified using a sprite frame if atlas mode is off.
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
      * The index is automatically incremented on each addition.
      * 
      * @param frame SpriteFrame containting data about tex coords
      */
     void addAnimationIndex(cocos2d::SpriteFrame* frame);
 
-    /** Add a particle animation index based on tex coords spicified using a sprite frame if atlas mode is off.
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
      * you can specify which index you want to override in this function
      * @param index Index id to override the index with
      * @param frame SpriteFrame containting data about tex coords
      */
     void addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
+
+    /** Add a particle animation index based on tex coords spicified.
+     * you can specify which index you want to override in this function
+     * @param index Index id to override the index with
+     * @param rect Rect containting data about tex coords in pixels
+     * @param rotated Not implemented.
+     */
+    void addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
 
     /** Add a particle animation descriptor with an index.
     *
@@ -1178,17 +1167,10 @@ protected:
     bool _isEmitterAnimated;
     /** is the emitter particle system animated */
     bool _isLoopAnimated;
-    /** True if you want to use an atlas with a fixed cell size
-    * False if you want to use SpriteFrames as your indexes using the function addAnimationIndex() */
-    bool _isAnimationAtlas;
-    /** tex coord animation direction for the system */
-    TexAnimDir _animDir;
-    /** the width and height of an animated cell unified */
-    int _animUnifiedSize;
-    /** variable keeping count of sprite frames added for atlas mode off */
+    /** variable keeping count of sprite frames or atlas indices added */
     int _animIndexCount;
     /** wether to start from first or last when using life animation */
-    bool _isLifeAnimationReversed;
+    bool _isAnimationReversed;
     /** A map that stores particle animation index coords */
     std::unordered_map<unsigned short, ParticleFrameDescriptor> _animationIndices;
     /** A map that stores particle animation descriptors */
