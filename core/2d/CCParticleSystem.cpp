@@ -1085,6 +1085,12 @@ void ParticleSystem::update(float dt)
         }
     }
 
+    // The reason for using for-loops separately for every property is because
+    // When the processor needs to read from or write to a location in memory,
+    // it first checks whether a copy of that data is in the cpu's cache.
+    // And wether if every property's memory of the particle system is continuous,
+    // for the purpose of improving cache hit rate, we should process only one property in one for-loop.
+    // It was proved to be effective especially for low-end devices.
     {
         for (int i = 0; i < _particleCount; ++i)
         {
@@ -1136,9 +1142,7 @@ void ParticleSystem::update(float dt)
                                                                            anim.animationIndices.size() - 1)];
             }
             if (_isLoopAnimated && _animations.empty())
-            {
-                _particleData.animCellIndex[i] = 0;
-            }
+                std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
         }
 
         for (int i = 0; i < _particleCount; ++i)
@@ -1211,12 +1215,6 @@ void ParticleSystem::update(float dt)
         }
         else
         {
-            // Why use so many for-loop separately instead of putting them together?
-            // When the processor needs to read from or write to a location in memory,
-            // it first checks whether a copy of that data is in the cache.
-            // And every property's memory of the particle system is continuous,
-            // for the purpose of improving cache hit rate, we should process only one property in one for-loop AFAP.
-            // It was proved to be effective especially for low-end machine.
             for (int i = 0; i < _particleCount; ++i)
             {
                 _particleData.modeB.angle[i] += _particleData.modeB.degreesPerSecond[i] * dt;

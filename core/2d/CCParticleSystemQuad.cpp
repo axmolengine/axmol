@@ -453,9 +453,8 @@ void ParticleSystemQuad::updateParticleQuads()
         float* g                  = _particleData.colorG;
         float* b                  = _particleData.colorB;
         float* a                  = _particleData.colorA;
-        unsigned short* cellIndex = _particleData.animCellIndex;
 
-        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++cellIndex)
+        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
         {
             uint8_t colorR = *r * *a * 255;
             uint8_t colorG = *g * *a * 255;
@@ -465,9 +464,6 @@ void ParticleSystemQuad::updateParticleQuads()
             quad->br.colors.set(colorR, colorG, colorB, colorA);
             quad->tl.colors.set(colorR, colorG, colorB, colorA);
             quad->tr.colors.set(colorR, colorG, colorB, colorA);
-
-            if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
-                setTexCoords(quad, cellIndex);
         }
     }
     else
@@ -477,9 +473,8 @@ void ParticleSystemQuad::updateParticleQuads()
         float* g                  = _particleData.colorG;
         float* b                  = _particleData.colorB;
         float* a                  = _particleData.colorA;
-        unsigned short* cellIndex = _particleData.animCellIndex;
 
-        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++cellIndex)
+        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
         {
             uint8_t colorR = *r * 255;
             uint8_t colorG = *g * 255;
@@ -489,10 +484,22 @@ void ParticleSystemQuad::updateParticleQuads()
             quad->br.colors.set(colorR, colorG, colorB, colorA);
             quad->tl.colors.set(colorR, colorG, colorB, colorA);
             quad->tr.colors.set(colorR, colorG, colorB, colorA);
-
-            if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
-                setTexCoords(quad, cellIndex);
         }
+    }
+
+    // The reason for using for-loops separately for every property is because
+    // When the processor needs to read from or write to a location in memory,
+    // it first checks whether a copy of that data is in the cpu's cache.
+    // And wether if every property's memory of the particle system is continuous,
+    // for the purpose of improving cache hit rate, we should process only one property in one for-loop.
+    // It was proved to be effective especially for low-end devices.
+    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
+    {
+        V3F_C4B_T2F_Quad* quad    = startQuad;
+        unsigned short* cellIndex = _particleData.animCellIndex;
+
+        for (int i = 0; i < _particleCount; ++i, ++quad, ++cellIndex)
+            setTexCoords(quad, cellIndex);
     }
 }
 
