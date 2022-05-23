@@ -71,7 +71,7 @@ NS_CC_BEGIN
 namespace network
 {
 
-Uri::Uri() : _isValid(false), _isSecure(false), _hasAuthority(false), _port(0) {}
+Uri::Uri() : _isValid(false), _isSecure(false), _hasAuthority(false), _isCustomPort(false), _port(0) {}
 
 Uri::Uri(const Uri& o)
 {
@@ -95,6 +95,7 @@ Uri& Uri::operator=(const Uri& o)
         _host         = o._host;
         _hostName     = o._hostName;
         _hasAuthority = o._hasAuthority;
+        _isCustomPort = o._isCustomPort;
         _port         = o._port;
         _authority    = o._authority;
         _pathEtc      = o._pathEtc;
@@ -121,7 +122,9 @@ Uri& Uri::operator=(Uri&& o)
         _host           = std::move(o._host);
         _hostName       = std::move(o._hostName);
         _hasAuthority   = o._hasAuthority;
+        _isCustomPort   = o._isCustomPort;
         o._hasAuthority = false;
+        o._isCustomPort = false;
         _port           = o._port;
         o._port         = 0;
         _authority      = std::move(o._authority);
@@ -290,18 +293,26 @@ bool Uri::doParse(std::string_view str)
             _isSecure = true;
             if (_port == 0)
                 _port = 443;
+
+            _isCustomPort = _port != 443;
         }
         else if (_scheme == "http" || _scheme == "ws")
         {
             if (_port == 0)
                 _port = 80;
+
+            _isCustomPort = _port != 80;
         }
         else if (_scheme == "ftp")
         {
             if (_port == 0)
                 _port = 21;
+
+            _isCustomPort = _port != 21;
         }
     }
+    else
+        _isCustomPort = _port != 0;
 
     if (_path.empty())
         _path.push_back('/');
@@ -319,6 +330,7 @@ void Uri::clear()
     _host.clear();
     _hostName.clear();
     _hasAuthority = false;
+    _isCustomPort = false;
     _port         = 0;
     _authority.clear();
     _pathEtc.clear();
@@ -371,7 +383,7 @@ std::string Uri::toString() const
             ss << _username << "@";
         }
         ss << _host;
-        if (_port != 0)
+        if (_isCustomPort)
         {
             ss << ":" << _port;
         }

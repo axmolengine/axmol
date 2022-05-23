@@ -23,7 +23,7 @@
 # ****************************************************************************/
 cmake_minimum_required(VERSION 3.10)
 
-set(APP_NAME fairygui-tests)
+set(APP_NAME fairygui_tests)
 
 project(${APP_NAME})
 
@@ -58,8 +58,6 @@ if(APPLE OR VS)
 endif()
 
 if(ANDROID)
-    # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
-    set(APP_NAME fairygui_tests)
     list(APPEND GAME_SOURCE
          proj.android/app/jni/main.cpp
          )
