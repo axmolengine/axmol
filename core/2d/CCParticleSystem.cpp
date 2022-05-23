@@ -670,12 +670,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     }
 
     if (animationCellIndex != -1)
-    {
-        for (int i = start; i < _particleCount; ++i)
-        {
-            _particleData.animCellIndex[i] = animationCellIndex;
-        }
-    }
+        std::fill_n(_particleData.animCellIndex + start, _particleCount - start, animationCellIndex);
 
     if (animationIndex == -1 && !_animations.empty())
     {
@@ -694,27 +689,14 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     }
 
     if (_isEmitterAnimated || _isLoopAnimated)
-    {
-        for (int i = start; i < _particleCount; ++i)
-        {
-            _particleData.animTimeDelta[i] = 0;
-        }
-    }
-
-    if (_isLoopAnimated && _animations.empty())
-    {
-        for (int i = start; i < _particleCount; ++i)
-        {
-            _particleData.animTimeDelta[i] = 0;
-        }
-    }
+        std::fill_n(_particleData.animTimeDelta + start, _particleCount - start, 0);
 
     if (animationIndex != -1)
     {
         for (int i = start; i < _particleCount; ++i)
         {
             _particleData.animIndex[i] = animationIndex;
-            auto& descriptor            = _animations.at(_particleData.animIndex[i]);
+            auto& descriptor           = _animations.at(animationIndex);
             _particleData.animTimeLength[i] =
                 descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_M11(&RANDSEED);
         }
@@ -765,12 +747,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         }
     }
     else
-    {
-        for (int i = start; i < _particleCount; ++i)
-        {
-            _particleData.deltaSize[i] = 0.0f;
-        }
-    }
+        std::fill_n(_particleData.deltaSize + start, _particleCount - start, 0.0F);
 
     // rotation
     for (int i = start; i < _particleCount; ++i)
@@ -799,14 +776,8 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     {
         pos = _position;
     }
-    for (int i = start; i < _particleCount; ++i)
-    {
-        _particleData.startPosX[i] = pos.x;
-    }
-    for (int i = start; i < _particleCount; ++i)
-    {
-        _particleData.startPosY[i] = pos.y;
-    }
+    std::fill_n(_particleData.startPosX + start, _particleCount - start, pos.x);
+    std::fill_n(_particleData.startPosY + start, _particleCount - start, pos.y);
 
     // Mode Gravity: A
     if (_emitterMode == Mode::GRAVITY)
@@ -875,12 +846,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         }
 
         if (modeB.endRadius == START_RADIUS_EQUAL_TO_END_RADIUS)
-        {
-            for (int i = start; i < _particleCount; ++i)
-            {
-                _particleData.modeB.deltaRadius[i] = 0.0f;
-            }
-        }
+            std::fill_n(_particleData.modeB.deltaRadius + start, _particleCount - start, 0.0F);
         else
         {
             for (int i = start; i < _particleCount; ++i)
