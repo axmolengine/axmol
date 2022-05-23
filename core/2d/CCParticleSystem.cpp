@@ -1723,16 +1723,6 @@ void ParticleSystem::resumeUpdate()
     _updatePaused = false;
 }
 
-float ParticleSystem::getTimeScale()
-{
-    return _timeScale;
-}
-
-void ParticleSystem::setTimeScale(float scale)
-{
-    _timeScale = scale;
-}
-
 float ParticleSystem::getFixedFPS()
 {
     return _fixedFPS;
@@ -1741,6 +1731,16 @@ float ParticleSystem::getFixedFPS()
 void ParticleSystem::setFixedFPS(float frameRate)
 {
     _fixedFPS = frameRate;
+}
+
+float ParticleSystem::getTimeScale()
+{
+    return _timeScale;
+}
+
+void ParticleSystem::setTimeScale(float scale)
+{
+    _timeScale = scale;
 }
 
 NS_CC_END
