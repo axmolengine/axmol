@@ -1016,11 +1016,32 @@ public:
      */
     virtual bool isPaused() const;
 
-    /* Pause the emissions*/
+    /* Pause the emissions */
     virtual void pauseEmissions();
 
-    /* UnPause the emissions*/
+    /* Unpause the emissions */
     virtual void resumeEmissions();
+
+    /** Is system update paused
+     @return True if the emissions are paused, else false
+     */
+    virtual bool isUpdatePaused() const;
+
+    /* Pause the particles from being updated */
+    virtual void pauseUpdate();
+
+    /* Unpause the particles from being updated */
+    virtual void resumeUpdate();
+
+    /** Gets the time scale of the particle system.
+     @return Time scale of the particle system.
+     */
+    virtual float getTimeScale();
+
+    /** Gets the time scale of the particle system.
+     @param Time scale of the particle system. (default: 1.0)
+     */
+    virtual void setTimeScale(float scale = 1.0F);
 
 protected:
     virtual void updateBlendFunc();
@@ -1209,6 +1230,12 @@ protected:
 
     /** is the emitter paused */
     bool _paused;
+
+    /** is system update paused */
+    bool _updatePaused;
+
+    /** time scale of the particle system */
+    float _timeScale;
 
     /** is sourcePosition compatible */
     bool _sourcePositionCompatible;
