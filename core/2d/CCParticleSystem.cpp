@@ -640,6 +640,9 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     if (_paused)
         return;
 
+    // Try to add as many particles as you can without overflowing.
+    count = MIN(int(_totalParticles * __totalParticleCountFactor) - _particleCount, count);
+
     animationCellIndex = MIN(animationCellIndex, _animIndexCount - 1);
     animationIndex     = MIN(animationIndex, _animIndexCount - 1);
 
