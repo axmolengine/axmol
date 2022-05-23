@@ -1204,7 +1204,7 @@ void ParseUriTest::onEnter()
             EXPECT_EQ("ws", v.getScheme());
             EXPECT_EQ("localhost", v.getHost());
             EXPECT_EQ("localhost", v.getHostName());
-            EXPECT_EQ("", v.getPath());
+            EXPECT_EQ("/", v.getPath());
             EXPECT_EQ(90, v.getPort());
             EXPECT_EQ("", v.getFragment());
             EXPECT_EQ("key1=foo=bar&key2=foobar&", v.getQuery());
@@ -1219,7 +1219,7 @@ void ParseUriTest::onEnter()
             EXPECT_EQ("ws", v.getScheme());
             EXPECT_EQ("localhost", v.getHost());
             EXPECT_EQ("localhost", v.getHostName());
-            EXPECT_EQ("", v.getPath());
+            EXPECT_EQ("/", v.getPath());
             EXPECT_EQ(90, v.getPort());
             EXPECT_EQ("", v.getFragment());
             EXPECT_EQ("key1=foo=bar&key2=foobar&", v.getQuery());
@@ -1246,7 +1246,7 @@ void ParseUriTest::onEnter()
             EXPECT_EQ("ws", v.getScheme());
             EXPECT_EQ("localhost", v.getHost());
             EXPECT_EQ("localhost", v.getHostName());
-            EXPECT_EQ("", v.getPath());
+            EXPECT_EQ("/", v.getPath());
             EXPECT_EQ(90, v.getPort());
             EXPECT_EQ("", v.getFragment());
             EXPECT_EQ("key1=foo=bar&key2=foobar&", v.getQuery());
@@ -1262,7 +1262,7 @@ void ParseUriTest::onEnter()
             EXPECT_EQ("ws", v.getScheme());
             EXPECT_EQ("localhost", v.getHost());
             EXPECT_EQ("localhost", v.getHostName());
-            EXPECT_EQ("", v.getPath());
+            EXPECT_EQ("/", v.getPath());
             EXPECT_EQ(90, v.getPort());
             EXPECT_EQ("", v.getFragment());
             EXPECT_EQ("key1=foo=bar&key2=foobar&", v.getQuery());
@@ -1386,20 +1386,20 @@ void ParseUriTest::onEnter()
         EXPECT_EQ(u4.getScheme(), "");
         EXPECT_EQ(u4.getHost(), "localhost");
         EXPECT_EQ(u4.getPort(), 8080);
-        EXPECT_EQ(u4.getPath(), "");
+        EXPECT_EQ(u4.getPath(), "/");
         EXPECT_EQ(u4.getPathEtc(), "");
 
         EXPECT_EQ(u5.getScheme(), "bb");
         EXPECT_EQ(u5.getHost(), "localhost");
         EXPECT_EQ(u5.getPort(), 0);
-        EXPECT_EQ(u5.getPath(), "");
+        EXPECT_EQ(u5.getPath(), "/");
         EXPECT_EQ(u5.getPathEtc(), "?&foo=12:4&ccc=13");
         EXPECT_EQ(u5.getQuery(), "&foo=12:4&ccc=13");
 
         EXPECT_EQ(u6.getScheme(), "cc");
         EXPECT_EQ(u6.getHost(), "localhost");
         EXPECT_EQ(u6.getPort(), 91);
-        EXPECT_EQ(u6.getPath(), "");
+        EXPECT_EQ(u6.getPath(), "/");
         EXPECT_EQ(u6.getPathEtc(), "?&foo=321&bbb=1");
         EXPECT_EQ(u6.getQuery(), "&foo=321&bbb=1");
     }

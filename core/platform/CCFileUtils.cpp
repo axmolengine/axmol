@@ -1033,10 +1033,7 @@ bool FileUtils::isFileExist(std::string_view filename) const
     else
     {
         std::string fullpath = fullPathForFilename(filename);
-        if (fullpath.empty())
-            return false;
-        else
-            return true;
+        return !fullpath.empty();
     }
 }
 

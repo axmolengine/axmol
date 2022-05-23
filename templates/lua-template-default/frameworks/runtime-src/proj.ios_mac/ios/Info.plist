@@ -4,12 +4,10 @@
 <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
-    <!--
     <key>CFBundleDisplayName</key>
     <string>${PROJECT_NAME}</string>
     <key>CFBundleExecutable</key>
     <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
-    -->
     <key>CFBundleIconFile</key>
     <string>Icon-57.png</string>
     <key>CFBundleIdentifier</key>
