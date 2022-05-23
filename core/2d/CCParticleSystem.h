@@ -1065,16 +1065,6 @@ public:
     /* Unpause the particles from being updated */
     virtual void resumeUpdate();
 
-    /** Gets the time scale of the particle system.
-     @return Time scale of the particle system.
-     */
-    virtual float getTimeScale();
-
-    /** Gets the time scale of the particle system.
-     @param Time scale of the particle system. (default: 1.0)
-     */
-    virtual void setTimeScale(float scale = 1.0F);
-
     /** Gets the fixed frame rate count of the particle system.
      @return Fixed frame rate count of the particle system.
      */
@@ -1084,6 +1074,16 @@ public:
      @param Fixed frame rate count of the particle system. (default: 0.0)
      */
     virtual void setFixedFPS(float frameRate = 0.0F);
+
+    /** Gets the time scale of the particle system.
+     @return Time scale of the particle system.
+     */
+    virtual float getTimeScale();
+
+    /** Gets the time scale of the particle system.
+     @param Time scale of the particle system. (default: 1.0)
+     */
+    virtual void setTimeScale(float scale = 1.0F);
 
 protected:
     virtual void updateBlendFunc();
