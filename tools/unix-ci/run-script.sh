@@ -33,7 +33,7 @@ function build_linux()
     cd $ADXE_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON
-    cmake --build build --target cpp-tests -- -j `nproc`
+    cmake --build build --target cpp_tests -- -j `nproc`
     set +x
 }
 
@@ -44,7 +44,7 @@ function build_osx()
     cd $ADXE_ROOT
     mkdir -p build
     cmake -S . -B build -GXcode -DAX_ENABLE_EXT_IMGUI=ON -DAX_USE_ALSOFT=ON
-    cmake --build build --config Release --target cpp-tests -- -quiet
+    cmake --build build --config Release --target cpp_tests -- -quiet
 
     exit 0
 }
@@ -57,7 +57,7 @@ function build_ios()
 
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DAX_USE_ALSOFT=ON
     # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
-    cmake --build build --config Release --target cpp-tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
+    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
 
     exit 0
 }
@@ -72,13 +72,13 @@ function build_android()
     echo "Building Android samples ..."
     source ../environment.sh
 
-    # build fairygui-tests
+    # build fairygui_tests
     pushd $ADXE_ROOT/tests/fairygui-tests/proj.android
     
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 
-    # build cpp-tests
+    # build cpp_tests
     pushd $ADXE_ROOT/tests/cpp-tests/proj.android
     
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
