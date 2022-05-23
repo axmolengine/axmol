@@ -268,6 +268,9 @@ public:
 
         /** The starting radius of the particle is equal to the ending radius. */
         START_RADIUS_EQUAL_TO_END_RADIUS = -1,
+
+        /** The simulation's seconds are set to the particles' lifetime specified inclusive of variant. */
+        SIMULATION_USE_PARTICLE_LIFETIME = -1,
     };
 
     /** Creates an initializes a ParticleSystem from a plist file.
@@ -743,27 +746,27 @@ public:
      */
     void setEndSpinVar(float endSpinVar) { _endSpinVar = endSpinVar; }
 
-    /** Gets the fixed angle of each particle
+    /** Gets the spawn angle of each particle
      *
      * @return The angle in degrees of each particle.
      */
-    float getSpawnRotation() { return _staticRotation; }
-    /** Sets the fixed angle of each particle
+    float getSpawnAngle() { return _spawnAngle; }
+    /** Sets the spawn angle of each particle
      *
      * @param angle The angle in degrees of each particle.
      */
-    void setSpawnRotation(float angle) { _staticRotation = angle; }
+    void setSpawnAngle(float angle) { _spawnAngle = angle; }
 
-    /** Sets the fixed angle variance of each particle.
+    /** Sets the spawn angle variance of each particle.
      *
      * @return The angle variance in degrees of each particle.
      */
-    float getSpawnRotationVar() { return _staticRotationVar; }
-    /** Sets the fixed angle variance of each particle.
+    float getSpawnAngleVar() { return _spawnAngleVar; }
+    /** Sets the spawn angle variance of each particle.
      *
      * @param angle The angle variance in degrees of each particle.
      */
-    void setSpawnRotationVar(float angle) { _staticRotationVar = angle; }
+    void setSpawnAngleVar(float angle) { _spawnAngleVar = angle; }
 
     /** Gets the emission rate of the particles.
      *
@@ -945,6 +948,35 @@ public:
      */
     void setPositionType(PositionType type) { _positionType = type; }
 
+    /** Advance the particle system and make it seem like it ran for this many seconds.
+     * The frame rate used for simulation accuracy is the screens refresh rate.
+     * 
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     */
+    void simulate(float seconds = SIMULATION_USE_PARTICLE_LIFETIME);
+
+    /** Advance the particle system and make it seem like it ran for this many seconds.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance.
+     */
+    void simulateFPS(float seconds = SIMULATION_USE_PARTICLE_LIFETIME, float frameRate = 30.0F);
+
+    /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
+     * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     */
+    void resimulate(float seconds = SIMULATION_USE_PARTICLE_LIFETIME);
+
+    /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
+     * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance.
+     */
+    void resimulateFPS(float seconds = SIMULATION_USE_PARTICLE_LIFETIME, float frameRate = 30.0F);
+
     // Overrides
     virtual void onEnter() override;
     virtual void onExit() override;
@@ -1042,6 +1074,16 @@ public:
      @param Time scale of the particle system. (default: 1.0)
      */
     virtual void setTimeScale(float scale = 1.0F);
+
+    /** Gets the fixed frame rate count of the particle system.
+     @return Fixed frame rate count of the particle system.
+     */
+    virtual float getFixedFPS();
+
+    /** Sets the fixed frame rate count of the particle system.
+     @param Fixed frame rate count of the particle system. (default: 0.0)
+     */
+    virtual void setFixedFPS(float frameRate = 0.0F);
 
 protected:
     virtual void updateBlendFunc();
@@ -1191,9 +1233,9 @@ protected:
     //* initial angle of each particle
     float _endSpinVar;
     //* initial rotation of each particle
-    float _staticRotation;
+    float _spawnAngle;
     //* initial rotation of each particle
-    float _staticRotationVar;
+    float _spawnAngleVar;
     /** emission rate of the particles */
     float _emissionRate;
     /** maximum particles of the system */
@@ -1231,11 +1273,17 @@ protected:
     /** is the emitter paused */
     bool _paused;
 
-    /** is system update paused */
+    /** is particle system update paused */
     bool _updatePaused;
 
     /** time scale of the particle system */
     float _timeScale;
+
+    /** Fixed frame rate of the particle system */
+    float _fixedFPS;
+
+    /** Fixed frame rate delta (internal) */
+    float _fixedFPSDelta;
 
     /** is sourcePosition compatible */
     bool _sourcePositionCompatible;

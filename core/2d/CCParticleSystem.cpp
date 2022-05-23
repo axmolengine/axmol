@@ -1,3 +1,7 @@
+#include "CCParticleSystem.h"
+#include "CCParticleSystem.h"
+#include "CCParticleSystem.h"
+#include "CCParticleSystem.h"
 /****************************************************************************
 Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2010-2012 cocos2d-x.org
@@ -236,8 +240,8 @@ ParticleSystem::ParticleSystem()
     , _startSpinVar(0)
     , _endSpin(0)
     , _endSpinVar(0)
-    , _staticRotation(0)
-    , _staticRotationVar(0)
+    , _spawnAngle(0)
+    , _spawnAngleVar(0)
     , _emissionRate(0)
     , _totalParticles(0)
     , _texture(nullptr)
@@ -253,6 +257,8 @@ ParticleSystem::ParticleSystem()
     , _paused(false)
     , _updatePaused(false)
     , _timeScale(1)
+    , _fixedFPS(0)
+    , _fixedFPSDelta(0)
     , _sourcePositionCompatible(true)  // In the furture this member's default value maybe false or be removed.
 {
     modeA.gravity.setZero();
@@ -772,7 +778,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     // static rotation
     for (int i = start; i < _particleCount; ++i)
     {
-        _particleData.staticRotation[i] = _staticRotation + _staticRotationVar * RANDOM_KISS();
+        _particleData.staticRotation[i] = _spawnAngle + _spawnAngleVar * RANDOM_KISS();
     }
 
     // position
@@ -1014,6 +1020,46 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect,
     return true;
 }
 
+void ParticleSystem::simulate(float seconds)
+{
+    simulateFPS(seconds, 1.0F / Director::getInstance()->getAnimationInterval());
+}
+
+void ParticleSystem::simulateFPS(float seconds, float frameRate)
+{
+    auto l_updatePaused = _updatePaused;
+    _updatePaused = false;
+    seconds = seconds == SIMULATION_USE_PARTICLE_LIFETIME ?
+        getLife() + getLifeVar() : seconds;
+    auto delta = 1.0F / frameRate;
+    float lastDelta = 0.0F;
+    if (seconds > delta)
+    {
+        while (seconds > 0.0F)
+        {
+            this->update(delta);
+            lastDelta = seconds;
+            seconds -= delta;
+        }
+        this->update(seconds);
+    }
+    else
+        this->update(seconds);
+    _updatePaused = l_updatePaused;
+}
+
+void ParticleSystem::resimulate(float seconds)
+{
+    this->resetSystem();
+    this->simulate(seconds);
+}
+
+void ParticleSystem::resimulateFPS(float seconds, float frameRate)
+{
+    this->resetSystem();
+    this->simulateFPS(seconds, frameRate);
+}
+
 void ParticleSystem::onEnter()
 {
     Node::onEnter();
@@ -1047,10 +1093,7 @@ void ParticleSystem::resetSystem()
 {
     _isActive = true;
     _elapsed  = 0;
-    for (int i = 0; i < _particleCount; ++i)
-    {
-        _particleData.timeToLive[i] = 0.0f;
-    }
+    std::fill_n(_particleData.timeToLive, _particleCount, 0.0F);
 }
 
 bool ParticleSystem::isFull()
@@ -1070,6 +1113,15 @@ void ParticleSystem::update(float dt)
     if (_componentContainer && !_componentContainer->isEmpty())
     {
         _componentContainer->visit(dt);
+    }
+
+    if (_fixedFPS != 0)
+    {
+        _fixedFPSDelta += dt;
+        if (_fixedFPSDelta < 1.0F / _fixedFPS)
+            return;
+        dt = _fixedFPSDelta;
+        _fixedFPSDelta = 0.0F;
     }
 
     dt *= _timeScale;
@@ -1679,6 +1731,16 @@ float ParticleSystem::getTimeScale()
 void ParticleSystem::setTimeScale(float scale)
 {
     _timeScale = scale;
+}
+
+float ParticleSystem::getFixedFPS()
+{
+    return _fixedFPS;
+}
+
+void ParticleSystem::setFixedFPS(float frameRate)
+{
+    _fixedFPS = frameRate;
 }
 
 NS_CC_END
