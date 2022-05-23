@@ -32,8 +32,6 @@ THE SOFTWARE.
 #include "base/CCProtocols.h"
 #include "2d/CCNode.h"
 #include "base/CCValue.h"
-#include "2d/CCSpriteFrame.h"
-#include "2d/CCSpriteFrameCache.h"
 
 NS_CC_BEGIN
 
@@ -52,26 +50,6 @@ struct particle_point
 {
     float x;
     float y;
-};
-
-/** @struct ParticleAnimationDescriptor
-Structure that contains animation description
-*/
-struct ParticleAnimationDescriptor
-{
-    float                       animationSpeed;
-    float                       animationSpeedVariance;
-    std::vector<unsigned short> animationIndices;
-    bool                        reverseIndices;
-};
-
-/** @struct ParticleFrameDescriptor
-Structure that contains frame description
-*/
-struct ParticleFrameDescriptor
-{
-    cocos2d::Rect rect;
-    bool          isRotated;
 };
 
 class CC_DLL ParticleData
@@ -95,14 +73,8 @@ public:
     float* size;
     float* deltaSize;
     float* rotation;
-    float* staticRotation;
     float* deltaRotation;
-    float* totalTimeToLive;
     float* timeToLive;
-    float* animTimeDelta;
-    float* animTimeLength;
-    unsigned short* animIndex;
-    unsigned short* animCellIndex;
     unsigned int* atlasIndex;
 
     //! Mode A: gravity, direction, radial accel, tangential accel
@@ -152,10 +124,8 @@ public:
         rotation[p1]      = rotation[p2];
         deltaRotation[p1] = deltaRotation[p2];
 
-        totalTimeToLive[p1] = totalTimeToLive[p2];
         timeToLive[p1] = timeToLive[p2];
 
-        animCellIndex[p1] = animCellIndex[p2];
         atlasIndex[p1] = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
@@ -232,7 +202,7 @@ public:
     };
 
     /** PositionType
-     Types of particle positioning.
+     Possible types of particle positions.
      * @js cc.ParticleSystem.TYPE_FREE
      */
     enum class PositionType
@@ -243,17 +213,6 @@ public:
                    Use case: Attach an emitter to an sprite, and you want that the emitter follows the sprite.*/
 
         GROUPED, /** Living particles are attached to the emitter and are translated along with it. */
-
-    };
-
-   /** TexAnimDir
-    Texture animation direction for the particles.
-    */
-    enum class TexAnimDir
-    {
-        VERTICAL, /** texture coordinates are read top to bottom within the texture */
-
-        HORIZONTAL, /** texture coordinates are read left to right within the texture */
 
     };
 
@@ -293,7 +252,7 @@ public:
     static Vector<ParticleSystem*>& getAllParticleSystems();
 
 public:
-    void addParticles(int count, int animationCellIndex = -1, int animationIndex = -1);
+    void addParticles(int count);
 
     void stopSystem();
     /** Kill all living particles.
@@ -743,28 +702,6 @@ public:
      */
     void setEndSpinVar(float endSpinVar) { _endSpinVar = endSpinVar; }
 
-    /** Gets the fixed angle of each particle
-     *
-     * @return The angle in degrees of each particle.
-     */
-    float getSpawnRotation() { return _staticRotation; }
-    /** Sets the fixed angle of each particle
-     *
-     * @param angle The angle in degrees of each particle.
-     */
-    void setSpawnRotation(float angle) { _staticRotation = angle; }
-
-    /** Sets the fixed angle variance of each particle.
-     *
-     * @return The angle variance in degrees of each particle.
-     */
-    float getSpawnRotationVar() { return _staticRotationVar; }
-    /** Sets the fixed angle variance of each particle.
-     *
-     * @param angle The angle variance in degrees of each particle.
-     */
-    void setSpawnRotationVar(float angle) { _staticRotationVar = angle; }
-
     /** Gets the emission rate of the particles.
      *
      * @return The emission rate of the particles.
@@ -790,147 +727,6 @@ public:
     /** does the alpha value modify color */
     void setOpacityModifyRGB(bool opacityModifyRGB) override { _opacityModifyRGB = opacityModifyRGB; }
     bool isOpacityModifyRGB() const override { return _opacityModifyRGB; }
-
-    /** Enables or disables tex coord animations that are set based on particle life. */
-    void setLifeAnimation(bool enabled)
-    {
-        _isLifeAnimated = enabled;
-        _isEmitterAnimated = false;
-        _isLoopAnimated = false;
-    }
-
-    /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. */
-    void setEmitterAnimation(bool enabled)
-    {
-        _isEmitterAnimated = enabled;
-        _isLifeAnimated = false;
-        _isLoopAnimated = false;
-    }
-
-    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die */
-    void setLoopAnimation(bool enabled)
-    {
-        _isLoopAnimated = enabled;
-        _isEmitterAnimated = false;
-        _isLifeAnimated = false;
-    }
-
-    bool isLifeAnimated() { return _isLifeAnimated; }
-    bool isEmitterAnimated() { return _isEmitterAnimated; }
-    bool isLoopAnimated() { return _isLoopAnimated; }
-
-    /** Gets the total number of indices. 
-    *
-    * @return The size of the list holding animation indices.
-    */
-    int getTotalAnimationIndices() { return _animIndexCount; }
-
-    /** Sets wether to start from first cell and go forwards (normal) or last cell and go backwards (reversed) */
-    void setAnimationReverse(bool reverse) { _isAnimationReversed = reverse; }
-    bool isAnimationReversed() { return _isAnimationReversed; }
-
-    /** Resets the count of indices to 0 and empties the animation index array */
-    void resetAnimationIndices();
-
-    /** Empties the container of animation descriptors */
-    void resetAnimationDescriptors();
-
-    /** Choose what animation descriptors are to be selected at random for particles.
-    * This function should be called after you've inserted/overwritten any animation descriptors.
-    * 
-    * @param animations Array of specific indices of animations to play at random
-    */
-    void setMultiAnimationRandomSpecific(const std::vector<unsigned short> &animations) { _randomAnimations = animations; };
-
-    /** Choose ALL animation descriptors to be selected at random for particles.
-    * This function should be called after you've inserted/overwritten any animation descriptors.
-    */
-    void setMultiAnimationRandom();
-
-    /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
-    * will erase the array and add new indices from the atlas.
-    * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
-    void setAnimationIndicesAtlas();
-
-    /** Add all particle animation indices based on cell size and direction spicified if the method of rendering preferred is texture atlas.
-    * will erase the array and add new indices from the atlas.
-    *
-    * @param unifiedCellSize The size of cell unified.
-    * @param direction What direction is the atlas
-    */
-    void setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction = TexAnimDir::HORIZONTAL);
-
-    /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    * The index is automatically incremented on each addition.
-    *
-    * @param frameName SpriteFrame name to search for
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
-    bool addAnimationIndex(std::string_view frameName);
-
-    /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    *
-    * @param index Index id to add the frame to or override it with the new frame
-    * @param frameName SpriteFrame name to search for
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
-    bool addAnimationIndex(unsigned short index, std::string_view frameName);
-
-    /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    * The index is automatically incremented on each addition.
-    * 
-    * @param frame SpriteFrame containting data about tex coords
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
-    bool addAnimationIndex(cocos2d::SpriteFrame* frame);
-
-    /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    * you can specify which index you want to override in this function
-    * 
-    * @param index Index id to add the frame to or override it with the new frame
-    * @param frame SpriteFrame containting data about tex coords
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
-    bool addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
-
-    /** Add a particle animation index based on tex coords spicified.
-    * you can specify which index you want to override in this function
-    * 
-    * @param index Index id to add the frame to or override it with the new rect
-    * @param rect Rect containting data about tex coords in pixels
-    * @param rotated Not implemented.
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
-    bool addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
-
-    /** Add a particle animation descriptor with an index.
-    *
-    * @param indexOfDescriptor Index of the animation to be added, adding to the same index will just override the pervious animation descriptor
-    * @param time length of the animation in seconds
-    * @param timeVariance Time randomly selected for each different particle added on the animation length
-    * @param indices An array of the indicies
-    * @param reverse Should the animation indicies be played backwards? (default: false)
-    */
-    void setAnimationDescriptor(unsigned short indexOfDescriptor,
-                                float time,
-                                float timeVariance,
-                                const std::vector<unsigned short> &indices,
-                                bool reverse = false);
-
-    /** Add a particle animation descriptor with the index 0.
-     *
-     * @param indices An array of the indicies
-     * @param reverse Should the animation indicies be played backwards? (default: false)
-     */
-    void setAnimationDescriptor(const std::vector<unsigned short> &indices, bool reverse = false)
-    {
-        setAnimationDescriptor(0, 0, 0, indices, reverse);
-    };
 
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
@@ -1016,32 +812,11 @@ public:
      */
     virtual bool isPaused() const;
 
-    /* Pause the emissions */
+    /* Pause the emissions*/
     virtual void pauseEmissions();
 
-    /* Unpause the emissions */
+    /* UnPause the emissions*/
     virtual void resumeEmissions();
-
-    /** Is system update paused
-     @return True if the emissions are paused, else false
-     */
-    virtual bool isUpdatePaused() const;
-
-    /* Pause the particles from being updated */
-    virtual void pauseUpdate();
-
-    /* Unpause the particles from being updated */
-    virtual void resumeUpdate();
-
-    /** Gets the time scale of the particle system.
-     @return Time scale of the particle system.
-     */
-    virtual float getTimeScale();
-
-    /** Gets the time scale of the particle system.
-     @param Time scale of the particle system. (default: 1.0)
-     */
-    virtual void setTimeScale(float scale = 1.0F);
 
 protected:
     virtual void updateBlendFunc();
@@ -1190,10 +965,6 @@ protected:
     float _endSpin;
     //* initial angle of each particle
     float _endSpinVar;
-    //* initial rotation of each particle
-    float _staticRotation;
-    //* initial rotation of each particle
-    float _staticRotationVar;
     /** emission rate of the particles */
     float _emissionRate;
     /** maximum particles of the system */
@@ -1204,22 +975,6 @@ protected:
     BlendFunc _blendFunc;
     /** does the alpha value modify color */
     bool _opacityModifyRGB;
-    /** is the particle system animated */
-    bool _isLifeAnimated;
-    /** is the emitter particle system animated */
-    bool _isEmitterAnimated;
-    /** is the emitter particle system animated */
-    bool _isLoopAnimated;
-    /** variable keeping count of sprite frames or atlas indices added */
-    int _animIndexCount;
-    /** wether to start from first or last when using life animation */
-    bool _isAnimationReversed;
-    /** A map that stores particle animation index coords */
-    std::unordered_map<unsigned short, ParticleFrameDescriptor> _animationIndices;
-    /** A map that stores particle animation descriptors */
-    std::unordered_map<unsigned short, ParticleAnimationDescriptor> _animations;
-    /** A vector that stores ids of animation descriptors that are choosen at random */
-    std::vector<unsigned short> _randomAnimations;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
 
@@ -1230,12 +985,6 @@ protected:
 
     /** is the emitter paused */
     bool _paused;
-
-    /** is system update paused */
-    bool _updatePaused;
-
-    /** time scale of the particle system */
-    float _timeScale;
 
     /** is sourcePosition compatible */
     bool _sourcePositionCompatible;
