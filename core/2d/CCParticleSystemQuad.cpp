@@ -105,6 +105,8 @@ ParticleSystemQuad* ParticleSystemQuad::create(std::string_view filename)
 
 ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfParticles)
 {
+    CCASSERT(numberOfParticles <= 10000, "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of U_SHORT (uint16_t)");
+
     ParticleSystemQuad* ret = new ParticleSystemQuad();
     if (ret->initWithTotalParticles(numberOfParticles))
     {
@@ -273,7 +275,11 @@ void ParticleSystemQuad::initIndices()
     }
 }
 
-inline void updatePosWithParticle(V3F_C4B_T2F_Quad* quad, const Vec2& newPosition, float size, float rotation)
+inline void updatePosWithParticle(V3F_C4B_T2F_Quad* quad,
+                                  const Vec2& newPosition,
+                                  float size,
+                                  float rotation,
+                                  float staticRotation)
 {
     // vertices
     float size_2 = size / 2;
@@ -285,7 +291,7 @@ inline void updatePosWithParticle(V3F_C4B_T2F_Quad* quad, const Vec2& newPositio
     float x  = newPosition.x;
     float y  = newPosition.y;
 
-    float r  = (float)-CC_DEGREES_TO_RADIANS(rotation);
+    float r = (float)-CC_DEGREES_TO_RADIANS(rotation + staticRotation);
     float cr = cosf(r);
     float sr = sinf(r);
     float ax = x1 * cr - y1 * sr + x;
@@ -351,14 +357,15 @@ void ParticleSystemQuad::updateParticleQuads()
         worldToNodeTM.transformPoint(&p1);
         Vec3 p2;
         Vec2 newPos;
-        float* startX               = _particleData.startPosX;
-        float* startY               = _particleData.startPosY;
-        float* x                    = _particleData.posx;
-        float* y                    = _particleData.posy;
-        float* s                    = _particleData.size;
-        float* r                    = _particleData.rotation;
+        float* startX                = _particleData.startPosX;
+        float* startY                = _particleData.startPosY;
+        float* x                     = _particleData.posx;
+        float* y                     = _particleData.posy;
+        float* s                     = _particleData.size;
+        float* r                     = _particleData.rotation;
+        float* sr                    = _particleData.staticRotation;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
-        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r)
+        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
         {
             p2.set(*startX, *startY, 0);
             worldToNodeTM.transformPoint(&p2);
@@ -366,7 +373,7 @@ void ParticleSystemQuad::updateParticleQuads()
             p2 = p1 - p2;
             newPos.x -= p2.x - pos.x;
             newPos.y -= p2.y - pos.y;
-            updatePosWithParticle(quadStart, newPos, *s, *r);
+            updatePosWithParticle(quadStart, newPos, *s, *r, *sr);
         }
     }
     else if (_positionType == PositionType::RELATIVE)
@@ -378,14 +385,15 @@ void ParticleSystemQuad::updateParticleQuads()
         float* y                    = _particleData.posy;
         float* s                    = _particleData.size;
         float* r                    = _particleData.rotation;
+        float* sr                   = _particleData.staticRotation;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
-        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r)
+        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
         {
             newPos.set(*x, *y);
             newPos.x = *x - (currentPosition.x - *startX);
             newPos.y = *y - (currentPosition.y - *startY);
             newPos += pos;
-            updatePosWithParticle(quadStart, newPos, *s, *r);
+            updatePosWithParticle(quadStart, newPos, *s, *r, *sr);
         }
     }
     else
@@ -397,22 +405,54 @@ void ParticleSystemQuad::updateParticleQuads()
         float* y                    = _particleData.posy;
         float* s                    = _particleData.size;
         float* r                    = _particleData.rotation;
+        float* sr                   = _particleData.staticRotation;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
-        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r)
+        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
         {
             newPos.set(*x + pos.x, *y + pos.y);
-            updatePosWithParticle(quadStart, newPos, *s, *r);
+            updatePosWithParticle(quadStart, newPos, *s, *r, *sr);
         }
     }
+
+    auto setTexCoords = [this](V3F_C4B_T2F_Quad* quad, unsigned short* cellIndex) {
+
+        float left = 0.0F, bottom = 0.0F, top = 1.0F, right = 1.0F;
+
+        // TODO: index.isRotated should be treated accordingly
+
+        auto& index = _animationIndices.at(*cellIndex);
+
+        auto texWidth  = _texture->getPixelsWide();
+        auto texHeight = _texture->getPixelsHigh();
+
+        left   = index.rect.origin.x / texWidth;
+        right  = (index.rect.origin.x + index.rect.size.x) / texWidth;
+
+        top    = index.rect.origin.y / texHeight;
+        bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
+
+        quad->bl.texCoords.u = left;
+        quad->bl.texCoords.v = bottom;
+
+        quad->br.texCoords.u = right;
+        quad->br.texCoords.v = bottom;
+
+        quad->tl.texCoords.u = left;
+        quad->tl.texCoords.v = top;
+
+        quad->tr.texCoords.u = right;
+        quad->tr.texCoords.v = top;
+
+    };
 
     // set color
     if (_opacityModifyRGB)
     {
-        V3F_C4B_T2F_Quad* quad = startQuad;
-        float* r               = _particleData.colorR;
-        float* g               = _particleData.colorG;
-        float* b               = _particleData.colorB;
-        float* a               = _particleData.colorA;
+        V3F_C4B_T2F_Quad* quad    = startQuad;
+        float* r                  = _particleData.colorR;
+        float* g                  = _particleData.colorG;
+        float* b                  = _particleData.colorB;
+        float* a                  = _particleData.colorA;
 
         for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
         {
@@ -428,11 +468,11 @@ void ParticleSystemQuad::updateParticleQuads()
     }
     else
     {
-        V3F_C4B_T2F_Quad* quad = startQuad;
-        float* r               = _particleData.colorR;
-        float* g               = _particleData.colorG;
-        float* b               = _particleData.colorB;
-        float* a               = _particleData.colorA;
+        V3F_C4B_T2F_Quad* quad    = startQuad;
+        float* r                  = _particleData.colorR;
+        float* g                  = _particleData.colorG;
+        float* b                  = _particleData.colorB;
+        float* a                  = _particleData.colorA;
 
         for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
         {
@@ -445,6 +485,21 @@ void ParticleSystemQuad::updateParticleQuads()
             quad->tl.colors.set(colorR, colorG, colorB, colorA);
             quad->tr.colors.set(colorR, colorG, colorB, colorA);
         }
+    }
+
+    // The reason for using for-loops separately for every property is because
+    // When the processor needs to read from or write to a location in memory,
+    // it first checks whether a copy of that data is in the cpu's cache.
+    // And wether if every property's memory of the particle system is continuous,
+    // for the purpose of improving cache hit rate, we should process only one property in one for-loop.
+    // It was proved to be effective especially for low-end devices.
+    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
+    {
+        V3F_C4B_T2F_Quad* quad    = startQuad;
+        unsigned short* cellIndex = _particleData.animCellIndex;
+
+        for (int i = 0; i < _particleCount; ++i, ++quad, ++cellIndex)
+            setTexCoords(quad, cellIndex);
     }
 }
 
