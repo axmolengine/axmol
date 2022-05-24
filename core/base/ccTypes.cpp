@@ -46,6 +46,15 @@ Color3B::Color3B(const Color4B& color) : r(color.r), g(color.g), b(color.b) {}
 
 Color3B::Color3B(const Color4F& color) : r(color.r * 255.0f), g(color.g * 255.0f), b(color.b * 255.0f) {}
 
+Color3B::Color3B(const HSV& hsv)
+{
+    float fR, fG, fB;
+    hsv.color(fR, fG, fB);
+    r = fR * 255.0F;
+    g = fG * 255.0F;
+    b = fB * 255.0F;
+}
+
 bool Color3B::operator==(const Color3B& right) const
 {
     return (r == right.r && g == right.g && b == right.b);
@@ -87,6 +96,16 @@ Color4B::Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) : r(_r), g(_g),
 Color4B::Color4B(const Color3B& color, uint8_t _a) : r(color.r), g(color.g), b(color.b), a(_a) {}
 
 Color4B::Color4B(const Color4F& color) : r(color.r * 255), g(color.g * 255), b(color.b * 255), a(color.a * 255) {}
+
+Color4B::Color4B(const HSV& hsv)
+{
+    float fR, fG, fB, fA;
+    hsv.color(fR, fG, fB);
+    r = fR * 255.0F;
+    g = fG * 255.0F;
+    b = fB * 255.0F;
+    a = hsv.a * 255.0F;
+}
 
 bool Color4B::operator==(const Color4B& right) const
 {
@@ -132,6 +151,16 @@ Color4F::Color4F(const Color3B& color, float _a) : r(color.r / 255.0f), g(color.
 Color4F::Color4F(const Color4B& color)
     : r(color.r / 255.0f), g(color.g / 255.0f), b(color.b / 255.0f), a(color.a / 255.0f)
 {}
+
+Color4F::Color4F(const HSV& hsv)
+{
+    float fR, fG, fB, fA;
+    hsv.color(fR, fG, fB);
+    r = fR;
+    g = fG;
+    b = fB;
+    a = hsv.a;
+}
 
 bool Color4F::operator==(const Color4F& right) const
 {
@@ -273,6 +302,150 @@ const Color4F Color4F::MAGENTA(1, 0, 1, 1);
 const Color4F Color4F::BLACK(0, 0, 0, 1);
 const Color4F Color4F::ORANGE(1, 0.5f, 0, 1);
 const Color4F Color4F::GRAY(0.65f, 0.65f, 0.65f, 1);
+
+HSV::HSV() {}
+
+HSV::HSV(float _h, float _s, float _v, float _a) : h(_h), s(_s), v(_v), a(_a) {}
+
+HSV::HSV(const Color3B& c)
+{
+    float fR = c.r / 255.0F;
+    float fG = c.g / 255.0F;
+    float fB = c.b / 255.0F;
+    hsv(fR, fG, fB);
+    a = 1.0F;
+}
+
+HSV::HSV(const Color4B& c)
+{
+    float fR = c.r / 255.0F;
+    float fG = c.g / 255.0F;
+    float fB = c.b / 255.0F;
+    float fA = c.a / 255.0F;
+    hsv(fR, fG, fB);
+    a = fA;
+}
+
+HSV::HSV(const Color4F& c)
+{
+    float fR = c.r;
+    float fG = c.g;
+    float fB = c.b;
+    float fA = c.a;
+    hsv(fR, fG, fB);
+    a = fA;
+}
+
+// This only compares hue saturation value without alpha value.
+bool HSV::operator==(const HSV& right) const
+{
+    return (h == right.h && s == right.s && v == right.v);
+}
+
+bool HSV::operator!=(const HSV& right) const
+{
+    return !(h != right.h || s != right.s || v != right.v);
+}
+
+void HSV::hsv(float& fR, float& fG, float& fB)
+{
+    float fCMax  = MAX(MAX(fR, fG), fB);
+    float fCMin  = MIN(MIN(fR, fG), fB);
+    float fDelta = fCMax - fCMin;
+
+    if (fDelta > 0)
+    {
+        if (fCMax == fR)
+        {
+            h = 60 * (fmod(((fG - fB) / fDelta), 6));
+        }
+        else if (fCMax == fG)
+        {
+            h = 60 * (((fB - fR) / fDelta) + 2);
+        }
+        else if (fCMax == fB)
+        {
+            h = 60 * (((fR - fG) / fDelta) + 4);
+        }
+
+        if (fCMax > 0)
+        {
+            s = fDelta / fCMax;
+        }
+        else
+        {
+            s = 0;
+        }
+
+        v = fCMax;
+    }
+    else
+    {
+        h = 0;
+        s = 0;
+        v = fCMax;
+    }
+
+    if (h < 0)
+    {
+        h = 360 + h;
+    }
+}
+
+void HSV::color(float& fR, float& fG, float& fB) const
+{
+    float fC      = v * s;
+    float fHPrime = fmod(h / 60.0, 6);
+    float fX      = fC * (1 - fabs(fmod(fHPrime, 2) - 1));
+    float fM      = v - fC;
+
+    if (0 <= fHPrime && fHPrime < 1)
+    {
+        fR = fC;
+        fG = fX;
+        fB = 0;
+    }
+    else if (1 <= fHPrime && fHPrime < 2)
+    {
+        fR = fX;
+        fG = fC;
+        fB = 0;
+    }
+    else if (2 <= fHPrime && fHPrime < 3)
+    {
+        fR = 0;
+        fG = fC;
+        fB = fX;
+    }
+    else if (3 <= fHPrime && fHPrime < 4)
+    {
+        fR = 0;
+        fG = fX;
+        fB = fC;
+    }
+    else if (4 <= fHPrime && fHPrime < 5)
+    {
+        fR = fX;
+        fG = 0;
+        fB = fC;
+    }
+    else if (5 <= fHPrime && fHPrime < 6)
+    {
+        fR = fC;
+        fG = 0;
+        fB = fX;
+    }
+    else
+    {
+        fR = 0;
+        fG = 0;
+        fB = 0;
+    }
+
+    fR += fM;
+    fG += fM;
+    fB += fM;
+}
 
 const BlendFunc BlendFunc::DISABLE             = {backend::BlendFactor::ONE, backend::BlendFactor::ZERO};
 const BlendFunc BlendFunc::ALPHA_PREMULTIPLIED = {backend::BlendFactor::ONE, backend::BlendFactor::ONE_MINUS_SRC_ALPHA};

@@ -43,6 +43,7 @@ NS_CC_BEGIN
 
 struct Color4B;
 struct Color4F;
+struct HSV;
 
 /**
  * RGB color composed of bytes 3 bytes.
@@ -54,6 +55,7 @@ struct CC_DLL Color3B
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b);
     explicit Color3B(const Color4B& color);
     explicit Color3B(const Color4F& color);
+    explicit Color3B(const HSV& hsv);
 
     bool operator==(const Color3B& right) const;
     bool operator==(const Color4B& right) const;
@@ -89,6 +91,7 @@ struct CC_DLL Color4B
     Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
     explicit Color4B(const Color3B& color, uint8_t _a = 255);
     Color4B(const Color4F& color);
+    explicit Color4B(const HSV& hsv);
 
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
     {
@@ -131,6 +134,7 @@ struct CC_DLL Color4F
     Color4F(float _r, float _g, float _b, float _a);
     explicit Color4F(const Color3B& color, float _a = 1.0f);
     explicit Color4F(const Color4B& color);
+    Color4F(const HSV& hsv);
 
     bool operator==(const Color4F& right) const;
     bool operator==(const Color3B& right) const;
@@ -155,6 +159,35 @@ struct CC_DLL Color4F
     static const Color4F BLACK;
     static const Color4F ORANGE;
     static const Color4F GRAY;
+};
+
+/**
+ * Hue Saturation Value color composed of 4 floats.
+ * @since adxe-1.0.0b6
+ * 
+ * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
+ */
+struct CC_DLL HSV
+{
+    HSV();
+    HSV(float _h, float _s, float _v, float _a = 1.0F);
+
+    explicit HSV(const Color3B& c);
+    explicit HSV(const Color4B& c);
+    explicit HSV(const Color4F& c);
+
+    bool operator==(const HSV& right) const;
+    bool operator!=(const HSV& right) const;
+
+    bool equals(const HSV& other) const { return (*this == other); }
+
+    void hsv(float& fR, float& fG, float& fB);
+    void color(float& fR, float& fG, float& fB) const;
+
+    float h = 0.f;
+    float s = 0.f;
+    float v = 0.f;
+    float a = 0.f;
 };
 
 Color4F& operator+=(Color4F& lhs, const Color4F& rhs);
