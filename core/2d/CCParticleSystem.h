@@ -914,6 +914,12 @@ public:
     */
     bool addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
 
+    /** You can specify what rect is used if an index in an animation descriptor wasn't found.
+    *
+    * @param rect Rect containting data about tex coords in pixels
+    */
+    void setRectForUndefinedIndices(cocos2d::Rect rect) { _undefinedIndexRect = rect; };
+
     /** Add a particle animation descriptor with an index.
     *
     * @param indexOfDescriptor Index of the animation to be added, adding to the same index will just override the pervious animation descriptor
@@ -937,6 +943,13 @@ public:
     {
         setAnimationDescriptor(0, 0, 0, indices, reverse);
     };
+
+    /** Sets wether the animation descriptors should follow the time scale of the system or not.
+     *
+     * @param independent Should the animation descriptor speeds be played independently? (default: false)
+     */
+    void setAnimationSpeedTimescaleIndependent(bool independent) { _animationTimescaleInd = independent; };
+    bool isAnimationSpeedTimescaleIndependent() { return _animationTimescaleInd; };
 
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
@@ -1253,6 +1266,10 @@ protected:
     std::unordered_map<unsigned short, ParticleAnimationDescriptor> _animations;
     /** A vector that stores ids of animation descriptors that are choosen at random */
     std::vector<unsigned short> _randomAnimations;
+    /** Wether the animation goes with the time scale of the system or is independent. */
+    bool _animationTimescaleInd;
+    /** A rect that is used instead when an index is not found */
+    cocos2d::Rect _undefinedIndexRect;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
 
