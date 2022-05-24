@@ -248,6 +248,7 @@ ParticleSystem::ParticleSystem()
     , _isLoopAnimated(false)
     , _animIndexCount(0)
     , _isAnimationReversed(false)
+    , _undefinedIndexRect({0,0,0,0})
     , _yCoordFlipped(1)
     , _positionType(PositionType::FREE)
     , _paused(false)
@@ -1115,6 +1116,7 @@ void ParticleSystem::update(float dt)
         _fixedFPSDelta = 0.0F;
     }
 
+    float pureDt = dt;
     dt *= _timeScale;
 
     if (_isActive && _emissionRate)
@@ -1154,15 +1156,15 @@ void ParticleSystem::update(float dt)
             _particleData.timeToLive[i] -= dt;
             if (_isEmitterAnimated && !_animations.empty())
             {
-                _particleData.animTimeDelta[i] += dt;
+                _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
                 if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
                 {
-                    auto& anim                     = _animations.at(_particleData.animIndex[i]);
-                    float percent                  = abs(RANDOM_KISS());
-                    percent                        = anim.reverseIndices ? 1.0F - percent : percent;
+                    auto& anim    = _animations.at(_particleData.animIndex[i]);
+                    float percent = abs(RANDOM_KISS());
+                    percent       = anim.reverseIndices ? 1.0F - percent : percent;
 
-                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
-                                                                               anim.animationIndices.size() - 1)];
+                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(
+                        percent * anim.animationIndices.size(), anim.animationIndices.size() - 1)];
                     _particleData.animTimeDelta[i] = 0;
                 }
             }
@@ -1179,6 +1181,7 @@ void ParticleSystem::update(float dt)
                 float percent =
                     (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
                 percent = (!!_isAnimationReversed != !!anim.reverseIndices) ? 1.0F - percent : percent;
+                percent = MAX(0.0F, percent);
 
                 _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
                                                                            anim.animationIndices.size() - 1)];
@@ -1187,12 +1190,13 @@ void ParticleSystem::update(float dt)
             {
                 auto& anim = _animations.at(_particleData.animIndex[i]);
 
-                _particleData.animTimeDelta[i] += dt;
+                _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
                 if (_particleData.animTimeDelta[i] >= _particleData.animTimeLength[i])
                     _particleData.animTimeDelta[i] = 0;
 
                 float percent = _particleData.animTimeDelta[i] / _particleData.animTimeLength[i];
-                percent = anim.reverseIndices ? 1.0F - percent : percent;
+                percent       = anim.reverseIndices ? 1.0F - percent : percent;
+                percent       = MAX(0.0F, percent);
 
                 _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
                                                                            anim.animationIndices.size() - 1)];

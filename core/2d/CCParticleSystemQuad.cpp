@@ -414,37 +414,6 @@ void ParticleSystemQuad::updateParticleQuads()
         }
     }
 
-    auto setTexCoords = [this](V3F_C4B_T2F_Quad* quad, unsigned short* cellIndex) {
-
-        float left = 0.0F, bottom = 0.0F, top = 1.0F, right = 1.0F;
-
-        // TODO: index.isRotated should be treated accordingly
-
-        auto& index = _animationIndices.at(*cellIndex);
-
-        auto texWidth  = _texture->getPixelsWide();
-        auto texHeight = _texture->getPixelsHigh();
-
-        left   = index.rect.origin.x / texWidth;
-        right  = (index.rect.origin.x + index.rect.size.x) / texWidth;
-
-        top    = index.rect.origin.y / texHeight;
-        bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
-
-        quad->bl.texCoords.u = left;
-        quad->bl.texCoords.v = bottom;
-
-        quad->br.texCoords.u = right;
-        quad->br.texCoords.v = bottom;
-
-        quad->tl.texCoords.u = left;
-        quad->tl.texCoords.v = top;
-
-        quad->tr.texCoords.u = right;
-        quad->tr.texCoords.v = top;
-
-    };
-
     // set color
     if (_opacityModifyRGB)
     {
@@ -486,6 +455,40 @@ void ParticleSystemQuad::updateParticleQuads()
             quad->tr.colors.set(colorR, colorG, colorB, colorA);
         }
     }
+
+    auto setTexCoords = [this](V3F_C4B_T2F_Quad* quad, unsigned short* cellIndex) {
+        float left = 0.0F, bottom = 0.0F, top = 1.0F, right = 1.0F;
+
+        // TODO: index.isRotated should be treated accordingly
+
+        ParticleFrameDescriptor index;
+        auto iter = _animationIndices.find(*cellIndex);
+        if (iter == _animationIndices.end())
+            index.rect = _undefinedIndexRect;
+        else
+            index = iter->second;
+
+        auto texWidth  = _texture->getPixelsWide();
+        auto texHeight = _texture->getPixelsHigh();
+
+        left  = index.rect.origin.x / texWidth;
+        right = (index.rect.origin.x + index.rect.size.x) / texWidth;
+
+        top    = index.rect.origin.y / texHeight;
+        bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
+
+        quad->bl.texCoords.u = left;
+        quad->bl.texCoords.v = bottom;
+
+        quad->br.texCoords.u = right;
+        quad->br.texCoords.v = bottom;
+
+        quad->tl.texCoords.u = left;
+        quad->tl.texCoords.v = top;
+
+        quad->tr.texCoords.u = right;
+        quad->tr.texCoords.v = top;
+    };
 
     // The reason for using for-loops separately for every property is because
     // When the processor needs to read from or write to a location in memory,
