@@ -344,7 +344,7 @@ bool HSV::operator!=(const HSV& right) const
     return !(h != right.h || s != right.s || v != right.v);
 }
 
-void HSV::rgb(float fR, float fG, float fB, float fA = 1.0F)
+void HSV::rgb(float fR, float fG, float fB, float fA)
 {
     float fCMax  = MAX(MAX(fR, fG), fB);
     float fCMin  = MIN(MIN(fR, fG), fB);
