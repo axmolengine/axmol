@@ -312,8 +312,7 @@ HSV::HSV(const Color3B& c)
     float fR = c.r / 255.0F;
     float fG = c.g / 255.0F;
     float fB = c.b / 255.0F;
-    hsv(fR, fG, fB);
-    a = 1.0F;
+    hsv(fR, fG, fB, 1.0F);
 }
 
 HSV::HSV(const Color4B& c)
@@ -322,8 +321,7 @@ HSV::HSV(const Color4B& c)
     float fG = c.g / 255.0F;
     float fB = c.b / 255.0F;
     float fA = c.a / 255.0F;
-    hsv(fR, fG, fB);
-    a = fA;
+    hsv(fR, fG, fB, fA);
 }
 
 HSV::HSV(const Color4F& c)
@@ -332,8 +330,7 @@ HSV::HSV(const Color4F& c)
     float fG = c.g;
     float fB = c.b;
     float fA = c.a;
-    hsv(fR, fG, fB);
-    a = fA;
+    hsv(fR, fG, fB, fA);
 }
 
 // This only compares hue saturation value without alpha value.
@@ -347,7 +344,7 @@ bool HSV::operator!=(const HSV& right) const
     return !(h != right.h || s != right.s || v != right.v);
 }
 
-void HSV::hsv(float fR, float fG, float fB)
+void HSV::hsv(float fR, float fG, float fB, float fA = 1.0F)
 {
     float fCMax  = MAX(MAX(fR, fG), fB);
     float fCMin  = MIN(MIN(fR, fG), fB);
@@ -390,6 +387,8 @@ void HSV::hsv(float fR, float fG, float fB)
     {
         h = 360 + h;
     }
+
+    a = fA;
 }
 
 void HSV::color(float& fR, float& fG, float& fB) const
