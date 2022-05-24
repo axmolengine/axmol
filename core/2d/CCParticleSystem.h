@@ -271,6 +271,9 @@ public:
 
         /** The simulation's seconds are set to the particles' lifetime specified inclusive of variant. */
         SIMULATION_USE_PARTICLE_LIFETIME = -1,
+
+        /** The simulation's framerate is set to the animation interval specified in director. */
+        SIMULATION_USE_GAME_ANIMATION_INTERVAL = -1,
     };
 
     /** Creates an initializes a ParticleSystem from a plist file.
@@ -949,33 +952,21 @@ public:
     void setPositionType(PositionType type) { _positionType = type; }
 
     /** Advance the particle system and make it seem like it ran for this many seconds.
-     * The frame rate used for simulation accuracy is the screens refresh rate.
-     * 
-     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
-     */
-    void simulate(float seconds = SIMULATION_USE_PARTICLE_LIFETIME);
-
-    /** Advance the particle system and make it seem like it ran for this many seconds.
      *
      * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
-     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance.
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance. value of -1 means (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
      */
-    void simulateFPS(float seconds = SIMULATION_USE_PARTICLE_LIFETIME, float frameRate = 30.0F);
+    void simulate(float seconds      = SIMULATION_USE_PARTICLE_LIFETIME,
+                     float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
      * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
      *
      * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance. value of -1 means (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
      */
-    void resimulate(float seconds = SIMULATION_USE_PARTICLE_LIFETIME);
-
-    /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
-     * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
-     *
-     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
-     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance.
-     */
-    void resimulateFPS(float seconds = SIMULATION_USE_PARTICLE_LIFETIME, float frameRate = 30.0F);
+    void resimulate(float seconds   = SIMULATION_USE_PARTICLE_LIFETIME,
+                    float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     // Overrides
     virtual void onEnter() override;

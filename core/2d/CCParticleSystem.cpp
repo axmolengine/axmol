@@ -1016,25 +1016,20 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect,
     return true;
 }
 
-void ParticleSystem::simulate(float seconds)
-{
-    simulateFPS(seconds, 1.0F / Director::getInstance()->getAnimationInterval());
-}
-
-void ParticleSystem::simulateFPS(float seconds, float frameRate)
+void ParticleSystem::simulate(float seconds, float frameRate)
 {
     auto l_updatePaused = _updatePaused;
     _updatePaused = false;
-    seconds = seconds == SIMULATION_USE_PARTICLE_LIFETIME ?
+    seconds   = seconds   == SIMULATION_USE_PARTICLE_LIFETIME ?
         getLife() + getLifeVar() : seconds;
+    frameRate = frameRate == SIMULATION_USE_GAME_ANIMATION_INTERVAL ?
+        1.0F / Director::getInstance()->getAnimationInterval() : frameRate;
     auto delta = 1.0F / frameRate;
-    float lastDelta = 0.0F;
     if (seconds > delta)
     {
         while (seconds > 0.0F)
         {
             this->update(delta);
-            lastDelta = seconds;
             seconds -= delta;
         }
         this->update(seconds);
@@ -1044,16 +1039,10 @@ void ParticleSystem::simulateFPS(float seconds, float frameRate)
     _updatePaused = l_updatePaused;
 }
 
-void ParticleSystem::resimulate(float seconds)
+void ParticleSystem::resimulate(float seconds, float frameRate)
 {
     this->resetSystem();
-    this->simulate(seconds);
-}
-
-void ParticleSystem::resimulateFPS(float seconds, float frameRate)
-{
-    this->resetSystem();
-    this->simulateFPS(seconds, frameRate);
+    this->simulate(seconds, frameRate);
 }
 
 void ParticleSystem::onEnter()
@@ -1109,6 +1098,12 @@ void ParticleSystem::update(float dt)
     if (_componentContainer && !_componentContainer->isEmpty())
     {
         _componentContainer->visit(dt);
+    }
+
+    if (dt > 0.5F)
+    {
+        this->simulate(dt, 15);
+        return;
     }
 
     if (_fixedFPS != 0)
