@@ -181,7 +181,7 @@ struct CC_DLL HSV
 
     bool equals(const HSV& other) const { return (*this == other); }
 
-    void hsv(float fR, float fG, float fB, float fA = 1.0F);
+    void rgb(float fR, float fG, float fB, float fA = 1.0F);
     void color(float& fR, float& fG, float& fB) const;
 
     float h = 0.f;
