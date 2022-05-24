@@ -388,7 +388,7 @@ void HSV::rgb(float fR, float fG, float fB, float fA)
         h = 360 + h;
     }
 
-    // Make hue value wrap around 360 (i.e. -390 degrees would be 30 wrapper)
+    // Make hue value wrap around 360 (i.e. -390 degrees would be 30 wrapped)
     h = abs(fmod(h, 360.0F));
 
     a = fA;
