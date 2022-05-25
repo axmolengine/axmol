@@ -55,7 +55,6 @@ struct CC_DLL Color3B
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b);
     explicit Color3B(const Color4B& color);
     explicit Color3B(const Color4F& color);
-    explicit Color3B(const HSV& hsv);
 
     bool operator==(const Color3B& right) const;
     bool operator==(const Color4B& right) const;
@@ -91,7 +90,6 @@ struct CC_DLL Color4B
     Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
     explicit Color4B(const Color3B& color, uint8_t _a = 255);
     Color4B(const Color4F& color);
-    explicit Color4B(const HSV& hsv);
 
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
     {
@@ -134,7 +132,6 @@ struct CC_DLL Color4F
     Color4F(float _r, float _g, float _b, float _a);
     explicit Color4F(const Color3B& color, float _a = 1.0f);
     explicit Color4F(const Color4B& color);
-    Color4F(const HSV& hsv);
 
     bool operator==(const Color4F& right) const;
     bool operator==(const Color3B& right) const;
@@ -161,8 +158,24 @@ struct CC_DLL Color4F
     static const Color4F GRAY;
 };
 
+Color4F& operator+=(Color4F& lhs, const Color4F& rhs);
+Color4F operator+(Color4F lhs, const Color4F& rhs);
+
+Color4F& operator-=(Color4F& lhs, const Color4F& rhs);
+Color4F operator-(Color4F lhs, const Color4F& rhs);
+
+Color4F& operator*=(Color4F& lhs, const Color4F& rhs);
+Color4F operator*(Color4F lhs, const Color4F& rhs);
+Color4F& operator*=(Color4F& lhs, float rhs);
+Color4F operator*(Color4F lhs, float rhs);
+
+Color4F& operator/=(Color4F& lhs, const Color4F& rhs);
+Color4F operator/(Color4F lhs, const Color4F& rhs);
+Color4F& operator/=(Color4F& lhs, float rhs);
+Color4F operator/(Color4F lhs, float rhs);
+
 /**
- * Hue Saturation Value color composed of 4 floats.
+ * Hue Saturation Value color space composed of 4 floats.
  * @since adxe-1.0.0b6
  * 
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
@@ -181,8 +194,12 @@ struct CC_DLL HSV
 
     bool equals(const HSV& other) const { return (*this == other); }
 
-    void rgb(float fR, float fG, float fB, float fA = 1.0F);
-    void color(float& fR, float& fG, float& fB) const;
+    void set(float fR, float fG, float fB, float fA = 1.0F);
+    void get(float& fR, float& fG, float& fB) const;
+
+    Color3B toColor3B();
+    Color4B toColor4B();
+    Color4F toColor4F();
 
     float h = 0.f;
     float s = 0.f;
@@ -190,21 +207,72 @@ struct CC_DLL HSV
     float a = 0.f;
 };
 
-Color4F& operator+=(Color4F& lhs, const Color4F& rhs);
-Color4F operator+(Color4F lhs, const Color4F& rhs);
+HSV& operator+=(HSV& lhs, const HSV& rhs);
+HSV operator+(HSV lhs, const HSV& rhs);
 
-Color4F& operator-=(Color4F& lhs, const Color4F& rhs);
-Color4F operator-(Color4F lhs, const Color4F& rhs);
+HSV& operator-=(HSV& lhs, const HSV& rhs);
+HSV operator-(HSV lhs, const HSV& rhs);
 
-Color4F& operator*=(Color4F& lhs, const Color4F& rhs);
-Color4F operator*(Color4F lhs, const Color4F& rhs);
-Color4F& operator*=(Color4F& lhs, float rhs);
-Color4F operator*(Color4F lhs, float rhs);
+HSV& operator*=(HSV& lhs, const HSV& rhs);
+HSV operator*(HSV lhs, const HSV& rhs);
+HSV& operator*=(HSV& lhs, float rhs);
+HSV operator*(HSV lhs, float rhs);
 
-Color4F& operator/=(Color4F& lhs, const Color4F& rhs);
-Color4F operator/(Color4F lhs, const Color4F& rhs);
-Color4F& operator/=(Color4F& lhs, float rhs);
-Color4F operator/(Color4F lhs, float rhs);
+HSV& operator/=(HSV& lhs, const HSV& rhs);
+HSV operator/(HSV lhs, const HSV& rhs);
+HSV& operator/=(HSV& lhs, float rhs);
+HSV operator/(HSV lhs, float rhs);
+
+/**
+ * Hue Saturation Luminance color space composed of 4 floats.
+ * @since adxe-1.0.0b6
+ *
+ * Implementation source: https://gist.github.com/ciembor/1494530
+ */
+struct CC_DLL HSL
+{
+    HSL();
+    HSL(float _h, float _s, float _l, float _a = 1.0F);
+
+    explicit HSL(const Color3B& c);
+    explicit HSL(const Color4B& c);
+    explicit HSL(const Color4F& c);
+
+    bool operator==(const HSL& right) const;
+    bool operator!=(const HSL& right) const;
+
+    bool equals(const HSL& other) const { return (*this == other); }
+
+    void set(float fR, float fG, float fB, float fA = 1.0F);
+    void get(float& fR, float& fG, float& fB) const;
+
+    static float hue2rgb(float p, float q, float t);
+
+    Color3B toColor3B();
+    Color4B toColor4B();
+    Color4F toColor4F();
+
+    float h = 0.f;
+    float s = 0.f;
+    float l = 0.f;
+    float a = 0.f;
+};
+
+HSL& operator+=(HSL& lhs, const HSL& rhs);
+HSL operator+(HSL lhs, const HSL& rhs);
+
+HSL& operator-=(HSL& lhs, const HSL& rhs);
+HSL operator-(HSL lhs, const HSL& rhs);
+
+HSL& operator*=(HSL& lhs, const HSL& rhs);
+HSL operator*(HSL lhs, const HSL& rhs);
+HSL& operator*=(HSL& lhs, float rhs);
+HSL operator*(HSL lhs, float rhs);
+
+HSL& operator/=(HSL& lhs, const HSL& rhs);
+HSL operator/(HSL lhs, const HSL& rhs);
+HSL& operator/=(HSL& lhs, float rhs);
+HSL operator/(HSL lhs, float rhs);
 
 /** @struct Tex2F
  * A TEXCOORD composed of 2 floats: u, v
