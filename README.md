@@ -90,7 +90,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
   
   Build excecutable in a command line (e.g. cpp-tests):
-    ```msbuild .\build\adxe.sln -target:cpp-tests -maxCpuCount```
+    ```msbuild .\build\adxe.sln -target:cpp_tests -maxCpuCount```
 
 #### Android
   1. Install Android Studio 2021.1.1+
