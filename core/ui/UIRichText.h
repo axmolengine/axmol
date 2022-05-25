@@ -503,9 +503,10 @@ public:
 
     /**
      * @brief Rearrange all RichElement in the RichText.
+     * @param force Force the formatting of the contents
      * It's usually called internally.
      */
-    void formatText();
+    void formatText(bool force = false);
 
     // override functions.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
