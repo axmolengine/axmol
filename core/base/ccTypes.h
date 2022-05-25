@@ -225,7 +225,7 @@ HSV operator/(HSV lhs, float rhs);
 
 /**
  * Hue Saturation Luminance color space composed of 4 floats.
- * @since adxe-1.0.0b6
+ * @since adxe-1.0.0b7
  *
  * Implementation source: https://gist.github.com/ciembor/1494530
  */
