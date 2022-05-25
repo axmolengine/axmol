@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "base/CCProtocols.h"
 #include "2d/CCNode.h"
 #include "base/CCValue.h"
+#include "2d/CCSpriteFrame.h"
+#include "2d/CCSpriteFrameCache.h"
 
 NS_CC_BEGIN
 
@@ -52,6 +54,26 @@ struct particle_point
     float y;
 };
 
+/** @struct ParticleAnimationDescriptor
+Structure that contains animation description
+*/
+struct ParticleAnimationDescriptor
+{
+    float                       animationSpeed;
+    float                       animationSpeedVariance;
+    std::vector<unsigned short> animationIndices;
+    bool                        reverseIndices;
+};
+
+/** @struct ParticleFrameDescriptor
+Structure that contains frame description
+*/
+struct ParticleFrameDescriptor
+{
+    cocos2d::Rect rect;
+    bool          isRotated;
+};
+
 class CC_DLL ParticleData
 {
 public:
@@ -70,11 +92,21 @@ public:
     float* deltaColorB;
     float* deltaColorA;
 
+    float* hueValue;
+    float* saturationValue;
+    float* luminanceValue;
+
     float* size;
     float* deltaSize;
     float* rotation;
+    float* staticRotation;
     float* deltaRotation;
+    float* totalTimeToLive;
     float* timeToLive;
+    float* animTimeDelta;
+    float* animTimeLength;
+    unsigned short* animIndex;
+    unsigned short* animCellIndex;
     unsigned int* atlasIndex;
 
     //! Mode A: gravity, direction, radial accel, tangential accel
@@ -103,10 +135,10 @@ public:
 
     void copyParticle(int p1, int p2)
     {
-        posx[p1]      = posx[p2];
-        posy[p1]      = posy[p2];
-        startPosX[p1] = startPosX[p2];
-        startPosY[p1] = startPosY[p2];
+        posx[p1]       = posx[p2];
+        posy[p1]       = posy[p2];
+        startPosX[p1]  = startPosX[p2];
+        startPosY[p1]  = startPosY[p2];
 
         colorR[p1] = colorR[p2];
         colorG[p1] = colorG[p2];
@@ -118,15 +150,24 @@ public:
         deltaColorB[p1] = deltaColorB[p2];
         deltaColorA[p1] = deltaColorA[p2];
 
-        size[p1]      = size[p2];
-        deltaSize[p1] = deltaSize[p2];
+        hueValue[p1]        = hueValue[p2];
+        saturationValue[p1] = saturationValue[p2];
+        luminanceValue[p1]  = luminanceValue[p2];
 
-        rotation[p1]      = rotation[p2];
-        deltaRotation[p1] = deltaRotation[p2];
+        size[p1]           = size[p2];
+        deltaSize[p1]      = deltaSize[p2];
+        rotation[p1]       = rotation[p2];
+        staticRotation[p1] = staticRotation[p2];
+        deltaRotation[p1]  = deltaRotation[p2];
+		
+        totalTimeToLive[p1] = totalTimeToLive[p2];
+        timeToLive[p1]      = timeToLive[p2];
+        animTimeDelta[p1]   = animTimeDelta[p2];
+        animTimeLength[p1]  = animTimeLength[p2];
 
-        timeToLive[p1] = timeToLive[p2];
-
-        atlasIndex[p1] = atlasIndex[p2];
+        animIndex[p1]     = animIndex[p2];
+        animCellIndex[p1] = animCellIndex[p2];
+        atlasIndex[p1]    = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
         modeA.dirY[p1]            = modeA.dirY[p2];
@@ -202,7 +243,7 @@ public:
     };
 
     /** PositionType
-     Possible types of particle positions.
+     Types of particle positioning.
      * @js cc.ParticleSystem.TYPE_FREE
      */
     enum class PositionType
@@ -213,6 +254,17 @@ public:
                    Use case: Attach an emitter to an sprite, and you want that the emitter follows the sprite.*/
 
         GROUPED, /** Living particles are attached to the emitter and are translated along with it. */
+
+    };
+
+   /** TexAnimDir
+    Texture animation direction for the particles.
+    */
+    enum class TexAnimDir
+    {
+        VERTICAL, /** texture coordinates are read top to bottom within the texture */
+
+        HORIZONTAL, /** texture coordinates are read left to right within the texture */
 
     };
 
@@ -227,6 +279,12 @@ public:
 
         /** The starting radius of the particle is equal to the ending radius. */
         START_RADIUS_EQUAL_TO_END_RADIUS = -1,
+
+        /** The simulation's seconds are set to the particles' lifetime specified inclusive of variant. */
+        SIMULATION_USE_PARTICLE_LIFETIME = -1,
+
+        /** The simulation's framerate is set to the animation interval specified in director. */
+        SIMULATION_USE_GAME_ANIMATION_INTERVAL = -1,
     };
 
     /** Creates an initializes a ParticleSystem from a plist file.
@@ -252,7 +310,7 @@ public:
     static Vector<ParticleSystem*>& getAllParticleSystems();
 
 public:
-    void addParticles(int count);
+    void addParticles(int count, int animationCellIndex = -1, int animationIndex = -1);
 
     void stopSystem();
     /** Kill all living particles.
@@ -658,6 +716,92 @@ public:
      */
     void setEndColorVar(const Color4F& color) { _endColorVar = color; }
 
+    /** Sets wether to use HSV color system.
+     * WARNING: careful when using HSV with too many particles because it's expensive.
+     * 
+     * @param hsv Use hsv color system.
+     */
+    void useHSV(bool hsv) { _isHsv = hsv; };
+    bool isHSV() { return _isHsv; };
+
+    /** Gets the hue value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     * 
+     * @return The hue value of each particle in degress (i.e. 360).
+     */
+    float getHue() const { return _hueValue; }
+    /** Sets the hue value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param degrees The hue value of each particle in degress (i.e. 360).
+     */
+    void setHue(float degrees) { _hueValue = degrees; }
+
+    /** Gets the hue variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The hue variance value of each particle in degress (i.e. 360).
+     */
+    float getHueVar() const { return _hueValueVar; }
+    /** Sets the hue variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param degrees The hue variance value of each particle in degress (i.e. 360).
+     */
+    void setHueVar(float degrees) { _hueValueVar = degrees; }
+
+    /** Gets the saturation value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The saturation value of each particle.
+     */
+    float getSaturation() const { return _saturationValue; }
+    /** Sets the saturation value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The saturation value of each particle.
+     */
+    void setSaturation(float value) { _saturationValue = value; }
+
+    /** Gets the saturation variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The saturation variance value of each particle.
+     */
+    float getSaturationVar() const { return _saturationValueVar; }
+    /** Sets the saturation variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The saturation variance value of each particle.
+     */
+    void setSaturationVar(float value) { _saturationValueVar = value; }
+
+    /** Gets the luminance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The luminance value of each particle.
+     */
+    float getLuminance() const { return _luminanceValue; }
+    /** Sets the luminance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The luminance value of each particle.
+     */
+    void setLuminance(float value) { _luminanceValue = value; }
+
+    /** Gets the luminance variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The luminance variance value of each particle.
+     */
+    float getLuminanceVar() const { return _luminanceValueVar; }
+    /** Sets the luminance variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The luminance variance value of each particle.
+     */
+    void setLuminanceVar(float value) { _luminanceValueVar = value; }
+
     /** Gets the start spin of each particle.
      *
      * @return The start spin of each particle.
@@ -702,6 +846,28 @@ public:
      */
     void setEndSpinVar(float endSpinVar) { _endSpinVar = endSpinVar; }
 
+    /** Gets the spawn angle of each particle
+     *
+     * @return The angle in degrees of each particle.
+     */
+    float getSpawnAngle() { return _spawnAngle; }
+    /** Sets the spawn angle of each particle
+     *
+     * @param angle The angle in degrees of each particle.
+     */
+    void setSpawnAngle(float angle) { _spawnAngle = angle; }
+
+    /** Sets the spawn angle variance of each particle.
+     *
+     * @return The angle variance in degrees of each particle.
+     */
+    float getSpawnAngleVar() { return _spawnAngleVar; }
+    /** Sets the spawn angle variance of each particle.
+     *
+     * @param angle The angle variance in degrees of each particle.
+     */
+    void setSpawnAngleVar(float angle) { _spawnAngleVar = angle; }
+
     /** Gets the emission rate of the particles.
      *
      * @return The emission rate of the particles.
@@ -728,6 +894,160 @@ public:
     void setOpacityModifyRGB(bool opacityModifyRGB) override { _opacityModifyRGB = opacityModifyRGB; }
     bool isOpacityModifyRGB() const override { return _opacityModifyRGB; }
 
+    /** Enables or disables tex coord animations that are set based on particle life. */
+    void setLifeAnimation(bool enabled)
+    {
+        _isLifeAnimated = enabled;
+        _isEmitterAnimated = false;
+        _isLoopAnimated = false;
+    }
+
+    /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. */
+    void setEmitterAnimation(bool enabled)
+    {
+        _isEmitterAnimated = enabled;
+        _isLifeAnimated = false;
+        _isLoopAnimated = false;
+    }
+
+    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die */
+    void setLoopAnimation(bool enabled)
+    {
+        _isLoopAnimated = enabled;
+        _isEmitterAnimated = false;
+        _isLifeAnimated = false;
+    }
+
+    bool isLifeAnimated() { return _isLifeAnimated; }
+    bool isEmitterAnimated() { return _isEmitterAnimated; }
+    bool isLoopAnimated() { return _isLoopAnimated; }
+
+    /** Gets the total number of indices. 
+    *
+    * @return The size of the list holding animation indices.
+    */
+    int getTotalAnimationIndices() { return _animIndexCount; }
+
+    /** Sets wether to start from first cell and go forwards (normal) or last cell and go backwards (reversed) */
+    void setAnimationReverse(bool reverse) { _isAnimationReversed = reverse; }
+    bool isAnimationReversed() { return _isAnimationReversed; }
+
+    /** Resets the count of indices to 0 and empties the animation index array */
+    void resetAnimationIndices();
+
+    /** Empties the container of animation descriptors */
+    void resetAnimationDescriptors();
+
+    /** Choose what animation descriptors are to be selected at random for particles.
+    * This function should be called after you've inserted/overwritten any animation descriptors.
+    * 
+    * @param animations Array of specific indices of animations to play at random
+    */
+    void setMultiAnimationRandomSpecific(const std::vector<unsigned short> &animations) { _randomAnimations = animations; };
+
+    /** Choose ALL animation descriptors to be selected at random for particles.
+    * This function should be called after you've inserted/overwritten any animation descriptors.
+    */
+    void setMultiAnimationRandom();
+
+    /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
+    * will erase the array and add new indices from the atlas.
+    * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
+    void setAnimationIndicesAtlas();
+
+    /** Add all particle animation indices based on cell size and direction spicified if the method of rendering preferred is texture atlas.
+    * will erase the array and add new indices from the atlas.
+    *
+    * @param unifiedCellSize The size of cell unified.
+    * @param direction What direction is the atlas
+    */
+    void setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction = TexAnimDir::HORIZONTAL);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+    * The index is automatically incremented on each addition.
+    *
+    * @param frameName SpriteFrame name to search for
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(std::string_view frameName);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+    *
+    * @param index Index id to add the frame to or override it with the new frame
+    * @param frameName SpriteFrame name to search for
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(unsigned short index, std::string_view frameName);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+    * The index is automatically incremented on each addition.
+    * 
+    * @param frame SpriteFrame containting data about tex coords
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(cocos2d::SpriteFrame* frame);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+    * you can specify which index you want to override in this function
+    * 
+    * @param index Index id to add the frame to or override it with the new frame
+    * @param frame SpriteFrame containting data about tex coords
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
+
+    /** Add a particle animation index based on tex coords spicified.
+    * you can specify which index you want to override in this function
+    * 
+    * @param index Index id to add the frame to or override it with the new rect
+    * @param rect Rect containting data about tex coords in pixels
+    * @param rotated Not implemented.
+    * 
+    * @return Returns true of the index was successfully found and added. Otherwise, false
+    */
+    bool addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
+
+    /** You can specify what rect is used if an index in an animation descriptor wasn't found.
+    *
+    * @param rect Rect containting data about tex coords in pixels
+    */
+    void setRectForUndefinedIndices(cocos2d::Rect rect) { _undefinedIndexRect = rect; };
+
+    /** Add a particle animation descriptor with an index.
+    *
+    * @param indexOfDescriptor Index of the animation to be added, adding to the same index will just override the pervious animation descriptor
+    * @param time length of the animation in seconds
+    * @param timeVariance Time randomly selected for each different particle added on the animation length
+    * @param indices An array of the indicies
+    * @param reverse Should the animation indicies be played backwards? (default: false)
+    */
+    void setAnimationDescriptor(unsigned short indexOfDescriptor,
+                                float time,
+                                float timeVariance,
+                                const std::vector<unsigned short> &indices,
+                                bool reverse = false);
+
+    /** Add a particle animation descriptor with the index 0.
+     *
+     * @param indices An array of the indicies
+     * @param reverse Should the animation indicies be played backwards? (default: false)
+     */
+    void setAnimationDescriptor(const std::vector<unsigned short> &indices, bool reverse = false)
+    {
+        setAnimationDescriptor(0, 0, 0, indices, reverse);
+    };
+
+    /** Sets wether the animation descriptors should follow the time scale of the system or not.
+     *
+     * @param independent Should the animation descriptor speeds be played independently? (default: false)
+     */
+    void setAnimationSpeedTimescaleIndependent(bool independent) { _animationTimescaleInd = independent; };
+    bool isAnimationSpeedTimescaleIndependent() { return _animationTimescaleInd; };
+
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
      *
@@ -740,6 +1060,23 @@ public:
      * @param type The particles movement type.
      */
     void setPositionType(PositionType type) { _positionType = type; }
+
+    /** Advance the particle system and make it seem like it ran for this many seconds.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance. value of -1 means (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+     */
+    void simulate(float seconds      = SIMULATION_USE_PARTICLE_LIFETIME,
+                     float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
+
+    /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
+     * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance. value of -1 means (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+     */
+    void resimulate(float seconds   = SIMULATION_USE_PARTICLE_LIFETIME,
+                    float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     // Overrides
     virtual void onEnter() override;
@@ -812,11 +1149,42 @@ public:
      */
     virtual bool isPaused() const;
 
-    /* Pause the emissions*/
+    /* Pause the emissions */
     virtual void pauseEmissions();
 
-    /* UnPause the emissions*/
+    /* Unpause the emissions */
     virtual void resumeEmissions();
+
+    /** Is system update paused
+     @return True if the emissions are paused, else false
+     */
+    virtual bool isUpdatePaused() const;
+
+    /* Pause the particles from being updated */
+    virtual void pauseUpdate();
+
+    /* Unpause the particles from being updated */
+    virtual void resumeUpdate();
+
+    /** Gets the fixed frame rate count of the particle system.
+     @return Fixed frame rate count of the particle system.
+     */
+    virtual float getFixedFPS();
+
+    /** Sets the fixed frame rate count of the particle system.
+     @param Fixed frame rate count of the particle system. (default: 0.0)
+     */
+    virtual void setFixedFPS(float frameRate = 0.0F);
+
+    /** Gets the time scale of the particle system.
+     @return Time scale of the particle system.
+     */
+    virtual float getTimeScale();
+
+    /** Gets the time scale of the particle system.
+     @param Time scale of the particle system. (default: 1.0)
+     */
+    virtual void setTimeScale(float scale = 1.0F);
 
 protected:
     virtual void updateBlendFunc();
@@ -957,6 +1325,20 @@ protected:
     Color4F _endColor;
     /** end color variance of each particle */
     Color4F _endColorVar;
+    //* Is the hsv system used or not.
+    bool _isHsv;
+    //* Hue value of each particle
+    float _hueValue;
+    //* Hue value variance of each particle
+    float _hueValueVar;
+    //* Saturation value of each particle
+    float _saturationValue;
+    //* Saturation value variance of each particle
+    float _saturationValueVar;
+    //* Luminance value of each particle
+    float _luminanceValue;
+    //* Luminance value variance of each particle
+    float _luminanceValueVar;
     //* initial angle of each particle
     float _startSpin;
     //* initial angle of each particle
@@ -965,6 +1347,10 @@ protected:
     float _endSpin;
     //* initial angle of each particle
     float _endSpinVar;
+    //* initial rotation of each particle
+    float _spawnAngle;
+    //* initial rotation of each particle
+    float _spawnAngleVar;
     /** emission rate of the particles */
     float _emissionRate;
     /** maximum particles of the system */
@@ -975,6 +1361,26 @@ protected:
     BlendFunc _blendFunc;
     /** does the alpha value modify color */
     bool _opacityModifyRGB;
+    /** is the particle system animated */
+    bool _isLifeAnimated;
+    /** is the emitter particle system animated */
+    bool _isEmitterAnimated;
+    /** is the emitter particle system animated */
+    bool _isLoopAnimated;
+    /** variable keeping count of sprite frames or atlas indices added */
+    int _animIndexCount;
+    /** wether to start from first or last when using life animation */
+    bool _isAnimationReversed;
+    /** A map that stores particle animation index coords */
+    std::unordered_map<unsigned short, ParticleFrameDescriptor> _animationIndices;
+    /** A map that stores particle animation descriptors */
+    std::unordered_map<unsigned short, ParticleAnimationDescriptor> _animations;
+    /** A vector that stores ids of animation descriptors that are choosen at random */
+    std::vector<unsigned short> _randomAnimations;
+    /** Wether the animation goes with the time scale of the system or is independent. */
+    bool _animationTimescaleInd;
+    /** A rect that is used instead when an index is not found */
+    cocos2d::Rect _undefinedIndexRect;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
 
@@ -985,6 +1391,18 @@ protected:
 
     /** is the emitter paused */
     bool _paused;
+
+    /** is particle system update paused */
+    bool _updatePaused;
+
+    /** time scale of the particle system */
+    float _timeScale;
+
+    /** Fixed frame rate of the particle system */
+    float _fixedFPS;
+
+    /** Fixed frame rate delta (internal) */
+    float _fixedFPSDelta;
 
     /** is sourcePosition compatible */
     bool _sourcePositionCompatible;
