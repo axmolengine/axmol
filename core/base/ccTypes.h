@@ -176,7 +176,7 @@ Color4F operator/(Color4F lhs, float rhs);
 
 /**
  * Hue Saturation Value color space composed of 4 floats.
- * @since adxe-1.0.0b6
+ * @since adxe-1.0.0b7
  * 
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
  */
