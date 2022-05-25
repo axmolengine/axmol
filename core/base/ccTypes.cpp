@@ -435,7 +435,7 @@ void HSV::set(float r, float g, float b, float a)
         h = 360 + h;
     }
 
-    a = a;
+    this->a = a;
 }
 
 void HSV::get(float& r, float& g, float& b) const
