@@ -194,8 +194,8 @@ struct CC_DLL HSV
 
     bool equals(const HSV& other) const { return (*this == other); }
 
-    void set(float fR, float fG, float fB, float fA = 1.0F);
-    void get(float& fR, float& fG, float& fB) const;
+    void set(float r, float f, float b, float a = 1.0F);
+    void get(float& r, float& g, float& b) const;
 
     Color3B toColor3B();
     Color4B toColor4B();
@@ -243,8 +243,8 @@ struct CC_DLL HSL
 
     bool equals(const HSL& other) const { return (*this == other); }
 
-    void set(float fR, float fG, float fB, float fA = 1.0F);
-    void get(float& fR, float& fG, float& fB) const;
+    void set(float r, float g, float b, float a = 1.0F);
+    void get(float& r, float& g, float& b) const;
 
     static float hue2rgb(float p, float q, float t);
 

@@ -280,28 +280,28 @@ HSV::HSV(float _h, float _s, float _v, float _a) : h(_h), s(_s), v(_v), a(_a) {}
 
 HSV::HSV(const Color3B& c)
 {
-    float fR = c.r / 255.0F;
-    float fG = c.g / 255.0F;
-    float fB = c.b / 255.0F;
-    set(fR, fG, fB, 1.0F);
+    float r = c.r / 255.0F;
+    float g = c.g / 255.0F;
+    float b = c.b / 255.0F;
+    set(r, g, b, 1.0F);
 }
 
 HSV::HSV(const Color4B& c)
 {
-    float fR = c.r / 255.0F;
-    float fG = c.g / 255.0F;
-    float fB = c.b / 255.0F;
-    float fA = c.a / 255.0F;
-    set(fR, fG, fB, fA);
+    float r = c.r / 255.0F;
+    float g = c.g / 255.0F;
+    float b = c.b / 255.0F;
+    float a = c.a / 255.0F;
+    set(r, g, b, a);
 }
 
 HSV::HSV(const Color4F& c)
 {
-    float fR = c.r;
-    float fG = c.g;
-    float fB = c.b;
-    float fA = c.a;
-    set(fR, fG, fB, fA);
+    float r = c.r;
+    float g = c.g;
+    float b = c.b;
+    float a = c.a;
+    set(r, g, b, a);
 }
 
 bool HSV::operator==(const HSV& right) const
@@ -391,25 +391,25 @@ HSV operator/(HSV lhs, float rhs)
     return lhs /= rhs;
 }
 
-void HSV::set(float fR, float fG, float fB, float fA)
+void HSV::set(float r, float g, float b, float a)
 {
-    float fCMax  = MAX(MAX(fR, fG), fB);
-    float fCMin  = MIN(MIN(fR, fG), fB);
+    float fCMax  = MAX(MAX(r, g), b);
+    float fCMin  = MIN(MIN(r, g), b);
     float fDelta = fCMax - fCMin;
 
     if (fDelta > 0)
     {
-        if (fCMax == fR)
+        if (fCMax == r)
         {
-            h = 60 * (fmod(((fG - fB) / fDelta), 6));
+            h = 60 * (fmod(((g - b) / fDelta), 6));
         }
-        else if (fCMax == fG)
+        else if (fCMax == g)
         {
-            h = 60 * (((fB - fR) / fDelta) + 2);
+            h = 60 * (((b - r) / fDelta) + 2);
         }
-        else if (fCMax == fB)
+        else if (fCMax == b)
         {
-            h = 60 * (((fR - fG) / fDelta) + 4);
+            h = 60 * (((r - g) / fDelta) + 4);
         }
 
         if (fCMax > 0)
@@ -435,10 +435,10 @@ void HSV::set(float fR, float fG, float fB, float fA)
         h = 360 + h;
     }
 
-    a = fA;
+    a = a;
 }
 
-void HSV::get(float& fR, float& fG, float& fB) const
+void HSV::get(float& r, float& g, float& b) const
 {
     float hue = -(remainder(std::fabs(h), 360));
     hue += 360;
@@ -450,50 +450,50 @@ void HSV::get(float& fR, float& fG, float& fB) const
 
     if (0 <= fHPrime && fHPrime < 1)
     {
-        fR = fC;
-        fG = fX;
-        fB = 0;
+        r = fC;
+        g = fX;
+        b = 0;
     }
     else if (1 <= fHPrime && fHPrime < 2)
     {
-        fR = fX;
-        fG = fC;
-        fB = 0;
+        r = fX;
+        g = fC;
+        b = 0;
     }
     else if (2 <= fHPrime && fHPrime < 3)
     {
-        fR = 0;
-        fG = fC;
-        fB = fX;
+        r = 0;
+        g = fC;
+        b = fX;
     }
     else if (3 <= fHPrime && fHPrime < 4)
     {
-        fR = 0;
-        fG = fX;
-        fB = fC;
+        r = 0;
+        g = fX;
+        b = fC;
     }
     else if (4 <= fHPrime && fHPrime < 5)
     {
-        fR = fX;
-        fG = 0;
-        fB = fC;
+        r = fX;
+        g = 0;
+        b = fC;
     }
     else if (5 <= fHPrime && fHPrime < 6)
     {
-        fR = fC;
-        fG = 0;
-        fB = fX;
+        r = fC;
+        g = 0;
+        b = fX;
     }
     else
     {
-        fR = 0;
-        fG = 0;
-        fB = 0;
+        r = 0;
+        g = 0;
+        b = 0;
     }
 
-    fR += fM;
-    fG += fM;
-    fB += fM;
+    r += fM;
+    g += fM;
+    b += fM;
 }
 
 Color3B HSV::toColor3B()
@@ -522,28 +522,28 @@ HSL::HSL(float _h, float _s, float _l, float _a) : h(_h), s(_s), l(_l), a(_a) {}
 
 HSL::HSL(const Color3B& c)
 {
-    float fR = c.r / 255.0F;
-    float fG = c.g / 255.0F;
-    float fB = c.b / 255.0F;
-    set(fR, fG, fB, 1.0F);
+    float r = c.r / 255.0F;
+    float g = c.g / 255.0F;
+    float b = c.b / 255.0F;
+    set(r, g, b, 1.0F);
 }
 
 HSL::HSL(const Color4B& c)
 {
-    float fR = c.r / 255.0F;
-    float fG = c.g / 255.0F;
-    float fB = c.b / 255.0F;
-    float fA = c.a / 255.0F;
-    set(fR, fG, fB, fA);
+    float r = c.r / 255.0F;
+    float g = c.g / 255.0F;
+    float b = c.b / 255.0F;
+    float a = c.a / 255.0F;
+    set(r, g, b, a);
 }
 
 HSL::HSL(const Color4F& c)
 {
-    float fR = c.r;
-    float fG = c.g;
-    float fB = c.b;
-    float fA = c.a;
-    set(fR, fG, fB, fA);
+    float r = c.r;
+    float g = c.g;
+    float b = c.b;
+    float a = c.a;
+    set(r, g, b, a);
 }
 
 bool HSL::operator==(const HSL& right) const
@@ -633,10 +633,10 @@ HSL operator/(HSL lhs, float rhs)
     return lhs /= rhs;
 }
 
-void HSL::set(float fR, float fG, float fB, float fA)
+void HSL::set(float r, float g, float b, float a)
 {
-    float max = MAX(MAX(fR, fG), fB);
-    float min = MIN(MIN(fR, fG), fB);
+    float max = MAX(MAX(r, g), b);
+    float min = MIN(MIN(r, g), b);
 
     h = s = l = (max + min) / 2;
 
@@ -649,23 +649,23 @@ void HSL::set(float fR, float fG, float fB, float fA)
         float d  = max - min;
         s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
 
-        if (max == fR)
+        if (max == r)
         {
-            h = (fG - fB) / d + (fG < fB ? 6 : 0);
+            h = (g - b) / d + (g < b ? 6 : 0);
         }
-        else if (max == fG)
+        else if (max == g)
         {
-            h = (fB - fR) / d + 2;
+            h = (b - r) / d + 2;
         }
-        else if (max == fB)
+        else if (max == b)
         {
-            h = (fR - fG) / d + 4;
+            h = (r - g) / d + 4;
         }
 
         h /= 6;
     }
     
-    a = fA;
+    a = a;
 }
 
 float HSL::hue2rgb(float p, float q, float t)
@@ -684,7 +684,7 @@ float HSL::hue2rgb(float p, float q, float t)
     return p;
 }
 
-void HSL::get(float& fR, float& fG, float& fB) const
+void HSL::get(float& r, float& g, float& b) const
 {
     float hue = -(remainder(std::fabs(h), 360));
     hue += 360;
@@ -692,15 +692,15 @@ void HSL::get(float& fR, float& fG, float& fB) const
 
     if (0 == s)
     {
-        fR = fG = fB = l;  // achromatic
+        r = g = b = l;  // achromatic
     }
     else
     {
         float q  = l < 0.5 ? l * (1 + s) : l + s - l * s;
         float p  = 2 * l - q;
-        fR       = hue2rgb(p, q, hue + 1. / 3);
-        fG       = hue2rgb(p, q, hue);
-        fB       = hue2rgb(p, q, hue - 1. / 3);
+        r       = hue2rgb(p, q, hue + 1. / 3);
+        g       = hue2rgb(p, q, hue);
+        b       = hue2rgb(p, q, hue - 1. / 3);
     }
 }
 
