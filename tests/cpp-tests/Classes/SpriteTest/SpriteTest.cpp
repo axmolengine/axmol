@@ -86,6 +86,7 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(SpriteChildrenAnchorPoint);
     ADD_TEST_CASE(SpriteBatchNodeChildrenAnchorPoint);
     ADD_TEST_CASE(SpriteColorOpacity);
+    ADD_TEST_CASE(SpriteColorOpacityHSVHSL);
     ADD_TEST_CASE(SpriteBatchNodeColorOpacity);
     ADD_TEST_CASE(SpriteZOrder);
     ADD_TEST_CASE(SpriteBatchNodeZOrder);
@@ -359,6 +360,118 @@ std::string SpriteColorOpacity::title() const
 std::string SpriteColorOpacity::subtitle() const
 {
     return "Color & Opacity";
+}
+
+//------------------------------------------------------------------
+//
+// SpriteColorOpacityHSVHSL
+//
+//------------------------------------------------------------------
+
+SpriteColorOpacityHSVHSL::SpriteColorOpacityHSVHSL()
+{
+    auto sprite1 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 0, 121 * 1, 85, 121));
+    auto sprite2 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 1, 121 * 1, 85, 121));
+    auto sprite3 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 2, 121 * 1, 85, 121));
+    auto sprite4 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 3, 121 * 1, 85, 121));
+
+    auto sprite5 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 0, 121 * 1, 85, 121));
+    auto sprite6 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 1, 121 * 1, 85, 121));
+    auto sprite7 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 2, 121 * 1, 85, 121));
+    auto sprite8 = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * 3, 121 * 1, 85, 121));
+
+    auto s = Director::getInstance()->getWinSize();
+    sprite1->setPosition(Vec2((s.width / 5) * 1, (s.height / 3) * 1));
+    sprite2->setPosition(Vec2((s.width / 5) * 2, (s.height / 3) * 1));
+    sprite3->setPosition(Vec2((s.width / 5) * 3, (s.height / 3) * 1));
+    sprite4->setPosition(Vec2((s.width / 5) * 4, (s.height / 3) * 1));
+    sprite5->setPosition(Vec2((s.width / 5) * 1, (s.height / 3) * 2));
+    sprite6->setPosition(Vec2((s.width / 5) * 2, (s.height / 3) * 2));
+    sprite7->setPosition(Vec2((s.width / 5) * 3, (s.height / 3) * 2));
+    sprite8->setPosition(Vec2((s.width / 5) * 4, (s.height / 3) * 2));
+
+    auto action      = FadeIn::create(2);
+    auto action_back = action->reverse();
+    auto fade        = RepeatForever::create(Sequence::create(action, action_back, nullptr));
+
+    auto col          = HSV(0, 1, 1, 1).toColor3B();
+    auto tintred      = TintBy::create(2, col.r, col.g, col.b);
+    auto tintred_back = tintred->reverse();
+    auto red          = RepeatForever::create(Sequence::create(tintred, tintred_back, nullptr));
+
+    col                 = HSV(120, 1, 1, 1).toColor3B();
+    auto tintgreen      = TintBy::create(2, col.r, col.g, col.b);
+    auto tintgreen_back = tintgreen->reverse();
+    auto green          = RepeatForever::create(Sequence::create(tintgreen, tintgreen_back, nullptr));
+
+    col                = HSV(240, 1, 1, 1).toColor3B();
+    auto tintblue      = TintBy::create(2, col.r, col.g, col.b);
+    auto tintblue_back = tintblue->reverse();
+    auto blue          = RepeatForever::create(Sequence::create(tintblue, tintblue_back, nullptr));
+
+    sprite1->runAction(red);
+    sprite2->runAction(green);
+    sprite3->runAction(blue);
+    sprite4->runAction(fade);
+
+    action      = FadeIn::create(2);
+    action_back = action->reverse();
+    fade        = RepeatForever::create(Sequence::create(action, action_back, nullptr));
+
+    col          = HSL(0, 1, .7, 1).toColor3B();
+    tintred      = TintBy::create(2, col.r, col.g, col.b);
+    tintred_back = tintred->reverse();
+    red          = RepeatForever::create(Sequence::create(tintred, tintred_back, nullptr));
+
+    col            = HSL(120, 1, .7, 1).toColor3B();
+    tintgreen      = TintBy::create(2, col.r, col.g, col.b);
+    tintgreen_back = tintgreen->reverse();
+    green          = RepeatForever::create(Sequence::create(tintgreen, tintgreen_back, nullptr));
+
+    col           = HSL(240, 1, .7, 1).toColor3B();
+    tintblue      = TintBy::create(2, col.r, col.g, col.b);
+    tintblue_back = tintblue->reverse();
+    blue          = RepeatForever::create(Sequence::create(tintblue, tintblue_back, nullptr));
+
+    sprite5->runAction(red);
+    sprite6->runAction(green);
+    sprite7->runAction(blue);
+    sprite8->runAction(fade);
+
+    // late add: test dirtyColor and dirtyPosition
+    addChild(sprite1, 0, kTagSprite1);
+    addChild(sprite2, 0, kTagSprite2);
+    addChild(sprite3, 0, kTagSprite3);
+    addChild(sprite4, 0, kTagSprite4);
+    addChild(sprite5, 0, kTagSprite5);
+    addChild(sprite6, 0, kTagSprite6);
+    addChild(sprite7, 0, kTagSprite7);
+    addChild(sprite8, 0, kTagSprite8);
+
+    schedule(CC_CALLBACK_1(SpriteColorOpacityHSVHSL::removeAndAddSprite, this), 2, "remove_add_key");
+}
+
+// this function test if remove and add works as expected:
+//   color array and vertex array should be reindexed
+void SpriteColorOpacityHSVHSL::removeAndAddSprite(float dt)
+{
+    auto sprite = static_cast<Sprite*>(getChildByTag(kTagSprite5));
+    sprite->retain();
+
+    removeChild(sprite, false);
+    addChild(sprite, 0, kTagSprite5);
+
+    sprite->release();
+}
+
+std::string SpriteColorOpacityHSVHSL::title() const
+{
+    return "Testing Sprite";
+}
+
+std::string SpriteColorOpacityHSVHSL::subtitle() const
+{
+    return "Color & Opacity using HSV/HSL";
 }
 
 //------------------------------------------------------------------
