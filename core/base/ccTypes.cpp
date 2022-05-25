@@ -665,7 +665,7 @@ void HSL::set(float r, float g, float b, float a)
         h /= 6;
     }
     
-    a = a;
+    this->a = a;
 }
 
 float HSL::hue2rgb(float p, float q, float t)
