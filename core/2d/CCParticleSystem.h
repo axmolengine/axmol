@@ -92,6 +92,10 @@ public:
     float* deltaColorB;
     float* deltaColorA;
 
+    float* hueValue;
+    float* saturationValue;
+    float* luminanceValue;
+
     float* size;
     float* deltaSize;
     float* rotation;
@@ -131,10 +135,10 @@ public:
 
     void copyParticle(int p1, int p2)
     {
-        posx[p1]      = posx[p2];
-        posy[p1]      = posy[p2];
-        startPosX[p1] = startPosX[p2];
-        startPosY[p1] = startPosY[p2];
+        posx[p1]       = posx[p2];
+        posy[p1]       = posy[p2];
+        startPosX[p1]  = startPosX[p2];
+        startPosY[p1]  = startPosY[p2];
 
         colorR[p1] = colorR[p2];
         colorG[p1] = colorG[p2];
@@ -146,17 +150,24 @@ public:
         deltaColorB[p1] = deltaColorB[p2];
         deltaColorA[p1] = deltaColorA[p2];
 
-        size[p1]      = size[p2];
-        deltaSize[p1] = deltaSize[p2];
+        hueValue[p1]        = hueValue[p2];
+        saturationValue[p1] = saturationValue[p2];
+        luminanceValue[p1]  = luminanceValue[p2];
 
-        rotation[p1]      = rotation[p2];
-        deltaRotation[p1] = deltaRotation[p2];
-
+        size[p1]           = size[p2];
+        deltaSize[p1]      = deltaSize[p2];
+        rotation[p1]       = rotation[p2];
+        staticRotation[p1] = staticRotation[p2];
+        deltaRotation[p1]  = deltaRotation[p2];
+		
         totalTimeToLive[p1] = totalTimeToLive[p2];
-        timeToLive[p1] = timeToLive[p2];
+        timeToLive[p1]      = timeToLive[p2];
+        animTimeDelta[p1]   = animTimeDelta[p2];
+        animTimeLength[p1]  = animTimeLength[p2];
 
+        animIndex[p1]     = animIndex[p2];
         animCellIndex[p1] = animCellIndex[p2];
-        atlasIndex[p1] = atlasIndex[p2];
+        atlasIndex[p1]    = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
         modeA.dirY[p1]            = modeA.dirY[p2];
@@ -705,6 +716,92 @@ public:
      */
     void setEndColorVar(const Color4F& color) { _endColorVar = color; }
 
+    /** Sets wether to use HSV color system.
+     * WARNING: careful when using HSV with too many particles because it's expensive.
+     * 
+     * @param hsv Use hsv color system.
+     */
+    void useHSV(bool hsv) { _isHsv = hsv; };
+    bool isHSV() { return _isHsv; };
+
+    /** Gets the hue value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     * 
+     * @return The hue value of each particle in degress (i.e. 360).
+     */
+    float getHue() const { return _hueValue; }
+    /** Sets the hue value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param degrees The hue value of each particle in degress (i.e. 360).
+     */
+    void setHue(float degrees) { _hueValue = degrees; }
+
+    /** Gets the hue variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The hue variance value of each particle in degress (i.e. 360).
+     */
+    float getHueVar() const { return _hueValueVar; }
+    /** Sets the hue variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param degrees The hue variance value of each particle in degress (i.e. 360).
+     */
+    void setHueVar(float degrees) { _hueValueVar = degrees; }
+
+    /** Gets the saturation value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The saturation value of each particle.
+     */
+    float getSaturation() const { return _saturationValue; }
+    /** Sets the saturation value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The saturation value of each particle.
+     */
+    void setSaturation(float value) { _saturationValue = value; }
+
+    /** Gets the saturation variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The saturation variance value of each particle.
+     */
+    float getSaturationVar() const { return _saturationValueVar; }
+    /** Sets the saturation variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The saturation variance value of each particle.
+     */
+    void setSaturationVar(float value) { _saturationValueVar = value; }
+
+    /** Gets the luminance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The luminance value of each particle.
+     */
+    float getLuminance() const { return _luminanceValue; }
+    /** Sets the luminance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The luminance value of each particle.
+     */
+    void setLuminance(float value) { _luminanceValue = value; }
+
+    /** Gets the luminance variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @return The luminance variance value of each particle.
+     */
+    float getLuminanceVar() const { return _luminanceValueVar; }
+    /** Sets the luminance variance value of each particle.
+     * NOTE: hsv has to be enabled using useHSV(true) for this function to work.
+     *
+     * @param value The luminance variance value of each particle.
+     */
+    void setLuminanceVar(float value) { _luminanceValueVar = value; }
+
     /** Gets the start spin of each particle.
      *
      * @return The start spin of each particle.
@@ -1228,6 +1325,20 @@ protected:
     Color4F _endColor;
     /** end color variance of each particle */
     Color4F _endColorVar;
+    //* Is the hsv system used or not.
+    bool _isHsv;
+    //* Hue value of each particle
+    float _hueValue;
+    //* Hue value variance of each particle
+    float _hueValueVar;
+    //* Saturation value of each particle
+    float _saturationValue;
+    //* Saturation value variance of each particle
+    float _saturationValueVar;
+    //* Luminance value of each particle
+    float _luminanceValue;
+    //* Luminance value variance of each particle
+    float _luminanceValueVar;
     //* initial angle of each particle
     float _startSpin;
     //* initial angle of each particle
