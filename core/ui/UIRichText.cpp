@@ -1473,8 +1473,9 @@ void RichText::setOpenUrlHandler(const OpenUrlHandler& handleOpenUrl)
     _handleOpenUrl = handleOpenUrl;
 }
 
-void RichText::formatText()
+void RichText::formatText(bool force)
 {
+    _formatTextDirty |= force;
     if (_formatTextDirty)
     {
         this->removeAllProtectedChildren();
