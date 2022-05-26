@@ -182,6 +182,8 @@ void ParticleData::release()
     CC_SAFE_FREE(hue);
     CC_SAFE_FREE(sat);
     CC_SAFE_FREE(val);
+    CC_SAFE_FREE(opacityFadeInDelta);
+    CC_SAFE_FREE(opacityFadeInLength);
     CC_SAFE_FREE(size);
     CC_SAFE_FREE(deltaSize);
     CC_SAFE_FREE(rotation);
@@ -243,6 +245,9 @@ ParticleSystem::ParticleSystem()
     , _isHsv(false)
     , _hsv(0, 1, 1)
     , _hsvVar(0, 0, 0)
+    , _isOpacityFadeInAllocated(false)
+    , _spawnFadeIn(0)
+    , _spawnFadeInVar(0)
     , _emissionRate(0)
     , _totalParticles(0)
     , _texture(nullptr)
@@ -326,7 +331,7 @@ bool ParticleSystem::allocAnimationMem()
 
 void ParticleSystem::deallocAnimationMem()
 {
-    if (!_isAnimAllocated)
+    if (_isAnimAllocated)
     {
         CC_SAFE_FREE(_particleData.animTimeLength);
         CC_SAFE_FREE(_particleData.animTimeDelta);
@@ -348,11 +353,30 @@ bool ParticleSystem::allocHSVMem()
 
 void ParticleSystem::deallocHSVMem()
 {
-    if (!_isHSVAllocated)
+    if (_isHSVAllocated)
     {
         CC_SAFE_FREE(_particleData.hue);
         CC_SAFE_FREE(_particleData.sat);
         CC_SAFE_FREE(_particleData.val);
+    }
+}
+
+bool ParticleSystem::allocOpacityFadeInMem()
+{
+    if (!_isOpacityFadeInAllocated)
+    {
+        _particleData.opacityFadeInDelta = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.opacityFadeInLength = (float*)malloc(_totalParticles * sizeof(float));
+    }
+    return _isOpacityFadeInAllocated = _particleData.opacityFadeInDelta && _particleData.opacityFadeInLength;
+}
+
+void ParticleSystem::deallocOpacityFadeInMem()
+{
+    if (_isOpacityFadeInAllocated)
+    {
+        CC_SAFE_FREE(_particleData.opacityFadeInDelta);
+        CC_SAFE_FREE(_particleData.opacityFadeInLength);
     }
 }
 
@@ -694,7 +718,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     if (_paused)
         return;
 
-    // Try to add as many particles as you can without overflowing.
+    // Try to add as many particles as possible without overflowing.
     count = MIN(int(_totalParticles * __totalParticleCountFactor) - _particleCount, count);
 
     animationCellIndex = MIN(animationCellIndex, _animIndexCount - 1);
@@ -803,6 +827,16 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     SET_DELTA_COLOR(_particleData.colorG, _particleData.deltaColorG);
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
+
+    // opacity fade in
+    if (_isOpacityFadeInAllocated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.opacityFadeInLength[i] = _spawnFadeIn + _spawnFadeInVar * RANDOM_KISS();
+        }
+        std::fill_n(_particleData.opacityFadeInDelta + start, _particleCount - start, 0.0F);
+    }
 
     // hue saturation value color
     if (_isHSVAllocated)
@@ -1270,6 +1304,16 @@ void ParticleSystem::update(float dt)
             _particleData.timeToLive[i] -= dt;
         }
 
+        if (_isOpacityFadeInAllocated)
+        {
+            for (int i = 0; i < _particleCount; ++i)
+            {
+                _particleData.opacityFadeInDelta[i] += dt;
+                _particleData.opacityFadeInDelta[i] =
+                    MIN(_particleData.opacityFadeInDelta[i], _particleData.opacityFadeInLength[i]);
+            }
+        }
+
         if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
         {
             for (int i = 0; i < _particleCount; ++i)
@@ -1726,6 +1770,22 @@ void ParticleSystem::useHSV(bool hsv)
 
     _isHsv = hsv;
 };
+
+void ParticleSystem::setSpawnFadeIn(float time)
+{
+    if (time != 0.0F && !allocOpacityFadeInMem())
+        return;
+
+    _spawnFadeIn = time;
+}
+
+void ParticleSystem::setSpawnFadeInVar(float time)
+{
+    if (time != 0.0F && !allocOpacityFadeInMem())
+        return;
+
+    _spawnFadeInVar = time;
+}
 
 int ParticleSystem::getTotalParticles() const
 {

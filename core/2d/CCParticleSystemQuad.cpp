@@ -420,83 +420,176 @@ void ParticleSystemQuad::updateParticleQuads()
     float* b               = _particleData.colorB;
     float* a               = _particleData.colorA;
 
-    // HSV calculation is expensive, so we should skip it if it's not enabled.
-    if (_isHsv)
+    if (_isOpacityFadeInAllocated)
     {
-        float* hue = _particleData.hue;
-        float* sat = _particleData.sat;
-        float* val = _particleData.val;
+        float* fadeDt = _particleData.opacityFadeInDelta;
+        float* fadeLn = _particleData.opacityFadeInLength;
 
-        if (_opacityModifyRGB)
+        // HSV calculation is expensive, so we should skip it if it's not enabled.
+        if (_isHsv)
         {
-            auto hsv = HSV();
-            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+            float* hue = _particleData.hue;
+            float* sat = _particleData.sat;
+            float* val = _particleData.val;
+
+            if (_opacityModifyRGB)
             {
-                float colorR = *r * *a;
-                float colorG = *g * *a;
-                float colorB = *b * *a;
-                float colorA = *a;
-                hsv.set(colorR, colorG, colorB, colorA);
-                hsv.h += *hue;
-                hsv.s    = abs(*sat);
-                hsv.v    = abs(*val);
-                auto col = hsv.toColor4B();
-                quad->bl.colors.set(col.r, col.g, col.b, col.a);
-                quad->br.colors.set(col.r, col.g, col.b, col.a);
-                quad->tl.colors.set(col.r, col.g, col.b, col.a);
-                quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                auto hsv = HSV();
+                for (int i = 0; i < _particleCount;
+                     ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val, ++fadeDt, ++fadeLn)
+                {
+                    float colorR = *r * *a;
+                    float colorG = *g * *a;
+                    float colorB = *b * *a;
+                    float colorA = *a * (*fadeDt / *fadeLn);
+                    hsv.set(colorR, colorG, colorB, colorA);
+                    hsv.h += *hue;
+                    hsv.s    = abs(*sat);
+                    hsv.v    = abs(*val);
+                    auto col = hsv.toColor4B();
+                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->br.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                }
+            }
+            else
+            {
+                auto hsv = HSV();
+                for (int i = 0; i < _particleCount;
+                     ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val, ++fadeDt, ++fadeLn)
+                {
+                    float colorR = *r;
+                    float colorG = *g;
+                    float colorB = *b;
+                    float colorA = *a * (*fadeDt / *fadeLn);
+                    hsv.set(colorR, colorG, colorB, colorA);
+                    hsv.h += *hue;
+                    hsv.s    = abs(*sat);
+                    hsv.v    = abs(*val);
+                    auto col = hsv.toColor4B();
+                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->br.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                }
             }
         }
         else
         {
-            auto hsv = HSV();
-            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+            // set color
+            if (_opacityModifyRGB)
             {
-                float colorR = *r;
-                float colorG = *g;
-                float colorB = *b;
-                float colorA = *a;
-                hsv.set(colorR, colorG, colorB, colorA);
-                hsv.h += *hue;
-                hsv.s    = abs(*sat);
-                hsv.v    = abs(*val);
-                auto col = hsv.toColor4B();
-                quad->bl.colors.set(col.r, col.g, col.b, col.a);
-                quad->br.colors.set(col.r, col.g, col.b, col.a);
-                quad->tl.colors.set(col.r, col.g, col.b, col.a);
-                quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++fadeDt, ++fadeLn)
+                {
+                    uint8_t colorR = *r * *a * 255;
+                    uint8_t colorG = *g * *a * 255;
+                    uint8_t colorB = *b * *a * 255;
+                    uint8_t colorA = *a * (*fadeDt / *fadeLn) * 255;
+                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->br.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++fadeDt, ++fadeLn)
+                {
+                    uint8_t colorR = *r * 255;
+                    uint8_t colorG = *g * 255;
+                    uint8_t colorB = *b * 255;
+                    uint8_t colorA = *a * (*fadeDt / *fadeLn) * 255;
+                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->br.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                }
             }
         }
     }
     else
     {
-        // set color
-        if (_opacityModifyRGB)
+        // HSV calculation is expensive, so we should skip it if it's not enabled.
+        if (_isHsv)
         {
-            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+            float* hue = _particleData.hue;
+            float* sat = _particleData.sat;
+            float* val = _particleData.val;
+
+            if (_opacityModifyRGB)
             {
-                uint8_t colorR = *r * *a * 255;
-                uint8_t colorG = *g * *a * 255;
-                uint8_t colorB = *b * *a * 255;
-                uint8_t colorA = *a * 255;
-                quad->bl.colors.set(colorR, colorG, colorB, colorA);
-                quad->br.colors.set(colorR, colorG, colorB, colorA);
-                quad->tl.colors.set(colorR, colorG, colorB, colorA);
-                quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                auto hsv = HSV();
+                for (int i = 0; i < _particleCount;
+                     ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+                {
+                    float colorR = *r * *a;
+                    float colorG = *g * *a;
+                    float colorB = *b * *a;
+                    float colorA = *a;
+                    hsv.set(colorR, colorG, colorB, colorA);
+                    hsv.h += *hue;
+                    hsv.s    = abs(*sat);
+                    hsv.v    = abs(*val);
+                    auto col = hsv.toColor4B();
+                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->br.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                }
+            }
+            else
+            {
+                auto hsv = HSV();
+                for (int i = 0; i < _particleCount;
+                     ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+                {
+                    float colorR = *r;
+                    float colorG = *g;
+                    float colorB = *b;
+                    float colorA = *a;
+                    hsv.set(colorR, colorG, colorB, colorA);
+                    hsv.h += *hue;
+                    hsv.s    = abs(*sat);
+                    hsv.v    = abs(*val);
+                    auto col = hsv.toColor4B();
+                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->br.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
+                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                }
             }
         }
         else
         {
-            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+            // set color
+            if (_opacityModifyRGB)
             {
-                uint8_t colorR = *r * 255;
-                uint8_t colorG = *g * 255;
-                uint8_t colorB = *b * 255;
-                uint8_t colorA = *a * 255;
-                quad->bl.colors.set(colorR, colorG, colorB, colorA);
-                quad->br.colors.set(colorR, colorG, colorB, colorA);
-                quad->tl.colors.set(colorR, colorG, colorB, colorA);
-                quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+                {
+                    uint8_t colorR = *r * *a * 255;
+                    uint8_t colorG = *g * *a * 255;
+                    uint8_t colorB = *b * *a * 255;
+                    uint8_t colorA = *a * 255;
+                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->br.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+                {
+                    uint8_t colorR = *r * 255;
+                    uint8_t colorG = *g * 255;
+                    uint8_t colorB = *b * 255;
+                    uint8_t colorA = *a * 255;
+                    quad->bl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->br.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tl.colors.set(colorR, colorG, colorB, colorA);
+                    quad->tr.colors.set(colorR, colorG, colorB, colorA);
+                }
             }
         }
     }
