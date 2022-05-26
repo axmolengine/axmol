@@ -73,6 +73,16 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class SpriteColorOpacityHSVHSL : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteColorOpacityHSVHSL);
+    SpriteColorOpacityHSVHSL();
+    void removeAndAddSprite(float dt);
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
 class SpriteBatchNodeColorOpacity : public SpriteTestDemo
 {
 public:
