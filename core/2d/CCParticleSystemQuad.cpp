@@ -42,6 +42,7 @@ THE SOFTWARE.
 #include "base/ccUTF8.h"
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
+#include "2d/CCTweenFunction.h"
 
 NS_CC_BEGIN
 
@@ -378,7 +379,7 @@ void ParticleSystemQuad::updateParticleQuads()
                 p2 = p1 - p2;
                 newPos.x -= p2.x - pos.x;
                 newPos.y -= p2.y - pos.y;
-                updatePosWithParticle(quadStart, newPos, *s, *sid / *sil, *r, *sr);
+                updatePosWithParticle(quadStart, newPos, *s, tweenfunc::expoEaseOut(*sid / *sil), *r, *sr);
             }
         }
         else
@@ -416,7 +417,7 @@ void ParticleSystemQuad::updateParticleQuads()
                 newPos.x = *x - (currentPosition.x - *startX);
                 newPos.y = *y - (currentPosition.y - *startY);
                 newPos += pos;
-                updatePosWithParticle(quadStart, newPos, *s, *sid / *sil, *r, *sr);
+                updatePosWithParticle(quadStart, newPos, *s, tweenfunc::expoEaseOut(*sid / *sil), *r, *sr);
             }
         }
         else
@@ -449,7 +450,7 @@ void ParticleSystemQuad::updateParticleQuads()
             for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
             {
                 newPos.set(*x + pos.x, *y + pos.y);
-                updatePosWithParticle(quadStart, newPos, *s, *sid / *sil, *r, *sr);
+                updatePosWithParticle(quadStart, newPos, *s, tweenfunc::expoEaseOut(*sid / *sil), *r, *sr);
             }
         }
         else
