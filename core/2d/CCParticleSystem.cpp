@@ -1071,7 +1071,7 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
             frame.size.x = texWidth;
             frame.size.y = unifiedCellSize;
 
-            addAnimationIndex(_animIndexCount++, frame);
+            addAnimationIndex(_animIndexCount, frame);
         }
 
         break;
@@ -1088,7 +1088,7 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
             frame.size.x   = unifiedCellSize;
             frame.size.y   = texHeight;
 
-            addAnimationIndex(_animIndexCount++, frame);
+            addAnimationIndex(_animIndexCount, frame);
         }
 
         break;
