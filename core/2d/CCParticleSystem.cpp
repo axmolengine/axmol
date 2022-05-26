@@ -1316,9 +1316,9 @@ void ParticleSystem::update(float dt)
 
         if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
         {
-            for (int i = 0; i < _particleCount; ++i)
+            if (_isEmitterAnimated && !_animations.empty())
             {
-                if (_isEmitterAnimated && !_animations.empty())
+                for (int i = 0; i < _particleCount; ++i)
                 {
                     _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
                     if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
@@ -1332,7 +1332,10 @@ void ParticleSystem::update(float dt)
                         _particleData.animTimeDelta[i] = 0;
                     }
                 }
-                if (_isLifeAnimated && _animations.empty())
+            }
+            if (_isLifeAnimated && _animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
                 {
                     float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) /
                                     _particleData.totalTimeToLive[i];
@@ -1340,7 +1343,10 @@ void ParticleSystem::update(float dt)
                     _particleData.animCellIndex[i] =
                         (unsigned short)MIN(percent * _animIndexCount, _animIndexCount - 1);
                 }
-                if (_isLifeAnimated && !_animations.empty())
+            }
+            if (_isLifeAnimated && !_animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
                 {
                     auto& anim = _animations.at(_particleData.animIndex[i]);
 
@@ -1352,7 +1358,10 @@ void ParticleSystem::update(float dt)
                     _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
                                                                                anim.animationIndices.size() - 1)];
                 }
-                if (_isLoopAnimated && !_animations.empty())
+            }
+            if (_isLoopAnimated && !_animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
                 {
                     auto& anim = _animations.at(_particleData.animIndex[i]);
 
@@ -1367,9 +1376,9 @@ void ParticleSystem::update(float dt)
                     _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
                                                                                anim.animationIndices.size() - 1)];
                 }
-                if (_isLoopAnimated && _animations.empty())
-                    std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
             }
+            if (_isLoopAnimated && _animations.empty())
+                std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
         }
 
         for (int i = 0; i < _particleCount; ++i)
