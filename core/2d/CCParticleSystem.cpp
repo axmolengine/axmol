@@ -184,6 +184,8 @@ void ParticleData::release()
     CC_SAFE_FREE(val);
     CC_SAFE_FREE(opacityFadeInDelta);
     CC_SAFE_FREE(opacityFadeInLength);
+    CC_SAFE_FREE(scaleInDelta);
+    CC_SAFE_FREE(scaleInLength);
     CC_SAFE_FREE(size);
     CC_SAFE_FREE(deltaSize);
     CC_SAFE_FREE(rotation);
@@ -248,6 +250,9 @@ ParticleSystem::ParticleSystem()
     , _isOpacityFadeInAllocated(false)
     , _spawnFadeIn(0)
     , _spawnFadeInVar(0)
+    , _isScaleInAllocated(false)
+    , _spawnScaleIn(0)
+    , _spawnScaleInVar(0)
     , _emissionRate(0)
     , _totalParticles(0)
     , _texture(nullptr)
@@ -377,6 +382,25 @@ void ParticleSystem::deallocOpacityFadeInMem()
     {
         CC_SAFE_FREE(_particleData.opacityFadeInDelta);
         CC_SAFE_FREE(_particleData.opacityFadeInLength);
+    }
+}
+
+bool ParticleSystem::allocScaleInMem()
+{
+    if (!_isScaleInAllocated)
+    {
+        _particleData.scaleInDelta  = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.scaleInLength = (float*)malloc(_totalParticles * sizeof(float));
+    }
+    return _isScaleInAllocated = _particleData.scaleInDelta && _particleData.scaleInLength;
+}
+
+void ParticleSystem::deallocScaleInMem()
+{
+    if (_isScaleInAllocated)
+    {
+        CC_SAFE_FREE(_particleData.scaleInDelta);
+        CC_SAFE_FREE(_particleData.scaleInLength);
     }
 }
 
@@ -836,6 +860,16 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             _particleData.opacityFadeInLength[i] = _spawnFadeIn + _spawnFadeInVar * RANDOM_KISS();
         }
         std::fill_n(_particleData.opacityFadeInDelta + start, _particleCount - start, 0.0F);
+    }
+
+    // scale fade in
+    if (_isScaleInAllocated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.scaleInLength[i] = _spawnScaleIn + _spawnScaleInVar * RANDOM_KISS();
+        }
+        std::fill_n(_particleData.scaleInDelta + start, _particleCount - start, 0.0F);
     }
 
     // hue saturation value color
@@ -1311,6 +1345,15 @@ void ParticleSystem::update(float dt)
                 _particleData.opacityFadeInDelta[i] += dt;
                 _particleData.opacityFadeInDelta[i] =
                     MIN(_particleData.opacityFadeInDelta[i], _particleData.opacityFadeInLength[i]);
+            }
+        }
+
+        if (_isScaleInAllocated)
+        {
+            for (int i = 0; i < _particleCount; ++i)
+            {
+                _particleData.scaleInDelta[i] += dt;
+                _particleData.scaleInDelta[i] = MIN(_particleData.scaleInDelta[i], _particleData.scaleInLength[i]);
             }
         }
 
@@ -1794,6 +1837,22 @@ void ParticleSystem::setSpawnFadeInVar(float time)
         return;
 
     _spawnFadeInVar = time;
+}
+
+void ParticleSystem::setSpawnScaleIn(float time)
+{
+    if (time != 0.0F && !allocScaleInMem())
+        return;
+
+    _spawnScaleIn = time;
+}
+
+void ParticleSystem::setSpawnScaleInVar(float time)
+{
+    if (time != 0.0F && !allocScaleInMem())
+        return;
+
+    _spawnScaleInVar = time;
 }
 
 int ParticleSystem::getTotalParticles() const

@@ -278,16 +278,17 @@ void ParticleSystemQuad::initIndices()
 inline void updatePosWithParticle(V3F_C4B_T2F_Quad* quad,
                                   const Vec2& newPosition,
                                   float size,
+                                  float scaleInSize,
                                   float rotation,
                                   float staticRotation)
 {
     // vertices
     float size_2 = size / 2;
-    float x1     = -size_2;
-    float y1     = -size_2;
+    float x1     = -size_2 * scaleInSize;
+    float y1     = -size_2 * scaleInSize;
 
-    float x2 = size_2;
-    float y2 = size_2;
+    float x2 = size_2 * scaleInSize;
+    float y2 = size_2 * scaleInSize;
     float x  = newPosition.x;
     float y  = newPosition.y;
 
@@ -364,16 +365,34 @@ void ParticleSystemQuad::updateParticleQuads()
         float* s                     = _particleData.size;
         float* r                     = _particleData.rotation;
         float* sr                    = _particleData.staticRotation;
+        float* sid                   = _particleData.scaleInDelta;
+        float* sil                   = _particleData.scaleInLength;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
-        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
+        if (_isScaleInAllocated)
         {
-            p2.set(*startX, *startY, 0);
-            worldToNodeTM.transformPoint(&p2);
-            newPos.set(*x, *y);
-            p2 = p1 - p2;
-            newPos.x -= p2.x - pos.x;
-            newPos.y -= p2.y - pos.y;
-            updatePosWithParticle(quadStart, newPos, *s, *r, *sr);
+            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
+            {
+                p2.set(*startX, *startY, 0);
+                worldToNodeTM.transformPoint(&p2);
+                newPos.set(*x, *y);
+                p2 = p1 - p2;
+                newPos.x -= p2.x - pos.x;
+                newPos.y -= p2.y - pos.y;
+                updatePosWithParticle(quadStart, newPos, *s, *sid / *sil, *r, *sr);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
+            {
+                p2.set(*startX, *startY, 0);
+                worldToNodeTM.transformPoint(&p2);
+                newPos.set(*x, *y);
+                p2 = p1 - p2;
+                newPos.x -= p2.x - pos.x;
+                newPos.y -= p2.y - pos.y;
+                updatePosWithParticle(quadStart, newPos, *s, 1.0F, *r, *sr);
+            }
         }
     }
     else if (_positionType == PositionType::RELATIVE)
@@ -386,14 +405,30 @@ void ParticleSystemQuad::updateParticleQuads()
         float* s                    = _particleData.size;
         float* r                    = _particleData.rotation;
         float* sr                   = _particleData.staticRotation;
+        float* sid                  = _particleData.scaleInDelta;
+        float* sil                  = _particleData.scaleInLength;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
-        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
+        if (_isScaleInAllocated)
         {
-            newPos.set(*x, *y);
-            newPos.x = *x - (currentPosition.x - *startX);
-            newPos.y = *y - (currentPosition.y - *startY);
-            newPos += pos;
-            updatePosWithParticle(quadStart, newPos, *s, *r, *sr);
+            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
+            {
+                newPos.set(*x, *y);
+                newPos.x = *x - (currentPosition.x - *startX);
+                newPos.y = *y - (currentPosition.y - *startY);
+                newPos += pos;
+                updatePosWithParticle(quadStart, newPos, *s, *sid / *sil, *r, *sr);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
+            {
+                newPos.set(*x, *y);
+                newPos.x = *x - (currentPosition.x - *startX);
+                newPos.y = *y - (currentPosition.y - *startY);
+                newPos += pos;
+                updatePosWithParticle(quadStart, newPos, *s, 1.0F, *r, *sr);
+            }
         }
     }
     else
@@ -406,11 +441,24 @@ void ParticleSystemQuad::updateParticleQuads()
         float* s                    = _particleData.size;
         float* r                    = _particleData.rotation;
         float* sr                   = _particleData.staticRotation;
+        float* sid                  = _particleData.scaleInDelta;
+        float* sil                  = _particleData.scaleInLength;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
-        for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
+        if (_isScaleInAllocated)
         {
-            newPos.set(*x + pos.x, *y + pos.y);
-            updatePosWithParticle(quadStart, newPos, *s, *r, *sr);
+            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
+            {
+                newPos.set(*x + pos.x, *y + pos.y);
+                updatePosWithParticle(quadStart, newPos, *s, *sid / *sil, *r, *sr);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr)
+            {
+                newPos.set(*x + pos.x, *y + pos.y);
+                updatePosWithParticle(quadStart, newPos, *s, 1.0F, *r, *sr);
+            }
         }
     }
 
