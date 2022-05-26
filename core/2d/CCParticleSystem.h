@@ -92,6 +92,10 @@ public:
     float* deltaColorB;
     float* deltaColorA;
 
+    float* hue;
+    float* sat;
+    float* val;
+
     float* size;
     float* deltaSize;
     float* rotation;
@@ -146,17 +150,24 @@ public:
         deltaColorB[p1] = deltaColorB[p2];
         deltaColorA[p1] = deltaColorA[p2];
 
-        size[p1]      = size[p2];
-        deltaSize[p1] = deltaSize[p2];
+        hue[p1] = hue[p2];
+        sat[p1] = sat[p2];
+        val[p1] = val[p2];
 
-        rotation[p1]      = rotation[p2];
-        deltaRotation[p1] = deltaRotation[p2];
+        size[p1]           = size[p2];
+        deltaSize[p1]      = deltaSize[p2];
+        rotation[p1]       = rotation[p2];
+        staticRotation[p1] = staticRotation[p2];
+        deltaRotation[p1]  = deltaRotation[p2];
 
         totalTimeToLive[p1] = totalTimeToLive[p2];
-        timeToLive[p1] = timeToLive[p2];
+        timeToLive[p1]      = timeToLive[p2];
+        animTimeDelta[p1]   = animTimeDelta[p2];
+        animTimeLength[p1]  = animTimeLength[p2];
 
+        animIndex[p1]     = animIndex[p2];
         animCellIndex[p1] = animCellIndex[p2];
-        atlasIndex[p1] = atlasIndex[p2];
+        atlasIndex[p1]    = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
         modeA.dirY[p1]            = modeA.dirY[p2];
@@ -705,6 +716,58 @@ public:
      */
     void setEndColorVar(const Color4F& color) { _endColorVar = color; }
 
+    /** Sets wether to use HSV color system.
+     * WARNING: becareful when using HSV with too many particles because it's expensive.
+     *
+     * @param hsv Use HSV color system.
+     */
+    void useHSV(bool hsv) { _isHsv = hsv; };
+    bool isHSV() { return _isHsv; };
+
+    /** Gets the hue of each particle.
+     *
+     * @return The hue of each particle.
+     */
+    float getHue() const { return _hsv.h; }
+    /** Sets the hue of each particle.
+     *
+     * @param hsv The hue color of each particle.
+     */
+    void setHue(float hue) { _hsv.h = hue; }
+
+    /** Gets the hue variance of each particle.
+     *
+     * @return The hue variance of each particle.
+     */
+    float getHueVar() const { return _hsvVar.h; }
+    /** Sets the hue variance of each particle.
+     *
+     * @param hsv The hue variance color of each particle.
+     */
+    void setHueVar(float hue) { _hsvVar.h = hue; }
+
+    /** Gets the HSV color of each particle.
+     *
+     * @return The HSV color of each particle.
+     */
+    const HSV& getHSV() const { return _hsv; }
+    /** Sets the HSV color of each particle.
+     *
+     * @param hsv The HSV color of each particle.
+     */
+    void setHSV(const HSV& hsv) { _hsv = hsv; }
+
+    /** Gets the HSV color variance of each particle.
+     *
+     * @return The HSV color variance of each particle.
+     */
+    const HSV& getHSVVar() const { return _hsvVar; }
+    /** Sets the HSV color variance of each particle.
+     *
+     * @param hsv The HSV color variance of each particle.
+     */
+    void setHSVVar(const HSV& hsv) { _hsvVar = hsv; }
+
     /** Gets the start spin of each particle.
      *
      * @return The start spin of each particle.
@@ -1228,6 +1291,12 @@ protected:
     Color4F _endColor;
     /** end color variance of each particle */
     Color4F _endColorVar;
+    //* Is the hsv system used or not.
+    bool _isHsv;
+    /** hsv color of each particle */
+    HSV _hsv;
+    /** hsv color variance of each particle */
+    HSV _hsvVar;
     //* initial angle of each particle
     float _startSpin;
     //* initial angle of each particle

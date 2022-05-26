@@ -138,6 +138,9 @@ bool ParticleData::init(int count)
     deltaColorG        = (float*)malloc(count * sizeof(float));
     deltaColorB        = (float*)malloc(count * sizeof(float));
     deltaColorA        = (float*)malloc(count * sizeof(float));
+    hue                = (float*)malloc(count * sizeof(float));
+    sat                = (float*)malloc(count * sizeof(float));
+    val                = (float*)malloc(count * sizeof(float));
     size               = (float*)malloc(count * sizeof(float));
     deltaSize          = (float*)malloc(count * sizeof(float));
     rotation           = (float*)malloc(count * sizeof(float));
@@ -162,10 +165,10 @@ bool ParticleData::init(int count)
     modeB.radius           = (float*)malloc(count * sizeof(float));
 
     return posx && posy && startPosX && startPosY && colorR && colorG && colorB && colorA && deltaColorR &&
-           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && staticRotation &&
-           deltaRotation && totalTimeToLive && timeToLive && animTimeLength && animTimeDelta && animIndex &&
-           animCellIndex && atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel && modeA.tangentialAccel &&
-           modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
+           deltaColorG && deltaColorB && deltaColorA && hue && sat && val && size && deltaSize && rotation &&
+           staticRotation && deltaRotation && totalTimeToLive && timeToLive && animTimeLength && animTimeDelta &&
+           animIndex && animCellIndex && atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel &&
+           modeA.tangentialAccel && modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
 }
 
 void ParticleData::release()
@@ -182,6 +185,9 @@ void ParticleData::release()
     CC_SAFE_FREE(deltaColorG);
     CC_SAFE_FREE(deltaColorB);
     CC_SAFE_FREE(deltaColorA);
+    CC_SAFE_FREE(hue);
+    CC_SAFE_FREE(sat);
+    CC_SAFE_FREE(val);
     CC_SAFE_FREE(size);
     CC_SAFE_FREE(deltaSize);
     CC_SAFE_FREE(rotation);
@@ -238,6 +244,8 @@ ParticleSystem::ParticleSystem()
     , _endSpinVar(0)
     , _spawnAngle(0)
     , _spawnAngleVar(0)
+    , _hsv(0, 1, 1)
+    , _hsvVar(0, 0, 0)
     , _emissionRate(0)
     , _totalParticles(0)
     , _texture(nullptr)
@@ -249,6 +257,7 @@ ParticleSystem::ParticleSystem()
     , _animIndexCount(0)
     , _isAnimationReversed(false)
     , _undefinedIndexRect({0,0,0,0})
+    , _animationTimescaleInd(false)
     , _yCoordFlipped(1)
     , _positionType(PositionType::FREE)
     , _paused(false)
@@ -742,6 +751,24 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
 
+    // hue saturation value color
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.hue[i] = _hsv.h + _hsvVar.h * RANDOM_KISS();
+        }
+
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.sat[i] = _hsv.s + _hsvVar.s * RANDOM_KISS();
+        }
+
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.val[i] = _hsv.v + _hsvVar.v * RANDOM_KISS();
+        }
+    }
+
     // size
     for (int i = start; i < _particleCount; ++i)
     {
@@ -1099,12 +1126,6 @@ void ParticleSystem::update(float dt)
     if (_componentContainer && !_componentContainer->isEmpty())
     {
         _componentContainer->visit(dt);
-    }
-
-    if (dt > 0.5F)
-    {
-        this->simulate(dt, 15);
-        return;
     }
 
     if (_fixedFPS != 0)

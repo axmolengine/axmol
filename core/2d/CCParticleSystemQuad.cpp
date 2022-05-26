@@ -414,81 +414,92 @@ void ParticleSystemQuad::updateParticleQuads()
         }
     }
 
-    // set color
-    if (_opacityModifyRGB)
-    {
-        V3F_C4B_T2F_Quad* quad    = startQuad;
-        float* r                  = _particleData.colorR;
-        float* g                  = _particleData.colorG;
-        float* b                  = _particleData.colorB;
-        float* a                  = _particleData.colorA;
+    V3F_C4B_T2F_Quad* quad = startQuad;
+    float* r               = _particleData.colorR;
+    float* g               = _particleData.colorG;
+    float* b               = _particleData.colorB;
+    float* a               = _particleData.colorA;
 
-        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+    // HSV calculation is expensive, so we should skip it if it's not enabled.
+    if (_isHsv)
+    {
+        float* hue = _particleData.hue;
+        float* sat = _particleData.sat;
+        float* val = _particleData.val;
+
+        if (_opacityModifyRGB)
         {
-            uint8_t colorR = *r * *a * 255;
-            uint8_t colorG = *g * *a * 255;
-            uint8_t colorB = *b * *a * 255;
-            uint8_t colorA = *a * 255;
-            quad->bl.colors.set(colorR, colorG, colorB, colorA);
-            quad->br.colors.set(colorR, colorG, colorB, colorA);
-            quad->tl.colors.set(colorR, colorG, colorB, colorA);
-            quad->tr.colors.set(colorR, colorG, colorB, colorA);
+            auto hsv = HSV();
+            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+            {
+                float colorR = *r * *a;
+                float colorG = *g * *a;
+                float colorB = *b * *a;
+                float colorA = *a;
+                hsv.set(colorR, colorG, colorB, colorA);
+                hsv.h += *hue;
+                hsv.s    = abs(*sat);
+                hsv.v    = abs(*val);
+                auto col = hsv.toColor4B();
+                quad->bl.colors.set(col.r, col.g, col.b, col.a);
+                quad->br.colors.set(col.r, col.g, col.b, col.a);
+                quad->tl.colors.set(col.r, col.g, col.b, col.a);
+                quad->tr.colors.set(col.r, col.g, col.b, col.a);
+            }
+        }
+        else
+        {
+            auto hsv = HSV();
+            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+            {
+                float colorR = *r;
+                float colorG = *g;
+                float colorB = *b;
+                float colorA = *a;
+                hsv.set(colorR, colorG, colorB, colorA);
+                hsv.h += *hue;
+                hsv.s    = abs(*sat);
+                hsv.v    = abs(*val);
+                auto col = hsv.toColor4B();
+                quad->bl.colors.set(col.r, col.g, col.b, col.a);
+                quad->br.colors.set(col.r, col.g, col.b, col.a);
+                quad->tl.colors.set(col.r, col.g, col.b, col.a);
+                quad->tr.colors.set(col.r, col.g, col.b, col.a);
+            }
         }
     }
     else
     {
-        V3F_C4B_T2F_Quad* quad    = startQuad;
-        float* r                  = _particleData.colorR;
-        float* g                  = _particleData.colorG;
-        float* b                  = _particleData.colorB;
-        float* a                  = _particleData.colorA;
-
-        for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+        // set color
+        if (_opacityModifyRGB)
         {
-            uint8_t colorR = *r * 255;
-            uint8_t colorG = *g * 255;
-            uint8_t colorB = *b * 255;
-            uint8_t colorA = *a * 255;
-            quad->bl.colors.set(colorR, colorG, colorB, colorA);
-            quad->br.colors.set(colorR, colorG, colorB, colorA);
-            quad->tl.colors.set(colorR, colorG, colorB, colorA);
-            quad->tr.colors.set(colorR, colorG, colorB, colorA);
+            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+            {
+                uint8_t colorR = *r * *a * 255;
+                uint8_t colorG = *g * *a * 255;
+                uint8_t colorB = *b * *a * 255;
+                uint8_t colorA = *a * 255;
+                quad->bl.colors.set(colorR, colorG, colorB, colorA);
+                quad->br.colors.set(colorR, colorG, colorB, colorA);
+                quad->tl.colors.set(colorR, colorG, colorB, colorA);
+                quad->tr.colors.set(colorR, colorG, colorB, colorA);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a)
+            {
+                uint8_t colorR = *r * 255;
+                uint8_t colorG = *g * 255;
+                uint8_t colorB = *b * 255;
+                uint8_t colorA = *a * 255;
+                quad->bl.colors.set(colorR, colorG, colorB, colorA);
+                quad->br.colors.set(colorR, colorG, colorB, colorA);
+                quad->tl.colors.set(colorR, colorG, colorB, colorA);
+                quad->tr.colors.set(colorR, colorG, colorB, colorA);
+            }
         }
     }
-
-    auto setTexCoords = [this](V3F_C4B_T2F_Quad* quad, unsigned short* cellIndex) {
-        float left = 0.0F, bottom = 0.0F, top = 1.0F, right = 1.0F;
-
-        // TODO: index.isRotated should be treated accordingly
-
-        ParticleFrameDescriptor index;
-        auto iter = _animationIndices.find(*cellIndex);
-        if (iter == _animationIndices.end())
-            index.rect = _undefinedIndexRect;
-        else
-            index = iter->second;
-
-        auto texWidth  = _texture->getPixelsWide();
-        auto texHeight = _texture->getPixelsHigh();
-
-        left  = index.rect.origin.x / texWidth;
-        right = (index.rect.origin.x + index.rect.size.x) / texWidth;
-
-        top    = index.rect.origin.y / texHeight;
-        bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
-
-        quad->bl.texCoords.u = left;
-        quad->bl.texCoords.v = bottom;
-
-        quad->br.texCoords.u = right;
-        quad->br.texCoords.v = bottom;
-
-        quad->tl.texCoords.u = left;
-        quad->tl.texCoords.v = top;
-
-        quad->tr.texCoords.u = right;
-        quad->tr.texCoords.v = top;
-    };
 
     // The reason for using for-loops separately for every property is because
     // When the processor needs to read from or write to a location in memory,
@@ -501,8 +512,40 @@ void ParticleSystemQuad::updateParticleQuads()
         V3F_C4B_T2F_Quad* quad    = startQuad;
         unsigned short* cellIndex = _particleData.animCellIndex;
 
+        ParticleFrameDescriptor index;
         for (int i = 0; i < _particleCount; ++i, ++quad, ++cellIndex)
-            setTexCoords(quad, cellIndex);
+        {
+            float left = 0.0F, bottom = 0.0F, top = 1.0F, right = 1.0F;
+
+            // TODO: index.isRotated should be treated accordingly
+
+            auto iter = _animationIndices.find(*cellIndex);
+            if (iter == _animationIndices.end())
+                index.rect = _undefinedIndexRect;
+            else
+                index = iter->second;
+
+            auto texWidth  = _texture->getPixelsWide();
+            auto texHeight = _texture->getPixelsHigh();
+
+            left  = index.rect.origin.x / texWidth;
+            right = (index.rect.origin.x + index.rect.size.x) / texWidth;
+
+            top    = index.rect.origin.y / texHeight;
+            bottom = (index.rect.origin.y + index.rect.size.y) / texHeight;
+
+            quad->bl.texCoords.u = left;
+            quad->bl.texCoords.v = bottom;
+
+            quad->br.texCoords.u = right;
+            quad->br.texCoords.v = bottom;
+
+            quad->tl.texCoords.u = left;
+            quad->tl.texCoords.v = top;
+
+            quad->tr.texCoords.u = right;
+            quad->tr.texCoords.v = top;
+        }
     }
 }
 
