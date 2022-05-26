@@ -138,9 +138,7 @@ bool ParticleData::init(int count)
     deltaColorG        = (float*)malloc(count * sizeof(float));
     deltaColorB        = (float*)malloc(count * sizeof(float));
     deltaColorA        = (float*)malloc(count * sizeof(float));
-    hue                = (float*)malloc(count * sizeof(float));
-    sat                = (float*)malloc(count * sizeof(float));
-    val                = (float*)malloc(count * sizeof(float));
+
     size               = (float*)malloc(count * sizeof(float));
     deltaSize          = (float*)malloc(count * sizeof(float));
     rotation           = (float*)malloc(count * sizeof(float));
@@ -148,10 +146,6 @@ bool ParticleData::init(int count)
     deltaRotation      = (float*)malloc(count * sizeof(float));
     totalTimeToLive    = (float*)malloc(count * sizeof(float));
     timeToLive         = (float*)malloc(count * sizeof(float));
-    animTimeLength     = (float*)malloc(count * sizeof(float));
-    animTimeDelta      = (float*)malloc(count * sizeof(float));
-    animIndex          = (unsigned short*)malloc(count * sizeof(unsigned short));
-    animCellIndex      = (unsigned short*)malloc(count * sizeof(unsigned short));
     atlasIndex         = (unsigned int*)malloc(count * sizeof(unsigned int));
 
     modeA.dirX            = (float*)malloc(count * sizeof(float));
@@ -165,10 +159,10 @@ bool ParticleData::init(int count)
     modeB.radius           = (float*)malloc(count * sizeof(float));
 
     return posx && posy && startPosX && startPosY && colorR && colorG && colorB && colorA && deltaColorR &&
-           deltaColorG && deltaColorB && deltaColorA && hue && sat && val && size && deltaSize && rotation &&
-           staticRotation && deltaRotation && totalTimeToLive && timeToLive && animTimeLength && animTimeDelta &&
-           animIndex && animCellIndex && atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel &&
-           modeA.tangentialAccel && modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
+           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && staticRotation &&
+           deltaRotation && totalTimeToLive && timeToLive && atlasIndex && modeA.dirX && modeA.dirY &&
+           modeA.radialAccel && modeA.tangentialAccel && modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius &&
+           modeB.radius;
 }
 
 void ParticleData::release()
@@ -226,6 +220,8 @@ ParticleSystem::ParticleSystem()
     , _atlasIndex(0)
     , _transformSystemDirty(false)
     , _allocatedParticles(0)
+    , _isAnimAllocated(false)
+    , _isHSVAllocated(false)
     , _isActive(true)
     , _particleCount(0)
     , _duration(0)
@@ -244,6 +240,7 @@ ParticleSystem::ParticleSystem()
     , _endSpinVar(0)
     , _spawnAngle(0)
     , _spawnAngleVar(0)
+    , _isHsv(false)
     , _hsv(0, 1, 1)
     , _hsvVar(0, 0, 0)
     , _emissionRate(0)
@@ -312,6 +309,51 @@ ParticleSystem* ParticleSystem::createWithTotalParticles(int numberOfParticles)
 Vector<ParticleSystem*>& ParticleSystem::getAllParticleSystems()
 {
     return __allInstances;
+}
+
+bool ParticleSystem::allocAnimationMem()
+{
+    if (!_isAnimAllocated)
+    {
+        _particleData.animTimeLength = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.animTimeDelta  = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.animIndex      = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        _particleData.animCellIndex  = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+    }
+    return _isAnimAllocated = _particleData.animTimeLength && _particleData.animTimeDelta &&
+                              _particleData.animIndex && _particleData.animCellIndex;
+}
+
+void ParticleSystem::deallocAnimationMem()
+{
+    if (!_isAnimAllocated)
+    {
+        CC_SAFE_FREE(_particleData.animTimeLength);
+        CC_SAFE_FREE(_particleData.animTimeDelta);
+        CC_SAFE_FREE(_particleData.animIndex);
+        CC_SAFE_FREE(_particleData.animCellIndex);
+    }
+}
+
+bool ParticleSystem::allocHSVMem()
+{
+    if (!_isHSVAllocated)
+    {
+        _particleData.hue = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.sat = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.val = (float*)malloc(_totalParticles * sizeof(float));
+    }
+    return _isHSVAllocated = _particleData.hue && _particleData.sat && _particleData.val;
+}
+
+void ParticleSystem::deallocHSVMem()
+{
+    if (!_isHSVAllocated)
+    {
+        CC_SAFE_FREE(_particleData.hue);
+        CC_SAFE_FREE(_particleData.sat);
+        CC_SAFE_FREE(_particleData.val);
+    }
 }
 
 void ParticleSystem::setTotalParticleCountFactor(float factor)
@@ -647,7 +689,7 @@ ParticleSystem::~ParticleSystem()
     CC_SAFE_RELEASE(_texture);
 }
 
-void ParticleSystem::addParticles(int count, int animationCellIndex, int animationIndex)
+void ParticleSystem::addParticles(int count, int animationIndex, int animationCellIndex)
 {
     if (_paused)
         return;
@@ -681,46 +723,57 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
         _particleData.posy[i] = _sourcePosition.y + _posVar.y * RANDOM_KISS();
     }
 
-    if (animationCellIndex == -1 && _isEmitterAnimated)
+    if (animationCellIndex != -1 || animationIndex != -1)
+        allocAnimationMem();
+
+    if (_isAnimAllocated)
     {
-        for (int i = start; i < _particleCount; ++i)
+        if (animationCellIndex != -1)
+            std::fill_n(_particleData.animCellIndex + start, _particleCount - start, animationCellIndex);
+        else
+            std::fill_n(_particleData.animCellIndex + start, _particleCount - start, 0xFFFF);
+
+        if (animationIndex != -1)
         {
-            int rand0                      = abs(RANDOM_KISS() * _animIndexCount);
-            _particleData.animCellIndex[i] = MIN(rand0, _animIndexCount - 1);
+            for (int i = start; i < _particleCount; ++i)
+            {
+                _particleData.animIndex[i] = animationIndex;
+                auto& descriptor           = _animations.at(animationIndex);
+                _particleData.animTimeLength[i] =
+                    descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_KISS();
+            }
         }
     }
 
-    if (animationCellIndex != -1)
-        std::fill_n(_particleData.animCellIndex + start, _particleCount - start, animationCellIndex);
-
-    if (animationIndex == -1 && !_animations.empty())
+    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
     {
-        if (_randomAnimations.empty())
-            setMultiAnimationRandom();
-
-        for (int i = start; i < _particleCount; ++i)
+        if (animationCellIndex == -1 && _isEmitterAnimated)
         {
-            int rand0 = abs(RANDOM_KISS() * _randomAnimations.size());
-            int index = MIN(rand0, _randomAnimations.size() - 1);
-            _particleData.animIndex[i] = _randomAnimations[index];
-            auto& descriptor = _animations.at(_particleData.animIndex[i]);
-            _particleData.animTimeLength[i] =
-                descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_KISS();
+            for (int i = start; i < _particleCount; ++i)
+            {
+                int rand0                      = abs(RANDOM_KISS() * _animIndexCount);
+                _particleData.animCellIndex[i] = MIN(rand0, _animIndexCount - 1);
+            }
         }
-    }
 
-    if (_isEmitterAnimated || _isLoopAnimated)
-        std::fill_n(_particleData.animTimeDelta + start, _particleCount - start, 0);
-
-    if (animationIndex != -1)
-    {
-        for (int i = start; i < _particleCount; ++i)
+        if (animationIndex == -1 && !_animations.empty())
         {
-            _particleData.animIndex[i] = animationIndex;
-            auto& descriptor           = _animations.at(animationIndex);
-            _particleData.animTimeLength[i] =
-                descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_KISS();
+            if (_randomAnimations.empty())
+                setMultiAnimationRandom();
+
+            for (int i = start; i < _particleCount; ++i)
+            {
+                int rand0                  = abs(RANDOM_KISS() * _randomAnimations.size());
+                int index                  = MIN(rand0, _randomAnimations.size() - 1);
+                _particleData.animIndex[i] = _randomAnimations[index];
+                auto& descriptor           = _animations.at(_particleData.animIndex[i]);
+                _particleData.animTimeLength[i] =
+                    descriptor.animationSpeed + descriptor.animationSpeedVariance * RANDOM_KISS();
+            }
         }
+
+        if (_isEmitterAnimated || _isLoopAnimated)
+            std::fill_n(_particleData.animTimeDelta + start, _particleCount - start, 0);
     }
 
     // color
@@ -752,6 +805,7 @@ void ParticleSystem::addParticles(int count, int animationCellIndex, int animati
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
 
     // hue saturation value color
+    if (_isHSVAllocated)
     {
         for (int i = start; i < _particleCount; ++i)
         {
@@ -913,6 +967,45 @@ void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
     desc.animationSpeedVariance = timeVariance;
     desc.animationIndices       = std::move(indices);
     desc.reverseIndices         = reverse;
+}
+
+void ParticleSystem::setLifeAnimation(bool enabled)
+{
+    if (enabled && !allocAnimationMem())
+        return;
+
+    if (!enabled)
+        deallocAnimationMem();
+
+    _isLifeAnimated    = enabled;
+    _isEmitterAnimated = false;
+    _isLoopAnimated    = false;
+}
+
+void ParticleSystem::setEmitterAnimation(bool enabled)
+{
+    if (enabled && !allocAnimationMem())
+        return;
+
+    if (!enabled)
+        deallocAnimationMem();
+
+    _isEmitterAnimated = enabled;
+    _isLifeAnimated    = false;
+    _isLoopAnimated    = false;
+}
+
+void ParticleSystem::setLoopAnimation(bool enabled)
+{
+    if (enabled && !allocAnimationMem())
+        return;
+
+    if (!enabled)
+        deallocAnimationMem();
+
+    _isLoopAnimated    = enabled;
+    _isEmitterAnimated = false;
+    _isLifeAnimated    = false;
 }
 
 void ParticleSystem::resetAnimationIndices()
@@ -1175,55 +1268,64 @@ void ParticleSystem::update(float dt)
         for (int i = 0; i < _particleCount; ++i)
         {
             _particleData.timeToLive[i] -= dt;
-            if (_isEmitterAnimated && !_animations.empty())
+        }
+
+        if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
+        {
+            for (int i = 0; i < _particleCount; ++i)
             {
-                _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
-                if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
+                if (_isEmitterAnimated && !_animations.empty())
                 {
-                    auto& anim    = _animations.at(_particleData.animIndex[i]);
-                    float percent = abs(RANDOM_KISS());
-                    percent       = anim.reverseIndices ? 1.0F - percent : percent;
+                    _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
+                    if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
+                    {
+                        auto& anim    = _animations.at(_particleData.animIndex[i]);
+                        float percent = abs(RANDOM_KISS());
+                        percent       = anim.reverseIndices ? 1.0F - percent : percent;
 
-                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(
-                        percent * anim.animationIndices.size(), anim.animationIndices.size() - 1)];
-                    _particleData.animTimeDelta[i] = 0;
+                        _particleData.animCellIndex[i] = anim.animationIndices[MIN(
+                            percent * anim.animationIndices.size(), anim.animationIndices.size() - 1)];
+                        _particleData.animTimeDelta[i] = 0;
+                    }
                 }
+                if (_isLifeAnimated && _animations.empty())
+                {
+                    float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) /
+                                    _particleData.totalTimeToLive[i];
+                    percent = _isAnimationReversed ? 1.0F - percent : percent;
+                    _particleData.animCellIndex[i] =
+                        (unsigned short)MIN(percent * _animIndexCount, _animIndexCount - 1);
+                }
+                if (_isLifeAnimated && !_animations.empty())
+                {
+                    auto& anim = _animations.at(_particleData.animIndex[i]);
+
+                    float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) /
+                                    _particleData.totalTimeToLive[i];
+                    percent = (!!_isAnimationReversed != !!anim.reverseIndices) ? 1.0F - percent : percent;
+                    percent = MAX(0.0F, percent);
+
+                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
+                                                                               anim.animationIndices.size() - 1)];
+                }
+                if (_isLoopAnimated && !_animations.empty())
+                {
+                    auto& anim = _animations.at(_particleData.animIndex[i]);
+
+                    _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
+                    if (_particleData.animTimeDelta[i] >= _particleData.animTimeLength[i])
+                        _particleData.animTimeDelta[i] = 0;
+
+                    float percent = _particleData.animTimeDelta[i] / _particleData.animTimeLength[i];
+                    percent       = anim.reverseIndices ? 1.0F - percent : percent;
+                    percent       = MAX(0.0F, percent);
+
+                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
+                                                                               anim.animationIndices.size() - 1)];
+                }
+                if (_isLoopAnimated && _animations.empty())
+                    std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
             }
-            if (_isLifeAnimated && _animations.empty())
-            {
-                float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
-                percent = _isAnimationReversed ? 1.0F - percent : percent;
-                _particleData.animCellIndex[i] = (unsigned short)MIN(percent * _animIndexCount, _animIndexCount - 1);
-            }
-            if (_isLifeAnimated && !_animations.empty())
-            {
-                auto& anim = _animations.at(_particleData.animIndex[i]);
-
-                float percent =
-                    (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) / _particleData.totalTimeToLive[i];
-                percent = (!!_isAnimationReversed != !!anim.reverseIndices) ? 1.0F - percent : percent;
-                percent = MAX(0.0F, percent);
-
-                _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
-                                                                           anim.animationIndices.size() - 1)];
-            }
-            if (_isLoopAnimated && !_animations.empty())
-            {
-                auto& anim = _animations.at(_particleData.animIndex[i]);
-
-                _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
-                if (_particleData.animTimeDelta[i] >= _particleData.animTimeLength[i])
-                    _particleData.animTimeDelta[i] = 0;
-
-                float percent = _particleData.animTimeDelta[i] / _particleData.animTimeLength[i];
-                percent       = anim.reverseIndices ? 1.0F - percent : percent;
-                percent       = MAX(0.0F, percent);
-
-                _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
-                                                                           anim.animationIndices.size() - 1)];
-            }
-            if (_isLoopAnimated && _animations.empty())
-                std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
         }
 
         for (int i = 0; i < _particleCount; ++i)
@@ -1613,6 +1715,17 @@ bool ParticleSystem::isActive() const
 {
     return _isActive;
 }
+
+void ParticleSystem::useHSV(bool hsv)
+{
+    if (hsv && !allocHSVMem())
+        return;
+
+    if (!hsv)
+        deallocHSVMem();
+
+    _isHsv = hsv;
+};
 
 int ParticleSystem::getTotalParticles() const
 {

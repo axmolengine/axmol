@@ -150,9 +150,12 @@ public:
         deltaColorB[p1] = deltaColorB[p2];
         deltaColorA[p1] = deltaColorA[p2];
 
-        hue[p1] = hue[p2];
-        sat[p1] = sat[p2];
-        val[p1] = val[p2];
+        if (hue && sat && val)
+        {
+            hue[p1] = hue[p2];
+            sat[p1] = sat[p2];
+            val[p1] = val[p2];
+        }
 
         size[p1]           = size[p2];
         deltaSize[p1]      = deltaSize[p2];
@@ -162,11 +165,15 @@ public:
 
         totalTimeToLive[p1] = totalTimeToLive[p2];
         timeToLive[p1]      = timeToLive[p2];
-        animTimeDelta[p1]   = animTimeDelta[p2];
-        animTimeLength[p1]  = animTimeLength[p2];
 
-        animIndex[p1]     = animIndex[p2];
-        animCellIndex[p1] = animCellIndex[p2];
+        if (animTimeDelta && animTimeLength && animIndex && animCellIndex)
+        {
+            animTimeDelta[p1]  = animTimeDelta[p2];
+            animTimeLength[p1] = animTimeLength[p2];
+            animIndex[p1]      = animIndex[p2];
+            animCellIndex[p1]  = animCellIndex[p2];
+        }
+
         atlasIndex[p1]    = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
@@ -309,8 +316,17 @@ public:
      */
     static Vector<ParticleSystem*>& getAllParticleSystems();
 
+protected:
+    bool allocAnimationMem();
+    void deallocAnimationMem();
+    bool _isAnimAllocated;
+
+    bool allocHSVMem();
+    void deallocHSVMem();
+    bool _isHSVAllocated;
+
 public:
-    void addParticles(int count, int animationCellIndex = -1, int animationIndex = -1);
+    void addParticles(int count, int animationIndex = -1, int animationCellIndex = -1);
 
     void stopSystem();
     /** Kill all living particles.
@@ -721,7 +737,7 @@ public:
      *
      * @param hsv Use HSV color system.
      */
-    void useHSV(bool hsv) { _isHsv = hsv; };
+    void useHSV(bool hsv);
     bool isHSV() { return _isHsv; };
 
     /** Gets the hue of each particle.
@@ -861,28 +877,13 @@ public:
     bool isOpacityModifyRGB() const override { return _opacityModifyRGB; }
 
     /** Enables or disables tex coord animations that are set based on particle life. */
-    void setLifeAnimation(bool enabled)
-    {
-        _isLifeAnimated = enabled;
-        _isEmitterAnimated = false;
-        _isLoopAnimated = false;
-    }
+    void setLifeAnimation(bool enabled);
 
     /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. */
-    void setEmitterAnimation(bool enabled)
-    {
-        _isEmitterAnimated = enabled;
-        _isLifeAnimated = false;
-        _isLoopAnimated = false;
-    }
+    void setEmitterAnimation(bool enabled);
 
     /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die */
-    void setLoopAnimation(bool enabled)
-    {
-        _isLoopAnimated = enabled;
-        _isEmitterAnimated = false;
-        _isLifeAnimated = false;
-    }
+    void setLoopAnimation(bool enabled);
 
     bool isLifeAnimated() { return _isLifeAnimated; }
     bool isEmitterAnimated() { return _isEmitterAnimated; }

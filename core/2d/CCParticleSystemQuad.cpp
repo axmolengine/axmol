@@ -507,7 +507,7 @@ void ParticleSystemQuad::updateParticleQuads()
     // And wether if every property's memory of the particle system is continuous,
     // for the purpose of improving cache hit rate, we should process only one property in one for-loop.
     // It was proved to be effective especially for low-end devices.
-    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
+    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated || _isAnimAllocated)
     {
         V3F_C4B_T2F_Quad* quad    = startQuad;
         unsigned short* cellIndex = _particleData.animCellIndex;
@@ -521,7 +521,7 @@ void ParticleSystemQuad::updateParticleQuads()
 
             auto iter = _animationIndices.find(*cellIndex);
             if (iter == _animationIndices.end())
-                index.rect = _undefinedIndexRect;
+                index.rect = {0, 0, float(_texture->getPixelsWide()), float(_texture->getPixelsHigh())};
             else
                 index = iter->second;
 
