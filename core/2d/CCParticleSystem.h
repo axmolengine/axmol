@@ -99,6 +99,9 @@ public:
     float* opacityFadeInDelta;
     float* opacityFadeInLength;
 
+    float* scaleInDelta;
+    float* scaleInLength;
+
     float* size;
     float* deltaSize;
     float* rotation;
@@ -164,6 +167,12 @@ public:
         {
             opacityFadeInDelta[p1]  = opacityFadeInDelta[p2];
             opacityFadeInLength[p1] = opacityFadeInLength[p2];
+        }
+
+        if (scaleInDelta && scaleInLength)
+        {
+            scaleInDelta[p1]  = scaleInDelta[p2];
+            scaleInLength[p1] = scaleInLength[p2];
         }
 
         size[p1]           = size[p2];
@@ -337,6 +346,10 @@ protected:
     bool allocOpacityFadeInMem();
     void deallocOpacityFadeInMem();
     bool _isOpacityFadeInAllocated;
+
+    bool allocScaleInMem();
+    void deallocScaleInMem();
+    bool _isScaleInAllocated;
 
 public:
     void addParticles(int count, int animationIndex = -1, int animationCellIndex = -1);
@@ -864,26 +877,56 @@ public:
     void setSpawnAngleVar(float angle) { _spawnAngleVar = angle; }
 
     /** Gets the spawn opacity fade in time of each particle.
-     *
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
+
      * @return The spawn opacity fade in time in seconds.
      */
     float getSpawnFadeIn() { return _spawnFadeIn; }
     /** Sets the spawn opacity fade in time of each particle when it's created.
-     *
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
+     * 
      * @param time The spawn opacity fade in time in seconds.
      */
     void setSpawnFadeIn(float time);
 
     /** Gets the spawn opacity fade in time variance of each particle.
-     *
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
+     * 
      * @return The spawn opacity fade in time variance in seconds.
      */
     float getSpawnFadeInVar() { return _spawnFadeInVar; }
     /** Sets the spawn opacity fade in time variance of each particle when it's created.
-     *
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
+     * 
      * @param time The spawn opacity fade in time variance in seconds.
      */
     void setSpawnFadeInVar(float time);
+
+    /** Gets the spawn opacity fade in time of each particle.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
+     * 
+     * @return The spawn opacity fade in time in seconds.
+     */
+    float getSpawnScaleIn() { return _spawnScaleIn; }
+    /** Sets the spawn opacity fade in time of each particle when it's created.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
+     * 
+     * @param time The spawn opacity fade in time in seconds.
+     */
+    void setSpawnScaleIn(float time);
+
+    /** Gets the spawn opacity fade in time variance of each particle.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
+     * 
+     * @return The spawn opacity fade in time variance in seconds.
+     */
+    float getSpawnScaleInVar() { return _spawnScaleInVar; }
+    /** Sets the spawn opacity fade in time variance of each particle when it's created.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
+     * 
+     * @param time The spawn opacity fade in time variance in seconds.
+     */
+    void setSpawnScaleInVar(float time);
 
     /** Gets the emission rate of the particles.
      *
@@ -1349,6 +1392,10 @@ protected:
     float _spawnFadeIn;
     //* initial fade in time variance of each particle
     float _spawnFadeInVar;
+    //* initial scale in time of each particle
+    float _spawnScaleIn;
+    //* initial scale in time variance of each particle
+    float _spawnScaleInVar;
     /** emission rate of the particles */
     float _emissionRate;
     /** maximum particles of the system */
