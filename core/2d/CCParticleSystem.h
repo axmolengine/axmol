@@ -96,6 +96,9 @@ public:
     float* sat;
     float* val;
 
+    float* opacityFadeInDelta;
+    float* opacityFadeInLength;
+
     float* size;
     float* deltaSize;
     float* rotation;
@@ -155,6 +158,12 @@ public:
             hue[p1] = hue[p2];
             sat[p1] = sat[p2];
             val[p1] = val[p2];
+        }
+
+        if (opacityFadeInDelta && opacityFadeInLength)
+        {
+            opacityFadeInDelta[p1]  = opacityFadeInDelta[p2];
+            opacityFadeInLength[p1] = opacityFadeInLength[p2];
         }
 
         size[p1]           = size[p2];
@@ -324,6 +333,10 @@ protected:
     bool allocHSVMem();
     void deallocHSVMem();
     bool _isHSVAllocated;
+
+    bool allocOpacityFadeInMem();
+    void deallocOpacityFadeInMem();
+    bool _isOpacityFadeInAllocated;
 
 public:
     void addParticles(int count, int animationIndex = -1, int animationCellIndex = -1);
@@ -850,6 +863,28 @@ public:
      */
     void setSpawnAngleVar(float angle) { _spawnAngleVar = angle; }
 
+    /** Gets the spawn opacity fade in time of each particle.
+     *
+     * @return The spawn opacity fade in time in seconds.
+     */
+    float getSpawnFadeIn() { return _spawnFadeIn; }
+    /** Sets the spawn opacity fade in time of each particle when it's created.
+     *
+     * @param time The spawn opacity fade in time in seconds.
+     */
+    void setSpawnFadeIn(float time);
+
+    /** Gets the spawn opacity fade in time variance of each particle.
+     *
+     * @return The spawn opacity fade in time variance in seconds.
+     */
+    float getSpawnFadeInVar() { return _spawnFadeInVar; }
+    /** Sets the spawn opacity fade in time variance of each particle when it's created.
+     *
+     * @param time The spawn opacity fade in time variance in seconds.
+     */
+    void setSpawnFadeInVar(float time);
+
     /** Gets the emission rate of the particles.
      *
      * @return The emission rate of the particles.
@@ -1310,6 +1345,10 @@ protected:
     float _spawnAngle;
     //* initial rotation of each particle
     float _spawnAngleVar;
+    //* initial fade in time of each particle
+    float _spawnFadeIn;
+    //* initial fade in time variance of each particle
+    float _spawnFadeInVar;
     /** emission rate of the particles */
     float _emissionRate;
     /** maximum particles of the system */
