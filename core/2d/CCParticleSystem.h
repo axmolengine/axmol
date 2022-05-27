@@ -764,7 +764,7 @@ public:
      * @param hsv Use HSV color system.
      */
     void useHSV(bool hsv);
-    bool isHSV() { return _isHsv; };
+    bool isHSV() { return _isHSVAllocated; };
 
     /** Gets the hue of each particle.
      *
@@ -1370,8 +1370,6 @@ protected:
     Color4F _endColor;
     /** end color variance of each particle */
     Color4F _endColorVar;
-    //* Is the hsv system used or not.
-    bool _isHsv;
     /** hsv color of each particle */
     HSV _hsv;
     /** hsv color variance of each particle */

@@ -475,7 +475,7 @@ void ParticleSystemQuad::updateParticleQuads()
         float* fadeLn = _particleData.opacityFadeInLength;
 
         // HSV calculation is expensive, so we should skip it if it's not enabled.
-        if (_isHsv)
+        if (_isHSVAllocated)
         {
             float* hue = _particleData.hue;
             float* sat = _particleData.sat;
@@ -560,7 +560,7 @@ void ParticleSystemQuad::updateParticleQuads()
     else
     {
         // HSV calculation is expensive, so we should skip it if it's not enabled.
-        if (_isHsv)
+        if (_isHSVAllocated)
         {
             float* hue = _particleData.hue;
             float* sat = _particleData.sat;
