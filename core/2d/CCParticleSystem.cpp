@@ -226,6 +226,8 @@ ParticleSystem::ParticleSystem()
     , _allocatedParticles(0)
     , _isAnimAllocated(false)
     , _isHSVAllocated(false)
+    , _isOpacityFadeInAllocated(false)
+    , _isScaleInAllocated(false)
     , _isActive(true)
     , _particleCount(0)
     , _duration(0)
@@ -244,13 +246,10 @@ ParticleSystem::ParticleSystem()
     , _endSpinVar(0)
     , _spawnAngle(0)
     , _spawnAngleVar(0)
-    , _isHsv(false)
     , _hsv(0, 1, 1)
     , _hsvVar(0, 0, 0)
-    , _isOpacityFadeInAllocated(false)
     , _spawnFadeIn(0)
     , _spawnFadeInVar(0)
-    , _isScaleInAllocated(false)
     , _spawnScaleIn(0)
     , _spawnScaleInVar(0)
     , _emissionRate(0)
@@ -1831,8 +1830,6 @@ void ParticleSystem::useHSV(bool hsv)
 
     if (!hsv)
         deallocHSVMem();
-
-    _isHsv = hsv;
 };
 
 void ParticleSystem::setSpawnFadeIn(float time)
