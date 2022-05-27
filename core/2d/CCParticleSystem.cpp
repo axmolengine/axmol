@@ -326,23 +326,26 @@ bool ParticleSystem::allocAnimationMem()
     if (!_isAnimAllocated)
     {
         _particleData.animTimeLength = (float*)malloc(_totalParticles * sizeof(float));
-        _particleData.animTimeDelta  = (float*)malloc(_totalParticles * sizeof(float));
-        _particleData.animIndex      = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
-        _particleData.animCellIndex  = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        _particleData.animTimeDelta = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.animIndex = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        _particleData.animCellIndex = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        if (_particleData.animTimeLength && _particleData.animTimeDelta &&
+            _particleData.animIndex && _particleData.animCellIndex)
+            return _isAnimAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocAnimationMem();
     }
-    return _isAnimAllocated = _particleData.animTimeLength && _particleData.animTimeDelta &&
-                              _particleData.animIndex && _particleData.animCellIndex;
+    return false;
 }
 
 void ParticleSystem::deallocAnimationMem()
 {
-    if (_isAnimAllocated)
-    {
-        CC_SAFE_FREE(_particleData.animTimeLength);
-        CC_SAFE_FREE(_particleData.animTimeDelta);
-        CC_SAFE_FREE(_particleData.animIndex);
-        CC_SAFE_FREE(_particleData.animCellIndex);
-    }
+    CC_SAFE_FREE(_particleData.animTimeLength);
+    CC_SAFE_FREE(_particleData.animTimeDelta);
+    CC_SAFE_FREE(_particleData.animIndex);
+    CC_SAFE_FREE(_particleData.animCellIndex);
+    _isAnimAllocated = false;
 }
 
 bool ParticleSystem::allocHSVMem()
@@ -352,37 +355,43 @@ bool ParticleSystem::allocHSVMem()
         _particleData.hue = (float*)malloc(_totalParticles * sizeof(float));
         _particleData.sat = (float*)malloc(_totalParticles * sizeof(float));
         _particleData.val = (float*)malloc(_totalParticles * sizeof(float));
+        if (_particleData.hue && _particleData.sat && _particleData.val)
+            return _isHSVAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocHSVMem();
     }
-    return _isHSVAllocated = _particleData.hue && _particleData.sat && _particleData.val;
+    return false;
 }
 
 void ParticleSystem::deallocHSVMem()
 {
-    if (_isHSVAllocated)
-    {
-        CC_SAFE_FREE(_particleData.hue);
-        CC_SAFE_FREE(_particleData.sat);
-        CC_SAFE_FREE(_particleData.val);
-    }
+    CC_SAFE_FREE(_particleData.hue);
+    CC_SAFE_FREE(_particleData.sat);
+    CC_SAFE_FREE(_particleData.val);
+    _isHSVAllocated = false;
 }
 
 bool ParticleSystem::allocOpacityFadeInMem()
 {
     if (!_isOpacityFadeInAllocated)
     {
-        _particleData.opacityFadeInDelta = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.opacityFadeInDelta  = (float*)malloc(_totalParticles * sizeof(float));
         _particleData.opacityFadeInLength = (float*)malloc(_totalParticles * sizeof(float));
+        if (_particleData.opacityFadeInDelta && _particleData.opacityFadeInLength)
+            return _isOpacityFadeInAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocOpacityFadeInMem();
     }
-    return _isOpacityFadeInAllocated = _particleData.opacityFadeInDelta && _particleData.opacityFadeInLength;
+    return false;
 }
 
 void ParticleSystem::deallocOpacityFadeInMem()
 {
-    if (_isOpacityFadeInAllocated)
-    {
-        CC_SAFE_FREE(_particleData.opacityFadeInDelta);
-        CC_SAFE_FREE(_particleData.opacityFadeInLength);
-    }
+    CC_SAFE_FREE(_particleData.opacityFadeInDelta);
+    CC_SAFE_FREE(_particleData.opacityFadeInLength);
+    _isOpacityFadeInAllocated = false;
 }
 
 bool ParticleSystem::allocScaleInMem()
@@ -391,17 +400,20 @@ bool ParticleSystem::allocScaleInMem()
     {
         _particleData.scaleInDelta  = (float*)malloc(_totalParticles * sizeof(float));
         _particleData.scaleInLength = (float*)malloc(_totalParticles * sizeof(float));
+        if (_particleData.scaleInDelta && _particleData.scaleInLength)
+            return _isScaleInAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocScaleInMem();
     }
-    return _isScaleInAllocated = _particleData.scaleInDelta && _particleData.scaleInLength;
+    return false;
 }
 
 void ParticleSystem::deallocScaleInMem()
 {
-    if (_isScaleInAllocated)
-    {
-        CC_SAFE_FREE(_particleData.scaleInDelta);
-        CC_SAFE_FREE(_particleData.scaleInLength);
-    }
+    CC_SAFE_FREE(_particleData.scaleInDelta);
+    CC_SAFE_FREE(_particleData.scaleInLength);
+    _isScaleInAllocated = false;
 }
 
 void ParticleSystem::setTotalParticleCountFactor(float factor)
