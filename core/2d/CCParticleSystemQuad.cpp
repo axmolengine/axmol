@@ -487,15 +487,17 @@ void ParticleSystemQuad::updateParticleQuads()
                 for (int i = 0; i < _particleCount;
                      ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val, ++fadeDt, ++fadeLn)
                 {
-                    float colorR = *r * *a;
-                    float colorG = *g * *a;
-                    float colorB = *b * *a;
+                    float colorR = *r;
+                    float colorG = *g;
+                    float colorB = *b;
                     float colorA = *a * (*fadeDt / *fadeLn);
                     hsv.set(colorR, colorG, colorB, colorA);
                     hsv.h += *hue;
-                    hsv.s    = abs(*sat);
-                    hsv.v    = abs(*val);
-                    auto col = hsv.toColor4B();
+                    hsv.s     = abs(*sat);
+                    hsv.v     = abs(*val);
+                    auto colF = hsv.toColor4F();
+                    auto col  = Color4B(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
                     quad->bl.colors.set(col.r, col.g, col.b, col.a);
                     quad->br.colors.set(col.r, col.g, col.b, col.a);
                     quad->tl.colors.set(col.r, col.g, col.b, col.a);
@@ -572,15 +574,17 @@ void ParticleSystemQuad::updateParticleQuads()
                 for (int i = 0; i < _particleCount;
                      ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
                 {
-                    float colorR = *r * *a;
-                    float colorG = *g * *a;
-                    float colorB = *b * *a;
+                    float colorR = *r;
+                    float colorG = *g;
+                    float colorB = *b;
                     float colorA = *a;
                     hsv.set(colorR, colorG, colorB, colorA);
                     hsv.h += *hue;
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
-                    auto col = hsv.toColor4B();
+                    auto colF = hsv.toColor4F();
+                    auto col  = Color4B(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
                     quad->bl.colors.set(col.r, col.g, col.b, col.a);
                     quad->br.colors.set(col.r, col.g, col.b, col.a);
                     quad->tl.colors.set(col.r, col.g, col.b, col.a);
