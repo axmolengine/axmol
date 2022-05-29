@@ -484,7 +484,6 @@ void ParticleSystemQuad::updateParticleQuads()
             if (_opacityModifyRGB)
             {
                 auto hsv = HSV();
-                auto col = Color4B();
                 for (int i = 0; i < _particleCount;
                      ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val, ++fadeDt, ++fadeLn)
                 {
@@ -497,12 +496,14 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s     = abs(*sat);
                     hsv.v     = abs(*val);
                     auto colF = hsv.toColor4F();
-                    col.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
-                            colF.a * 255.0F);
-                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->br.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                    quad->bl.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
+                    quad->br.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
+                    quad->tl.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
+                    quad->tr.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
                 }
             }
             else
@@ -572,7 +573,6 @@ void ParticleSystemQuad::updateParticleQuads()
             if (_opacityModifyRGB)
             {
                 auto hsv = HSV();
-                auto col = Color4B();
                 for (int i = 0; i < _particleCount;
                      ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
                 {
@@ -585,12 +585,14 @@ void ParticleSystemQuad::updateParticleQuads()
                     hsv.s    = abs(*sat);
                     hsv.v    = abs(*val);
                     auto colF = hsv.toColor4F();
-                    col.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
-                            colF.a * 255.0F);
-                    quad->bl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->br.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tl.colors.set(col.r, col.g, col.b, col.a);
-                    quad->tr.colors.set(col.r, col.g, col.b, col.a);
+                    quad->bl.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
+                    quad->br.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
+                    quad->tl.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
+                    quad->tr.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
+                                        colF.a * 255.0F);
                 }
             }
             else
