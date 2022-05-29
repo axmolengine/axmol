@@ -1226,7 +1226,7 @@ public:
      */
     virtual float getTimeScale();
 
-    /** Gets the time scale of the particle system.
+    /** Sets the time scale of the particle system.
      @param Time scale of the particle system. (default: 1.0)
      */
     virtual void setTimeScale(float scale = 1.0F);
