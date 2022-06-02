@@ -802,10 +802,10 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::RECTTORUS:
             {
-                float width           = (shape.outerWidth  - shape.innerWidth)  * abs(RANDOM_KISS()) + shape.outerWidth;
-                float height          = (shape.outerHeight - shape.innerHeight) * abs(RANDOM_KISS()) + shape.outerHeight;
-                width                 = RANDOM_KISS() < 0.0F ? (width - ((shape.outerWidth - shape.innerWidth) / 2)) * -1 : width - ((shape.outerWidth - shape.innerWidth) / 2);
-                height                = RANDOM_KISS() < 0.0F ? (height - ((shape.outerHeight - shape.innerHeight) / 2)) * -1 : height - ((shape.outerHeight - shape.innerHeight) / 2);
+                float width           = (shape.outerWidth  - shape.innerWidth)  * abs(RANDOM_KISS()) + shape.innerWidth;
+                float height          = (shape.outerHeight - shape.innerHeight) * abs(RANDOM_KISS()) + shape.innerHeight;
+                width                 = RANDOM_KISS() < 0.0F ? width  * -1 : width;
+                height                = RANDOM_KISS() < 0.0F ? height * -1 : height;
                 float prob            = RANDOM_KISS();
                 _particleData.posx[i] = _sourcePosition.x + shape.x + width / 2 * (prob >= 0.0F ? 1.0F : RANDOM_KISS());
                 _particleData.posy[i] = _sourcePosition.y + shape.y + height / 2 * (prob < 0.0F ? 1.0F : RANDOM_KISS());
