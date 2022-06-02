@@ -54,6 +54,42 @@ struct particle_point
     float y;
 };
 
+/**
+ * Particle emission shapes.
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
+ * @since adxe-1.0.0b7
+ */
+enum class EmissionShapeType
+{
+    POINT,
+    RECT,
+    RECTTORUS,
+    CIRCLE,
+    TORUS,
+};
+
+/**
+ * Particle emission shapes.
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
+ * @since adxe-1.0.0b7
+ */
+struct EmissionShape
+{
+    EmissionShapeType type;
+
+    float x;
+    float y;
+
+    float innerWidth;
+    float innerHeight;
+    float outerWidth;
+    float outerHeight;
+
+    float innerRadius;
+    float outerRadius;
+    float edgeElasticity;
+};
+
 /** @struct ParticleAnimationDescriptor
 Structure that contains animation description
 */
@@ -1093,6 +1129,29 @@ public:
     void setAnimationSpeedTimescaleIndependent(bool independent) { _animationTimescaleInd = independent; };
     bool isAnimationSpeedTimescaleIndependent() { return _animationTimescaleInd; };
 
+    /** Sets wether to use emission shapes for this particle system or not */
+    void setEmissionShapes(bool enabled) { _isEmissionShapes = enabled; }
+    bool isEmissionShapes() { return _isEmissionShapes; }
+
+    /** Adds an emission shape of type point to the system. */
+    void addEmissionShapePoint(Vec2 pos);
+
+    /** Adds an emission shape of type Rectangle to the system. */
+    void addEmissionShapeRect(Vec2 pos, Size size);
+
+    /** Adds an emission shape of type Rectangular Torus to the system. */
+    void addEmissionShapeRectTorus(Vec2 pos, Size innerSize, Size outerSize);
+
+    /** Adds an emission shape of type Circle to the system.
+    * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the circle more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no bias behaviour.
+    */
+    void addEmissionShapeCircle(Vec2 pos, float radius, float edgeElasticity = 1.0F);
+
+    /** Adds an emission shape of type Torus to the system.
+    * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the torus more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the inner radius of the torus more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no bias behaviour.
+    */
+    void addEmissionShapeTorus(Vec2 pos, float innerRadius, float outerRadius, float edgeElasticity = 1.0F);
+
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
      *
@@ -1426,6 +1485,12 @@ protected:
     cocos2d::Rect _undefinedIndexRect;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
+
+    /** Wether to use emission shapes for this particle system or not */
+    bool _isEmissionShapes;
+
+    /** A vector that contains emission shapes. */
+    std::vector<EmissionShape> _emissionShapes;
 
     /** particles movement type: Free or Grouped
      @since v0.8

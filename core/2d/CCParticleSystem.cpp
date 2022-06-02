@@ -770,16 +770,87 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         _particleData.timeToLive[i]      = MAX(0, particleLife);
     }
 
-    // position
-    for (int i = start; i < _particleCount; ++i)
+    if (_isEmissionShapes)
     {
-        auto f                = RANDOM_KISS();
-        _particleData.posx[i] = _sourcePosition.x + _posVar.x * RANDOM_KISS();
-    }
+        for (int i = start; i < _particleCount; ++i)
+        {
+            if (_emissionShapes.empty())
+            {
+                _particleData.posx[i] = _sourcePosition.x + _posVar.x * RANDOM_KISS();
+                _particleData.posy[i] = _sourcePosition.y + _posVar.y * RANDOM_KISS();
+                continue;
+            }
 
-    for (int i = start; i < _particleCount; ++i)
+            auto randElem = abs(RANDOM_KISS());
+            auto& shape = _emissionShapes[MIN(randElem * _emissionShapes.size(), _emissionShapes.size() - 1)];
+
+            switch (shape.type)
+            {
+            case EmissionShapeType::POINT:
+            {
+                _particleData.posx[i] = _sourcePosition.x + shape.x;
+                _particleData.posy[i] = _sourcePosition.y + shape.y;
+
+                break;
+            }
+            case EmissionShapeType::RECT:
+            {
+                _particleData.posx[i] = _sourcePosition.x + shape.x + shape.innerWidth / 2 * RANDOM_KISS();
+                _particleData.posy[i] = _sourcePosition.y + shape.y + shape.innerHeight / 2 * RANDOM_KISS();
+
+                break;
+            }
+            case EmissionShapeType::RECTTORUS:
+            {
+                float width           = (shape.outerWidth  - shape.innerWidth)  * abs(RANDOM_KISS()) + shape.outerWidth;
+                float height          = (shape.outerHeight - shape.innerHeight) * abs(RANDOM_KISS()) + shape.outerHeight;
+                width                 = RANDOM_KISS() < 0.0F ? (width - ((shape.outerWidth - shape.innerWidth) / 2)) * -1 : width - ((shape.outerWidth - shape.innerWidth) / 2);
+                height                = RANDOM_KISS() < 0.0F ? (height - ((shape.outerHeight - shape.innerHeight) / 2)) * -1 : height - ((shape.outerHeight - shape.innerHeight) / 2);
+                float prob            = RANDOM_KISS();
+                _particleData.posx[i] = _sourcePosition.x + shape.x + width / 2 * (prob >= 0.0F ? 1.0F : RANDOM_KISS());
+                _particleData.posy[i] = _sourcePosition.y + shape.y + height / 2 * (prob < 0.0F ? 1.0F : RANDOM_KISS());
+
+                break;
+            }
+            case EmissionShapeType::CIRCLE:
+            {
+                auto val              = abs(RANDOM_KISS()) * shape.innerRadius / shape.innerRadius;
+                val                   = powf(val, 1 / shape.edgeElasticity);
+                auto point            = Vec2(val * shape.innerRadius * (RANDOM_KISS() < 0.0F ? 1.0F : -1.0F), 0.0F);
+                point                 = point.rotateByAngle(Vec2::ZERO, CC_DEGREES_TO_RADIANS(RANDOM_KISS() * 360));
+                _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
+                _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
+
+                break;
+            }
+            case EmissionShapeType::TORUS:
+            {
+                auto val              = abs(RANDOM_KISS()) * shape.outerRadius / shape.outerRadius;
+                val                   = powf(val, 1 / shape.edgeElasticity);
+                auto point = Vec2(((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) -
+                                   (shape.outerRadius - shape.innerRadius)) *
+                             (RANDOM_KISS() < 0.0F ? 1.0F : -1.0F), 0.0F);
+                point                 = point.rotateByAngle(Vec2::ZERO, CC_DEGREES_TO_RADIANS(RANDOM_KISS() * 360));
+                _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
+                _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
+
+                break;
+            }
+            }
+        }
+    }
+    else
     {
-        _particleData.posy[i] = _sourcePosition.y + _posVar.y * RANDOM_KISS();
+        // position
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.posx[i] = _sourcePosition.x + _posVar.x * RANDOM_KISS();
+        }
+
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.posy[i] = _sourcePosition.y + _posVar.y * RANDOM_KISS();
+        }
     }
 
     if (animationCellIndex != -1 || animationIndex != -1)
@@ -1046,6 +1117,85 @@ void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
     desc.animationSpeedVariance = timeVariance;
     desc.animationIndices       = std::move(indices);
     desc.reverseIndices         = reverse;
+}
+
+void ParticleSystem::addEmissionShapePoint(Vec2 pos)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::POINT;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    _emissionShapes.push_back(shape);
+}
+
+void ParticleSystem::addEmissionShapeRect(Vec2 pos, Size size)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::RECT;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerWidth  = size.x;
+    shape.innerHeight = size.y;
+
+    _emissionShapes.push_back(shape);
+}
+
+void ParticleSystem::addEmissionShapeRectTorus(Vec2 pos, Size innerSize, Size outerSize)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::RECTTORUS;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerWidth  = innerSize.x;
+    shape.innerHeight = innerSize.y;
+
+    shape.outerWidth  = outerSize.x;
+    shape.outerHeight = outerSize.y;
+
+    _emissionShapes.push_back(shape);
+}
+
+void ParticleSystem::addEmissionShapeCircle(Vec2 pos, float radius, float edgeElasticity)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::CIRCLE;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = radius;
+
+    shape.edgeElasticity = edgeElasticity;
+
+    _emissionShapes.push_back(shape);
+}
+
+void ParticleSystem::addEmissionShapeTorus(Vec2 pos, float innerRadius, float outerRadius, float edgeElasticity)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::TORUS;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = innerRadius;
+
+    shape.outerRadius = outerRadius;
+
+    shape.edgeElasticity = edgeElasticity;
+
+    _emissionShapes.push_back(shape);
 }
 
 void ParticleSystem::setLifeAnimation(bool enabled)
