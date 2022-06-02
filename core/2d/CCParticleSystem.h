@@ -1133,6 +1133,9 @@ public:
     void setEmissionShapes(bool enabled) { _isEmissionShapes = enabled; }
     bool isEmissionShapes() { return _isEmissionShapes; }
 
+    /** Resets the count of emission shapes to 0 and empties the emission shapes array */
+    void resetEmissionShapes();
+
     /** Adds an emission shape of type point to the system. */
     void addEmissionShapePoint(Vec2 pos);
 

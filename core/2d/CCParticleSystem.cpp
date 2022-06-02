@@ -1119,6 +1119,11 @@ void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
     desc.reverseIndices         = reverse;
 }
 
+void ParticleSystem::resetEmissionShapes()
+{
+    _emissionShapes.clear();
+}
+
 void ParticleSystem::addEmissionShapePoint(Vec2 pos)
 {
     EmissionShape shape{};
