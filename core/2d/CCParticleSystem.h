@@ -66,6 +66,8 @@ enum class EmissionShapeType
     RECTTORUS,
     CIRCLE,
     TORUS,
+    CONE,
+    CONETORUS,
 };
 
 /**
@@ -95,10 +97,10 @@ Structure that contains animation description
 */
 struct ParticleAnimationDescriptor
 {
-    float                       animationSpeed;
-    float                       animationSpeedVariance;
+    float animationSpeed;
+    float animationSpeedVariance;
     std::vector<unsigned short> animationIndices;
-    bool                        reverseIndices;
+    bool reverseIndices;
 };
 
 /** @struct ParticleFrameDescriptor
@@ -107,7 +109,7 @@ Structure that contains frame description
 struct ParticleFrameDescriptor
 {
     cocos2d::Rect rect;
-    bool          isRotated;
+    bool isRotated;
 };
 
 class CC_DLL ParticleData
@@ -228,7 +230,7 @@ public:
             animCellIndex[p1]  = animCellIndex[p2];
         }
 
-        atlasIndex[p1]    = atlasIndex[p2];
+        atlasIndex[p1] = atlasIndex[p2];
 
         modeA.dirX[p1]            = modeA.dirX[p2];
         modeA.dirY[p1]            = modeA.dirY[p2];
@@ -318,9 +320,9 @@ public:
 
     };
 
-   /** TexAnimDir
-    Texture animation direction for the particles.
-    */
+    /** TexAnimDir
+     Texture animation direction for the particles.
+     */
     enum class TexAnimDir
     {
         VERTICAL, /** texture coordinates are read top to bottom within the texture */
@@ -913,53 +915,61 @@ public:
     void setSpawnAngleVar(float angle) { _spawnAngleVar = angle; }
 
     /** Gets the spawn opacity fade in time of each particle.
-     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     specified time.
 
      * @return The spawn opacity fade in time in seconds.
      */
     float getSpawnFadeIn() { return _spawnFadeIn; }
     /** Sets the spawn opacity fade in time of each particle when it's created.
-     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     * specified time.
+     *
      * @param time The spawn opacity fade in time in seconds.
      */
     void setSpawnFadeIn(float time);
 
     /** Gets the spawn opacity fade in time variance of each particle.
-     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     * specified time.
+     *
      * @return The spawn opacity fade in time variance in seconds.
      */
     float getSpawnFadeInVar() { return _spawnFadeInVar; }
     /** Sets the spawn opacity fade in time variance of each particle when it's created.
-     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     * specified time.
+     *
      * @param time The spawn opacity fade in time variance in seconds.
      */
     void setSpawnFadeInVar(float time);
 
     /** Gets the spawn opacity fade in time of each particle.
-     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
      * @return The spawn opacity fade in time in seconds.
      */
     float getSpawnScaleIn() { return _spawnScaleIn; }
     /** Sets the spawn opacity fade in time of each particle when it's created.
-     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
      * @param time The spawn opacity fade in time in seconds.
      */
     void setSpawnScaleIn(float time);
 
     /** Gets the spawn opacity fade in time variance of each particle.
-     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
      * @return The spawn opacity fade in time variance in seconds.
      */
     float getSpawnScaleInVar() { return _spawnScaleInVar; }
     /** Sets the spawn opacity fade in time variance of each particle when it's created.
-     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified time.
-     * 
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
      * @param time The spawn opacity fade in time variance in seconds.
      */
     void setSpawnScaleInVar(float time);
@@ -996,17 +1006,18 @@ public:
     /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. */
     void setEmitterAnimation(bool enabled);
 
-    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die */
+    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die
+     */
     void setLoopAnimation(bool enabled);
 
     bool isLifeAnimated() { return _isLifeAnimated; }
     bool isEmitterAnimated() { return _isEmitterAnimated; }
     bool isLoopAnimated() { return _isLoopAnimated; }
 
-    /** Gets the total number of indices. 
-    *
-    * @return The size of the list holding animation indices.
-    */
+    /** Gets the total number of indices.
+     *
+     * @return The size of the list holding animation indices.
+     */
     int getTotalAnimationIndices() { return _animIndexCount; }
 
     /** Sets wether to start from first cell and go forwards (normal) or last cell and go backwards (reversed) */
@@ -1020,96 +1031,100 @@ public:
     void resetAnimationDescriptors();
 
     /** Choose what animation descriptors are to be selected at random for particles.
-    * This function should be called after you've inserted/overwritten any animation descriptors.
-    * 
-    * @param animations Array of specific indices of animations to play at random
-    */
-    void setMultiAnimationRandomSpecific(const std::vector<unsigned short> &animations) { _randomAnimations = animations; };
+     * This function should be called after you've inserted/overwritten any animation descriptors.
+     *
+     * @param animations Array of specific indices of animations to play at random
+     */
+    void setMultiAnimationRandomSpecific(const std::vector<unsigned short>& animations)
+    {
+        _randomAnimations = animations;
+    };
 
     /** Choose ALL animation descriptors to be selected at random for particles.
-    * This function should be called after you've inserted/overwritten any animation descriptors.
-    */
+     * This function should be called after you've inserted/overwritten any animation descriptors.
+     */
     void setMultiAnimationRandom();
 
     /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
-    * will erase the array and add new indices from the atlas.
-    * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
+     * will erase the array and add new indices from the atlas.
+     * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
     void setAnimationIndicesAtlas();
 
-    /** Add all particle animation indices based on cell size and direction spicified if the method of rendering preferred is texture atlas.
-    * will erase the array and add new indices from the atlas.
-    *
-    * @param unifiedCellSize The size of cell unified.
-    * @param direction What direction is the atlas
-    */
+    /** Add all particle animation indices based on cell size and direction spicified if the method of rendering
+     * preferred is texture atlas. will erase the array and add new indices from the atlas.
+     *
+     * @param unifiedCellSize The size of cell unified.
+     * @param direction What direction is the atlas
+     */
     void setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction = TexAnimDir::HORIZONTAL);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    * The index is automatically incremented on each addition.
-    *
-    * @param frameName SpriteFrame name to search for
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
+     * The index is automatically incremented on each addition.
+     *
+     * @param frameName SpriteFrame name to search for
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
     bool addAnimationIndex(std::string_view frameName);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    *
-    * @param index Index id to add the frame to or override it with the new frame
-    * @param frameName SpriteFrame name to search for
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
+     *
+     * @param index Index id to add the frame to or override it with the new frame
+     * @param frameName SpriteFrame name to search for
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
     bool addAnimationIndex(unsigned short index, std::string_view frameName);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    * The index is automatically incremented on each addition.
-    * 
-    * @param frame SpriteFrame containting data about tex coords
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
+     * The index is automatically incremented on each addition.
+     *
+     * @param frame SpriteFrame containting data about tex coords
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
     bool addAnimationIndex(cocos2d::SpriteFrame* frame);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
-    * you can specify which index you want to override in this function
-    * 
-    * @param index Index id to add the frame to or override it with the new frame
-    * @param frame SpriteFrame containting data about tex coords
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
+     * you can specify which index you want to override in this function
+     *
+     * @param index Index id to add the frame to or override it with the new frame
+     * @param frame SpriteFrame containting data about tex coords
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
     bool addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
 
     /** Add a particle animation index based on tex coords spicified.
-    * you can specify which index you want to override in this function
-    * 
-    * @param index Index id to add the frame to or override it with the new rect
-    * @param rect Rect containting data about tex coords in pixels
-    * @param rotated Not implemented.
-    * 
-    * @return Returns true of the index was successfully found and added. Otherwise, false
-    */
+     * you can specify which index you want to override in this function
+     *
+     * @param index Index id to add the frame to or override it with the new rect
+     * @param rect Rect containting data about tex coords in pixels
+     * @param rotated Not implemented.
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
     bool addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
 
     /** You can specify what rect is used if an index in an animation descriptor wasn't found.
-    *
-    * @param rect Rect containting data about tex coords in pixels
-    */
+     *
+     * @param rect Rect containting data about tex coords in pixels
+     */
     void setRectForUndefinedIndices(cocos2d::Rect rect) { _undefinedIndexRect = rect; };
 
     /** Add a particle animation descriptor with an index.
-    *
-    * @param indexOfDescriptor Index of the animation to be added, adding to the same index will just override the pervious animation descriptor
-    * @param time length of the animation in seconds
-    * @param timeVariance Time randomly selected for each different particle added on the animation length
-    * @param indices An array of the indicies
-    * @param reverse Should the animation indicies be played backwards? (default: false)
-    */
+     *
+     * @param indexOfDescriptor Index of the animation to be added, adding to the same index will just override the
+     * pervious animation descriptor
+     * @param time length of the animation in seconds
+     * @param timeVariance Time randomly selected for each different particle added on the animation length
+     * @param indices An array of the indicies
+     * @param reverse Should the animation indicies be played backwards? (default: false)
+     */
     void setAnimationDescriptor(unsigned short indexOfDescriptor,
                                 float time,
                                 float timeVariance,
-                                const std::vector<unsigned short> &indices,
+                                const std::vector<unsigned short>& indices,
                                 bool reverse = false);
 
     /** Add a particle animation descriptor with the index 0.
@@ -1117,7 +1132,7 @@ public:
      * @param indices An array of the indicies
      * @param reverse Should the animation indicies be played backwards? (default: false)
      */
-    void setAnimationDescriptor(const std::vector<unsigned short> &indices, bool reverse = false)
+    void setAnimationDescriptor(const std::vector<unsigned short>& indices, bool reverse = false)
     {
         setAnimationDescriptor(0, 0, 0, indices, reverse);
     };
@@ -1146,13 +1161,19 @@ public:
     void addEmissionShapeRectTorus(Vec2 pos, Size innerSize, Size outerSize);
 
     /** Adds an emission shape of type Circle to the system.
-    * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the circle more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no bias behaviour.
-    */
+     * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the circle
+     * more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the center
+     * of the circle more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no bias
+     * behaviour.
+     */
     void addEmissionShapeCircle(Vec2 pos, float radius, float edgeElasticity = 1.0F);
 
     /** Adds an emission shape of type Torus to the system.
-    * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the torus more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the inner radius of the torus more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no bias behaviour.
-    */
+     * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the torus
+     * more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the inner
+     * radius of the torus more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no
+     * bias behaviour.
+     */
     void addEmissionShapeTorus(Vec2 pos, float innerRadius, float outerRadius, float edgeElasticity = 1.0F);
 
     /** Gets the particles movement type: Free or Grouped.
@@ -1171,16 +1192,20 @@ public:
     /** Advance the particle system and make it seem like it ran for this many seconds.
      *
      * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
-     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance. value of -1 means (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more
+     * accurate the simulation will be at the cost of performance. value of -1 means
+     * (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
      */
-    void simulate(float seconds      = SIMULATION_USE_PARTICLE_LIFETIME,
-                     float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
+    void simulate(float seconds   = SIMULATION_USE_PARTICLE_LIFETIME,
+                  float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
      * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
      *
      * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
-     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more accurate the simulation will be at the cost of performance. value of -1 means (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more
+     * accurate the simulation will be at the cost of performance. value of -1 means
+     * (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
      */
     void resimulate(float seconds   = SIMULATION_USE_PARTICLE_LIFETIME,
                     float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
@@ -1279,6 +1304,9 @@ public:
     virtual float getFixedFPS();
 
     /** Sets the fixed frame rate count of the particle system.
+     * i.e. if the framerate is set to 30.0 while the refresh rate is greater than 30.0 then the particle system will
+     wait until it hits the 30.0 FPS mark.
+     * This is usefull for increasing performance or for creating old-school effects with it.
      @param Fixed frame rate count of the particle system. (default: 0.0)
      */
     virtual void setFixedFPS(float frameRate = 0.0F);

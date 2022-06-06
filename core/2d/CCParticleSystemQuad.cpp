@@ -106,7 +106,9 @@ ParticleSystemQuad* ParticleSystemQuad::create(std::string_view filename)
 
 ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfParticles)
 {
-    CCASSERT(numberOfParticles <= 10000, "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of U_SHORT (uint16_t)");
+    CCASSERT(numberOfParticles <= 10000,
+             "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of "
+             "U_SHORT (uint16_t)");
 
     ParticleSystemQuad* ret = new ParticleSystemQuad();
     if (ret->initWithTotalParticles(numberOfParticles))
@@ -293,7 +295,7 @@ inline void updatePosWithParticle(V3F_C4B_T2F_Quad* quad,
     float x  = newPosition.x;
     float y  = newPosition.y;
 
-    float r = (float)-CC_DEGREES_TO_RADIANS(rotation + staticRotation);
+    float r  = (float)-CC_DEGREES_TO_RADIANS(rotation + staticRotation);
     float cr = cosf(r);
     float sr = sinf(r);
     float ax = x1 * cr - y1 * sr + x;
@@ -359,19 +361,20 @@ void ParticleSystemQuad::updateParticleQuads()
         worldToNodeTM.transformPoint(&p1);
         Vec3 p2;
         Vec2 newPos;
-        float* startX                = _particleData.startPosX;
-        float* startY                = _particleData.startPosY;
-        float* x                     = _particleData.posx;
-        float* y                     = _particleData.posy;
-        float* s                     = _particleData.size;
-        float* r                     = _particleData.rotation;
-        float* sr                    = _particleData.staticRotation;
-        float* sid                   = _particleData.scaleInDelta;
-        float* sil                   = _particleData.scaleInLength;
+        float* startX               = _particleData.startPosX;
+        float* startY               = _particleData.startPosY;
+        float* x                    = _particleData.posx;
+        float* y                    = _particleData.posy;
+        float* s                    = _particleData.size;
+        float* r                    = _particleData.rotation;
+        float* sr                   = _particleData.staticRotation;
+        float* sid                  = _particleData.scaleInDelta;
+        float* sil                  = _particleData.scaleInLength;
         V3F_C4B_T2F_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
-            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
+            for (int i = 0; i < _particleCount;
+                 ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
             {
                 p2.set(*startX, *startY, 0);
                 worldToNodeTM.transformPoint(&p2);
@@ -411,7 +414,8 @@ void ParticleSystemQuad::updateParticleQuads()
         V3F_C4B_T2F_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
-            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
+            for (int i = 0; i < _particleCount;
+                 ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
             {
                 newPos.set(*x, *y);
                 newPos.x = *x - (currentPosition.x - *startX);
@@ -447,7 +451,8 @@ void ParticleSystemQuad::updateParticleQuads()
         V3F_C4B_T2F_Quad* quadStart = startQuad;
         if (_isScaleInAllocated)
         {
-            for (int i = 0; i < _particleCount; ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
+            for (int i = 0; i < _particleCount;
+                 ++i, ++startX, ++startY, ++x, ++y, ++quadStart, ++s, ++r, ++sr, ++sid, ++sil)
             {
                 newPos.set(*x + pos.x, *y + pos.y);
                 updatePosWithParticle(quadStart, newPos, *s, tweenfunc::expoEaseOut(*sid / *sil), *r, *sr);
@@ -573,8 +578,7 @@ void ParticleSystemQuad::updateParticleQuads()
             if (_opacityModifyRGB)
             {
                 auto hsv = HSV();
-                for (int i = 0; i < _particleCount;
-                     ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+                for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
                 {
                     float colorR = *r;
                     float colorG = *g;
@@ -582,8 +586,8 @@ void ParticleSystemQuad::updateParticleQuads()
                     float colorA = *a;
                     hsv.set(colorR, colorG, colorB, colorA);
                     hsv.h += *hue;
-                    hsv.s    = abs(*sat);
-                    hsv.v    = abs(*val);
+                    hsv.s     = abs(*sat);
+                    hsv.v     = abs(*val);
                     auto colF = hsv.toColor4F();
                     quad->bl.colors.set(colF.r * colF.a * 255.0F, colF.g * colF.a * 255.0F, colF.b * colF.a * 255.0F,
                                         colF.a * 255.0F);
@@ -598,8 +602,7 @@ void ParticleSystemQuad::updateParticleQuads()
             else
             {
                 auto hsv = HSV();
-                for (int i = 0; i < _particleCount;
-                     ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
+                for (int i = 0; i < _particleCount; ++i, ++quad, ++r, ++g, ++b, ++a, ++hue, ++sat, ++val)
                 {
                     float colorR = *r;
                     float colorG = *g;
