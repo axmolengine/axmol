@@ -126,27 +126,27 @@ bool ParticleData::init(int count)
 {
     maxCount = count;
 
-    posx               = (float*)malloc(count * sizeof(float));
-    posy               = (float*)malloc(count * sizeof(float));
-    startPosX          = (float*)malloc(count * sizeof(float));
-    startPosY          = (float*)malloc(count * sizeof(float));
-    colorR             = (float*)malloc(count * sizeof(float));
-    colorG             = (float*)malloc(count * sizeof(float));
-    colorB             = (float*)malloc(count * sizeof(float));
-    colorA             = (float*)malloc(count * sizeof(float));
-    deltaColorR        = (float*)malloc(count * sizeof(float));
-    deltaColorG        = (float*)malloc(count * sizeof(float));
-    deltaColorB        = (float*)malloc(count * sizeof(float));
-    deltaColorA        = (float*)malloc(count * sizeof(float));
+    posx        = (float*)malloc(count * sizeof(float));
+    posy        = (float*)malloc(count * sizeof(float));
+    startPosX   = (float*)malloc(count * sizeof(float));
+    startPosY   = (float*)malloc(count * sizeof(float));
+    colorR      = (float*)malloc(count * sizeof(float));
+    colorG      = (float*)malloc(count * sizeof(float));
+    colorB      = (float*)malloc(count * sizeof(float));
+    colorA      = (float*)malloc(count * sizeof(float));
+    deltaColorR = (float*)malloc(count * sizeof(float));
+    deltaColorG = (float*)malloc(count * sizeof(float));
+    deltaColorB = (float*)malloc(count * sizeof(float));
+    deltaColorA = (float*)malloc(count * sizeof(float));
 
-    size               = (float*)malloc(count * sizeof(float));
-    deltaSize          = (float*)malloc(count * sizeof(float));
-    rotation           = (float*)malloc(count * sizeof(float));
-    staticRotation     = (float*)malloc(count * sizeof(float));
-    deltaRotation      = (float*)malloc(count * sizeof(float));
-    totalTimeToLive    = (float*)malloc(count * sizeof(float));
-    timeToLive         = (float*)malloc(count * sizeof(float));
-    atlasIndex         = (unsigned int*)malloc(count * sizeof(unsigned int));
+    size            = (float*)malloc(count * sizeof(float));
+    deltaSize       = (float*)malloc(count * sizeof(float));
+    rotation        = (float*)malloc(count * sizeof(float));
+    staticRotation  = (float*)malloc(count * sizeof(float));
+    deltaRotation   = (float*)malloc(count * sizeof(float));
+    totalTimeToLive = (float*)malloc(count * sizeof(float));
+    timeToLive      = (float*)malloc(count * sizeof(float));
+    atlasIndex      = (unsigned int*)malloc(count * sizeof(unsigned int));
 
     modeA.dirX            = (float*)malloc(count * sizeof(float));
     modeA.dirY            = (float*)malloc(count * sizeof(float));
@@ -262,7 +262,7 @@ ParticleSystem::ParticleSystem()
     , _isLoopAnimated(false)
     , _animIndexCount(0)
     , _isAnimationReversed(false)
-    , _undefinedIndexRect({0,0,0,0})
+    , _undefinedIndexRect({0, 0, 0, 0})
     , _animationTimescaleInd(false)
     , _yCoordFlipped(1)
     , _positionType(PositionType::FREE)
@@ -325,11 +325,11 @@ bool ParticleSystem::allocAnimationMem()
     if (!_isAnimAllocated)
     {
         _particleData.animTimeLength = (float*)malloc(_totalParticles * sizeof(float));
-        _particleData.animTimeDelta = (float*)malloc(_totalParticles * sizeof(float));
-        _particleData.animIndex = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
-        _particleData.animCellIndex = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
-        if (_particleData.animTimeLength && _particleData.animTimeDelta &&
-            _particleData.animIndex && _particleData.animCellIndex)
+        _particleData.animTimeDelta  = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.animIndex      = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        _particleData.animCellIndex  = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        if (_particleData.animTimeLength && _particleData.animTimeDelta && _particleData.animIndex &&
+            _particleData.animCellIndex)
             return _isAnimAllocated = true;
         else
             // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
@@ -782,7 +782,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
 
             auto randElem = abs(RANDOM_KISS());
-            auto& shape = _emissionShapes[MIN(randElem * _emissionShapes.size(), _emissionShapes.size() - 1)];
+            auto& shape   = _emissionShapes[MIN(randElem * _emissionShapes.size(), _emissionShapes.size() - 1)];
 
             switch (shape.type)
             {
@@ -802,11 +802,11 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::RECTTORUS:
             {
-                float width           = (shape.outerWidth  - shape.innerWidth)  * abs(RANDOM_KISS()) + shape.innerWidth;
-                float height          = (shape.outerHeight - shape.innerHeight) * abs(RANDOM_KISS()) + shape.innerHeight;
-                width                 = RANDOM_KISS() < 0.0F ? width  * -1 : width;
-                height                = RANDOM_KISS() < 0.0F ? height * -1 : height;
-                float prob            = RANDOM_KISS();
+                float width  = (shape.outerWidth - shape.innerWidth) * abs(RANDOM_KISS()) + shape.innerWidth;
+                float height = (shape.outerHeight - shape.innerHeight) * abs(RANDOM_KISS()) + shape.innerHeight;
+                width        = RANDOM_KISS() < 0.0F ? width * -1 : width;
+                height       = RANDOM_KISS() < 0.0F ? height * -1 : height;
+                float prob   = RANDOM_KISS();
                 _particleData.posx[i] = _sourcePosition.x + shape.x + width / 2 * (prob >= 0.0F ? 1.0F : RANDOM_KISS());
                 _particleData.posy[i] = _sourcePosition.y + shape.y + height / 2 * (prob < 0.0F ? 1.0F : RANDOM_KISS());
 
@@ -827,9 +827,10 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             {
                 auto val              = abs(RANDOM_KISS()) * shape.outerRadius / shape.outerRadius;
                 val                   = powf(val, 1 / shape.edgeElasticity);
-                auto point = Vec2(((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) -
+                auto point            = Vec2(((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) -
                                    (shape.outerRadius - shape.innerRadius)) *
-                             (RANDOM_KISS() < 0.0F ? 1.0F : -1.0F), 0.0F);
+                                                 (RANDOM_KISS() < 0.0F ? 1.0F : -1.0F),
+                                             0.0F);
                 point                 = point.rotateByAngle(Vec2::ZERO, CC_DEGREES_TO_RADIANS(RANDOM_KISS() * 360));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
@@ -907,9 +908,9 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
     }
 
     // color
-#define SET_COLOR(c, b, v)                                  \
-    for (int i = start; i < _particleCount; ++i)            \
-    {                                                       \
+#define SET_COLOR(c, b, v)                          \
+    for (int i = start; i < _particleCount; ++i)    \
+    {                                               \
         c[i] = clampf(b + v * RANDOM_KISS(), 0, 1); \
     }
 
@@ -1035,8 +1036,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         // tangential accel
         for (int i = start; i < _particleCount; ++i)
         {
-            _particleData.modeA.tangentialAccel[i] =
-                modeA.tangentialAccel + modeA.tangentialAccelVar * RANDOM_KISS();
+            _particleData.modeA.tangentialAccel[i] = modeA.tangentialAccel + modeA.tangentialAccelVar * RANDOM_KISS();
         }
 
         // rotation is dir
@@ -1105,7 +1105,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
                                             float time,
                                             float timeVariance,
-                                            const std::vector<unsigned short> &indices,
+                                            const std::vector<unsigned short>& indices,
                                             bool reverse)
 {
     auto iter = _animations.find(indexOfDescriptor);
@@ -1266,16 +1266,14 @@ void ParticleSystem::setAnimationIndicesAtlas()
     // VERTICAL
     if (_texture->getPixelsHigh() > _texture->getPixelsWide())
     {
-        setAnimationIndicesAtlas(_texture->getPixelsWide(),
-            ParticleSystem::TexAnimDir::VERTICAL);
+        setAnimationIndicesAtlas(_texture->getPixelsWide(), ParticleSystem::TexAnimDir::VERTICAL);
         return;
     }
 
     // HORIZONTAL
     if (_texture->getPixelsWide() > _texture->getPixelsHigh())
     {
-        setAnimationIndicesAtlas(_texture->getPixelsHigh(),
-            ParticleSystem::TexAnimDir::HORIZONTAL);
+        setAnimationIndicesAtlas(_texture->getPixelsHigh(), ParticleSystem::TexAnimDir::HORIZONTAL);
         return;
     }
 
@@ -1287,7 +1285,7 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
     CCASSERT(unifiedCellSize > 0, "A cell cannot have a size of zero.");
 
     resetAnimationIndices();
-    
+
     auto texWidth  = _texture->getPixelsWide();
     auto texHeight = _texture->getPixelsHigh();
 
@@ -1319,8 +1317,8 @@ void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexA
             frame.origin.x = unifiedCellSize * i;
             frame.origin.y = 0;
 
-            frame.size.x   = unifiedCellSize;
-            frame.size.y   = texHeight;
+            frame.size.x = unifiedCellSize;
+            frame.size.y = texHeight;
 
             addAnimationIndex(_animIndexCount, frame);
         }
@@ -1342,7 +1340,7 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, std::string_view fr
     if (frame)
         return addAnimationIndex(index, frame);
     return false;
- }
+}
 
 bool ParticleSystem::addAnimationIndex(cocos2d::SpriteFrame* frame)
 {
@@ -1374,12 +1372,12 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect,
 void ParticleSystem::simulate(float seconds, float frameRate)
 {
     auto l_updatePaused = _updatePaused;
-    _updatePaused = false;
-    seconds   = seconds   == SIMULATION_USE_PARTICLE_LIFETIME ?
-        getLife() + getLifeVar() : seconds;
-    frameRate = frameRate == SIMULATION_USE_GAME_ANIMATION_INTERVAL ?
-        1.0F / Director::getInstance()->getAnimationInterval() : frameRate;
-    auto delta = 1.0F / frameRate;
+    _updatePaused       = false;
+    seconds             = seconds == SIMULATION_USE_PARTICLE_LIFETIME ? getLife() + getLifeVar() : seconds;
+    frameRate           = frameRate == SIMULATION_USE_GAME_ANIMATION_INTERVAL
+                              ? 1.0F / Director::getInstance()->getAnimationInterval()
+                              : frameRate;
+    auto delta          = 1.0F / frameRate;
     if (seconds > delta)
     {
         while (seconds > 0.0F)
@@ -1459,8 +1457,11 @@ void ParticleSystem::update(float dt)
     {
         _fixedFPSDelta += dt;
         if (_fixedFPSDelta < 1.0F / _fixedFPS)
+        {
+            CC_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
             return;
-        dt = _fixedFPSDelta;
+        }
+        dt             = _fixedFPSDelta;
         _fixedFPSDelta = 0.0F;
     }
 
