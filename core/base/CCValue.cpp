@@ -210,7 +210,7 @@ Value& Value::operator=(Value&& other)
         switch (other.getTypeFamily())
         {
         case Type::INTEGER:
-            _field.uintVal = other._field.uintVal;
+            _field.uint64Val = other._field.uint64Val;
             break;
         case Type::FLOAT:
             _field.floatVal = other._field.floatVal;
