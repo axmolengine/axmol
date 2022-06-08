@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -206,7 +206,8 @@ public:
             _cancelled = true;
             if (this->_sockfd != -1)
             {
-                ::shutdown(this->_sockfd, SD_BOTH);  // may cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
+                if(::shutdown(this->_sockfd, SD_BOTH) == -1) // may cause curl CURLE_SEND_ERROR(55) or CURLE_RECV_ERROR(56)
+                    ::closesocket(this->_sockfd);
                 this->_sockfd = -1;
             }
         }
