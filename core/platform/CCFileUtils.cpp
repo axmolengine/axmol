@@ -646,24 +646,14 @@ void FileUtils::writeValueVectorToFile(ValueVector vecData,
         std::move(callback), std::move(vecData));
 }
 
-std::string FileUtils::getNewFilename(std::string_view filename) const
+std::string_view FileUtils::getNewFilename(std::string_view filename) const
 {
-    std::string newFileName;
-
     DECLARE_GUARD;
 
     // in Lookup Filename dictionary ?
     auto iter = _filenameLookupDict.find(filename);
 
-    if (iter == _filenameLookupDict.end())
-    {
-        newFileName = filename;
-    }
-    else
-    {
-        newFileName = iter->second.asString();
-    }
-    return newFileName;
+    return iter == _filenameLookupDict.end() ? filename : iter->second.asStringRef();
 }
 
 std::string FileUtils::getPathForFilename(std::string_view filename,
@@ -725,7 +715,7 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
     }
 
     // Get the new file name.
-    const std::string newFilename(getNewFilename(filename));
+    std::string_view newFilename = getNewFilename(filename);
 
     std::string fullpath;
 
@@ -781,7 +771,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
         longdir += "/";
     }
 
-    const std::string newdirname(getNewFilename(longdir));
+    std::string_view newdirname = getNewFilename(longdir);
 
     for (const auto& searchIt : _searchPathArray)
     {
