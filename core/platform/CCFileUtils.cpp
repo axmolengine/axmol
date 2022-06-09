@@ -646,16 +646,6 @@ void FileUtils::writeValueVectorToFile(ValueVector vecData,
         std::move(callback), std::move(vecData));
 }
 
-std::string_view FileUtils::getNewFilename(std::string_view filename) const
-{
-    DECLARE_GUARD;
-
-    // in Lookup Filename dictionary ?
-    auto iter = _filenameLookupDict.find(filename);
-
-    return iter == _filenameLookupDict.end() ? filename : iter->second.asStringRef();
-}
-
 std::string FileUtils::getPathForFilename(std::string_view filename,
                                           std::string_view resolutionDirectory,
                                           std::string_view searchPath) const
@@ -714,16 +704,13 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
         return cacheIter->second;
     }
 
-    // Get the new file name.
-    std::string_view newFilename = getNewFilename(filename);
-
     std::string fullpath;
 
     for (const auto& searchIt : _searchPathArray)
     {
         for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
-            fullpath = this->getPathForFilename(newFilename, resolutionIt, searchIt);
+            fullpath = this->getPathForFilename(filename, resolutionIt, searchIt);
 
             if (!fullpath.empty())
             {
@@ -771,13 +758,11 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
         longdir += "/";
     }
 
-    std::string_view newdirname = getNewFilename(longdir);
-
     for (const auto& searchIt : _searchPathArray)
     {
         for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
-            fullpath = this->getPathForDirectory(newdirname, resolutionIt, searchIt);
+            fullpath = this->getPathForDirectory(longdir, resolutionIt, searchIt);
             if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
             {
                 // Using the filename passed in as key.
@@ -798,7 +783,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
 std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const
 {
-    return std::string{relativeFile.substr(0, relativeFile.rfind('/') + 1)}.append(getNewFilename(filename));
+    return std::string{relativeFile.substr(0, relativeFile.rfind('/') + 1)}.append(filename);
 }
 
 void FileUtils::setSearchResolutionsOrder(const std::vector<std::string>& searchResolutionsOrder)
@@ -964,35 +949,6 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
     {
         _originalSearchPaths.push_back(std::string{searchpath});
         _searchPathArray.push_back(std::move(path));
-    }
-}
-
-void FileUtils::setFilenameLookupDictionary(const ValueMap& filenameLookupDict)
-{
-    DECLARE_GUARD;
-    _fullPathCache.clear();
-    _fullPathCacheDir.clear();
-    _filenameLookupDict = filenameLookupDict;
-}
-
-void FileUtils::loadFilenameLookupDictionaryFromFile(std::string_view filename)
-{
-    const std::string fullPath = fullPathForFilename(filename);
-    if (!fullPath.empty())
-    {
-        ValueMap dict = getValueMapFromFile(fullPath);
-        if (!dict.empty())
-        {
-            ValueMap& metadata = dict["metadata"].asValueMap();
-            int version        = metadata["version"].asInt();
-            if (version != 1)
-            {
-                CCLOG("cocos2d: ERROR: Invalid filenameLookup dictionary version: %d. Filename: %s", version,
-                      filename.data());
-                return;
-            }
-            setFilenameLookupDictionary(dict["filenames"].asValueMap());
-        }
     }
 }
 
