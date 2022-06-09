@@ -1,6 +1,6 @@
 /******************************************************************************
 
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  ASTC Texture Decompression.
 
@@ -33,7 +33,8 @@ struct astc_decompress_task
     ~astc_decompress_task()
     {
 #if ASTCDEC_NO_CONTEXT
-        term_block_size_descriptor(_bsd);
+        if (_bsd)
+            aligned_free<block_size_descriptor>(_bsd);
 #else
         if (_context)
             astcenc_context_free(this->_context);
@@ -55,7 +56,7 @@ struct astc_decompress_task
 #if ASTCDEC_NO_CONTEXT
     unsigned int _block_x, _block_y;
     ParallelManager _decompress_pm{};
-    block_size_descriptor _bsd{};
+    block_size_descriptor* _bsd = nullptr;
 #else
     astcenc_config _config{};
     astcenc_context* _context = nullptr;
@@ -160,7 +161,8 @@ private:
 
         task->_block_x = block_x;
         task->_block_y = block_y;
-        init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, task->_bsd);
+        task->_bsd     = aligned_malloc<block_size_descriptor>(sizeof(block_size_descriptor), ASTCENC_VECALIGN);
+        init_block_size_descriptor(block_x, block_y, 1, false, 0 /*unused for decompress*/, 0, *task->_bsd);
         task->_decompress_pm.init(total_blocks);
 #else
         (void)astcenc_config_init(ASTCENC_PRF_LDR, block_x, block_y, 1, 0, ASTCENC_FLG_DECOMPRESS_ONLY, &task->_config);
@@ -195,7 +197,7 @@ private:
             unsigned int block_x = task->_block_x;
             unsigned int block_y = task->_block_y;
             unsigned int block_z = 1;  // task->block_z;
-            auto& bsd            = task->_bsd;
+            auto& bsd            = *task->_bsd;
             auto& decompress_pm  = task->_decompress_pm;
 #else
             unsigned int block_x = task->_config.block_x;

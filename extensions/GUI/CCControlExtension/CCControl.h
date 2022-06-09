@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * http://www.cocos2d-x.org
+ * https://adxeproject.github.io/
  *
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com
@@ -181,11 +181,10 @@ public:
     virtual bool isOpacityModifyRGB() const override;
     virtual void setOpacityModifyRGB(bool bOpacityModifyRGB) override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        Control();
+    /**
+     * @js ctor
+     */
+    Control();
     /**
      * @js NA
      * @lua NA

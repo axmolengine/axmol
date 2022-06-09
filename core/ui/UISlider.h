@@ -281,7 +281,7 @@ public:
     ResourceData getBallPressedFile();
     ResourceData getBallDisabledFile();
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
 protected:
     virtual void initRenderer() override;

@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -72,7 +72,7 @@ public:
 
     cocos2d::Rect getBoundingBox() const override;
 
-    CC_CONSTRUCTOR_ACCESS : SkeletonNode();
+    SkeletonNode();
     virtual ~SkeletonNode();
     virtual bool init() override;
 

@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +44,17 @@ static void luaTableToObjcDictionary(lua_State* L, NSMutableDictionary* dict, NS
     lua_pushnil(L);
     while (lua_next(L, -2))
     {
-        NSString* key2 = [NSString stringWithCString:lua_tostring(L, -2) encoding:NSUTF8StringEncoding];
+        NSString* key2 = nil;
+        int keyType    = lua_type(L, -2);
+        if (keyType == LUA_TSTRING)
+            key2 = [NSString stringWithCString:lua_tostring(L, -2) encoding:NSUTF8StringEncoding];
+        else if (keyType == LUA_TNUMBER)
+            key2 = [[NSNumber numberWithInt:lua_tonumber(L, -2)] stringValue];
+        else
+        {
+            lua_pop(L, 1);
+            continue;
+        }
 
         switch (lua_type(L, -1))
         {

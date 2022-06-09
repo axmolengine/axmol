@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,7 @@
 #ifndef COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CONTROLLER_MANUAL_H
 #define COCOS_SCRIPTING_LUA_BINDINGS_LUA_COCOS2DX_CONTROLLER_MANUAL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "tolua++.h"
-#ifdef __cplusplus
-}
-#endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 

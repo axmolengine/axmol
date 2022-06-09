@@ -84,11 +84,9 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(final GL10 gl) {
         /*
-         * No need to use algorithm in default(60 FPS) situation,
-         * since onDrawFrame() was called by system 60 times per second by default.
+         * Fix 60fps limiting doesn't work when high-end device is working in 120fps mode.
          */
-
-        if (Cocos2dxRenderer.sAnimationInterval <= 1.0f / 60f * Cocos2dxRenderer.NANOSECONDSPERSECOND) {
+        if (Cocos2dxRenderer.sAnimationInterval <= 1.0f / 1200.0f * Cocos2dxRenderer.NANOSECONDSPERSECOND) {
             Cocos2dxRenderer.nativeRender();
         } else {
             final long now = System.nanoTime();

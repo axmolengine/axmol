@@ -352,7 +352,7 @@ void physical_to_symbolic(
 	const auto& di = bsd.get_decimation_info(bm.decimation_mode);
 
 	int weight_count = di.weight_count;
-	quant_method weight_quant_method = (quant_method)bm.quant_mode;
+	quant_method weight_quant_method = static_cast<quant_method>(bm.quant_mode);
 	int is_dual_plane = bm.is_dual_plane;
 
 	int real_weight_count = is_dual_plane ? 2 * weight_count : weight_count;
@@ -479,9 +479,10 @@ void physical_to_symbolic(
 	}
 
 	// Unpack the integer color values and assign to endpoints
-	scb.quant_mode = (quant_method)color_quant_level;
+	scb.quant_mode = static_cast<quant_method>(color_quant_level);
 	uint8_t values_to_decode[32];
-	decode_ise((quant_method)color_quant_level, color_integer_count, pcb.data, values_to_decode, (partition_count == 1 ? 17 : 19 + PARTITION_INDEX_BITS));
+	decode_ise(static_cast<quant_method>(color_quant_level), color_integer_count, pcb.data,
+	           values_to_decode, (partition_count == 1 ? 17 : 19 + PARTITION_INDEX_BITS));
 
 	int valuecount_to_decode = 0;
 	for (int i = 0; i < partition_count; i++)

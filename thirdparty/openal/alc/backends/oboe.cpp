@@ -40,17 +40,6 @@ oboe::DataCallbackResult OboePlayback::onAudioReady(oboe::AudioStream *oboeStrea
     assert(numFrames > 0);
     const int32_t numChannels{oboeStream->getChannelCount()};
 
-    if UNLIKELY(numChannels > 2 && mDevice->FmtChans == DevFmtStereo)
-    {
-        /* If the device is only mixing stereo but there's more than two
-         * output channels, there are unused channels that need to be silenced.
-         */
-        if(mStream->getFormat() == oboe::AudioFormat::Float)
-            memset(audioData, 0, static_cast<uint32_t>(numFrames*numChannels)*sizeof(float));
-        else
-            memset(audioData, 0, static_cast<uint32_t>(numFrames*numChannels)*sizeof(int16_t));
-    }
-
     mDevice->renderSamples(audioData, static_cast<uint32_t>(numFrames),
         static_cast<uint32_t>(numChannels));
     return oboe::DataCallbackResult::Continue;
@@ -142,38 +131,15 @@ bool OboePlayback::reset()
         mStream->getBufferCapacityInFrames()));
     TRACE("Got stream with properties:\n%s", oboe::convertToText(mStream.get()));
 
-    switch(mStream->getChannelCount())
+    if(static_cast<uint>(mStream->getChannelCount()) != mDevice->channelsFromFmt())
     {
-    case oboe::ChannelCount::Mono:
-        mDevice->FmtChans = DevFmtMono;
-        break;
-    case oboe::ChannelCount::Stereo:
-        mDevice->FmtChans = DevFmtStereo;
-        break;
-    /* Other potential configurations. Could be wrong, but better than failing.
-     * Assume WFX channel order.
-     */
-    case 4:
-        mDevice->FmtChans = DevFmtQuad;
-        break;
-    case 6:
-        mDevice->FmtChans = DevFmtX51Rear;
-        break;
-    case 7:
-        mDevice->FmtChans = DevFmtX61;
-        break;
-    case 8:
-        mDevice->FmtChans = DevFmtX71;
-        break;
-    default:
-        if(mStream->getChannelCount() < 1)
+        if(mStream->getChannelCount() >= 2)
+            mDevice->FmtChans = DevFmtStereo;
+        else if(mStream->getChannelCount() == 1)
+            mDevice->FmtChans = DevFmtMono;
+        else
             throw al::backend_exception{al::backend_error::DeviceError,
                 "Got unhandled channel count: %d", mStream->getChannelCount()};
-        /* Assume first two channels are front left/right. We can do a stereo
-         * mix and keep the other channels silent.
-         */
-        mDevice->FmtChans = DevFmtStereo;
-        break;
     }
     setDefaultWFXChannelOrder();
 
@@ -227,6 +193,9 @@ struct OboeCapture final : public BackendBase {
 
     oboe::ManagedStream mStream;
 
+    std::vector<al::byte> mSamples;
+    uint mLastAvail{0u};
+
     void open(const char *name) override;
     void start() override;
     void stop() override;
@@ -263,7 +232,6 @@ void OboeCapture::open(const char *name)
         break;
     case DevFmtQuad:
     case DevFmtX51:
-    case DevFmtX51Rear:
     case DevFmtX61:
     case DevFmtX71:
     case DevFmtAmbi3D:
@@ -324,6 +292,23 @@ void OboeCapture::start()
 
 void OboeCapture::stop()
 {
+    /* Capture any unread samples before stopping. Oboe drops whatever's left
+     * in the stream.
+     */
+    if(auto availres = mStream->getAvailableFrames())
+    {
+        const auto avail = std::max(static_cast<uint>(availres.value()), mLastAvail);
+        const size_t frame_size{static_cast<uint32_t>(mStream->getBytesPerFrame())};
+        const size_t pos{mSamples.size()};
+        mSamples.resize(pos + avail*frame_size);
+
+        auto result = mStream->read(&mSamples[pos], availres.value(), 0);
+        uint got{bool{result} ? static_cast<uint>(result.value()) : 0u};
+        if(got < avail)
+            std::fill_n(&mSamples[pos + got*frame_size], (avail-got)*frame_size, al::byte{});
+        mLastAvail = 0;
+    }
+
     const oboe::Result result{mStream->stop()};
     if(result != oboe::Result::OK)
         throw al::backend_exception{al::backend_error::DeviceError, "Failed to stop stream: %s",
@@ -332,23 +317,36 @@ void OboeCapture::stop()
 
 uint OboeCapture::availableSamples()
 {
-    auto result = mStream->getAvailableFrames();
-    /* FIXME: This shouldn't report less samples than have been previously
-     * reported and not captured.
+    /* Keep track of the max available frame count, to ensure it doesn't go
+     * backwards.
      */
-    if(!result) return 0;
-    return static_cast<uint>(result.value());
+    if(auto result = mStream->getAvailableFrames())
+        mLastAvail = std::max(static_cast<uint>(result.value()), mLastAvail);
+
+    const auto frame_size = static_cast<uint32_t>(mStream->getBytesPerFrame());
+    return static_cast<uint>(mSamples.size()/frame_size) + mLastAvail;
 }
 
 void OboeCapture::captureSamples(al::byte *buffer, uint samples)
 {
+    const auto frame_size = static_cast<uint>(mStream->getBytesPerFrame());
+    if(const size_t storelen{mSamples.size()})
+    {
+        const auto instore = static_cast<uint>(storelen / frame_size);
+        const uint tocopy{std::min(samples, instore) * frame_size};
+        std::copy_n(mSamples.begin(), tocopy, buffer);
+        mSamples.erase(mSamples.begin(), mSamples.begin() + tocopy);
+
+        buffer += tocopy;
+        samples -= tocopy/frame_size;
+        if(!samples) return;
+    }
+
     auto result = mStream->read(buffer, static_cast<int32_t>(samples), 0);
     uint got{bool{result} ? static_cast<uint>(result.value()) : 0u};
     if(got < samples)
-    {
-        auto frame_size = static_cast<uint>(mStream->getBytesPerFrame());
         std::fill_n(buffer + got*frame_size, (samples-got)*frame_size, al::byte{});
-    }
+    mLastAvail = std::max(mLastAvail, samples) - samples;
 }
 
 } // namespace

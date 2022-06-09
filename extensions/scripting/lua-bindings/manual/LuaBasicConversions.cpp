@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://adxe.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -360,8 +360,8 @@ bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* f
     }
 
     // assertion: since we only have vec2, you should never passing rect as vec2 to native
-    const auto objlen = lua_objlen(L, -1);
-    assert(objlen == 2);
+    const auto objlen = lua_objlen(L, lo);
+    assert(objlen != 4);
 
     if (ok)
     {

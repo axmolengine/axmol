@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,7 @@ public:
 
     virtual void setActionTag(int actionTag) { _actionTag = actionTag; }
     virtual int getActionTag() const { return _actionTag; }
-CC_CONSTRUCTOR_ACCESS:
+
     ActionTimelineData();
     virtual bool init(int actionTag);
 protected:

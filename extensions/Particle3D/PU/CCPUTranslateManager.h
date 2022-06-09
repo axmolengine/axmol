@@ -3,7 +3,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,7 @@ public:
     void translateMaterialSystem(PUMaterialCache* ms, const PUAbstractNodeList* alist);
     virtual PUScriptTranslator* getTranslator(PUAbstractNode* node);
 
-    CC_CONSTRUCTOR_ACCESS : PUTranslateManager();
+    PUTranslateManager();
     virtual ~PUTranslateManager();
 };
 

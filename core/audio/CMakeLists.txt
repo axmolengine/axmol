@@ -19,21 +19,12 @@ set(COCOS_AUDIO_SRC
     audio/AudioDecoderOgg.cpp
     audio/AudioPlayer.cpp
     audio/AudioCache.cpp
+    audio/AudioEngineImpl.cpp
     )
-    
-# stupid, clang always compie .mm as objc/cpp mix obj
-if(ANDROID OR LINUX)
-    set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-        audio/linux-link.cpp
-    )
-else()
-    set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}
-        audio/AudioEngineImpl.mm
-    )
-endif()
 
-# Apple, we use system audio decoder
 if(APPLE)
+    set_source_files_properties(audio/AudioEngineImpl.cpp PROPERTIES LANGUAGE OBJCXX)
+    
     set(COCOS_AUDIO_HEADER ${COCOS_AUDIO_HEADER}
                         audio/AudioDecoderEXT.h)
     set(COCOS_AUDIO_SRC ${COCOS_AUDIO_SRC}

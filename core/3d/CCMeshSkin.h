@@ -82,9 +82,7 @@ public:
     /**get root bone of the skin*/
     Bone3D* getRootBone() const;
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        MeshSkin();
+    MeshSkin();
 
     ~MeshSkin();
 

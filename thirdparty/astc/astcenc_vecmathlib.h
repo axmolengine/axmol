@@ -75,6 +75,13 @@
 	#define ASTCENC_SIMD_WIDTH 8
 
 	using vfloat = vfloat8;
+
+	#if defined(ASTCENC_NO_INVARIANCE)
+		using vfloatacc = vfloat8;
+	#else
+		using vfloatacc = vfloat4;
+	#endif
+
 	using vint = vint8;
 	using vmask = vmask8;
 
@@ -89,6 +96,7 @@
 	#define ASTCENC_SIMD_WIDTH 4
 
 	using vfloat = vfloat4;
+	using vfloatacc = vfloat4;
 	using vint = vint4;
 	using vmask = vmask4;
 
@@ -103,6 +111,7 @@
 	#define ASTCENC_SIMD_WIDTH 4
 
 	using vfloat = vfloat4;
+	using vfloatacc = vfloat4;
 	using vint = vint4;
 	using vmask = vmask4;
 
@@ -134,6 +143,7 @@
 	#define ASTCENC_SIMD_WIDTH 4
 
 	using vfloat = vfloat4;
+	using vfloatacc = vfloat4;
 	using vint = vint4;
 	using vmask = vmask4;
 
@@ -201,7 +211,7 @@ ASTCENC_SIMD_INLINE vfloat change_sign(vfloat a, vfloat b)
 {
 	vint ia = float_as_int(a);
 	vint ib = float_as_int(b);
-	vint sign_mask((int)0x80000000);
+	vint sign_mask(static_cast<int>(0x80000000));
 	vint r = ia ^ (ib & sign_mask);
 	return int_as_float(r);
 }
@@ -227,7 +237,7 @@ ASTCENC_SIMD_INLINE vfloat atan2(vfloat y, vfloat x)
 {
 	vfloat z = atan(abs(y / x));
 	vmask xmask = vmask(float_as_int(x).m);
-	return change_sign(select(z, vfloat(astc::PI) - z, xmask), y);
+	return change_sign(select_msb(z, vfloat(astc::PI) - z, xmask), y);
 }
 
 /*
@@ -243,7 +253,8 @@ static ASTCENC_SIMD_INLINE vfloat4 unit4()
  */
 static ASTCENC_SIMD_INLINE vfloat4 unit3()
 {
-	return vfloat4(0.57735f, 0.57735f, 0.57735f, 0.0f);
+	float val = 0.577350258827209473f;
+	return vfloat4(val, val, val, 0.0f);
 }
 
 /**
@@ -251,7 +262,8 @@ static ASTCENC_SIMD_INLINE vfloat4 unit3()
  */
 static ASTCENC_SIMD_INLINE vfloat4 unit2()
 {
-	return vfloat4(0.70711f, 0.70711f, 0.0f, 0.0f);
+	float val = 0.707106769084930420f;
+	return vfloat4(val, val, 0.0f, 0.0f);
 }
 
 /**

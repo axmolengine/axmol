@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,8 +44,12 @@
 #include "UIFocusTest/UIFocusTest.h"
 #include "UITabControlTest/UITabControlTest.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) && !defined(CC_TARGET_OS_TVOS)
 #    include "UIVideoPlayerTest/UIVideoPlayerTest.h"
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
 #    include "UIWebViewTest/UIWebViewTest.h"
 #endif
 #include "UIScale9SpriteTest.h"
@@ -58,7 +63,8 @@
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) && !defined(CC_TARGET_OS_TVOS)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && \

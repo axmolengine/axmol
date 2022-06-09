@@ -162,7 +162,7 @@ public:
      */
     void setFlags(unsigned int flags) { _flags = flags; }
 
-    CC_CONSTRUCTOR_ACCESS : Action();
+    Action();
     virtual ~Action();
 
 protected:
@@ -219,7 +219,7 @@ public:
         return nullptr;
     }
 
-    CC_CONSTRUCTOR_ACCESS : FiniteTimeAction() : _duration(0) {}
+    FiniteTimeAction() : _duration(0) {}
     virtual ~FiniteTimeAction() {}
 
 protected:
@@ -287,7 +287,7 @@ public:
      */
     virtual bool isDone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : Speed();
+    Speed();
     virtual ~Speed();
     /** Initializes the action. */
     bool initWithAction(ActionInterval* action, float speed);
@@ -364,11 +364,10 @@ public:
     virtual bool isDone() const override;
     virtual void stop() override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        Follow()
+    /**
+     * @js ctor
+     */
+    Follow()
         : _followedNode(nullptr)
         , _boundarySet(false)
         , _boundaryFullyCovered(false)

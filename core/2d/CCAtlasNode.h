@@ -101,7 +101,7 @@ public:
 
     bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
 
-    CC_CONSTRUCTOR_ACCESS : AtlasNode() = default;
+    AtlasNode() = default;
     virtual ~AtlasNode();
 
     /** Initializes an AtlasNode  with an Atlas file the width and height of each item and the quantity of items to

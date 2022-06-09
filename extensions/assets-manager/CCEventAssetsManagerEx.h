@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -72,17 +72,16 @@ public:
 
     float getPercentByFile() const { return _percentByFile; }
 
-    CC_CONSTRUCTOR_ACCESS :
-        /** Constructor */
-        EventAssetsManagerEx(std::string_view eventName,
-                             cocos2d::extension::AssetsManagerEx* manager,
-                             const EventCode& code,
-                             float percent            = 0,
-                             float percentByFile      = 0,
-                             std::string_view assetId = "",
-                             std::string_view message = "",
-                             int curle_code           = 0,
-                             int curlm_code           = 0);
+    /** Constructor */
+    EventAssetsManagerEx(std::string_view eventName,
+                         cocos2d::extension::AssetsManagerEx* manager,
+                         const EventCode& code,
+                         float percent            = 0,
+                         float percentByFile      = 0,
+                         std::string_view assetId = "",
+                         std::string_view message = "",
+                         int curle_code           = 0,
+                         int curlm_code           = 0);
 
 private:
     EventCode _code;

@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -184,7 +184,7 @@ void CommandBufferGL::setWinding(Winding winding)
 void CommandBufferGL::setIndexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
-    if (buffer == nullptr)
+    if (buffer == nullptr || _indexBuffer == buffer)
         return;
 
     buffer->retain();
@@ -199,6 +199,7 @@ void CommandBufferGL::setVertexBuffer(Buffer* buffer)
         return;
 
     buffer->retain();
+    CC_SAFE_RELEASE(_vertexBuffer);
     _vertexBuffer = static_cast<BufferGL*>(buffer);
 }
 

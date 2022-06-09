@@ -164,14 +164,14 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
       [](io_event* ev, sol::variadic_args args, sol::this_state s) {
         sol::state_view L(s);
         auto& pkt = ev->packet();
-        if (pkt.empty())
+        if (is_packet_empty(pkt))
           return sol::make_object(L, sol::lua_nil);
 
         int buffer_type = (args.size() >= 1) ? static_cast<int>(args[0]) : static_cast<int>(lyasio::BUFFER_DEFAULT);
         switch (buffer_type)
         {
           case lyasio::BUFFER_RAW:
-            return sol::make_object(L, cxx17::string_view{pkt.data(), pkt.size()});
+            return sol::make_object(L, cxx17::string_view{packet_data(pkt), packet_len(pkt)});
           case lyasio::BUFFER_FAST:
             return sol::make_object(L, cxx14::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt)));
           default:
@@ -234,7 +234,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           case YOPT_S_TCP_KEEPALIVE:
             service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]));
             break;
-          case YOPT_C_LFBFD_PARAMS:
+          case YOPT_C_UNPACK_PARAMS:
             service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]), static_cast<int>(args[3]),
                                 static_cast<int>(args[4]));
             break;
@@ -315,7 +315,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YOPT_S_DNS_QUERIES_TIMEOUT);
   YASIO_EXPORT_ENUM(YOPT_S_TCP_KEEPALIVE);
   YASIO_EXPORT_ENUM(YOPT_S_EVENT_CB);
-  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS); // alias for YOPT_C_UNPACK_PARAMS
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_HOST);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_PORT);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_ENDPOINT);
@@ -581,21 +582,21 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                                      .addStaticFunction("default_packet",
                                                         [](io_event* ev) {
                                                           auto& pkt = ev->packet();
-                                                          if (pkt.empty())
+                                                          if (is_packet_empty(pkt))
                                                             return std::unique_ptr<yasio::ibstream>{};
                                                           return cxx14::make_unique<yasio::ibstream>(forward_packet((packet_t &&) pkt));
                                                         })
                                      .addStaticFunction("raw_packet",
                                                         [](io_event* ev) {
                                                           auto& pkt = ev->packet();
-                                                          if (pkt.empty())
+                                                          if (is_packet_empty(pkt))
                                                             return cxx17::string_view{""};
-                                                          return cxx17::string_view{pkt.data(), pkt.size()};
+                                                          return cxx17::string_view{packet_data(pkt), packet_len(pkt)};
                                                         })
                                      .addStaticFunction("fast_packet",
                                                         [](io_event* ev) {
                                                           auto& pkt = ev->packet();
-                                                          if (pkt.empty())
+                                                          if (is_packet_empty(pkt))
                                                             return std::unique_ptr<yasio::fast_ibstream>{};
                                                           return cxx14::make_unique<yasio::fast_ibstream>(forward_packet((packet_t &&) pkt));
                                                         })
@@ -679,7 +680,7 @@ end
                                  case YOPT_S_TCP_KEEPALIVE:
                                    service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]));
                                    break;
-                                 case YOPT_C_LFBFD_PARAMS:
+                                 case YOPT_C_UNPACK_PARAMS:
                                    service->set_option(opt, static_cast<int>(args[0]), static_cast<int>(args[1]), static_cast<int>(args[2]),
                                                        static_cast<int>(args[3]), static_cast<int>(args[4]));
                                    break;
@@ -747,7 +748,8 @@ end
   YASIO_EXPORT_ENUM(YOPT_S_DNS_QUERIES_TIMEOUT);
   YASIO_EXPORT_ENUM(YOPT_S_TCP_KEEPALIVE);
   YASIO_EXPORT_ENUM(YOPT_S_EVENT_CB);
-  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS); // alias for YOPT_C_UNPACK_PARAMS
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_HOST);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_PORT);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_ENDPOINT);

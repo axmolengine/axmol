@@ -283,7 +283,7 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 			-inp will set the MSB if the input number is nonzero.
 			Thus (-inp) >> 31 will turn into 0 if the input number is 0 and 1 otherwise.
 		*/
-		return (uint32_t) (-(int32_t) inp) >> 31;
+		return static_cast<uint32_t>((-static_cast<int32_t>(inp))) >> 31;
 
 		/*
 			negative, exponent = , round-mode == DOWN, need to check whether number is

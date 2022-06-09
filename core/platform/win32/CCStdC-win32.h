@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -87,7 +88,6 @@ typedef SSIZE_T ssize_t;
 #    include "platform/win32/compat/stdint.h"
 #endif
 
-#define _WINSOCKAPI_
 #ifndef NOMINMAX
 #    define NOMINMAX
 #endif
@@ -112,7 +112,6 @@ NS_CC_END
 
 #else
 
-#    undef _WINSOCKAPI_
 #    include <winsock2.h>
 #    include <Windows.h>
 

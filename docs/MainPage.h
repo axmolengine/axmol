@@ -10,7 +10,7 @@ adxe is based on cocos2d-x-4.0, cocos2d-x is a open source project is designed t
 It runs on top of OpenGL 2.0 and OpenGL ES 2.0 and is written in C++.\n
 This project is based on the famous <A HREF="http://www.cocos2d-iphone.org">"cocos2d-iphone"</A> project.\n
 
-- website:                          https://adxe.org/
+- website:                          https://adxeproject.github.io/
 
 - <A HREF="https://github.com/adxeproject/adxe/issues">FAQ</A>
 
@@ -19,7 +19,7 @@ This project is based on the famous <A HREF="http://www.cocos2d-iphone.org">"coc
 @section sec2 License
 Copyright (c) 2010-2012 cocos2d-x.org \n
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd. \n
-Copyright (c) 2021 Bytedance Inc. \n
+Copyright (c) 2021-2022 Bytedance Inc. \n
 \n
 Permission is hereby granted, free of charge, to any person obtaining a copy \n
 of this software and associated documentation files (the "Software"), to deal \n

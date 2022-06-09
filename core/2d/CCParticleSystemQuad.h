@@ -138,11 +138,10 @@ public:
 
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ParticleSystemQuad();
+    /**
+     * @js ctor
+     */
+    ParticleSystemQuad();
     /**
      * @js NA
      * @lua NA

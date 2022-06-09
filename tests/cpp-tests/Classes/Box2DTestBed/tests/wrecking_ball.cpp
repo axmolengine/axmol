@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "test.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 
 /// This test shows how a distance joint can be used to stabilize a chain of
 /// bodies with a heavy payload. Notice that the distance joint just prevents

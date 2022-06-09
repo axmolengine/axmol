@@ -4,6 +4,7 @@ if(WINDOWS)
             ui/UIEditBox/UIEditBoxImpl-win32.h
             ui/UIWebView/UIWebViewImpl-win32.h
             ui/UIWebView/UIWebView.h
+            
             )
         set(COCOS_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
@@ -16,6 +17,19 @@ if(WINDOWS)
             )
         set(COCOS_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
+            )
+    endif()
+    
+    if (AX_ENABLE_MFMEDIA)
+        set(COCOS_UI_SPECIFIC_HEADER ${COCOS_UI_SPECIFIC_HEADER}
+            ui/UIVideoPlayer/MFUtils.h
+            ui/UIVideoPlayer/MFMediaPlayer.h
+            ui/UIVideoPlayer/UIVideoPlayer.h
+            )
+        set(COCOS_UI_SPECIFIC_SRC ${COCOS_UI_SPECIFIC_SRC}
+            ui/UIVideoPlayer/MFUtils.cpp
+            ui/UIVideoPlayer/MFMediaPlayer.cpp
+            ui/UIVideoPlayer/UIVideoPlayer-win.cpp
             )
     endif()
 elseif(APPLE)
@@ -40,7 +54,7 @@ elseif(APPLE)
     elseif(IOS)
         set(COCOS_UI_SPECIFIC_HEADER
             ui/UIWebView/UIWebView.h
-            ui/UIVideoPlayer.h
+            ui/UIVideoPlayer/UIVideoPlayer.h
             ui/UIWebView/UIWebViewImpl-ios.h
             ui/UIEditBox/UIEditBoxImpl-ios.h
             ui/UIEditBox/iOS/CCUIEditBoxIOS.h
@@ -52,7 +66,7 @@ elseif(APPLE)
             )
         set(COCOS_UI_SPECIFIC_SRC
             ui/UIWebView/UIWebView.mm
-            ui/UIVideoPlayer-ios.mm
+            ui/UIVideoPlayer/UIVideoPlayer-ios.mm
             ui/UIWebView/UIWebViewImpl-ios.mm
             ui/UIEditBox/UIEditBoxImpl-ios.mm
             ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
@@ -72,13 +86,13 @@ elseif(LINUX)
 elseif(ANDROID)
     set(COCOS_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h
-        ui/UIVideoPlayer.h
+        ui/UIVideoPlayer/UIVideoPlayer.h
         ui/UIWebView/UIWebViewImpl-android.h
         ui/UIEditBox/UIEditBoxImpl-android.h
         )
     set(COCOS_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-android.cpp
-        ui/UIVideoPlayer-android.cpp
+        ui/UIVideoPlayer/UIVideoPlayer-android.cpp
         ui/UIWebView/UIWebViewImpl-android.cpp
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp

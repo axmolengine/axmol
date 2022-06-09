@@ -10,12 +10,6 @@ $macro_judgement
 #end for
 #end if 
 
-\#ifdef __cplusplus
-extern "C" {
-\#endif
 \#include "tolua++.h"
-\#ifdef __cplusplus
-}
-\#endif
 
 int register_all_${prefix}(lua_State* tolua_S);

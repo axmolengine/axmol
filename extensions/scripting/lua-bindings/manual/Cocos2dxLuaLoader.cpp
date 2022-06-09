@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
-https://adxe.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,20 +34,6 @@ THE SOFTWARE.
 #include "yasio/cxx17/string_view.hpp"
 
 using namespace cocos2d;
-
-static std::string adxelua_tostr(lua_State* L, int arg)
-{
-    size_t l      = 0;
-    const char* s = lua_tolstring(L, arg, &l);
-    return std::string{s, l};
-}
-
-static cxx17::string_view adxelua_tosv(lua_State* L, int arg)
-{
-    size_t l      = 0;
-    const char* s = lua_tolstring(L, arg, &l);
-    return cxx17::string_view{s, l};
-}
 
 extern "C" {
 int cocos2dx_lua_loader(lua_State* L)

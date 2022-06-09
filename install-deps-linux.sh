@@ -25,11 +25,11 @@ DEPENDS+=' libgl2ps-dev'
 DEPENDS+=' libxi-dev'
 DEPENDS+=' libzip-dev'
 DEPENDS+=' libpng-dev'
-DEPENDS+=' libcurl4-gnutls-dev'
+#DEPENDS+=' libcurl4-gnutls-dev'
 DEPENDS+=' libfontconfig1-dev'
-DEPENDS+=' libsqlite3-dev'
-DEPENDS+=' libglew-dev'
-DEPENDS+=' libssl-dev'
+#DEPENDS+=' libsqlite3-dev'
+#DEPENDS+=' libglew-dev'
+#DEPENDS+=' libssl-dev'
 DEPENDS+=' libgtk-3-dev'
 DEPENDS+=' binutils'
 DEPENDS+=' libbsd-dev'
@@ -43,6 +43,7 @@ mkdir buildsrc
 cd buildsrc
 git clone https://gitlab.freedesktop.org/freetype/freetype.git
 cd freetype
+git checkout VER-2-12-1
 sh autogen.sh
 ./configure --prefix=/usr --enable-freetype-config --disable-static
 sudo make install

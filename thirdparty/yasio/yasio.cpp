@@ -937,11 +937,11 @@ void io_service::run()
     process_ares_requests(fds_array);
 #endif
 
-    // process active channels
-    process_channels(fds_array);
-
     // process active transports
     process_transports(fds_array);
+
+    // process active channels
+    process_channels(fds_array);
 
     // process timeout timers
     process_timers();

@@ -1,5 +1,7 @@
 adxe-1.0  ??
 
+- [HIGHLIGHT] Improve windows workflow, support linking with engine prebuilt libs
+- [HIGHLIGHT] Implement Windows video player using microsoft media foundation
 - [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
 - [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
 - [HIGHLIGHT] Windows x64 build support
@@ -10,7 +12,7 @@ adxe-1.0  ??
 - [HIGHLIGHT] Improve Lua RTTI performance and less memory cost
 - [HIGHLIGHT] Virtual File System support, thanks to @rh101 
 - [HIGHLIGHT] Refactor lua loader, speed up 30%+
-- [HIGHLIGHT] Update plainlua version to 5.4.3
+- [HIGHLIGHT] Update plainlua version to 5.4.4
 - [HIGHLIGHT] Use Openal-Soft for all platform
 - [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
 - [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM

@@ -98,7 +98,7 @@ public:
     virtual ActionInstant* reverse() const override;
     virtual Show* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : Show() {}
+    Show() {}
     virtual ~Show() {}
 
 private:
@@ -127,7 +127,7 @@ public:
     virtual ActionInstant* reverse() const override;
     virtual Hide* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : Hide() {}
+    Hide() {}
     virtual ~Hide() {}
 
 private:
@@ -156,7 +156,7 @@ public:
     virtual ToggleVisibility* reverse() const override;
     virtual ToggleVisibility* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : ToggleVisibility() {}
+    ToggleVisibility() {}
     virtual ~ToggleVisibility() {}
 
 private:
@@ -186,7 +186,7 @@ public:
     virtual RemoveSelf* clone() const override;
     virtual RemoveSelf* reverse() const override;
 
-    CC_CONSTRUCTOR_ACCESS : RemoveSelf() : _isNeedCleanUp(true) {}
+    RemoveSelf() : _isNeedCleanUp(true) {}
     virtual ~RemoveSelf() {}
 
     /** init the action */
@@ -223,7 +223,7 @@ public:
     virtual FlipX* reverse() const override;
     virtual FlipX* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : FlipX() : _flipX(false) {}
+    FlipX() : _flipX(false) {}
     virtual ~FlipX() {}
 
     /** init the action */
@@ -260,7 +260,7 @@ public:
     virtual FlipY* reverse() const override;
     virtual FlipY* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : FlipY() : _flipY(false) {}
+    FlipY() : _flipY(false) {}
     virtual ~FlipY() {}
 
     /** init the action */
@@ -296,7 +296,7 @@ public:
     virtual Place* reverse() const override;
     virtual Place* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : Place() {}
+    Place() {}
     virtual ~Place() {}
 
     /** Initializes a Place action with a position */
@@ -341,7 +341,7 @@ public:
     virtual CallFunc* reverse() const override;
     virtual CallFunc* clone() const override;
 
-    CC_CONSTRUCTOR_ACCESS : CallFunc() = default;
+    CallFunc() = default;
     virtual ~CallFunc()                = default;
 
     /** initializes the action with the std::function<void()>
@@ -378,7 +378,7 @@ public:
     virtual CallFuncN* clone() const override;
     virtual void execute() override;
 
-    CC_CONSTRUCTOR_ACCESS : CallFuncN() : _functionN(nullptr) {}
+    CallFuncN() : _functionN(nullptr) {}
     virtual ~CallFuncN() {}
 
     /** initializes the action with the std::function<void(Node*)> */

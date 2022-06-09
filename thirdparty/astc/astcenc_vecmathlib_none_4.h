@@ -888,9 +888,20 @@ ASTCENC_SIMD_INLINE vfloat4 sqrt(vfloat4 a)
 }
 
 /**
- * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ * @brief Return lanes from @c b if @c cond is set, else @c a.
  */
 ASTCENC_SIMD_INLINE vfloat4 select(vfloat4 a, vfloat4 b, vmask4 cond)
+{
+	return vfloat4((cond.m[0] & 0x80000000) ? b.m[0] : a.m[0],
+	               (cond.m[1] & 0x80000000) ? b.m[1] : a.m[1],
+	               (cond.m[2] & 0x80000000) ? b.m[2] : a.m[2],
+	               (cond.m[3] & 0x80000000) ? b.m[3] : a.m[3]);
+}
+
+/**
+ * @brief Return lanes from @c b if MSB of @c cond is set, else @c a.
+ */
+ASTCENC_SIMD_INLINE vfloat4 select_msb(vfloat4 a, vfloat4 b, vmask4 cond)
 {
 	return vfloat4((cond.m[0] & 0x80000000) ? b.m[0] : a.m[0],
 	               (cond.m[1] & 0x80000000) ? b.m[1] : a.m[1],

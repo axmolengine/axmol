@@ -341,7 +341,7 @@ public:
      */
     virtual const BlendFunc& getBlendFunc() const override;
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
     virtual bool init(std::string_view textContent, std::string_view fontName, float fontSize);
 
 protected:

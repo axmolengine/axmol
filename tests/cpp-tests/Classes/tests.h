@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -120,6 +120,6 @@
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
 #if defined(CC_PLATFORM_PC)
-#    include "ImGuiEXTTest/ImGuiEXTTest.h"
+#    include "ImGuiTest/ImGuiTest.h"
 #endif
 #endif

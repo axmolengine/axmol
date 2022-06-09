@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ public:
     {
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(CC_PLATFORM_PC)
-        addTest("ImGuiEXT", []() { return new ImGuiEXTTests(); });
+        addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
         addTest("ActionManager", []() { return new ActionManagerTests(); });

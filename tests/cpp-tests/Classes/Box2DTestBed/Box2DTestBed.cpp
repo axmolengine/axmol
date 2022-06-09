@@ -1,7 +1,7 @@
 /****************************************************************************
  * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 #include "platform/CCPlatformConfig.h"
 #include "extensions/cocos-ext.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 #include "cocos2d.h"
 
 #include "Box2DTestBed.h"
@@ -236,13 +236,13 @@ void Box2DTestBed::onMouseScroll(Event* event)
 void Box2DTestBed::onEnter()
 {
     Scene::onEnter();
-    ImGuiEXT::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
-    ImGuiEXT::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
+    ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+    ImGuiPresenter::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
 }
 void Box2DTestBed::onExit()
 {
     Scene::onExit();
-    ImGuiEXT::getInstance()->removeRenderLoop("#im01");
+    ImGuiPresenter::getInstance()->removeRenderLoop("#im01");
 }
 
 void Box2DTestBed::update(float dt)

@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +27,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "tolua++.h"
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
-//#include "lua.hpp"
 #ifdef __cplusplus
 }
 #endif
+
+#include "tolua++.h"
 
 TOLUA_API int register_downloader(lua_State* L);

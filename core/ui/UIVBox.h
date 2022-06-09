@@ -72,10 +72,8 @@ public:
      */
     static VBox* create(const Vec2& size);
 
-    CC_CONSTRUCTOR_ACCESS :
-        // initializes state of widget.
-        virtual bool
-        init() override;
+    // initializes state of widget.
+    virtual bool init() override;
     virtual bool initWithSize(const Vec2& size);
 };
 

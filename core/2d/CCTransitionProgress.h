@@ -60,7 +60,7 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
 
-    CC_CONSTRUCTOR_ACCESS : TransitionProgress();
+    TransitionProgress();
     virtual ~TransitionProgress() {}
 
 protected:
@@ -91,12 +91,10 @@ public:
      */
     static TransitionProgressRadialCCW* create(float t, Scene* scene);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionProgressRadialCCW()
-    {}
+    /**
+     * @js ctor
+     */
+    TransitionProgressRadialCCW() {}
     virtual ~TransitionProgressRadialCCW() {}
 
 protected:
@@ -121,12 +119,10 @@ public:
      */
     static TransitionProgressRadialCW* create(float t, Scene* scene);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionProgressRadialCW()
-    {}
+    /**
+     * @js ctor
+     */
+    TransitionProgressRadialCW() {}
     virtual ~TransitionProgressRadialCW() {}
 
 protected:
@@ -151,12 +147,10 @@ public:
      */
     static TransitionProgressHorizontal* create(float t, Scene* scene);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionProgressHorizontal()
-    {}
+    /**
+     * @js ctor
+     */
+    TransitionProgressHorizontal() {}
     virtual ~TransitionProgressHorizontal() {}
 
 protected:
@@ -180,12 +174,10 @@ public:
      */
     static TransitionProgressVertical* create(float t, Scene* scene);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionProgressVertical()
-    {}
+    /**
+     * @js ctor
+     */
+    TransitionProgressVertical() {}
     virtual ~TransitionProgressVertical() {}
 
 protected:
@@ -209,12 +201,10 @@ public:
      */
     static TransitionProgressInOut* create(float t, Scene* scene);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionProgressInOut()
-    {}
+    /**
+     * @js ctor
+     */
+    TransitionProgressInOut() {}
     virtual ~TransitionProgressInOut() {}
 
 protected:
@@ -240,12 +230,10 @@ public:
      */
     static TransitionProgressOutIn* create(float t, Scene* scene);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionProgressOutIn()
-    {}
+    /**
+     * @js ctor
+     */
+    TransitionProgressOutIn() {}
     virtual ~TransitionProgressOutIn() {}
 
 protected:

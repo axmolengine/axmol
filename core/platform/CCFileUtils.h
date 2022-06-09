@@ -42,6 +42,9 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/CCDirector.h"
 
+#define AX_PC_RESOURCES_DIR "Resources/"
+#define AX_PC_RESOURCES_DIR_LEN (sizeof("Resources/") - 1)
+
 NS_CC_BEGIN
 
 /**
@@ -55,62 +58,43 @@ public:
     virtual ~ResizableBuffer() {}
     virtual void resize(size_t size) = 0;
     virtual void* buffer() const     = 0;
+    virtual size_t size() const      = 0;
 };
 
-template <typename T>
-class ResizableBufferAdapter
+template <typename T, typename Enable = void>
+struct is_resizable_container : std::false_type
 {};
 
-template <typename CharT, typename Traits, typename Allocator>
-class ResizableBufferAdapter<std::basic_string<CharT, Traits, Allocator>> : public ResizableBuffer
+template <typename... Ts>
+struct is_resizable_container_helper
+{};
+
+template <typename T>
+struct is_resizable_container<T,
+                              std::conditional_t<false,
+                                                 is_resizable_container_helper<typename T::value_type,
+                                                                               decltype(std::declval<T>().size()),
+                                                                               decltype(std::declval<T>().resize(0)),
+                                                                               decltype(std::declval<T>().data())>,
+                                                 void>> : public std::true_type
+{};
+
+template <typename _T>
+inline constexpr bool is_resizable_container_v = is_resizable_container<_T>::value;
+
+template <typename T>
+class ResizableBufferAdapter : public ResizableBuffer
 {
-    typedef std::basic_string<CharT, Traits, Allocator> BufferType;
-    BufferType* _buffer;
+    T* _buffer;
 
 public:
-    explicit ResizableBufferAdapter(BufferType* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override { _buffer->resize((size + sizeof(CharT) - 1) / sizeof(CharT)); }
-    virtual void* buffer() const override
+    explicit ResizableBufferAdapter(T* buffer) : _buffer(buffer) {}
+    virtual void resize(size_t size) override
     {
-        // can not invoke string::front() if it is empty
-
-        if (_buffer->empty())
-            return nullptr;
-        else
-            return &_buffer->front();
+        _buffer->resize((size + sizeof(typename T::value_type) - 1) / sizeof(typename T::value_type));
     }
-};
-
-template <typename T, typename Allocator>
-class ResizableBufferAdapter<std::vector<T, Allocator>> : public ResizableBuffer
-{
-    typedef std::vector<T, Allocator> BufferType;
-    BufferType* _buffer;
-
-public:
-    explicit ResizableBufferAdapter(BufferType* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override { _buffer->resize((size + sizeof(T) - 1) / sizeof(T)); }
-    virtual void* buffer() const override
-    {
-        // can not invoke vector::front() if it is empty
-
-        if (_buffer->empty())
-            return nullptr;
-        else
-            return &_buffer->front();
-    }
-};
-
-template <>
-class ResizableBufferAdapter<Data> : public ResizableBuffer
-{
-    typedef Data BufferType;
-    BufferType* _buffer;
-
-public:
-    explicit ResizableBufferAdapter(BufferType* buffer) : _buffer(buffer) {}
-    virtual void resize(size_t size) override { _buffer->resize(size); }
-    virtual void* buffer() const override { return _buffer->getBytes(); }
+    virtual void* buffer() const override { return _buffer->data(); }
+    virtual size_t size() const override { return _buffer->size() * sizeof(typename T::value_type); }
 };
 
 /** Helper class to handle file operations. */
@@ -237,7 +221,6 @@ public:
      *      virtual void* buffer() const override {
      *          // your code here
      *      }
-     *  };
      *  NS_CC_END
      *  @endcode
      *
@@ -252,13 +235,11 @@ public:
      *      - Status::TooLarge when there file to be read is too large (> 2^32-1), the buffer will not changed.
      *      - Status::ObtainSizeFailed when failed to obtain the file size, the buffer will not changed.
      */
-    template <typename T,
-              typename Enable =
-                  typename std::enable_if<std::is_base_of<ResizableBuffer, ResizableBufferAdapter<T>>::value>::type>
+    template <typename T, typename Enable = std::enable_if_t<is_resizable_container_v<T>>>
     Status getContents(std::string_view filename, T* buffer) const
     {
         ResizableBufferAdapter<T> buf(buffer);
-        return getContents(filename, &buf);
+        return getContents(filename, static_cast<ResizableBuffer*>(&buf));
     }
     virtual Status getContents(std::string_view filename, ResizableBuffer* buffer) const;
 
@@ -311,49 +292,6 @@ public:
      @since v2.1
      */
     virtual std::string fullPathForFilename(std::string_view filename) const;
-
-    /**
-     * Loads the filenameLookup dictionary from the contents of a filename.
-     *
-     * @note The plist file name should follow the format below:
-     *
-     * @code
-     * <?xml version="1.0" encoding="UTF-8"?>
-     * <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-     * <plist version="1.0">
-     * <dict>
-     *     <key>filenames</key>
-     *     <dict>
-     *         <key>sounds/click.wav</key>
-     *         <string>sounds/click.caf</string>
-     *         <key>sounds/endgame.wav</key>
-     *         <string>sounds/endgame.caf</string>
-     *         <key>sounds/gem-0.wav</key>
-     *         <string>sounds/gem-0.caf</string>
-     *     </dict>
-     *     <key>metadata</key>
-     *     <dict>
-     *         <key>version</key>
-     *         <integer>1</integer>
-     *     </dict>
-     * </dict>
-     * </plist>
-     * @endcode
-     * @param filename The plist file name.
-     *
-     @since v2.1
-     * @js loadFilenameLookup
-     * @lua loadFilenameLookup
-     */
-    virtual void loadFilenameLookupDictionaryFromFile(std::string_view filename);
-
-    /**
-     *  Sets the filenameLookup dictionary.
-     *
-     *  @param filenameLookupDict The dictionary for replacing filename.
-     *  @since v2.1
-     */
-    virtual void setFilenameLookupDictionary(const ValueMap& filenameLookupDict);
 
     /**
      *  Gets full path from a file name and the path of the relative file.
@@ -840,15 +778,6 @@ public:
     const hlookup::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
 
     /**
-     *  Gets the new filename from the filename lookup dictionary.
-     *  It is possible to have a override names.
-     *  @param filename The original filename.
-     *  @return The new filename after searching in the filename lookup dictionary.
-     *          If the original filename wasn't in the dictionary, it will return the original filename.
-     */
-    virtual std::string getNewFilename(std::string_view filename) const;
-
-    /**
      *  Checks whether a file exists without considering search paths and resolution orders.
      *  @param filename The file (with absolute path) to look up for
      *  @return Returns true if the file found at the given absolute path, otherwise returns false
@@ -927,15 +856,6 @@ protected:
      * mutex used to protect fields.
      */
     mutable std::recursive_mutex _mutex;
-
-    /** Dictionary used to lookup filenames based on a key.
-     *  It is used internally by the following methods:
-     *
-     *  std::string fullPathForFilename(const char*);
-     *
-     *  @since v2.1
-     */
-    ValueMap _filenameLookupDict;
 
     /**
      *  The vector contains resolution folders.

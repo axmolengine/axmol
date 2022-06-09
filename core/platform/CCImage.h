@@ -2,8 +2,8 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 c4games.com
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2020 C4games Ltd
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -121,15 +121,6 @@ public:
      *  @param enabled (default: true)
      */
     static void setPNGPremultipliedAlphaEnabled(bool enabled) { PNG_PREMULTIPLIED_ALPHA_ENABLED = enabled; }
-
-    /** treats (or not) PVR files as if they have alpha premultiplied.
-     Since it is impossible to know at runtime if the PVR images have the alpha channel premultiplied, it is
-     possible load them as if they have (or not) the alpha channel premultiplied.
-
-     By default it is disabled.
-     !!!DEPRECATED, use setCompressedImagesHavePMA(CompressedImagePMAFlag::PVR, true) instead
-     */
-    CC_DEPRECATED_ATTRIBUTE static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
 
     /** The new APIs to treats (or not) compressed image files as if they have alpha premultiplied.
      *
@@ -270,7 +261,6 @@ protected:
     bool isEtc1(const uint8_t* data, ssize_t dataLen);
     bool isEtc2(const uint8_t* data, ssize_t dataLen);
     bool isS3TC(const uint8_t* data, ssize_t dataLen);
-    bool isATITC(const uint8_t* data, ssize_t dataLen);
     bool isASTC(const uint8_t* data, ssize_t dataLen);
 };
 

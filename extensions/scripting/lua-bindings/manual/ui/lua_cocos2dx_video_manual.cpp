@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +24,11 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/ui/lua_cocos2dx_video_manual.hpp"
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer/UIVideoPlayer.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
-     CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
-    !defined(CC_PLATFORM_OS_TVOS)
 
 static int lua_cocos2dx_video_VideoPlayer_addEventListener(lua_State* L)
 {
@@ -109,5 +106,3 @@ int register_all_cocos2dx_video_manual(lua_State* L)
 
     return 0;
 }
-
-#endif

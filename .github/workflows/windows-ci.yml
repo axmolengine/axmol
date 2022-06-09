@@ -13,6 +13,7 @@ on:
       - thirdparty/**/*
       - CMakeLists.txt
       - .github/workflows/windows-ci.yml
+      - tools/win-ci/build.ps1
 
 jobs:
   build:
@@ -21,7 +22,7 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       matrix:
         arch:

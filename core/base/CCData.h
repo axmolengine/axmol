@@ -44,6 +44,12 @@ class CC_DLL Data
     friend class Properties;
 
 public:
+
+    /* stl compatible */
+    using value_type = uint8_t;
+    size_t size() const { return _size; }
+    uint8_t* data() const { return _bytes; }
+
     /**
      * This parameter is defined for convenient reference if a null Data object is needed.
      */

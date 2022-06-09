@@ -158,7 +158,7 @@ public:
 
     bool setProgramState(backend::ProgramState* programState, bool needsRetain) override;
 
-    CC_CONSTRUCTOR_ACCESS : MotionStreak();
+    MotionStreak();
     virtual ~MotionStreak();
 
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename

@@ -91,13 +91,10 @@ public:
      */
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        MenuItem()
-        : _selected(false), _enabled(false), _callback(nullptr)
-    {}
+    /**
+     * @js ctor
+     */
+    MenuItem() : _selected(false), _enabled(false), _callback(nullptr) {}
     /**
      * @js NA
      * @lua NA
@@ -160,13 +157,10 @@ public:
     virtual void unselected() override;
     virtual void setEnabled(bool enabled) override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        MenuItemLabel()
-        : _originalScale(0.0), _label(nullptr)
-    {}
+    /**
+     * @js ctor
+     */
+    MenuItemLabel() : _originalScale(0.0), _label(nullptr) {}
     /**
      * @js NA
      * @lua NA
@@ -209,12 +203,10 @@ public:
                                      char startCharMap,
                                      const ccMenuCallback& callback);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        MenuItemAtlasFont()
-    {}
+    /**
+     * @js ctor
+     */
+    MenuItemAtlasFont() {}
     /**
      * @js NA
      * @lua NA
@@ -282,11 +274,10 @@ public:
      */
     std::string_view getFontNameObj() const;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        MenuItemFont();
+    /**
+     * @js ctor
+     */
+    MenuItemFont();
     /**
      * @js NA
      * @lua NA
@@ -355,8 +346,7 @@ public:
     /** Enables or disables the item. */
     virtual void setEnabled(bool bEnabled);
 
-    CC_CONSTRUCTOR_ACCESS : MenuItemSprite() : _normalImage(nullptr), _selectedImage(nullptr), _disabledImage(nullptr)
-    {}
+    MenuItemSprite() : _normalImage(nullptr), _selectedImage(nullptr), _disabledImage(nullptr) {}
 
     /** Initializes a menu item with a normal, selected and disabled image with a callable object. */
     bool initWithNormalSprite(Node* normalSprite,
@@ -414,12 +404,10 @@ public:
     /** Sets the sprite frame for the disabled image. */
     void setDisabledSpriteFrame(SpriteFrame* frame);
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        MenuItemImage()
-    {}
+    /**
+     * @js ctor
+     */
+    MenuItemImage() {}
     /**
      * @js NA
      * @lua NA
@@ -490,13 +478,10 @@ public:
     virtual void setEnabled(bool var) override;
     virtual void cleanup() override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        MenuItemToggle()
-        : _selectedIndex(0), _selectedItem(nullptr)
-    {}
+    /**
+     * @js ctor
+     */
+    MenuItemToggle() : _selectedIndex(0), _selectedItem(nullptr) {}
 
     /** Initializes a menu item from a list of items with a callable object. */
     bool initWithCallback(const ccMenuCallback& callback, MenuItem* item, va_list args);

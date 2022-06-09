@@ -354,10 +354,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dict,
     if (pixelFormatIt != pixelFormats.end())
     {
         const backend::PixelFormat pixelFormat        = (*pixelFormatIt).second;
-        const backend::PixelFormat currentPixelFormat = Texture2D::getDefaultAlphaPixelFormat();
-        Texture2D::setDefaultAlphaPixelFormat(pixelFormat);
-        texture = Director::getInstance()->getTextureCache()->addImage(texturePath);
-        Texture2D::setDefaultAlphaPixelFormat(currentPixelFormat);
+        texture = Director::getInstance()->getTextureCache()->addImage(texturePath, pixelFormat);
     }
     else
     {

@@ -4,7 +4,7 @@ Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -219,9 +219,23 @@ void Director::setDefaultValues()
     else if (pixel_format == "rgba5551")
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGB5A1);
 
+    /* !!!Notes
+    ** All compressed image should do PMA at texture convert tools(such as astcenc-2.2+ with -pp-premultiply)
+    ** or GPU fragment shader
+    */
+
     // PVR v2 has alpha premultiplied ?
     bool pvr_alpha_premultiplied = conf->getValue("adxe.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
+
+    // ASTC has alpha premultiplied ?
+    bool astc_alpha_premultiplied = conf->getValue("adxe.texture.astc_has_pma", Value{true}).asBool();
+    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ASTC, astc_alpha_premultiplied);
+
+    // ETC2 has alpha premultiplied ?
+    // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set etc2 PMA default to `false`
+    bool etc2_alpha_premultiplied = conf->getValue("adxe.texture.etc2_has_pma", Value{false}).asBool();
+    Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ETC2, etc2_alpha_premultiplied);
 }
 
 void Director::setGLDefaultValues()
@@ -1247,8 +1261,6 @@ void Director::createStatsLabel()
         FileUtils::getInstance()->purgeCachedEntries();
     }
 
-    backend::PixelFormat currentFormat = Texture2D::getDefaultAlphaPixelFormat();
-    Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA4);
     unsigned char* data = nullptr;
     ssize_t dataLength  = 0;
     getFPSImageData(&data, &dataLength);
@@ -1263,7 +1275,7 @@ void Director::createStatsLabel()
         return;
     }
 
-    texture = _textureCache->addImage(image, "/cc_fps_images");
+    texture = _textureCache->addImage(image, "/cc_fps_images", PixelFormat::RGBA4);
     CC_SAFE_RELEASE(image);
 
     /*
@@ -1290,8 +1302,6 @@ void Director::createStatsLabel()
     _drawnVerticesLabel->retain();
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
     _drawnVerticesLabel->setScale(scaleFactor);
-
-    Texture2D::setDefaultAlphaPixelFormat(currentFormat);
 
     auto safeOrigin          = getSafeAreaRect().origin;
     const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());

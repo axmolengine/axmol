@@ -146,9 +146,7 @@ public:
                     const cocos2d::Mat4& endTransform,
                     HitResult* result);
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        Physics3DWorld();
+    Physics3DWorld();
     virtual ~Physics3DWorld();
 
     bool init(Physics3DWorldDes* info);

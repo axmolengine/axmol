@@ -3,6 +3,7 @@
 
 #include <array>
 #include <atomic>
+#include <bitset>
 #include <memory>
 #include <stddef.h>
 #include <string>
@@ -138,6 +139,7 @@ struct VoiceProps {
     std::array<float,2> StereoPan;
 
     float Radius;
+    float EnhWidth;
 
     /** Direct filter and auxiliary send info. */
     struct {
@@ -163,13 +165,17 @@ struct VoicePropsItem : public VoiceProps {
     DEF_NEWDEL(VoicePropsItem)
 };
 
-constexpr uint VoiceIsStatic{       1u<<0};
-constexpr uint VoiceIsCallback{     1u<<1};
-constexpr uint VoiceIsAmbisonic{    1u<<2}; /* Needs HF scaling for ambisonic upsampling. */
-constexpr uint VoiceCallbackStopped{1u<<3};
-constexpr uint VoiceIsFading{       1u<<4}; /* Use gain stepping for smooth transitions. */
-constexpr uint VoiceHasHrtf{        1u<<5};
-constexpr uint VoiceHasNfc{         1u<<6};
+enum : uint {
+    VoiceIsStatic,
+    VoiceIsCallback,
+    VoiceIsAmbisonic,
+    VoiceCallbackStopped,
+    VoiceIsFading,
+    VoiceHasHrtf,
+    VoiceHasNfc,
+
+    VoiceFlagCount
+};
 
 struct Voice {
     enum State {
@@ -207,12 +213,14 @@ struct Voice {
     FmtChannels mFmtChannels;
     FmtType mFmtType;
     uint mFrequency;
-    uint mFrameSize;
+    uint mFrameStep; /**< In steps of the sample type size. */
+    uint mFrameSize; /**< In bytes. */
     AmbiLayout mAmbiLayout;
     AmbiScaling mAmbiScaling;
     uint mAmbiOrder;
 
     std::unique_ptr<UhjDecoder> mDecoder;
+    UhjDecoder::DecoderFunc mDecoderFunc{};
 
     /** Current target parameters used for mixing. */
     uint mStep{0};
@@ -221,7 +229,7 @@ struct Voice {
 
     InterpState mResampleState;
 
-    uint mFlags{};
+    std::bitset<VoiceFlagCount> mFlags{};
     uint mNumCallbackSamples{0};
 
     struct TargetData {
@@ -236,13 +244,11 @@ struct Voice {
      * now current (which may be overwritten if the buffer data is still
      * available).
      */
-    static constexpr size_t LineSize{BufferLineSize + MaxResamplerPadding +
-        UhjDecoder::sFilterDelay};
-    using BufferLine = std::array<float,LineSize>;
-    al::vector<BufferLine,16> mVoiceSamples{2};
+    using HistoryLine = std::array<float,MaxResamplerPadding>;
+    al::vector<HistoryLine,16> mPrevSamples{2};
 
     struct ChannelData {
-        float mAmbiScale;
+        float mAmbiHFScale, mAmbiLFScale;
         BandSplitter mAmbiSplitter;
 
         DirectParams mDryParams;
@@ -251,7 +257,7 @@ struct Voice {
     al::vector<ChannelData> mChans{2};
 
     Voice() = default;
-    ~Voice() { delete mUpdate.exchange(nullptr, std::memory_order_acq_rel); }
+    ~Voice() = default;
 
     Voice(const Voice&) = delete;
     Voice& operator=(const Voice&) = delete;

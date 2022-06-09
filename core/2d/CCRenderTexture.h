@@ -375,7 +375,6 @@ protected:
 
     Texture2D* _texture2D           = nullptr;
     Texture2D* _depthStencilTexture = nullptr;
-    Texture2D* _texture2DCopy       = nullptr;  // a copy of _texture
 
     backend::RenderTarget* _renderTarget    = nullptr;
     backend::RenderTarget* _oldRenderTarget = nullptr;

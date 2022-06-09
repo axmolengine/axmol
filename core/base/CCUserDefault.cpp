@@ -2,8 +2,8 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2017-2020 c4games.com.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2017-2020 C4games Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -42,16 +42,16 @@ THE SOFTWARE.
 #include "openssl/modes.h"
 #include "openssl/rc4.h"
 
+#include "yasio/ibstream.hpp"
+#include "yasio/obstream.hpp"
+#include "yasio/detail/sz.hpp"
+
 #include "base/CCUserDefault.h"
 #include "platform/CCCommon.h"
 #include "platform/CCFileUtils.h"
 #include "pugixml/pugixml.hpp"
 #include "base/base64.h"
 #include "base/ccUtils.h"
-
-#include "yasio/ibstream.hpp"
-#include "yasio/obstream.hpp"
-#include "yasio/detail/sz.hpp"
 
 #include "CCPosixFileStream.h"
 

@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 c4games.com
+ Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -27,7 +28,7 @@
 #include "DeviceMTL.h"
 #include "DeviceInfoMTL.h"
 #include "TextureMTL.h"
-#include "../TextureUtils.h"
+#include "../PixelFormatUtils.h"
 #include "base/CCConfiguration.h"
 
 CC_BACKEND_BEGIN

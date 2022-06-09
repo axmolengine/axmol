@@ -7503,6 +7503,56 @@ int lua_cocos2dx_Node_pause(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_Node_applyMaskOnEnter(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Node* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Node",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Node*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Node_applyMaskOnEnter'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.Node:applyMaskOnEnter");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Node_applyMaskOnEnter'", nullptr);
+            return 0;
+        }
+        cobj->applyMaskOnEnter(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Node:applyMaskOnEnter",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Node_applyMaskOnEnter'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_Node_isOpacityModifyRGB(lua_State* tolua_S)
 {
     int argc = 0;
@@ -11972,6 +12022,7 @@ int lua_register_cocos2dx_Node(lua_State* tolua_S)
         tolua_function(tolua_S,"convertToNodeSpace",lua_cocos2dx_Node_convertToNodeSpace);
         tolua_function(tolua_S,"setPositionNormalized",lua_cocos2dx_Node_setPositionNormalized);
         tolua_function(tolua_S,"pause",lua_cocos2dx_Node_pause);
+        tolua_function(tolua_S,"applyMaskOnEnter",lua_cocos2dx_Node_applyMaskOnEnter);
         tolua_function(tolua_S,"isOpacityModifyRGB",lua_cocos2dx_Node_isOpacityModifyRGB);
         tolua_function(tolua_S,"setPosition",lua_cocos2dx_Node_setPosition);
         tolua_function(tolua_S,"stopActionByTag",lua_cocos2dx_Node_stopActionByTag);
@@ -32844,8 +32895,8 @@ int lua_cocos2dx_FileUtils_getNewFilename(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_FileUtils_getNewFilename'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getNewFilename(arg0);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getNewFilename(arg0);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.FileUtils:getNewFilename",argc, 1);
@@ -76777,8 +76828,8 @@ int lua_cocos2dx_Sprite_initWithFile(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite:initWithFile");
 
             if (!ok) { break; }
-            cocos2d::Rect arg1;
-            ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.Sprite:initWithFile");
+            cocos2d::backend::PixelFormat arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.Sprite:initWithFile");
 
             if (!ok) { break; }
             bool ret = cobj->initWithFile(arg0, arg1);
@@ -76799,7 +76850,23 @@ int lua_cocos2dx_Sprite_initWithFile(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.Sprite:initWithFile",argc, 1);
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.Sprite:initWithFile");
+
+            if (!ok) { break; }
+            cocos2d::Rect arg1;
+            ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.Sprite:initWithFile");
+
+            if (!ok) { break; }
+            bool ret = cobj->initWithFile(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.Sprite:initWithFile",argc, 2);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -95234,12 +95301,12 @@ int lua_cocos2dx_TextureCache_addImage(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            cocos2d::Image* arg0;
-            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.TextureCache:addImage");
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.TextureCache:addImage");
 
             if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCache:addImage");
+            cocos2d::backend::PixelFormat arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.TextureCache:addImage");
 
             if (!ok) { break; }
             cocos2d::Texture2D* ret = cobj->addImage(arg0, arg1);
@@ -95260,7 +95327,43 @@ int lua_cocos2dx_TextureCache_addImage(lua_State* tolua_S)
         }
     }while(0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.TextureCache:addImage",argc, 1);
+    do{
+        if (argc == 2) {
+            cocos2d::Image* arg0;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            cocos2d::Texture2D* ret = cobj->addImage(arg0, arg1);
+            object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            cocos2d::Image* arg0;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 2, "cc.Image",&arg0, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            cocos2d::backend::PixelFormat arg2;
+            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.TextureCache:addImage");
+
+            if (!ok) { break; }
+            cocos2d::Texture2D* ret = cobj->addImage(arg0, arg1, arg2);
+            object_to_luaval<cocos2d::Texture2D>(tolua_S, "cc.Texture2D",(cocos2d::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.TextureCache:addImage",argc, 3);
     return 0;
 
 #if COCOS2D_DEBUG >= 1

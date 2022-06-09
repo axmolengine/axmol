@@ -2,7 +2,8 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 c4games.com
+ Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
 //
 // Copyright 2013 The ANGLE Project Authors. All rights reserved.
@@ -89,7 +90,7 @@ etc2_uint32 etc2_pkm_get_height(const etc2_byte* pHeader)
     return readBEUint16(pHeader + ETC2_PKM_HEIGHT_OFFSET);
 }
 
-etc2_uint32 etc2_pkm_get_format(const uint8_t* pHeader)
+etc2_uint32 etc2_pkm_get_format(const etc2_byte* pHeader)
 {
     return readBEUint16(pHeader + ETC2_PKM_FORMAT_OFFSET);
 }

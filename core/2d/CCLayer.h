@@ -63,7 +63,7 @@ public:
     // Overrides
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS : Layer();
+    Layer();
     virtual ~Layer();
 
     virtual bool init() override;
@@ -143,7 +143,7 @@ public:
      */
     virtual void setBlendFunc(const BlendFunc& blendFunc) override;
 
-    CC_CONSTRUCTOR_ACCESS : LayerColor();
+    LayerColor();
     virtual ~LayerColor();
 
     bool init() override;
@@ -285,7 +285,7 @@ public:
 
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS : LayerGradient();
+    LayerGradient();
     virtual ~LayerGradient();
 
     virtual bool init() override;
@@ -368,7 +368,7 @@ public:
     void setBlendFunc(const BlendFunc& blendFunc);
     BlendFunc getBlendFunc() const;
 
-    CC_CONSTRUCTOR_ACCESS : LayerRadialGradient();
+    LayerRadialGradient();
     virtual ~LayerRadialGradient();
 
     bool initWithColor(const Color4B& startColor,
@@ -471,11 +471,10 @@ public:
 
     virtual std::string getDescription() const override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        LayerMultiplex();
+    /**
+     * @js ctor
+     */
+    LayerMultiplex();
     /**
      * @js NA
      * @lua NA

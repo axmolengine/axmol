@@ -11,8 +11,8 @@
 #include "bufferline.h"
 #include "devformat.h"
 #include "filters/splitter.h"
+#include "vector.h"
 
-struct AmbDecConf;
 struct FrontStablizer;
 
 
@@ -38,16 +38,19 @@ class BFormatDec {
     const std::unique_ptr<FrontStablizer> mStablizer;
     const bool mDualBand{false};
 
-    al::FlexArray<ChannelDecoder> mChannelDec;
+    /* TODO: This should ideally be a FlexArray, since ChannelDecoder is rather
+     * small and only a few are needed (3, 4, 5, 7, typically). But that can
+     * only be used in a standard layout struct, and a std::unique_ptr member
+     * (mStablizer) causes GCC and Clang to warn it's not.
+     */
+    al::vector<ChannelDecoder> mChannelDec;
 
 public:
-    BFormatDec(const AmbDecConf *conf, const bool allow_2band, const size_t inchans,
-        const uint srate, const uint (&chanmap)[MAX_OUTPUT_CHANNELS],
-        std::unique_ptr<FrontStablizer> stablizer);
     BFormatDec(const size_t inchans, const al::span<const ChannelDec> coeffs,
-        const al::span<const ChannelDec> coeffslf, std::unique_ptr<FrontStablizer> stablizer);
+        const al::span<const ChannelDec> coeffslf, const float xover_f0norm,
+        std::unique_ptr<FrontStablizer> stablizer);
 
-    bool hasStablizer() const noexcept { return mStablizer != nullptr; };
+    bool hasStablizer() const noexcept { return mStablizer != nullptr; }
 
     /* Decodes the ambisonic input to the given output channels. */
     void process(const al::span<FloatBufferLine> OutBuffer, const FloatBufferLine *InSamples,
@@ -58,14 +61,11 @@ public:
         const FloatBufferLine *InSamples, const size_t lidx, const size_t ridx, const size_t cidx,
         const size_t SamplesToDo);
 
-    static std::unique_ptr<BFormatDec> Create(const AmbDecConf *conf, const bool allow_2band,
-        const size_t inchans, const uint srate, const uint (&chanmap)[MAX_OUTPUT_CHANNELS],
-        std::unique_ptr<FrontStablizer> stablizer);
     static std::unique_ptr<BFormatDec> Create(const size_t inchans,
         const al::span<const ChannelDec> coeffs, const al::span<const ChannelDec> coeffslf,
-        std::unique_ptr<FrontStablizer> stablizer);
+        const float xover_f0norm, std::unique_ptr<FrontStablizer> stablizer);
 
-    DEF_FAM_NEWDEL(BFormatDec, mChannelDec)
+    DEF_NEWDEL(BFormatDec)
 };
 
 #endif /* CORE_BFORMATDEC_H */

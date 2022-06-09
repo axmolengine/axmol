@@ -2,7 +2,7 @@
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 Copyright (c) 2021 Bytedance Inc.
 
-https://adxe.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -66,7 +66,7 @@ public:
     void setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)>& selector);
     cocos2d::Node* getNodeByTag(int nTag);
     inline AttachComponentType getAttachComponentType() { return _attachComponent; }
-    CC_CONSTRUCTOR_ACCESS : SceneReader();
+    SceneReader();
     virtual ~SceneReader();
 
 private:

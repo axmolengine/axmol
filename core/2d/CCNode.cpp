@@ -117,6 +117,7 @@ Node::Node()
     , _realColor(Color3B::WHITE)
     , _cascadeColorEnabled(false)
     , _cascadeOpacityEnabled(false)
+    , _childFollowCameraMask(false)
     , _cameraMask(1)
     , _onEnterCallback(nullptr)
     , _onExitCallback(nullptr)
@@ -995,7 +996,13 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_vie
     this->insertChild(child, localZOrder);
 
     child->setParent(this);
-
+    
+    if (_childFollowCameraMask)
+    {
+        child->setCameraMask(this->getCameraMask());
+        child->applyMaskOnEnter(true);
+    }
+    
     if (setTag)
     {
         child->setTag(tag);
@@ -2175,6 +2182,11 @@ bool isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, 
         *p = P;
     }
     return rect.containsPoint(Vec2(P.x, P.y));
+}
+
+void Node::applyMaskOnEnter(bool applyChildren)
+{
+    _childFollowCameraMask = applyChildren;
 }
 
 // MARK: Camera

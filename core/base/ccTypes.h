@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 c4games.com.
+Copyright (c) 2020 C4games Ltd.
 
 https://adxeproject.github.io/
 
@@ -43,6 +43,7 @@ NS_CC_BEGIN
 
 struct Color4B;
 struct Color4F;
+struct HSV;
 
 /**
  * RGB color composed of bytes 3 bytes.
@@ -172,6 +173,106 @@ Color4F& operator/=(Color4F& lhs, const Color4F& rhs);
 Color4F operator/(Color4F lhs, const Color4F& rhs);
 Color4F& operator/=(Color4F& lhs, float rhs);
 Color4F operator/(Color4F lhs, float rhs);
+
+/**
+ * Hue Saturation Value color space composed of 4 floats.
+ * @since adxe-1.0.0b7
+ * 
+ * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
+ */
+struct CC_DLL HSV
+{
+    HSV();
+    HSV(float _h, float _s, float _v, float _a = 1.0F);
+
+    explicit HSV(const Color3B& c);
+    explicit HSV(const Color4B& c);
+    explicit HSV(const Color4F& c);
+
+    bool operator==(const HSV& right) const;
+    bool operator!=(const HSV& right) const;
+
+    bool equals(const HSV& other) const { return (*this == other); }
+
+    void set(float r, float g, float b, float a = 1.0F);
+    void get(float& r, float& g, float& b) const;
+
+    Color3B toColor3B();
+    Color4B toColor4B();
+    Color4F toColor4F();
+
+    float h = 0.f;
+    float s = 0.f;
+    float v = 0.f;
+    float a = 0.f;
+};
+
+HSV& operator+=(HSV& lhs, const HSV& rhs);
+HSV operator+(HSV lhs, const HSV& rhs);
+
+HSV& operator-=(HSV& lhs, const HSV& rhs);
+HSV operator-(HSV lhs, const HSV& rhs);
+
+HSV& operator*=(HSV& lhs, const HSV& rhs);
+HSV operator*(HSV lhs, const HSV& rhs);
+HSV& operator*=(HSV& lhs, float rhs);
+HSV operator*(HSV lhs, float rhs);
+
+HSV& operator/=(HSV& lhs, const HSV& rhs);
+HSV operator/(HSV lhs, const HSV& rhs);
+HSV& operator/=(HSV& lhs, float rhs);
+HSV operator/(HSV lhs, float rhs);
+
+/**
+ * Hue Saturation Luminance color space composed of 4 floats.
+ * @since adxe-1.0.0b7
+ *
+ * Implementation source: https://gist.github.com/ciembor/1494530
+ */
+struct CC_DLL HSL
+{
+    HSL();
+    HSL(float _h, float _s, float _l, float _a = 1.0F);
+
+    explicit HSL(const Color3B& c);
+    explicit HSL(const Color4B& c);
+    explicit HSL(const Color4F& c);
+
+    bool operator==(const HSL& right) const;
+    bool operator!=(const HSL& right) const;
+
+    bool equals(const HSL& other) const { return (*this == other); }
+
+    void set(float r, float g, float b, float a = 1.0F);
+    void get(float& r, float& g, float& b) const;
+
+    static float hue2rgb(float p, float q, float t);
+
+    Color3B toColor3B();
+    Color4B toColor4B();
+    Color4F toColor4F();
+
+    float h = 0.f;
+    float s = 0.f;
+    float l = 0.f;
+    float a = 0.f;
+};
+
+HSL& operator+=(HSL& lhs, const HSL& rhs);
+HSL operator+(HSL lhs, const HSL& rhs);
+
+HSL& operator-=(HSL& lhs, const HSL& rhs);
+HSL operator-(HSL lhs, const HSL& rhs);
+
+HSL& operator*=(HSL& lhs, const HSL& rhs);
+HSL operator*(HSL lhs, const HSL& rhs);
+HSL& operator*=(HSL& lhs, float rhs);
+HSL operator*(HSL lhs, float rhs);
+
+HSL& operator/=(HSL& lhs, const HSL& rhs);
+HSL operator/(HSL lhs, const HSL& rhs);
+HSL& operator/=(HSL& lhs, float rhs);
+HSL operator/(HSL lhs, float rhs);
 
 /** @struct Tex2F
  * A TEXCOORD composed of 2 floats: u, v

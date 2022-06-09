@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(APP_NAME lua-tests)
+set(APP_NAME lua_tests)
 
 project(${APP_NAME})
 
@@ -15,13 +15,22 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         file(TO_CMAKE_PATH ${ADXE_ROOT_PATH} ADXE_ROOT_PATH) # string(REPLACE "\\" "/" ADXE_ROOT_PATH ${ADXE_ROOT_PATH})        
         message(STATUS "Using system env var ADXE_ROOT=${ADXE_ROOT}")
     else()
-        set(ADXE_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../..)
+        message(FATAL_ERROR "Please run setup.py add system env var 'ADXE_ROOT' to specific the engine root")
     endif()
     set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
 
     include(CocosBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
-    add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
+
+    set(_AX_USE_PREBUILT FALSE)
+    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR})
+        set(_AX_USE_PREBUILT TRUE)
+    endif()
+
+    if (NOT _AX_USE_PREBUILT)
+        add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
+    endif()
+
 endif()
 
 set(GAME_HEADER
@@ -48,13 +57,12 @@ set(res_script_folders
 if(APPLE OR VS)
     cocos_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
     cocos_mark_multi_resources(res_src RES_TO "Resources/src" FOLDERS ${res_src_folders})
+    set(cc_common_res ${res_res} ${res_src})
     cocos_mark_multi_resources(res_script RES_TO "Resources/src/cocos" FOLDERS ${res_script_folders})
-    set(cc_common_res ${res_res} ${res_src} ${res_script})
+    set(cc_common_res ${cc_common_res} ${res_script})
 endif()
 
 if(ANDROID)
-    # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
-    set(APP_NAME lua_tests)
     list(APPEND GAME_SOURCE proj.android/app/jni/main.cpp)
 elseif(LINUX)
     list(APPEND GAME_SOURCE proj.linux/main.cpp)
@@ -104,7 +112,6 @@ set(APP_SRC ${GAME_HEADER} ${GAME_SOURCE})
 
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SRC})
-    target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
 
@@ -112,7 +119,7 @@ else()
     add_subdirectory(${ADXE_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 
-    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/core/lua-android)
+    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "x86")
         #add `-Wl,--no-warn-shared-textrel` to fix warning "shared library text segment is not shareable clang"
         target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive -Wl,--no-warn-shared-textrel)
@@ -123,7 +130,9 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
+if (NOT _AX_USE_PREBUILT)
+    target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
+endif()
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
 
@@ -145,24 +154,41 @@ if(APPLE)
         )
     elseif(IOS)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/Info.plist")
-        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon-${APP_NAME}")
+        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
+        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTIFY "iPhone Developer")
     endif()
 
     # For code-signing, set the DEVELOPMENT_TEAM:
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
-    cocos_copy_target_dll(${APP_NAME})
-    cocos_copy_lua_dlls(${APP_NAME})
+    if(NOT _AX_USE_PREBUILT)
+        cocos_copy_target_dll(${APP_NAME})
+        cocos_copy_lua_dlls(${APP_NAME})
+    endif()
 endif()
-
-if(WINDOWS)
-    set(my_res_folder "${CMAKE_CURRENT_SOURCE_DIR}/..")
-    cocos_copy_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/cocos")
-    cocos_copy_target_res(${APP_NAME} LINK_TO "${my_res_folder}/res" FOLDERS "${ADXE_ROOT_PATH}/tests/cpp-tests/Resources")
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${my_res_folder}")
-elseif(LINUX)
+if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
     cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR}/res FOLDERS ${res_res_folders})
     cocos_copy_lua_scripts(${APP_NAME} ${res_src_folders} ${APP_RES_DIR}/src )
     cocos_copy_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/cocos)
+elseif(WINDOWS)
+    set(my_res_folder "${CMAKE_CURRENT_SOURCE_DIR}/..")
+    cocos_copy_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/cocos")
+    cocos_copy_target_res(${APP_NAME} LINK_TO "${my_res_folder}/res" FOLDERS "${ADXE_ROOT_PATH}/tests/cpp-tests/Resources")
+    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${my_res_folder}")
+    if(NOT DEFINED BUILD_ENGINE_DONE)
+        set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+    endif()
+endif()
+
+# The optional thirdparties(not dependent by engine)
+if (AX_WITH_YAML_CPP)
+    target_include_directories(${APP_NAME} PRIVATE ${ADXE_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_link_libraries(${APP_NAME} yaml-cpp)
+endif()
+
+if (_AX_USE_PREBUILT) # support windows only
+    include(${ADXE_ROOT_PATH}/cmake/Modules/AdxeLinkHelpers.cmake)
+    adxe_link_lua_prebuilt(${APP_NAME} ${ADXE_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

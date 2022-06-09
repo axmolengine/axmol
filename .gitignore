@@ -111,6 +111,9 @@ tags
 
 /build_*
 
+# ignore ninja build dir
+/out
+
 # ignore jniLibs android
 /**/jniLibs/*/*.so
 

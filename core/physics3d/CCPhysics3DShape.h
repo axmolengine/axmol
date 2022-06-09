@@ -135,7 +135,7 @@ public:
     btCollisionShape* getbtShape() const { return _btShape; }
 #        endif
 
-    CC_CONSTRUCTOR_ACCESS : Physics3DShape();
+    Physics3DShape();
     ~Physics3DShape();
 
     bool initBox(const cocos2d::Vec3& ext);

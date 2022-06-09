@@ -14,16 +14,16 @@ endif()
 
 set(ZLIB_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE STRING "zlib include dir" FORCE)
 
-if(MACOSX OR ANDROID)
+if(NOT WINDOWS)
   set(ZLIB_LIBRARY "${platform_spec_path}/libz.a" CACHE STRING "zlib library" FORCE)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${platform_spec_path}/libz.a"
   )
-elseif(WINDOWS)
-  set(ZLIB_LIBRARY "${platform_spec_path}/libzlib.lib" CACHE STRING "zlib library" FORCE)
+else()
+  set(ZLIB_LIBRARY "${platform_spec_path}/zlib.lib" CACHE STRING "zlib library" FORCE)
   set_target_properties(${target_name} PROPERTIES
     IMPORTED_LOCATION "${platform_spec_path}/zlib1.dll"
-    IMPORTED_IMPLIB "${platform_spec_path}/libzlib.lib"
+    IMPORTED_IMPLIB "${platform_spec_path}/zlib.lib"
   )
 endif()
 

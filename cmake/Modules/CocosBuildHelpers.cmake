@@ -212,9 +212,12 @@ function(cocos_copy_target_dll cocos_target)
 
     # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${cocos_target} $<TARGET_FILE_DIR:${cocos_target}>)
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+        set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+    endif()
     add_custom_command(TARGET ${cocos_target} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
+        "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
          $<TARGET_FILE_DIR:${cocos_target}>)
 
     # Copy windows angle binaries
@@ -225,13 +228,24 @@ function(cocos_copy_target_dll cocos_target)
         ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
         $<TARGET_FILE_DIR:${cocos_target}>
     )
+
+    # Copy webview2 for ninja
+    if(CMAKE_GENERATOR STREQUAL "Ninja")
+        add_custom_command(TARGET ${cocos_target} POST_BUILD
+           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+           "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+           $<TARGET_FILE_DIR:${cocos_target}>)
+    endif()
 endfunction()
 
 function(cocos_copy_lua_dlls cocos_target)
     if(NOT AX_USE_LUAJIT)
+        if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+            set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+        endif()
         add_custom_command(TARGET ${cocos_target} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/\$\(Configuration\)/plainlua.dll"
+            "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
              $<TARGET_FILE_DIR:${cocos_target}>)
     endif()
 endfunction()
@@ -334,7 +348,7 @@ function(setup_cocos_app_config app_name)
     if(BUILD_SHARED_LIBS)
         target_compile_definitions(${app_name} PRIVATE SPINEPLUGIN_API=DLLIMPORT) # spine dll
     endif()
-    target_link_libraries(${app_name} ${CC_EXTENSION_LIBS})
+    target_link_libraries(${app_name} ${_AX_EXTENSION_LIBS})
 
     if(XCODE AND AX_USE_ALSOFT AND ALSOFT_OSX_FRAMEWORK)
         # Embedded soft_oal embedded framework
@@ -418,7 +432,7 @@ function(cocos_use_pkg target pkg)
     endif()
     if(_include_dirs)
         include_directories(${_include_dirs})
-        # message(STATUS "${pkg} add to include_dirs: ${_include_dirs}")
+        message(STATUS "${pkg} add to include_dirs: ${_include_dirs}")
     endif()
 
     set(_library_dirs)
@@ -439,7 +453,7 @@ function(cocos_use_pkg target pkg)
     endif()
     if(_libs)
         target_link_libraries(${target} ${_libs})
-        # message(STATUS "${pkg} libs added to '${target}': ${_libs}")
+        message(STATUS "${pkg} libs added to '${target}': ${_libs}")
     endif()
 
     set(_defs)
@@ -448,7 +462,7 @@ function(cocos_use_pkg target pkg)
     endif()
     if(_defs)
         add_definitions(${_defs})
-        # message(STATUS "${pkg} add definitions: ${_defs}")
+        message(STATUS "${pkg} add definitions: ${_defs}")
     endif()
 
     set(_dlls)
@@ -472,3 +486,10 @@ function(cocos_use_pkg target pkg)
     endif()
 
 endfunction()
+
+# The adxe preprocessors config helper macro
+macro(adxe_config_pred target_name pred)
+    if(${pred})
+        target_compile_definitions(${target_name} PUBLIC ${pred}=1)
+    endif()
+endmacro()

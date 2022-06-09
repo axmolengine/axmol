@@ -29,8 +29,8 @@
 #include <stdint.h>
 
 #include "alc/effects/base.h"
-#include "alc/effectslot.h"
 #include "almalloc.h"
+#include "alnumbers.h"
 #include "alnumeric.h"
 #include "alspan.h"
 #include "core/ambidefs.h"
@@ -38,12 +38,12 @@
 #include "core/context.h"
 #include "core/devformat.h"
 #include "core/device.h"
+#include "core/effectslot.h"
 #include "core/filters/biquad.h"
 #include "core/filters/splitter.h"
 #include "core/mixer.h"
 #include "core/mixer/defs.h"
 #include "intrusive_ptr.h"
-#include "math_defs.h"
 #include "opthelpers.h"
 #include "vecmat.h"
 #include "vector.h"
@@ -97,20 +97,28 @@ constexpr float MODULATION_DEPTH_COEFF{0.05f};
  * in the future, true opposites can be used.
  */
 alignas(16) constexpr float B2A[NUM_LINES][NUM_LINES]{
-    { 0.288675134595f,  0.288675134595f,  0.288675134595f,  0.288675134595f },
-    { 0.288675134595f, -0.288675134595f, -0.288675134595f,  0.288675134595f },
-    { 0.288675134595f,  0.288675134595f, -0.288675134595f, -0.288675134595f },
-    { 0.288675134595f, -0.288675134595f,  0.288675134595f, -0.288675134595f }
+    { 0.5f,  0.5f,  0.5f,  0.5f },
+    { 0.5f, -0.5f, -0.5f,  0.5f },
+    { 0.5f,  0.5f, -0.5f, -0.5f },
+    { 0.5f, -0.5f,  0.5f, -0.5f }
 };
 
-/* Converts A-Format to B-Format. */
-alignas(16) constexpr float A2B[NUM_LINES][NUM_LINES]{
-    { 0.866025403785f,  0.866025403785f,  0.866025403785f,  0.866025403785f },
-    { 0.866025403785f, -0.866025403785f,  0.866025403785f, -0.866025403785f },
-    { 0.866025403785f, -0.866025403785f, -0.866025403785f,  0.866025403785f },
-    { 0.866025403785f,  0.866025403785f, -0.866025403785f, -0.866025403785f }
+/* Converts A-Format to B-Format for early reflections. */
+alignas(16) constexpr float EarlyA2B[NUM_LINES][NUM_LINES]{
+    { 0.5f,  0.5f,  0.5f,  0.5f },
+    { 0.5f, -0.5f,  0.5f, -0.5f },
+    { 0.5f, -0.5f, -0.5f,  0.5f },
+    { 0.5f,  0.5f, -0.5f, -0.5f }
 };
 
+/* Converts A-Format to B-Format for late reverb. */
+constexpr auto InvSqrt2 = static_cast<float>(1.0/al::numbers::sqrt2);
+alignas(16) constexpr float LateA2B[NUM_LINES][NUM_LINES]{
+    { 0.5f,  0.5f,  0.5f,  0.5f },
+    { InvSqrt2, -InvSqrt2,  0.0f,  0.0f },
+    { 0.0f,  0.0f,  InvSqrt2, -InvSqrt2 },
+    { 0.5f,  0.5f, -0.5f, -0.5f }
+};
 
 /* The all-pass and delay lines have a variable length dependent on the
  * effect's density parameter, which helps alter the perceived environment
@@ -484,13 +492,13 @@ struct ReverbState final : public EffectState {
         const al::span<float> tmpspan{al::assume_aligned<16>(mTempLine.data()), todo};
         for(size_t c{0u};c < NUM_LINES;c++)
         {
-            DoMixRow(tmpspan, A2B[c], mEarlySamples[0].data(), mEarlySamples[0].size());
+            DoMixRow(tmpspan, EarlyA2B[c], mEarlySamples[0].data(), mEarlySamples[0].size());
             MixSamples(tmpspan, samplesOut, mEarly.CurrentGain[c], mEarly.PanGain[c], counter,
                 offset);
         }
         for(size_t c{0u};c < NUM_LINES;c++)
         {
-            DoMixRow(tmpspan, A2B[c], mLateSamples[0].data(), mLateSamples[0].size());
+            DoMixRow(tmpspan, LateA2B[c], mLateSamples[0].data(), mLateSamples[0].size());
             MixSamples(tmpspan, samplesOut, mLate.CurrentGain[c], mLate.PanGain[c], counter,
                 offset);
         }
@@ -504,7 +512,7 @@ struct ReverbState final : public EffectState {
         const al::span<float> tmpspan{al::assume_aligned<16>(mTempLine.data()), todo};
         for(size_t c{0u};c < NUM_LINES;c++)
         {
-            DoMixRow(tmpspan, A2B[c], mEarlySamples[0].data(), mEarlySamples[0].size());
+            DoMixRow(tmpspan, EarlyA2B[c], mEarlySamples[0].data(), mEarlySamples[0].size());
 
             /* Apply scaling to the B-Format's HF response to "upsample" it to
              * higher-order output.
@@ -517,7 +525,7 @@ struct ReverbState final : public EffectState {
         }
         for(size_t c{0u};c < NUM_LINES;c++)
         {
-            DoMixRow(tmpspan, A2B[c], mLateSamples[0].data(), mLateSamples[0].size());
+            DoMixRow(tmpspan, LateA2B[c], mLateSamples[0].data(), mLateSamples[0].size());
 
             const float hfscale{(c==0) ? mOrderScales[0] : mOrderScales[1]};
             mAmbiSplitter[1][c].processHfScale(tmpspan, hfscale);
@@ -737,7 +745,7 @@ inline float CalcDensityGain(const float a)
 inline void CalcMatrixCoeffs(const float diffusion, float *x, float *y)
 {
     /* The matrix is of order 4, so n is sqrt(4 - 1). */
-    constexpr float n{1.73205080756887719318f/*std::sqrt(3.0f)*/};
+    constexpr float n{al::numbers::sqrt3_v<float>};
     const float t{diffusion * std::atan(n)};
 
     /* Calculate the first mixing matrix coefficient. */
@@ -786,10 +794,8 @@ void T60Filter::calcCoeffs(const float length, const float lfDecayTime,
 void EarlyReflections::updateLines(const float density_mult, const float diffusion,
     const float decayTime, const float frequency)
 {
-    constexpr float sqrt1_2{0.70710678118654752440f/*1.0f/std::sqrt(2.0f)*/};
-
     /* Calculate the all-pass feed-back/forward coefficient. */
-    VecAp.Coeff = diffusion*diffusion * sqrt1_2;
+    VecAp.Coeff = diffusion*diffusion * InvSqrt2;
 
     for(size_t i{0u};i < NUM_LINES;i++)
     {
@@ -879,8 +885,7 @@ void LateReverb::updateLines(const float density_mult, const float diffusion,
     DensityGain[1] = CalcDensityGain(CalcDecayCoeff(length, decayTimeWeighted));
 
     /* Calculate the all-pass feed-back/forward coefficient. */
-    constexpr float sqrt1_2{0.70710678118654752440f/*1.0f/std::sqrt(2.0f)*/};
-    VecAp.Coeff = diffusion*diffusion * sqrt1_2;
+    VecAp.Coeff = diffusion*diffusion * InvSqrt2;
 
     for(size_t i{0u};i < NUM_LINES;i++)
     {
@@ -897,7 +902,7 @@ void LateReverb::updateLines(const float density_mult, const float diffusion,
          * filter for each of its four lines. Also include the average
          * modulation delay (depth is half the max delay in samples).
          */
-        length += lerp(LATE_ALLPASS_LENGTHS[i], late_allpass_avg, diffusion)*density_mult +
+        length += lerpf(LATE_ALLPASS_LENGTHS[i], late_allpass_avg, diffusion)*density_mult +
             Mod.Depth[1]/frequency;
 
         /* Calculate the T60 damping coefficients for each line. */
@@ -939,8 +944,6 @@ void ReverbState::updateDelayLine(const float earlyDelay, const float lateDelay,
  */
 alu::Matrix GetTransformFromVector(const float *vec)
 {
-    constexpr float sqrt3{1.73205080756887719318f};
-
     /* Normalize the panning vector according to the N3D scale, which has an
      * extra sqrt(3) term on the directional components. Converting from OpenAL
      * to B-Format also requires negating X (ACN 1) and Z (ACN 3). Note however
@@ -952,9 +955,9 @@ alu::Matrix GetTransformFromVector(const float *vec)
     float mag{std::sqrt(vec[0]*vec[0] + vec[1]*vec[1] + vec[2]*vec[2])};
     if(mag > 1.0f)
     {
-        norm[0] = vec[0] / mag * -sqrt3;
-        norm[1] = vec[1] / mag * sqrt3;
-        norm[2] = vec[2] / mag * sqrt3;
+        norm[0] = vec[0] / mag * -al::numbers::sqrt3_v<float>;
+        norm[1] = vec[1] / mag * al::numbers::sqrt3_v<float>;
+        norm[2] = vec[2] / mag * al::numbers::sqrt3_v<float>;
         mag = 1.0f;
     }
     else
@@ -963,9 +966,9 @@ alu::Matrix GetTransformFromVector(const float *vec)
          * term. There's no need to renormalize the magnitude since it would
          * just be reapplied in the matrix.
          */
-        norm[0] = vec[0] * -sqrt3;
-        norm[1] = vec[1] * sqrt3;
-        norm[2] = vec[2] * sqrt3;
+        norm[0] = vec[0] * -al::numbers::sqrt3_v<float>;
+        norm[1] = vec[1] * al::numbers::sqrt3_v<float>;
+        norm[2] = vec[2] * al::numbers::sqrt3_v<float>;
     }
 
     return alu::Matrix{
@@ -1424,7 +1427,7 @@ void ReverbState::earlyFaded(const size_t offset, const size_t todo, const float
 
 void Modulation::calcDelays(size_t todo)
 {
-    constexpr float inv_scale{MOD_FRACONE / al::MathDefs<float>::Tau()};
+    constexpr float inv_scale{MOD_FRACONE / al::numbers::pi_v<float> / 2.0f};
     uint idx{Index};
     const uint step{Step};
     const float depth{Depth[0]};
@@ -1439,7 +1442,7 @@ void Modulation::calcDelays(size_t todo)
 
 void Modulation::calcFadedDelays(size_t todo, float fadeCount, float fadeStep)
 {
-    constexpr float inv_scale{MOD_FRACONE / al::MathDefs<float>::Tau()};
+    constexpr float inv_scale{MOD_FRACONE / al::numbers::pi_v<float> / 2.0f};
     uint idx{Index};
     const uint step{Step};
     const float depth{Depth[0]};
@@ -1514,7 +1517,7 @@ void ReverbState::lateUnfaded(const size_t offset, const size_t todo)
                  * samples that were acquired above, and combined with the main
                  * delay tap.
                  */
-                mTempSamples[j][i] = lerp(out0, out1, frac)*midGain +
+                mTempSamples[j][i] = lerpf(out0, out1, frac)*midGain +
                     main_delay.Line[late_delay_tap++][j]*densityGain;
                 ++i;
             } while(--td);
@@ -1583,8 +1586,8 @@ void ReverbState::lateFaded(const size_t offset, const size_t todo, const float 
                 const float fade1{densityStep*fadeCount};
                 const float gfade0{oldMidGain + oldMidStep*fadeCount};
                 const float gfade1{midStep*fadeCount};
-                mTempSamples[j][i] = lerp(out00, out01, frac)*gfade0 +
-                    lerp(out10, out11, frac)*gfade1 +
+                mTempSamples[j][i] = lerpf(out00, out01, frac)*gfade0 +
+                    lerpf(out10, out11, frac)*gfade1 +
                     main_delay.Line[late_delay_tap0++][j]*fade0 +
                     main_delay.Line[late_delay_tap1++][j]*fade1;
                 ++i;

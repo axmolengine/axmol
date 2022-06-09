@@ -4,6 +4,8 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2020 C4games Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -93,16 +95,19 @@ public:
      @param filepath The file path.
     */
     Texture2D* addImage(std::string_view filepath);
+    Texture2D* addImage(std::string_view filepath, PixelFormat format);
 
     /** Returns a Texture2D object given a file image.
     * If the file image was not previously loaded, it will create a new Texture2D object and it will return it.
-    * Otherwise it will load a texture in a new thread, and when the image is loaded, the callback will be called with
+    * Otherwise it will load a texture in a offthread, and when the image is loaded, the callback will be called with
     the Texture2D as a parameter.
     * The callback will be called from the main thread, so it is safe to create any cocos2d object from the callback.
     * Supported image extensions: .png, .jpg
      @param filepath The file path.
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
+     
+     @remark Please don't invoke Texture2D::setDefaultAlphaPixelFormat in main GL thread before invoke this API.
     */
     virtual void addImageAsync(std::string_view filepath, const std::function<void(Texture2D*)>& callback);
 
@@ -130,6 +135,7 @@ public:
      * If "key" is nil, then a new texture will be created each time.
      */
     Texture2D* addImage(Image* image, std::string_view key);
+    Texture2D* addImage(Image* image, std::string_view key, PixelFormat format);
 
     /** Returns an already created texture. Returns nil if the texture doesn't exist.
     @param key It's the related/absolute path of the file image.

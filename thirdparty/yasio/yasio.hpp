@@ -175,7 +175,8 @@ enum
 
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
-  YOPT_C_LFBFD_FN = 101,
+  YOPT_C_UNPACK_FN = 101,
+  YOPT_C_LFBFD_FN  = YOPT_C_UNPACK_FN,
 
   // Sets channel length field based frame decode params
   // params:

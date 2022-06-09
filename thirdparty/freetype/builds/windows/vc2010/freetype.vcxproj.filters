@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\..\src\smooth\smooth.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\svg\svg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\truetype\truetype.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -143,4 +146,4 @@
       <Filter>Source Files</Filter>
     </ResourceCompile>
   </ItemGroup>
-</Project>
+</Project>

@@ -1,12 +1,12 @@
 # The adxe thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 2.1.0.4692 branch on chromium/4692 @Google Chrome 97.0.4692.71
+- Version: git 2.1-e37380e (18155) on branch `chromium/4951` @Google Chrome 101.0.4951.41
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
 - Upstream: https://github.com/ARM-software/astc-encoder
-- Version: 3.3
+- Version: 3.7
 - License: Apache-2.0
 
 ## Box2D
@@ -21,8 +21,9 @@
 
 ## Bullet
 - Upstream: https://github.com/bulletphysics/bullet3
-- Version: 3.21
+- Version: 3.24
 - License: zlib
+- Update method: Compare `adxe/thirdparty/bullet` with `bullet3/src`
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
@@ -46,7 +47,7 @@
 
 ## curl
 - Upstream: https://github.com/curl/curl
-- Version: 7.81.0
+- Version: 7.83.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -61,7 +62,7 @@
 
 ## FreeType
 - Upstream: https://www.freetype.org/
-- Version: 2.11.1
+- Version: 2.12.1
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -86,7 +87,7 @@
 
 ## jpeg (libjpeg-turbo)
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.2
+- Version: 2.1.3
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -112,7 +113,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-a91d0d9 (2517)
+  - Version: git 2.1.0-91bc6b8 (2562)
   - License: MIT
 
 - tolua
@@ -153,22 +154,22 @@
 
 ## OpenAL Soft
 - Upstream: https://github.com/kcat/openal-soft
-- Version: git 1.21.1-4733c9f (7628)
+- Version: 1.22.0
 - License: LGPL-2.1
 
 ## OpenSSL
 - Upstream: https://github.com/openssl/openssl
-- Version: 3.0.1
+- Version: 3.0.3
 - License: Apache-2.0
 
 ## png
 - Upstream: https://github.com/glennrp/libpng
-- Version: git 1.6.38-dbe3e0c (4088) with arm64 neon detect fix
+- Version: git 1.6.38-a37d483 (4098) with arm64 neon detect fix
 - License: PNG Reference Library License version 2
 
 ## poly2tri
 - Upstream: https://github.com/jhasse/poly2tri
-- Version: git 7f0487a
+- Version: git 3380f5c  (until 25 Mar 2022)
 - License: BSD-3-Clause
 
 ## pugixml
@@ -188,7 +189,7 @@
 
 ## robin-map
 - Upstream: https://github.com/Tessil/robin-map
-- Version: git 0.6.3-84c1bee (101) with modified for more compatible with stl
+- Version: 1.0.1 with modified for more compatible with stl
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
 - License: MIT
@@ -215,7 +216,7 @@
 
 ## webp
 - Upstream: https://github.com/webmproject/libwebp
-- Version: 1.2.1
+- Version: 1.2.2
 - License: Google Inc
 
 ## xsbase
@@ -235,12 +236,12 @@
 
 ## yasio
 - Upstream: https://github.com/yasio/yasio
-- Version: 3.39.3
+- Version: 3.39.4
 - License: MIT WITH Anti-996
 
 ## zlib
 - Upstream: https://github.com/madler/zlib
-- Version: 1.2.11
+- Version: 1.2.12
 - License: zlib
 
 ## libiconv

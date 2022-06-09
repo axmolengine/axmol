@@ -172,9 +172,7 @@ public:
     /**remove unused spritematerial*/
     void removeUnusedSprite3DMaterial();
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        Sprite3DMaterialCache();
+    Sprite3DMaterialCache();
     ~Sprite3DMaterialCache();
 
 protected:

@@ -118,7 +118,7 @@ public:
     /** override function */
     virtual void removeAllChildren() override;
 
-    CC_CONSTRUCTOR_ACCESS : Scene();
+    Scene();
     virtual ~Scene();
 
     bool init() override;
@@ -179,7 +179,7 @@ public:
      */
     static Scene* createWithPhysics();
 
-    CC_CONSTRUCTOR_ACCESS : bool initWithPhysics();
+    bool initWithPhysics();
 
     bool initPhysicsWorld();
 

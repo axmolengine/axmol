@@ -17,7 +17,7 @@ option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 
 if(WINDOWS OR MACOSX OR LINUX)
-  option(AX_ENABLE_EXT_IMGUI "Build extension ImGuiEXT" ON)
+  option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
@@ -53,7 +53,7 @@ function(setup_cocos_extension_config target_name)
   )
 
   if(NOT opt_DNTLINK)
-      set(CC_EXTENSION_LIBS "${target_name};${CC_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
+      set(_AX_EXTENSION_LIBS "${target_name};${_AX_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
   endif()
   
   if(XCODE OR VS)
@@ -96,7 +96,7 @@ if(AX_ENABLE_EXT_FAIRYGUI)
 endif()
 
 if(AX_ENABLE_EXT_IMGUI)
-  add_subdirectory(ImGuiEXT)
+  add_subdirectory(ImGui)
 endif()
 
 if(AX_ENABLE_EXT_COCOSTUDIO)
@@ -122,4 +122,4 @@ if(AX_ENABLE_EXT_LUA)
 endif()
 
 
-message(STATUS "CC_EXTENSION_LIBS:${CC_EXTENSION_LIBS}")
+message(STATUS "Enabled adxe extensions:${_AX_EXTENSION_LIBS}")

@@ -64,9 +64,8 @@ endif()
 
 add_library(thirdparty STATIC empty.cpp)
 
-# header only libs
+# bellow are header only libs
 target_include_directories(thirdparty
-    INTERFACE "fmt/include"
     INTERFACE "robin-map/include"
 )
 
@@ -76,12 +75,14 @@ if (ANDROID)
     )
 endif()
 
-if(MACOSX OR ANDROID OR WINDOWS)
-    add_subdirectory(zlib)
-    target_link_libraries(thirdparty 
-        dep_zlib
-    )
-endif()
+add_subdirectory(fmt EXCLUDE_FROM_ALL)
+target_link_libraries(thirdparty fmt-header-only)
+
+# bellow are non header only libs
+add_subdirectory(zlib)
+target_link_libraries(thirdparty 
+    dep_zlib
+)
 
 if(AX_WITH_BOX2D)
     set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests" FORCE)
@@ -116,12 +117,15 @@ if(AX_WITH_CHIPMUNK)
     configure_target_outdir(chipmunk)
 endif(AX_WITH_CHIPMUNK)
 if(AX_WITH_FREETYPE)
-    set(FT_WITH_ZLIB ON CACHE BOOL "Use system zlib instead of internal library." FORCE)
-    set(DISABLE_FORCE_DEBUG_POSTFIX ON CACHE BOOL "" FORCE)
-    add_subdirectory(freetype)
+    if (NOT LINUX)
+        set(FT_WITH_ZLIB ON CACHE BOOL "Use system zlib instead of internal library." FORCE)
+        set(DISABLE_FORCE_DEBUG_POSTFIX ON CACHE BOOL "" FORCE)
+        set(SKIP_INSTALL_ALL TRUE CACHE BOOL "Skip freetype instal." FORCE)
+        add_subdirectory(freetype)
+        target_link_libraries(thirdparty freetype)
+        configure_target_outdir(freetype)
+    endif()
     target_include_directories(thirdparty PUBLIC "freetype/include")
-    target_link_libraries(thirdparty freetype)
-    configure_target_outdir(freetype)
 endif(AX_WITH_FREETYPE)
 if(AX_WITH_RECAST)
     add_subdirectory(recast)
@@ -217,15 +221,13 @@ if(AX_ENABLE_EXT_LUA)
     )
 endif()
 
-if(NOT LINUX)
-    if(AX_WITH_CURL)
-        add_subdirectory(curl)
-        if(ANDROID OR LINUX)
-            target_link_libraries(libcurl INTERFACE OpenSSL::SSL)
-        endif()
-        target_link_libraries(thirdparty libcurl)
-    endif(AX_WITH_CURL)
-endif(NOT LINUX)
+if(AX_WITH_CURL)
+    add_subdirectory(curl)
+    if(ANDROID OR LINUX)
+        target_link_libraries(libcurl INTERFACE OpenSSL::SSL)
+    endif()
+    target_link_libraries(thirdparty libcurl)
+endif(AX_WITH_CURL)
 
 if(ANDROID)
     add_subdirectory(android-specific/cpufeatures)
@@ -246,7 +248,7 @@ if(AX_WITH_ALSOFT)
     target_link_libraries(thirdparty
         OpenAL
     )
-    target_compile_definitions(thirdparty PUBLIC CC_USE_ALSOFT=1)
+    target_compile_definitions(thirdparty PUBLIC AX_USE_ALSOFT=1)
     
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
@@ -278,16 +280,15 @@ if(WINDOWS OR MACOSX OR LINUX)
     target_include_directories(thirdparty PUBLIC "glfw/include/GLFW")
 endif()
 
-if(NOT LINUX)
-    add_subdirectory(png)
-    target_include_directories(png PRIVATE "zlib/include")
-    if(ANDROID)
-        target_include_directories(png PRIVATE ${cpufeatures_include_dir})
-        target_link_libraries(png INTERFACE cpufeatures)
-    endif()
-    target_link_libraries(thirdparty png)
-    configure_target_outdir(png)
+# libpng
+add_subdirectory(png)
+target_include_directories(png PRIVATE "zlib/include")
+if(ANDROID)
+    target_include_directories(png PRIVATE ${cpufeatures_include_dir})
+    target_link_libraries(png INTERFACE cpufeatures)
 endif()
+target_link_libraries(thirdparty png)
+configure_target_outdir(png)
 
 # unzip depend on zlib
 if(AX_WITH_UNZIP)
@@ -325,7 +326,7 @@ if(AX_WITH_YAML_CPP)
     # set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
     add_subdirectory(yaml-cpp)
     configure_target_outdir(yaml-cpp)
-    # target_link_libraries(thirdparty yaml-cpp)
+    add_dependencies(thirdparty yaml-cpp)
 endif()
 
 # kcp

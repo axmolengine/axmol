@@ -7,6 +7,7 @@ on:
     paths:
       - core/**/*
       - extensions/**/*
+      - tools/tolua/*
       - .github/workflows/genbindings-ci.yml
 
 jobs:
@@ -29,10 +30,11 @@ jobs:
       run: tools\win-ci\genbindings.ps1
       
     - name: Commit genbindings changes
-      uses: EndBug/add-and-commit@v7.5.0
+      uses: EndBug/add-and-commit@v9.0.0
       with:
+        pull: '--rebase'
         committer_name: GitHub Actions
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-        message: 'Committing genbindings changes [skip ci]'
+        message: 'Committing genbindings changes'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

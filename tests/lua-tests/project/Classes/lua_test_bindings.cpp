@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ public:
     // Overrides
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    CC_CONSTRUCTOR_ACCESS : DrawNode3D();
+    DrawNode3D();
     virtual ~DrawNode3D();
     virtual bool init() override;
 

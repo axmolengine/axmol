@@ -99,11 +99,10 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        TransitionPageTurn();
+    /**
+     * @js ctor
+     */
+    TransitionPageTurn();
     /**
      * @js NA
      * @lua NA

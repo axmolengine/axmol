@@ -135,6 +135,31 @@ elseif(ANDROID)
         manual/ui/lua_cocos2dx_video_manual.cpp
         auto/lua_cocos2dx_video_auto.cpp
         )
+elseif(WINDOWS)
+    if(AX_ENABLE_MFMEDIA)
+        set(lua_bindings_manual_headers
+            ${lua_bindings_manual_headers}
+            auto/lua_cocos2dx_video_auto.hpp
+            manual/ui/lua_cocos2dx_video_manual.hpp
+            )
+        set(lua_bindings_manual_files
+            ${lua_bindings_manual_files}
+            manual/ui/lua_cocos2dx_video_manual.cpp
+            auto/lua_cocos2dx_video_auto.cpp
+            )
+    endif()
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+        set(lua_bindings_manual_headers
+            ${lua_bindings_manual_headers}
+            manual/ui/lua_cocos2dx_webview_manual.hpp
+            auto/lua_cocos2dx_webview_auto.hpp
+            )
+        set(lua_bindings_manual_files
+            ${lua_bindings_manual_files}
+            manual/ui/lua_cocos2dx_webview_manual.cpp
+            auto/lua_cocos2dx_webview_auto.cpp
+            )
+    endif()
 endif()
 
 set(lua_bindings_files
@@ -181,6 +206,12 @@ target_include_directories(${ADXE_LUA_LIB}
 if(WINDOWS)
     target_compile_definitions(${ADXE_LUA_LIB} PUBLIC _USRLUASTATIC)
 endif()
+
+if(AX_ENABLE_MSEDGE_WEBVIEW2)
+endif()
+
+adxe_config_pred(${ADXE_LUA_LIB} AX_ENABLE_MFMEDIA)
+adxe_config_pred(${ADXE_LUA_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
 set_target_properties(${ADXE_LUA_LIB}
                       PROPERTIES

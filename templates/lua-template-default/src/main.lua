@@ -1,6 +1,3 @@
-
-cc.FileUtils:getInstance():setPopupNotify(false)
-
 require "config"
 require "cocos.init"
 

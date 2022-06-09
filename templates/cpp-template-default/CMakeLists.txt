@@ -150,7 +150,9 @@ else()
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
+if (NOT _AX_USE_PREBUILT)
+    target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
+endif()
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
@@ -179,152 +181,23 @@ elseif(WINDOWS)
     endif()
 endif()
 
-if(WINDOWS)
+if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+    cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
+    cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+elseif(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
     if(NOT DEFINED BUILD_ENGINE_DONE)
         set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
     endif()
-elseif(LINUX)
-    cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
-    cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+endif()
+
+# The optional thirdparties(not dependent by engine)
+if (AX_WITH_YAML_CPP)
+    target_include_directories(${APP_NAME} PRIVATE ${ADXE_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-
-    if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
-        set(WIN64 TRUE)
-        set(ARCH_ALIAS "x64")
-    else()
-       set(WIN32 TRUE)
-       set(ARCH_ALIAS "x86")
-    endif()
-
-    if (NOT AX_USE_SHARED_PREBUILT)
-        target_compile_definitions(${APP_NAME}
-            PRIVATE CC_STATIC=1
-        )
-    endif()
-
-    target_include_directories(${APP_NAME}
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/lua
-        PRIVATE ${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/manual
-        PRIVATE ${ADXE_ROOT_PATH}
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty
-        PRIVATE ${ADXE_ROOT_PATH}/extensions
-        PRIVATE ${ADXE_ROOT_PATH}/core
-        PRIVATE ${ADXE_ROOT_PATH}/core/platform
-        PRIVATE ${ADXE_ROOT_PATH}/core/base
-        PRIVATE ${ADXE_ROOT_PATH}/core/audio
-        PRIVATE ${ADXE_ROOT_PATH}/core/platform/win32
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/fmt/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/robin-map/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/freetype/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/glfw/include/GLFW
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/box2d/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/chipmunk/include
-        PRIVATE ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/engine/thirdparty/freetype/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/recast/..
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/bullet/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/webp/src/webp
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/pugixml
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/xxhash/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/lz4/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/clipper/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/ConvertUTF/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/poly2tri/..
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/astc/..
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/openal/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/ogg/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/glad/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/glfw/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/png
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/unzip/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/llhttp/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/lua/plainlua
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/lua/tolua/.
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/lua/lua-cjson/.
-        PRIVATE ${ADXE_ROOT_PATH}/extensions/cocostudio
-        PRIVATE ${ADXE_ROOT_PATH}/extensions/spine/runtime/include
-        PRIVATE ${ADXE_ROOT_PATH}/extensions/fairygui
-        PRIVATE ${ADXE_ROOT_PATH}/extensions/GUI
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/zlib/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/jpeg/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/openssl/include
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/curl/include
-    )
-    
-    target_link_directories(${APP_NAME}
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/jpeg/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${ADXE_ROOT_PATH}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/lib/Debug
-    )
-    
-    # Linking OS libs
-    target_link_libraries(${APP_NAME} winmm Version)
-    
-    # Linking engine and thirdparty libs
-    target_link_libraries(${APP_NAME}
-        spine.lib
-        particle3d.lib
-        assets-manager.lib
-        cocostudio.lib
-        DragonBones.lib
-        adxe.lib
-        box2d.lib
-        chipmunk.lib
-        freetype.lib
-        libzlib.lib
-        recast.lib
-        bullet.lib
-        jpeg-static.lib
-        libcrypto.lib
-        libssl.lib
-        webp.lib
-        pugixml.lib
-        xxhash.lib
-        lz4.lib
-        clipper.lib
-        ConvertUTF.lib
-        poly2tri.lib
-        astc.lib
-        libcurl_imp.lib
-        OpenAL32.lib
-        ogg.lib
-        glad.lib
-        glfw.lib
-        png.lib
-        unzip.lib
-        llhttp.lib
-        physics-nodes.lib
-    )
-    
-    # Copy dlls to app bin dir
-        # copy thirdparty dlls to target bin dir
-    # copy_thirdparty_dlls(${APP_NAME} $<TARGET_FILE_DIR:${APP_NAME}>)
-    set(ssl_dll_suffix "")
-    if(WIN64)
-        set(ssl_dll_suffix "-${ARCH_ALIAS}")
-    endif()
-    add_custom_command(TARGET ${APP_NAME} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
-        "${ADXE_ROOT_PATH}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
-        "${ADXE_ROOT_PATH}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
-        "${ADXE_ROOT_PATH}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
-        "${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR}/bin/\$\(Configuration\)/OpenAL32.dll"
-         $<TARGET_FILE_DIR:${APP_NAME}>)
-
-    # Copy windows angle binaries
-    if (AX_USE_COMPAT_GL)
-        add_custom_command(TARGET ${APP_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${ADXE_ROOT_PATH}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
-            ${ADXE_ROOT_PATH}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
-            ${ADXE_ROOT_PATH}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
-            $<TARGET_FILE_DIR:${APP_NAME}>
-        )
-    endif()
-    
+    include(${ADXE_ROOT_PATH}/cmake/Modules/AdxeLinkHelpers.cmake)
+    adxe_link_cxx_prebuilt(${APP_NAME} ${ADXE_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

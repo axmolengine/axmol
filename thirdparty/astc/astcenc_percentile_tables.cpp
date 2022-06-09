@@ -45,6 +45,7 @@ struct packed_percentile_table
 	const uint16_t *items[2];
 };
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (4 * 4)
 static const uint16_t percentile_arr_4x4_0[61] {
 	0x0242,0x7243,0x6A51,0x6A52,0x5A41,0x4A53,0x8851,0x3842,
 	0x3852,0x3853,0x3043,0xFA33,0x1BDF,0x2022,0x1032,0x29CE,
@@ -77,7 +78,9 @@ static const packed_percentile_table block_pcd_4x4 {
 	{ 0, 53 },
 	{ percentile_arr_4x4_0, percentile_arr_4x4_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (5 * 4)
 static const uint16_t percentile_arr_5x4_0[91] {
 	0x02C1,0xFAD1,0xE8D3,0xDAC2,0xA8D2,0x70D1,0x50C2,0x80C3,
 	0xD2C3,0x4AA2,0x2AD2,0x2242,0x2251,0x42A3,0x1A43,0x4A52,
@@ -116,7 +119,9 @@ static const packed_percentile_table block_pcd_5x4 {
 	{ 0, 202 },
 	{ percentile_arr_5x4_0, percentile_arr_5x4_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (5 * 5)
 static const uint16_t percentile_arr_5x5_0[129] {
 	0x00F3,0xF8F2,0x70E3,0x62E1,0x60E1,0x4AC1,0x3261,0x38D3,
 	0x3271,0x5AF1,0x5873,0x2AD1,0x28E2,0x28F1,0x2262,0x9AC2,
@@ -163,7 +168,9 @@ static const packed_percentile_table block_pcd_5x5 {
 	{ 0, 116 },
 	{ percentile_arr_5x5_0, percentile_arr_5x5_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (6 * 5)
 static const uint16_t percentile_arr_6x5_0[165] {
 	0x0163,0xF8F3,0x9962,0x8972,0x7961,0x7173,0x6953,0x5943,
 	0x4B41,0x3AE1,0x38E3,0x6971,0x32C1,0x28D3,0x2A61,0xC8F2,
@@ -217,7 +224,9 @@ static const packed_percentile_table block_pcd_6x5 {
 	{ 0, 156 },
 	{ percentile_arr_6x5_0, percentile_arr_6x5_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (6 * 6)
 static const uint16_t percentile_arr_6x6_0[206] {
 	0x006F,0xF908,0xF104,0xE918,0xE963,0xD114,0xB0F3,0xA07E,
 	0x7972,0x705F,0x687F,0x6162,0x5953,0x586E,0x610C,0x524D,
@@ -278,7 +287,9 @@ static const packed_percentile_table block_pcd_6x6 {
 	{ 0, 256 },
 	{ percentile_arr_6x6_0, percentile_arr_6x6_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (8 * 5)
 static const uint16_t percentile_arr_8x5_0[226] {
 	0x0066,0xF865,0xE963,0xA856,0xA1F2,0x9875,0x91C3,0x91E2,
 	0x80F3,0x8076,0x61E3,0x6153,0x5172,0x59D2,0x51D3,0x5047,
@@ -342,7 +353,9 @@ static const packed_percentile_table block_pcd_8x5 {
 	{ 0, 178 },
 	{ percentile_arr_8x5_0, percentile_arr_8x5_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (8 * 6)
 static const uint16_t percentile_arr_8x6_0[273] {
 	0x0154,0xF944,0xE066,0xA128,0x9963,0x8118,0x806F,0x79F2,
 	0x79E2,0x7108,0xD934,0x6056,0x69C3,0x60F3,0x5972,0x59E3,
@@ -415,7 +428,9 @@ static const packed_percentile_table block_pcd_8x6 {
 	{ 0, 64 },
 	{ percentile_arr_8x6_0, percentile_arr_8x6_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (8 * 8)
 static const uint16_t percentile_arr_8x8_0[347] {
 	0x0334,0xFD44,0xDD14,0x9154,0x9B08,0x906A,0x8928,0x8108,
 	0xE866,0xC918,0x606F,0xC0FE,0x5963,0x58EE,0x6534,0x505A,
@@ -499,7 +514,9 @@ static const packed_percentile_table block_pcd_8x8 {
 	{ 0, 38 },
 	{ percentile_arr_8x8_0, percentile_arr_8x8_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 5)
 static const uint16_t percentile_arr_10x5_0[274] {
 	0x0165,0xF975,0xD866,0xC056,0xA946,0x90C6,0x90F5,0x8963,
 	0x80D6,0x80E6,0x60F3,0x61C3,0x59F2,0xA927,0x5075,0x4847,
@@ -571,7 +588,9 @@ static const packed_percentile_table block_pcd_10x5 {
 	{ 0, 79 },
 	{ percentile_arr_10x5_0, percentile_arr_10x5_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 6)
 static const uint16_t percentile_arr_10x6_0[325] {
 	0x01A4,0xF954,0xA066,0x9975,0x80F5,0x7056,0x6918,0x6963,
 	0x58C6,0x5946,0x5928,0x5174,0x586F,0xA0E6,0x5108,0x48D6,
@@ -651,7 +670,9 @@ static const packed_percentile_table block_pcd_10x6 {
 	{ 0, 78 },
 	{ percentile_arr_10x6_0, percentile_arr_10x6_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 8)
 static const uint16_t percentile_arr_10x8_0[400] {
 	0x0154,0xAB34,0xAD44,0x8308,0x7866,0x7B64,0x79A4,0x7975,
 	0x686A,0x6908,0xC514,0x6174,0x6128,0x6118,0x5B54,0x5163,
@@ -744,7 +765,9 @@ static const packed_percentile_table block_pcd_10x8 =
 	{ 0, 52 },
 	{ percentile_arr_10x8_0, percentile_arr_10x8_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 10)
 static const uint16_t percentile_arr_10x10_0[453] {
 	0x0334,0x9514,0x8954,0x806A,0x6F14,0x6724,0x6108,0x6364,
 	0x5175,0x5D44,0x5866,0x5118,0x5308,0xA179,0x5128,0xF534,
@@ -845,7 +868,9 @@ static const packed_percentile_table block_pcd_10x10 {
 	{ 0, 70 },
 	{ percentile_arr_10x10_0, percentile_arr_10x10_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (12 * 10)
 static const uint16_t percentile_arr_12x10_0[491] {
 	0x0334,0x9954,0x8514,0x7128,0x6364,0xC174,0x5D34,0x5866,
 	0x5975,0x5354,0xAF14,0x506A,0x5108,0x5724,0x5308,0x4544,
@@ -952,7 +977,9 @@ static const packed_percentile_table block_pcd_12x10 =
 	{ 0, 23 },
 	{ percentile_arr_12x10_0, percentile_arr_12x10_1 }
 };
+#endif
 
+#if ASTCENC_BLOCK_MAX_TEXELS >= (12 * 12)
 static const uint16_t percentile_arr_12x12_0[529] {
 	0x0334,0xF534,0x8514,0x8954,0x7F14,0xFB54,0x7B08,0x7128,
 	0x7974,0x6179,0x6B64,0x6908,0x606A,0x6724,0xB544,0xB066,
@@ -1064,6 +1091,7 @@ static const packed_percentile_table block_pcd_12x12 {
 	{ 0, 22 },
 	{ percentile_arr_12x12_0, percentile_arr_12x12_1 }
 };
+#endif
 
 /**
  * @brief Fetch the packed percentile table for the given 2D block size.
@@ -1080,20 +1108,48 @@ static const packed_percentile_table *get_packed_table(
 	int idx = (ydim << 8) | xdim;
 	switch (idx)
 	{
+#if ASTCENC_BLOCK_MAX_TEXELS >= (4 * 4)
 		case 0x0404: return &block_pcd_4x4;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (5 * 4)
 		case 0x0405: return &block_pcd_5x4;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (5 * 5)
 		case 0x0505: return &block_pcd_5x5;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (6 * 5)
 		case 0x0506: return &block_pcd_6x5;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (6 * 6)
 		case 0x0606: return &block_pcd_6x6;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (8 * 5)
 		case 0x0508: return &block_pcd_8x5;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (8 * 6)
 		case 0x0608: return &block_pcd_8x6;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (8 * 8)
 		case 0x0808: return &block_pcd_8x8;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 5)
 		case 0x050A: return &block_pcd_10x5;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 6)
 		case 0x060A: return &block_pcd_10x6;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 8)
 		case 0x080A: return &block_pcd_10x8;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (10 * 10)
 		case 0x0A0A: return &block_pcd_10x10;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (12 * 10)
 		case 0x0A0C: return &block_pcd_12x10;
+#endif
+#if ASTCENC_BLOCK_MAX_TEXELS >= (12 * 12)
 		case 0x0C0C: return &block_pcd_12x12;
+#endif
 	}
 
 	// Should never hit this with a valid 2D block size
@@ -1128,7 +1184,7 @@ const float *get_2d_percentile_table(
 			unsigned int idx = item & 0x7FF;
 			unsigned int weight = (item >> 11) & 0x1F;
 			accum += weight;
-			unpacked_table[idx] = (float)accum / (float)difscale;
+			unpacked_table[idx] = static_cast<float>(accum) / static_cast<float>(difscale);
 		}
 	}
 

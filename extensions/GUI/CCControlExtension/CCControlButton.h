@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * http://www.cocos2d-x.org
+ * https://adxeproject.github.io/
  *
  * Copyright 2011 Yannick Loriot. All rights reserved.
  * http://yannickloriot.com
@@ -191,11 +191,10 @@ public:
     std::string_view getCurrentTitle() const { return _currentTitle; };
     std::string getCurrentTitle() { return _currentTitle; };
 
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        ControlButton();
+    /**
+     * @js ctor
+     */
+    ControlButton();
     /**
      * @js NA
      * @lua NA

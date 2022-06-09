@@ -130,6 +130,8 @@ public:
      */
     std::string_view getAuthority() const { return _authority; }
 
+    bool isCustomPort() const { return _isCustomPort; }
+
     /** Gets a string representation of the URI. */
     std::string toString() const;
 
@@ -163,13 +165,14 @@ private:
 
     bool _isValid;
     bool _isSecure;
+    bool _hasAuthority;
+    bool _isCustomPort;
+    uint16_t _port;
     std::string _scheme;
     std::string _username;
     std::string _password;
     std::string _host;
     std::string _hostName;
-    bool _hasAuthority;
-    uint16_t _port;
     std::string _authority;
     std::string _pathEtc;
     std::string _path;

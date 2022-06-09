@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 #include "test.h"
-#include "ImGuiEXT/CCImGuiEXT.h"
+#include "ImGui/ImGuiPresenter.h"
 
 class CompoundShapes : public Test
 {

@@ -146,10 +146,8 @@ public:
 
     ResourceData getRenderFile();
 
-    CC_CONSTRUCTOR_ACCESS :
-        // initializes state of widget.
-        virtual bool
-        init() override;
+    // initializes state of widget.
+    virtual bool init() override;
     virtual bool init(std::string_view imageFileName, TextureResType texType = TextureResType::LOCAL);
 
 protected:

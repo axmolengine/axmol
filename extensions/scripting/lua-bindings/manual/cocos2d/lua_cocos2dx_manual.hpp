@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://adxe.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,7 @@
 #ifndef COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_MANUAL_H
 #define COCOS2DX_SCRIPT_LUA_COCOS2DX_SUPPORT_GENERATED_LUA_COCOS2DX_MANUAL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "tolua++.h"
-#ifdef __cplusplus
-}
-#endif
-
 
 #include "scripting/lua-bindings/manual/cocos2d/LuaScriptHandlerMgr.h"
 #include "base/CCEventListenerAcceleration.h"

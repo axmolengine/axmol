@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 HALX99.
- Copyright (c) 2020 c4games.com.
+ Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
  https://adxeproject.github.io/
@@ -45,6 +45,8 @@ __inline int IsEqualGUID(const GUID& rguid1, const GUID& rguid2)
 {
     return !::memcmp(&rguid1, &rguid2, sizeof(GUID));
 }
+#else
+#include <guiddef.h>
 #endif
 
 namespace cocos2d

@@ -2,6 +2,7 @@
 #define ALC_DEVICE_H
 
 #include <atomic>
+#include <memory>
 #include <mutex>
 #include <stdint.h>
 #include <string>
@@ -10,15 +11,22 @@
 #include "AL/alc.h"
 #include "AL/alext.h"
 
+#include "alconfig.h"
 #include "almalloc.h"
 #include "alnumeric.h"
 #include "core/device.h"
+#include "inprogext.h"
 #include "intrusive_ptr.h"
 #include "vector.h"
+
+#ifdef ALSOFT_EAX
+#include "al/eax_x_ram.h"
+#endif // ALSOFT_EAX
 
 struct ALbuffer;
 struct ALeffect;
 struct ALfilter;
+struct BackendBase;
 
 using uint = unsigned int;
 
@@ -70,6 +78,13 @@ struct FilterSubList {
 
 
 struct ALCdevice : public al::intrusive_ref<ALCdevice>, DeviceBase {
+    /* This lock protects the device state (format, update size, etc) from
+     * being from being changed in multiple threads, or being accessed while
+     * being changed. It's also used to serialize calls to the backend.
+     */
+    std::mutex StateLock;
+    std::unique_ptr<BackendBase> Backend;
+
     ALCuint NumMonoSources{};
     ALCuint NumStereoSources{};
 
@@ -82,7 +97,21 @@ struct ALCdevice : public al::intrusive_ref<ALCdevice>, DeviceBase {
     al::vector<std::string> mHrtfList;
     ALCenum mHrtfStatus{ALC_FALSE};
 
-    ALCenum LimiterState{ALC_DONT_CARE_SOFT};
+    enum class OutputMode1 : ALCenum {
+        Any = ALC_ANY_SOFT,
+        Mono = ALC_MONO_SOFT,
+        Stereo = ALC_STEREO_SOFT,
+        StereoBasic = ALC_STEREO_BASIC_SOFT,
+        Uhj2 = ALC_STEREO_UHJ_SOFT,
+        Hrtf = ALC_STEREO_HRTF_SOFT,
+        Quad = ALC_QUAD_SOFT,
+        X51 = ALC_SURROUND_5_1_SOFT,
+        X61 = ALC_SURROUND_6_1_SOFT,
+        X71 = ALC_SURROUND_7_1_SOFT
+    };
+    OutputMode1 getOutputMode1() const noexcept;
+
+    using OutputMode = OutputMode1;
 
     std::atomic<ALCenum> LastError{ALC_NO_ERROR};
 
@@ -98,13 +127,39 @@ struct ALCdevice : public al::intrusive_ref<ALCdevice>, DeviceBase {
     std::mutex FilterLock;
     al::vector<FilterSubList> FilterList;
 
+#ifdef ALSOFT_EAX
+    ALuint eax_x_ram_free_size{eax_x_ram_max_size};
+#endif // ALSOFT_EAX
 
-    ALCdevice(DeviceType type) : DeviceBase{type} { }
+
+    ALCdevice(DeviceType type);
     ~ALCdevice();
 
     void enumerateHrtfs();
 
+    bool getConfigValueBool(const char *block, const char *key, bool def)
+    { return GetConfigValueBool(DeviceName.c_str(), block, key, def); }
+
+    template<typename T>
+    al::optional<T> configValue(const char *block, const char *key) = delete;
+
     DEF_NEWDEL(ALCdevice)
 };
+
+template<>
+inline al::optional<std::string> ALCdevice::configValue(const char *block, const char *key)
+{ return ConfigValueStr(DeviceName.c_str(), block, key); }
+template<>
+inline al::optional<int> ALCdevice::configValue(const char *block, const char *key)
+{ return ConfigValueInt(DeviceName.c_str(), block, key); }
+template<>
+inline al::optional<uint> ALCdevice::configValue(const char *block, const char *key)
+{ return ConfigValueUInt(DeviceName.c_str(), block, key); }
+template<>
+inline al::optional<float> ALCdevice::configValue(const char *block, const char *key)
+{ return ConfigValueFloat(DeviceName.c_str(), block, key); }
+template<>
+inline al::optional<bool> ALCdevice::configValue(const char *block, const char *key)
+{ return ConfigValueBool(DeviceName.c_str(), block, key); }
 
 #endif

@@ -2,7 +2,7 @@
  Copyright (c) 2014 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- http://www.cocos2d-x.org
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -625,7 +625,7 @@ void AssetsManagerEx::downloadVersion()
     {
         _updateState = State::DOWNLOADING_VERSION;
         // Download version file asynchronously
-        _downloader->createDownloadFileTask(versionUrl, _tempVersionPath, "", VERSION_ID);
+        _downloader->createDownloadFileTask(versionUrl, _tempVersionPath, VERSION_ID);
     }
     // No version file found
     else
@@ -696,7 +696,7 @@ void AssetsManagerEx::downloadManifest()
     {
         _updateState = State::DOWNLOADING_MANIFEST;
         // Download version file asynchronously
-        _downloader->createDownloadFileTask(manifestUrl, _tempManifestPath, "", MANIFEST_ID);
+        _downloader->createDownloadFileTask(manifestUrl, _tempManifestPath, MANIFEST_ID);
     }
     // No manifest file found
     else
@@ -1258,7 +1258,7 @@ void AssetsManagerEx::queueDowload()
         _currConcurrentTask++;
         DownloadUnit& unit = _downloadUnits[key];
         _fileUtils->createDirectory(basename(unit.storagePath));
-        _downloader->createDownloadFileTask(unit.srcUrl, unit.storagePath, "", unit.customId);
+        _downloader->createDownloadFileTask(unit.srcUrl, unit.storagePath, unit.customId);
 
         _tempManifest->setAssetDownloadState(key, Manifest::DownloadState::DOWNLOADING);
     }

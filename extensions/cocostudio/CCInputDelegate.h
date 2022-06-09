@@ -1,7 +1,7 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -46,17 +46,15 @@ namespace cocostudio
  */
 class CCS_DLL InputDelegate
 {
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         * @js ctor
-         */
-        InputDelegate(void);
+public:
+    /**
+     * @js ctor
+     */
+    InputDelegate(void);
     /**
      * @js NA
      */
     virtual ~InputDelegate(void);
-
-public:
     virtual bool isTouchEnabled() const;
     virtual void setTouchEnabled(bool value);
     virtual bool isAccelerometerEnabled() const;

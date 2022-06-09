@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-http://www.cocos2d-x.org
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -65,12 +65,10 @@ public:
     virtual bool serialize(void* r) override;
     virtual cocos2d::Node* getNode();
     virtual void setNode(cocos2d::Node* node);
-
-    CC_CONSTRUCTOR_ACCESS :
-        /**
-         *  @js ctor
-         */
-        ComRender();
+    /**
+     *  @js ctor
+     */
+    ComRender();
     ComRender(cocos2d::Node* node, const char* comName);
     /**
      * @js NA

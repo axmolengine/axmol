@@ -503,9 +503,10 @@ public:
 
     /**
      * @brief Rearrange all RichElement in the RichText.
+     * @param force Force the formatting of the contents
      * It's usually called internally.
      */
-    void formatText();
+    void formatText(bool force = false);
 
     // override functions.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
@@ -582,7 +583,7 @@ public:
      */
     void setOpenUrlHandler(const OpenUrlHandler& handleOpenUrl);
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
     bool initWithXML(std::string_view xml,
                      const ValueMap& defaults            = ValueMap(),

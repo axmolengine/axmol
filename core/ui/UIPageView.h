@@ -326,7 +326,7 @@ public:
 
     void setAutoScrollStopEpsilon(float epsilon);
 
-    CC_CONSTRUCTOR_ACCESS : virtual bool init() override;
+    virtual bool init() override;
 
     // override methods
     virtual void doLayout() override;

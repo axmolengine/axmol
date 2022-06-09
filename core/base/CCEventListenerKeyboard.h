@@ -60,7 +60,7 @@ public:
 
     std::function<void(EventKeyboard::KeyCode, Event*)> onKeyPressed;
     std::function<void(EventKeyboard::KeyCode, Event*)> onKeyReleased;
-    CC_CONSTRUCTOR_ACCESS : EventListenerKeyboard();
+    EventListenerKeyboard();
     bool init();
 };
 

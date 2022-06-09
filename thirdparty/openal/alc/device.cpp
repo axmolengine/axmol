@@ -25,17 +25,8 @@ using voidp = void*;
 } // namespace
 
 
-/* This should be in core/device.cpp. */
-DeviceBase::DeviceBase(DeviceType type) : Type{type}, mContexts{&sEmptyContextArray}
-{
-}
-
-DeviceBase::~DeviceBase()
-{
-    auto *oldarray = mContexts.exchange(nullptr, std::memory_order_relaxed);
-    if(oldarray != &sEmptyContextArray) delete oldarray;
-}
-
+ALCdevice::ALCdevice(DeviceType type) : DeviceBase{type}
+{ }
 
 ALCdevice::~ALCdevice()
 {
@@ -64,8 +55,8 @@ ALCdevice::~ALCdevice()
 
 void ALCdevice::enumerateHrtfs()
 {
-    mHrtfList = EnumerateHrtf(ConfigValueStr(DeviceName.c_str(), nullptr, "hrtf-paths"));
-    if(auto defhrtfopt = ConfigValueStr(DeviceName.c_str(), nullptr, "default-hrtf"))
+    mHrtfList = EnumerateHrtf(configValue<std::string>(nullptr, "hrtf-paths"));
+    if(auto defhrtfopt = configValue<std::string>(nullptr, "default-hrtf"))
     {
         auto iter = std::find(mHrtfList.begin(), mHrtfList.end(), *defhrtfopt);
         if(iter == mHrtfList.end())
@@ -73,4 +64,27 @@ void ALCdevice::enumerateHrtfs()
         else if(iter != mHrtfList.begin())
             std::rotate(mHrtfList.begin(), iter, iter+1);
     }
+}
+
+auto ALCdevice::getOutputMode1() const noexcept -> OutputMode1
+{
+    if(mContexts.load(std::memory_order_relaxed)->empty())
+        return OutputMode1::Any;
+
+    switch(FmtChans)
+    {
+    case DevFmtMono: return OutputMode1::Mono;
+    case DevFmtStereo:
+        if(mHrtf)
+            return OutputMode1::Hrtf;
+        else if(mUhjEncoder)
+            return OutputMode1::Uhj2;
+        return OutputMode1::StereoBasic;
+    case DevFmtQuad: return OutputMode1::Quad;
+    case DevFmtX51: return OutputMode1::X51;
+    case DevFmtX61: return OutputMode1::X61;
+    case DevFmtX71: return OutputMode1::X71;
+    case DevFmtAmbi3D: break;
+    }
+    return OutputMode1::Any;
 }

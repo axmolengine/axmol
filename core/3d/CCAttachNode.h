@@ -59,9 +59,7 @@ public:
     virtual const Mat4& getNodeToParentTransform() const override;
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
-    CC_CONSTRUCTOR_ACCESS :
-
-        AttachNode();
+    AttachNode();
     virtual ~AttachNode();
 
 protected:

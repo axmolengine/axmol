@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(APP_NAME cpp-tests)
+set(APP_NAME cpp_tests)
+
+
+# "too large PDB" error often occurs in cpp-tests when using default "/Zi"
+if (MSVC)
+    string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+endif()
 
 project(${APP_NAME})
 
@@ -36,8 +45,6 @@ if(APPLE OR VS)
 endif()
 
 if(ANDROID)
-    # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
-    set(APP_NAME cpp_tests)
     list(APPEND GAME_HEADER
          Classes/JNITest/JNITest.h
          )
@@ -108,7 +115,7 @@ list(APPEND GAME_HEADER
      Classes/VibrateTest/VibrateTest.h
      Classes/ClippingNodeTest/ClippingNodeTest.h
      Classes/UserDefaultTest/UserDefaultTest.h
-     Classes/ImGuiEXTTest/ImGuiEXTTest.h
+     Classes/ImGuiTest/ImGuiTest.h
      Classes/tests.h
      Classes/DataVisitorTest/DataVisitorTest.h
      Classes/NewAudioEngineTest/NewAudioEngineTest.h
@@ -330,7 +337,7 @@ list(APPEND GAME_SOURCE
 #     Classes/UnitTest/RefPtrTest.cpp
      Classes/UnitTest/UnitTest.cpp
      Classes/UserDefaultTest/UserDefaultTest.cpp
-     Classes/ImGuiEXTTest/ImGuiEXTTest.cpp
+     Classes/ImGuiTest/ImGuiTest.cpp
      Classes/VisibleRect.cpp
      Classes/VibrateTest/VibrateTest.cpp
      Classes/ZwoptexTest/ZwoptexTest.cpp
@@ -339,13 +346,18 @@ list(APPEND GAME_SOURCE
      Classes/ZipTest/ZipTests.cpp
      )
 
+if(ANDROID OR IOS OR WIN32)
+    list(APPEND GAME_HEADER
+             Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
+    list(APPEND GAME_SOURCE
+             Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
+endif()
+
 if(ANDROID OR IOS)
     list(APPEND GAME_HEADER
-         Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h
          Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
          )
     list(APPEND GAME_SOURCE
-         Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp
          Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
          )
 endif()
@@ -498,15 +510,15 @@ if(WINDOWS OR MACOSX OR LINUX)
         Classes/ChipmunkTestBed/demo/Slice.c
         Classes/ChipmunkTestBed/demo/Unicycle.c
         Classes/ChipmunkTestBed/demo/Tumble.c)
-        if(WINDOWS)
-            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
-        else()
-            set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
-        endif()
-		list(APPEND GAME_SOURCE
-			${TESTBED_C_SORUCES}
-			Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
-		)
+    if(WINDOWS)
+        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
+    else()
+        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
+    endif()
+	list(APPEND GAME_SOURCE
+		${TESTBED_C_SORUCES}
+		Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
+	)
 endif()
 
 
@@ -555,27 +567,27 @@ if(APPLE)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.mac/Info.plist")
     elseif(IOS)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios/Info.plist")
-        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon-${APP_NAME}")
+        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
     endif()
 
     # For code-signing, set the DEVELOPMENT_TEAM:
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
-    # "too large PDB" error often occurs in cpp-tests when using default "/Zi"
-    target_compile_options(${APP_NAME} PRIVATE /Z7)
     cocos_copy_target_dll(${APP_NAME})
 endif()
 
-if(WINDOWS)
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
-elseif(LINUX)
+if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
     cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
     cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+elseif(WINDOWS)
+    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
 endif()
 
 if(WINDOWS)
-    # precompiled header. Compilation time speedup ~4x.
-    target_sources(${APP_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp")
-    set_target_properties(${APP_NAME} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
-    set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
+    # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
+    if(NOT CMAKE_GENERATOR STREQUAL "Ninja") 
+        target_sources(${APP_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp")
+        set_target_properties(${APP_NAME} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
+        set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
+    endif()
 endif()
