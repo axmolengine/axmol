@@ -32895,8 +32895,8 @@ int lua_cocos2dx_FileUtils_getNewFilename(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_FileUtils_getNewFilename'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getNewFilename(arg0);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        std::string_view ret = cobj->getNewFilename(arg0);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.FileUtils:getNewFilename",argc, 1);
