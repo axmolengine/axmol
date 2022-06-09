@@ -65,18 +65,6 @@ public:
 
 protected:
     FontNoReplacementTest();
-
-    bool _replace;
-};
-
-class FontReplacementTest : public FontNoReplacementTest
-{
-public:
-    static FontReplacementTest* create();
-    virtual std::string title() const override;
-
-protected:
-    FontReplacementTest();
 };
 
 #endif  // _FONT_TEST_H_
