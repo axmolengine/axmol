@@ -60,7 +60,7 @@ THE SOFTWARE.
 
 #if CC_TARGET_PLATFORM != CC_PLATFORM_IOS && \
     (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22))
-#    define ADXE_HAVE_STDFS 1
+#    define AX_HAVE_STDFS 1
 #    include <filesystem>
 namespace stdfs = std::filesystem;
 #    if defined(_WIN32)
@@ -76,7 +76,7 @@ inline stdfs::path toFspath(const std::string_view& pathSV)
 #    endif
 #else
 #    include "tinydir/tinydir.h"
-#    define ADXE_HAVE_STDFS 0
+#    define AX_HAVE_STDFS 0
 #endif
 
 NS_CC_BEGIN
@@ -163,7 +163,7 @@ public:
     void startElement(void* ctx, const char* name, const char** atts) override
     {
         const std::string sName(name);
-        if (sName == "dict")
+        if (sName == "dict"sv)
         {
             if (_resultType == SAX_RESULT_DICT && _rootDict.empty())
             {
@@ -197,23 +197,23 @@ public:
             _stateStack.push(_state);
             _dictStack.push(_curDict);
         }
-        else if (sName == "key")
+        else if (sName == "key"sv)
         {
             _state = SAX_KEY;
         }
-        else if (sName == "integer")
+        else if (sName == "integer"sv)
         {
             _state = SAX_INT;
         }
-        else if (sName == "real")
+        else if (sName == "real"sv)
         {
             _state = SAX_REAL;
         }
-        else if (sName == "string")
+        else if (sName == "string"sv)
         {
             _state = SAX_STRING;
         }
-        else if (sName == "array")
+        else if (sName == "array"sv)
         {
             _state = SAX_ARRAY;
 
@@ -253,7 +253,7 @@ public:
     {
         SAXState curState = _stateStack.empty() ? SAX_DICT : _stateStack.top();
         const std::string sName((char*)name);
-        if (sName == "dict")
+        if (sName == "dict"sv)
         {
             _stateStack.pop();
             _dictStack.pop();
@@ -262,7 +262,7 @@ public:
                 _curDict = _dictStack.top();
             }
         }
-        else if (sName == "array")
+        else if (sName == "array"sv)
         {
             _stateStack.pop();
             _arrayStack.pop();
@@ -271,7 +271,7 @@ public:
                 _curArray = _arrayStack.top();
             }
         }
-        else if (sName == "true")
+        else if (sName == "true"sv)
         {
             if (SAX_ARRAY == curState)
             {
@@ -282,7 +282,7 @@ public:
                 (*_curDict)[_curKey] = Value(true);
             }
         }
-        else if (sName == "false")
+        else if (sName == "false"sv)
         {
             if (SAX_ARRAY == curState)
             {
@@ -293,22 +293,22 @@ public:
                 (*_curDict)[_curKey] = Value(false);
             }
         }
-        else if (sName == "string" || sName == "integer" || sName == "real")
+        else if (sName == "string"sv || sName == "integer"sv || sName == "real"sv)
         {
             if (SAX_ARRAY == curState)
             {
-                if (sName == "string")
+                if (sName == "string"sv)
                     _curArray->push_back(Value(_curValue));
-                else if (sName == "integer")
+                else if (sName == "integer"sv)
                     _curArray->push_back(Value(atoi(_curValue.c_str())));
                 else
                     _curArray->push_back(Value(std::atof(_curValue.c_str())));
             }
             else if (SAX_DICT == curState)
             {
-                if (sName == "string")
+                if (sName == "string"sv)
                     (*_curDict)[_curKey] = Value(_curValue);
-                else if (sName == "integer")
+                else if (sName == "integer"sv)
                     (*_curDict)[_curKey] = Value(atoi(_curValue.c_str()));
                 else
                     (*_curDict)[_curKey] = Value(std::atof(_curValue.c_str()));
@@ -423,25 +423,25 @@ static void generateElementForObject(const Value& value, pugi::xml_node& parent)
     // object is String
     if (value.getType() == Value::Type::STRING)
     {
-        auto node = parent.append_child("string");
-        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
+        auto node = parent.append_child("string"sv);
+        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString());
     }
     // object is integer
     else if (value.getType() == Value::Type::INTEGER)
     {
-        auto node = parent.append_child("integer");
-        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
+        auto node = parent.append_child("integer"sv);
+        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString());
     }
     // object is real
     else if (value.getType() == Value::Type::FLOAT || value.getType() == Value::Type::DOUBLE)
     {
-        auto node = parent.append_child("real");
-        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
+        auto node = parent.append_child("real"sv);
+        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString());
     }
     // object is bool
     else if (value.getType() == Value::Type::BOOLEAN)
     {
-        parent.append_child(value.asString().c_str());
+        parent.append_child(value.asString());
     }
     // object is Array
     else if (value.getType() == Value::Type::VECTOR)
@@ -453,11 +453,11 @@ static void generateElementForObject(const Value& value, pugi::xml_node& parent)
 
 static void generateElementForDict(const ValueMap& dict, pugi::xml_node& parent)
 {
-    auto dictDS = parent.append_child("dict");
+    auto dictDS = parent.append_child("dict"sv);
     for (const auto& iter : dict)
     {
-        auto key = dictDS.append_child("key");
-        key.append_child(pugi::xml_node_type::node_pcdata).set_value(iter.first.c_str());
+        auto key = dictDS.append_child("key"sv);
+        key.append_child(pugi::xml_node_type::node_pcdata).set_value(iter.first);
 
         generateElementForObject(iter.second, dictDS);
     }
@@ -465,7 +465,7 @@ static void generateElementForDict(const ValueMap& dict, pugi::xml_node& parent)
 
 static void generateElementForArray(const ValueVector& array, pugi::xml_node& parent)
 {
-    auto arrayDS = parent.append_child("array");
+    auto arrayDS = parent.append_child("array"sv);
     for (const auto& value : array)
     {
         generateElementForObject(value, arrayDS);
@@ -1179,7 +1179,7 @@ std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath,
  a. ios: require ios 13.0+
  b. android: require ndk-r22+
 */
-#if ADXE_HAVE_STDFS
+#if AX_HAVE_STDFS
 std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
 {
     const auto fullPath = fullPathForDirectory(dirPath);
