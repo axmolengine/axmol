@@ -827,7 +827,7 @@ public:
      *  @return The new filename after searching in the filename lookup dictionary.
      *          If the original filename wasn't in the dictionary, it will return the original filename.
      */
-    virtual std::string getNewFilename(std::string_view filename) const;
+    virtual std::string_view getNewFilename(std::string_view filename) const;
 
     /**
      *  Checks whether a file exists without considering search paths and resolution orders.
