@@ -865,6 +865,13 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                     point = shape.mask.points[index];
                 }
 
+                point -= size / 2;
+
+                point.x = point.x / size.x * overrideSize.x * scale.x;
+                point.y = point.y / size.y * overrideSize.y * scale.y;
+
+                point = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(angle));
+
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y;
 
