@@ -222,7 +222,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 
     do
     {
-        if (!face->charmap || face->charmap->encoding == FT_ENCODING_UNICODE)
+        if (!face->charmap || face->charmap->encoding != FT_ENCODING_UNICODE)
             break;
 
         // set the requested font size
