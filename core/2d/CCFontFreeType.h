@@ -2,7 +2,7 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -45,7 +45,7 @@ class CC_DLL FontFreeType : public Font
 public:
     static const int DistanceMapSpread;
 
-    static FontFreeType* create(std::string_view fontName,
+    static FontFreeType* create(std::string_view fontPath,
                                 float fontSize,
                                 GlyphCollection glyphs,
                                 std::string_view customGlyphs,
@@ -89,11 +89,9 @@ public:
                       int32_t bitmapWidth,
                       int32_t bitmapHeight);
 
-    FT_Encoding getEncoding() const { return _encoding; }
-
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(uint32_t theChar,
+    unsigned char* getGlyphBitmap(char32_t charCode,
                                   int32_t& outWidth,
                                   int32_t& outHeight,
                                   Rect& outRect,
@@ -119,7 +117,7 @@ private:
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool loadFontFace(std::string_view fontName, float fontSize);
+    bool loadFontFace(std::string_view fontPath, float fontSize);
 
     static bool initFreeType();
 
@@ -132,7 +130,6 @@ private:
     FT_Face _fontFace;
     std::unique_ptr<FT_StreamRec> _fontStream;
     FT_Stroker _stroker;
-    FT_Encoding _encoding;
 
     std::string _fontName;
     float _fontSize;

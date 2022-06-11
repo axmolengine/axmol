@@ -2,7 +2,7 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -229,80 +229,9 @@ bool FontAtlas::getLetterDefinitionForChar(char32_t utf32Char, FontLetterDefinit
     }
 }
 
-void FontAtlas::conversionU32TOGB2312(const std::u32string& u32Text,
-                                      std::unordered_map<unsigned int, unsigned int>& charCodeMap)
-{
-    size_t strLen      = u32Text.length();
-    auto gb2312StrSize = strLen * 2;
-    auto gb2312Text    = new char[gb2312StrSize];
-    memset(gb2312Text, 0, gb2312StrSize);
-
-    switch (_fontFreeType->getEncoding())
-    {
-    case FT_ENCODING_GB2312:
-    {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-        std::u16string u16Text;
-        cocos2d::StringUtils::UTF32ToUTF16(u32Text, u16Text);
-        WideCharToMultiByte(936, NULL, (LPCWCH)u16Text.c_str(), strLen, (LPSTR)gb2312Text, gb2312StrSize, NULL, NULL);
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-        conversionEncodingJNI((char*)u32Text.c_str(), gb2312StrSize, "UTF-32LE", gb2312Text, "GB2312");
-#else
-        if (_iconv == nullptr)
-        {
-            _iconv = iconv_open("GBK//TRANSLIT", "UTF-32LE");
-        }
-
-        if (_iconv == (iconv_t)-1)
-        {
-            CCLOG("conversion from utf32 to gb2312 not available");
-        }
-        else
-        {
-            char* pin     = (char*)u32Text.c_str();
-            char* pout    = gb2312Text;
-            size_t inLen  = strLen * 2;
-            size_t outLen = gb2312StrSize;
-
-            iconv(_iconv, (char**)&pin, &inLen, &pout, &outLen);
-        }
-#endif
-    }
-    break;
-    default:
-        CCLOG("Unsupported encoding:%d", _fontFreeType->getEncoding());
-        break;
-    }
-
-    unsigned short gb2312Code = 0;
-    unsigned char* dst        = (unsigned char*)&gb2312Code;
-    char32_t u32Code;
-    for (size_t index = 0, gbIndex = 0; index < strLen; ++index)
-    {
-        u32Code = u32Text[index];
-        if (u32Code < 256)
-        {
-            charCodeMap[u32Code] = u32Code;
-            gbIndex += 1;
-        }
-        else
-        {
-            dst[0]               = gb2312Text[gbIndex + 1];
-            dst[1]               = gb2312Text[gbIndex];
-            charCodeMap[u32Code] = gb2312Code;
-
-            gbIndex += 2;
-        }
-    }
-
-    delete[] gb2312Text;
-}
-
-void FontAtlas::findNewCharacters(const std::u32string& u32Text,
-                                  std::unordered_map<unsigned int, unsigned int>& charCodeMap)
+void FontAtlas::findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charset)
 {
     std::u32string newChars;
-    FT_Encoding charEncoding = _fontFreeType->getEncoding();
 
     // find new characters
     if (_letterDefinitions.empty())
@@ -338,25 +267,8 @@ void FontAtlas::findNewCharacters(const std::u32string& u32Text,
 
     if (!newChars.empty())
     {
-        switch (charEncoding)
-        {
-        case FT_ENCODING_UNICODE:
-        {
-            for (auto u32Code : newChars)
-            {
-                charCodeMap[u32Code] = u32Code;
-            }
-            break;
-        }
-        case FT_ENCODING_GB2312:
-        {
-            conversionU32TOGB2312(newChars, charCodeMap);
-            break;
-        }
-        default:
-            CCLOG("FontAtlas::findNewCharacters: Unsupported encoding:%d", charEncoding);
-            break;
-        }
+        for (auto u32Code : newChars)
+            charset.insert(u32Code);
     }
 }
 
@@ -370,9 +282,9 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
     if (!_currentPageData)
         reinit();
 
-    std::unordered_map<unsigned int, unsigned int> codeMapOfNewChar;
-    findNewCharacters(utf32Text, codeMapOfNewChar);
-    if (codeMapOfNewChar.empty())
+    std::unordered_set<char32_t> charCodeSet;
+    findNewCharacters(utf32Text, charCodeSet);
+    if (charCodeSet.empty())
     {
         return false;
     }
@@ -390,9 +302,9 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     int startY = (int)_currentPageOrigY;
 
-    for (auto&& it : codeMapOfNewChar)
+    for (auto charCode : charCodeSet)
     {
-        auto bitmap = _fontFreeType->getGlyphBitmap(it.second, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
+        auto bitmap = _fontFreeType->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
         if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)
         {
             tempDef.validDefinition = true;
@@ -471,7 +383,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             _currentPageOrigX += 1;
         }
 
-        _letterDefinitions[it.first] = tempDef;
+        _letterDefinitions[charCode] = tempDef;
     }
 
     updateTextureContent(pixelFormat, startY);
