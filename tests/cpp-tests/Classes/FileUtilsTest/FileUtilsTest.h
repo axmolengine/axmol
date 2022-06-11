@@ -64,6 +64,16 @@ private:
     std::vector<std::string> _defaultResolutionsOrderArray;
 };
 
+class TestFilenameLookup : public FileUtilsDemo
+{
+public:
+    CREATE_FUNC(TestFilenameLookup);
+
+    virtual void onEnter() override;
+    virtual void onExit() override;
+    virtual std::string title() const override;
+};
+
 class TestIsFileExist : public FileUtilsDemo
 {
 public:

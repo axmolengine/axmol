@@ -55,7 +55,7 @@ macro(cocos2dx_depend)
             find_library(APPLICATIONSERVICES_LIBRARY ApplicationServices)
             find_library(IOKIT_LIBRARY IOKit)
             find_library(APPKIT_LIBRARY AppKit)
-            #find_library(ICONV_LIBRARY iconv)
+            find_library(ICONV_LIBRARY iconv)
             find_library(AUDIOUNIT_LIBRARY AudioUnit)
             find_library(COREAUDIO_LIBRARY CoreAudio)
             find_library(SYSTEMCONFIGURATION_LIBRARY SystemConfiguration)
@@ -66,7 +66,7 @@ macro(cocos2dx_depend)
                  ${IOKIT_LIBRARY}
                  ${COCOS_APPLE_LIBS}
                  ${APPKIT_LIBRARY}
-                 #${ICONV_LIBRARY}
+                 ${ICONV_LIBRARY}
                  ${AUDIOUNIT_LIBRARY}
                  ${COREAUDIO_LIBRARY}
                  ${SYSTEMCONFIGURATION_LIBRARY}
@@ -84,7 +84,7 @@ macro(cocos2dx_depend)
             find_library(AV_FOUNDATION_LIBRARY AVFoundation)
             find_library(WEBKIT_LIBRARY WebKit)
             find_library(ZLIB z)
-            #find_library(ICONVLIB iconv)
+            find_library(ICONVLIB iconv)
             list(APPEND PLATFORM_SPECIFIC_LIBS
                  ${UIKIT_LIBRARY}
                  ${OPENGLES_LIBRARY}
@@ -98,7 +98,7 @@ macro(cocos2dx_depend)
                  ${WEBKIT_LIBRARY}
                  ${COCOS_APPLE_LIBS}
                  ${ZLIB}
-                 #${ICONVLIB}
+                 ${ICONVLIB}
                  )
         endif()
     endif()

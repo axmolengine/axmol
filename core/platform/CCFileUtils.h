@@ -294,6 +294,49 @@ public:
     virtual std::string fullPathForFilename(std::string_view filename) const;
 
     /**
+     * Loads the filenameLookup dictionary from the contents of a filename.
+     *
+     * @note The plist file name should follow the format below:
+     *
+     * @code
+     * <?xml version="1.0" encoding="UTF-8"?>
+     * <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     * <plist version="1.0">
+     * <dict>
+     *     <key>filenames</key>
+     *     <dict>
+     *         <key>sounds/click.wav</key>
+     *         <string>sounds/click.caf</string>
+     *         <key>sounds/endgame.wav</key>
+     *         <string>sounds/endgame.caf</string>
+     *         <key>sounds/gem-0.wav</key>
+     *         <string>sounds/gem-0.caf</string>
+     *     </dict>
+     *     <key>metadata</key>
+     *     <dict>
+     *         <key>version</key>
+     *         <integer>1</integer>
+     *     </dict>
+     * </dict>
+     * </plist>
+     * @endcode
+     * @param filename The plist file name.
+     *
+     @since v2.1
+     * @js loadFilenameLookup
+     * @lua loadFilenameLookup
+     */
+    virtual void loadFilenameLookupDictionaryFromFile(std::string_view filename);
+
+    /**
+     *  Sets the filenameLookup dictionary.
+     *
+     *  @param filenameLookupDict The dictionary for replacing filename.
+     *  @since v2.1
+     */
+    virtual void setFilenameLookupDictionary(const ValueMap& filenameLookupDict);
+
+    /**
      *  Gets full path from a file name and the path of the relative file.
      *  @param filename The file name.
      *  @param relativeFile The path of the relative file.
@@ -778,6 +821,15 @@ public:
     const hlookup::string_map<std::string> getFullPathCache() const { return _fullPathCache; }
 
     /**
+     *  Gets the new filename from the filename lookup dictionary.
+     *  It is possible to have a override names.
+     *  @param filename The original filename.
+     *  @return The new filename after searching in the filename lookup dictionary.
+     *          If the original filename wasn't in the dictionary, it will return the original filename.
+     */
+    virtual std::string getNewFilename(std::string_view filename) const;
+
+    /**
      *  Checks whether a file exists without considering search paths and resolution orders.
      *  @param filename The file (with absolute path) to look up for
      *  @return Returns true if the file found at the given absolute path, otherwise returns false
@@ -856,6 +908,15 @@ protected:
      * mutex used to protect fields.
      */
     mutable std::recursive_mutex _mutex;
+
+    /** Dictionary used to lookup filenames based on a key.
+     *  It is used internally by the following methods:
+     *
+     *  std::string fullPathForFilename(const char*);
+     *
+     *  @since v2.1
+     */
+    ValueMap _filenameLookupDict;
 
     /**
      *  The vector contains resolution folders.

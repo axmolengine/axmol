@@ -9,7 +9,7 @@ android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
 
     // setup ndk
-    def ndkInfo = adxetools.findNDK()
+    def ndkInfo = adxetools.findNDK("19.2.5345600+")
     ndkVersion = ndkInfo[0]
     if(ndkInfo[1]) {
         ndkPath = ndkInfo[1]

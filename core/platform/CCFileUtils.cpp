@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "base/ccMacros.h"
 #include "base/CCDirector.h"
 #include "platform/CCSAXParser.h"
+//#include "base/ccUtils.h"
 #include "platform/CCPosixFileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
@@ -49,19 +50,19 @@ THE SOFTWARE.
 #    include "yasio/cxx17/string_view.hpp"
 #endif
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#    include "tinydir/tinydir.h"
+#endif
+
 #include "pugixml/pugixml.hpp"
 
 #define DECLARE_GUARD (void)0
 
 #if CC_TARGET_PLATFORM != CC_PLATFORM_IOS && \
     (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22))
+#    define ADXE_HAVE_STDFS 1
 #    include <filesystem>
 namespace stdfs = std::filesystem;
-#else
-#include "ghc/filesystem.hpp"
-namespace stdfs = ghc::filesystem;
-#endif
-
 #    if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
@@ -73,6 +74,10 @@ inline stdfs::path toFspath(const std::string_view& pathSV)
     return stdfs::path{pathSV};
 }
 #    endif
+#else
+#    include "tinydir/tinydir.h"
+#    define ADXE_HAVE_STDFS 0
+#endif
 
 NS_CC_BEGIN
 
@@ -158,7 +163,7 @@ public:
     void startElement(void* ctx, const char* name, const char** atts) override
     {
         const std::string sName(name);
-        if (sName == "dict"sv)
+        if (sName == "dict")
         {
             if (_resultType == SAX_RESULT_DICT && _rootDict.empty())
             {
@@ -192,23 +197,23 @@ public:
             _stateStack.push(_state);
             _dictStack.push(_curDict);
         }
-        else if (sName == "key"sv)
+        else if (sName == "key")
         {
             _state = SAX_KEY;
         }
-        else if (sName == "integer"sv)
+        else if (sName == "integer")
         {
             _state = SAX_INT;
         }
-        else if (sName == "real"sv)
+        else if (sName == "real")
         {
             _state = SAX_REAL;
         }
-        else if (sName == "string"sv)
+        else if (sName == "string")
         {
             _state = SAX_STRING;
         }
-        else if (sName == "array"sv)
+        else if (sName == "array")
         {
             _state = SAX_ARRAY;
 
@@ -248,7 +253,7 @@ public:
     {
         SAXState curState = _stateStack.empty() ? SAX_DICT : _stateStack.top();
         const std::string sName((char*)name);
-        if (sName == "dict"sv)
+        if (sName == "dict")
         {
             _stateStack.pop();
             _dictStack.pop();
@@ -257,7 +262,7 @@ public:
                 _curDict = _dictStack.top();
             }
         }
-        else if (sName == "array"sv)
+        else if (sName == "array")
         {
             _stateStack.pop();
             _arrayStack.pop();
@@ -266,7 +271,7 @@ public:
                 _curArray = _arrayStack.top();
             }
         }
-        else if (sName == "true"sv)
+        else if (sName == "true")
         {
             if (SAX_ARRAY == curState)
             {
@@ -277,7 +282,7 @@ public:
                 (*_curDict)[_curKey] = Value(true);
             }
         }
-        else if (sName == "false"sv)
+        else if (sName == "false")
         {
             if (SAX_ARRAY == curState)
             {
@@ -288,22 +293,22 @@ public:
                 (*_curDict)[_curKey] = Value(false);
             }
         }
-        else if (sName == "string"sv || sName == "integer"sv || sName == "real"sv)
+        else if (sName == "string" || sName == "integer" || sName == "real")
         {
             if (SAX_ARRAY == curState)
             {
-                if (sName == "string"sv)
+                if (sName == "string")
                     _curArray->push_back(Value(_curValue));
-                else if (sName == "integer"sv)
+                else if (sName == "integer")
                     _curArray->push_back(Value(atoi(_curValue.c_str())));
                 else
                     _curArray->push_back(Value(std::atof(_curValue.c_str())));
             }
             else if (SAX_DICT == curState)
             {
-                if (sName == "string"sv)
+                if (sName == "string")
                     (*_curDict)[_curKey] = Value(_curValue);
-                else if (sName == "integer"sv)
+                else if (sName == "integer")
                     (*_curDict)[_curKey] = Value(atoi(_curValue.c_str()));
                 else
                     (*_curDict)[_curKey] = Value(std::atof(_curValue.c_str()));
@@ -418,25 +423,25 @@ static void generateElementForObject(const Value& value, pugi::xml_node& parent)
     // object is String
     if (value.getType() == Value::Type::STRING)
     {
-        auto node = parent.append_child("string"sv);
-        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString());
+        auto node = parent.append_child("string");
+        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
     }
     // object is integer
     else if (value.getType() == Value::Type::INTEGER)
     {
-        auto node = parent.append_child("integer"sv);
-        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString());
+        auto node = parent.append_child("integer");
+        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
     }
     // object is real
     else if (value.getType() == Value::Type::FLOAT || value.getType() == Value::Type::DOUBLE)
     {
-        auto node = parent.append_child("real"sv);
-        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString());
+        auto node = parent.append_child("real");
+        node.append_child(pugi::xml_node_type::node_pcdata).set_value(value.asString().c_str());
     }
     // object is bool
     else if (value.getType() == Value::Type::BOOLEAN)
     {
-        parent.append_child(value.asString());
+        parent.append_child(value.asString().c_str());
     }
     // object is Array
     else if (value.getType() == Value::Type::VECTOR)
@@ -448,11 +453,11 @@ static void generateElementForObject(const Value& value, pugi::xml_node& parent)
 
 static void generateElementForDict(const ValueMap& dict, pugi::xml_node& parent)
 {
-    auto dictDS = parent.append_child("dict"sv);
+    auto dictDS = parent.append_child("dict");
     for (const auto& iter : dict)
     {
-        auto key = dictDS.append_child("key"sv);
-        key.append_child(pugi::xml_node_type::node_pcdata).set_value(iter.first);
+        auto key = dictDS.append_child("key");
+        key.append_child(pugi::xml_node_type::node_pcdata).set_value(iter.first.c_str());
 
         generateElementForObject(iter.second, dictDS);
     }
@@ -460,7 +465,7 @@ static void generateElementForDict(const ValueMap& dict, pugi::xml_node& parent)
 
 static void generateElementForArray(const ValueVector& array, pugi::xml_node& parent)
 {
-    auto arrayDS = parent.append_child("array"sv);
+    auto arrayDS = parent.append_child("array");
     for (const auto& value : array)
     {
         generateElementForObject(value, arrayDS);
@@ -641,6 +646,26 @@ void FileUtils::writeValueVectorToFile(ValueVector vecData,
         std::move(callback), std::move(vecData));
 }
 
+std::string FileUtils::getNewFilename(std::string_view filename) const
+{
+    std::string newFileName;
+
+    DECLARE_GUARD;
+
+    // in Lookup Filename dictionary ?
+    auto iter = _filenameLookupDict.find(filename);
+
+    if (iter == _filenameLookupDict.end())
+    {
+        newFileName = filename;
+    }
+    else
+    {
+        newFileName = iter->second.asString();
+    }
+    return newFileName;
+}
+
 std::string FileUtils::getPathForFilename(std::string_view filename,
                                           std::string_view resolutionDirectory,
                                           std::string_view searchPath) const
@@ -699,13 +724,16 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
         return cacheIter->second;
     }
 
+    // Get the new file name.
+    const std::string newFilename(getNewFilename(filename));
+
     std::string fullpath;
 
     for (const auto& searchIt : _searchPathArray)
     {
         for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
-            fullpath = this->getPathForFilename(filename, resolutionIt, searchIt);
+            fullpath = this->getPathForFilename(newFilename, resolutionIt, searchIt);
 
             if (!fullpath.empty())
             {
@@ -753,11 +781,13 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
         longdir += "/";
     }
 
+    const std::string newdirname(getNewFilename(longdir));
+
     for (const auto& searchIt : _searchPathArray)
     {
         for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
-            fullpath = this->getPathForDirectory(longdir, resolutionIt, searchIt);
+            fullpath = this->getPathForDirectory(newdirname, resolutionIt, searchIt);
             if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
             {
                 // Using the filename passed in as key.
@@ -778,7 +808,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
 std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const
 {
-    return std::string{relativeFile.substr(0, relativeFile.rfind('/') + 1)}.append(filename);
+    return std::string{relativeFile.substr(0, relativeFile.rfind('/') + 1)}.append(getNewFilename(filename));
 }
 
 void FileUtils::setSearchResolutionsOrder(const std::vector<std::string>& searchResolutionsOrder)
@@ -944,6 +974,35 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
     {
         _originalSearchPaths.push_back(std::string{searchpath});
         _searchPathArray.push_back(std::move(path));
+    }
+}
+
+void FileUtils::setFilenameLookupDictionary(const ValueMap& filenameLookupDict)
+{
+    DECLARE_GUARD;
+    _fullPathCache.clear();
+    _fullPathCacheDir.clear();
+    _filenameLookupDict = filenameLookupDict;
+}
+
+void FileUtils::loadFilenameLookupDictionaryFromFile(std::string_view filename)
+{
+    const std::string fullPath = fullPathForFilename(filename);
+    if (!fullPath.empty())
+    {
+        ValueMap dict = getValueMapFromFile(fullPath);
+        if (!dict.empty())
+        {
+            ValueMap& metadata = dict["metadata"].asValueMap();
+            int version        = metadata["version"].asInt();
+            if (version != 1)
+            {
+                CCLOG("cocos2d: ERROR: Invalid filenameLookup dictionary version: %d. Filename: %s", version,
+                      filename.data());
+                return;
+            }
+            setFilenameLookupDictionary(dict["filenames"].asValueMap());
+        }
     }
 }
 
@@ -1117,9 +1176,10 @@ std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath,
 }
 
 /* !!!Notes for c++fs
- a. ios: require ios 13.0+, currently use ghc as workaround in lower ios 13.0- devices
+ a. ios: require ios 13.0+
  b. android: require ndk-r22+
 */
+#if ADXE_HAVE_STDFS
 std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
 {
     const auto fullPath = fullPathForDirectory(dirPath);
@@ -1146,7 +1206,9 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
             std::string pathStr = entry.path().string();
 #    endif
             if (isDir)
+            {
                 pathStr += '/';
+            }
             files.emplace_back(std::move(pathStr));
         }
     }
@@ -1178,11 +1240,100 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
             std::string pathStr = entry.path().string();
 #    endif
             if (isDir)
+            {
                 pathStr += '/';
+            }
             files->emplace_back(std::move(pathStr));
         }
     }
 }
+#else
+std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
+{
+    std::vector<std::string> files;
+    std::string fullpath = fullPathForDirectory(dirPath);
+    if (!fullpath.empty() && isDirectoryExist(fullpath))
+    {
+        tinydir_dir dir;
+        std::string fullpathstr = fullpath;
+
+        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
+        {
+            while (dir.has_next)
+            {
+                tinydir_file file;
+                if (tinydir_readfile(&dir, &file) == -1)
+                {
+                    // Error getting file
+                    break;
+                }
+                std::string filepath = file.path;
+
+                if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
+                {
+                    if (file.is_dir)
+                        filepath.push_back('/');
+
+                    files.push_back(std::move(filepath));
+                }
+
+                if (tinydir_next(&dir) == -1)
+                {
+                    // Error getting next file
+                    break;
+                }
+            }
+        }
+        tinydir_close(&dir);
+    }
+    return files;
+}
+
+void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const
+{
+    std::string fullpath = fullPathForDirectory(dirPath);
+    if (isDirectoryExist(fullpath))
+    {
+        tinydir_dir dir;
+        std::string fullpathstr = fullpath;
+
+        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
+        {
+            while (dir.has_next)
+            {
+                tinydir_file file;
+                if (tinydir_readfile(&dir, &file) == -1)
+                {
+                    // Error getting file
+                    break;
+                }
+
+                if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
+                {
+                    std::string filepath = file.path;
+                    if (file.is_dir)
+                    {
+                        filepath.push_back('/');
+                        files->push_back(filepath);
+                        listFilesRecursively(filepath, files);
+                    }
+                    else
+                    {
+                        files->push_back(std::move(filepath));
+                    }
+                }
+
+                if (tinydir_next(&dir) == -1)
+                {
+                    // Error getting next file
+                    break;
+                }
+            }
+        }
+        tinydir_close(&dir);
+    }
+}
+#endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 // windows os implement should override in platform specific FileUtiles class

@@ -1,6 +1,6 @@
 # adxe
 
-[![dev](https://img.shields.io/github/v/release/adxeproject/adxe?include_prereleases&label=release)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/badge/v1.0.0-beta6-yellow.svg)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
@@ -73,7 +73,7 @@
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Platform 29 r5  (在SDK Platforms页签)
      * Android SDK Build-Tools 29.0.2  
-     * NDK r23c+  
+     * NDK r19c+  
      * CMake 3.10+  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  

@@ -30,6 +30,7 @@ FileUtilsTests::FileUtilsTests()
 {
     ADD_TEST_CASE(TestResolutionDirectories);
     ADD_TEST_CASE(TestSearchPath);
+    ADD_TEST_CASE(TestFilenameLookup);
     ADD_TEST_CASE(TestIsFileExist);
     ADD_TEST_CASE(TestIsDirectoryExist);
     ADD_TEST_CASE(TestFileFuncs);
@@ -207,6 +208,44 @@ std::string TestSearchPath::subtitle() const
     return "See the console, can see a orange box and a 'about' picture, except Android";
 }
 
+// TestFilenameLookup
+
+void TestFilenameLookup::onEnter()
+{
+    FileUtilsDemo::onEnter();
+
+    auto sharedFileUtils = FileUtils::getInstance();
+
+    ValueMap dict;
+    dict["grossini.bmp"] = Value("Images/grossini.png");
+    dict["grossini.xcf"] = Value("Images/grossini.png");
+
+    sharedFileUtils->setFilenameLookupDictionary(dict);
+
+    // Instead of loading carlitos.xcf, it will load grossini.png
+    auto sprite = Sprite::create("grossini.xcf");
+    this->addChild(sprite);
+
+    auto s = Director::getInstance()->getWinSize();
+    sprite->setPosition(s.width / 2, s.height / 2);
+}
+
+void TestFilenameLookup::onExit()
+{
+
+    FileUtils* sharedFileUtils = FileUtils::getInstance();
+
+    // reset filename lookup
+    sharedFileUtils->setFilenameLookupDictionary(ValueMap());
+
+    FileUtilsDemo::onExit();
+}
+
+std::string TestFilenameLookup::title() const
+{
+    return "FileUtils: filename lookup";
+}
+
 // TestIsFileExist
 
 void TestIsFileExist::onEnter()
@@ -236,6 +275,9 @@ void TestIsFileExist::onExit()
 {
 
     FileUtils* sharedFileUtils = FileUtils::getInstance();
+
+    // reset filename lookup
+    sharedFileUtils->setFilenameLookupDictionary(ValueMap());
 
     FileUtilsDemo::onExit();
 }
@@ -955,6 +997,7 @@ void TestUnicodePath::onExit()
 
     FileUtils* sharedFileUtils = FileUtils::getInstance();
     sharedFileUtils->purgeCachedEntries();
+    sharedFileUtils->setFilenameLookupDictionary(ValueMap());
     FileUtilsDemo::onExit();
 }
 
@@ -994,6 +1037,12 @@ void TestIsFileExistAsync::onEnter()
 
 void TestIsFileExistAsync::onExit()
 {
+
+    FileUtils* sharedFileUtils = FileUtils::getInstance();
+
+    // reset filename lookup
+    sharedFileUtils->setFilenameLookupDictionary(ValueMap());
+
     FileUtilsDemo::onExit();
 }
 

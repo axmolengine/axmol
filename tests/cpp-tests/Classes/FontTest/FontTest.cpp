@@ -80,6 +80,7 @@ FontTests::FontTests()
         });
     }
     ADD_TEST_CASE(FontNoReplacementTest);
+    ADD_TEST_CASE(FontReplacementTest);
 }
 
 void FontTest::showFont(std::string_view fontFile)
@@ -161,6 +162,7 @@ FontNoReplacementTest* FontNoReplacementTest::create()
 
 FontNoReplacementTest::FontNoReplacementTest()
 {
+    _replace = false;
 }
 
 FontNoReplacementTest::~FontNoReplacementTest()
@@ -174,6 +176,7 @@ FontNoReplacementTest::~FontNoReplacementTest()
     FontFreeType::releaseFont("fonts/Abduction.ttf");
     FontAtlasCache::unloadFontAtlasTTF("fonts/Schwarzwald.ttf");
     FontFreeType::releaseFont("fonts/Schwarzwald.ttf");
+    FileUtils::getInstance()->setFilenameLookupDictionary(ValueMap());
 }
 
 void FontNoReplacementTest::onEnter()
@@ -181,6 +184,17 @@ void FontNoReplacementTest::onEnter()
     TestCase::onEnter();
 
     std::string suffix;
+    if (_replace)
+    {
+        ValueMap dict{{"fonts/A Damn Mess.ttf", Value("fonts/arial.ttf")},
+                      {"fonts/Abberancy.ttf", Value("fonts/arial.ttf")},
+                      {"fonts/Abduction.ttf", Value("fonts/arial.ttf")},
+                      {"fonts/Schwarzwald.ttf", Value("fonts/arial.ttf")}};
+
+        FileUtils::getInstance()->setFilenameLookupDictionary(dict);
+        suffix = " replaced by arial.ttf";
+    }
+
     auto s = Director::getInstance()->getWinSize();
 
     auto blockSize = Size(s.width / 3, 200);
@@ -238,4 +252,30 @@ void FontNoReplacementTest::onEnter()
 std::string FontNoReplacementTest::title() const
 {
     return "Font no replacement test";
+}
+
+FontReplacementTest* FontReplacementTest::create()
+{
+    auto ret = new FontReplacementTest;
+    if (ret->init())
+    {
+        ret->autorelease();
+    }
+    else
+    {
+        delete ret;
+        ret = nullptr;
+    }
+
+    return ret;
+}
+
+FontReplacementTest::FontReplacementTest()
+{
+    _replace = true;
+}
+
+std::string FontReplacementTest::title() const
+{
+    return "Font replacement test";
 }

@@ -1,11 +1,14 @@
 //
-// Copyright (c) 2014-2022 @HALX99 - All Rights Reserved
+// Copyright (c) 2014-2020 @HALX99 - All Rights Reserved
 //
 #ifndef _UITEXTFIELD_CPP_H_
 #define _UITEXTFIELD_CPP_H_
 #include "UITextFieldEx.h"
 
 #include "base/CCDirector.h"
+// #include "CCGLView.h"
+//#include "NXMacroDefs.h"
+//#include "purelib/utils/iconvw.h"
 
 /// cocos2d singleton objects
 #define CCDIRECTOR cocos2d::Director::getInstance()
