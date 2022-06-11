@@ -100,8 +100,10 @@ inline void normalize_point(float x, float y, particle_point* out)
 /**
  A more effective random number generator function that fixes strafing for position variance, made by kiss rng.
  KEEP IT SIMPLE STUPID (KISS) rng example: https://gist.github.com/3ki5tj/7b1d51e96d1f9bfb89bc
+
+ Generates a random number between 0.0 to 1.0 INCLUSIVE.
  */
-inline static float RANDOM_KISS(void)
+inline static float RANDOM_KISS_ABS(void)
 {
 #define kiss_znew(z) (z = 36969 * (z & 65535) + (z >> 16))
 #define kiss_wnew(w) (w = 18000 * (w & 65535) + (w >> 16))
@@ -111,10 +113,18 @@ inline static float RANDOM_KISS(void)
 #define kiss_KISS(z, w, jc, jsr) ((kiss_MWC(z, w) ^ kiss_CONG(jc)) + kiss_SHR3(jsr))
 
     static unsigned kiss_z = rand(), kiss_w = rand(), kiss_jsr = rand(), kiss_jcong = rand();
-    // Generate two random floats and add them to get a total of 2.0 and then subtract 1.0
-    // to get a random number between -1.0 and 1.0 INCLUSIVE.
-    return -1.0F + ((kiss_KISS(kiss_z, kiss_w, kiss_jcong, kiss_jsr) / 4294967296.0) +
-                    (kiss_KISS(kiss_z, kiss_w, kiss_jcong, kiss_jsr) / 4294967296.0));
+    return kiss_KISS(kiss_z, kiss_w, kiss_jcong, kiss_jsr) / 4294967296.0;
+}
+
+/**
+ A more effective random number generator function that fixes strafing for position variance, made by kiss rng.
+ KEEP IT SIMPLE STUPID (KISS) rng example: https://gist.github.com/3ki5tj/7b1d51e96d1f9bfb89bc
+
+ Generates a random number between -1.0 and 1.0 INCLUSIVE.
+ */
+inline static float RANDOM_KISS(void)
+{
+    return -1.0F + RANDOM_KISS_ABS() + RANDOM_KISS_ABS();
 }
 
 ParticleData::ParticleData()
@@ -783,7 +793,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 continue;
             }
 
-            auto randElem = abs(RANDOM_KISS());
+            auto randElem = RANDOM_KISS_ABS();
             auto& shape   = _emissionShapes[MIN(randElem * _emissionShapes.size(), _emissionShapes.size() - 1)];
 
             switch (shape.type)
@@ -804,8 +814,8 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::RECTTORUS:
             {
-                float width  = (shape.outerWidth - shape.innerWidth) * abs(RANDOM_KISS()) + shape.innerWidth;
-                float height = (shape.outerHeight - shape.innerHeight) * abs(RANDOM_KISS()) + shape.innerHeight;
+                float width  = (shape.outerWidth - shape.innerWidth) * RANDOM_KISS_ABS() + shape.innerWidth;
+                float height = (shape.outerHeight - shape.innerHeight) * RANDOM_KISS_ABS() + shape.innerHeight;
                 width        = RANDOM_KISS() < 0.0F ? width * -1 : width;
                 height       = RANDOM_KISS() < 0.0F ? height * -1 : height;
                 float prob   = RANDOM_KISS();
@@ -816,7 +826,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::CIRCLE:
             {
-                auto val              = abs(RANDOM_KISS()) * shape.innerRadius / shape.innerRadius;
+                auto val              = RANDOM_KISS_ABS() * shape.innerRadius / shape.innerRadius;
                 val                   = powf(val, 1 / shape.edgeElasticity);
                 auto point            = Vec2(0.0F, val * shape.innerRadius);
                 point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * RANDOM_KISS()));
@@ -827,7 +837,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::TORUS:
             {
-                auto val              = abs(RANDOM_KISS()) * shape.outerRadius / shape.outerRadius;
+                auto val              = RANDOM_KISS_ABS() * shape.outerRadius / shape.outerRadius;
                 val                   = powf(val, 1 / shape.edgeElasticity);
                 auto point            = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) - (shape.outerRadius - shape.innerRadius)));
                 point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * RANDOM_KISS()));
@@ -1651,7 +1661,7 @@ void ParticleSystem::update(float dt)
                     if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
                     {
                         auto& anim    = _animations.at(_particleData.animIndex[i]);
-                        float percent = abs(RANDOM_KISS());
+                        float percent = RANDOM_KISS_ABS();
                         percent       = anim.reverseIndices ? 1.0F - percent : percent;
 
                         _particleData.animCellIndex[i] = anim.animationIndices[MIN(
