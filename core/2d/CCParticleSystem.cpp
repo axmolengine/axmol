@@ -265,6 +265,8 @@ ParticleSystem::ParticleSystem()
     , _undefinedIndexRect({0, 0, 0, 0})
     , _animationTimescaleInd(false)
     , _yCoordFlipped(1)
+    , _isEmissionShapes(false)
+    , _emissionShapeIndex(0)
     , _positionType(PositionType::FREE)
     , _paused(false)
     , _updatePaused(false)
@@ -816,8 +818,8 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             {
                 auto val              = abs(RANDOM_KISS()) * shape.innerRadius / shape.innerRadius;
                 val                   = powf(val, 1 / shape.edgeElasticity);
-                auto point            = Vec2(val * shape.innerRadius * (RANDOM_KISS() < 0.0F ? 1.0F : -1.0F), 0.0F);
-                point                 = point.rotateByAngle(Vec2::ZERO, CC_DEGREES_TO_RADIANS(RANDOM_KISS() * 360));
+                auto point            = Vec2(0.0F, val * shape.innerRadius);
+                point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * RANDOM_KISS()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -827,11 +829,8 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             {
                 auto val              = abs(RANDOM_KISS()) * shape.outerRadius / shape.outerRadius;
                 val                   = powf(val, 1 / shape.edgeElasticity);
-                auto point            = Vec2(((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) -
-                                   (shape.outerRadius - shape.innerRadius)) *
-                                                 (RANDOM_KISS() < 0.0F ? 1.0F : -1.0F),
-                                             0.0F);
-                point                 = point.rotateByAngle(Vec2::ZERO, CC_DEGREES_TO_RADIANS(RANDOM_KISS() * 360));
+                auto point            = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) - (shape.outerRadius - shape.innerRadius)));
+                point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * RANDOM_KISS()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -1121,10 +1120,28 @@ void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
 
 void ParticleSystem::resetEmissionShapes()
 {
+    _emissionShapeIndex = 0;
     _emissionShapes.clear();
 }
 
-void ParticleSystem::addEmissionShapePoint(Vec2 pos)
+void ParticleSystem::addEmissionShape(EmissionShape shape)
+{
+    setEmissionShape(_emissionShapeIndex, shape);
+}
+
+void ParticleSystem::setEmissionShape(unsigned short index, EmissionShape shape)
+{
+    auto iter = _emissionShapes.find(index);
+    if (iter == _emissionShapes.end())
+    {
+        iter = _emissionShapes.emplace(index, EmissionShape{}).first;
+        _emissionShapeIndex++;
+    }
+
+    iter->second = shape;
+}
+
+EmissionShape ParticleSystem::createPointShape(Vec2 pos)
 {
     EmissionShape shape{};
 
@@ -1133,10 +1150,10 @@ void ParticleSystem::addEmissionShapePoint(Vec2 pos)
     shape.x = pos.x;
     shape.y = pos.y;
 
-    _emissionShapes.push_back(shape);
+    return shape;
 }
 
-void ParticleSystem::addEmissionShapeRect(Vec2 pos, Size size)
+EmissionShape ParticleSystem::createRectShape(Vec2 pos, Size size)
 {
     EmissionShape shape{};
 
@@ -1148,10 +1165,10 @@ void ParticleSystem::addEmissionShapeRect(Vec2 pos, Size size)
     shape.innerWidth  = size.x;
     shape.innerHeight = size.y;
 
-    _emissionShapes.push_back(shape);
+    return shape;
 }
 
-void ParticleSystem::addEmissionShapeRectTorus(Vec2 pos, Size innerSize, Size outerSize)
+EmissionShape ParticleSystem::createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize)
 {
     EmissionShape shape{};
 
@@ -1166,10 +1183,10 @@ void ParticleSystem::addEmissionShapeRectTorus(Vec2 pos, Size innerSize, Size ou
     shape.outerWidth  = outerSize.x;
     shape.outerHeight = outerSize.y;
 
-    _emissionShapes.push_back(shape);
+    return shape;
 }
 
-void ParticleSystem::addEmissionShapeCircle(Vec2 pos, float radius, float edgeElasticity)
+EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float edgeElasticity)
 {
     EmissionShape shape{};
 
@@ -1180,12 +1197,34 @@ void ParticleSystem::addEmissionShapeCircle(Vec2 pos, float radius, float edgeEl
 
     shape.innerRadius = radius;
 
+    shape.coneOffset = 0;
+    shape.coneAngle  = 360;
+
     shape.edgeElasticity = edgeElasticity;
 
-    _emissionShapes.push_back(shape);
+    return shape;
 }
 
-void ParticleSystem::addEmissionShapeTorus(Vec2 pos, float innerRadius, float outerRadius, float edgeElasticity)
+EmissionShape ParticleSystem::createConeShape(Vec2 pos, float radius, float offset, float angle, float edgeBias)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::CIRCLE;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = radius;
+
+    shape.coneOffset = offset;
+    shape.coneAngle  = angle;
+
+    shape.edgeElasticity = edgeBias;
+
+    return shape;
+}
+
+EmissionShape ParticleSystem::createTorusShape(Vec2 pos, float innerRadius, float outerRadius, float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1195,12 +1234,39 @@ void ParticleSystem::addEmissionShapeTorus(Vec2 pos, float innerRadius, float ou
     shape.y = pos.y;
 
     shape.innerRadius = innerRadius;
-
     shape.outerRadius = outerRadius;
 
-    shape.edgeElasticity = edgeElasticity;
+    shape.coneOffset = 0;
+    shape.coneAngle  = 360;
 
-    _emissionShapes.push_back(shape);
+    shape.edgeElasticity = edgeBias;
+
+    return shape;
+}
+
+EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
+                                                          float innerRadius,
+                                                          float outerRadius,
+                                                          float offset,
+                                                          float angle,
+                                                          float edgeBias)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::TORUS;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = innerRadius;
+    shape.outerRadius = outerRadius;
+
+    shape.coneOffset = offset;
+    shape.coneAngle  = angle;
+
+    shape.edgeElasticity = edgeBias;
+
+    return shape;
 }
 
 void ParticleSystem::setLifeAnimation(bool enabled)
@@ -1358,13 +1424,14 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect,
 {
     auto iter = _animationIndices.find(index);
     if (iter == _animationIndices.end())
+    {
         iter = _animationIndices.emplace(index, ParticleFrameDescriptor{}).first;
+        _animIndexCount++;
+    }
 
     auto& desc     = iter->second;
     desc.rect      = rect;
     desc.isRotated = rotated;
-
-    ++_animIndexCount;
 
     return true;
 }

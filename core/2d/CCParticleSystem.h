@@ -65,14 +65,12 @@ enum class EmissionShapeType
     RECT,
     RECTTORUS,
     CIRCLE,
-    TORUS,
-    CONE,
-    CONETORUS,
+    TORUS
 };
 
 /**
  * Particle emission shapes.
- * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus
  * @since adxe-1.0.0b7
  */
 struct EmissionShape
@@ -89,6 +87,8 @@ struct EmissionShape
 
     float innerRadius;
     float outerRadius;
+    float coneOffset;
+    float coneAngle;
     float edgeElasticity;
 };
 
@@ -1151,30 +1151,103 @@ public:
     /** Resets the count of emission shapes to 0 and empties the emission shapes array */
     void resetEmissionShapes();
 
-    /** Adds an emission shape of type point to the system. */
-    void addEmissionShapePoint(Vec2 pos);
+    /** Adds an emission shape to the system.
+     * The index is automatically incremented on each addition.
+     * 
+     * @param shape Shape descriptor object.
+     */
+    void addEmissionShape(EmissionShape shape);
 
-    /** Adds an emission shape of type Rectangle to the system. */
-    void addEmissionShapeRect(Vec2 pos, Size size);
+    /** Updates an existing emission shape or adds it.
+     * @param index index of the shape descriptor.
+     * @param shape Shape descriptor object.
+     */
+    void setEmissionShape(unsigned short index, EmissionShape shape);
 
-    /** Adds an emission shape of type Rectangular Torus to the system. */
-    void addEmissionShapeRectTorus(Vec2 pos, Size innerSize, Size outerSize);
+    /** Adds an emission shape of type point to the system. 
+     * @param pos Position of the emission shape in local space.
+     */
+    static EmissionShape createPointShape(Vec2 pos);
+
+    /** Adds an emission shape of type Rectangle to the system. 
+     * @param pos Position of the emission shape in local space.
+     * @param size Size of the rectangle.
+     */
+    static EmissionShape createRectShape(Vec2 pos, Size size);
+
+    /** Adds an emission shape of type Rectangular Torus to the system. 
+     * @param pos Position of the emission shape in local space.
+     * @param innerSize Inner size offset of the rectangle.
+     * @param outerSize Outer size of the rectangle.
+     */
+    static EmissionShape createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize);
 
     /** Adds an emission shape of type Circle to the system.
-     * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the circle
-     * more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the center
-     * of the circle more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no bias
-     * behaviour.
+     *
+     * The default angle offset of the circle is 0 and the default angle of the circle is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param radius Radius of the circle.
+     * @param edgeBias circle edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the circle more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
      */
-    void addEmissionShapeCircle(Vec2 pos, float radius, float edgeElasticity = 1.0F);
+    static EmissionShape createCircleShape(Vec2 pos, float radius, float edgeBias = 1.0F);
+
+    /** Adds an emission shape of type Cone to the system.
+     *
+     * The default angle offset of the circle is 0 and the default angle of the circle is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param radius Radius of the circle.
+     * @param offset Cone offset angle in degrees.
+     * @param angle Cone angle in degrees.
+     * @param edgeBias circle edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the circle more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
+     */
+    static EmissionShape createConeShape(Vec2 pos,
+                                                float radius,
+                                                float offset,
+                                                float angle,
+                                                float edgeBias = 1.0F);
 
     /** Adds an emission shape of type Torus to the system.
-     * @param edgeElasticity If the value is greater than 1.0 then particles will bias towards the edge of the torus
-     * more often the greater the value is; If the value is lower than 1.0 then particles will bias towards the inner
-     * radius of the torus more often the closer the value is to 0.0; If the value is exactly 1.0 then there will be no
-     * bias behaviour.
+     *
+     * The default angle offset of the torus is 0 and the default angle of the torus is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param innerRadius Inner radius offset of the torus.
+     * @param outerRadius Outer radius of the torus.
+     * @param edgeBias torus edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the torus more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the torus more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
      */
-    void addEmissionShapeTorus(Vec2 pos, float innerRadius, float outerRadius, float edgeElasticity = 1.0F);
+    static EmissionShape createTorusShape(Vec2 pos, float innerRadius, float outerRadius, float edgeBias = 1.0F);
+
+    /** Adds an emission shape of type Torus to the system.
+     *
+     * The default angle offset of the torus is 0 and the default angle of the torus is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param innerRadius Inner radius offset of the torus.
+     * @param outerRadius Outer radius of the torus.
+     * @param offset Cone offset angle in degrees.
+     * @param angle Cone angle in degrees.
+     * @param edgeBias torus edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the torus more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the torus more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
+     */
+    static EmissionShape createConeTorusShape(Vec2 pos,
+                                                     float innerRadius,
+                                                     float outerRadius,
+                                                     float offset,
+                                                     float angle,
+                                                     float edgeBias = 1.0F);
 
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
@@ -1200,7 +1273,7 @@ public:
                   float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
-     * seconds. The frame rate used for simulation accuracy is the screens refresh rate.
+     * seconds. The frame rate used for simulation accuracy is the director's animation interval.
      *
      * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
      * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more
@@ -1288,7 +1361,7 @@ public:
     virtual void resumeEmissions();
 
     /** Is system update paused
-     @return True if the emissions are paused, else false
+     @return True if system update is paused, else false
      */
     virtual bool isUpdatePaused() const;
 
@@ -1520,8 +1593,10 @@ protected:
     /** Wether to use emission shapes for this particle system or not */
     bool _isEmissionShapes;
 
-    /** A vector that contains emission shapes. */
-    std::vector<EmissionShape> _emissionShapes;
+    /** variable keeping count of emission shapes added */
+    int _emissionShapeIndex;
+    /** A map that stores emission shapes that are choosen at random */
+    std::unordered_map<unsigned short, EmissionShape> _emissionShapes;
 
     /** particles movement type: Free or Grouped
      @since v0.8
