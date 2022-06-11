@@ -59,7 +59,7 @@ typedef struct _DataRef
     unsigned int referenceCount = 0;
 } DataRef;
 
-static std::unordered_map<std::string, DataRef> s_cacheFontData;
+static hlookup::string_map<DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,
