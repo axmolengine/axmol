@@ -860,7 +860,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 Vec2 point = {0, 0};
 
                 {
-                    int rand0 = abs(RANDOM_KISS() * shape.mask.points.size());
+                    int rand0 = RANDOM_KISS_ABS() * shape.mask.points.size();
                     int index = MIN(rand0, shape.mask.points.size() - 1);
                     point = shape.mask.points[index];
                 }
@@ -915,7 +915,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         {
             for (int i = start; i < _particleCount; ++i)
             {
-                int rand0                      = abs(RANDOM_KISS() * _animIndexCount);
+                int rand0                      = RANDOM_KISS_ABS() * _animIndexCount;
                 _particleData.animCellIndex[i] = MIN(rand0, _animIndexCount - 1);
             }
         }
@@ -927,7 +927,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
             for (int i = start; i < _particleCount; ++i)
             {
-                int rand0                  = abs(RANDOM_KISS() * _randomAnimations.size());
+                int rand0                  = RANDOM_KISS_ABS() * _randomAnimations.size();
                 int index                  = MIN(rand0, _randomAnimations.size() - 1);
                 _particleData.animIndex[i] = _randomAnimations[index];
                 auto& descriptor           = _animations.at(_particleData.animIndex[i]);
