@@ -848,21 +848,23 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::ALPHA_MASK:
             {
+                auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.maskName);
+
                 Vec2 pos            = {shape.x, shape.y};
-                Vec2 size           = shape.mask.size;
+                Vec2 size           = mask.size;
                 Vec2 overrideSize   = {shape.innerWidth, shape.innerHeight};
                 Vec2 scale          = {shape.outerWidth, shape.outerHeight};
                 float angle         = shape.coneOffset;
 
                 if (overrideSize.isZero())
-                    overrideSize = shape.mask.size;
+                    overrideSize = mask.size;
 
                 Vec2 point = {0, 0};
 
                 {
-                    int rand0 = RANDOM_KISS_ABS() * shape.mask.points.size();
-                    int index = MIN(rand0, shape.mask.points.size() - 1);
-                    point = shape.mask.points[index];
+                    int rand0 = RANDOM_KISS_ABS() * mask.points.size();
+                    int index = MIN(rand0, mask.points.size() - 1);
+                    point = mask.points[index];
                 }
 
                 point -= size / 2;
@@ -1192,7 +1194,7 @@ EmissionShape ParticleSystem::createMaskShape(std::string_view maskName,
 
     shape.type = EmissionShapeType::ALPHA_MASK;
 
-    shape.mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(maskName);
+    shape.maskName = maskName;
 
     shape.x = pos.x;
     shape.y = pos.y;

@@ -98,7 +98,7 @@ struct EmissionShape
     float coneAngle;
     float edgeElasticity;
 
-    ParticleEmissionMaskDescriptor mask;
+    std::string_view maskName;
 };
 
 /** @struct ParticleAnimationDescriptor
