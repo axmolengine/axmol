@@ -138,7 +138,6 @@ protected:
     float _lineHeight           = 0.f;
     Font* _font                 = nullptr;
     FontFreeType* _fontFreeType = nullptr;
-    void* _iconv                = nullptr;
 
     // Dynamic GlyphCollection related stuff
     int _currentPage                    = 0;

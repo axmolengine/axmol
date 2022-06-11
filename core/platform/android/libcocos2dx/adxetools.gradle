@@ -96,9 +96,7 @@ class adxetools {
         return new VersionComparator().compare(ver1, ver2);
     }
 
-    static String[] findNDK(){
-        def ndkVer = "23.2.8568313" // ndk-r23c
-        
+    static String[] findNDK(String ndkVer){
         def allowNewerNdk = false
         if(ndkVer.endsWith('+')) {
             allowNewerNdk = true

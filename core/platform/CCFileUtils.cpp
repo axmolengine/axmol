@@ -35,6 +35,7 @@ THE SOFTWARE.
 #include "base/ccMacros.h"
 #include "base/CCDirector.h"
 #include "platform/CCSAXParser.h"
+//#include "base/ccUtils.h"
 #include "platform/CCPosixFileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
@@ -49,19 +50,19 @@ THE SOFTWARE.
 #    include "yasio/cxx17/string_view.hpp"
 #endif
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#    include "tinydir/tinydir.h"
+#endif
+
 #include "pugixml/pugixml.hpp"
 
 #define DECLARE_GUARD (void)0
 
 #if CC_TARGET_PLATFORM != CC_PLATFORM_IOS && \
     (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22))
+#    define AX_HAVE_STDFS 1
 #    include <filesystem>
 namespace stdfs = std::filesystem;
-#else
-#include "ghc/filesystem.hpp"
-namespace stdfs = ghc::filesystem;
-#endif
-
 #    if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
@@ -73,6 +74,10 @@ inline stdfs::path toFspath(const std::string_view& pathSV)
     return stdfs::path{pathSV};
 }
 #    endif
+#else
+#    include "tinydir/tinydir.h"
+#    define AX_HAVE_STDFS 0
+#endif
 
 NS_CC_BEGIN
 
@@ -1117,9 +1122,10 @@ std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath,
 }
 
 /* !!!Notes for c++fs
- a. ios: require ios 13.0+, currently use ghc as workaround in lower ios 13.0- devices
+ a. ios: require ios 13.0+
  b. android: require ndk-r22+
 */
+#if AX_HAVE_STDFS
 std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
 {
     const auto fullPath = fullPathForDirectory(dirPath);
@@ -1146,7 +1152,9 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
             std::string pathStr = entry.path().string();
 #    endif
             if (isDir)
+            {
                 pathStr += '/';
+            }
             files.emplace_back(std::move(pathStr));
         }
     }
@@ -1178,11 +1186,100 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
             std::string pathStr = entry.path().string();
 #    endif
             if (isDir)
+            {
                 pathStr += '/';
+            }
             files->emplace_back(std::move(pathStr));
         }
     }
 }
+#else
+std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
+{
+    std::vector<std::string> files;
+    std::string fullpath = fullPathForDirectory(dirPath);
+    if (!fullpath.empty() && isDirectoryExist(fullpath))
+    {
+        tinydir_dir dir;
+        std::string fullpathstr = fullpath;
+
+        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
+        {
+            while (dir.has_next)
+            {
+                tinydir_file file;
+                if (tinydir_readfile(&dir, &file) == -1)
+                {
+                    // Error getting file
+                    break;
+                }
+                std::string filepath = file.path;
+
+                if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
+                {
+                    if (file.is_dir)
+                        filepath.push_back('/');
+
+                    files.push_back(std::move(filepath));
+                }
+
+                if (tinydir_next(&dir) == -1)
+                {
+                    // Error getting next file
+                    break;
+                }
+            }
+        }
+        tinydir_close(&dir);
+    }
+    return files;
+}
+
+void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::string>* files) const
+{
+    std::string fullpath = fullPathForDirectory(dirPath);
+    if (isDirectoryExist(fullpath))
+    {
+        tinydir_dir dir;
+        std::string fullpathstr = fullpath;
+
+        if (tinydir_open(&dir, &fullpathstr[0]) != -1)
+        {
+            while (dir.has_next)
+            {
+                tinydir_file file;
+                if (tinydir_readfile(&dir, &file) == -1)
+                {
+                    // Error getting file
+                    break;
+                }
+
+                if (strcmp(file.name, ".") != 0 && strcmp(file.name, "..") != 0)
+                {
+                    std::string filepath = file.path;
+                    if (file.is_dir)
+                    {
+                        filepath.push_back('/');
+                        files->push_back(filepath);
+                        listFilesRecursively(filepath, files);
+                    }
+                    else
+                    {
+                        files->push_back(std::move(filepath));
+                    }
+                }
+
+                if (tinydir_next(&dir) == -1)
+                {
+                    // Error getting next file
+                    break;
+                }
+            }
+        }
+        tinydir_close(&dir);
+    }
+}
+#endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 // windows os implement should override in platform specific FileUtiles class
