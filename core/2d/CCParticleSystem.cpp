@@ -836,6 +836,30 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
                 break;
             }
+            case EmissionShapeType::ALPHA_MASK:
+            {
+                Vec2 pos            = {shape.x, shape.y};
+                Vec2 size           = shape.mask.size;
+                Vec2 overrideSize   = {shape.innerWidth, shape.innerHeight};
+                Vec2 scale          = {shape.outerWidth, shape.outerHeight};
+                float angle         = shape.coneOffset;
+
+                if (overrideSize.isZero())
+                    overrideSize = shape.mask.size;
+
+                Vec2 point = {0, 0};
+
+                {
+                    int rand0 = abs(RANDOM_KISS() * shape.mask.points.size());
+                    int index = MIN(rand0, shape.mask.points.size() - 1);
+                    point = shape.mask.points[index];
+                }
+
+                _particleData.posx[i] = _sourcePosition.x + shape.x + point.x;
+                _particleData.posy[i] = _sourcePosition.y + shape.y + point.y;
+
+                break;
+            }
             }
         }
     }
@@ -1139,6 +1163,32 @@ void ParticleSystem::setEmissionShape(unsigned short index, EmissionShape shape)
     }
 
     iter->second = shape;
+}
+
+EmissionShape ParticleSystem::createMaskShape(std::string_view maskName,
+                                              Vec2 pos,
+                                              Vec2 overrideSize,
+                                              Vec2 scale,
+                                              float angle)
+{
+    EmissionShape shape{};
+
+    shape.type = EmissionShapeType::ALPHA_MASK;
+
+    shape.mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(maskName);
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerWidth  = overrideSize.x;
+    shape.innerHeight = overrideSize.y;
+
+    shape.outerWidth  = scale.x;
+    shape.outerHeight = scale.y;
+
+    shape.coneOffset = angle;
+
+    return shape;
 }
 
 EmissionShape ParticleSystem::createPointShape(Vec2 pos)
@@ -2230,6 +2280,89 @@ float ParticleSystem::getTimeScale()
 void ParticleSystem::setTimeScale(float scale)
 {
     _timeScale = scale;
+}
+
+static ParticleEmissionMaskCache* emissionMaskCache;
+
+ParticleEmissionMaskCache* ParticleEmissionMaskCache::getInstance()
+{
+    if (emissionMaskCache == nullptr)
+    {
+        emissionMaskCache = new ParticleEmissionMaskCache();
+        return emissionMaskCache;
+    }
+    return emissionMaskCache;
+}
+
+void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
+                                                 std::string_view texturePath,
+                                                 float alphaThreshold,
+                                                 bool inverted)
+{
+    auto img = new Image();
+    img->Image::initWithImageFile(texturePath);
+    img->autorelease();
+
+    CCASSERT(img, "image texture was nullptr.");
+    bakeEmissionMask(maskName, img, alphaThreshold, inverted);
+}
+
+void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
+                                                 Image* imageTexture,
+                                                 float alphaThreshold,
+                                                 bool inverted)
+{
+    auto img = imageTexture;
+    CCASSERT(img, "image texture was nullptr.");
+    CCASSERT(img->hasAlpha(), "image data should contain an alpha channel.");
+
+    vector<Vec2> points;
+
+    auto data = img->getData();
+    auto w    = img->getWidth();
+    auto h    = img->getHeight();
+
+    for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
+    {
+        float a = data[(y * w + x) * 4 + 3] / 255.0F;
+        if (a >= alphaThreshold && !inverted)
+            points.push_back({float(x), float(h - y)});
+        if (a < alphaThreshold && inverted)
+            points.push_back({float(x), float(h - y)});
+    }
+
+    auto iter = this->masks.find(maskName);
+    if (iter == this->masks.end())
+        iter = this->masks.emplace(maskName, ParticleEmissionMaskDescriptor{}).first;
+
+    ParticleEmissionMaskDescriptor desc;
+    desc.size   = {float(w), float(h)};
+    desc.points = std::move(points);
+
+    iter->second = desc;
+}
+
+const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(std::string_view maskName)
+{
+    auto iter = this->masks.find(maskName);
+    if (iter == this->masks.end())
+    {
+        ParticleEmissionMaskDescriptor desc;
+        desc.size   = {float(1), float(1)};
+        desc.points = {{0, 0}};
+        return desc;
+    }
+    return iter->second;
+}
+
+void ParticleEmissionMaskCache::releaseMaskFromMemory(std::string_view maskName)
+{
+    this->masks.erase(maskName);
+}
+
+void ParticleEmissionMaskCache::releaseAllMasksFromMemory()
+{
+    this->masks.clear();
 }
 
 NS_CC_END

@@ -65,7 +65,14 @@ enum class EmissionShapeType
     RECT,
     RECTTORUS,
     CIRCLE,
-    TORUS
+    TORUS,
+    ALPHA_MASK
+};
+
+struct ParticleEmissionMaskDescriptor
+{
+    Vec2 size;
+    std::vector<cocos2d::Vec2> points;
 };
 
 /**
@@ -90,6 +97,8 @@ struct EmissionShape
     float coneOffset;
     float coneAngle;
     float edgeElasticity;
+
+    ParticleEmissionMaskDescriptor mask;
 };
 
 /** @struct ParticleAnimationDescriptor
@@ -244,6 +253,29 @@ public:
     }
 };
 
+class CC_DLL ParticleEmissionMaskCache : public cocos2d::Ref
+{
+public:
+    static ParticleEmissionMaskCache* getInstance();
+
+    void bakeEmissionMask(std::string_view maskName,
+                          std::string_view texturePath,
+                          float alphaThreshold = 0.5F,
+                          bool inverted        = false);
+
+    void bakeEmissionMask(std::string_view maskName,
+                          Image* imageTexture,
+                          float alphaThreshold = 0.5F,
+                          bool inverted        = false);
+
+    const ParticleEmissionMaskDescriptor& getEmissionMask(std::string_view maskName);
+
+    void releaseMaskFromMemory(std::string_view maskName);
+    void releaseAllMasksFromMemory();
+
+    hlookup::string_map<ParticleEmissionMaskDescriptor> masks;
+};
+
 // typedef void (*CC_UPDATE_PARTICLE_IMP)(id, SEL, tParticle*, Vec2);
 
 class Texture2D;
@@ -292,7 +324,6 @@ emitter.startSpin = 0;
 @endcode
 
 */
-
 class CC_DLL ParticleSystem : public Node, public TextureProtocol, public PlayableProtocol
 {
 public:
@@ -1163,6 +1194,17 @@ public:
      * @param shape Shape descriptor object.
      */
     void setEmissionShape(unsigned short index, EmissionShape shape);
+
+    /** Adds an emission shape of type mask to the system.
+     * The mask should be added using the ParticleEmissionMaskCache class.
+     * 
+     * @param maskName Name of the emission mask.
+     * @param pos Position of the emission shape in local space.
+     * @param overrideSize Size of the emission mask in pixels, leave ZERO to use texture size.
+     * @param scale Scale of the emission mask, the size will be multiplied by the specified scale.
+     * @param angle Angle of the sampled points to be rotated in degrees.
+     */
+    static EmissionShape createMaskShape(std::string_view maskName, Vec2 pos = Vec2::ZERO, Vec2 overrideSize = Vec2::ZERO, Vec2 scale = Vec2::ONE, float angle = 0.0F);
 
     /** Adds an emission shape of type point to the system. 
      * @param pos Position of the emission shape in local space.
