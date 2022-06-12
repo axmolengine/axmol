@@ -2,7 +2,7 @@
 Copyright (c) 2013      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -59,7 +59,7 @@ typedef struct _DataRef
     unsigned int referenceCount = 0;
 } DataRef;
 
-static std::unordered_map<std::string, DataRef> s_cacheFontData;
+static hlookup::string_map<DataRef> s_cacheFontData;
 
 // ------ freetype2 stream parsing support ---
 static unsigned long ft_stream_read_callback(FT_Stream stream,
@@ -149,7 +149,6 @@ FT_Library FontFreeType::getFTLibrary()
 FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outline /* = 0 */)
 : _fontFace(nullptr)
 , _stroker(nullptr)
-, _encoding(FT_ENCODING_UNICODE)
 , _distanceFieldEnabled(distanceFieldEnabled)
 , _outlineSize(0.0f)
 , _ascender(0)
@@ -170,16 +169,12 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 }
 // clang-format on
 
-bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
+bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 {
     FT_Face face;
-    // save font name locally
-    _fontName = fontName;
-    _fontSize = fontSize;
-
     if (_streamParsingEnabled)
     {
-        auto fullPath = FileUtils::getInstance()->fullPathForFilename(_fontName);
+        auto fullPath = FileUtils::getInstance()->fullPathForFilename(fontPath);
         if (fullPath.empty())
             return false;
 
@@ -207,15 +202,15 @@ bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
     else
     {
         DataRef* sharableData;
-        auto it = s_cacheFontData.find(_fontName);
+        auto it = s_cacheFontData.find(fontPath);
         if (it != s_cacheFontData.end())
         {
             sharableData = &it->second;
         }
         else
         {
-            sharableData       = &s_cacheFontData[_fontName];
-            sharableData->data = FileUtils::getInstance()->getDataFromFile(_fontName);
+            sharableData       = &s_cacheFontData[fontPath];
+            sharableData->data = FileUtils::getInstance()->getDataFromFile(fontPath);
         }
 
         ++sharableData->referenceCount;
@@ -225,66 +220,55 @@ bool FontFreeType::loadFontFace(std::string_view fontName, float fontSize)
             return false;
     }
 
-    if (FT_Select_Charmap(face, FT_ENCODING_UNICODE))
+    do
     {
-        int foundIndex = -1;
-        for (int charmapIndex = 0; charmapIndex < face->num_charmaps; charmapIndex++)
+        if (!face->charmap || face->charmap->encoding != FT_ENCODING_UNICODE)
+            break;
+
+        // set the requested font size
+        int dpi            = 72;
+        int fontSizePoints = (int)(64.f * fontSize * CC_CONTENT_SCALE_FACTOR());
+        if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
+            break;
+
+        // store the face globally
+        _fontFace = face;
+        _fontSize = fontSize;
+		_fontName = fontPath;
+
+        // Notes:
+        //  a. Since freetype 2.8.1 the TT matrics isn't sync to size_matrics, see the function 'tt_size_request' in
+        //  truetype/ttdriver.c b. The TT spec always asks for ROUND, not FLOOR or CEIL, see also the function
+        //  'tt_size_reset' in truetype/ttobjs.c
+        // ** Please see description of FT_Size_Metrics_ in freetype.h about this solution
+        // FT_PIX_ROUND is copy from freetype/internal/ftobjs.h
+        auto& size_metrics = _fontFace->size->metrics;
+        if (_doNativeBytecodeHinting && !strcmp(FT_Get_Font_Format(face), "TrueType"))
         {
-            if (face->charmaps[charmapIndex]->encoding != FT_ENCODING_NONE)
-            {
-                foundIndex = charmapIndex;
-                break;
-            }
-        }
-
-        if (foundIndex == -1)
-        {
-            return false;
-        }
-
-        _encoding = face->charmaps[foundIndex]->encoding;
-        if (FT_Select_Charmap(face, _encoding))
-        {
-            return false;
-        }
-    }
-
-    // set the requested font size
-    int dpi            = 72;
-    int fontSizePoints = (int)(64.f * fontSize * CC_CONTENT_SCALE_FACTOR());
-    if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
-        return false;
-
-    // store the face globally
-    _fontFace = face;
-
-    // Notes:
-    //  a. Since freetype 2.8.1 the TT matrics isn't sync to size_matrics, see the function 'tt_size_request' in
-    //  truetype/ttdriver.c b. The TT spec always asks for ROUND, not FLOOR or CEIL, see also the function
-    //  'tt_size_reset' in truetype/ttobjs.c
-    // ** Please see description of FT_Size_Metrics_ in freetype.h about this solution
-    // FT_PIX_ROUND is copy from freetype/internal/ftobjs.h
-    auto& size_metrics = _fontFace->size->metrics;
-    if (_doNativeBytecodeHinting && !strcmp(FT_Get_Font_Format(face), "TrueType"))
-    {
 #if !defined(FT_PIX_ROUND)
 #    define FT_TYPEOF(type)
 #    define FT_PIX_FLOOR(x) ((x) & ~FT_TYPEOF(x) 63)
 #    define FT_PIX_ROUND(x) FT_PIX_FLOOR((x) + 32)
 #endif
-        _ascender  = FT_PIX_ROUND(FT_MulFix(face->ascender, size_metrics.y_scale));
-        _descender = FT_PIX_ROUND(FT_MulFix(face->descender, size_metrics.y_scale));
-    }
-    else
-    {
-        _ascender  = size_metrics.ascender;
-        _descender = size_metrics.descender;
-    }
+            _ascender  = FT_PIX_ROUND(FT_MulFix(face->ascender, size_metrics.y_scale));
+            _descender = FT_PIX_ROUND(FT_MulFix(face->descender, size_metrics.y_scale));
+        }
+        else
+        {
+            _ascender  = size_metrics.ascender;
+            _descender = size_metrics.descender;
+        }
 
-    _lineHeight = (_ascender - _descender) >> 6;
+        _lineHeight = (_ascender - _descender) >> 6;
 
-    // done and good
-    return true;
+        // done and good
+        return true;
+    } while (false);
+
+    FT_Done_Face(face);
+
+    cocos2d::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
+    return false;
 }
 
 FontFreeType::~FontFreeType()
@@ -386,7 +370,7 @@ const char* FontFreeType::getFontFamily() const
     return _fontFace->family_name;
 }
 
-unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
+unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                                             int32_t& outWidth,
                                             int32_t& outHeight,
                                             Rect& outRect,
@@ -400,11 +384,11 @@ unsigned char* FontFreeType::getGlyphBitmap(uint32_t theChar,
             break;
 
         // @remark: glyphIndex=0 means charactor is mssing on current font face
-        auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(theChar));
+        auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
         if (glyphIndex == 0)
         {
-            char32_t ntcs[2] = {theChar, (char32_t)0};
+            char32_t ntcs[2] = {charCode, (char32_t)0};
             std::u32string_view charUTF32(ntcs, 1);
             std::string charUTF8;
             cocos2d::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);

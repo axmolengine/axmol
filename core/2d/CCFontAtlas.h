@@ -2,7 +2,7 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -120,10 +120,7 @@ protected:
 
     void releaseTextures();
 
-    void findNewCharacters(const std::u32string& u32Text, std::unordered_map<unsigned int, unsigned int>& charCodeMap);
-
-    void conversionU32TOGB2312(const std::u32string& u32Text,
-                               std::unordered_map<unsigned int, unsigned int>& charCodeMap);
+    void findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charCodeSet);
 
     void initTextureWithZeros(Texture2D* texture);
 
@@ -141,7 +138,6 @@ protected:
     float _lineHeight           = 0.f;
     Font* _font                 = nullptr;
     FontFreeType* _fontFreeType = nullptr;
-    void* _iconv                = nullptr;
 
     // Dynamic GlyphCollection related stuff
     int _currentPage                    = 0;

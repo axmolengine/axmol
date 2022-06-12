@@ -54,8 +54,7 @@ void FontAtlasCache::purgeCachedData()
 
 FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
 {
-    auto realFontFilename = FileUtils::getInstance()->getNewFilename(
-        config->fontFilePath);  // resolves real file path, to prevent storing multiple atlases for the same file.
+    auto realFontFilename = config->fontFilePath;  // resolves real file path, to prevent storing multiple atlases for the same file.
     bool useDistanceField = config->distanceFieldEnabled;
     if (config->outlineSize > 0)
     {
@@ -97,8 +96,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName)
 
 FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey)
 {
-    const auto realFontFilename = FileUtils::getInstance()->getNewFilename(
-        fontFileName);  // resolves real file path, to prevent storing multiple atlases for the same file.
+    const auto realFontFilename = fontFileName;  // resolves real file path, to prevent storing multiple atlases for the same file.
     std::string atlasName{subTextureKey};
     atlasName.append(" ", 1).append(realFontFilename);
 
@@ -125,8 +123,7 @@ FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, std::s
 
 FontAtlas* FontAtlasCache::getFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated)
 {
-    const auto realFontFilename = FileUtils::getInstance()->getNewFilename(
-        fontFileName);  // resolves real file path, to prevent storing multiple atlases for the same file.
+    const auto realFontFilename = fontFileName;  // resolves real file path, to prevent storing multiple atlases for the same file.
     char keyPrefix[ATLAS_MAP_KEY_PREFIX_BUFFER_SIZE];
     snprintf(keyPrefix, ATLAS_MAP_KEY_PREFIX_BUFFER_SIZE, "%.2f %.2f ", imageRect.origin.x, imageRect.origin.y);
     std::string atlasName(keyPrefix);

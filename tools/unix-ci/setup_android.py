@@ -28,9 +28,9 @@ COCOS2D_X = os.path.abspath(os.path.join(DIR_PATH, "../.."))
 ROOT_DIR = os.path.abspath(os.path.join(COCOS2D_X, ".."))
 
 # cmdlinetools download page: https://developer.android.com/studio#command-tools
-# commandlinetools-linux-8092744_latest.zip
-CMDLINETOOLS_REV = "8092744"
-NDK_VER = "19.2.5345600" # "r19c"
+# commandlinetools-win-8512546_latest.zip
+CMDLINETOOLS_REV = "8512546"
+NDK_VER = "23.2.8568313" # "r23c LTS"
 
 # ANDROID_NDK = os.path.join(ROOT_DIR, "android-ndk-" + NDK_VER)
 ANDROID_SDK = os.path.join(ROOT_DIR, "android-sdk")

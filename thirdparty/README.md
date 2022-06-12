@@ -80,6 +80,11 @@
 - Version: git d78c3d2
 - License: MIT
 
+## GHC (iOS devices only)
+- Upstream: https://github.com/gulrak/filesystem
+- Version: 1.5.12
+- License: MIT
+
 ## jni.hpp
 - Upstream: https://github.com/mapbox/jni.hpp
 - Version: v4.0.0

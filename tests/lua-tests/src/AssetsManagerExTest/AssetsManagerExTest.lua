@@ -78,11 +78,11 @@ function AMTestScene1.create()
                     local strInfo = ""
 
                     if assetId == cc.AssetsManagerExStatic.VERSION_ID then
-                        strInfo = string.format("Version file: %d%%", percent)
+                        strInfo = string.format("Version file: %.3f%%", percent)
                     elseif assetId == cc.AssetsManagerExStatic.MANIFEST_ID then
-                        strInfo = string.format("Manifest file: %d%%", percent)
+                        strInfo = string.format("Manifest file: %.3f%%", percent)
                     else
-                        strInfo = string.format("%d%%", percent)
+                        strInfo = string.format("%.3f%%", percent)
                     end
                     progress:setString(strInfo)
                 elseif eventCode == cc.EventAssetsManagerEx.EventCode.ERROR_DOWNLOAD_MANIFEST or 

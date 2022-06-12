@@ -171,8 +171,9 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     	Log.d(TAG, "onResume()");
         paused = false;
         super.onResume();
-        this.hideVirtualButton();
-       	resumeIfHasFocus();
+       	if (this.hasFocus) {
+            resume();
+        }
     }
     
     @Override
@@ -181,7 +182,15 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         super.onWindowFocusChanged(hasFocus);
         
         this.hasFocus = hasFocus;
-        resumeIfHasFocus();
+        if (this.hasFocus && !paused) {
+            resume();
+        }
+    }
+
+    private void resume() {
+        this.hideVirtualButton();
+        Cocos2dxHelper.onResume();
+        mGLSurfaceView.onResume();
     }
     
     private void resumeIfHasFocus() {
@@ -190,9 +199,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         boolean readyToPlay = !isDeviceLocked() && !isDeviceAsleep();
 
         if(hasFocus && readyToPlay) {
-            this.hideVirtualButton();
-        	Cocos2dxHelper.onResume();
-        	mGLSurfaceView.onResume();
+            resume();
         }
     }
 
