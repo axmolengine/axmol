@@ -2357,6 +2357,9 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
     desc.points = std::move(points);
 
     iter->second = desc;
+
+    CCLOG("Particle emission mask '%s' baked (%dx%d), %d samples generated taking %.2fmb of memory.",
+          std::string(maskName).c_str(), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 
 const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(std::string_view maskName)
@@ -2364,7 +2367,7 @@ const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask
     auto iter = this->masks.find(maskName);
     if (iter == this->masks.end())
     {
-        ParticleEmissionMaskDescriptor desc;
+        ParticleEmissionMaskDescriptor desc{};
         desc.size   = {float(1), float(1)};
         desc.points = {{0, 0}};
         return desc;
