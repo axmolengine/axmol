@@ -405,7 +405,7 @@ std::string getDataMD5Hash(const Data& data)
     return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
 }
 
-CC_DLL std::string computeDigest(std::string_view data, std::string_view algorithm)
+std::string computeDigest(std::string_view data, std::string_view algorithm)
 {
     const EVP_MD* md                       = nullptr;
     unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
