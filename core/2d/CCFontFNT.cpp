@@ -756,7 +756,7 @@ FontAtlas* FontFNT::newFontAtlas()
     }
 
     // add the texture
-    tempAtlas->addTexture(tempTexture, 0);
+    tempAtlas->setTexture(0, tempTexture);
 
     // done
     return tempAtlas;

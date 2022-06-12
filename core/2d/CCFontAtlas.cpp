@@ -30,6 +30,7 @@
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #    include "platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 #endif
+#include <algorithm>
 #include "2d/CCFontFreeType.h"
 #include "base/ccUTF8.h"
 #include "base/CCDirector.h"
@@ -55,15 +56,29 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
         _fontAscender     = _fontFreeType->getFontAscender();
         _letterEdgeExtend = 2;
 
-        if (_fontFreeType->isDistanceFieldEnabled())
-        {
-            _letterPadding += 2 * FontFreeType::DistanceMapSpread;
-        }
-
         auto outlineSize = _fontFreeType->getOutlineSize();
         if (outlineSize > 0)
         {
+            _strideShift         = 1;
+            _pixelFormat         = backend::PixelFormat::LA8;
+            _currentPageDataSize = CacheTextureWidth * CacheTextureHeight << _strideShift;
+
+#if defined(CC_USE_METAL)
+            _currentPageDataSizeRGBA = CacheTextureWidth * CacheTextureHeight * 4;
+#endif
+
             _lineHeight += 2 * outlineSize;
+        }
+        else
+        {
+            _strideShift         = 0;
+            _pixelFormat         = backend::PixelFormat::A8;
+            _currentPageDataSize = CacheTextureWidth * CacheTextureHeight;
+        }
+
+        if (_fontFreeType->isDistanceFieldEnabled())
+        {
+            _letterPadding += 2 * FontFreeType::DistanceMapSpread;
         }
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -78,37 +93,17 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
 
 void FontAtlas::reinit()
 {
-    if (_currentPageData)
-    {
-        delete[] _currentPageData;
-        _currentPageData = nullptr;
-    }
+    if (!_currentPageData)
+        _currentPageData = new uint8_t[_currentPageDataSize];
+    _currentPage     = -1;
 
-    CC_SAFE_DELETE_ARRAY(_currentPageDataRGBA);
+#if defined(CC_USE_METAL)
+    if (_strideShift && !_currentPageDataRGBA)
+        _currentPageDataRGBA = new uint8_t[_currentPageDataSizeRGBA];
+#endif
 
-    auto texture = new Texture2D;
-
-    _currentPageDataSize = CacheTextureWidth * CacheTextureHeight;
-
-    auto outlineSize = _fontFreeType->getOutlineSize();
-    if (outlineSize > 0)
-    {
-        _currentPageDataSize *= 2;
-
-        _currentPageDataSizeRGBA = _currentPageDataSize * 2;
-        _currentPageDataRGBA     = new unsigned char[_currentPageDataSizeRGBA];
-        memset(_currentPageDataRGBA, 0, _currentPageDataSizeRGBA);
-    }
-
-    _currentPageData = new unsigned char[_currentPageDataSize];
-    memset(_currentPageData, 0, _currentPageDataSize);
-
-    initTextureWithZeros(texture);
-
-    addTexture(texture, 0);
-    texture->release();
+    addNewPage();
 }
-
 FontAtlas::~FontAtlas()
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -123,30 +118,10 @@ FontAtlas::~FontAtlas()
     _font->release();
     releaseTextures();
 
-    delete[] _currentPageData;
-}
-
-void FontAtlas::initTextureWithZeros(Texture2D* texture)
-{
-    char* zeros = nullptr;
-    backend::PixelFormat pixelFormat;
-    float outlineSize = _fontFreeType->getOutlineSize();
-    size_t zeroBytes  = 0;
-    if (outlineSize > 0)
-    {
-        // metal do no support AI88 format
-        pixelFormat = backend::PixelFormat::RGBA8;
-        zeroBytes   = CacheTextureWidth * CacheTextureWidth * 4;
-    }
-    else
-    {
-        pixelFormat = backend::PixelFormat::A8;
-        zeroBytes   = CacheTextureWidth * CacheTextureWidth;
-    }
-    zeros = new char[zeroBytes]();
-    // std::fill(zeros, zeros + cnt, 0);
-    texture->initWithData(zeros, zeroBytes, pixelFormat, CacheTextureWidth, CacheTextureHeight);
-    delete[] zeros;
+    CC_SAFE_DELETE_ARRAY(_currentPageData);
+#if defined(CC_USE_METAL)
+    CC_SAFE_DELETE_ARRAY(_currentPageDataRGBA);
+#endif
 }
 
 void FontAtlas::reset()
@@ -154,7 +129,6 @@ void FontAtlas::reset()
     releaseTextures();
 
     _currLineHeight   = 0;
-    _currentPage      = 0;
     _currentPageOrigX = 0;
     _currentPageOrigY = 0;
     _letterDefinitions.clear();
@@ -222,44 +196,15 @@ bool FontAtlas::getLetterDefinitionForChar(char32_t utf32Char, FontLetterDefinit
 
 void FontAtlas::findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charset)
 {
-    std::u32string newChars;
-
-    // find new characters
     if (_letterDefinitions.empty())
     {
-        // fixed #16169: new android project crash in android 5.0.2 device (Nexus 7) when use 3.12.
-        // While using clang compiler with gnustl_static on android, the copy assignment operator of `std::u32string`
-        // will affect the memory validity, it means after `newChars` is destroyed, the memory of `u32Text` holds
-        // will be a dead region. `u32text` represents the variable in `Label::_utf32Text`, when somewhere
-        // allocates memory by `malloc, realloc, new, new[]`, the generated memory address may be the same
-        // as `Label::_utf32Text` holds. If doing a `memset` or other memory operations, the orignal `Label::_utf32Text`
-        // will be in an unknown state. Meanwhile, a bunch lots of logic which depends on `Label::_utf32Text`
-        // will be broken.
-
-        // newChars = u32Text;
-
-        // Using `append` method is a workaround for this issue. So please be carefuly while using the assignment
-        // operator of `std::u32string`.
-        newChars.append(u32Text);
+        std::copy(u32Text.begin(), u32Text.end(), std::inserter(charset, charset.end()));
     }
     else
     {
-        auto length = u32Text.length();
-        newChars.reserve(length);
-        for (size_t i = 0; i < length; ++i)
-        {
-            auto outIterator = _letterDefinitions.find(u32Text[i]);
-            if (outIterator == _letterDefinitions.end())
-            {
-                newChars.push_back(u32Text[i]);
-            }
-        }
-    }
-
-    if (!newChars.empty())
-    {
-        for (auto u32Code : newChars)
-            charset.insert(u32Code);
+        for (auto charCode : u32Text)
+            if (_letterDefinitions.find(charCode) == _letterDefinitions.end())
+                charset.insert(charCode);
     }
 }
 
@@ -282,14 +227,14 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     int adjustForDistanceMap = _letterPadding / 2;
     int adjustForExtend      = _letterEdgeExtend / 2;
-    int32_t bitmapWidth;
-    int32_t bitmapHeight;
+    int32_t bitmapWidth      = 0;
+    int32_t bitmapHeight     = 0;
     int glyphHeight;
     Rect tempRect;
     FontLetterDefinition tempDef;
 
     auto scaleFactor = CC_CONTENT_SCALE_FACTOR();
-    auto pixelFormat = _fontFreeType->getOutlineSize() > 0 ? backend::PixelFormat::LA8 : backend::PixelFormat::A8;
+    auto pixelFormat = _pixelFormat;
 
     int startY = (int)_currentPageOrigY;
 
@@ -314,25 +259,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                     updateTextureContent(pixelFormat, startY);
 
                     startY = 0;
-
-                    _currentPageOrigY = 0;
-                    memset(_currentPageData, 0, _currentPageDataSize);
-                    _currentPage++;
-                    auto tex = new Texture2D;
-
-                    initTextureWithZeros(tex);
-
-                    if (_antialiasEnabled)
-                    {
-                        tex->setAntiAliasTexParameters();
-                    }
-                    else
-                    {
-                        tex->setAliasTexParameters();
-                    }
-                    addTexture(tex, _currentPage);
-
-                    tex->release();
+                    addNewPage();
                 }
             }
             glyphHeight = static_cast<int>(bitmapHeight) + _letterPadding + _letterEdgeExtend;
@@ -353,9 +280,11 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             tempDef.U       = tempDef.U / scaleFactor;
             tempDef.V       = tempDef.V / scaleFactor;
             tempDef.rotated = false;
+
+            updateTextureContent(pixelFormat, startY);
         }
         else
-        {
+        {  // don't render anythings
             if (bitmap)
                 delete[] bitmap;
             if (tempDef.xAdvance)
@@ -377,15 +306,18 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
         _letterDefinitions[charCode] = tempDef;
     }
 
-    updateTextureContent(pixelFormat, startY);
     return true;
 }
 
 void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
 {
+#if !defined(CC_USE_METAL)
+    auto data = _currentPageData + (CacheTextureWidth * (int)startY << _strideShift);
+    _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, CacheTextureWidth,
+                                                    (int)_currentPageOrigY - startY + _currLineHeight);
+#else
     unsigned char* data = nullptr;
-    auto outlineSize    = _fontFreeType->getOutlineSize();
-    if (outlineSize > 0 && format == backend::PixelFormat::LA8)
+    if (_strideShift)
     {
         int nLen = CacheTextureWidth * ((int)_currentPageOrigY - startY + _currLineHeight);
         data     = _currentPageData + CacheTextureWidth * (int)startY * 2;
@@ -404,9 +336,44 @@ void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
         _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, CacheTextureWidth,
                                                         (int)_currentPageOrigY - startY + _currLineHeight);
     }
+#endif
 }
 
-void FontAtlas::addTexture(Texture2D* texture, int slot)
+void FontAtlas::addNewPage()
+{
+    auto texture = new Texture2D();
+
+    memset(_currentPageData, 0, _currentPageDataSize);
+
+#if !defined(CC_USE_METAL)
+    texture->initWithData(_currentPageData, _currentPageDataSize, _pixelFormat, CacheTextureWidth, CacheTextureHeight);
+#else
+    if (_strideShift)
+    {
+        memset(_currentPageDataRGBA, 0, _currentPageDataSizeRGBA);
+        texture->initWithData(_currentPageDataRGBA, _currentPageDataSizeRGBA, backend::PixelFormat::RGBA8,
+                              CacheTextureWidth, CacheTextureHeight);
+    }
+    else
+    {
+        texture->initWithData(_currentPageData, _currentPageDataSize, _pixelFormat, CacheTextureWidth,
+                              CacheTextureHeight);
+    }
+#endif
+
+    if (_antialiasEnabled)
+        texture->setAntiAliasTexParameters();
+    else
+        texture->setAliasTexParameters();
+
+    setTexture(++_currentPage, texture);
+    texture->release();
+
+    _currentPageOrigY = 0;
+
+}
+
+void FontAtlas::setTexture(unsigned int slot, Texture2D* texture)
 {
     texture->retain();
     _atlasTextures[slot] = texture;
