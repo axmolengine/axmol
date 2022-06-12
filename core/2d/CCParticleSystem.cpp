@@ -2367,10 +2367,10 @@ const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask
     auto iter = this->masks.find(maskName);
     if (iter == this->masks.end())
     {
-        ParticleEmissionMaskDescriptor desc{};
-        desc.size   = {float(1), float(1)};
-        desc.points = {{0, 0}};
-        return desc;
+        iter = this->masks.emplace(maskName, ParticleEmissionMaskDescriptor{}).first;
+        iter->second.size   = {float(1), float(1)};
+        iter->second.points = {{0, 0}};
+        return iter->second;
     }
     return iter->second;
 }
