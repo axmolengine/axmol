@@ -69,6 +69,10 @@ enum class EmissionShapeType
     ALPHA_MASK
 };
 
+/**
+ * Particle emission mask descriptor.
+ * @since adxe-1.0.0b7
+ */
 struct ParticleEmissionMaskDescriptor
 {
     Vec2 size;
@@ -253,27 +257,63 @@ public:
     }
 };
 
+/**
+ * Particle emission mask cache.
+ * @since adxe-1.0.0b7
+ */
 class CC_DLL ParticleEmissionMaskCache : public cocos2d::Ref
 {
 public:
     static ParticleEmissionMaskCache* getInstance();
 
+    /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
+     * If the mask already exists then it will be overwritten.
+     *
+     * @param maskName The name that identifies the mask.
+     * @param texturePath Path of the texture that holds alpha data.
+     * @param alphaThreshold The threshold at which pixels are picked, If a pixel's alpha channel is greater than
+     * alphaThreshold then it will be picked.
+     * @param inverted Inverts the pick condition so that If a pixel's alpha channel is lower than alphaThreshold then
+     * it will be picked.
+     */
     void bakeEmissionMask(std::string_view maskName,
                           std::string_view texturePath,
                           float alphaThreshold = 0.5F,
                           bool inverted        = false);
 
+    /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
+     * If the mask already exists then it will be overwritten.
+     *
+     * @param maskName The name that identifies the mask.
+     * @param imageTexture Image object containing texture data with alpha channel.
+     * @param alphaThreshold The threshold at which pixels are picked, If a pixel's alpha channel is greater than
+     * alphaThreshold then it will be picked.
+     * @param inverted Inverts the pick condition so that If a pixel's alpha channel is lower than alphaThreshold then
+     * it will be picked.
+     */
     void bakeEmissionMask(std::string_view maskName,
                           Image* imageTexture,
                           float alphaThreshold = 0.5F,
                           bool inverted        = false);
 
+    /** Returns a baked mask with the specified name if it exists. otherwise, it will return a dummy mask.
+     *
+     * @param maskName The name that identifies the mask.
+     */
     const ParticleEmissionMaskDescriptor& getEmissionMask(std::string_view maskName);
 
-    void releaseMaskFromMemory(std::string_view maskName);
-    void releaseAllMasksFromMemory();
+    /** Deletes a baked mask and releases the data from memory with the specified name if it exists.
+     *
+     * @param maskName The name that identifies the mask.
+     */
+    void deleteMask(std::string_view maskName);
 
+    /** Deletes all baked masks and releases their data from memory. */
+    void deleteAllMasks();
+
+private:
     hlookup::string_map<ParticleEmissionMaskDescriptor> masks;
+
 };
 
 // typedef void (*CC_UPDATE_PARTICLE_IMP)(id, SEL, tParticle*, Vec2);

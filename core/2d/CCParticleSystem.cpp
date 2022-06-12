@@ -2375,12 +2375,12 @@ const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask
     return iter->second;
 }
 
-void ParticleEmissionMaskCache::releaseMaskFromMemory(std::string_view maskName)
+void ParticleEmissionMaskCache::deleteMask(std::string_view maskName)
 {
     this->masks.erase(maskName);
 }
 
-void ParticleEmissionMaskCache::releaseAllMasksFromMemory()
+void ParticleEmissionMaskCache::deleteAllMasks()
 {
     this->masks.clear();
 }
