@@ -40,10 +40,13 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
-bool FontFreeType::_FTInitialized           = false;
-bool FontFreeType::_streamParsingEnabled    = true;
-bool FontFreeType::_doNativeBytecodeHinting = true;
-const int FontFreeType::DistanceMapSpread   = 6;
+bool FontFreeType::_FTInitialized            = false;
+bool FontFreeType::_streamParsingEnabled     = true;
+bool FontFreeType::_doNativeBytecodeHinting  = true;
+const int FontFreeType::DistanceMapSpread    = 6;
+
+// By default, will render square when character glyph missing in current font
+char32_t FontFreeType::_mssingGlyphCharacter = 0;
 
 using namespace std::string_view_literals;
 constexpr std::string_view _glyphASCII =
@@ -234,7 +237,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         // store the face globally
         _fontFace = face;
         _fontSize = fontSize;
-		_fontName = fontPath;
+        _fontName = fontPath;
 
         // Notes:
         //  a. Since freetype 2.8.1 the TT matrics isn't sync to size_matrics, see the function 'tt_size_request' in
@@ -397,7 +400,15 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
                 charUTF8 = "\\n";
             cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
                          charUTF8.c_str());
-            return nullptr;
+
+            if (_mssingGlyphCharacter != 0)
+            {
+                if (_mssingGlyphCharacter == 0x1A)
+                    return nullptr;  // don't render anything for this character
+
+                // Try get new glyph index with missing glyph character code
+                glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(_mssingGlyphCharacter));
+            }
         }
 #endif
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))

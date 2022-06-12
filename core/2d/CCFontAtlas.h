@@ -81,14 +81,18 @@ public:
 
     bool prepareLetterDefinitions(const std::u32string& utf16String);
 
-    const std::unordered_map<ssize_t, Texture2D*>& getTextures() const { return _atlasTextures; }
-    void addTexture(Texture2D* texture, int slot);
+    const std::unordered_map<unsigned int, Texture2D*>& getTextures() const { return _atlasTextures; }
+
+    void addNewPage();
+
+    void setTexture(unsigned int slot, Texture2D* texture);
+    Texture2D* getTexture(int slot);
+
     float getLineHeight() const { return _lineHeight; }
     void setLineHeight(float newHeight);
 
     std::string_view getFontName() const;
 
-    Texture2D* getTexture(int slot);
     const Font* getFont() const { return _font; }
 
     /** listen the event that renderer was recreated on Android/WP8
@@ -122,8 +126,6 @@ protected:
 
     void findNewCharacters(const std::u32string& u32Text, std::unordered_set<char32_t>& charCodeSet);
 
-    void initTextureWithZeros(Texture2D* texture);
-
     /**
      * Scale each font letter by scaleFactor.
      *
@@ -133,22 +135,29 @@ protected:
 
     void updateTextureContent(backend::PixelFormat format, int startY);
 
-    std::unordered_map<ssize_t, Texture2D*> _atlasTextures;
+    std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;
     float _lineHeight           = 0.f;
     Font* _font                 = nullptr;
     FontFreeType* _fontFreeType = nullptr;
 
     // Dynamic GlyphCollection related stuff
-    int _currentPage                    = 0;
-    unsigned char* _currentPageData     = nullptr;
-    unsigned char* _currentPageDataRGBA = nullptr;
-    int _currentPageDataSize            = 0;
-    int _currentPageDataSizeRGBA        = 0;
-    float _currentPageOrigX             = 0;
-    float _currentPageOrigY             = 0;
-    int _letterPadding                  = 0;
-    int _letterEdgeExtend               = 0;
+    int _currentPage                  = -1;
+    backend::PixelFormat _pixelFormat = backend::PixelFormat::NONE;
+    int _strideShift                  = 0;
+    uint8_t* _currentPageData         = nullptr;
+    int _currentPageDataSize          = 0;
+#if defined(CC_USE_METAL)
+    // Notes: 
+    // Metal backend doesn't support PixelFormat::LA8
+    // Currently we use RGBA for texture data upload
+    uint8_t* _currentPageDataRGBA = nullptr;
+    int _currentPageDataSizeRGBA  = 0;
+#endif
+    float _currentPageOrigX = 0;
+    float _currentPageOrigY = 0;
+    int _letterPadding      = 0;
+    int _letterEdgeExtend   = 0;
 
     int _fontAscender                               = 0;
     EventListenerCustom* _rendererRecreatedListener = nullptr;

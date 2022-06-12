@@ -63,6 +63,8 @@ public:
     static void setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
     static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
 
+    static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
+
     /*
     **TrueType fonts with native bytecode hinting**
     *
@@ -113,6 +115,7 @@ private:
     static bool _FTInitialized;
     static bool _streamParsingEnabled;
     static bool _doNativeBytecodeHinting;
+    static char32_t _mssingGlyphCharacter;
 
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
