@@ -861,11 +861,9 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
                 Vec2 point = {0, 0};
 
-                {
-                    int rand0 = RANDOM_KISS_ABS() * mask.points.size();
-                    int index = MIN(rand0, mask.points.size() - 1);
-                    point = mask.points[index];
-                }
+                int rand0 = RANDOM_KISS_ABS() * mask.points.size();
+                int index = MIN(rand0, mask.points.size() - 1);
+                point = mask.points[index];
 
                 point -= size / 2;
 
