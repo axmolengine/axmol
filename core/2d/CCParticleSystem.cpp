@@ -2314,20 +2314,22 @@ ParticleEmissionMaskCache* ParticleEmissionMaskCache::getInstance()
 void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
                                                  std::string_view texturePath,
                                                  float alphaThreshold,
-                                                 bool inverted)
+                                                 bool inverted,
+                                                 int inbetweenSamples)
 {
     auto img = new Image();
     img->Image::initWithImageFile(texturePath);
     img->autorelease();
 
     CCASSERT(img, "image texture was nullptr.");
-    bakeEmissionMask(maskName, img, alphaThreshold, inverted);
+    bakeEmissionMask(maskName, img, alphaThreshold, inverted, inbetweenSamples);
 }
 
 void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
                                                  Image* imageTexture,
                                                  float alphaThreshold,
-                                                 bool inverted)
+                                                 bool inverted,
+                                                 int inbetweenSamples)
 {
     auto img = imageTexture;
     CCASSERT(img, "image texture was nullptr.");
@@ -2339,14 +2341,28 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
     auto w    = img->getWidth();
     auto h    = img->getHeight();
 
-    for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
-    {
-        float a = data[(y * w + x) * 4 + 3] / 255.0F;
-        if (a >= alphaThreshold && !inverted)
-            points.push_back({float(x), float(h - y)});
-        if (a < alphaThreshold && inverted)
-            points.push_back({float(x), float(h - y)});
-    }
+    for (int y = 0; y < h; y++)
+        for (int x = 0; x < w; x++)
+        {
+            if (inbetweenSamples > 1)
+            {
+                float a = data[(y * w + x) * 4 + 3] / 255.0F;
+                if (a >= alphaThreshold && !inverted)
+                    for (float i = 0; i < 1.0F; i += 1.0F / inbetweenSamples)
+                        points.push_back({float(x + i), float(h - y + i)});
+                if (a < alphaThreshold && inverted)
+                    for (float i = 0; i < 1.0F; i += 1.0F / inbetweenSamples)
+                        points.push_back({float(x + i), float(h - y + i)});
+            }
+            else
+            {
+                float a = data[(y * w + x) * 4 + 3] / 255.0F;
+                if (a >= alphaThreshold && !inverted)
+                    points.push_back({float(x), float(h - y)});
+                if (a < alphaThreshold && inverted)
+                    points.push_back({float(x), float(h - y)});
+            }
+        }
 
     auto iter = this->masks.find(maskName);
     if (iter == this->masks.end())
@@ -2375,12 +2391,12 @@ const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask
     return iter->second;
 }
 
-void ParticleEmissionMaskCache::deleteMask(std::string_view maskName)
+void ParticleEmissionMaskCache::removeMask(std::string_view maskName)
 {
     this->masks.erase(maskName);
 }
 
-void ParticleEmissionMaskCache::deleteAllMasks()
+void ParticleEmissionMaskCache::removeAllMasks()
 {
     this->masks.clear();
 }

@@ -275,11 +275,14 @@ public:
      * alphaThreshold then it will be picked.
      * @param inverted Inverts the pick condition so that If a pixel's alpha channel is lower than alphaThreshold then
      * it will be picked.
+     * @param inbetweenSamples How many times should pixels be filled inbetween, this value should be increased If
+     * you're planning to scale the emission shape up. WARNING: it will use more memory.
      */
     void bakeEmissionMask(std::string_view maskName,
                           std::string_view texturePath,
                           float alphaThreshold = 0.5F,
-                          bool inverted        = false);
+                          bool inverted        = false,
+                          int inbetweenSamples = 1);
 
     /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
      * If the mask already exists then it will be overwritten.
@@ -290,11 +293,14 @@ public:
      * alphaThreshold then it will be picked.
      * @param inverted Inverts the pick condition so that If a pixel's alpha channel is lower than alphaThreshold then
      * it will be picked.
+     * @param inbetweenSamples How many times should pixels be filled inbetween, this value should be increased If
+     * you're planning to scale the emission shape up. WARNING: it will use more memory.
      */
     void bakeEmissionMask(std::string_view maskName,
                           Image* imageTexture,
                           float alphaThreshold = 0.5F,
-                          bool inverted        = false);
+                          bool inverted        = false,
+                          int inbetweenSamples = 1);
 
     /** Returns a baked mask with the specified name if it exists. otherwise, it will return a dummy mask.
      *
@@ -302,14 +308,14 @@ public:
      */
     const ParticleEmissionMaskDescriptor& getEmissionMask(std::string_view maskName);
 
-    /** Deletes a baked mask and releases the data from memory with the specified name if it exists.
+    /** Removes a baked mask and releases the data from memory with the specified name if it exists.
      *
      * @param maskName The name that identifies the mask.
      */
-    void deleteMask(std::string_view maskName);
+    void removeMask(std::string_view maskName);
 
-    /** Deletes all baked masks and releases their data from memory. */
-    void deleteAllMasks();
+    /** Remove all baked masks and releases their data from memory. */
+    void removeAllMasks();
 
 private:
     hlookup::string_map<ParticleEmissionMaskDescriptor> masks;
