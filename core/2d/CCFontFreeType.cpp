@@ -40,10 +40,10 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
-bool FontFreeType::_FTInitialized            = false;
-bool FontFreeType::_streamParsingEnabled     = true;
-bool FontFreeType::_doNativeBytecodeHinting  = true;
-const int FontFreeType::DistanceMapSpread    = 6;
+bool FontFreeType::_FTInitialized           = false;
+bool FontFreeType::_streamParsingEnabled    = true;
+bool FontFreeType::_doNativeBytecodeHinting = true;
+const int FontFreeType::DistanceMapSpread   = 6;
 
 // By default, will render square when character glyph missing in current font
 char32_t FontFreeType::_mssingGlyphCharacter = 0;
@@ -571,28 +571,16 @@ void FontFreeType::renderCharAt(unsigned char* dest,
                                 int32_t bitmapWidth,
                                 int32_t bitmapHeight)
 {
-    int iX = posX;
+    const int iX = posX;
     int iY = posY;
 
     if (_outlineSize > 0)
     {
-        unsigned char tempChar;
         for (int32_t y = 0; y < bitmapHeight; ++y)
         {
             int32_t bitmap_y = y * bitmapWidth;
-
-            for (int x = 0; x < bitmapWidth; ++x)
-            {
-                tempChar                                                 = bitmap[(bitmap_y + x) * 2];
-                dest[(iX + (iY * FontAtlas::CacheTextureWidth)) * 2]     = tempChar;
-                tempChar                                                 = bitmap[(bitmap_y + x) * 2 + 1];
-                dest[(iX + (iY * FontAtlas::CacheTextureWidth)) * 2 + 1] = tempChar;
-
-                iX += 1;
-            }
-
-            iX = posX;
-            iY += 1;
+            memcpy(dest + (iX + (iY * FontAtlas::CacheTextureWidth)) * 2, bitmap + bitmap_y * 2, bitmapWidth * 2);
+            ++iY;
         }
         delete[] bitmap;
     }
@@ -601,19 +589,8 @@ void FontFreeType::renderCharAt(unsigned char* dest,
         for (int32_t y = 0; y < bitmapHeight; ++y)
         {
             int32_t bitmap_y = y * bitmapWidth;
-
-            for (int x = 0; x < bitmapWidth; ++x)
-            {
-                unsigned char cTemp = bitmap[bitmap_y + x];
-
-                // the final pixel
-                dest[(iX + (iY * FontAtlas::CacheTextureWidth))] = cTemp;
-
-                iX += 1;
-            }
-
-            iX = posX;
-            iY += 1;
+            memcpy(dest + (iX + (iY * FontAtlas::CacheTextureWidth)), bitmap + bitmap_y, bitmapWidth);
+            ++iY;
         }
     }
 }
