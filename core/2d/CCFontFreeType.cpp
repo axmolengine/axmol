@@ -27,15 +27,21 @@ THE SOFTWARE.
 
 #include "2d/CCFontFreeType.h"
 
-#include "freetype/ftfntfmt.h"
 
-#include FT_BBOX_H
+
+
 #include "2d/CCFontAtlas.h"
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
 #include "freetype/ftmodapi.h"
 #include "platform/CCFileUtils.h"
 #include "platform/CCFileStream.h"
+
+#include "ft2build.h"
+#include FT_FREETYPE_H
+#include FT_STROKER_H
+#include FT_BBOX_H
+#include FT_FONT_FORMATS_H
 
 NS_CC_BEGIN
 
@@ -151,6 +157,7 @@ FT_Library FontFreeType::getFTLibrary()
 // clang-format off
 FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outline /* = 0 */)
 : _fontFace(nullptr)
+, _fontStream(nullptr)
 , _stroker(nullptr)
 , _distanceFieldEnabled(distanceFieldEnabled)
 , _outlineSize(0.0f)
@@ -172,6 +179,28 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 }
 // clang-format on
 
+FontFreeType::~FontFreeType()
+{
+    if (_FTInitialized)
+    {
+        if (_stroker)
+            FT_Stroker_Done(_stroker);
+
+        if (_fontFace)
+            FT_Done_Face(_fontFace);
+    }
+
+    delete _fontStream;
+
+    auto iter = s_cacheFontData.find(_fontName);
+    if (iter != s_cacheFontData.end())
+    {
+        iter->second.referenceCount -= 1;
+        if (iter->second.referenceCount == 0)
+            s_cacheFontData.erase(iter);
+    }
+}
+
 bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 {
     FT_Face face;
@@ -187,20 +216,20 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
             return false;
         }
 
-        std::unique_ptr<FT_StreamRec> fts(new FT_StreamRec());
+        FT_Stream fts           = new FT_StreamRec{};
         fts->read               = ft_stream_read_callback;
         fts->close              = ft_stream_close_callback;
         fts->size               = static_cast<unsigned long>(fs->size());
         fts->descriptor.pointer = fs.release();  // transfer ownership to FT_Open_Face
 
-        FT_Open_Args args = {0};
+        FT_Open_Args args = {};
         args.flags        = FT_OPEN_STREAM;
-        args.stream       = fts.get();
+        args.stream       = fts;
+
+        _fontStream = fts;
 
         if (FT_Open_Face(getFTLibrary(), &args, 0, &face))
             return false;
-
-        _fontStream = std::move(fts);
     }
     else
     {
@@ -272,31 +301,6 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 
     cocos2d::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
     return false;
-}
-
-FontFreeType::~FontFreeType()
-{
-    if (_FTInitialized)
-    {
-        if (_stroker)
-        {
-            FT_Stroker_Done(_stroker);
-        }
-        if (_fontFace)
-        {
-            FT_Done_Face(_fontFace);
-        }
-    }
-
-    auto iter = s_cacheFontData.find(_fontName);
-    if (iter != s_cacheFontData.end())
-    {
-        iter->second.referenceCount -= 1;
-        if (iter->second.referenceCount == 0)
-        {
-            s_cacheFontData.erase(iter);
-        }
-    }
 }
 
 FontAtlas* FontFreeType::newFontAtlas()
@@ -374,8 +378,8 @@ const char* FontFreeType::getFontFamily() const
 }
 
 unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
-                                            int32_t& outWidth,
-                                            int32_t& outHeight,
+                                            int& outWidth,
+                                            int& outHeight,
                                             Rect& outRect,
                                             int& xAdvance)
 {
@@ -568,8 +572,8 @@ void FontFreeType::renderCharAt(unsigned char* dest,
                                 int posX,
                                 int posY,
                                 unsigned char* bitmap,
-                                int32_t bitmapWidth,
-                                int32_t bitmapHeight)
+                                int bitmapWidth,
+                                int bitmapHeight)
 {
     const int iX = posX;
     int iY = posY;
