@@ -244,7 +244,7 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
     if (_zoomFactorFarPlane == 1024)
         _zoomFactorFarPlane = farPlane;
     if (_zoomFactorNearPlane == 10)
-        _zoomFactorFarPlane = nearPlane;
+        _zoomFactorNearPlane = nearPlane;
 
     Mat4::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
