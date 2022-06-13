@@ -26,10 +26,6 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "2d/CCFontFreeType.h"
-
-
-
-
 #include "2d/CCFontAtlas.h"
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
@@ -216,7 +212,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
             return false;
         }
 
-        FT_Stream fts           = new FT_StreamRec{};
+        FT_Stream fts           = new FT_StreamRec();
         fts->read               = ft_stream_read_callback;
         fts->close              = ft_stream_close_callback;
         fts->size               = static_cast<unsigned long>(fs->size());
@@ -345,13 +341,13 @@ int* FontFreeType::getHorizontalKerningForTextUTF32(const std::u32string& text, 
 int FontFreeType::getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const
 {
     // get the ID to the char we need
-    int glyphIndex1 = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(firstChar));
+    auto glyphIndex1 = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(firstChar));
 
     if (!glyphIndex1)
         return 0;
 
     // get the ID to the char we need
-    int glyphIndex2 = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(secondChar));
+    auto glyphIndex2 = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(secondChar));
 
     if (!glyphIndex2)
         return 0;
