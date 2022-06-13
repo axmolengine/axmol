@@ -404,7 +404,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
             if (_mssingGlyphCharacter != 0)
             {
                 if (_mssingGlyphCharacter == 0x1A)
-                    return nullptr;  // don't render anything for this character
+                    break;  // don't render anything for this character
 
                 // Try get new glyph index with missing glyph character code
                 glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(_mssingGlyphCharacter));
