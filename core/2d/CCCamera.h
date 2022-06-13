@@ -398,7 +398,9 @@ protected:
     float _eyeZdistance; // Z eye projection distance for 2D in 3D projection.
     float _zoomFactor; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
     float _zoomFactorFarPlane;
+    float _zoomFactorNearPlane;
     Vec2 _positionCenter;
+    bool _isCameraInitialized;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };

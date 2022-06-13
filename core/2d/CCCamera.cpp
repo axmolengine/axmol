@@ -97,8 +97,10 @@ Camera::Camera()
     , _zoomFactor(1)
     , _nearPlane(-1024)
     , _farPlane(1024)
+    , _zoomFactorNearPlane(10)
     , _zoomFactorFarPlane(1024)
     , _positionCenter({0, 0})
+    , _isCameraInitialized(false)
 {
     // minggo comment
     // _frustum.setClipZ(true);
@@ -184,7 +186,18 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 
 bool Camera::initDefault()
 {
-    _projectionType = _director->getProjection();
+    if (_projectionType != _director->getProjection())
+    {
+        _projectionType = _director->getProjection();
+        _isCameraInitialized = false;
+    }
+
+    if (_isCameraInitialized)
+    {
+        applyCustomProperties();
+        return true;
+    }
+    _isCameraInitialized = true;
 
     auto& size = _director->getWinSize();
     // create default camera
@@ -201,7 +214,7 @@ bool Camera::initDefault()
     {
         float zeye = _director->getZEye();
         initPerspective(60, (float)size.width / size.height, 10, zeye + size.height / 2.0f);
-        Vec3 eye(size.width / 2, size.height / 2.0f, zeye), center(size.width / 2, size.height / 2, 0.0f),
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
             up(0.0f, 1.0f, 0.0f);
         _eyeZdistance = eye.z;
         setPosition3D(eye);
@@ -213,7 +226,11 @@ bool Camera::initDefault()
         break;
     }
     if (_zoomFactor != 1.0F)
+    {
         applyZoom();
+        if (_projectionType == Director::Projection::_2D)
+            setPositionCenter(_positionCenter);
+    }
     return true;
 }
 
@@ -223,8 +240,12 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
     _aspectRatio        = aspectRatio;
     _nearPlane          = nearPlane;
     _farPlane           = farPlane;
+
     if (_zoomFactorFarPlane == 1024)
         _zoomFactorFarPlane = farPlane;
+    if (_zoomFactorNearPlane == 10)
+        _zoomFactorFarPlane = nearPlane;
+
     Mat4::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
@@ -369,11 +390,21 @@ void Camera::setDepth(int8_t depth)
 
 void Camera::setZoom(float factor)
 {
-    // Stretch the far plane further the more we zoom out.
-    if (_projectionType == Director::Projection::_3D && _zoomFactorFarPlane * factor > _farPlane)
+    if (_projectionType == Director::Projection::_3D)
     {
-        _farPlane = _zoomFactorFarPlane * factor;
-        applyCustomProperties();
+        // Push the far plane farther the more we zoom out.
+        if (_zoomFactorFarPlane * factor > _farPlane)
+        {
+            _farPlane = _zoomFactorFarPlane * factor;
+            applyCustomProperties();
+        }
+
+        // Push the near plane closer the more we zoom in.
+        if (_zoomFactorNearPlane * factor < _nearPlane)
+        {
+            _nearPlane = _zoomFactorNearPlane * factor;
+            applyCustomProperties();
+        }
     }
 
     _zoomFactor = factor;
@@ -414,7 +445,13 @@ void Camera::applyZoom()
 
 void Camera::applyCustomProperties()
 {
-    _projectionType = _director->getProjection();
+    if (_projectionType != _director->getProjection())
+    {
+        _projectionType = _director->getProjection();
+        _isCameraInitialized = false;
+        initDefault();
+        return;
+    }
 
     auto& size = _director->getWinSize();
     // create default camera
@@ -431,7 +468,7 @@ void Camera::applyCustomProperties()
     {
         float zeye = _director->getZEye();
         initPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-        Vec3 eye(size.width / 2, size.height / 2.0f, zeye), center(size.width / 2, size.height / 2, 0.0f),
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
             up(0.0f, 1.0f, 0.0f);
         _eyeZdistance = eye.z;
         setPosition3D(eye);
@@ -440,7 +477,11 @@ void Camera::applyCustomProperties()
     }
     }
     if (_zoomFactor != 1.0F)
+    {
         applyZoom();
+        if (_projectionType == Director::Projection::_2D)
+            setPositionCenter(_positionCenter);
+    }
 }
 
 void Camera::onEnter()
