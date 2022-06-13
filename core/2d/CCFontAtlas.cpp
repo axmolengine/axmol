@@ -104,6 +104,7 @@ void FontAtlas::reinit()
 
     addNewPage();
 }
+
 FontAtlas::~FontAtlas()
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
