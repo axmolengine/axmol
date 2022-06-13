@@ -386,7 +386,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
         if (_fontFace == nullptr)
             break;
 
-        // @remark: glyphIndex=0 means charactor is mssing on current font face
+        // @remark: glyphIndex=0 means character is missing on current font face
         auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
         if (glyphIndex == 0)
