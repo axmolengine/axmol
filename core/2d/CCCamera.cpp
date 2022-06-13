@@ -94,6 +94,12 @@ const Camera* Camera::getVisitingCamera()
 // end static methods
 
 Camera::Camera()
+    : _eyeZdistance(1)
+    , _zoomFactor(1)
+    , _nearPlane(-1024)
+    , _farPlane(1024)
+    , _zoomFactorFarPlane(1024)
+    , _positionCenter({0, 0})
 {
     // minggo comment
     // _frustum.setClipZ(true);
@@ -137,6 +143,7 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     Vec3::cross(zaxis, xaxis, &yaxis);
     yaxis.normalize();
     Mat4 rotation;
+
     rotation.m[0] = xaxis.x;
     rotation.m[1] = xaxis.y;
     rotation.m[2] = xaxis.z;
@@ -146,6 +153,7 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     rotation.m[5]  = yaxis.y;
     rotation.m[6]  = yaxis.z;
     rotation.m[7]  = 0;
+
     rotation.m[8]  = zaxis.x;
     rotation.m[9]  = zaxis.y;
     rotation.m[10] = zaxis.z;
@@ -177,6 +185,8 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 
 bool Camera::initDefault()
 {
+    _projectionType = Director::getInstance()->getProjection();
+
     auto size = _director->getWinSize();
     // create default camera
     auto projection = _director->getProjection();
@@ -185,7 +195,7 @@ bool Camera::initDefault()
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, -1024, 1024);
-        setPosition3D(Vec3(0.0f, 0.0f, 0.0f));
+        setPosition3D(Vec3(0.f, 0.f, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -195,6 +205,7 @@ bool Camera::initDefault()
         initPerspective(60, (float)size.width / size.height, 10, zeye + size.height / 2.0f);
         Vec3 eye(size.width / 2, size.height / 2.0f, zeye), center(size.width / 2, size.height / 2, 0.0f),
             up(0.0f, 1.0f, 0.0f);
+        _eyeZdistance = eye.z;
         setPosition3D(eye);
         lookAt(center, up);
         break;
@@ -203,15 +214,19 @@ bool Camera::initDefault()
         CCLOG("unrecognized projection");
         break;
     }
+    if (_zoomFactor != 1.0F)
+        applyZoom();
     return true;
 }
 
 bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
-    _fieldOfView = fieldOfView;
-    _aspectRatio = aspectRatio;
-    _nearPlane   = nearPlane;
-    _farPlane    = farPlane;
+    _fieldOfView        = fieldOfView;
+    _aspectRatio        = aspectRatio;
+    _nearPlane          = nearPlane;
+    _farPlane           = farPlane;
+    if (_zoomFactorFarPlane == 1024)
+        _zoomFactorFarPlane = farPlane;
     Mat4::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
@@ -354,6 +369,82 @@ void Camera::setDepth(int8_t depth)
     }
 }
 
+void Camera::setZoom(float factor)
+{
+    // Stretch the far plane further the more we zoom out.
+    if (_projectionType == Director::Projection::_3D && _zoomFactorFarPlane * factor > _farPlane)
+    {
+        _farPlane = _zoomFactorFarPlane * factor;
+        applyCustomProperties();
+    }
+
+    _zoomFactor = factor;
+    applyZoom();
+    if (_projectionType == Director::Projection::_2D)
+        setPositionCenter(_positionCenter);
+}
+
+void Camera::setPositionCenter(const Vec2& position)
+{
+    setPositionCenter(position.x, position.y);
+}
+
+void Camera::setPositionCenter(float x, float y)
+{
+    Vec2 pos = {x, y};
+    _positionCenter = pos;
+    auto v = Director::getInstance()->getVisibleSize();
+    setPosition(pos.x + v.width / 2 * (1.0F - _zoomFactor), pos.y + v.height / 2 * (1.0F - _zoomFactor));
+}
+
+void Camera::applyZoom()
+{
+    switch (_projectionType)
+    {
+    case cocos2d::Director::Projection::_2D:
+    {
+        this->setScale(_zoomFactor);
+        break;
+    }
+    case cocos2d::Director::Projection::_3D:
+    {
+        this->setPositionZ(_eyeZdistance * _zoomFactor);
+        break;
+    }
+    }
+}
+
+void Camera::applyCustomProperties()
+{
+    _projectionType = Director::getInstance()->getProjection();
+
+    auto& size = _director->getWinSize();
+    // create default camera
+    switch (_projectionType)
+    {
+    case Director::Projection::_2D:
+    {
+        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        setPosition3D(Vec3(0.f, 0.f, 0.f));
+        setRotation3D(Vec3(0.f, 0.f, 0.f));
+        break;
+    }
+    case Director::Projection::_3D:
+    {
+        float zeye = _director->getZEye();
+        initPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
+        Vec3 eye(size.width / 2, size.height / 2.0f, zeye), center(size.width / 2, size.height / 2, 0.0f),
+            up(0.0f, 1.0f, 0.0f);
+        _eyeZdistance = eye.z;
+        setPosition3D(eye);
+        lookAt(center, up);
+        break;
+    }
+    }
+    if (_zoomFactor != 1.0F)
+        applyZoom();
+}
+
 void Camera::onEnter()
 {
     if (_scene == nullptr)
@@ -429,6 +520,30 @@ int Camera::getRenderOrder() const
     result = 127 << 8;
     result += _depth;
     return result;
+}
+
+void Camera::setAspectRatio(float ratio)
+{
+    _aspectRatio = ratio;
+    applyCustomProperties();
+}
+
+void Camera::setFOV(float fieldOfView)
+{
+    _fieldOfView = fieldOfView;
+    applyCustomProperties();
+}
+
+void Camera::setFarPlane(float farPlane)
+{
+    _farPlane = farPlane;
+    applyCustomProperties();
+}
+
+void Camera::setNearPlane(float nearPlane)
+{
+    _nearPlane = nearPlane;
+    applyCustomProperties();
 }
 
 void Camera::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
