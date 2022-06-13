@@ -27,7 +27,6 @@
  ****************************************************************************/
 #include "2d/CCCamera.h"
 #include "2d/CCCameraBackgroundBrush.h"
-#include "base/CCDirector.h"
 #include "platform/CCGLView.h"
 #include "2d/CCScene.h"
 #include "renderer/CCRenderer.h"
@@ -185,12 +184,11 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 
 bool Camera::initDefault()
 {
-    _projectionType = Director::getInstance()->getProjection();
+    _projectionType = _director->getProjection();
 
-    auto size = _director->getWinSize();
+    auto& size = _director->getWinSize();
     // create default camera
-    auto projection = _director->getProjection();
-    switch (projection)
+    switch (_projectionType)
     {
     case Director::Projection::_2D:
     {
@@ -416,7 +414,7 @@ void Camera::applyZoom()
 
 void Camera::applyCustomProperties()
 {
-    _projectionType = Director::getInstance()->getProjection();
+    _projectionType = _director->getProjection();
 
     auto& size = _director->getWinSize();
     // create default camera

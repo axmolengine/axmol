@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "3d/CCFrustum.h"
 #include "renderer/CCQuadCommand.h"
 #include "renderer/CCCustomCommand.h"
+#include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
