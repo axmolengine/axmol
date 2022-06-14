@@ -131,8 +131,6 @@ bool SimpleSnake::init()
     mydraw = DrawNode::create();
     addChild(mydraw, 10);
 
-    float delay = 0.1;
-
     f.x    = 10;
     f.y    = 10;
     s[0].x = 20;

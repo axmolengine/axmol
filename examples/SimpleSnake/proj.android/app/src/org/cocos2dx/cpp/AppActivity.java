@@ -29,7 +29,7 @@ import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.SharedLoader;
 import android.os.Build;
 import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
+//import android.view.WindowManager.LayoutParams;
 
 public class AppActivity extends Cocos2dxActivity {
     static {
