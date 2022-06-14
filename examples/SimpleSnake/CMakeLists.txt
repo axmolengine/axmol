@@ -25,7 +25,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-set(APP_NAME HelloCpp)
+set(APP_NAME SimpleSnake)
 
 project(${APP_NAME})
 
@@ -77,11 +77,11 @@ endif()
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
+     Classes/SimpleSnakeScene.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
+     Classes/SimpleSnakeScene.h
      )
 
 if(ANDROID)
