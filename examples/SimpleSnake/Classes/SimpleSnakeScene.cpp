@@ -131,7 +131,7 @@ bool SimpleSnake::init()
     mydraw = DrawNode::create();
     addChild(mydraw, 10);
 
-    float timer = 0, delay = 0.1;
+    float delay = 0.1;
 
     f.x    = 10;
     f.y    = 10;
@@ -140,7 +140,7 @@ bool SimpleSnake::init()
 
     char buffer[1024];
 
-    for (size_t i = 0; i < snakeBodies; i++)
+    for (int i = 0; i < snakeBodies; i++)
     {
         myScore[i] = 0.0;
         sprintf(buffer, "Level %i Time : %f", i + 1, myScore[i]);
