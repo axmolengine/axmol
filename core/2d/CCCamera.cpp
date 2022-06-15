@@ -207,7 +207,6 @@ bool Camera::initDefault()
     {
         initOrthographic(size.width, size.height, -1024, 1024);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
-        _originalPosition = {size.width / 2, size.height / 2};
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -447,7 +446,6 @@ void Camera::applyCustomProperties()
         initOrthographic(size.width, size.height, _nearPlane, _farPlane);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         _originalPosition = {size.width / 2, size.height / 2};
-        setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
     case Director::Projection::_3D:
@@ -458,7 +456,6 @@ void Camera::applyCustomProperties()
             up(0.0f, 1.0f, 0.0f);
         _eyeZdistance = eye.z;
         setPosition3D(eye);
-        lookAt(center, up);
         break;
     }
     }
@@ -512,7 +509,7 @@ const Vec2& Camera::getPosition() const
 
 void Camera::setPosition(const Vec2& position)
 {
-    _originalPosition = position;
+    _originalPosition = {position.x, position.y};
     auto& pos = getPositionCenter(position, _projectionType, getZoom(), getRotation());
     Node::setPosition(pos.x, pos.y);
 }
@@ -525,16 +522,16 @@ void Camera::getPosition(float* x, float* y) const
 
 void Camera::setPosition(float x, float y)
 {
-    _originalPosition = getPositionCenter({x, y}, _projectionType, getZoom(), getRotation());
-    Node::setPosition(_originalPosition.x, _originalPosition.y);
     _originalPosition = {x, y};
+    auto& pos = getPositionCenter({x, y}, _projectionType, getZoom(), getRotation());
+    Node::setPosition(pos.x, pos.y);
 }
 
 void Camera::setPosition3D(const Vec3& position)
 {
-    _originalPosition = getPositionCenter({position.x, position.y}, _projectionType, getZoom(), getRotation());
-    Node::setPosition3D({_originalPosition.x, _originalPosition.y, position.z});
     _originalPosition = {position.x, position.y};
+    auto& pos = getPositionCenter({position.x, position.y}, _projectionType, getZoom(), getRotation());
+    Node::setPosition3D({pos.x, pos.y, position.z});
 }
 
 Vec3 Camera::getPosition3D() const
