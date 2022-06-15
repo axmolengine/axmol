@@ -157,20 +157,16 @@ void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
     switch (keyCode)
     {
     case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        if (dir != 2)
-            dir = 1;
+        if (dir != 2) dir = 1;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        if (dir != 1)
-            dir = 2;
+        if (dir != 1) dir = 2;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-        if (dir != 3)
-            dir = 0;
+        if (dir != 3) dir = 0;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-        if (dir != 0)
-            dir = 3;
+        if (dir != 0) dir = 3;
         break;
     default:
         break;
@@ -185,7 +181,7 @@ void SimpleSnake::menuCloseCallback(Ref* sender)
 void SimpleSnake::update(float delta)
 {
     static float runTime = 0;
-    static bool finish = false;
+    static bool finish   = false;
     runTime += delta;
     endLevelTime += delta;
 
@@ -204,23 +200,19 @@ void SimpleSnake::update(float delta)
         {
         case 0:
             s[0].y++;
-            if (s[0].y >= M)
-                s[0].y = 0;
+            if (s[0].y >= M) s[0].y = 0;
             break;
         case 1:
             s[0].x--;
-            if (s[0].x < 0)
-                s[0].x = N;
+            if (s[0].x < 0) s[0].x = N;
             break;
         case 2:
             s[0].x++;
-            if (s[0].x >= N)
-                s[0].x = 0;
+            if (s[0].x >= N) s[0].x = 0;
             break;
         case 3:
             s[0].y--;
-            if (s[0].y < 0)
-                s[0].y = M;
+            if (s[0].y < 0) s[0].y = M;
             break;
         default:
             break;
@@ -249,7 +241,7 @@ void SimpleSnake::update(float delta)
             myScore[num - StartBodies] = endLevelTime;
             sprintf(buffer, "Level %i Time : %f", num - StartBodies + 1, myScore[num - StartBodies]);
             myScoreLabel[num - StartBodies]->setString(buffer);
-            if (num >= (snakeBodies + StartBodies-1))
+            if (num >= (snakeBodies + StartBodies - 1))
             {
                 myScoreLabel[num - StartBodies]->setString("FINISH");
                 finish = true;
