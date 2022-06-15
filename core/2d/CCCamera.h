@@ -290,34 +290,97 @@ public:
      */
     void setZoom(float factor);
 
-    /**
-     * Gets the position of the camera before any zoom transformations.
-     * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
-     */
-    const Vec2& getPositionCenter() { return _positionCenter; }
+    ///**
+    // * Gets the position of the camera before any zoom transformations.
+    // * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
+    // */
+    //const Vec2& getPositionCenter() { return _positionCenter; }
 
-    /**
-     * Sets the position of the camera with respect to the zoom factor.
-     * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
-     */
-    void setPositionCenter(const Vec2& position);
+    ///**
+    // * Sets the position of the camera with respect to the zoom factor.
+    // * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
+    // */
+    //void setPositionCenter(const Vec2& position);
 
-    /**
-     * Sets the position of the camera with respect to the zoom factor.
-     * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
-     */
-    void setPositionCenter(float x, float y);
+    ///**
+    // * Sets the position of the camera with respect to the zoom factor.
+    // * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
+    // */
+    //void setPositionCenter(float x, float y);
 
     /**
      Apply the zoom factor.
      */
     void applyZoom();
 
+    /**
+     Apply the fov, near far planes and aspect values non-destructively.
+     */
     void applyCustomProperties();
 
     // override
     virtual void onEnter() override;
     virtual void onExit() override;
+
+    /**
+     * Override of getPosition() in Node class for custom behaviours
+     */
+    virtual const Vec2& getPosition() const override;
+
+    /**
+     * Override of getPosition() in Node class for custom behaviours
+     */
+    virtual void setPosition(const Vec2& position) override;
+
+    /**
+     * Override of getPosition() in Node class for custom behaviours
+     */
+    virtual void getPosition(float* x, float* y) const override;
+
+    /**
+     * Override of setPosition() in Node class for custom behaviours
+     */
+    virtual void setPosition(float x, float y) override;
+
+    /**
+     * Override of setPosition3D() in Node class for custom behaviours
+     */
+    virtual void setPosition3D(const Vec3& position) override;
+
+    /**
+     * Override of getPosition3D() in Node class for custom behaviours
+     */
+    virtual Vec3 getPosition3D() const override;
+
+    /**
+     * Override of getPositionX() in Node class for custom behaviours
+     */
+    virtual float getPositionX() const override;
+
+    /**
+     * Override of setPositionX() in Node class for custom behaviours
+     */
+    virtual void setPositionX(float x) override;
+
+    /**
+     * Override of getPositionY() in Node class for custom behaviours
+     */
+    virtual float getPositionY() const override;
+
+    /**
+     * Override of setPositionY() in Node class for custom behaviours
+     */
+    virtual void setPositionY(float y) override;
+
+    /**
+     * Override of getPositionZ() in Node class for custom behaviours
+     */
+    virtual float getPositionZ() const override;
+
+    /**
+     * Override of setPositionZ() in Node class for custom behaviours
+     */
+    virtual void setPositionZ(float positionZ) override;
 
     /**
      Before rendering the scene with this camera, the background needs to be cleared.
@@ -399,8 +462,9 @@ protected:
     float _zoomFactor; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
     float _zoomFactorFarPlane;
     float _zoomFactorNearPlane;
-    Vec2 _positionCenter;
-    bool _isCameraInitialized;
+    Vec2 _originalPosition;
+
+    bool  _isCameraInitialized;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };

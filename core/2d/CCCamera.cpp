@@ -99,7 +99,7 @@ Camera::Camera()
     , _farPlane(1024)
     , _zoomFactorNearPlane(10)
     , _zoomFactorFarPlane(1024)
-    , _positionCenter({0, 0})
+    , _originalPosition({0, 0})
     , _isCameraInitialized(false)
 {
     // minggo comment
@@ -206,7 +206,7 @@ bool Camera::initDefault()
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, -1024, 1024);
-        setPosition3D(Vec3(0.f, 0.f, 0.f));
+        setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -226,11 +226,9 @@ bool Camera::initDefault()
         break;
     }
     if (_zoomFactor != 1.0F)
-    {
         applyZoom();
-        if (_projectionType == Director::Projection::_2D)
-            setPositionCenter(_positionCenter);
-    }
+    setPosition(getPosition());
+    setRotation3D(getRotation3D());
     return true;
 }
 
@@ -293,7 +291,7 @@ Vec2 Camera::projectGL(const Vec3& src) const
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
-    CCASSERT(clipPos.w != 0.0f, "clipPos.w can't be 0.0f!");
+    //CCASSERT(clipPos.w != 0.0f, "clipPos.w can't be 0.0f!");
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
@@ -410,20 +408,7 @@ void Camera::setZoom(float factor)
     _zoomFactor = factor;
     applyZoom();
     if (_projectionType == Director::Projection::_2D)
-        setPositionCenter(_positionCenter);
-}
-
-void Camera::setPositionCenter(const Vec2& position)
-{
-    setPositionCenter(position.x, position.y);
-}
-
-void Camera::setPositionCenter(float x, float y)
-{
-    Vec2 pos = {x, y};
-    _positionCenter = pos;
-    auto v = Director::getInstance()->getVisibleSize();
-    setPosition(pos.x + v.width / 2 * (1.0F - _zoomFactor), pos.y + v.height / 2 * (1.0F - _zoomFactor));
+        setPosition(getPosition());
 }
 
 void Camera::applyZoom()
@@ -477,11 +462,9 @@ void Camera::applyCustomProperties()
     }
     }
     if (_zoomFactor != 1.0F)
-    {
         applyZoom();
-        if (_projectionType == Director::Projection::_2D)
-            setPositionCenter(_positionCenter);
-    }
+    setPosition(getPosition());
+    setRotation3D(getRotation3D());
 }
 
 void Camera::onEnter()
@@ -502,6 +485,90 @@ void Camera::onExit()
     // remove this camera from scene
     setScene(nullptr);
     Node::onExit();
+}
+
+inline const Vec2& getPositionCenter(const Vec2& pos,
+                                      Director::Projection projectionType,
+                                      float zoomFactor,
+                                      float angleOfRotation)
+{
+    auto director = Director::getInstance();
+    if (projectionType == Director::Projection::_2D)
+    {
+        auto v    = director->getVisibleSize();
+        auto rpos = Vec2(pos.x, pos.y);
+        rpos -= v / 2;
+        rpos = Vec2(rpos.x + v.width / 2 * (1.0F - zoomFactor), rpos.y + v.height / 2 * (1.0F - zoomFactor));
+        return rpos.rotateByAngle(rpos + v / 2 * zoomFactor, -CC_DEGREES_TO_RADIANS(angleOfRotation));
+    }
+    return pos;
+}
+
+const Vec2& Camera::getPosition() const
+{
+    return _originalPosition;
+}
+
+void Camera::setPosition(const Vec2& position)
+{
+    _originalPosition = getPositionCenter(position, _projectionType, getZoom(), getRotation());
+    Node::setPosition(_originalPosition.x, _originalPosition.y);
+    _originalPosition = position;
+}
+
+void Camera::getPosition(float* x, float* y) const
+{
+    *x = _originalPosition.x;
+    *y = _originalPosition.y;
+}
+
+void Camera::setPosition(float x, float y)
+{
+    _originalPosition = getPositionCenter({x, y}, _projectionType, getZoom(), getRotation());
+    Node::setPosition(_originalPosition.x, _originalPosition.y);
+    _originalPosition = {x, y};
+}
+
+void Camera::setPosition3D(const Vec3& position)
+{
+    _originalPosition = getPositionCenter({position.x, position.y}, _projectionType, getZoom(), getRotation());
+    Node::setPosition3D({_originalPosition.x, _originalPosition.y, position.z});
+    _originalPosition = {position.x, position.y};
+}
+
+Vec3 Camera::getPosition3D() const
+{
+    return {_originalPosition.x, _originalPosition.y, getPositionZ()};
+}
+
+float Camera::getPositionX() const
+{
+    return _originalPosition.x;
+}
+
+void Camera::setPositionX(float x)
+{
+    setPosition(x, _originalPosition.y);
+}
+
+float Camera::getPositionY() const
+{
+    return _originalPosition.y;
+}
+
+void Camera::setPositionY(float y)
+{
+    setPosition(_originalPosition.x, y);
+}
+
+float Camera::getPositionZ() const
+{
+    return Node::getPositionZ();
+}
+
+void Camera::setPositionZ(float positionZ)
+{
+    Node::setPositionZ(positionZ);
 }
 
 void Camera::setScene(Scene* scene)
