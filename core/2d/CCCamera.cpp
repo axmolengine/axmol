@@ -445,7 +445,7 @@ void Camera::applyCustomProperties()
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-        setPosition3D(Vec3(0.f, 0.f, 0.f));
+        setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
