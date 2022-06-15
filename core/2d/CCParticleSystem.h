@@ -54,10 +54,92 @@ struct particle_point
     float y;
 };
 
+//* A more effective random number generator function that fixes strafing for position variance, made by kiss rng.
+struct RngSeed
+{
+    const unsigned long RNG_RAND_MAX        = 4294967295;
+    const unsigned long RNG_RAND_MAX_SIGNED = 2147483647;
+    unsigned long _x                        = 1;
+    unsigned long _y                        = 2;
+    unsigned long _z                        = 4;
+    unsigned long _w                        = 8;
+    unsigned long _carry                    = 0;
+    unsigned long _k;
+    unsigned long _m;
+    unsigned long _seed;
+
+    RngSeed() { seed_rand(time(NULL)); }
+
+    // initialize this object with seed
+    void seed_rand(unsigned long seed)
+    {
+        _seed  = seed;
+        _x     = seed | 1;
+        _y     = seed | 2;
+        _z     = seed | 4;
+        _w     = seed | 8;
+        _carry = 0;
+    }
+
+    // returns an unsigned long random value
+    unsigned long rand()
+    {
+        _x = _x * 69069 + 1;
+        _y ^= _y << 13;
+        _y ^= _y >> 17;
+        _y ^= _y << 5;
+        _k     = (_z >> 2) + (_w >> 3) + (_carry >> 2);
+        _m     = _w + _w + _z + _carry;
+        _z     = _w;
+        _w     = _m;
+        _carry = _k >> 30;
+        return _x + _y + _w;
+    }
+
+    // returns a random integer from min to max
+    int range(int min, int max)
+    {
+        return floor(min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min))));
+    }
+
+    // returns a random unsigned integer from min to max
+    unsigned int rangeu(unsigned int min, unsigned int max)
+    {
+        return floor(min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min))));
+    }
+
+    // returns a random float from min to max
+    float rangef(float min = -1.0F, float max = 1.0F)
+    {
+        return min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min)));
+    }
+
+    // returns a random integer from 0 to max
+    int max(int max = INT_MAX)
+    {
+        return floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))));
+    }
+
+    // returns a random unsigned integer from 0 to max
+    unsigned int maxu(unsigned int max = UINT_MAX)
+    {
+        return floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))));
+    }
+
+    // returns a random float from 0.0 to max
+    float maxf(float max) { return 0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))); }
+
+    // returns a random float from 0.0 to 1.0
+    float float01() { return 0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (1 - 0))); }
+
+    // returns either false or true randomly
+    bool bool01() { return (bool)floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (2 - 0)))); }
+};
+
 /**
  * Particle emission shapes.
  * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
- * @since adxe-1.0.0b7
+ * @since adxe-1.0.0b8
  */
 enum class EmissionShapeType
 {
@@ -71,7 +153,7 @@ enum class EmissionShapeType
 
 /**
  * Particle emission mask descriptor.
- * @since adxe-1.0.0b7
+ * @since adxe-1.0.0b8
  */
 struct ParticleEmissionMaskDescriptor
 {
@@ -82,7 +164,7 @@ struct ParticleEmissionMaskDescriptor
 /**
  * Particle emission shapes.
  * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus
- * @since adxe-1.0.0b7
+ * @since adxe-1.0.0b8
  */
 struct EmissionShape
 {
@@ -259,7 +341,7 @@ public:
 
 /**
  * Particle emission mask cache.
- * @since adxe-1.0.0b7
+ * @since adxe-1.0.0b8
  */
 class CC_DLL ParticleEmissionMaskCache : public cocos2d::Ref
 {
@@ -1021,14 +1103,14 @@ public:
      */
     void setSpawnFadeInVar(float time);
 
-    /** Gets the spawn opacity fade in time of each particle.
+    /** Gets the spawn scale fade in time of each particle.
      * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
      * time.
      *
      * @return The spawn opacity fade in time in seconds.
      */
     float getSpawnScaleIn() { return _spawnScaleIn; }
-    /** Sets the spawn opacity fade in time of each particle when it's created.
+    /** Sets the spawn scale fade in time of each particle when it's created.
      * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
      * time.
      *
@@ -1036,14 +1118,14 @@ public:
      */
     void setSpawnScaleIn(float time);
 
-    /** Gets the spawn opacity fade in time variance of each particle.
+    /** Gets the spawn scale fade in time variance of each particle.
      * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
      * time.
      *
      * @return The spawn opacity fade in time variance in seconds.
      */
     float getSpawnScaleInVar() { return _spawnScaleInVar; }
-    /** Sets the spawn opacity fade in time variance of each particle when it's created.
+    /** Sets the spawn scale fade in time variance of each particle when it's created.
      * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
      * time.
      *
@@ -1448,17 +1530,6 @@ public:
     /* Unpause the emissions */
     virtual void resumeEmissions();
 
-    /** Is system update paused
-     @return True if system update is paused, else false
-     */
-    virtual bool isUpdatePaused() const;
-
-    /* Pause the particles from being updated */
-    virtual void pauseUpdate();
-
-    /* Unpause the particles from being updated */
-    virtual void resumeUpdate();
-
     /** Gets the fixed frame rate count of the particle system.
      @return Fixed frame rate count of the particle system.
      */
@@ -1694,9 +1765,6 @@ protected:
     /** is the emitter paused */
     bool _paused;
 
-    /** is particle system update paused */
-    bool _updatePaused;
-
     /** time scale of the particle system */
     float _timeScale;
 
@@ -1710,6 +1778,8 @@ protected:
     bool _sourcePositionCompatible;
 
     static Vector<ParticleSystem*> __allInstances;
+
+    RngSeed _rng;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystem);
