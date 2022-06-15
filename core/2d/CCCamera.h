@@ -383,6 +383,11 @@ public:
     virtual void setPositionZ(float positionZ) override;
 
     /**
+     * Override of setRotation() in Node class for custom behaviours
+     */
+    virtual void setRotation(float rotation) override;
+
+    /**
      Before rendering the scene with this camera, the background needs to be cleared.
      It will clear the depth buffer with max depth by default.
      Use setBackgroundBrush to modify this default behavior.

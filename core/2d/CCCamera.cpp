@@ -207,6 +207,7 @@ bool Camera::initDefault()
     {
         initOrthographic(size.width, size.height, -1024, 1024);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
+        _originalPosition = {size.width / 2, size.height / 2};
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -228,7 +229,6 @@ bool Camera::initDefault()
     if (_zoomFactor != 1.0F)
         applyZoom();
     setPosition(getPosition());
-    setRotation3D(getRotation3D());
     return true;
 }
 
@@ -446,6 +446,7 @@ void Camera::applyCustomProperties()
     {
         initOrthographic(size.width, size.height, _nearPlane, _farPlane);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
+        _originalPosition = {size.width / 2, size.height / 2};
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -464,7 +465,6 @@ void Camera::applyCustomProperties()
     if (_zoomFactor != 1.0F)
         applyZoom();
     setPosition(getPosition());
-    setRotation3D(getRotation3D());
 }
 
 void Camera::onEnter()
@@ -488,17 +488,18 @@ void Camera::onExit()
 }
 
 inline const Vec2& getPositionCenter(const Vec2& pos,
-                                      Director::Projection projectionType,
-                                      float zoomFactor,
-                                      float angleOfRotation)
+                                     Director::Projection projectionType,
+                                     float zoomFactor,
+                                     float angleOfRotation)
 {
     auto director = Director::getInstance();
     if (projectionType == Director::Projection::_2D)
     {
         auto v    = director->getVisibleSize();
-        auto rpos = Vec2(pos.x, pos.y);
+        auto rpos = Vec2(0, 0);
         rpos -= v / 2;
-        rpos = Vec2(rpos.x + v.width / 2 * (1.0F - zoomFactor), rpos.y + v.height / 2 * (1.0F - zoomFactor));
+        rpos.x += pos.x + v.width / 2 * (1.0F - zoomFactor);
+        rpos.y += pos.y + v.height / 2 * (1.0F - zoomFactor);
         return rpos.rotateByAngle(rpos + v / 2 * zoomFactor, -CC_DEGREES_TO_RADIANS(angleOfRotation));
     }
     return pos;
@@ -511,9 +512,9 @@ const Vec2& Camera::getPosition() const
 
 void Camera::setPosition(const Vec2& position)
 {
-    _originalPosition = getPositionCenter(position, _projectionType, getZoom(), getRotation());
-    Node::setPosition(_originalPosition.x, _originalPosition.y);
     _originalPosition = position;
+    auto& pos = getPositionCenter(position, _projectionType, getZoom(), getRotation());
+    Node::setPosition(pos.x, pos.y);
 }
 
 void Camera::getPosition(float* x, float* y) const
@@ -569,6 +570,12 @@ float Camera::getPositionZ() const
 void Camera::setPositionZ(float positionZ)
 {
     Node::setPositionZ(positionZ);
+}
+
+void Camera::setRotation(float rotation)
+{
+    Node::setRotation(rotation);
+    setPosition(getPosition());
 }
 
 void Camera::setScene(Scene* scene)
