@@ -283,30 +283,9 @@ public:
      * Sets the zoom multiplier of the camera.
      * This is designed to be used with 2D views only.
      * 
-     * For 2D projection mode the zoom will be at the bottom left of the viewport, If you don't want this behaviour and
-     * want it to be around the center then you need to use the functions 'setPositionCenter()' and 'getPositionCenter()'
-     *
      * @param factor The zoom factor of the camera.
      */
     void setZoom(float factor);
-
-    ///**
-    // * Gets the position of the camera before any zoom transformations.
-    // * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
-    // */
-    //const Vec2& getPositionCenter() { return _positionCenter; }
-
-    ///**
-    // * Sets the position of the camera with respect to the zoom factor.
-    // * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
-    // */
-    //void setPositionCenter(const Vec2& position);
-
-    ///**
-    // * Sets the position of the camera with respect to the zoom factor.
-    // * Should only be used If you're zooming in and out while 2D projection mode is set in the director.
-    // */
-    //void setPositionCenter(float x, float y);
 
     /**
      Apply the zoom factor.
