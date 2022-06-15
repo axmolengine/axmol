@@ -502,7 +502,7 @@ const Vec2& Node::getPosition() const
 /// position setter
 void Node::setPosition(const Vec2& position)
 {
-    setPosition(position.x, position.y);
+    Node::setPosition(position.x, position.y);
 }
 
 void Node::getPosition(float* x, float* y) const
@@ -525,8 +525,8 @@ void Node::setPosition(float x, float y)
 
 void Node::setPosition3D(const Vec3& position)
 {
-    setPositionZ(position.z);
-    setPosition(position.x, position.y);
+    Node::setPositionZ(position.z);
+    Node::setPosition(position.x, position.y);
 }
 
 Vec3 Node::getPosition3D() const
@@ -541,7 +541,7 @@ float Node::getPositionX() const
 
 void Node::setPositionX(float x)
 {
-    setPosition(x, _position.y);
+    Node::setPosition(x, _position.y);
 }
 
 float Node::getPositionY() const
@@ -551,7 +551,7 @@ float Node::getPositionY() const
 
 void Node::setPositionY(float y)
 {
-    setPosition(_position.x, y);
+    Node::setPosition(_position.x, y);
 }
 
 float Node::getPositionZ() const

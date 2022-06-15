@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "3d/CCFrustum.h"
 #include "renderer/CCQuadCommand.h"
 #include "renderer/CCCustomCommand.h"
+#include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
@@ -234,22 +235,141 @@ public:
     int getRenderOrder() const;
 
     /**
-     * Get the frustum's far plane.
+     * Gets the aspect ratio of the camera if the projection mode is 3D.
+     */
+    float getAspectRatio() const { return _fieldOfView; }
+
+    /**
+     * Sets the aspect ratio of the camera if the projection mode is 3D.
+     */
+    void setAspectRatio(float ratio);
+
+    /**
+     * Gets the field of view of the camera if the projection mode is 3D.
+     */
+    float getFOV() const { return _fieldOfView; }
+
+    /**
+     * Sets the field of view of the camera if the projection mode is 3D.
+     */
+    void setFOV(float fov);
+
+    /**
+     * Gets the frustum's far plane.
      */
     float getFarPlane() const { return _farPlane; }
 
     /**
-     * Get the frustum's near plane.
+     * Sets the frustum's far plane.
+     */
+    void setFarPlane(float farPlane);
+
+    /**
+     * Gets the frustum's near plane.
      */
     float getNearPlane() const { return _nearPlane; }
+
+    /**
+     * Gets the frustum's near plane.
+     */
+    void setNearPlane(float nearPlane);
+
+    /**
+     * Gets the zoom multiplier of the camera.
+     */
+    float getZoom() const { return _zoomFactor; }
+
+    /**
+     * Sets the zoom multiplier of the camera.
+     * This is designed to be used with 2D views only.
+     * 
+     * @param factor The zoom factor of the camera.
+     */
+    void setZoom(float factor);
+
+    /**
+     Apply the zoom factor.
+     */
+    void applyZoom();
+
+    /**
+     Apply the fov, near far planes and aspect values non-destructively.
+     */
+    void applyCustomProperties();
 
     // override
     virtual void onEnter() override;
     virtual void onExit() override;
 
     /**
-     Before rendering scene with this camera, the background need to be cleared. It clears the depth buffer with max
-     depth by default. Use setBackgroundBrush to modify the default behavior
+     * Override of getPosition() in Node class for custom behaviours
+     */
+    virtual const Vec2& getPosition() const override;
+
+    /**
+     * Override of getPosition() in Node class for custom behaviours
+     */
+    virtual void setPosition(const Vec2& position) override;
+
+    /**
+     * Override of getPosition() in Node class for custom behaviours
+     */
+    virtual void getPosition(float* x, float* y) const override;
+
+    /**
+     * Override of setPosition() in Node class for custom behaviours
+     */
+    virtual void setPosition(float x, float y) override;
+
+    /**
+     * Override of setPosition3D() in Node class for custom behaviours
+     */
+    virtual void setPosition3D(const Vec3& position) override;
+
+    /**
+     * Override of getPosition3D() in Node class for custom behaviours
+     */
+    virtual Vec3 getPosition3D() const override;
+
+    /**
+     * Override of getPositionX() in Node class for custom behaviours
+     */
+    virtual float getPositionX() const override;
+
+    /**
+     * Override of setPositionX() in Node class for custom behaviours
+     */
+    virtual void setPositionX(float x) override;
+
+    /**
+     * Override of getPositionY() in Node class for custom behaviours
+     */
+    virtual float getPositionY() const override;
+
+    /**
+     * Override of setPositionY() in Node class for custom behaviours
+     */
+    virtual void setPositionY(float y) override;
+
+    /**
+     * Override of getPositionZ() in Node class for custom behaviours
+     */
+    virtual float getPositionZ() const override;
+
+    /**
+     * Override of setPositionZ() in Node class for custom behaviours
+     */
+    virtual void setPositionZ(float positionZ) override;
+
+    /**
+     * Override of setRotation() in Node class for custom behaviours
+     */
+    virtual void setRotation(float rotation) override;
+
+    /**
+     Before rendering the scene with this camera, the background needs to be cleared.
+     It will clear the depth buffer with max depth by default.
+     Use setBackgroundBrush to modify this default behavior.
      */
     void clearBackground();
     /**
@@ -258,8 +378,8 @@ public:
     void apply();
 
     /**
-     * Whether or not the viewprojection matrix was updated since the last frame.
-     * @return True if the viewprojection matrix was updated since the last frame.
+     * Whether or not the viewprojection matrix was updated last frame.
+     * @return True if the viewprojection matrix was updated last frame.
      */
     bool isViewProjectionUpdated() const { return _viewProjectionUpdated; }
 
@@ -282,7 +402,7 @@ public:
     ~Camera();
 
     /**
-     * Set the scene,this method shall not be invoke manually
+     * Set the owner scene of the camera, this method shall not be invoked manually
      */
     void setScene(Scene* scene);
 
@@ -300,7 +420,7 @@ protected:
     static Camera* _visitingCamera;
     static Viewport _defaultViewport;
 
-    Scene* _scene = nullptr;  // Scene camera belongs to
+    Scene* _scene = nullptr;  // Scene that owns this camera.
     Mat4 _projection;
     mutable Mat4 _view;
     mutable Mat4 _viewInv;
@@ -320,6 +440,15 @@ protected:
     mutable bool _frustumDirty = true;
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
+    Director::Projection _projectionType;
+
+    float _eyeZdistance; // Z eye projection distance for 2D in 3D projection.
+    float _zoomFactor; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
+    float _zoomFactorFarPlane;
+    float _zoomFactorNearPlane;
+    Vec2 _originalPosition;
+
+    bool  _isCameraInitialized;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };

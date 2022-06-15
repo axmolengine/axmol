@@ -37,7 +37,10 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-CC_DLL const char* cocos2dVersion();
+inline const char* cocos2dVersion()
+{
+    return adxeVersion();
+}
 
 NS_CC_END
 
