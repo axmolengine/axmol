@@ -236,21 +236,29 @@ public:
 
     /**
      * Gets the aspect ratio of the camera if the projection mode is 3D.
+     * 
+     * @since adxe-1.0.0b8
      */
     float getAspectRatio() const { return _fieldOfView; }
 
     /**
      * Sets the aspect ratio of the camera if the projection mode is 3D.
+     * 
+     * @since adxe-1.0.0b8
      */
     void setAspectRatio(float ratio);
 
     /**
      * Gets the field of view of the camera if the projection mode is 3D.
+     * 
+     * @since adxe-1.0.0b8
      */
     float getFOV() const { return _fieldOfView; }
 
     /**
      * Sets the field of view of the camera if the projection mode is 3D.
+     * 
+     * @since adxe-1.0.0b8
      */
     void setFOV(float fov);
 
@@ -261,6 +269,8 @@ public:
 
     /**
      * Sets the frustum's far plane.
+     * 
+     * @since adxe-1.0.0b8
      */
     void setFarPlane(float farPlane);
 
@@ -271,11 +281,15 @@ public:
 
     /**
      * Gets the frustum's near plane.
+     * 
+     * @since adxe-1.0.0b8
      */
     void setNearPlane(float nearPlane);
 
     /**
      * Gets the zoom multiplier of the camera.
+     * 
+     * @since adxe-1.0.0b8
      */
     float getZoom() const { return _zoomFactor; }
 
@@ -284,16 +298,22 @@ public:
      * This is designed to be used with 2D views only.
      * 
      * @param factor The zoom factor of the camera.
+     * 
+     * @since adxe-1.0.0b8
      */
     void setZoom(float factor);
 
     /**
      Apply the zoom factor.
+     * 
+     * @since adxe-1.0.0b8
      */
     void applyZoom();
 
     /**
      Apply the fov, near far planes and aspect values non-destructively.
+     * 
+     * @since adxe-1.0.0b8
      */
     void applyCustomProperties();
 
@@ -303,66 +323,92 @@ public:
 
     /**
      * Override of getPosition() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual const Vec2& getPosition() const override;
 
     /**
      * Override of getPosition() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setPosition(const Vec2& position) override;
 
     /**
      * Override of getPosition() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void getPosition(float* x, float* y) const override;
 
     /**
      * Override of setPosition() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setPosition(float x, float y) override;
 
     /**
      * Override of setPosition3D() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setPosition3D(const Vec3& position) override;
 
     /**
      * Override of getPosition3D() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual Vec3 getPosition3D() const override;
 
     /**
      * Override of getPositionX() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual float getPositionX() const override;
 
     /**
      * Override of setPositionX() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setPositionX(float x) override;
 
     /**
      * Override of getPositionY() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual float getPositionY() const override;
 
     /**
      * Override of setPositionY() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setPositionY(float y) override;
 
     /**
      * Override of getPositionZ() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual float getPositionZ() const override;
 
     /**
      * Override of setPositionZ() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setPositionZ(float positionZ) override;
 
     /**
      * Override of setRotation() in Node class for custom behaviours
+     * 
+     * @since adxe-1.0.0b8
      */
     virtual void setRotation(float rotation) override;
 
@@ -410,7 +456,7 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** init camera */
+    /** Initialize the camera with default properties */
     bool initDefault();
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
