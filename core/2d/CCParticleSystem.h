@@ -101,9 +101,9 @@ struct EmissionShape
     float outerRadius;
     float coneOffset;
     float coneAngle;
-    float edgeElasticity;
+    float edgeBias;
 
-    std::string maskName;
+    uint32_t fourccId;
 };
 
 /** @struct ParticleAnimationDescriptor
@@ -270,7 +270,7 @@ public:
     /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
      * If the mask already exists then it will be overwritten.
      *
-     * @param maskName The name that identifies the mask.
+     * @param maskId The id of the mask, FOURCC starts with '#', such as "#abcd"
      * @param texturePath Path of the texture that holds alpha data.
      * @param alphaThreshold The threshold at which pixels are picked, If a pixel's alpha channel is greater than
      * alphaThreshold then it will be picked.
@@ -279,7 +279,7 @@ public:
      * @param inbetweenSamples How many times should pixels be filled inbetween, this value should be increased If
      * you're planning to scale the emission shape up. WARNING: it will use more memory.
      */
-    void bakeEmissionMask(std::string_view maskName,
+    void bakeEmissionMask(std::string_view maskId,
                           std::string_view texturePath,
                           float alphaThreshold = 0.5F,
                           bool inverted        = false,
@@ -288,7 +288,7 @@ public:
     /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
      * If the mask already exists then it will be overwritten.
      *
-     * @param maskName The name that identifies the mask.
+     * @param maskId The id of the mask, FOURCC starts with '#', such as "#abcd"
      * @param imageTexture Image object containing texture data with alpha channel.
      * @param alphaThreshold The threshold at which pixels are picked, If a pixel's alpha channel is greater than
      * alphaThreshold then it will be picked.
@@ -297,7 +297,7 @@ public:
      * @param inbetweenSamples How many times should pixels be filled inbetween, this value should be increased If
      * you're planning to scale the emission shape up. WARNING: it will use more memory.
      */
-    void bakeEmissionMask(std::string_view maskName,
+    void bakeEmissionMask(std::string_view maskId,
                           Image* imageTexture,
                           float alphaThreshold = 0.5F,
                           bool inverted        = false,
@@ -305,21 +305,27 @@ public:
 
     /** Returns a baked mask with the specified name if it exists. otherwise, it will return a dummy mask.
      *
-     * @param maskName The name that identifies the mask.
+     * @param fourccId The unsigned integer id of the mask.
      */
-    const ParticleEmissionMaskDescriptor& getEmissionMask(std::string_view maskName);
+    const ParticleEmissionMaskDescriptor& getEmissionMask(uint32_t fourccId);
+
+    /** Returns a baked mask with the specified name if it exists. otherwise, it will return a dummy mask.
+     *
+     * @param maskId The id of the mask, FOURCC starts with '#', such as "#abcd"
+     */
+    const ParticleEmissionMaskDescriptor& getEmissionMask(std::string_view maskId);
 
     /** Removes a baked mask and releases the data from memory with the specified name if it exists.
      *
-     * @param maskName The name that identifies the mask.
+     * @param maskId The id of the mask, FOURCC starts with '#', such as "#abcd"
      */
-    void removeMask(std::string_view maskName);
+    void removeMask(std::string_view maskId);
 
     /** Remove all baked masks and releases their data from memory. */
     void removeAllMasks();
 
 private:
-    hlookup::string_map<ParticleEmissionMaskDescriptor> masks;
+    std::unordered_map<uint32_t, ParticleEmissionMaskDescriptor> masks;
 
 };
 
@@ -1245,13 +1251,13 @@ public:
     /** Adds an emission shape of type mask to the system.
      * The mask should be added using the ParticleEmissionMaskCache class.
      * 
-     * @param maskName Name of the emission mask.
+     * @param maskId The id of the mask, FOURCC starts with '#', such as "#abcd"
      * @param pos Position of the emission shape in local space.
      * @param overrideSize Size of the emission mask in pixels, leave ZERO to use texture size.
      * @param scale Scale of the emission mask, the size will be multiplied by the specified scale.
      * @param angle Angle of the sampled points to be rotated in degrees.
      */
-    static EmissionShape createMaskShape(std::string_view maskName, Vec2 pos = Vec2::ZERO, Vec2 overrideSize = Vec2::ZERO, Vec2 scale = Vec2::ONE, float angle = 0.0F);
+    static EmissionShape createMaskShape(std::string_view maskId, Vec2 pos = Vec2::ZERO, Vec2 overrideSize = Vec2::ZERO, Vec2 scale = Vec2::ONE, float angle = 0.0F);
 
     /** Adds an emission shape of type point to the system. 
      * @param pos Position of the emission shape in local space.

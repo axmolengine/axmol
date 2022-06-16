@@ -796,7 +796,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             case EmissionShapeType::CIRCLE:
             {
                 auto val              = _rng.float01() * shape.innerRadius / shape.innerRadius;
-                val                   = powf(val, 1 / shape.edgeElasticity);
+                val                   = powf(val, 1 / shape.edgeBias);
                 auto point            = Vec2(0.0F, val * shape.innerRadius);
                 point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
@@ -807,7 +807,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             case EmissionShapeType::TORUS:
             {
                 auto val              = _rng.float01() * shape.outerRadius / shape.outerRadius;
-                val                   = powf(val, 1 / shape.edgeElasticity);
+                val                   = powf(val, 1 / shape.edgeBias);
                 auto point            = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) - (shape.outerRadius - shape.innerRadius)));
                 point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
@@ -817,7 +817,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
             }
             case EmissionShapeType::ALPHA_MASK:
             {
-                auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.maskName);
+                auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.fourccId);
 
                 Vec2 pos            = {shape.x, shape.y};
                 Vec2 size           = mask.size;
@@ -1151,7 +1151,7 @@ void ParticleSystem::setEmissionShape(unsigned short index, EmissionShape shape)
     iter->second = shape;
 }
 
-EmissionShape ParticleSystem::createMaskShape(std::string_view maskName,
+EmissionShape ParticleSystem::createMaskShape(std::string_view maskId,
                                               Vec2 pos,
                                               Vec2 overrideSize,
                                               Vec2 scale,
@@ -1161,7 +1161,7 @@ EmissionShape ParticleSystem::createMaskShape(std::string_view maskName,
 
     shape.type = EmissionShapeType::ALPHA_MASK;
 
-    shape.maskName = maskName;
+    shape.fourccId = utils::fourccValue(maskId);
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1222,7 +1222,7 @@ EmissionShape ParticleSystem::createRectTorusShape(Vec2 pos, Size innerSize, Siz
     return shape;
 }
 
-EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float edgeElasticity)
+EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1236,7 +1236,7 @@ EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float ed
     shape.coneOffset = 0;
     shape.coneAngle  = 360;
 
-    shape.edgeElasticity = edgeElasticity;
+    shape.edgeBias = edgeBias;
 
     return shape;
 }
@@ -1255,7 +1255,7 @@ EmissionShape ParticleSystem::createConeShape(Vec2 pos, float radius, float offs
     shape.coneOffset = offset;
     shape.coneAngle  = angle;
 
-    shape.edgeElasticity = edgeBias;
+    shape.edgeBias = edgeBias;
 
     return shape;
 }
@@ -1275,7 +1275,7 @@ EmissionShape ParticleSystem::createTorusShape(Vec2 pos, float innerRadius, floa
     shape.coneOffset = 0;
     shape.coneAngle  = 360;
 
-    shape.edgeElasticity = edgeBias;
+    shape.edgeBias = edgeBias;
 
     return shape;
 }
@@ -1300,7 +1300,7 @@ EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
     shape.coneOffset = offset;
     shape.coneAngle  = angle;
 
-    shape.edgeElasticity = edgeBias;
+    shape.edgeBias = edgeBias;
 
     return shape;
 }
@@ -2269,7 +2269,7 @@ ParticleEmissionMaskCache* ParticleEmissionMaskCache::getInstance()
     return emissionMaskCache;
 }
 
-void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
+void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
                                                  std::string_view texturePath,
                                                  float alphaThreshold,
                                                  bool inverted,
@@ -2280,10 +2280,10 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
     img->autorelease();
 
     CCASSERT(img, "image texture was nullptr.");
-    bakeEmissionMask(maskName, img, alphaThreshold, inverted, inbetweenSamples);
+    bakeEmissionMask(maskId, img, alphaThreshold, inverted, inbetweenSamples);
 }
 
-void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
+void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
                                                  Image* imageTexture,
                                                  float alphaThreshold,
                                                  bool inverted,
@@ -2322,9 +2322,11 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
             }
         }
 
-    auto iter = this->masks.find(maskName);
+    auto fourccId = utils::fourccValue(maskId);
+
+    auto iter = this->masks.find(fourccId);
     if (iter == this->masks.end())
-        iter = this->masks.emplace(maskName, ParticleEmissionMaskDescriptor{}).first;
+        iter = this->masks.emplace(fourccId, ParticleEmissionMaskDescriptor{}).first;
 
     ParticleEmissionMaskDescriptor desc;
     desc.size   = {float(w), float(h)};
@@ -2332,16 +2334,16 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskName,
 
     iter->second = desc;
 
-    CCLOG("Particle emission mask '%s' baked (%dx%d), %d samples generated taking %.2fmb of memory.",
-          std::string(maskName).c_str(), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
+    CCLOG("Particle emission mask '%lu' baked (%dx%d), %d samples generated taking %.2fmb of memory.",
+          (unsigned long)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 
-const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(std::string_view maskName)
+const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(uint32_t fourccId)
 {
-    auto iter = this->masks.find(maskName);
+    auto iter = this->masks.find(fourccId);
     if (iter == this->masks.end())
     {
-        iter = this->masks.emplace(maskName, ParticleEmissionMaskDescriptor{}).first;
+        iter                = this->masks.emplace(fourccId, ParticleEmissionMaskDescriptor{}).first;
         iter->second.size   = {float(1), float(1)};
         iter->second.points = {{0, 0}};
         return iter->second;
@@ -2349,9 +2351,24 @@ const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask
     return iter->second;
 }
 
-void ParticleEmissionMaskCache::removeMask(std::string_view maskName)
+const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(std::string_view maskId)
 {
-    this->masks.erase(maskName);
+    auto fourccId = utils::fourccValue(maskId);
+
+    auto iter = this->masks.find(fourccId);
+    if (iter == this->masks.end())
+    {
+        iter                = this->masks.emplace(fourccId, ParticleEmissionMaskDescriptor{}).first;
+        iter->second.size   = {float(1), float(1)};
+        iter->second.points = {{0, 0}};
+        return iter->second;
+    }
+    return iter->second;
+}
+
+void ParticleEmissionMaskCache::removeMask(std::string_view maskId)
+{
+    this->masks.erase(utils::fourccValue(maskId));
 }
 
 void ParticleEmissionMaskCache::removeAllMasks()
