@@ -95,7 +95,7 @@ void FontAtlas::reinit()
 {
     if (!_currentPageData)
         _currentPageData = new uint8_t[_currentPageDataSize];
-    _currentPage = -1;
+    _currentPage     = -1;
 
 #if defined(CC_USE_METAL)
     if (_strideShift && !_currentPageDataRGBA)
@@ -104,7 +104,6 @@ void FontAtlas::reinit()
 
     addNewPage();
 }
-
 FontAtlas::~FontAtlas()
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -228,8 +227,8 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     int adjustForDistanceMap = _letterPadding / 2;
     int adjustForExtend      = _letterEdgeExtend / 2;
-    int bitmapWidth          = 0;
-    int bitmapHeight         = 0;
+    int32_t bitmapWidth      = 0;
+    int32_t bitmapHeight     = 0;
     int glyphHeight;
     Rect tempRect;
     FontLetterDefinition tempDef;
@@ -281,28 +280,31 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             tempDef.U       = tempDef.U / scaleFactor;
             tempDef.V       = tempDef.V / scaleFactor;
             tempDef.rotated = false;
+
+            updateTextureContent(pixelFormat, startY);
         }
         else
-        {
+        {  // don't render anythings
             if (bitmap)
                 delete[] bitmap;
+            if (tempDef.xAdvance)
+                tempDef.validDefinition = true;
+            else
+                tempDef.validDefinition = false;
 
-            tempDef.validDefinition = !!tempDef.xAdvance;
-            tempDef.width           = 0;
-            tempDef.height          = 0;
-            tempDef.U               = 0;
-            tempDef.V               = 0;
-            tempDef.offsetX         = 0;
-            tempDef.offsetY         = 0;
-            tempDef.textureID       = 0;
-            tempDef.rotated         = false;
+            tempDef.width     = 0;
+            tempDef.height    = 0;
+            tempDef.U         = 0;
+            tempDef.V         = 0;
+            tempDef.offsetX   = 0;
+            tempDef.offsetY   = 0;
+            tempDef.textureID = 0;
+            tempDef.rotated   = false;
             _currentPageOrigX += 1;
         }
 
         _letterDefinitions[charCode] = tempDef;
     }
-
-    updateTextureContent(pixelFormat, startY);
 
     return true;
 }
@@ -368,6 +370,7 @@ void FontAtlas::addNewPage()
     texture->release();
 
     _currentPageOrigY = 0;
+
 }
 
 void FontAtlas::setTexture(unsigned int slot, Texture2D* texture)

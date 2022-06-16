@@ -31,14 +31,12 @@
 /// @cond DO_NOT_SHOW
 
 #include "2d/CCFont.h"
+
+#include "ft2build.h"
 #include <string>
 
-/* freetype fwd decls */
-typedef struct FT_LibraryRec_* FT_Library;
-typedef struct FT_StreamRec_* FT_Stream;
-typedef struct FT_FaceRec_* FT_Face;
-typedef struct FT_StrokerRec_* FT_Stroker;
-typedef struct FT_BBox_ FT_BBox;
+#include FT_FREETYPE_H
+#include FT_STROKER_H
 
 NS_CC_BEGIN
 
@@ -90,12 +88,16 @@ public:
                       int posX,
                       int posY,
                       unsigned char* bitmap,
-                      int bitmapWidth,
-                      int bitmapHeight);
+                      int32_t bitmapWidth,
+                      int32_t bitmapHeight);
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(char32_t charCode, int& outWidth, int& outHeight, Rect& outRect, int& xAdvance);
+    unsigned char* getGlyphBitmap(char32_t charCode,
+                                  int32_t& outWidth,
+                                  int32_t& outHeight,
+                                  Rect& outRect,
+                                  int& xAdvance);
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -129,7 +131,7 @@ private:
     std::string_view getGlyphCollection() const;
 
     FT_Face _fontFace;
-    FT_Stream _fontStream;
+    std::unique_ptr<FT_StreamRec> _fontStream;
     FT_Stroker _stroker;
 
     std::string _fontName;

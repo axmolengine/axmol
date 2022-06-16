@@ -97,21 +97,6 @@ inline void normalize_point(float x, float y, particle_point* out)
     out->y = y * n;
 }
 
-/**
- A more effect random number getter function, get from ejoy2d.
- */
-inline static float RANDOM_M11(unsigned int* seed)
-{
-    *seed = *seed * 134775813 + 1;
-    union
-    {
-        uint32_t d;
-        float f;
-    } u;
-    u.d = (((uint32_t)(*seed) & 0x7fff) << 8) | 0x40000000;
-    return u.f - 3.0f;
-}
-
 ParticleData::ParticleData()
 {
     memset(this, 0, sizeof(ParticleData));
@@ -121,24 +106,27 @@ bool ParticleData::init(int count)
 {
     maxCount = count;
 
-    posx          = (float*)malloc(count * sizeof(float));
-    posy          = (float*)malloc(count * sizeof(float));
-    startPosX     = (float*)malloc(count * sizeof(float));
-    startPosY     = (float*)malloc(count * sizeof(float));
-    colorR        = (float*)malloc(count * sizeof(float));
-    colorG        = (float*)malloc(count * sizeof(float));
-    colorB        = (float*)malloc(count * sizeof(float));
-    colorA        = (float*)malloc(count * sizeof(float));
-    deltaColorR   = (float*)malloc(count * sizeof(float));
-    deltaColorG   = (float*)malloc(count * sizeof(float));
-    deltaColorB   = (float*)malloc(count * sizeof(float));
-    deltaColorA   = (float*)malloc(count * sizeof(float));
-    size          = (float*)malloc(count * sizeof(float));
-    deltaSize     = (float*)malloc(count * sizeof(float));
-    rotation      = (float*)malloc(count * sizeof(float));
-    deltaRotation = (float*)malloc(count * sizeof(float));
-    timeToLive    = (float*)malloc(count * sizeof(float));
-    atlasIndex    = (unsigned int*)malloc(count * sizeof(unsigned int));
+    posx        = (float*)malloc(count * sizeof(float));
+    posy        = (float*)malloc(count * sizeof(float));
+    startPosX   = (float*)malloc(count * sizeof(float));
+    startPosY   = (float*)malloc(count * sizeof(float));
+    colorR      = (float*)malloc(count * sizeof(float));
+    colorG      = (float*)malloc(count * sizeof(float));
+    colorB      = (float*)malloc(count * sizeof(float));
+    colorA      = (float*)malloc(count * sizeof(float));
+    deltaColorR = (float*)malloc(count * sizeof(float));
+    deltaColorG = (float*)malloc(count * sizeof(float));
+    deltaColorB = (float*)malloc(count * sizeof(float));
+    deltaColorA = (float*)malloc(count * sizeof(float));
+
+    size            = (float*)malloc(count * sizeof(float));
+    deltaSize       = (float*)malloc(count * sizeof(float));
+    rotation        = (float*)malloc(count * sizeof(float));
+    staticRotation  = (float*)malloc(count * sizeof(float));
+    deltaRotation   = (float*)malloc(count * sizeof(float));
+    totalTimeToLive = (float*)malloc(count * sizeof(float));
+    timeToLive      = (float*)malloc(count * sizeof(float));
+    atlasIndex      = (unsigned int*)malloc(count * sizeof(unsigned int));
 
     modeA.dirX            = (float*)malloc(count * sizeof(float));
     modeA.dirY            = (float*)malloc(count * sizeof(float));
@@ -150,10 +138,11 @@ bool ParticleData::init(int count)
     modeB.deltaRadius      = (float*)malloc(count * sizeof(float));
     modeB.radius           = (float*)malloc(count * sizeof(float));
 
-    return posx && posy && startPosY && startPosX && colorR && colorG && colorB && colorA && deltaColorR &&
-           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && deltaRotation && timeToLive &&
-           atlasIndex && modeA.dirX && modeA.dirY && modeA.radialAccel && modeA.tangentialAccel && modeB.angle &&
-           modeB.degreesPerSecond && modeB.deltaRadius && modeB.radius;
+    return posx && posy && startPosX && startPosY && colorR && colorG && colorB && colorA && deltaColorR &&
+           deltaColorG && deltaColorB && deltaColorA && size && deltaSize && rotation && staticRotation &&
+           deltaRotation && totalTimeToLive && timeToLive && atlasIndex && modeA.dirX && modeA.dirY &&
+           modeA.radialAccel && modeA.tangentialAccel && modeB.angle && modeB.degreesPerSecond && modeB.deltaRadius &&
+           modeB.radius;
 }
 
 void ParticleData::release()
@@ -170,11 +159,24 @@ void ParticleData::release()
     CC_SAFE_FREE(deltaColorG);
     CC_SAFE_FREE(deltaColorB);
     CC_SAFE_FREE(deltaColorA);
+    CC_SAFE_FREE(hue);
+    CC_SAFE_FREE(sat);
+    CC_SAFE_FREE(val);
+    CC_SAFE_FREE(opacityFadeInDelta);
+    CC_SAFE_FREE(opacityFadeInLength);
+    CC_SAFE_FREE(scaleInDelta);
+    CC_SAFE_FREE(scaleInLength);
     CC_SAFE_FREE(size);
     CC_SAFE_FREE(deltaSize);
     CC_SAFE_FREE(rotation);
+    CC_SAFE_FREE(staticRotation);
     CC_SAFE_FREE(deltaRotation);
+    CC_SAFE_FREE(totalTimeToLive);
     CC_SAFE_FREE(timeToLive);
+    CC_SAFE_FREE(animTimeLength);
+    CC_SAFE_FREE(animTimeDelta);
+    CC_SAFE_FREE(animIndex);
+    CC_SAFE_FREE(animCellIndex);
     CC_SAFE_FREE(atlasIndex);
 
     CC_SAFE_FREE(modeA.dirX);
@@ -202,6 +204,10 @@ ParticleSystem::ParticleSystem()
     , _atlasIndex(0)
     , _transformSystemDirty(false)
     , _allocatedParticles(0)
+    , _isAnimAllocated(false)
+    , _isHSVAllocated(false)
+    , _isOpacityFadeInAllocated(false)
+    , _isScaleInAllocated(false)
     , _isActive(true)
     , _particleCount(0)
     , _duration(0)
@@ -218,14 +224,34 @@ ParticleSystem::ParticleSystem()
     , _startSpinVar(0)
     , _endSpin(0)
     , _endSpinVar(0)
+    , _spawnAngle(0)
+    , _spawnAngleVar(0)
+    , _hsv(0, 1, 1)
+    , _hsvVar(0, 0, 0)
+    , _spawnFadeIn(0)
+    , _spawnFadeInVar(0)
+    , _spawnScaleIn(0)
+    , _spawnScaleInVar(0)
     , _emissionRate(0)
     , _totalParticles(0)
     , _texture(nullptr)
     , _blendFunc(BlendFunc::ALPHA_PREMULTIPLIED)
     , _opacityModifyRGB(false)
+    , _isLifeAnimated(false)
+    , _isEmitterAnimated(false)
+    , _isLoopAnimated(false)
+    , _animIndexCount(0)
+    , _isAnimationReversed(false)
+    , _undefinedIndexRect({0, 0, 0, 0})
+    , _animationTimescaleInd(false)
     , _yCoordFlipped(1)
+    , _isEmissionShapes(false)
+    , _emissionShapeIndex(0)
     , _positionType(PositionType::FREE)
     , _paused(false)
+    , _timeScale(1)
+    , _fixedFPS(0)
+    , _fixedFPSDelta(0)
     , _sourcePositionCompatible(true)  // In the furture this member's default value maybe false or be removed.
 {
     modeA.gravity.setZero();
@@ -273,6 +299,101 @@ ParticleSystem* ParticleSystem::createWithTotalParticles(int numberOfParticles)
 Vector<ParticleSystem*>& ParticleSystem::getAllParticleSystems()
 {
     return __allInstances;
+}
+
+bool ParticleSystem::allocAnimationMem()
+{
+    if (!_isAnimAllocated)
+    {
+        _particleData.animTimeLength = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.animTimeDelta  = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.animIndex      = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        _particleData.animCellIndex  = (unsigned short*)malloc(_totalParticles * sizeof(unsigned short));
+        if (_particleData.animTimeLength && _particleData.animTimeDelta && _particleData.animIndex &&
+            _particleData.animCellIndex)
+            return _isAnimAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocAnimationMem();
+    }
+    return false;
+}
+
+void ParticleSystem::deallocAnimationMem()
+{
+    CC_SAFE_FREE(_particleData.animTimeLength);
+    CC_SAFE_FREE(_particleData.animTimeDelta);
+    CC_SAFE_FREE(_particleData.animIndex);
+    CC_SAFE_FREE(_particleData.animCellIndex);
+    _isAnimAllocated = false;
+}
+
+bool ParticleSystem::allocHSVMem()
+{
+    if (!_isHSVAllocated)
+    {
+        _particleData.hue = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.sat = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.val = (float*)malloc(_totalParticles * sizeof(float));
+        if (_particleData.hue && _particleData.sat && _particleData.val)
+            return _isHSVAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocHSVMem();
+    }
+    return false;
+}
+
+void ParticleSystem::deallocHSVMem()
+{
+    CC_SAFE_FREE(_particleData.hue);
+    CC_SAFE_FREE(_particleData.sat);
+    CC_SAFE_FREE(_particleData.val);
+    _isHSVAllocated = false;
+}
+
+bool ParticleSystem::allocOpacityFadeInMem()
+{
+    if (!_isOpacityFadeInAllocated)
+    {
+        _particleData.opacityFadeInDelta  = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.opacityFadeInLength = (float*)malloc(_totalParticles * sizeof(float));
+        if (_particleData.opacityFadeInDelta && _particleData.opacityFadeInLength)
+            return _isOpacityFadeInAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocOpacityFadeInMem();
+    }
+    return false;
+}
+
+void ParticleSystem::deallocOpacityFadeInMem()
+{
+    CC_SAFE_FREE(_particleData.opacityFadeInDelta);
+    CC_SAFE_FREE(_particleData.opacityFadeInLength);
+    _isOpacityFadeInAllocated = false;
+}
+
+bool ParticleSystem::allocScaleInMem()
+{
+    if (!_isScaleInAllocated)
+    {
+        _particleData.scaleInDelta  = (float*)malloc(_totalParticles * sizeof(float));
+        _particleData.scaleInLength = (float*)malloc(_totalParticles * sizeof(float));
+        if (_particleData.scaleInDelta && _particleData.scaleInLength)
+            return _isScaleInAllocated = true;
+        else
+            // If any of the above allocations fail, then we safely deallocate the ones that succeeded.
+            deallocScaleInMem();
+    }
+    return false;
+}
+
+void ParticleSystem::deallocScaleInMem()
+{
+    CC_SAFE_FREE(_particleData.scaleInDelta);
+    CC_SAFE_FREE(_particleData.scaleInLength);
+    _isScaleInAllocated = false;
 }
 
 void ParticleSystem::setTotalParticleCountFactor(float factor)
@@ -604,14 +725,20 @@ ParticleSystem::~ParticleSystem()
     // it is not needed to call "unscheduleUpdate" here. In fact, it will be called in "cleanup"
     // unscheduleUpdate();
     _particleData.release();
+    _animations.clear();
     CC_SAFE_RELEASE(_texture);
 }
 
-void ParticleSystem::addParticles(int count)
+void ParticleSystem::addParticles(int count, int animationIndex, int animationCellIndex)
 {
     if (_paused)
         return;
-    uint32_t RANDSEED = rand();
+
+    // Try to add as many particles as possible without overflowing.
+    count = MIN(int(_totalParticles * __totalParticleCountFactor) - _particleCount, count);
+
+    animationCellIndex = MIN(animationCellIndex, _animIndexCount - 1);
+    animationIndex     = MIN(animationIndex, _animIndexCount - 1);
 
     int start = _particleCount;
     _particleCount += count;
@@ -619,26 +746,181 @@ void ParticleSystem::addParticles(int count)
     // life
     for (int i = start; i < _particleCount; ++i)
     {
-        float theLife               = _life + _lifeVar * RANDOM_M11(&RANDSEED);
-        _particleData.timeToLive[i] = MAX(0, theLife);
+        float particleLife               = _life + _lifeVar * _rng.rangef();
+        _particleData.totalTimeToLive[i] = MAX(0, particleLife);
+        _particleData.timeToLive[i]      = MAX(0, particleLife);
     }
 
-    // position
-    for (int i = start; i < _particleCount; ++i)
+    if (_isEmissionShapes)
     {
-        _particleData.posx[i] = _sourcePosition.x + _posVar.x * RANDOM_M11(&RANDSEED);
+        for (int i = start; i < _particleCount; ++i)
+        {
+            if (_emissionShapes.empty())
+            {
+                _particleData.posx[i] = _sourcePosition.x + _posVar.x * _rng.rangef();
+                _particleData.posy[i] = _sourcePosition.y + _posVar.y * _rng.rangef();
+                continue;
+            }
+
+            auto randElem = _rng.float01();
+            auto& shape   = _emissionShapes[MIN(randElem * _emissionShapes.size(), _emissionShapes.size() - 1)];
+
+            switch (shape.type)
+            {
+            case ParticleSystem::EmissionShapeType::POINT:
+            {
+                _particleData.posx[i] = _sourcePosition.x + shape.x;
+                _particleData.posy[i] = _sourcePosition.y + shape.y;
+
+                break;
+            }
+            case ParticleSystem::EmissionShapeType::RECT:
+            {
+                _particleData.posx[i] = _sourcePosition.x + shape.x + shape.innerWidth / 2 * _rng.rangef();
+                _particleData.posy[i] = _sourcePosition.y + shape.y + shape.innerHeight / 2 * _rng.rangef();
+
+                break;
+            }
+            case ParticleSystem::EmissionShapeType::RECTTORUS:
+            {
+                float width  = (shape.outerWidth - shape.innerWidth) * _rng.float01() + shape.innerWidth;
+                float height = (shape.outerHeight - shape.innerHeight) * _rng.float01() + shape.innerHeight;
+                width        = _rng.rangef() < 0.0F ? width * -1 : width;
+                height       = _rng.rangef() < 0.0F ? height * -1 : height;
+                float prob   = _rng.rangef();
+                _particleData.posx[i] = _sourcePosition.x + shape.x + width / 2 * (prob >= 0.0F ? 1.0F : _rng.rangef());
+                _particleData.posy[i] = _sourcePosition.y + shape.y + height / 2 * (prob < 0.0F ? 1.0F : _rng.rangef());
+
+                break;
+            }
+            case ParticleSystem::EmissionShapeType::CIRCLE:
+            {
+                auto val              = _rng.float01() * shape.innerRadius / shape.innerRadius;
+                val                   = powf(val, 1 / shape.edgeBias);
+                auto point            = Vec2(0.0F, val * shape.innerRadius);
+                point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
+                _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
+
+                break;
+            }
+            case ParticleSystem::EmissionShapeType::TORUS:
+            {
+                auto val              = _rng.float01() * shape.outerRadius / shape.outerRadius;
+                val                   = powf(val, 1 / shape.edgeBias);
+                auto point            = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) - (shape.outerRadius - shape.innerRadius)));
+                point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
+                _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
+
+                break;
+            }
+            case ParticleSystem::EmissionShapeType::TEXTURE_ALPHA_MASK:
+            {
+                auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.fourccId);
+
+                Vec2 pos            = {shape.x, shape.y};
+                Vec2 size           = mask.size;
+                Vec2 overrideSize   = {shape.innerWidth, shape.innerHeight};
+                Vec2 scale          = {shape.outerWidth, shape.outerHeight};
+                float angle         = shape.coneOffset;
+
+                if (overrideSize.isZero())
+                    overrideSize = mask.size;
+
+                Vec2 point = {0, 0};
+
+                int rand0 = _rng.float01() * mask.points.size();
+                int index = MIN(rand0, mask.points.size() - 1);
+                point = mask.points[index];
+
+                point -= size / 2;
+
+                point.x = point.x / size.x * overrideSize.x * scale.x;
+                point.y = point.y / size.y * overrideSize.y * scale.y;
+
+                point = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(angle));
+
+                _particleData.posx[i] = _sourcePosition.x + shape.x + point.x;
+                _particleData.posy[i] = _sourcePosition.y + shape.y + point.y;
+
+                break;
+            }
+            }
+        }
+    }
+    else
+    {
+        // position
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.posx[i] = _sourcePosition.x + _posVar.x * _rng.rangef();
+        }
+
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.posy[i] = _sourcePosition.y + _posVar.y * _rng.rangef();
+        }
     }
 
-    for (int i = start; i < _particleCount; ++i)
+    if (animationCellIndex != -1 || animationIndex != -1)
+        allocAnimationMem();
+
+    if (_isAnimAllocated)
     {
-        _particleData.posy[i] = _sourcePosition.y + _posVar.y * RANDOM_M11(&RANDSEED);
+        if (animationCellIndex != -1)
+            std::fill_n(_particleData.animCellIndex + start, _particleCount - start, animationCellIndex);
+        else
+            std::fill_n(_particleData.animCellIndex + start, _particleCount - start, 0xFFFF);
+
+        if (animationIndex != -1)
+        {
+            for (int i = start; i < _particleCount; ++i)
+            {
+                _particleData.animIndex[i] = animationIndex;
+                auto& descriptor           = _animations.at(animationIndex);
+                _particleData.animTimeLength[i] =
+                    descriptor.animationSpeed + descriptor.animationSpeedVariance * _rng.rangef();
+            }
+        }
+    }
+
+    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
+    {
+        if (animationCellIndex == -1 && _isEmitterAnimated)
+        {
+            for (int i = start; i < _particleCount; ++i)
+            {
+                int rand0                      = _rng.float01() * _animIndexCount;
+                _particleData.animCellIndex[i] = MIN(rand0, _animIndexCount - 1);
+            }
+        }
+
+        if (animationIndex == -1 && !_animations.empty())
+        {
+            if (_randomAnimations.empty())
+                setMultiAnimationRandom();
+
+            for (int i = start; i < _particleCount; ++i)
+            {
+                int rand0                  = _rng.float01() * _randomAnimations.size();
+                int index                  = MIN(rand0, _randomAnimations.size() - 1);
+                _particleData.animIndex[i] = _randomAnimations[index];
+                auto& descriptor           = _animations.at(_particleData.animIndex[i]);
+                _particleData.animTimeLength[i] =
+                    descriptor.animationSpeed + descriptor.animationSpeedVariance * _rng.rangef();
+            }
+        }
+
+        if (_isEmitterAnimated || _isLoopAnimated)
+            std::fill_n(_particleData.animTimeDelta + start, _particleCount - start, 0);
     }
 
     // color
-#define SET_COLOR(c, b, v)                                  \
-    for (int i = start; i < _particleCount; ++i)            \
-    {                                                       \
-        c[i] = clampf(b + v * RANDOM_M11(&RANDSEED), 0, 1); \
+#define SET_COLOR(c, b, v)                          \
+    for (int i = start; i < _particleCount; ++i)    \
+    {                                               \
+        c[i] = clampf(b + v * _rng.rangef(), 0, 1); \
     }
 
     SET_COLOR(_particleData.colorR, _startColor.r, _startColorVar.r);
@@ -662,10 +944,49 @@ void ParticleSystem::addParticles(int count)
     SET_DELTA_COLOR(_particleData.colorB, _particleData.deltaColorB);
     SET_DELTA_COLOR(_particleData.colorA, _particleData.deltaColorA);
 
+    // opacity fade in
+    if (_isOpacityFadeInAllocated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.opacityFadeInLength[i] = _spawnFadeIn + _spawnFadeInVar * _rng.rangef();
+        }
+        std::fill_n(_particleData.opacityFadeInDelta + start, _particleCount - start, 0.0F);
+    }
+
+    // scale fade in
+    if (_isScaleInAllocated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.scaleInLength[i] = _spawnScaleIn + _spawnScaleInVar * _rng.rangef();
+        }
+        std::fill_n(_particleData.scaleInDelta + start, _particleCount - start, 0.0F);
+    }
+
+    // hue saturation value color
+    if (_isHSVAllocated)
+    {
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.hue[i] = _hsv.h + _hsvVar.h * _rng.rangef();
+        }
+
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.sat[i] = _hsv.s + _hsvVar.s * _rng.rangef();
+        }
+
+        for (int i = start; i < _particleCount; ++i)
+        {
+            _particleData.val[i] = _hsv.v + _hsvVar.v * _rng.rangef();
+        }
+    }
+
     // size
     for (int i = start; i < _particleCount; ++i)
     {
-        _particleData.size[i] = _startSize + _startSizeVar * RANDOM_M11(&RANDSEED);
+        _particleData.size[i] = _startSize + _startSizeVar * _rng.rangef();
         _particleData.size[i] = MAX(0, _particleData.size[i]);
     }
 
@@ -673,28 +994,29 @@ void ParticleSystem::addParticles(int count)
     {
         for (int i = start; i < _particleCount; ++i)
         {
-            float endSize              = _endSize + _endSizeVar * RANDOM_M11(&RANDSEED);
+            float endSize              = _endSize + _endSizeVar * _rng.rangef();
             endSize                    = MAX(0, endSize);
             _particleData.deltaSize[i] = (endSize - _particleData.size[i]) / _particleData.timeToLive[i];
         }
     }
     else
-    {
-        for (int i = start; i < _particleCount; ++i)
-        {
-            _particleData.deltaSize[i] = 0.0f;
-        }
-    }
+        std::fill_n(_particleData.deltaSize + start, _particleCount - start, 0.0F);
 
     // rotation
     for (int i = start; i < _particleCount; ++i)
     {
-        _particleData.rotation[i] = _startSpin + _startSpinVar * RANDOM_M11(&RANDSEED);
+        _particleData.rotation[i] = _startSpin + _startSpinVar * _rng.rangef();
     }
     for (int i = start; i < _particleCount; ++i)
     {
-        float endA                     = _endSpin + _endSpinVar * RANDOM_M11(&RANDSEED);
+        float endA                     = _endSpin + _endSpinVar * _rng.rangef();
         _particleData.deltaRotation[i] = (endA - _particleData.rotation[i]) / _particleData.timeToLive[i];
+    }
+
+    // static rotation
+    for (int i = start; i < _particleCount; ++i)
+    {
+        _particleData.staticRotation[i] = _spawnAngle + _spawnAngleVar * _rng.rangef();
     }
 
     // position
@@ -707,14 +1029,8 @@ void ParticleSystem::addParticles(int count)
     {
         pos = _position;
     }
-    for (int i = start; i < _particleCount; ++i)
-    {
-        _particleData.startPosX[i] = pos.x;
-    }
-    for (int i = start; i < _particleCount; ++i)
-    {
-        _particleData.startPosY[i] = pos.y;
-    }
+    std::fill_n(_particleData.startPosX + start, _particleCount - start, pos.x);
+    std::fill_n(_particleData.startPosY + start, _particleCount - start, pos.y);
 
     // Mode Gravity: A
     if (_emitterMode == Mode::GRAVITY)
@@ -723,14 +1039,13 @@ void ParticleSystem::addParticles(int count)
         // radial accel
         for (int i = start; i < _particleCount; ++i)
         {
-            _particleData.modeA.radialAccel[i] = modeA.radialAccel + modeA.radialAccelVar * RANDOM_M11(&RANDSEED);
+            _particleData.modeA.radialAccel[i] = modeA.radialAccel + modeA.radialAccelVar * _rng.rangef();
         }
 
         // tangential accel
         for (int i = start; i < _particleCount; ++i)
         {
-            _particleData.modeA.tangentialAccel[i] =
-                modeA.tangentialAccel + modeA.tangentialAccelVar * RANDOM_M11(&RANDSEED);
+            _particleData.modeA.tangentialAccel[i] = modeA.tangentialAccel + modeA.tangentialAccelVar * _rng.rangef();
         }
 
         // rotation is dir
@@ -738,9 +1053,9 @@ void ParticleSystem::addParticles(int count)
         {
             for (int i = start; i < _particleCount; ++i)
             {
-                float a = CC_DEGREES_TO_RADIANS(_angle + _angleVar * RANDOM_M11(&RANDSEED));
+                float a = CC_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
                 Vec2 v(cosf(a), sinf(a));
-                float s                     = modeA.speed + modeA.speedVar * RANDOM_M11(&RANDSEED);
+                float s                     = modeA.speed + modeA.speedVar * _rng.rangef();
                 Vec2 dir                    = v * s;
                 _particleData.modeA.dirX[i] = dir.x;  // v * s ;
                 _particleData.modeA.dirY[i] = dir.y;
@@ -751,9 +1066,9 @@ void ParticleSystem::addParticles(int count)
         {
             for (int i = start; i < _particleCount; ++i)
             {
-                float a = CC_DEGREES_TO_RADIANS(_angle + _angleVar * RANDOM_M11(&RANDSEED));
+                float a = CC_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
                 Vec2 v(cosf(a), sinf(a));
-                float s                     = modeA.speed + modeA.speedVar * RANDOM_M11(&RANDSEED);
+                float s                     = modeA.speed + modeA.speedVar * _rng.rangef();
                 Vec2 dir                    = v * s;
                 _particleData.modeA.dirX[i] = dir.x;  // v * s ;
                 _particleData.modeA.dirY[i] = dir.y;
@@ -768,37 +1083,431 @@ void ParticleSystem::addParticles(int count)
         //  Set the default diameter of the particle from the source position
         for (int i = start; i < _particleCount; ++i)
         {
-            _particleData.modeB.radius[i] = modeB.startRadius + modeB.startRadiusVar * RANDOM_M11(&RANDSEED);
+            _particleData.modeB.radius[i] = modeB.startRadius + modeB.startRadiusVar * _rng.rangef();
         }
 
         for (int i = start; i < _particleCount; ++i)
         {
-            _particleData.modeB.angle[i] = CC_DEGREES_TO_RADIANS(_angle + _angleVar * RANDOM_M11(&RANDSEED));
+            _particleData.modeB.angle[i] = CC_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
         }
 
         for (int i = start; i < _particleCount; ++i)
         {
             _particleData.modeB.degreesPerSecond[i] =
-                CC_DEGREES_TO_RADIANS(modeB.rotatePerSecond + modeB.rotatePerSecondVar * RANDOM_M11(&RANDSEED));
+                CC_DEGREES_TO_RADIANS(modeB.rotatePerSecond + modeB.rotatePerSecondVar * _rng.rangef());
         }
 
         if (modeB.endRadius == START_RADIUS_EQUAL_TO_END_RADIUS)
-        {
-            for (int i = start; i < _particleCount; ++i)
-            {
-                _particleData.modeB.deltaRadius[i] = 0.0f;
-            }
-        }
+            std::fill_n(_particleData.modeB.deltaRadius + start, _particleCount - start, 0.0F);
         else
         {
             for (int i = start; i < _particleCount; ++i)
             {
-                float endRadius = modeB.endRadius + modeB.endRadiusVar * RANDOM_M11(&RANDSEED);
+                float endRadius = modeB.endRadius + modeB.endRadiusVar * _rng.rangef();
                 _particleData.modeB.deltaRadius[i] =
                     (endRadius - _particleData.modeB.radius[i]) / _particleData.timeToLive[i];
             }
         }
     }
+}
+
+void ParticleSystem::setAnimationDescriptor(unsigned short indexOfDescriptor,
+                                            float time,
+                                            float timeVariance,
+                                            const std::vector<unsigned short>& indices,
+                                            bool reverse)
+{
+    auto iter = _animations.find(indexOfDescriptor);
+    if (iter == _animations.end())
+        iter = _animations.emplace(indexOfDescriptor, ParticleAnimationDescriptor{}).first;
+
+    auto& desc                  = iter->second;
+    desc.animationSpeed         = time;
+    desc.animationSpeedVariance = timeVariance;
+    desc.animationIndices       = std::move(indices);
+    desc.reverseIndices         = reverse;
+}
+
+void ParticleSystem::resetEmissionShapes()
+{
+    _emissionShapeIndex = 0;
+    _emissionShapes.clear();
+}
+
+void ParticleSystem::addEmissionShape(EmissionShape shape)
+{
+    setEmissionShape(_emissionShapeIndex, shape);
+}
+
+void ParticleSystem::setEmissionShape(unsigned short index, EmissionShape shape)
+{
+    auto iter = _emissionShapes.find(index);
+    if (iter == _emissionShapes.end())
+    {
+        iter = _emissionShapes.emplace(index, EmissionShape{}).first;
+        _emissionShapeIndex++;
+    }
+
+    iter->second = shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createMaskShape(std::string_view maskId,
+                                              Vec2 pos,
+                                              Vec2 overrideSize,
+                                              Vec2 scale,
+                                              float angle)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::TEXTURE_ALPHA_MASK;
+
+    shape.fourccId = utils::fourccValue(maskId);
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerWidth  = overrideSize.x;
+    shape.innerHeight = overrideSize.y;
+
+    shape.outerWidth  = scale.x;
+    shape.outerHeight = scale.y;
+
+    shape.coneOffset = angle;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createPointShape(Vec2 pos)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::POINT;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createRectShape(Vec2 pos, Size size)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::RECT;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerWidth  = size.x;
+    shape.innerHeight = size.y;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::RECTTORUS;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerWidth  = innerSize.x;
+    shape.innerHeight = innerSize.y;
+
+    shape.outerWidth  = outerSize.x;
+    shape.outerHeight = outerSize.y;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float edgeBias)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::CIRCLE;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = radius;
+
+    shape.coneOffset = 0;
+    shape.coneAngle  = 360;
+
+    shape.edgeBias = edgeBias;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createConeShape(Vec2 pos,
+                                                              float radius,
+                                                              float offset,
+                                                              float angle,
+                                                              float edgeBias)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::CIRCLE;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = radius;
+
+    shape.coneOffset = offset;
+    shape.coneAngle  = angle;
+
+    shape.edgeBias = edgeBias;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
+                                                               float innerRadius,
+                                                               float outerRadius,
+                                                               float edgeBias)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::TORUS;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = innerRadius;
+    shape.outerRadius = outerRadius;
+
+    shape.coneOffset = 0;
+    shape.coneAngle  = 360;
+
+    shape.edgeBias = edgeBias;
+
+    return shape;
+}
+
+ParticleSystem::EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
+                                                                   float innerRadius,
+                                                                   float outerRadius,
+                                                                   float offset,
+                                                                   float angle,
+                                                                   float edgeBias)
+{
+    ParticleSystem::EmissionShape shape{};
+
+    shape.type = ParticleSystem::EmissionShapeType::TORUS;
+
+    shape.x = pos.x;
+    shape.y = pos.y;
+
+    shape.innerRadius = innerRadius;
+    shape.outerRadius = outerRadius;
+
+    shape.coneOffset = offset;
+    shape.coneAngle  = angle;
+
+    shape.edgeBias = edgeBias;
+
+    return shape;
+}
+
+void ParticleSystem::setLifeAnimation(bool enabled)
+{
+    if (enabled && !allocAnimationMem())
+        return;
+
+    if (!enabled)
+        deallocAnimationMem();
+
+    _isLifeAnimated    = enabled;
+    _isEmitterAnimated = false;
+    _isLoopAnimated    = false;
+}
+
+void ParticleSystem::setEmitterAnimation(bool enabled)
+{
+    if (enabled && !allocAnimationMem())
+        return;
+
+    if (!enabled)
+        deallocAnimationMem();
+
+    _isEmitterAnimated = enabled;
+    _isLifeAnimated    = false;
+    _isLoopAnimated    = false;
+}
+
+void ParticleSystem::setLoopAnimation(bool enabled)
+{
+    if (enabled && !allocAnimationMem())
+        return;
+
+    if (!enabled)
+        deallocAnimationMem();
+
+    _isLoopAnimated    = enabled;
+    _isEmitterAnimated = false;
+    _isLifeAnimated    = false;
+}
+
+void ParticleSystem::resetAnimationIndices()
+{
+    _animIndexCount = 0;
+    _animationIndices.clear();
+}
+
+void ParticleSystem::resetAnimationDescriptors()
+{
+    _animations.clear();
+    _randomAnimations.clear();
+}
+
+void ParticleSystem::setMultiAnimationRandom()
+{
+    _randomAnimations.clear();
+    for (auto& a : _animations)
+        _randomAnimations.push_back(a.first);
+}
+
+void ParticleSystem::setAnimationIndicesAtlas()
+{
+    // VERTICAL
+    if (_texture->getPixelsHigh() > _texture->getPixelsWide())
+    {
+        setAnimationIndicesAtlas(_texture->getPixelsWide(), ParticleSystem::TexAnimDir::VERTICAL);
+        return;
+    }
+
+    // HORIZONTAL
+    if (_texture->getPixelsWide() > _texture->getPixelsHigh())
+    {
+        setAnimationIndicesAtlas(_texture->getPixelsHigh(), ParticleSystem::TexAnimDir::HORIZONTAL);
+        return;
+    }
+
+    CCASSERT(false, "Couldn't figure out the atlas size and direction.");
+}
+
+void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction)
+{
+    CCASSERT(unifiedCellSize > 0, "A cell cannot have a size of zero.");
+
+    resetAnimationIndices();
+
+    auto texWidth  = _texture->getPixelsWide();
+    auto texHeight = _texture->getPixelsHigh();
+
+    switch (direction)
+    {
+    case TexAnimDir::VERTICAL:
+    {
+        for (short i = 0; i < short(texHeight / unifiedCellSize); i++)
+        {
+            Rect frame{};
+
+            frame.origin.x = 0;
+            frame.origin.y = unifiedCellSize * i;
+
+            frame.size.x = texWidth;
+            frame.size.y = unifiedCellSize;
+
+            addAnimationIndex(_animIndexCount, frame);
+        }
+
+        break;
+    };
+    case TexAnimDir::HORIZONTAL:
+    {
+        for (short i = 0; i < short(texWidth / unifiedCellSize); i++)
+        {
+            Rect frame{};
+
+            frame.origin.x = unifiedCellSize * i;
+            frame.origin.y = 0;
+
+            frame.size.x = unifiedCellSize;
+            frame.size.y = texHeight;
+
+            addAnimationIndex(_animIndexCount, frame);
+        }
+
+        break;
+    };
+    }
+}
+
+bool ParticleSystem::addAnimationIndex(std::string_view frameName)
+{
+    return addAnimationIndex(_animIndexCount, frameName);
+}
+
+bool ParticleSystem::addAnimationIndex(unsigned short index, std::string_view frameName)
+{
+    auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName);
+
+    if (frame)
+        return addAnimationIndex(index, frame);
+    return false;
+}
+
+bool ParticleSystem::addAnimationIndex(cocos2d::SpriteFrame* frame)
+{
+    return addAnimationIndex(_animIndexCount, frame);
+}
+
+bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame)
+{
+    if (frame)
+    {
+        auto rect   = frame->getRectInPixels();
+        rect.size.x = frame->getOriginalSizeInPixels().x;
+        rect.size.y = frame->getOriginalSizeInPixels().y;
+        return addAnimationIndex(index, rect, frame->isRotated());
+    }
+    return false;
+}
+
+bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated)
+{
+    auto iter = _animationIndices.find(index);
+    if (iter == _animationIndices.end())
+    {
+        iter = _animationIndices.emplace(index, ParticleFrameDescriptor{}).first;
+        _animIndexCount++;
+    }
+
+    auto& desc     = iter->second;
+    desc.rect      = rect;
+    desc.isRotated = rotated;
+
+    return true;
+}
+
+void ParticleSystem::simulate(float seconds, float frameRate)
+{
+    seconds             = seconds == SIMULATION_USE_PARTICLE_LIFETIME ? getLife() + getLifeVar() : seconds;
+    frameRate           = frameRate == SIMULATION_USE_GAME_ANIMATION_INTERVAL
+                              ? 1.0F / Director::getInstance()->getAnimationInterval()
+                              : frameRate;
+    auto delta          = 1.0F / frameRate;
+    if (seconds > delta)
+    {
+        while (seconds > 0.0F)
+        {
+            this->update(delta);
+            seconds -= delta;
+        }
+        this->update(seconds);
+    }
+    else
+        this->update(seconds);
+}
+
+void ParticleSystem::resimulate(float seconds, float frameRate)
+{
+    this->resetSystem();
+    this->simulate(seconds, frameRate);
 }
 
 void ParticleSystem::onEnter()
@@ -834,10 +1543,7 @@ void ParticleSystem::resetSystem()
 {
     _isActive = true;
     _elapsed  = 0;
-    for (int i = 0; i < _particleCount; ++i)
-    {
-        _particleData.timeToLive[i] = 0.0f;
-    }
+    std::fill_n(_particleData.timeToLive, _particleCount, 0.0F);
 }
 
 bool ParticleSystem::isFull()
@@ -848,7 +1554,33 @@ bool ParticleSystem::isFull()
 // ParticleSystem - MainLoop
 void ParticleSystem::update(float dt)
 {
+    // don't process particles nor update gl buffer when this node is invisible.
+    if (!_visible)
+        return;
+
     CC_PROFILER_START_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
+
+    if (_componentContainer && !_componentContainer->isEmpty())
+    {
+        _componentContainer->visit(dt);
+    }
+
+    if (_fixedFPS != 0)
+    {
+        _fixedFPSDelta += dt;
+        if (_fixedFPSDelta < 1.0F / _fixedFPS)
+        {
+            updateParticleQuads();
+            _transformSystemDirty = false;
+            CC_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
+            return;
+        }
+        dt             = _fixedFPSDelta;
+        _fixedFPSDelta = 0.0F;
+    }
+
+    float pureDt = dt;
+    dt *= _timeScale;
 
     if (_isActive && _emissionRate)
     {
@@ -859,8 +1591,7 @@ void ParticleSystem::update(float dt)
         if (_particleCount < totalParticles)
         {
             _emitCounter += dt;
-            if (_emitCounter < 0.f)
-                _emitCounter = 0.f;
+            _emitCounter = MAX(0.0F, _emitCounter);
         }
 
         int emitCount = MIN(totalParticles - _particleCount, _emitCounter / rate);
@@ -876,10 +1607,102 @@ void ParticleSystem::update(float dt)
         }
     }
 
+    // The reason for using for-loops separately for every property is because
+    // When the processor needs to read from or write to a location in memory,
+    // it first checks whether a copy of that data is in the cpu's cache.
+    // And wether if every property's memory of the particle system is continuous,
+    // for the purpose of improving cache hit rate, we should process only one property in one for-loop.
+    // It was proved to be effective especially for low-end devices.
     {
         for (int i = 0; i < _particleCount; ++i)
         {
             _particleData.timeToLive[i] -= dt;
+        }
+
+        if (_isOpacityFadeInAllocated)
+        {
+            for (int i = 0; i < _particleCount; ++i)
+            {
+                _particleData.opacityFadeInDelta[i] += dt;
+                _particleData.opacityFadeInDelta[i] =
+                    MIN(_particleData.opacityFadeInDelta[i], _particleData.opacityFadeInLength[i]);
+            }
+        }
+
+        if (_isScaleInAllocated)
+        {
+            for (int i = 0; i < _particleCount; ++i)
+            {
+                _particleData.scaleInDelta[i] += dt;
+                _particleData.scaleInDelta[i] = MIN(_particleData.scaleInDelta[i], _particleData.scaleInLength[i]);
+            }
+        }
+
+        if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated)
+        {
+            if (_isEmitterAnimated && !_animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
+                {
+                    _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
+                    if (_particleData.animTimeDelta[i] > _particleData.animTimeLength[i])
+                    {
+                        auto& anim    = _animations.at(_particleData.animIndex[i]);
+                        float percent = _rng.float01();
+                        percent       = anim.reverseIndices ? 1.0F - percent : percent;
+
+                        _particleData.animCellIndex[i] = anim.animationIndices[MIN(
+                            percent * anim.animationIndices.size(), anim.animationIndices.size() - 1)];
+                        _particleData.animTimeDelta[i] = 0;
+                    }
+                }
+            }
+            if (_isLifeAnimated && _animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
+                {
+                    float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) /
+                                    _particleData.totalTimeToLive[i];
+                    percent = _isAnimationReversed ? 1.0F - percent : percent;
+                    _particleData.animCellIndex[i] =
+                        (unsigned short)MIN(percent * _animIndexCount, _animIndexCount - 1);
+                }
+            }
+            if (_isLifeAnimated && !_animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
+                {
+                    auto& anim = _animations.at(_particleData.animIndex[i]);
+
+                    float percent = (_particleData.totalTimeToLive[i] - _particleData.timeToLive[i]) /
+                                    _particleData.totalTimeToLive[i];
+                    percent = (!!_isAnimationReversed != !!anim.reverseIndices) ? 1.0F - percent : percent;
+                    percent = MAX(0.0F, percent);
+
+                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
+                                                                               anim.animationIndices.size() - 1)];
+                }
+            }
+            if (_isLoopAnimated && !_animations.empty())
+            {
+                for (int i = 0; i < _particleCount; ++i)
+                {
+                    auto& anim = _animations.at(_particleData.animIndex[i]);
+
+                    _particleData.animTimeDelta[i] += (_animationTimescaleInd ? pureDt : dt);
+                    if (_particleData.animTimeDelta[i] >= _particleData.animTimeLength[i])
+                        _particleData.animTimeDelta[i] = 0;
+
+                    float percent = _particleData.animTimeDelta[i] / _particleData.animTimeLength[i];
+                    percent       = anim.reverseIndices ? 1.0F - percent : percent;
+                    percent       = MAX(0.0F, percent);
+
+                    _particleData.animCellIndex[i] = anim.animationIndices[MIN(percent * anim.animationIndices.size(),
+                                                                               anim.animationIndices.size() - 1)];
+                }
+            }
+            if (_isLoopAnimated && _animations.empty())
+                std::fill_n(_particleData.animTimeDelta, _particleCount, 0);
         }
 
         for (int i = 0; i < _particleCount; ++i)
@@ -952,12 +1775,6 @@ void ParticleSystem::update(float dt)
         }
         else
         {
-            // Why use so many for-loop separately instead of putting them together?
-            // When the processor needs to read from or write to a location in memory,
-            // it first checks whether a copy of that data is in the cache.
-            // And every property's memory of the particle system is continuous,
-            // for the purpose of improving cache hit rate, we should process only one property in one for-loop AFAP.
-            // It was proved to be effective especially for low-end machine.
             for (int i = 0; i < _particleCount; ++i)
             {
                 _particleData.modeB.angle[i] += _particleData.modeB.degreesPerSecond[i] * dt;
@@ -1015,7 +1832,7 @@ void ParticleSystem::update(float dt)
         _transformSystemDirty = false;
     }
 
-    // only update gl buffer when visible
+    // update and send gl buffer only when this node is visible.
     if (_visible && !_batchNode)
     {
         postStep();
@@ -1276,6 +2093,47 @@ bool ParticleSystem::isActive() const
     return _isActive;
 }
 
+void ParticleSystem::useHSV(bool hsv)
+{
+    if (hsv && !allocHSVMem())
+        return;
+
+    if (!hsv)
+        deallocHSVMem();
+};
+
+void ParticleSystem::setSpawnFadeIn(float time)
+{
+    if (time != 0.0F && !allocOpacityFadeInMem())
+        return;
+
+    _spawnFadeIn = time;
+}
+
+void ParticleSystem::setSpawnFadeInVar(float time)
+{
+    if (time != 0.0F && !allocOpacityFadeInMem())
+        return;
+
+    _spawnFadeInVar = time;
+}
+
+void ParticleSystem::setSpawnScaleIn(float time)
+{
+    if (time != 0.0F && !allocScaleInMem())
+        return;
+
+    _spawnScaleIn = time;
+}
+
+void ParticleSystem::setSpawnScaleInVar(float time)
+{
+    if (time != 0.0F && !allocScaleInMem())
+        return;
+
+    _spawnScaleInVar = time;
+}
+
 int ParticleSystem::getTotalParticles() const
 {
     return _totalParticles;
@@ -1384,6 +2242,145 @@ void ParticleSystem::pauseEmissions()
 void ParticleSystem::resumeEmissions()
 {
     _paused = false;
+}
+
+float ParticleSystem::getFixedFPS()
+{
+    return _fixedFPS;
+}
+
+void ParticleSystem::setFixedFPS(float frameRate)
+{
+    _fixedFPS = frameRate;
+}
+
+float ParticleSystem::getTimeScale()
+{
+    return _timeScale;
+}
+
+void ParticleSystem::setTimeScale(float scale)
+{
+    _timeScale = scale;
+}
+
+static ParticleEmissionMaskCache* emissionMaskCache;
+
+ParticleEmissionMaskCache* ParticleEmissionMaskCache::getInstance()
+{
+    if (emissionMaskCache == nullptr)
+    {
+        emissionMaskCache = new ParticleEmissionMaskCache();
+        return emissionMaskCache;
+    }
+    return emissionMaskCache;
+}
+
+void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
+                                                 std::string_view texturePath,
+                                                 float alphaThreshold,
+                                                 bool inverted,
+                                                 int inbetweenSamples)
+{
+    auto img = new Image();
+    img->Image::initWithImageFile(texturePath);
+    img->autorelease();
+
+    CCASSERT(img, "image texture was nullptr.");
+    bakeEmissionMask(maskId, img, alphaThreshold, inverted, inbetweenSamples);
+}
+
+void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
+                                                 Image* imageTexture,
+                                                 float alphaThreshold,
+                                                 bool inverted,
+                                                 int inbetweenSamples)
+{
+    auto img = imageTexture;
+    CCASSERT(img, "image texture was nullptr.");
+    CCASSERT(img->hasAlpha(), "image data should contain an alpha channel.");
+
+    vector<Vec2> points;
+
+    auto data = img->getData();
+    auto w    = img->getWidth();
+    auto h    = img->getHeight();
+
+    for (int y = 0; y < h; y++)
+        for (int x = 0; x < w; x++)
+        {
+            if (inbetweenSamples > 1)
+            {
+                float a = data[(y * w + x) * 4 + 3] / 255.0F;
+                if (a >= alphaThreshold && !inverted)
+                    for (float i = 0; i < 1.0F; i += 1.0F / inbetweenSamples)
+                        points.push_back({float(x + i), float(h - y + i)});
+                if (a < alphaThreshold && inverted)
+                    for (float i = 0; i < 1.0F; i += 1.0F / inbetweenSamples)
+                        points.push_back({float(x + i), float(h - y + i)});
+            }
+            else
+            {
+                float a = data[(y * w + x) * 4 + 3] / 255.0F;
+                if (a >= alphaThreshold && !inverted)
+                    points.push_back({float(x), float(h - y)});
+                if (a < alphaThreshold && inverted)
+                    points.push_back({float(x), float(h - y)});
+            }
+        }
+
+    auto fourccId = utils::fourccValue(maskId);
+
+    auto iter = this->masks.find(fourccId);
+    if (iter == this->masks.end())
+        iter = this->masks.emplace(fourccId, ParticleEmissionMaskDescriptor{}).first;
+
+    ParticleEmissionMaskDescriptor desc;
+    desc.size   = {float(w), float(h)};
+    desc.points = std::move(points);
+
+    iter->second = desc;
+
+    CCLOG("Particle emission mask '%lu' baked (%dx%d), %d samples generated taking %.2fmb of memory.",
+          (unsigned long)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
+}
+
+const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(uint32_t fourccId)
+{
+    auto iter = this->masks.find(fourccId);
+    if (iter == this->masks.end())
+    {
+        iter                = this->masks.emplace(fourccId, ParticleEmissionMaskDescriptor{}).first;
+        iter->second.size   = {float(1), float(1)};
+        iter->second.points = {{0, 0}};
+        return iter->second;
+    }
+    return iter->second;
+}
+
+const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(std::string_view maskId)
+{
+    auto fourccId = utils::fourccValue(maskId);
+
+    auto iter = this->masks.find(fourccId);
+    if (iter == this->masks.end())
+    {
+        iter                = this->masks.emplace(fourccId, ParticleEmissionMaskDescriptor{}).first;
+        iter->second.size   = {float(1), float(1)};
+        iter->second.points = {{0, 0}};
+        return iter->second;
+    }
+    return iter->second;
+}
+
+void ParticleEmissionMaskCache::removeMask(std::string_view maskId)
+{
+    this->masks.erase(utils::fourccValue(maskId));
+}
+
+void ParticleEmissionMaskCache::removeAllMasks()
+{
+    this->masks.clear();
 }
 
 NS_CC_END
