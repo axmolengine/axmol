@@ -12,6 +12,7 @@
      endif()
  elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
      set(SYSTEM_STRING "Android")
+     set(ARCH_ALIAS ${ANDROID_ABI})
  elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
      if(ANDROID)
          set(SYSTEM_STRING "Android")

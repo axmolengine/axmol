@@ -9,6 +9,8 @@ include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
 
+include(../cmake/CocosExternalConfig.cmake)
+
 set(${target_name}_src
     astcenc_averages_and_directions.cpp
     astcenc_block_sizes.cpp
@@ -53,64 +55,68 @@ if (NOT DEFINED ISA_SIMD)
         set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
         check_c_compiler_flag(-msse2 ASTC_HAVE_SSE2_SWITCH)
     endif()
-    ### end check -msse2 flag
-
-
-    # Checking intel SIMD Intrinsics
-    if(APPLE)
-    set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
-    endif()
-    check_c_source_compiles("#include <immintrin.h>
-        #include <stdint.h>
-        int main()
-        {
-            __m256 m = _mm256_set_ps(1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f);
-            return (int)*(float*)&m;
-        }" ASTC_HAVE_AVX2_INTRINSICS)
-    check_c_source_compiles("#include <nmmintrin.h>
-        #include <stdint.h>
-        int main()
-        {
-            uint64_t v = 0;
-            return (int)_mm_popcnt_u64(v);
-        }" ASTC_HAVE_SSE42_INTRINSICS)
-    check_c_source_compiles("#include <smmintrin.h>
-        #include <stdint.h>
-        int main()
-        {
-            __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 12,8,4,0);
-            return *(int*)&shuf;
-        }" ASTC_HAVE_SSE41_INTRINSICS)
-
     if (ASTC_HAVE_SSE2_SWITCH)
         set(ASTC_HAVE_SSE2_INTRINSICS 1)
-    else()
-        check_c_source_compiles("#include <emmintrin.h>
+    endif()
+    ### end check -msse2 flag
+
+    if (NOT (ARCH_ALIAS STREQUAL "x86"))
+        # Checking intel SIMD Intrinsics
+        if(APPLE)
+            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
+        endif()
+        check_c_source_compiles("#include <immintrin.h>
             #include <stdint.h>
             int main()
             {
-                __m128d m = _mm_set_sd(0.0); 
-                return (int)*(double*)&m;
-            }" ASTC_HAVE_SSE2_INTRINSICS)
-    endif()
+                __m256 m = _mm256_set_ps(1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f);
+                return (int)*(float*)&m;
+            }" ASTC_HAVE_AVX2_INTRINSICS)
+        check_c_source_compiles("#include <nmmintrin.h>
+            #include <stdint.h>
+            int main()
+            {
+                uint32_t v = 0;
+                return (int)_mm_popcnt_u32(v);
+            }" ASTC_HAVE_SSE42_INTRINSICS)
+        check_c_source_compiles("#include <smmintrin.h>
+            #include <stdint.h>
+            int main()
+            {
+                __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 12,8,4,0);
+                return *(int*)&shuf;
+            }" ASTC_HAVE_SSE41_INTRINSICS)
 
-    ### Checking ARM SIMD neon
-    check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
-    if(ASTC_HAVE_ARM_NEON_H)
-        set(CMAKE_REQUIRED_FLAGS "-std=c++11")
-        check_cxx_source_compiles("#include <arm_neon.h>
+        if (NOT ASTC_HAVE_SSE2_INTRINSICS)
+            check_c_source_compiles("#include <emmintrin.h>
+                #include <stdint.h>
                 int main()
                 {
-                    int32x4_t ret4 = vdupq_n_s32(0);
-                    uint32x4_t v{};
-                    float16x4_t f16 = vcvt_f16_f32(v);
-                    return vgetq_lane_s32(ret4, 0);
-                }" ASTC_HAVE_NEON_INTRINSICS)
-    endif()
+                    __m128d m = _mm_set_sd(0.0); 
+                    return (int)*(double*)&m;
+                }" ASTC_HAVE_SSE2_INTRINSICS)
+        endif()
 
-    ### restore CMAKE_REQUIRED_FLAGS
-    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-    unset(OLD_REQUIRED_FLAGS) 
+        ### Checking ARM SIMD neon
+        check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
+        if(ASTC_HAVE_ARM_NEON_H)
+            set(CMAKE_REQUIRED_FLAGS "-std=c++11")
+            check_cxx_source_compiles("#include <arm_neon.h>
+                    int main()
+                    {
+                        int32x4_t ret4 = vdupq_n_s32(0);
+                        uint32x4_t v{};
+                        float16x4_t f16 = vcvt_f16_f32(v);
+                        return vgetq_lane_s32(ret4, 0);
+                    }" ASTC_HAVE_NEON_INTRINSICS)
+        endif()
+
+        ### restore CMAKE_REQUIRED_FLAGS
+        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+        unset(OLD_REQUIRED_FLAGS) 
+    else()
+        message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build x86 target")
+    endif()
 
     ### set ISA_SIMD
     if(ASTC_HAVE_AVX2_INTRINSICS)
