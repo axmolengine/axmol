@@ -404,8 +404,6 @@ inline char* char2hex(char* p, unsigned char c, unsigned char a = 'a')
 CC_DLL std::string urlEncode(std::string_view s);
 
 CC_DLL std::string urlDecode(std::string_view st);
-
-CC_DLL uint32_t fourccValue(std::string_view str);
 }  // namespace utils
 
 NS_CC_END

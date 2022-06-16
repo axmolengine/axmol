@@ -53,14 +53,7 @@ THE SOFTWARE.
 
 #define DECLARE_GUARD (void)0
 
-#if CC_TARGET_PLATFORM != CC_PLATFORM_IOS && \
-    (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID || (defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 22))
-#    include <filesystem>
-namespace stdfs = std::filesystem;
-#else
-#include "ghc/filesystem.hpp"
-namespace stdfs = ghc::filesystem;
-#endif
+#include "base/filesystem.h"
 
 #    if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
