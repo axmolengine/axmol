@@ -1563,6 +1563,8 @@ void ParticleSystem::update(float dt)
         _fixedFPSDelta += dt;
         if (_fixedFPSDelta < 1.0F / _fixedFPS)
         {
+            updateParticleQuads();
+            _transformSystemDirty = false;
             CC_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
             return;
         }
