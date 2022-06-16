@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "base/CCProtocols.h"
 #include "2d/CCNode.h"
 #include "base/CCValue.h"
+#include "2d/CCSpriteFrame.h"
+#include "2d/CCSpriteFrameCache.h"
 
 NS_CC_BEGIN
 
@@ -52,6 +54,159 @@ struct particle_point
     float y;
 };
 
+//* A more effective random number generator function that fixes strafing for position variance, made by kiss rng.
+struct RngSeed
+{
+    const unsigned long RNG_RAND_MAX        = 4294967295;
+    const unsigned long RNG_RAND_MAX_SIGNED = 2147483647;
+    unsigned long _x                        = 1;
+    unsigned long _y                        = 2;
+    unsigned long _z                        = 4;
+    unsigned long _w                        = 8;
+    unsigned long _carry                    = 0;
+    unsigned long _k;
+    unsigned long _m;
+    unsigned long _seed;
+
+    RngSeed() { seed_rand(time(NULL)); }
+
+    // initialize this object with seed
+    void seed_rand(unsigned long seed)
+    {
+        _seed  = seed;
+        _x     = seed | 1;
+        _y     = seed | 2;
+        _z     = seed | 4;
+        _w     = seed | 8;
+        _carry = 0;
+    }
+
+    // returns an unsigned long random value
+    unsigned long rand()
+    {
+        _x = _x * 69069 + 1;
+        _y ^= _y << 13;
+        _y ^= _y >> 17;
+        _y ^= _y << 5;
+        _k     = (_z >> 2) + (_w >> 3) + (_carry >> 2);
+        _m     = _w + _w + _z + _carry;
+        _z     = _w;
+        _w     = _m;
+        _carry = _k >> 30;
+        return _x + _y + _w;
+    }
+
+    // returns a random integer from min to max
+    int range(int min, int max)
+    {
+        return floor(min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min))));
+    }
+
+    // returns a random unsigned integer from min to max
+    unsigned int rangeu(unsigned int min, unsigned int max)
+    {
+        return floor(min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min))));
+    }
+
+    // returns a random float from min to max
+    float rangef(float min = -1.0F, float max = 1.0F)
+    {
+        return min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min)));
+    }
+
+    // returns a random integer from 0 to max
+    int max(int max = INT_MAX)
+    {
+        return floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))));
+    }
+
+    // returns a random unsigned integer from 0 to max
+    unsigned int maxu(unsigned int max = UINT_MAX)
+    {
+        return floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))));
+    }
+
+    // returns a random float from 0.0 to max
+    float maxf(float max) { return 0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))); }
+
+    // returns a random float from 0.0 to 1.0
+    float float01() { return 0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (1 - 0))); }
+
+    // returns either false or true randomly
+    bool bool01() { return (bool)floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (2 - 0)))); }
+};
+
+/**
+ * Particle emission shapes.
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
+ * @since adxe-1.0.0b8
+ */
+enum class EmissionShapeType
+{
+    POINT,
+    RECT,
+    RECTTORUS,
+    CIRCLE,
+    TORUS,
+    ALPHA_MASK
+};
+
+/**
+ * Particle emission mask descriptor.
+ * @since adxe-1.0.0b8
+ */
+struct ParticleEmissionMaskDescriptor
+{
+    Vec2 size;
+    std::vector<cocos2d::Vec2> points;
+};
+
+/**
+ * Particle emission shapes.
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus
+ * @since adxe-1.0.0b8
+ */
+struct EmissionShape
+{
+    EmissionShapeType type;
+
+    float x;
+    float y;
+
+    float innerWidth;
+    float innerHeight;
+    float outerWidth;
+    float outerHeight;
+
+    float innerRadius;
+    float outerRadius;
+    float coneOffset;
+    float coneAngle;
+    float edgeElasticity;
+
+    std::string_view maskName;
+};
+
+/** @struct ParticleAnimationDescriptor
+Structure that contains animation description
+*/
+struct ParticleAnimationDescriptor
+{
+    float animationSpeed;
+    float animationSpeedVariance;
+    std::vector<unsigned short> animationIndices;
+    bool reverseIndices;
+};
+
+/** @struct ParticleFrameDescriptor
+Structure that contains frame description
+*/
+struct ParticleFrameDescriptor
+{
+    cocos2d::Rect rect;
+    bool isRotated;
+};
+
 class CC_DLL ParticleData
 {
 public:
@@ -70,11 +225,27 @@ public:
     float* deltaColorB;
     float* deltaColorA;
 
+    float* hue;
+    float* sat;
+    float* val;
+
+    float* opacityFadeInDelta;
+    float* opacityFadeInLength;
+
+    float* scaleInDelta;
+    float* scaleInLength;
+
     float* size;
     float* deltaSize;
     float* rotation;
+    float* staticRotation;
     float* deltaRotation;
+    float* totalTimeToLive;
     float* timeToLive;
+    float* animTimeDelta;
+    float* animTimeLength;
+    unsigned short* animIndex;
+    unsigned short* animCellIndex;
     unsigned int* atlasIndex;
 
     //! Mode A: gravity, direction, radial accel, tangential accel
@@ -118,13 +289,41 @@ public:
         deltaColorB[p1] = deltaColorB[p2];
         deltaColorA[p1] = deltaColorA[p2];
 
-        size[p1]      = size[p2];
-        deltaSize[p1] = deltaSize[p2];
+        if (hue && sat && val)
+        {
+            hue[p1] = hue[p2];
+            sat[p1] = sat[p2];
+            val[p1] = val[p2];
+        }
 
-        rotation[p1]      = rotation[p2];
-        deltaRotation[p1] = deltaRotation[p2];
+        if (opacityFadeInDelta && opacityFadeInLength)
+        {
+            opacityFadeInDelta[p1]  = opacityFadeInDelta[p2];
+            opacityFadeInLength[p1] = opacityFadeInLength[p2];
+        }
 
-        timeToLive[p1] = timeToLive[p2];
+        if (scaleInDelta && scaleInLength)
+        {
+            scaleInDelta[p1]  = scaleInDelta[p2];
+            scaleInLength[p1] = scaleInLength[p2];
+        }
+
+        size[p1]           = size[p2];
+        deltaSize[p1]      = deltaSize[p2];
+        rotation[p1]       = rotation[p2];
+        staticRotation[p1] = staticRotation[p2];
+        deltaRotation[p1]  = deltaRotation[p2];
+
+        totalTimeToLive[p1] = totalTimeToLive[p2];
+        timeToLive[p1]      = timeToLive[p2];
+
+        if (animTimeDelta && animTimeLength && animIndex && animCellIndex)
+        {
+            animTimeDelta[p1]  = animTimeDelta[p2];
+            animTimeLength[p1] = animTimeLength[p2];
+            animIndex[p1]      = animIndex[p2];
+            animCellIndex[p1]  = animCellIndex[p2];
+        }
 
         atlasIndex[p1] = atlasIndex[p2];
 
@@ -138,6 +337,71 @@ public:
         modeB.radius[p1]           = modeB.radius[p2];
         modeB.deltaRadius[p1]      = modeB.deltaRadius[p2];
     }
+};
+
+/**
+ * Particle emission mask cache.
+ * @since adxe-1.0.0b8
+ */
+class CC_DLL ParticleEmissionMaskCache : public cocos2d::Ref
+{
+public:
+    static ParticleEmissionMaskCache* getInstance();
+
+    /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
+     * If the mask already exists then it will be overwritten.
+     *
+     * @param maskName The name that identifies the mask.
+     * @param texturePath Path of the texture that holds alpha data.
+     * @param alphaThreshold The threshold at which pixels are picked, If a pixel's alpha channel is greater than
+     * alphaThreshold then it will be picked.
+     * @param inverted Inverts the pick condition so that If a pixel's alpha channel is lower than alphaThreshold then
+     * it will be picked.
+     * @param inbetweenSamples How many times should pixels be filled inbetween, this value should be increased If
+     * you're planning to scale the emission shape up. WARNING: it will use more memory.
+     */
+    void bakeEmissionMask(std::string_view maskName,
+                          std::string_view texturePath,
+                          float alphaThreshold = 0.5F,
+                          bool inverted        = false,
+                          int inbetweenSamples = 1);
+
+    /** Bakes a particle emission mask from texture data on cpu and stores it in memory by it's name.
+     * If the mask already exists then it will be overwritten.
+     *
+     * @param maskName The name that identifies the mask.
+     * @param imageTexture Image object containing texture data with alpha channel.
+     * @param alphaThreshold The threshold at which pixels are picked, If a pixel's alpha channel is greater than
+     * alphaThreshold then it will be picked.
+     * @param inverted Inverts the pick condition so that If a pixel's alpha channel is lower than alphaThreshold then
+     * it will be picked.
+     * @param inbetweenSamples How many times should pixels be filled inbetween, this value should be increased If
+     * you're planning to scale the emission shape up. WARNING: it will use more memory.
+     */
+    void bakeEmissionMask(std::string_view maskName,
+                          Image* imageTexture,
+                          float alphaThreshold = 0.5F,
+                          bool inverted        = false,
+                          int inbetweenSamples = 1);
+
+    /** Returns a baked mask with the specified name if it exists. otherwise, it will return a dummy mask.
+     *
+     * @param maskName The name that identifies the mask.
+     */
+    const ParticleEmissionMaskDescriptor& getEmissionMask(std::string_view maskName);
+
+    /** Removes a baked mask and releases the data from memory with the specified name if it exists.
+     *
+     * @param maskName The name that identifies the mask.
+     */
+    void removeMask(std::string_view maskName);
+
+    /** Remove all baked masks and releases their data from memory. */
+    void removeAllMasks();
+
+private:
+    hlookup::string_map<ParticleEmissionMaskDescriptor> masks;
+
 };
 
 // typedef void (*CC_UPDATE_PARTICLE_IMP)(id, SEL, tParticle*, Vec2);
@@ -188,7 +452,6 @@ emitter.startSpin = 0;
 @endcode
 
 */
-
 class CC_DLL ParticleSystem : public Node, public TextureProtocol, public PlayableProtocol
 {
 public:
@@ -202,7 +465,7 @@ public:
     };
 
     /** PositionType
-     Possible types of particle positions.
+     Types of particle positioning.
      * @js cc.ParticleSystem.TYPE_FREE
      */
     enum class PositionType
@@ -213,6 +476,17 @@ public:
                    Use case: Attach an emitter to an sprite, and you want that the emitter follows the sprite.*/
 
         GROUPED, /** Living particles are attached to the emitter and are translated along with it. */
+
+    };
+
+    /** TexAnimDir
+     Texture animation direction for the particles.
+     */
+    enum class TexAnimDir
+    {
+        VERTICAL, /** texture coordinates are read top to bottom within the texture */
+
+        HORIZONTAL, /** texture coordinates are read left to right within the texture */
 
     };
 
@@ -227,6 +501,12 @@ public:
 
         /** The starting radius of the particle is equal to the ending radius. */
         START_RADIUS_EQUAL_TO_END_RADIUS = -1,
+
+        /** The simulation's seconds are set to the particles' lifetime specified inclusive of variant. */
+        SIMULATION_USE_PARTICLE_LIFETIME = -1,
+
+        /** The simulation's framerate is set to the animation interval specified in director. */
+        SIMULATION_USE_GAME_ANIMATION_INTERVAL = -1,
     };
 
     /** Creates an initializes a ParticleSystem from a plist file.
@@ -251,8 +531,25 @@ public:
      */
     static Vector<ParticleSystem*>& getAllParticleSystems();
 
+protected:
+    bool allocAnimationMem();
+    void deallocAnimationMem();
+    bool _isAnimAllocated;
+
+    bool allocHSVMem();
+    void deallocHSVMem();
+    bool _isHSVAllocated;
+
+    bool allocOpacityFadeInMem();
+    void deallocOpacityFadeInMem();
+    bool _isOpacityFadeInAllocated;
+
+    bool allocScaleInMem();
+    void deallocScaleInMem();
+    bool _isScaleInAllocated;
+
 public:
-    void addParticles(int count);
+    void addParticles(int count, int animationIndex = -1, int animationCellIndex = -1);
 
     void stopSystem();
     /** Kill all living particles.
@@ -658,6 +955,58 @@ public:
      */
     void setEndColorVar(const Color4F& color) { _endColorVar = color; }
 
+    /** Sets wether to use HSV color system.
+     * WARNING: becareful when using HSV with too many particles because it's expensive.
+     *
+     * @param hsv Use HSV color system.
+     */
+    void useHSV(bool hsv);
+    bool isHSV() { return _isHSVAllocated; };
+
+    /** Gets the hue of each particle.
+     *
+     * @return The hue of each particle.
+     */
+    float getHue() const { return _hsv.h; }
+    /** Sets the hue of each particle.
+     *
+     * @param hsv The hue color of each particle.
+     */
+    void setHue(float hue) { _hsv.h = hue; }
+
+    /** Gets the hue variance of each particle.
+     *
+     * @return The hue variance of each particle.
+     */
+    float getHueVar() const { return _hsvVar.h; }
+    /** Sets the hue variance of each particle.
+     *
+     * @param hsv The hue variance color of each particle.
+     */
+    void setHueVar(float hue) { _hsvVar.h = hue; }
+
+    /** Gets the HSV color of each particle.
+     *
+     * @return The HSV color of each particle.
+     */
+    const HSV& getHSV() const { return _hsv; }
+    /** Sets the HSV color of each particle.
+     *
+     * @param hsv The HSV color of each particle.
+     */
+    void setHSV(const HSV& hsv) { _hsv = hsv; }
+
+    /** Gets the HSV color variance of each particle.
+     *
+     * @return The HSV color variance of each particle.
+     */
+    const HSV& getHSVVar() const { return _hsvVar; }
+    /** Sets the HSV color variance of each particle.
+     *
+     * @param hsv The HSV color variance of each particle.
+     */
+    void setHSVVar(const HSV& hsv) { _hsvVar = hsv; }
+
     /** Gets the start spin of each particle.
      *
      * @return The start spin of each particle.
@@ -702,6 +1051,88 @@ public:
      */
     void setEndSpinVar(float endSpinVar) { _endSpinVar = endSpinVar; }
 
+    /** Gets the spawn angle of each particle
+     *
+     * @return The angle in degrees of each particle.
+     */
+    float getSpawnAngle() { return _spawnAngle; }
+    /** Sets the spawn angle of each particle
+     *
+     * @param angle The angle in degrees of each particle.
+     */
+    void setSpawnAngle(float angle) { _spawnAngle = angle; }
+
+    /** Sets the spawn angle variance of each particle.
+     *
+     * @return The angle variance in degrees of each particle.
+     */
+    float getSpawnAngleVar() { return _spawnAngleVar; }
+    /** Sets the spawn angle variance of each particle.
+     *
+     * @param angle The angle variance in degrees of each particle.
+     */
+    void setSpawnAngleVar(float angle) { _spawnAngleVar = angle; }
+
+    /** Gets the spawn opacity fade in time of each particle.
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     specified time.
+
+     * @return The spawn opacity fade in time in seconds.
+     */
+    float getSpawnFadeIn() { return _spawnFadeIn; }
+    /** Sets the spawn opacity fade in time of each particle when it's created.
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     * specified time.
+     *
+     * @param time The spawn opacity fade in time in seconds.
+     */
+    void setSpawnFadeIn(float time);
+
+    /** Gets the spawn opacity fade in time variance of each particle.
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     * specified time.
+     *
+     * @return The spawn opacity fade in time variance in seconds.
+     */
+    float getSpawnFadeInVar() { return _spawnFadeInVar; }
+    /** Sets the spawn opacity fade in time variance of each particle when it's created.
+     * Particles have the ability to spawn while having 0 opacity and gradually start going to 255 opacity with a
+     * specified time.
+     *
+     * @param time The spawn opacity fade in time variance in seconds.
+     */
+    void setSpawnFadeInVar(float time);
+
+    /** Gets the spawn scale fade in time of each particle.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
+     * @return The spawn opacity fade in time in seconds.
+     */
+    float getSpawnScaleIn() { return _spawnScaleIn; }
+    /** Sets the spawn scale fade in time of each particle when it's created.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
+     * @param time The spawn opacity fade in time in seconds.
+     */
+    void setSpawnScaleIn(float time);
+
+    /** Gets the spawn scale fade in time variance of each particle.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
+     * @return The spawn opacity fade in time variance in seconds.
+     */
+    float getSpawnScaleInVar() { return _spawnScaleInVar; }
+    /** Sets the spawn scale fade in time variance of each particle when it's created.
+     * Particles have the ability to spawn while having 0.0 size and gradually start going to 1.0 size with a specified
+     * time.
+     *
+     * @param time The spawn opacity fade in time variance in seconds.
+     */
+    void setSpawnScaleInVar(float time);
+
     /** Gets the emission rate of the particles.
      *
      * @return The emission rate of the particles.
@@ -728,6 +1159,266 @@ public:
     void setOpacityModifyRGB(bool opacityModifyRGB) override { _opacityModifyRGB = opacityModifyRGB; }
     bool isOpacityModifyRGB() const override { return _opacityModifyRGB; }
 
+    /** Enables or disables tex coord animations that are set based on particle life. */
+    void setLifeAnimation(bool enabled);
+
+    /** Enables or disables tex coord animations that are set by the emitter randomly when a particle is emitted. */
+    void setEmitterAnimation(bool enabled);
+
+    /** Enables or disables tex coord animations that are used to make particles play a sequence forever until they die
+     */
+    void setLoopAnimation(bool enabled);
+
+    bool isLifeAnimated() { return _isLifeAnimated; }
+    bool isEmitterAnimated() { return _isEmitterAnimated; }
+    bool isLoopAnimated() { return _isLoopAnimated; }
+
+    /** Gets the total number of indices.
+     *
+     * @return The size of the list holding animation indices.
+     */
+    int getTotalAnimationIndices() { return _animIndexCount; }
+
+    /** Sets wether to start from first cell and go forwards (normal) or last cell and go backwards (reversed) */
+    void setAnimationReverse(bool reverse) { _isAnimationReversed = reverse; }
+    bool isAnimationReversed() { return _isAnimationReversed; }
+
+    /** Resets the count of indices to 0 and empties the animation index array */
+    void resetAnimationIndices();
+
+    /** Empties the container of animation descriptors */
+    void resetAnimationDescriptors();
+
+    /** Choose what animation descriptors are to be selected at random for particles.
+     * This function should be called after you've inserted/overwritten any animation descriptors.
+     *
+     * @param animations Array of specific indices of animations to play at random
+     */
+    void setMultiAnimationRandomSpecific(const std::vector<unsigned short>& animations)
+    {
+        _randomAnimations = animations;
+    };
+
+    /** Choose ALL animation descriptors to be selected at random for particles.
+     * This function should be called after you've inserted/overwritten any animation descriptors.
+     */
+    void setMultiAnimationRandom();
+
+    /** Add all particle animation indices based on cells size and direction spicified using a texture atlas.
+     * will erase the array and add new indices from the atlas.
+     * This function will automatically figure out your atlas cell size and direction for you! thank her later :) */
+    void setAnimationIndicesAtlas();
+
+    /** Add all particle animation indices based on cell size and direction spicified if the method of rendering
+     * preferred is texture atlas. will erase the array and add new indices from the atlas.
+     *
+     * @param unifiedCellSize The size of cell unified.
+     * @param direction What direction is the atlas
+     */
+    void setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction = TexAnimDir::HORIZONTAL);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+     * The index is automatically incremented on each addition.
+     *
+     * @param frameName SpriteFrame name to search for
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
+    bool addAnimationIndex(std::string_view frameName);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+     *
+     * @param index Index id to add the frame to or override it with the new frame
+     * @param frameName SpriteFrame name to search for
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
+    bool addAnimationIndex(unsigned short index, std::string_view frameName);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+     * The index is automatically incremented on each addition.
+     *
+     * @param frame SpriteFrame containting data about tex coords
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
+    bool addAnimationIndex(cocos2d::SpriteFrame* frame);
+
+    /** Add a particle animation index based on tex coords spicified using a sprite frame.
+     * you can specify which index you want to override in this function
+     *
+     * @param index Index id to add the frame to or override it with the new frame
+     * @param frame SpriteFrame containting data about tex coords
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
+    bool addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame);
+
+    /** Add a particle animation index based on tex coords spicified.
+     * you can specify which index you want to override in this function
+     *
+     * @param index Index id to add the frame to or override it with the new rect
+     * @param rect Rect containting data about tex coords in pixels
+     * @param rotated Not implemented.
+     *
+     * @return Returns true of the index was successfully found and added. Otherwise, false
+     */
+    bool addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated = false);
+
+    /** You can specify what rect is used if an index in an animation descriptor wasn't found.
+     *
+     * @param rect Rect containting data about tex coords in pixels
+     */
+    void setRectForUndefinedIndices(cocos2d::Rect rect) { _undefinedIndexRect = rect; };
+
+    /** Add a particle animation descriptor with an index.
+     *
+     * @param indexOfDescriptor Index of the animation to be added, adding to the same index will just override the
+     * pervious animation descriptor
+     * @param time length of the animation in seconds
+     * @param timeVariance Time randomly selected for each different particle added on the animation length
+     * @param indices An array of the indicies
+     * @param reverse Should the animation indicies be played backwards? (default: false)
+     */
+    void setAnimationDescriptor(unsigned short indexOfDescriptor,
+                                float time,
+                                float timeVariance,
+                                const std::vector<unsigned short>& indices,
+                                bool reverse = false);
+
+    /** Add a particle animation descriptor with the index 0.
+     *
+     * @param indices An array of the indicies
+     * @param reverse Should the animation indicies be played backwards? (default: false)
+     */
+    void setAnimationDescriptor(const std::vector<unsigned short>& indices, bool reverse = false)
+    {
+        setAnimationDescriptor(0, 0, 0, indices, reverse);
+    };
+
+    /** Sets wether the animation descriptors should follow the time scale of the system or not.
+     *
+     * @param independent Should the animation descriptor speeds be played independently? (default: false)
+     */
+    void setAnimationSpeedTimescaleIndependent(bool independent) { _animationTimescaleInd = independent; };
+    bool isAnimationSpeedTimescaleIndependent() { return _animationTimescaleInd; };
+
+    /** Sets wether to use emission shapes for this particle system or not */
+    void setEmissionShapes(bool enabled) { _isEmissionShapes = enabled; }
+    bool isEmissionShapes() { return _isEmissionShapes; }
+
+    /** Resets the count of emission shapes to 0 and empties the emission shapes array */
+    void resetEmissionShapes();
+
+    /** Adds an emission shape to the system.
+     * The index is automatically incremented on each addition.
+     * 
+     * @param shape Shape descriptor object.
+     */
+    void addEmissionShape(EmissionShape shape);
+
+    /** Updates an existing emission shape or adds it.
+     * @param index index of the shape descriptor.
+     * @param shape Shape descriptor object.
+     */
+    void setEmissionShape(unsigned short index, EmissionShape shape);
+
+    /** Adds an emission shape of type mask to the system.
+     * The mask should be added using the ParticleEmissionMaskCache class.
+     * 
+     * @param maskName Name of the emission mask.
+     * @param pos Position of the emission shape in local space.
+     * @param overrideSize Size of the emission mask in pixels, leave ZERO to use texture size.
+     * @param scale Scale of the emission mask, the size will be multiplied by the specified scale.
+     * @param angle Angle of the sampled points to be rotated in degrees.
+     */
+    static EmissionShape createMaskShape(std::string_view maskName, Vec2 pos = Vec2::ZERO, Vec2 overrideSize = Vec2::ZERO, Vec2 scale = Vec2::ONE, float angle = 0.0F);
+
+    /** Adds an emission shape of type point to the system. 
+     * @param pos Position of the emission shape in local space.
+     */
+    static EmissionShape createPointShape(Vec2 pos);
+
+    /** Adds an emission shape of type Rectangle to the system. 
+     * @param pos Position of the emission shape in local space.
+     * @param size Size of the rectangle.
+     */
+    static EmissionShape createRectShape(Vec2 pos, Size size);
+
+    /** Adds an emission shape of type Rectangular Torus to the system. 
+     * @param pos Position of the emission shape in local space.
+     * @param innerSize Inner size offset of the rectangle.
+     * @param outerSize Outer size of the rectangle.
+     */
+    static EmissionShape createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize);
+
+    /** Adds an emission shape of type Circle to the system.
+     *
+     * The default angle offset of the circle is 0 and the default angle of the circle is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param radius Radius of the circle.
+     * @param edgeBias circle edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the circle more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
+     */
+    static EmissionShape createCircleShape(Vec2 pos, float radius, float edgeBias = 1.0F);
+
+    /** Adds an emission shape of type Cone to the system.
+     *
+     * The default angle offset of the circle is 0 and the default angle of the circle is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param radius Radius of the circle.
+     * @param offset Cone offset angle in degrees.
+     * @param angle Cone angle in degrees.
+     * @param edgeBias circle edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the circle more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
+     */
+    static EmissionShape createConeShape(Vec2 pos,
+                                                float radius,
+                                                float offset,
+                                                float angle,
+                                                float edgeBias = 1.0F);
+
+    /** Adds an emission shape of type Torus to the system.
+     *
+     * The default angle offset of the torus is 0 and the default angle of the torus is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param innerRadius Inner radius offset of the torus.
+     * @param outerRadius Outer radius of the torus.
+     * @param edgeBias torus edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the torus more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the torus more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
+     */
+    static EmissionShape createTorusShape(Vec2 pos, float innerRadius, float outerRadius, float edgeBias = 1.0F);
+
+    /** Adds an emission shape of type Torus to the system.
+     *
+     * The default angle offset of the torus is 0 and the default angle of the torus is 360
+     *
+     * @param pos Position of the emission shape in local space.
+     * @param innerRadius Inner radius offset of the torus.
+     * @param outerRadius Outer radius of the torus.
+     * @param offset Cone offset angle in degrees.
+     * @param angle Cone angle in degrees.
+     * @param edgeBias torus edge center bias value, If the value is greater than 1.0 then particles will bias
+     * towards the edge of the torus more often the greater the value is; If the value is lower than 1.0 then particles
+     * will bias towards the center of the torus more often the closer the value is to 0.0; If the value is exactly 1.0
+     * then there will be no bias behaviour.
+     */
+    static EmissionShape createConeTorusShape(Vec2 pos,
+                                                     float innerRadius,
+                                                     float outerRadius,
+                                                     float offset,
+                                                     float angle,
+                                                     float edgeBias = 1.0F);
+
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
      *
@@ -740,6 +1431,27 @@ public:
      * @param type The particles movement type.
      */
     void setPositionType(PositionType type) { _positionType = type; }
+
+    /** Advance the particle system and make it seem like it ran for this many seconds.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more
+     * accurate the simulation will be at the cost of performance. value of -1 means
+     * (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+     */
+    void simulate(float seconds   = SIMULATION_USE_PARTICLE_LIFETIME,
+                  float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
+
+    /** Resets the particle system and then advances the particle system and make it seem like it ran for this many
+     * seconds. The frame rate used for simulation accuracy is the director's animation interval.
+     *
+     * @param seconds Seconds to advance. value of -1 means (SIMULATION_USE_PARTICLE_LIFETIME)
+     * @param frameRate Frame rate to run the simulation with (preferred: 30.0) The higher this value is the more
+     * accurate the simulation will be at the cost of performance. value of -1 means
+     * (SIMULATION_USE_GAME_ANIMATION_INTERVAL)
+     */
+    void resimulate(float seconds   = SIMULATION_USE_PARTICLE_LIFETIME,
+                    float frameRate = SIMULATION_USE_GAME_ANIMATION_INTERVAL);
 
     // Overrides
     virtual void onEnter() override;
@@ -812,11 +1524,34 @@ public:
      */
     virtual bool isPaused() const;
 
-    /* Pause the emissions*/
+    /* Pause the emissions */
     virtual void pauseEmissions();
 
-    /* UnPause the emissions*/
+    /* Unpause the emissions */
     virtual void resumeEmissions();
+
+    /** Gets the fixed frame rate count of the particle system.
+     @return Fixed frame rate count of the particle system.
+     */
+    virtual float getFixedFPS();
+
+    /** Sets the fixed frame rate count of the particle system.
+     * i.e. if the framerate is set to 30.0 while the refresh rate is greater than 30.0 then the particle system will
+     wait until it hits the 30.0 FPS mark.
+     * This is usefull for increasing performance or for creating old-school effects with it.
+     @param Fixed frame rate count of the particle system. (default: 0.0)
+     */
+    virtual void setFixedFPS(float frameRate = 0.0F);
+
+    /** Gets the time scale of the particle system.
+     @return Time scale of the particle system.
+     */
+    virtual float getTimeScale();
+
+    /** Sets the time scale of the particle system.
+     @param Time scale of the particle system. (default: 1.0)
+     */
+    virtual void setTimeScale(float scale = 1.0F);
 
 protected:
     virtual void updateBlendFunc();
@@ -957,6 +1692,10 @@ protected:
     Color4F _endColor;
     /** end color variance of each particle */
     Color4F _endColorVar;
+    /** hsv color of each particle */
+    HSV _hsv;
+    /** hsv color variance of each particle */
+    HSV _hsvVar;
     //* initial angle of each particle
     float _startSpin;
     //* initial angle of each particle
@@ -965,6 +1704,18 @@ protected:
     float _endSpin;
     //* initial angle of each particle
     float _endSpinVar;
+    //* initial rotation of each particle
+    float _spawnAngle;
+    //* initial rotation of each particle
+    float _spawnAngleVar;
+    //* initial fade in time of each particle
+    float _spawnFadeIn;
+    //* initial fade in time variance of each particle
+    float _spawnFadeInVar;
+    //* initial scale in time of each particle
+    float _spawnScaleIn;
+    //* initial scale in time variance of each particle
+    float _spawnScaleInVar;
     /** emission rate of the particles */
     float _emissionRate;
     /** maximum particles of the system */
@@ -975,8 +1726,36 @@ protected:
     BlendFunc _blendFunc;
     /** does the alpha value modify color */
     bool _opacityModifyRGB;
+    /** is the particle system animated */
+    bool _isLifeAnimated;
+    /** is the emitter particle system animated */
+    bool _isEmitterAnimated;
+    /** is the emitter particle system animated */
+    bool _isLoopAnimated;
+    /** variable keeping count of sprite frames or atlas indices added */
+    int _animIndexCount;
+    /** wether to start from first or last when using life animation */
+    bool _isAnimationReversed;
+    /** A map that stores particle animation index coords */
+    std::unordered_map<unsigned short, ParticleFrameDescriptor> _animationIndices;
+    /** A map that stores particle animation descriptors */
+    std::unordered_map<unsigned short, ParticleAnimationDescriptor> _animations;
+    /** A vector that stores ids of animation descriptors that are choosen at random */
+    std::vector<unsigned short> _randomAnimations;
+    /** Wether the animation goes with the time scale of the system or is independent. */
+    bool _animationTimescaleInd;
+    /** A rect that is used instead when an index is not found */
+    cocos2d::Rect _undefinedIndexRect;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
+
+    /** Wether to use emission shapes for this particle system or not */
+    bool _isEmissionShapes;
+
+    /** variable keeping count of emission shapes added */
+    int _emissionShapeIndex;
+    /** A map that stores emission shapes that are choosen at random */
+    std::unordered_map<unsigned short, EmissionShape> _emissionShapes;
 
     /** particles movement type: Free or Grouped
      @since v0.8
@@ -986,10 +1765,21 @@ protected:
     /** is the emitter paused */
     bool _paused;
 
+    /** time scale of the particle system */
+    float _timeScale;
+
+    /** Fixed frame rate of the particle system */
+    float _fixedFPS;
+
+    /** Fixed frame rate delta (internal) */
+    float _fixedFPSDelta;
+
     /** is sourcePosition compatible */
     bool _sourcePositionCompatible;
 
     static Vector<ParticleSystem*> __allInstances;
+
+    RngSeed _rng;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystem);

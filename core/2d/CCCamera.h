@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "3d/CCFrustum.h"
 #include "renderer/CCQuadCommand.h"
 #include "renderer/CCCustomCommand.h"
-#include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
@@ -235,187 +234,22 @@ public:
     int getRenderOrder() const;
 
     /**
-     * Gets the aspect ratio of the camera if the projection mode is 3D.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    float getAspectRatio() const { return _fieldOfView; }
-
-    /**
-     * Sets the aspect ratio of the camera if the projection mode is 3D.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void setAspectRatio(float ratio);
-
-    /**
-     * Gets the field of view of the camera if the projection mode is 3D.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    float getFOV() const { return _fieldOfView; }
-
-    /**
-     * Sets the field of view of the camera if the projection mode is 3D.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void setFOV(float fov);
-
-    /**
-     * Gets the frustum's far plane.
+     * Get the frustum's far plane.
      */
     float getFarPlane() const { return _farPlane; }
 
     /**
-     * Sets the frustum's far plane.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void setFarPlane(float farPlane);
-
-    /**
-     * Gets the frustum's near plane.
+     * Get the frustum's near plane.
      */
     float getNearPlane() const { return _nearPlane; }
-
-    /**
-     * Gets the frustum's near plane.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void setNearPlane(float nearPlane);
-
-    /**
-     * Gets the zoom multiplier of the camera.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    float getZoom() const { return _zoomFactor; }
-
-    /**
-     * Sets the zoom multiplier of the camera.
-     * This is designed to be used with 2D views only.
-     * 
-     * @param factor The zoom factor of the camera.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void setZoom(float factor);
-
-    /**
-     Apply the zoom factor.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void applyZoom();
-
-    /**
-     Apply the fov, near far planes and aspect values non-destructively.
-     * 
-     * @since adxe-1.0.0b8
-     */
-    void applyCustomProperties();
 
     // override
     virtual void onEnter() override;
     virtual void onExit() override;
 
     /**
-     * Override of getPosition() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual const Vec2& getPosition() const override;
-
-    /**
-     * Override of getPosition() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setPosition(const Vec2& position) override;
-
-    /**
-     * Override of getPosition() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void getPosition(float* x, float* y) const override;
-
-    /**
-     * Override of setPosition() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setPosition(float x, float y) override;
-
-    /**
-     * Override of setPosition3D() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setPosition3D(const Vec3& position) override;
-
-    /**
-     * Override of getPosition3D() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual Vec3 getPosition3D() const override;
-
-    /**
-     * Override of getPositionX() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual float getPositionX() const override;
-
-    /**
-     * Override of setPositionX() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setPositionX(float x) override;
-
-    /**
-     * Override of getPositionY() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual float getPositionY() const override;
-
-    /**
-     * Override of setPositionY() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setPositionY(float y) override;
-
-    /**
-     * Override of getPositionZ() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual float getPositionZ() const override;
-
-    /**
-     * Override of setPositionZ() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setPositionZ(float positionZ) override;
-
-    /**
-     * Override of setRotation() in Node class for custom behaviours
-     * 
-     * @since adxe-1.0.0b8
-     */
-    virtual void setRotation(float rotation) override;
-
-    /**
-     Before rendering the scene with this camera, the background needs to be cleared.
-     It will clear the depth buffer with max depth by default.
-     Use setBackgroundBrush to modify this default behavior.
+     Before rendering scene with this camera, the background need to be cleared. It clears the depth buffer with max
+     depth by default. Use setBackgroundBrush to modify the default behavior
      */
     void clearBackground();
     /**
@@ -424,8 +258,8 @@ public:
     void apply();
 
     /**
-     * Whether or not the viewprojection matrix was updated last frame.
-     * @return True if the viewprojection matrix was updated last frame.
+     * Whether or not the viewprojection matrix was updated since the last frame.
+     * @return True if the viewprojection matrix was updated since the last frame.
      */
     bool isViewProjectionUpdated() const { return _viewProjectionUpdated; }
 
@@ -448,7 +282,7 @@ public:
     ~Camera();
 
     /**
-     * Set the owner scene of the camera, this method shall not be invoked manually
+     * Set the scene,this method shall not be invoke manually
      */
     void setScene(Scene* scene);
 
@@ -456,7 +290,7 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Initialize the camera with default properties */
+    /** init camera */
     bool initDefault();
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
@@ -466,7 +300,7 @@ protected:
     static Camera* _visitingCamera;
     static Viewport _defaultViewport;
 
-    Scene* _scene = nullptr;  // Scene that owns this camera.
+    Scene* _scene = nullptr;  // Scene camera belongs to
     Mat4 _projection;
     mutable Mat4 _view;
     mutable Mat4 _viewInv;
@@ -486,15 +320,6 @@ protected:
     mutable bool _frustumDirty = true;
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
-    Director::Projection _projectionType;
-
-    float _eyeZdistance; // Z eye projection distance for 2D in 3D projection.
-    float _zoomFactor; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
-    float _zoomFactorFarPlane;
-    float _zoomFactorNearPlane;
-    Vec2 _originalPosition;
-
-    bool  _isCameraInitialized;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };
