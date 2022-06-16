@@ -767,21 +767,21 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
             switch (shape.type)
             {
-            case ParticleSystem::EmissionShapeType::POINT:
+            case EmissionShapeType::POINT:
             {
                 _particleData.posx[i] = _sourcePosition.x + shape.x;
                 _particleData.posy[i] = _sourcePosition.y + shape.y;
 
                 break;
             }
-            case ParticleSystem::EmissionShapeType::RECT:
+            case EmissionShapeType::RECT:
             {
                 _particleData.posx[i] = _sourcePosition.x + shape.x + shape.innerWidth / 2 * _rng.rangef();
                 _particleData.posy[i] = _sourcePosition.y + shape.y + shape.innerHeight / 2 * _rng.rangef();
 
                 break;
             }
-            case ParticleSystem::EmissionShapeType::RECTTORUS:
+            case EmissionShapeType::RECTTORUS:
             {
                 float width  = (shape.outerWidth - shape.innerWidth) * _rng.float01() + shape.innerWidth;
                 float height = (shape.outerHeight - shape.innerHeight) * _rng.float01() + shape.innerHeight;
@@ -793,7 +793,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
                 break;
             }
-            case ParticleSystem::EmissionShapeType::CIRCLE:
+            case EmissionShapeType::CIRCLE:
             {
                 auto val              = _rng.float01() * shape.innerRadius / shape.innerRadius;
                 val                   = powf(val, 1 / shape.edgeBias);
@@ -804,7 +804,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
                 break;
             }
-            case ParticleSystem::EmissionShapeType::TORUS:
+            case EmissionShapeType::TORUS:
             {
                 auto val              = _rng.float01() * shape.outerRadius / shape.outerRadius;
                 val                   = powf(val, 1 / shape.edgeBias);
@@ -815,7 +815,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
                 break;
             }
-            case ParticleSystem::EmissionShapeType::TEXTURE_ALPHA_MASK:
+            case EmissionShapeType::TEXTURE_ALPHA_MASK:
             {
                 auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.fourccId);
 
@@ -1151,15 +1151,15 @@ void ParticleSystem::setEmissionShape(unsigned short index, EmissionShape shape)
     iter->second = shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createMaskShape(std::string_view maskId,
+EmissionShape ParticleSystem::createMaskShape(std::string_view maskId,
                                               Vec2 pos,
                                               Vec2 overrideSize,
                                               Vec2 scale,
                                               float angle)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::TEXTURE_ALPHA_MASK;
+    shape.type = EmissionShapeType::TEXTURE_ALPHA_MASK;
 
     shape.fourccId = utils::fourccValue(maskId);
 
@@ -1177,11 +1177,11 @@ ParticleSystem::EmissionShape ParticleSystem::createMaskShape(std::string_view m
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createPointShape(Vec2 pos)
+EmissionShape ParticleSystem::createPointShape(Vec2 pos)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::POINT;
+    shape.type = EmissionShapeType::POINT;
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1189,11 +1189,11 @@ ParticleSystem::EmissionShape ParticleSystem::createPointShape(Vec2 pos)
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createRectShape(Vec2 pos, Size size)
+EmissionShape ParticleSystem::createRectShape(Vec2 pos, Size size)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::RECT;
+    shape.type = EmissionShapeType::RECT;
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1204,11 +1204,11 @@ ParticleSystem::EmissionShape ParticleSystem::createRectShape(Vec2 pos, Size siz
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize)
+EmissionShape ParticleSystem::createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::RECTTORUS;
+    shape.type = EmissionShapeType::RECTTORUS;
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1222,11 +1222,11 @@ ParticleSystem::EmissionShape ParticleSystem::createRectTorusShape(Vec2 pos, Siz
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float edgeBias)
+EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float edgeBias)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::CIRCLE;
+    shape.type = EmissionShapeType::CIRCLE;
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1241,15 +1241,15 @@ ParticleSystem::EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float 
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createConeShape(Vec2 pos,
+EmissionShape ParticleSystem::createConeShape(Vec2 pos,
                                                               float radius,
                                                               float offset,
                                                               float angle,
                                                               float edgeBias)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::CIRCLE;
+    shape.type = EmissionShapeType::CIRCLE;
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1264,14 +1264,14 @@ ParticleSystem::EmissionShape ParticleSystem::createConeShape(Vec2 pos,
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
+EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
                                                                float innerRadius,
                                                                float outerRadius,
                                                                float edgeBias)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::TORUS;
+    shape.type = EmissionShapeType::TORUS;
 
     shape.x = pos.x;
     shape.y = pos.y;
@@ -1287,16 +1287,16 @@ ParticleSystem::EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
     return shape;
 }
 
-ParticleSystem::EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
+EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
                                                                    float innerRadius,
                                                                    float outerRadius,
                                                                    float offset,
                                                                    float angle,
                                                                    float edgeBias)
 {
-    ParticleSystem::EmissionShape shape{};
+    EmissionShape shape{};
 
-    shape.type = ParticleSystem::EmissionShapeType::TORUS;
+    shape.type = EmissionShapeType::TORUS;
 
     shape.x = pos.x;
     shape.y = pos.y;
