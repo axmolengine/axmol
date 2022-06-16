@@ -17,7 +17,7 @@ struct RngSeed
     unsigned long _m;
     unsigned long _seed;
 
-    RngSeed() { seed_rand(time(NULL)); }
+    RngSeed() : _k(0) { seed_rand(time(NULL)); }
 
     // initialize this object with seed
     void seed_rand(unsigned long seed)
