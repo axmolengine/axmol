@@ -204,7 +204,7 @@ bool Camera::initDefault()
     {
     case Director::Projection::_2D:
     {
-        initOrthographic(size.width / 2, size.height / 2, -1024, 1024);
+        initOrthographic(size.width, size.height, -1024, 1024);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
@@ -255,7 +255,8 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _zoom[1]   = zoomY;
     _nearPlane = nearPlane;
     _farPlane  = farPlane;
-    Mat4::createOrthographicOffCenter(-_zoom[0], _zoom[0], -_zoom[1], _zoom[1], _nearPlane, _farPlane, &_projection);
+    Mat4::createOrthographicOffCenter(-_zoom[0] / 2.0F, _zoom[0] / 2.0F, -_zoom[1] / 2.0F, _zoom[1] / 2.0F,
+                                      _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
     _type                = Type::ORTHOGRAPHIC;
@@ -439,7 +440,7 @@ void Camera::applyCustomProperties()
     {
     case Director::Projection::_2D:
     {
-        initOrthographic(size.width / 2, size.height / 2, _nearPlane, _farPlane);
+        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         break;
     }
