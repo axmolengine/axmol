@@ -13,11 +13,11 @@ struct RngSeed
     unsigned long _z                        = 4;
     unsigned long _w                        = 8;
     unsigned long _carry                    = 0;
-    unsigned long _k;
-    unsigned long _m;
-    unsigned long _seed;
+    unsigned long _k                        = 0;
+    unsigned long _m                        = 0;
+    unsigned long _seed                     = 0;
 
-    RngSeed() : _k(0) { seed_rand(time(NULL)); }
+    RngSeed() { seed_rand(time(NULL)); }
 
     // initialize this object with seed
     void seed_rand(unsigned long seed)
