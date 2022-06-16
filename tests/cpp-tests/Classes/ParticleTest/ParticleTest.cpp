@@ -1783,9 +1783,9 @@ void DemoEmissionShapeAlphaMask::onEnter()
     _emitter->setEmissionShapes(true);
 
     auto cache = ParticleEmissionMaskCache::getInstance();
-    cache->bakeEmissionMask("mask_001"sv, "Particles/mask.png", 0.5F, false, 1);
+    cache->bakeEmissionMask("#msk1"sv, "Particles/mask.png", 0.5F, false, 1);
 
-    _emitter->addEmissionShape(ParticleSystem::createMaskShape("mask_001"sv, {0, 0}, {400, 200}, Vec2::ONE));
+    _emitter->addEmissionShape(ParticleSystem::createMaskShape("#msk1"sv, {0, 0}, {400, 200}, Vec2::ONE));
 
     setEmitterPosition();
 }
