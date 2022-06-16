@@ -33,12 +33,7 @@ NS_CC_BEGIN
 
 CC_DLL const char* adxeVersion()
 {
-    return "adxe-1.0.0b8";
-}
-
-CC_DLL const char* cocos2dVersion()
-{
-    return adxeVersion();
+    return "adxe-1.0.0b7";
 }
 
 NS_CC_END
