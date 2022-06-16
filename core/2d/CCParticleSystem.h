@@ -55,20 +55,8 @@ struct particle_point
     float y;
 };
 
-/**
- * Particle emission shapes.
- * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
- * @since adxe-1.0.0b8
- */
-enum class EmissionShapeType
-{
-    POINT,
-    RECT,
-    RECTTORUS,
-    CIRCLE,
-    TORUS,
-    ALPHA_MASK
-};
+enum class EmissionShapeType;
+struct EmissionShape;
 
 /**
  * Particle emission mask descriptor.
@@ -78,32 +66,6 @@ struct ParticleEmissionMaskDescriptor
 {
     Vec2 size;
     std::vector<cocos2d::Vec2> points;
-};
-
-/**
- * Particle emission shapes.
- * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus
- * @since adxe-1.0.0b8
- */
-struct EmissionShape
-{
-    EmissionShapeType type;
-
-    float x;
-    float y;
-
-    float innerWidth;
-    float innerHeight;
-    float outerWidth;
-    float outerHeight;
-
-    float innerRadius;
-    float outerRadius;
-    float coneOffset;
-    float coneAngle;
-    float edgeBias;
-
-    uint32_t fourccId;
 };
 
 /** @struct ParticleAnimationDescriptor
@@ -413,6 +375,53 @@ public:
 
         HORIZONTAL, /** texture coordinates are read left to right within the texture */
 
+    };
+
+    /**
+     * Particle emission shapes.
+     * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha emission mask
+     * @since adxe-1.0.0b8
+     */
+    enum class EmissionShapeType
+    {
+        // Emission shape of type point
+        POINT,
+        // Emission shape of type rectangle
+        RECT,
+        // Emission shape of type rectangular torus
+        RECTTORUS,
+        // Emission shape of type circle or cone
+        CIRCLE,
+        // Emission shape of type torus or cone torus
+        TORUS,
+        // Emission shape of type texture alpha mask
+        TEXTURE_ALPHA_MASK
+    };
+
+    /**
+     * Particle emission shapes.
+     * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha emission mask
+     * @since adxe-1.0.0b8
+     */
+    struct EmissionShape
+    {
+        ParticleSystem::EmissionShapeType type;
+
+        float x;
+        float y;
+
+        float innerWidth;
+        float innerHeight;
+        float outerWidth;
+        float outerHeight;
+
+        float innerRadius;
+        float outerRadius;
+        float coneOffset;
+        float coneAngle;
+        float edgeBias;
+
+        uint32_t fourccId;
     };
 
     //* @enum
@@ -1257,25 +1266,29 @@ public:
      * @param scale Scale of the emission mask, the size will be multiplied by the specified scale.
      * @param angle Angle of the sampled points to be rotated in degrees.
      */
-    static EmissionShape createMaskShape(std::string_view maskId, Vec2 pos = Vec2::ZERO, Vec2 overrideSize = Vec2::ZERO, Vec2 scale = Vec2::ONE, float angle = 0.0F);
+    static ParticleSystem::EmissionShape createMaskShape(std::string_view maskId,
+                                                            Vec2 pos          = Vec2::ZERO,
+                                                            Vec2 overrideSize = Vec2::ZERO,
+                                                            Vec2 scale        = Vec2::ONE,
+                                                            float angle       = 0.0F);
 
     /** Adds an emission shape of type point to the system. 
      * @param pos Position of the emission shape in local space.
      */
-    static EmissionShape createPointShape(Vec2 pos);
+    static ParticleSystem::EmissionShape createPointShape(Vec2 pos);
 
     /** Adds an emission shape of type Rectangle to the system. 
      * @param pos Position of the emission shape in local space.
      * @param size Size of the rectangle.
      */
-    static EmissionShape createRectShape(Vec2 pos, Size size);
+    static ParticleSystem::EmissionShape createRectShape(Vec2 pos, Size size);
 
     /** Adds an emission shape of type Rectangular Torus to the system. 
      * @param pos Position of the emission shape in local space.
      * @param innerSize Inner size offset of the rectangle.
      * @param outerSize Outer size of the rectangle.
      */
-    static EmissionShape createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize);
+    static ParticleSystem::EmissionShape createRectTorusShape(Vec2 pos, Size innerSize, Size outerSize);
 
     /** Adds an emission shape of type Circle to the system.
      *
@@ -1288,7 +1301,7 @@ public:
      * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
      * then there will be no bias behaviour.
      */
-    static EmissionShape createCircleShape(Vec2 pos, float radius, float edgeBias = 1.0F);
+    static ParticleSystem::EmissionShape createCircleShape(Vec2 pos, float radius, float edgeBias = 1.0F);
 
     /** Adds an emission shape of type Cone to the system.
      *
@@ -1303,11 +1316,11 @@ public:
      * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
      * then there will be no bias behaviour.
      */
-    static EmissionShape createConeShape(Vec2 pos,
-                                                float radius,
-                                                float offset,
-                                                float angle,
-                                                float edgeBias = 1.0F);
+    static ParticleSystem::EmissionShape createConeShape(Vec2 pos,
+                                                         float radius,
+                                                         float offset,
+                                                         float angle,
+                                                         float edgeBias = 1.0F);
 
     /** Adds an emission shape of type Torus to the system.
      *
@@ -1321,7 +1334,10 @@ public:
      * will bias towards the center of the torus more often the closer the value is to 0.0; If the value is exactly 1.0
      * then there will be no bias behaviour.
      */
-    static EmissionShape createTorusShape(Vec2 pos, float innerRadius, float outerRadius, float edgeBias = 1.0F);
+    static ParticleSystem::EmissionShape createTorusShape(Vec2 pos,
+                                                          float innerRadius,
+                                                          float outerRadius,
+                                                          float edgeBias = 1.0F);
 
     /** Adds an emission shape of type Torus to the system.
      *
@@ -1337,12 +1353,12 @@ public:
      * will bias towards the center of the torus more often the closer the value is to 0.0; If the value is exactly 1.0
      * then there will be no bias behaviour.
      */
-    static EmissionShape createConeTorusShape(Vec2 pos,
-                                                     float innerRadius,
-                                                     float outerRadius,
-                                                     float offset,
-                                                     float angle,
-                                                     float edgeBias = 1.0F);
+    static ParticleSystem::EmissionShape createConeTorusShape(Vec2 pos,
+                                                              float innerRadius,
+                                                              float outerRadius,
+                                                              float offset,
+                                                              float angle,
+                                                              float edgeBias = 1.0F);
 
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8
