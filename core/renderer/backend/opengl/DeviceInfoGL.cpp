@@ -69,7 +69,7 @@ static bool checkReallySupportsASTC()
 
     auto error = glGetError();
 #if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
-    if (!error && glGetTexImage)
+    if (!error)
     {
         // read pixel RGB: should be: 255, 128, 0
         uint8_t pixels[TEXTURE_DIM * TEXTURE_DIM * 4] = {0};
