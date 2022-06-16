@@ -99,7 +99,6 @@ Camera::Camera()
     , _farPlane(1024)
     , _zoomFactorNearPlane(10)
     , _zoomFactorFarPlane(1024)
-    , _originalPosition({0, 0})
     , _isCameraInitialized(false)
 {
     // minggo comment
@@ -205,7 +204,7 @@ bool Camera::initDefault()
     {
     case Director::Projection::_2D:
     {
-        initOrthographic(size.width, size.height, -1024, 1024);
+        initOrthographic(size.width / 2, size.height / 2, -1024, 1024);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
@@ -227,7 +226,6 @@ bool Camera::initDefault()
     }
     if (_zoomFactor != 1.0F)
         applyZoom();
-    setPosition(getPosition());
     return true;
 }
 
@@ -257,7 +255,7 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _zoom[1]   = zoomY;
     _nearPlane = nearPlane;
     _farPlane  = farPlane;
-    Mat4::createOrthographicOffCenter(0, _zoom[0], 0, _zoom[1], _nearPlane, _farPlane, &_projection);
+    Mat4::createOrthographicOffCenter(-_zoom[0], _zoom[0], -_zoom[1], _zoom[1], _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
     _type                = Type::ORTHOGRAPHIC;
@@ -406,8 +404,6 @@ void Camera::setZoom(float factor)
 
     _zoomFactor = factor;
     applyZoom();
-    if (_projectionType == Director::Projection::_2D)
-        setPosition(getPosition());
 }
 
 void Camera::applyZoom()
@@ -443,9 +439,8 @@ void Camera::applyCustomProperties()
     {
     case Director::Projection::_2D:
     {
-        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        initOrthographic(size.width / 2, size.height / 2, _nearPlane, _farPlane);
         setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
-        _originalPosition = {size.width / 2, size.height / 2};
         break;
     }
     case Director::Projection::_3D:
@@ -461,7 +456,6 @@ void Camera::applyCustomProperties()
     }
     if (_zoomFactor != 1.0F)
         applyZoom();
-    setPosition(getPosition());
 }
 
 void Camera::onEnter()
@@ -482,97 +476,6 @@ void Camera::onExit()
     // remove this camera from scene
     setScene(nullptr);
     Node::onExit();
-}
-
-inline const Vec2& getPositionCenter(const Vec2& pos,
-                                     Director::Projection projectionType,
-                                     float zoomFactor,
-                                     float angleOfRotation)
-{
-    auto director = Director::getInstance();
-    if (projectionType == Director::Projection::_2D)
-    {
-        auto v    = director->getVisibleSize();
-        auto rpos = Vec2(0, 0);
-        rpos -= v / 2;
-        rpos.x += pos.x + v.width / 2 * (1.0F - zoomFactor);
-        rpos.y += pos.y + v.height / 2 * (1.0F - zoomFactor);
-        return rpos.rotateByAngle(rpos + v / 2 * zoomFactor, -CC_DEGREES_TO_RADIANS(angleOfRotation));
-    }
-    return pos;
-}
-
-const Vec2& Camera::getPosition() const
-{
-    return _originalPosition;
-}
-
-void Camera::setPosition(const Vec2& position)
-{
-    _originalPosition = {position.x, position.y};
-    auto& pos = getPositionCenter(position, _projectionType, getZoom(), getRotation());
-    Node::setPosition(pos.x, pos.y);
-}
-
-void Camera::getPosition(float* x, float* y) const
-{
-    *x = _originalPosition.x;
-    *y = _originalPosition.y;
-}
-
-void Camera::setPosition(float x, float y)
-{
-    _originalPosition = {x, y};
-    auto& pos = getPositionCenter({x, y}, _projectionType, getZoom(), getRotation());
-    Node::setPosition(pos.x, pos.y);
-}
-
-void Camera::setPosition3D(const Vec3& position)
-{
-    _originalPosition = {position.x, position.y};
-    auto& pos = getPositionCenter({position.x, position.y}, _projectionType, getZoom(), getRotation());
-    Node::setPosition3D({pos.x, pos.y, position.z});
-}
-
-Vec3 Camera::getPosition3D() const
-{
-    return {_originalPosition.x, _originalPosition.y, getPositionZ()};
-}
-
-float Camera::getPositionX() const
-{
-    return _originalPosition.x;
-}
-
-void Camera::setPositionX(float x)
-{
-    setPosition(x, _originalPosition.y);
-}
-
-float Camera::getPositionY() const
-{
-    return _originalPosition.y;
-}
-
-void Camera::setPositionY(float y)
-{
-    setPosition(_originalPosition.x, y);
-}
-
-float Camera::getPositionZ() const
-{
-    return Node::getPositionZ();
-}
-
-void Camera::setPositionZ(float positionZ)
-{
-    Node::setPositionZ(positionZ);
-}
-
-void Camera::setRotation(float rotation)
-{
-    Node::setRotation(rotation);
-    setPosition(getPosition());
 }
 
 void Camera::setScene(Scene* scene)
