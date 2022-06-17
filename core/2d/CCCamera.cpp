@@ -265,8 +265,7 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _zoom[1]   = zoomY;
     _nearPlane = nearPlane;
     _farPlane  = farPlane;
-    Mat4::createOrthographicOffCenter(-_zoom[0] / 2.0F, _zoom[0] / 2.0F, -_zoom[1] / 2.0F, _zoom[1] / 2.0F,
-                                      _nearPlane, _farPlane, &_projection);
+    Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
     _type                = Type::ORTHOGRAPHIC;
@@ -408,9 +407,7 @@ void Camera::applyZoom()
     {
     case cocos2d::Director::Projection::_2D:
     {
-        Mat4::createOrthographicOffCenter(-_zoom[0] / 2.0F * _zoomFactor, _zoom[0] / 2.0F * _zoomFactor,
-                                          -_zoom[1] / 2.0F * _zoomFactor, _zoom[1] / 2.0F * _zoomFactor,
-                                          _nearPlane, _farPlane, &_projection);
+        Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
         break;
     }
     case cocos2d::Director::Projection::_3D:
