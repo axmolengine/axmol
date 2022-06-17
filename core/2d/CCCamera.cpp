@@ -27,7 +27,6 @@
  ****************************************************************************/
 #include "2d/CCCamera.h"
 #include "2d/CCCameraBackgroundBrush.h"
-#include "base/CCDirector.h"
 #include "platform/CCGLView.h"
 #include "2d/CCScene.h"
 #include "renderer/CCRenderer.h"
@@ -53,7 +52,12 @@ Camera* Camera::create()
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
+    ret->_fieldOfView = fieldOfView;
+    ret->_aspectRatio = aspectRatio;
+    ret->_nearPlane   = nearPlane;
+    ret->_farPlane    = farPlane;
     ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
+    ret->_isCameraInitialized = true;
     ret->autorelease();
     return ret;
 }
@@ -61,7 +65,12 @@ Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float ne
 Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
+    ret->_zoom[0]   = zoomX;
+    ret->_zoom[1]   = zoomY;
+    ret->_nearPlane = nearPlane;
+    ret->_farPlane  = farPlane;
     ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
+    ret->_isCameraInitialized = true;
     ret->autorelease();
     return ret;
 }
@@ -94,6 +103,13 @@ const Camera* Camera::getVisitingCamera()
 // end static methods
 
 Camera::Camera()
+    : _eyeZdistance(1)
+    , _zoomFactor(1)
+    , _nearPlane(-1024)
+    , _farPlane(1024)
+    , _zoomFactorNearPlane(10)
+    , _zoomFactorFarPlane(1024)
+    , _isCameraInitialized(false)
 {
     // minggo comment
     // _frustum.setClipZ(true);
@@ -137,6 +153,7 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     Vec3::cross(zaxis, xaxis, &yaxis);
     yaxis.normalize();
     Mat4 rotation;
+
     rotation.m[0] = xaxis.x;
     rotation.m[1] = xaxis.y;
     rotation.m[2] = xaxis.z;
@@ -146,6 +163,7 @@ void Camera::lookAt(const Vec3& lookAtPos, const Vec3& up)
     rotation.m[5]  = yaxis.y;
     rotation.m[6]  = yaxis.z;
     rotation.m[7]  = 0;
+
     rotation.m[8]  = zaxis.x;
     rotation.m[9]  = zaxis.y;
     rotation.m[10] = zaxis.z;
@@ -177,15 +195,27 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 
 bool Camera::initDefault()
 {
-    auto size = _director->getWinSize();
+    if (_projectionType != _director->getProjection())
+    {
+        _projectionType = _director->getProjection();
+        _isCameraInitialized = false;
+    }
+
+    if (_isCameraInitialized)
+    {
+        applyCustomProperties();
+        return true;
+    }
+    _isCameraInitialized = true;
+
+    auto& size = _director->getWinSize();
     // create default camera
-    auto projection = _director->getProjection();
-    switch (projection)
+    switch (_projectionType)
     {
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, -1024, 1024);
-        setPosition3D(Vec3(0.0f, 0.0f, 0.0f));
+        setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -193,8 +223,9 @@ bool Camera::initDefault()
     {
         float zeye = _director->getZEye();
         initPerspective(60, (float)size.width / size.height, 10, zeye + size.height / 2.0f);
-        Vec3 eye(size.width / 2, size.height / 2.0f, zeye), center(size.width / 2, size.height / 2, 0.0f),
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
             up(0.0f, 1.0f, 0.0f);
+        _eyeZdistance = eye.z;
         setPosition3D(eye);
         lookAt(center, up);
         break;
@@ -203,15 +234,23 @@ bool Camera::initDefault()
         CCLOG("unrecognized projection");
         break;
     }
+    if (_zoomFactor != 1.0F)
+        applyZoom();
     return true;
 }
 
 bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
-    _fieldOfView = fieldOfView;
-    _aspectRatio = aspectRatio;
-    _nearPlane   = nearPlane;
-    _farPlane    = farPlane;
+    _fieldOfView        = fieldOfView;
+    _aspectRatio        = aspectRatio;
+    _nearPlane          = nearPlane;
+    _farPlane           = farPlane;
+
+    if (_zoomFactorFarPlane == 1024)
+        _zoomFactorFarPlane = farPlane;
+    if (_zoomFactorNearPlane == 10)
+        _zoomFactorNearPlane = nearPlane;
+
     Mat4::createPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
@@ -226,7 +265,8 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     _zoom[1]   = zoomY;
     _nearPlane = nearPlane;
     _farPlane  = farPlane;
-    Mat4::createOrthographicOffCenter(0, _zoom[0], 0, _zoom[1], _nearPlane, _farPlane, &_projection);
+    Mat4::createOrthographicOffCenter(-_zoom[0] / 2.0F, _zoom[0] / 2.0F, -_zoom[1] / 2.0F, _zoom[1] / 2.0F,
+                                      _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
     _type                = Type::ORTHOGRAPHIC;
@@ -259,7 +299,9 @@ Vec2 Camera::projectGL(const Vec3& src) const
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
-    CCASSERT(clipPos.w != 0.0f, "clipPos.w can't be 0.0f!");
+    if (clipPos.w == 0.0f)
+        CCLOG("WARNING: Camera's clip position w is 0.0! a black screen should be expected.");
+
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
@@ -354,6 +396,81 @@ void Camera::setDepth(int8_t depth)
     }
 }
 
+void Camera::setZoom(float factor)
+{
+    if (_projectionType == Director::Projection::_3D)
+    {
+        // Push the far plane farther the more we zoom out.
+        if (_zoomFactorFarPlane * factor > _farPlane)
+        {
+            _farPlane = _zoomFactorFarPlane * factor;
+            applyCustomProperties();
+        }
+
+        // Push the near plane closer the more we zoom in.
+        if (_zoomFactorNearPlane * factor < _nearPlane)
+        {
+            _nearPlane = _zoomFactorNearPlane * factor;
+            applyCustomProperties();
+        }
+    }
+
+    _zoomFactor = factor;
+    applyZoom();
+}
+
+void Camera::applyZoom()
+{
+    switch (_projectionType)
+    {
+    case cocos2d::Director::Projection::_2D:
+    {
+        this->setScale(_zoomFactor);
+        break;
+    }
+    case cocos2d::Director::Projection::_3D:
+    {
+        this->setPositionZ(_eyeZdistance * _zoomFactor);
+        break;
+    }
+    }
+}
+
+void Camera::applyCustomProperties()
+{
+    if (_projectionType != _director->getProjection())
+    {
+        _projectionType = _director->getProjection();
+        _isCameraInitialized = false;
+        initDefault();
+        return;
+    }
+
+    auto& size = _director->getWinSize();
+    // create default camera
+    switch (_projectionType)
+    {
+    case Director::Projection::_2D:
+    {
+        initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
+        break;
+    }
+    case Director::Projection::_3D:
+    {
+        float zeye = _director->getZEye();
+        initPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+            up(0.0f, 1.0f, 0.0f);
+        _eyeZdistance = eye.z;
+        setPosition3D(eye);
+        break;
+    }
+    }
+    if (_zoomFactor != 1.0F)
+        applyZoom();
+}
+
 void Camera::onEnter()
 {
     if (_scene == nullptr)
@@ -429,6 +546,30 @@ int Camera::getRenderOrder() const
     result = 127 << 8;
     result += _depth;
     return result;
+}
+
+void Camera::setAspectRatio(float ratio)
+{
+    _aspectRatio = ratio;
+    applyCustomProperties();
+}
+
+void Camera::setFOV(float fieldOfView)
+{
+    _fieldOfView = fieldOfView;
+    applyCustomProperties();
+}
+
+void Camera::setFarPlane(float farPlane)
+{
+    _farPlane = farPlane;
+    applyCustomProperties();
+}
+
+void Camera::setNearPlane(float nearPlane)
+{
+    _nearPlane = nearPlane;
+    applyCustomProperties();
 }
 
 void Camera::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)

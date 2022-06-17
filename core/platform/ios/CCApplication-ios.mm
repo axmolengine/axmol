@@ -102,7 +102,15 @@ LanguageType Application::getCurrentLanguage()
 
 Application::Platform Application::getTargetPlatform()
 {
-    return Platform::iOS;
+    if ([UIDevice.currentDevice userInterfaceIdiom] ==
+        UIUserInterfaceIdiomPad)  // idiom for iOS <= 3.2, otherwise: [UIDevice userInterfaceIdiom] is faster.
+    {
+        return Platform::OS_IPAD;
+    }
+    else
+    {
+        return Platform::OS_IPHONE;
+    }
 }
 
 std::string Application::getVersion()
