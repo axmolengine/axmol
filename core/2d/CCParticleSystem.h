@@ -38,16 +38,7 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-/**
- * @addtogroup _2d
- * @{
- */
-
 class ParticleBatchNode;
-
-/** @struct sParticle
-Structure that contains the values of each particle.
-*/
 
 struct particle_point
 {
@@ -57,32 +48,30 @@ struct particle_point
 
 /**
  * Particle emission shapes.
- * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha
+ * emission mask
  * @since adxe-1.0.0b8
  */
 enum class EmissionShapeType
 {
+    // Emission shape of type point
     POINT,
+    // Emission shape of type rectangle
     RECT,
+    // Emission shape of type rectangular torus
     RECTTORUS,
+    // Emission shape of type circle or cone
     CIRCLE,
+    // Emission shape of type torus or cone torus
     TORUS,
-    ALPHA_MASK
-};
-
-/**
- * Particle emission mask descriptor.
- * @since adxe-1.0.0b8
- */
-struct ParticleEmissionMaskDescriptor
-{
-    Vec2 size;
-    std::vector<cocos2d::Vec2> points;
+    // Emission shape of type texture alpha mask
+    TEXTURE_ALPHA_MASK
 };
 
 /**
  * Particle emission shapes.
- * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus
+ * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha
+ * emission mask
  * @since adxe-1.0.0b8
  */
 struct EmissionShape
@@ -104,6 +93,16 @@ struct EmissionShape
     float edgeBias;
 
     uint32_t fourccId;
+};
+
+/**
+ * Particle emission mask descriptor.
+ * @since adxe-1.0.0b8
+ */
+struct ParticleEmissionMaskDescriptor
+{
+    Vec2 size;
+    std::vector<cocos2d::Vec2> points;
 };
 
 /** @struct ParticleAnimationDescriptor
@@ -1257,7 +1256,11 @@ public:
      * @param scale Scale of the emission mask, the size will be multiplied by the specified scale.
      * @param angle Angle of the sampled points to be rotated in degrees.
      */
-    static EmissionShape createMaskShape(std::string_view maskId, Vec2 pos = Vec2::ZERO, Vec2 overrideSize = Vec2::ZERO, Vec2 scale = Vec2::ONE, float angle = 0.0F);
+    static EmissionShape createMaskShape(std::string_view maskId,
+                                         Vec2 pos          = Vec2::ZERO,
+                                         Vec2 overrideSize = Vec2::ZERO,
+                                         Vec2 scale        = Vec2::ONE,
+                                         float angle       = 0.0F);
 
     /** Adds an emission shape of type point to the system. 
      * @param pos Position of the emission shape in local space.
@@ -1303,11 +1306,7 @@ public:
      * will bias towards the center of the circle more often the closer the value is to 0.0; If the value is exactly 1.0
      * then there will be no bias behaviour.
      */
-    static EmissionShape createConeShape(Vec2 pos,
-                                                float radius,
-                                                float offset,
-                                                float angle,
-                                                float edgeBias = 1.0F);
+    static EmissionShape createConeShape(Vec2 pos, float radius, float offset, float angle, float edgeBias = 1.0F);
 
     /** Adds an emission shape of type Torus to the system.
      *
@@ -1338,11 +1337,11 @@ public:
      * then there will be no bias behaviour.
      */
     static EmissionShape createConeTorusShape(Vec2 pos,
-                                                     float innerRadius,
-                                                     float outerRadius,
-                                                     float offset,
-                                                     float angle,
-                                                     float edgeBias = 1.0F);
+                                              float innerRadius,
+                                              float outerRadius,
+                                              float offset,
+                                              float angle,
+                                              float edgeBias = 1.0F);
 
     /** Gets the particles movement type: Free or Grouped.
      @since v0.8

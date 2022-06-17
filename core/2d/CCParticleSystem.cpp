@@ -815,7 +815,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
                 break;
             }
-            case EmissionShapeType::ALPHA_MASK:
+            case EmissionShapeType::TEXTURE_ALPHA_MASK:
             {
                 auto& mask = ParticleEmissionMaskCache::getInstance()->getEmissionMask(shape.fourccId);
 
@@ -1159,7 +1159,7 @@ EmissionShape ParticleSystem::createMaskShape(std::string_view maskId,
 {
     EmissionShape shape{};
 
-    shape.type = EmissionShapeType::ALPHA_MASK;
+    shape.type = EmissionShapeType::TEXTURE_ALPHA_MASK;
 
     shape.fourccId = utils::fourccValue(maskId);
 
@@ -1241,7 +1241,11 @@ EmissionShape ParticleSystem::createCircleShape(Vec2 pos, float radius, float ed
     return shape;
 }
 
-EmissionShape ParticleSystem::createConeShape(Vec2 pos, float radius, float offset, float angle, float edgeBias)
+EmissionShape ParticleSystem::createConeShape(Vec2 pos,
+                                                              float radius,
+                                                              float offset,
+                                                              float angle,
+                                                              float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1260,7 +1264,10 @@ EmissionShape ParticleSystem::createConeShape(Vec2 pos, float radius, float offs
     return shape;
 }
 
-EmissionShape ParticleSystem::createTorusShape(Vec2 pos, float innerRadius, float outerRadius, float edgeBias)
+EmissionShape ParticleSystem::createTorusShape(Vec2 pos,
+                                                               float innerRadius,
+                                                               float outerRadius,
+                                                               float edgeBias)
 {
     EmissionShape shape{};
 
@@ -1281,11 +1288,11 @@ EmissionShape ParticleSystem::createTorusShape(Vec2 pos, float innerRadius, floa
 }
 
 EmissionShape ParticleSystem::createConeTorusShape(Vec2 pos,
-                                                          float innerRadius,
-                                                          float outerRadius,
-                                                          float offset,
-                                                          float angle,
-                                                          float edgeBias)
+                                                                   float innerRadius,
+                                                                   float outerRadius,
+                                                                   float offset,
+                                                                   float angle,
+                                                                   float edgeBias)
 {
     EmissionShape shape{};
 
