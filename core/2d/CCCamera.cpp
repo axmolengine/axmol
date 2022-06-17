@@ -215,7 +215,7 @@ bool Camera::initDefault()
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, -1024, 1024);
-        setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
+        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
         setRotation3D(Vec3(0.f, 0.f, 0.f));
         break;
     }
@@ -398,23 +398,6 @@ void Camera::setDepth(int8_t depth)
 
 void Camera::setZoom(float factor)
 {
-    if (_projectionType == Director::Projection::_3D)
-    {
-        // Push the far plane farther the more we zoom out.
-        if (_zoomFactorFarPlane * factor > _farPlane)
-        {
-            _farPlane = _zoomFactorFarPlane * factor;
-            applyCustomProperties();
-        }
-
-        // Push the near plane closer the more we zoom in.
-        if (_zoomFactorNearPlane * factor < _nearPlane)
-        {
-            _nearPlane = _zoomFactorNearPlane * factor;
-            applyCustomProperties();
-        }
-    }
-
     _zoomFactor = factor;
     applyZoom();
 }
@@ -425,11 +408,27 @@ void Camera::applyZoom()
     {
     case cocos2d::Director::Projection::_2D:
     {
-        this->setScale(_zoomFactor);
+        Mat4::createOrthographicOffCenter(-_zoom[0] / 2.0F * _zoomFactor, _zoom[0] / 2.0F * _zoomFactor,
+                                          -_zoom[1] / 2.0F * _zoomFactor, _zoom[1] / 2.0F * _zoomFactor,
+                                          _nearPlane, _farPlane, &_projection);
         break;
     }
     case cocos2d::Director::Projection::_3D:
     {
+        // Push the far plane farther the more we zoom out.
+        if (_zoomFactorFarPlane * _zoomFactor > _farPlane)
+        {
+            _farPlane = _zoomFactorFarPlane * _zoomFactor;
+            applyCustomProperties();
+        }
+
+        // Push the near plane closer the more we zoom in.
+        if (_zoomFactorNearPlane * _zoomFactor < _nearPlane)
+        {
+            _nearPlane = _zoomFactorNearPlane * _zoomFactor;
+            applyCustomProperties();
+        }
+
         this->setPositionZ(_eyeZdistance * _zoomFactor);
         break;
     }
@@ -453,7 +452,7 @@ void Camera::applyCustomProperties()
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-        setPosition3D(Vec3(size.width / 2, size.height / 2, 0.f));
+        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
         break;
     }
     case Director::Projection::_3D:
