@@ -780,6 +780,15 @@ std::string urlDecode(std::string_view st)
     return decoded;
 }
 
+CC_DLL uint32_t fourccValue(std::string_view str)
+{
+    if (str.empty() || str[0] != '#')
+        return (uint32_t)-1;
+    uint32_t value = 0;
+    memcpy(&value, str.data() + 1, std::min(sizeof(value), str.size() - 1));
+    return value;
+}
+
 }  // namespace utils
 
 NS_CC_END

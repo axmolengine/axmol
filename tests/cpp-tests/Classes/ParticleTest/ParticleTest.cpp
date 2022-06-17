@@ -680,6 +680,1123 @@ std::string ParallaxParticle::subtitle() const
 
 //------------------------------------------------------------------
 //
+// DemoFixedFPS
+//
+//------------------------------------------------------------------
+void DemoFixedFPS::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setFixedFPS(15.0F);
+
+    setEmitterPosition();
+}
+
+std::string DemoFixedFPS::subtitle() const
+{
+    return "Particle Fixed FPS set to 15";
+}
+
+//------------------------------------------------------------------
+//
+// DemoTimeScale
+//
+//------------------------------------------------------------------
+void DemoTimeScale::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setTag(2);
+
+    setEmitterPosition();
+}
+
+std::string DemoTimeScale::subtitle() const
+{
+    return "Particle system timescale should alternate between 1.0 and 0.0";
+}
+
+void DemoTimeScale::update(float dt)
+{
+    auto p = (ParticleSystem*)getChildByTag(2);
+
+    elapsedTime += Director::getInstance()->getDeltaTime();
+    auto scale = (sin(elapsedTime * 4) + 1.0F) / 2.0F;
+    p->setTimeScale(scale);
+}
+
+//------------------------------------------------------------------
+//
+// DemoSpawnFadeIn
+//
+//------------------------------------------------------------------
+void DemoSpawnFadeIn::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setSpawnFadeIn(0.5F);
+    _emitter->setSpawnFadeInVar(0);
+
+    setEmitterPosition();
+}
+
+std::string DemoSpawnFadeIn::subtitle() const
+{
+    return "Particle spawn fade in set to 0.5 seconds";
+}
+
+//------------------------------------------------------------------
+//
+// DemoScaleFadeIn
+//
+//------------------------------------------------------------------
+void DemoScaleFadeIn::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setSpawnScaleIn(1);
+    _emitter->setSpawnScaleInVar(0);
+
+    setEmitterPosition();
+}
+
+std::string DemoScaleFadeIn::subtitle() const
+{
+    return "Particle spawn scale in set to 1.0 seconds";
+}
+
+//------------------------------------------------------------------
+//
+// DemoSimulation
+//
+//------------------------------------------------------------------
+void DemoSimulation::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->simulate(3.0F);
+
+    setEmitterPosition();
+}
+
+std::string DemoSimulation::subtitle() const
+{
+    return "Particle simulation, particle system should advance 3 seconds in at the start";
+}
+
+//------------------------------------------------------------------
+//
+// DemoSpawnRotation
+//
+//------------------------------------------------------------------
+void DemoSpawnRotation::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setSpawnAngle(0);
+    _emitter->setSpawnAngleVar(180);
+
+    setEmitterPosition();
+}
+
+std::string DemoSpawnRotation::subtitle() const
+{
+    return "Particle rotation, particles should spawn with a random rotation";
+}
+
+//------------------------------------------------------------------
+//
+// DemoHSV
+//
+//------------------------------------------------------------------
+void DemoHSV::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->useHSV(true);
+    _emitter->setHSV(HSV(90, 0.5F, 0.5F));
+    _emitter->setHSVVar(HSV(90, 0.5F, 0.5F));
+
+    setEmitterPosition();
+}
+
+std::string DemoHSV::subtitle() const
+{
+    return "Particle HSV color system";
+}
+
+//------------------------------------------------------------------
+//
+// DemoLifeAnimation
+//
+//------------------------------------------------------------------
+void DemoLifeAnimation::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setLifeAnimation(true);
+
+    _emitter->resetAnimationIndices();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    setEmitterPosition();
+}
+
+std::string DemoLifeAnimation::subtitle() const
+{
+    return "Particle life animation, particles should show 0 to 9 based on their life";
+}
+
+//------------------------------------------------------------------
+//
+// DemoLifeAnimationAtlas
+//
+//------------------------------------------------------------------
+void DemoLifeAnimationAtlas::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setLifeAnimation(true);
+
+    _emitter->resetAnimationIndices();
+
+    _emitter->setAnimationIndicesAtlas();
+
+    setEmitterPosition();
+}
+
+std::string DemoLifeAnimationAtlas::subtitle() const
+{
+    return "Particle life animation, particles should show 0 to 9 based on their life based on a texture atlas NOT using sprite frames";
+}
+
+//------------------------------------------------------------------
+//
+// DemoLifeAnimation
+//
+//------------------------------------------------------------------
+void DemoLifeAnimationReversed::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setLifeAnimation(true);
+
+    _emitter->resetAnimationIndices();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    _emitter->setAnimationReverse(true);
+
+    setEmitterPosition();
+}
+
+std::string DemoLifeAnimationReversed::subtitle() const
+{
+    return "Particle life animation, particles should show 9 to 0 reversed based on their life";
+}
+
+//------------------------------------------------------------------
+//
+// DemoLoopAnimation
+//
+//------------------------------------------------------------------
+void DemoLoopAnimation::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setLoopAnimation(true);
+
+    _emitter->resetAnimationIndices();
+    _emitter->resetAnimationDescriptors();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    _emitter->setAnimationDescriptor(0, 1, 0.5F, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+
+    setEmitterPosition();
+}
+
+std::string DemoLoopAnimation::subtitle() const
+{
+    return "Particle loop animation, particles should loop from 0 to 9 in one second with 0.5 variance";
+}
+
+//------------------------------------------------------------------
+//
+// DemoLoopAnimationReversed
+//
+//------------------------------------------------------------------
+void DemoLoopAnimationReversed::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setLoopAnimation(true);
+
+    _emitter->resetAnimationIndices();
+    _emitter->resetAnimationDescriptors();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    _emitter->setAnimationDescriptor(0, 1, 0.5F, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, true /* Reversed animation descriptor */);
+
+    setEmitterPosition();
+}
+
+std::string DemoLoopAnimationReversed::subtitle() const
+{
+    return "Particle loop animation, particles should loop from 9 to 0 reversed in one second with 0.5 variance";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmitterAnimation
+//
+//------------------------------------------------------------------
+void DemoEmitterAnimation::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setEmitterAnimation(true);
+
+    _emitter->resetAnimationIndices();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    setEmitterPosition();
+}
+
+std::string DemoEmitterAnimation::subtitle() const
+{
+    return "Particle emitter animation, particles should spawn with a fixed random index";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmitterAnimation
+//
+//------------------------------------------------------------------
+void DemoEmitterAnimationDescriptor::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setEmitterAnimation(true);
+
+    _emitter->resetAnimationIndices();
+    _emitter->resetAnimationDescriptors();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    _emitter->setAnimationDescriptor(0, 1, 0.5F, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+
+    setEmitterPosition();
+}
+
+std::string DemoEmitterAnimationDescriptor::subtitle() const
+{
+    return "Particle emitter animation, particles should have their index changed every one second with a 0.5 variance to a random index";
+}
+
+//------------------------------------------------------------------
+//
+// DemoLoopAnimationMultiDescriptor
+//
+//------------------------------------------------------------------
+void DemoLoopAnimationMultiDescriptor::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Particles/animation_1.plist");
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage("Particles/animation_1.png"));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setStartColor({1, 1, 1, 1});
+    _emitter->setStartColorVar({0, 0, 0, 0});
+    _emitter->setEndColor({1, 1, 1, 1});
+    _emitter->setEndColorVar({0, 0, 0, 0});
+
+    _emitter->setEmissionRate(10);
+
+    _emitter->setStartSize(16);
+    _emitter->setEndSize(16);
+
+    _emitter->setLoopAnimation(true);
+
+    _emitter->resetAnimationIndices();
+    _emitter->resetAnimationDescriptors();
+
+    _emitter->addAnimationIndex("particle_anim_0.png");
+    _emitter->addAnimationIndex("particle_anim_1.png");
+    _emitter->addAnimationIndex("particle_anim_2.png");
+    _emitter->addAnimationIndex("particle_anim_3.png");
+    _emitter->addAnimationIndex("particle_anim_4.png");
+    _emitter->addAnimationIndex("particle_anim_5.png");
+    _emitter->addAnimationIndex("particle_anim_6.png");
+    _emitter->addAnimationIndex("particle_anim_7.png");
+    _emitter->addAnimationIndex("particle_anim_8.png");
+    _emitter->addAnimationIndex("particle_anim_9.png");
+
+    _emitter->setAnimationDescriptor(0, 1, 0.5F, {1, 3, 8});
+    _emitter->setAnimationDescriptor(1, 1, 0.5F, {0, 1});
+    _emitter->setAnimationDescriptor(2, 1, 0.5F, {0, 9});
+
+    setEmitterPosition();
+}
+
+std::string DemoLoopAnimationMultiDescriptor::subtitle() const
+{
+    return "Particle loop animation, particles should play a random animation descriptor";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapePoint
+//
+//------------------------------------------------------------------
+void DemoEmissionShapePoint::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createPointShape({40, 40}));
+    _emitter->addEmissionShape(ParticleSystem::createPointShape({-40, 40}));
+    _emitter->addEmissionShape(ParticleSystem::createPointShape({40, -40}));
+    _emitter->addEmissionShape(ParticleSystem::createPointShape({-40, -40}));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapePoint::subtitle() const
+{
+    return "Particle emission shape point";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeRect
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeRect::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createRectShape({0, 0}, {300, 100}));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeRect::subtitle() const
+{
+    return "Particle emission shape rectangle";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeRectTorus
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeRectTorus::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createRectTorusShape({0, 0}, {100, 100}, {150, 150}));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeRectTorus::subtitle() const
+{
+    return "Particle emission shape rectangular torus";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeCircle
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeCircle::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createCircleShape({0, 0}, 150, 2.0F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeCircle::subtitle() const
+{
+    return "Particle emission shape circle";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeCircleBias
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeCircleBiasEdge::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createCircleShape({0, 0}, 150, 6.0F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeCircleBiasEdge::subtitle() const
+{
+    return "Particle emission shape circle with bias towards the edge";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeCircleBiasCenter
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeCircleBiasCenter::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createCircleShape({0, 0}, 150, 0.75F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeCircleBiasCenter::subtitle() const
+{
+    return "Particle emission shape circle with bias towards the center";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeTorus
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeTorus::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createTorusShape({0, 0}, 80, 150, 2.0F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeTorus::subtitle() const
+{
+    return "Particle emission shape torus";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeTorusBiasEdge
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeTorusBiasEdge::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createTorusShape({0, 0}, 80, 150, 6.0F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeTorusBiasEdge::subtitle() const
+{
+    return "Particle emission shape torus with bias towards the edge";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeTorusBiasInner
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeTorusBiasInner::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createTorusShape({0, 0}, 80, 150, 0.5F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeTorusBiasInner::subtitle() const
+{
+    return "Particle emission shape torus with bias towards the inner radius";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeCone
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeCone::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createConeShape({0, 0}, 150, 0, 90, 2.0F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeCone::subtitle() const
+{
+    return "Particle emission shape cone";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeCone
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeConeTorus::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::create();
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(10);
+
+    _emitter->setEmissionShapes(true);
+
+    _emitter->addEmissionShape(ParticleSystem::createConeTorusShape({0, 0}, 100, 150, 0, 120, 2.0F /* Bias */));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeConeTorus::subtitle() const
+{
+    return "Particle emission shape cone torus";
+}
+
+//------------------------------------------------------------------
+//
+// DemoEmissionShapeAlphaMask
+//
+//------------------------------------------------------------------
+void DemoEmissionShapeAlphaMask::onEnter()
+{
+    ParticleDemo::onEnter();
+
+    _color->setColor(Color3B::BLACK);
+    removeChild(_background, true);
+    _background = nullptr;
+
+    _emitter = ParticleFireworks::createWithTotalParticles(8000);
+    _emitter->retain();
+    addChild(_emitter, 10);
+    _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+
+    _emitter->setBlendAdditive(true);
+
+    _emitter->setGravity({0, 0});
+    _emitter->setSpeed(0);
+    _emitter->setSpeedVar(0);
+
+    _emitter->setStartSize(3);
+    _emitter->setEndSize(3);
+
+    _emitter->setEmissionRate(1000);
+
+    _emitter->setEmissionShapes(true);
+
+    auto cache = ParticleEmissionMaskCache::getInstance();
+    cache->bakeEmissionMask("#msk1"sv, "Particles/mask.png", 0.5F, false, 1);
+
+    _emitter->addEmissionShape(ParticleSystem::createMaskShape("#msk1"sv, {0, 0}, {400, 200}, Vec2::ONE));
+
+    setEmitterPosition();
+}
+
+std::string DemoEmissionShapeAlphaMask::subtitle() const
+{
+    return "Particle emission shape alpha mask texture";
+}
+
+//------------------------------------------------------------------
+//
 // RadiusMode1
 //
 //------------------------------------------------------------------
@@ -1051,6 +2168,37 @@ ParticleTests::ParticleTests()
     addTestCase("ButterFlyYFlipped", []() { return DemoParticleFromFile::create("ButterFlyYFlipped"); });
     ADD_TEST_CASE(RadiusMode1);
     ADD_TEST_CASE(RadiusMode2);
+
+    ADD_TEST_CASE(DemoFixedFPS);
+    ADD_TEST_CASE(DemoTimeScale);
+    ADD_TEST_CASE(DemoSimulation);
+    ADD_TEST_CASE(DemoSpawnFadeIn);
+    ADD_TEST_CASE(DemoScaleFadeIn);
+    ADD_TEST_CASE(DemoSpawnRotation);
+    ADD_TEST_CASE(DemoHSV);
+
+    ADD_TEST_CASE(DemoLifeAnimation);
+    ADD_TEST_CASE(DemoLifeAnimationAtlas);
+    ADD_TEST_CASE(DemoLifeAnimationReversed);
+    ADD_TEST_CASE(DemoLoopAnimation);
+    ADD_TEST_CASE(DemoLoopAnimationReversed);
+    ADD_TEST_CASE(DemoLoopAnimationMultiDescriptor);
+    ADD_TEST_CASE(DemoEmitterAnimation);
+    ADD_TEST_CASE(DemoEmitterAnimationDescriptor);
+
+    ADD_TEST_CASE(DemoEmissionShapePoint);
+    ADD_TEST_CASE(DemoEmissionShapeRect);
+    ADD_TEST_CASE(DemoEmissionShapeRectTorus);
+    ADD_TEST_CASE(DemoEmissionShapeCircle);
+    ADD_TEST_CASE(DemoEmissionShapeCircleBiasEdge);
+    ADD_TEST_CASE(DemoEmissionShapeCircleBiasCenter);
+    ADD_TEST_CASE(DemoEmissionShapeTorus);
+    ADD_TEST_CASE(DemoEmissionShapeTorusBiasEdge);
+    ADD_TEST_CASE(DemoEmissionShapeTorusBiasInner);
+    ADD_TEST_CASE(DemoEmissionShapeCone);
+    ADD_TEST_CASE(DemoEmissionShapeConeTorus);
+    ADD_TEST_CASE(DemoEmissionShapeAlphaMask);
+
     ADD_TEST_CASE(Issue704);
     ADD_TEST_CASE(Issue870);
     ADD_TEST_CASE(Issue1201);

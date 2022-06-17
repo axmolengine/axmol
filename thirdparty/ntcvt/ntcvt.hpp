@@ -9,7 +9,7 @@
 #include <string>
 
 #if !defined(NTCVT_CP_DEFAULT)
-#define NTCVT_CP_DEFAULT CP_ACP
+#define NTCVT_CP_DEFAULT CP_UTF8
 #endif
 
 namespace ntcvt
