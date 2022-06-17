@@ -6484,7 +6484,7 @@ tolua_lerror:
     return 0;
 }
 
-int lua_cocos2dx_Application_is64BitIOSDevice(lua_State* tolua_S)
+int lua_cocos2dx_Application_is64BitMobileDevice(lua_State* tolua_S)
 {
     int argc                   = 0;
     cocos2d::Application* cobj = nullptr;
@@ -6543,7 +6543,7 @@ static void extendApplication(lua_State* tolua_S)
     if (lua_istable(tolua_S, -1))
     {
         tolua_function(tolua_S, "isIOS64bit", lua_cocos2dx_Application_isIOS64bit);
-        tolua_function(tolua_S, "is64BitIOSDevice", lua_cocos2dx_Application_is64BitIOSDevice);
+        tolua_function(tolua_S, "is64BitMobileDevice", lua_cocos2dx_Application_is64BitMobileDevice);
     }
     lua_pop(tolua_S, 1);
 }
