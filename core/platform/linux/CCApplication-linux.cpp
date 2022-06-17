@@ -130,7 +130,7 @@ std::string_view Application::getResourceRootPath()
 
 Application::Platform Application::getTargetPlatform()
 {
-    return Platform::OS_LINUX;
+    return Platform::Linux;
 }
 
 std::string Application::getVersion()
