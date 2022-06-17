@@ -52,7 +52,12 @@ Camera* Camera::create()
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
+    ret->_fieldOfView = fieldOfView;
+    ret->_aspectRatio = aspectRatio;
+    ret->_nearPlane   = nearPlane;
+    ret->_farPlane    = farPlane;
     ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
+    ret->_isCameraInitialized = true;
     ret->autorelease();
     return ret;
 }
@@ -60,7 +65,12 @@ Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float ne
 Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
+    ret->_zoom[0]   = zoomX;
+    ret->_zoom[1]   = zoomY;
+    ret->_nearPlane = nearPlane;
+    ret->_farPlane  = farPlane;
     ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
+    ret->_isCameraInitialized = true;
     ret->autorelease();
     return ret;
 }
