@@ -105,7 +105,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute the following command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  

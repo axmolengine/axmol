@@ -65262,6 +65262,1062 @@ int lua_register_cocos2dx_ParticleBatchNode(lua_State* tolua_S)
     return 1;
 }
 
+static int lua_cocos2dx_SpriteSheet_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (SpriteSheet)");
+    return 0;
+}
+
+int lua_register_cocos2dx_SpriteSheet(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.SpriteSheet");
+    tolua_cclass(tolua_S,"SpriteSheet","cc.SpriteSheet","",nullptr);
+
+    tolua_beginmodule(tolua_S,"SpriteSheet");
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(cocos2d::SpriteSheet).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.SpriteSheet";
+    g_typeCast[typeName] = "cc.SpriteSheet";
+    return 1;
+}
+
+int lua_cocos2dx_SpriteFrameCache_reloadTexture(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_reloadTexture'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:reloadTexture");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_reloadTexture'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->reloadTexture(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:reloadTexture",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_reloadTexture'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        unsigned int arg0;
+
+        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.SpriteFrameCache:getSpriteSheetLoader");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader'", nullptr);
+            return 0;
+        }
+        cocos2d::ISpriteSheetLoader* ret = cobj->getSpriteSheetLoader(arg0);
+        object_to_luaval<cocos2d::ISpriteSheetLoader>(tolua_S, "cc.ISpriteSheetLoader",(cocos2d::ISpriteSheetLoader*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:getSpriteSheetLoader",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_addSpriteFrame(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrame'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        cocos2d::SpriteFrame* arg0;
+        std::string_view arg1;
+
+        ok &= luaval_to_object<cocos2d::SpriteFrame>(tolua_S, 2, "cc.SpriteFrame",&arg0, "cc.SpriteFrameCache:addSpriteFrame");
+
+        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFrame");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrame'", nullptr);
+            return 0;
+        }
+        cobj->addSpriteFrame(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:addSpriteFrame",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrame'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_findFrame(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_findFrame'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:findFrame");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_findFrame'", nullptr);
+            return 0;
+        }
+        cocos2d::SpriteFrame* ret = cobj->findFrame(arg0);
+        object_to_luaval<cocos2d::SpriteFrame>(tolua_S, "cc.SpriteFrame",(cocos2d::SpriteFrame*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:findFrame",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_findFrame'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cobj->addSpriteFramesWithFile(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            unsigned int arg2;
+            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cobj->addSpriteFramesWithFile(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cobj->addSpriteFramesWithFile(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            unsigned int arg1;
+            ok &= luaval_to_uint32(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cobj->addSpriteFramesWithFile(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cocos2d::Texture2D* arg1;
+            ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 3, "cc.Texture2D",&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cobj->addSpriteFramesWithFile(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cocos2d::Texture2D* arg1;
+            ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 3, "cc.Texture2D",&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            unsigned int arg2;
+            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "cc.SpriteFrameCache:addSpriteFramesWithFile");
+
+            if (!ok) { break; }
+            cobj->addSpriteFramesWithFile(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.SpriteFrameCache:addSpriteFramesWithFile",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:getSpriteFrameByName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName'", nullptr);
+            return 0;
+        }
+        cocos2d::SpriteFrame* ret = cobj->getSpriteFrameByName(arg0);
+        object_to_luaval<cocos2d::SpriteFrame>(tolua_S, "cc.SpriteFrame",(cocos2d::SpriteFrame*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:getSpriteFrameByName",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3) 
+    {
+        cocos2d::SpriteFrame* arg0;
+        cocos2d::Rect arg1;
+        cocos2d::Texture2D* arg2;
+
+        ok &= luaval_to_object<cocos2d::SpriteFrame>(tolua_S, 2, "cc.SpriteFrame",&arg0, "cc.SpriteFrameCache:addSpriteFrameCapInset");
+
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.SpriteFrameCache:addSpriteFrameCapInset");
+
+        ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 4, "cc.Texture2D",&arg2, "cc.SpriteFrameCache:addSpriteFrameCapInset");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset'", nullptr);
+            return 0;
+        }
+        cobj->addSpriteFrameCapInset(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:addSpriteFrameCapInset",argc, 3);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:removeSpriteFramesFromFile");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile'", nullptr);
+            return 0;
+        }
+        cobj->removeSpriteFramesFromFile(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFramesFromFile",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_init(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_init'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_init'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->init();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:init",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_init'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_removeSpriteFrames(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrames'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrames'", nullptr);
+            return 0;
+        }
+        cobj->removeSpriteFrames();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFrames",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrames'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        unsigned int arg0;
+
+        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.SpriteFrameCache:deregisterSpriteSheetLoader");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader'", nullptr);
+            return 0;
+        }
+        cobj->deregisterSpriteSheetLoader(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:deregisterSpriteSheetLoader",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames'", nullptr);
+            return 0;
+        }
+        cobj->removeUnusedSpriteFrames();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeUnusedSpriteFrames",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:removeSpriteFramesFromFileContent");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent'", nullptr);
+            return 0;
+        }
+        cobj->removeSpriteFramesFromFileContent(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFramesFromFileContent",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:removeSpriteFrameByName");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName'", nullptr);
+            return 0;
+        }
+        cobj->removeSpriteFrameByName(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFrameByName",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_eraseFrame(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_eraseFrame'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:eraseFrame");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_eraseFrame'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->eraseFrame(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:eraseFrame",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_eraseFrame'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:isSpriteFramesWithFileLoaded");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isSpriteFramesWithFileLoaded(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:isSpriteFramesWithFileLoaded",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::SpriteFrameCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::Texture2D* arg0;
+
+        ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 2, "cc.Texture2D",&arg0, "cc.SpriteFrameCache:removeSpriteFramesFromTexture");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture'", nullptr);
+            return 0;
+        }
+        cobj->removeSpriteFramesFromTexture(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFramesFromTexture",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_destroyInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_destroyInstance'", nullptr);
+            return 0;
+        }
+        cocos2d::SpriteFrameCache::destroyInstance();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.SpriteFrameCache:destroyInstance",argc, 0);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_destroyInstance'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_SpriteFrameCache_getInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_getInstance'", nullptr);
+            return 0;
+        }
+        cocos2d::SpriteFrameCache* ret = cocos2d::SpriteFrameCache::getInstance();
+        object_to_luaval<cocos2d::SpriteFrameCache>(tolua_S, "cc.SpriteFrameCache",(cocos2d::SpriteFrameCache*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.SpriteFrameCache:getInstance",argc, 0);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_getInstance'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_cocos2dx_SpriteFrameCache_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (SpriteFrameCache)");
+    return 0;
+}
+
+int lua_register_cocos2dx_SpriteFrameCache(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.SpriteFrameCache");
+    tolua_cclass(tolua_S,"SpriteFrameCache","cc.SpriteFrameCache","cc.Ref",nullptr);
+
+    tolua_beginmodule(tolua_S,"SpriteFrameCache");
+        tolua_function(tolua_S,"reloadTexture",lua_cocos2dx_SpriteFrameCache_reloadTexture);
+        tolua_function(tolua_S,"getSpriteSheetLoader",lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader);
+        tolua_function(tolua_S,"addSpriteFrame",lua_cocos2dx_SpriteFrameCache_addSpriteFrame);
+        tolua_function(tolua_S,"findFrame",lua_cocos2dx_SpriteFrameCache_findFrame);
+        tolua_function(tolua_S,"addSpriteFrames",lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile);
+        tolua_function(tolua_S,"getSpriteFrame",lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName);
+        tolua_function(tolua_S,"addSpriteFrameCapInset",lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset);
+        tolua_function(tolua_S,"removeSpriteFramesFromFile",lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile);
+        tolua_function(tolua_S,"init",lua_cocos2dx_SpriteFrameCache_init);
+        tolua_function(tolua_S,"removeSpriteFrames",lua_cocos2dx_SpriteFrameCache_removeSpriteFrames);
+        tolua_function(tolua_S,"deregisterSpriteSheetLoader",lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader);
+        tolua_function(tolua_S,"removeUnusedSpriteFrames",lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames);
+        tolua_function(tolua_S,"removeSpriteFramesFromFileContent",lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent);
+        tolua_function(tolua_S,"removeSpriteFrameByName",lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName);
+        tolua_function(tolua_S,"eraseFrame",lua_cocos2dx_SpriteFrameCache_eraseFrame);
+        tolua_function(tolua_S,"isSpriteFramesWithFileLoaded",lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded);
+        tolua_function(tolua_S,"removeSpriteFramesFromTexture",lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture);
+        tolua_function(tolua_S,"destroyInstance", lua_cocos2dx_SpriteFrameCache_destroyInstance);
+        tolua_function(tolua_S,"getInstance", lua_cocos2dx_SpriteFrameCache_getInstance);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(cocos2d::SpriteFrameCache).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.SpriteFrameCache";
+    g_typeCast[typeName] = "cc.SpriteFrameCache";
+    return 1;
+}
+
 int lua_cocos2dx_ParticleData_release(lua_State* tolua_S)
 {
     int argc = 0;
@@ -65518,6 +66574,423 @@ int lua_register_cocos2dx_ParticleData(lua_State* tolua_S)
     return 1;
 }
 
+int lua_cocos2dx_ParticleEmissionMaskCache_bakeEmissionMask(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleEmissionMaskCache* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleEmissionMaskCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::ParticleEmissionMaskCache*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleEmissionMaskCache_bakeEmissionMask'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cocos2d::Image* arg1;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 3, "cc.Image",&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cocos2d::Image* arg1;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 3, "cc.Image",&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 4) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cocos2d::Image* arg1;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 3, "cc.Image",&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1, arg2, arg3);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 5) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cocos2d::Image* arg1;
+            ok &= luaval_to_object<cocos2d::Image>(tolua_S, 3, "cc.Image",&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1, arg2, arg3, arg4);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1, arg2);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 4) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1, arg2, arg3);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 5) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            bool arg3;
+            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            int arg4;
+            ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "cc.ParticleEmissionMaskCache:bakeEmissionMask");
+
+            if (!ok) { break; }
+            cobj->bakeEmissionMask(arg0, arg1, arg2, arg3, arg4);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.ParticleEmissionMaskCache:bakeEmissionMask",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleEmissionMaskCache_bakeEmissionMask'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleEmissionMaskCache_removeMask(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleEmissionMaskCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleEmissionMaskCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleEmissionMaskCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleEmissionMaskCache_removeMask'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:removeMask");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleEmissionMaskCache_removeMask'", nullptr);
+            return 0;
+        }
+        cobj->removeMask(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleEmissionMaskCache:removeMask",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleEmissionMaskCache_removeMask'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleEmissionMaskCache_getEmissionMask(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleEmissionMaskCache* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleEmissionMaskCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::ParticleEmissionMaskCache*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleEmissionMaskCache_getEmissionMask'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:getEmissionMask");
+
+            if (!ok) { break; }
+            const cocos2d::ParticleEmissionMaskDescriptor& ret = cobj->getEmissionMask(arg0);
+            #pragma warning NO CONVERSION FROM NATIVE FOR ParticleEmissionMaskDescriptor;
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            unsigned int arg0;
+            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.ParticleEmissionMaskCache:getEmissionMask");
+
+            if (!ok) { break; }
+            const cocos2d::ParticleEmissionMaskDescriptor& ret = cobj->getEmissionMask(arg0);
+            #pragma warning NO CONVERSION FROM NATIVE FOR ParticleEmissionMaskDescriptor;
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.ParticleEmissionMaskCache:getEmissionMask",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleEmissionMaskCache_getEmissionMask'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleEmissionMaskCache_removeAllMasks(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleEmissionMaskCache* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleEmissionMaskCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleEmissionMaskCache*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleEmissionMaskCache_removeAllMasks'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleEmissionMaskCache_removeAllMasks'", nullptr);
+            return 0;
+        }
+        cobj->removeAllMasks();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleEmissionMaskCache:removeAllMasks",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleEmissionMaskCache_removeAllMasks'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleEmissionMaskCache_getInstance(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleEmissionMaskCache",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleEmissionMaskCache_getInstance'", nullptr);
+            return 0;
+        }
+        cocos2d::ParticleEmissionMaskCache* ret = cocos2d::ParticleEmissionMaskCache::getInstance();
+        object_to_luaval<cocos2d::ParticleEmissionMaskCache>(tolua_S, "cc.ParticleEmissionMaskCache",(cocos2d::ParticleEmissionMaskCache*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleEmissionMaskCache:getInstance",argc, 0);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleEmissionMaskCache_getInstance'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_cocos2dx_ParticleEmissionMaskCache_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (ParticleEmissionMaskCache)");
+    return 0;
+}
+
+int lua_register_cocos2dx_ParticleEmissionMaskCache(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.ParticleEmissionMaskCache");
+    tolua_cclass(tolua_S,"ParticleEmissionMaskCache","cc.ParticleEmissionMaskCache","cc.Ref",nullptr);
+
+    tolua_beginmodule(tolua_S,"ParticleEmissionMaskCache");
+        tolua_function(tolua_S,"bakeEmissionMask",lua_cocos2dx_ParticleEmissionMaskCache_bakeEmissionMask);
+        tolua_function(tolua_S,"removeMask",lua_cocos2dx_ParticleEmissionMaskCache_removeMask);
+        tolua_function(tolua_S,"getEmissionMask",lua_cocos2dx_ParticleEmissionMaskCache_getEmissionMask);
+        tolua_function(tolua_S,"removeAllMasks",lua_cocos2dx_ParticleEmissionMaskCache_removeAllMasks);
+        tolua_function(tolua_S,"getInstance", lua_cocos2dx_ParticleEmissionMaskCache_getInstance);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(cocos2d::ParticleEmissionMaskCache).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ParticleEmissionMaskCache";
+    g_typeCast[typeName] = "cc.ParticleEmissionMaskCache";
+    return 1;
+}
+
 int lua_cocos2dx_ParticleSystem_getStartSizeVar(lua_State* tolua_S)
 {
     int argc = 0;
@@ -65561,6 +67034,117 @@ int lua_cocos2dx_ParticleSystem_getStartSizeVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getStartSizeVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setAnimationDescriptor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setAnimationDescriptor'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            std::vector<unsigned short> arg0;
+            ok &= luaval_to_std_vector_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            cobj->setAnimationDescriptor(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            std::vector<unsigned short> arg0;
+            ok &= luaval_to_std_vector_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            cobj->setAnimationDescriptor(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 4) {
+            unsigned short arg0;
+            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            std::vector<unsigned short> arg3;
+            ok &= luaval_to_std_vector_ushort(tolua_S, 5, &arg3, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            cobj->setAnimationDescriptor(arg0, arg1, arg2, arg3);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 5) {
+            unsigned short arg0;
+            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            std::vector<unsigned short> arg3;
+            ok &= luaval_to_std_vector_ushort(tolua_S, 5, &arg3, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            bool arg4;
+            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "cc.ParticleSystem:setAnimationDescriptor");
+
+            if (!ok) { break; }
+            cobj->setAnimationDescriptor(arg0, arg1, arg2, arg3, arg4);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.ParticleSystem:setAnimationDescriptor",argc, 4);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setAnimationDescriptor'.",&tolua_err);
 #endif
 
     return 0;
@@ -65800,6 +67384,53 @@ int lua_cocos2dx_ParticleSystem_getPositionType(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_getSpawnAngle(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getSpawnAngle'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getSpawnAngle'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getSpawnAngle();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getSpawnAngle",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getSpawnAngle'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setPosVar(lua_State* tolua_S)
 {
     int argc = 0;
@@ -65893,6 +67524,53 @@ int lua_cocos2dx_ParticleSystem_getEndSpin(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getEndSpin'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getSpawnScaleInVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getSpawnScaleInVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getSpawnScaleInVar'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getSpawnScaleInVar();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getSpawnScaleInVar",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getSpawnScaleInVar'.",&tolua_err);
 #endif
 
     return 0;
@@ -66138,6 +67816,53 @@ int lua_cocos2dx_ParticleSystem_getEndSizeVar(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_resetAnimationIndices(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_resetAnimationIndices'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_resetAnimationIndices'", nullptr);
+            return 0;
+        }
+        cobj->resetAnimationIndices();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:resetAnimationIndices",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_resetAnimationIndices'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setTangentialAccel(lua_State* tolua_S)
 {
     int argc = 0;
@@ -66184,6 +67909,53 @@ int lua_cocos2dx_ParticleSystem_setTangentialAccel(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setTangentialAccel'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getTotalAnimationIndices(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getTotalAnimationIndices'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getTotalAnimationIndices'", nullptr);
+            return 0;
+        }
+        int ret = cobj->getTotalAnimationIndices();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getTotalAnimationIndices",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getTotalAnimationIndices'.",&tolua_err);
 #endif
 
     return 0;
@@ -66235,7 +68007,7 @@ int lua_cocos2dx_ParticleSystem_getRadialAccel(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_ParticleSystem_setStartRadius(lua_State* tolua_S)
+int lua_cocos2dx_ParticleSystem_getHue(lua_State* tolua_S)
 {
     int argc = 0;
     cocos2d::ParticleSystem* cobj = nullptr;
@@ -66255,32 +68027,29 @@ int lua_cocos2dx_ParticleSystem_setStartRadius(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setStartRadius'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getHue'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 0) 
     {
-        double arg0;
-
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setStartRadius");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setStartRadius'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getHue'", nullptr);
             return 0;
         }
-        cobj->setStartRadius(arg0);
-        lua_settop(tolua_S, 1);
+        double ret = cobj->getHue();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setStartRadius",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getHue",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setStartRadius'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getHue'.",&tolua_err);
 #endif
 
     return 0;
@@ -66381,6 +68150,104 @@ int lua_cocos2dx_ParticleSystem_setEndSize(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setEndSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_isAnimationSpeedTimescaleIndependent(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isAnimationSpeedTimescaleIndependent'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isAnimationSpeedTimescaleIndependent'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isAnimationSpeedTimescaleIndependent();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isAnimationSpeedTimescaleIndependent",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isAnimationSpeedTimescaleIndependent'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setHSVVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setHSVVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::HSV arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR HSV
+		ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setHSVVar'", nullptr);
+            return 0;
+        }
+        cobj->setHSVVar(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setHSVVar",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setHSVVar'.",&tolua_err);
 #endif
 
     return 0;
@@ -66717,6 +68584,103 @@ int lua_cocos2dx_ParticleSystem_getAngle(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_isLoopAnimated(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isLoopAnimated'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isLoopAnimated'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isLoopAnimated();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isLoopAnimated",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isLoopAnimated'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setLifeAnimation(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setLifeAnimation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:setLifeAnimation");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setLifeAnimation'", nullptr);
+            return 0;
+        }
+        cobj->setLifeAnimation(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setLifeAnimation",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setLifeAnimation'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setEndColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -66867,6 +68831,129 @@ int lua_cocos2dx_ParticleSystem_setDuration(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_addAnimationIndex(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_addAnimationIndex'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 2) {
+            unsigned short arg0;
+            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            std::string_view arg1;
+            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool ret = cobj->addAnimationIndex(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool ret = cobj->addAnimationIndex(arg0);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            cocos2d::SpriteFrame* arg0;
+            ok &= luaval_to_object<cocos2d::SpriteFrame>(tolua_S, 2, "cc.SpriteFrame",&arg0, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool ret = cobj->addAnimationIndex(arg0);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            unsigned short arg0;
+            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            cocos2d::SpriteFrame* arg1;
+            ok &= luaval_to_object<cocos2d::SpriteFrame>(tolua_S, 3, "cc.SpriteFrame",&arg1, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool ret = cobj->addAnimationIndex(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            unsigned short arg0;
+            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            cocos2d::Rect arg1;
+            ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool ret = cobj->addAnimationIndex(arg0, arg1);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 3) {
+            unsigned short arg0;
+            ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            cocos2d::Rect arg1;
+            ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool arg2;
+            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "cc.ParticleSystem:addAnimationIndex");
+
+            if (!ok) { break; }
+            bool ret = cobj->addAnimationIndex(arg0, arg1, arg2);
+            tolua_pushboolean(tolua_S,(bool)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.ParticleSystem:addAnimationIndex",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_addAnimationIndex'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_initWithTotalParticles(lua_State* tolua_S)
 {
     int argc = 0;
@@ -66957,6 +69044,43 @@ int lua_cocos2dx_ParticleSystem_addParticles(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
+    if (argc == 2) 
+    {
+        int arg0;
+        int arg1;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.ParticleSystem:addParticles");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.ParticleSystem:addParticles");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_addParticles'", nullptr);
+            return 0;
+        }
+        cobj->addParticles(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 3) 
+    {
+        int arg0;
+        int arg1;
+        int arg2;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.ParticleSystem:addParticles");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.ParticleSystem:addParticles");
+
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.ParticleSystem:addParticles");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_addParticles'", nullptr);
+            return 0;
+        }
+        cobj->addParticles(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:addParticles",argc, 1);
     return 0;
 
@@ -67013,6 +69137,56 @@ int lua_cocos2dx_ParticleSystem_setTexture(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setTexture'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setSpawnFadeInVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setSpawnFadeInVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setSpawnFadeInVar");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setSpawnFadeInVar'", nullptr);
+            return 0;
+        }
+        cobj->setSpawnFadeInVar(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setSpawnFadeInVar",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setSpawnFadeInVar'.",&tolua_err);
 #endif
 
     return 0;
@@ -67399,7 +69573,7 @@ int lua_cocos2dx_ParticleSystem_setLifeVar(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_ParticleSystem_setTotalParticles(lua_State* tolua_S)
+int lua_cocos2dx_ParticleSystem_setHue(lua_State* tolua_S)
 {
     int argc = 0;
     cocos2d::ParticleSystem* cobj = nullptr;
@@ -67419,7 +69593,7 @@ int lua_cocos2dx_ParticleSystem_setTotalParticles(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setTotalParticles'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setHue'", nullptr);
         return 0;
     }
 #endif
@@ -67427,24 +69601,124 @@ int lua_cocos2dx_ParticleSystem_setTotalParticles(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        int arg0;
+        double arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.ParticleSystem:setTotalParticles");
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setHue");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setTotalParticles'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setHue'", nullptr);
             return 0;
         }
-        cobj->setTotalParticles(arg0);
+        cobj->setHue(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setTotalParticles",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setHue",argc, 1);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setTotalParticles'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setHue'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_useHSV(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_useHSV'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:useHSV");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_useHSV'", nullptr);
+            return 0;
+        }
+        cobj->useHSV(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:useHSV",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_useHSV'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setEmitterAnimation(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setEmitterAnimation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:setEmitterAnimation");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setEmitterAnimation'", nullptr);
+            return 0;
+        }
+        cobj->setEmitterAnimation(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setEmitterAnimation",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setEmitterAnimation'.",&tolua_err);
 #endif
 
     return 0;
@@ -67593,6 +69867,60 @@ int lua_cocos2dx_ParticleSystem_getStartSize(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setEmissionShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setEmissionShape'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        unsigned short arg0;
+        cocos2d::EmissionShape arg1;
+
+        ok &= luaval_to_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:setEmissionShape");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR EmissionShape
+		ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setEmissionShape'", nullptr);
+            return 0;
+        }
+        cobj->setEmissionShape(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setEmissionShape",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setEmissionShape'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setStartSpinVar(lua_State* tolua_S)
 {
     int argc = 0;
@@ -67639,6 +69967,103 @@ int lua_cocos2dx_ParticleSystem_setStartSpinVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setStartSpinVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getHueVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getHueVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getHueVar'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getHueVar();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getHueVar",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getHueVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setSpawnAngle(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setSpawnAngle'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setSpawnAngle");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setSpawnAngle'", nullptr);
+            return 0;
+        }
+        cobj->setSpawnAngle(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setSpawnAngle",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setSpawnAngle'.",&tolua_err);
 #endif
 
     return 0;
@@ -67887,6 +70312,56 @@ int lua_cocos2dx_ParticleSystem_getEndRadius(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setRectForUndefinedIndices(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setRectForUndefinedIndices'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::Rect arg0;
+
+        ok &= luaval_to_rect(tolua_S, 2, &arg0, "cc.ParticleSystem:setRectForUndefinedIndices");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setRectForUndefinedIndices'", nullptr);
+            return 0;
+        }
+        cobj->setRectForUndefinedIndices(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setRectForUndefinedIndices",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setRectForUndefinedIndices'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_isActive(lua_State* tolua_S)
 {
     int argc = 0;
@@ -67930,6 +70405,53 @@ int lua_cocos2dx_ParticleSystem_isActive(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isActive'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getTimeScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getTimeScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getTimeScale'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getTimeScale();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getTimeScale",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getTimeScale'.",&tolua_err);
 #endif
 
     return 0;
@@ -67980,6 +70502,56 @@ int lua_cocos2dx_ParticleSystem_setRadialAccelVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setRadialAccelVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setSpawnAngleVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setSpawnAngleVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setSpawnAngleVar");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setSpawnAngleVar'", nullptr);
+            return 0;
+        }
+        cobj->setSpawnAngleVar(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setSpawnAngleVar",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setSpawnAngleVar'.",&tolua_err);
 #endif
 
     return 0;
@@ -68131,6 +70703,153 @@ int lua_cocos2dx_ParticleSystem_getStartSpin(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setAnimationSpeedTimescaleIndependent(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setAnimationSpeedTimescaleIndependent'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:setAnimationSpeedTimescaleIndependent");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setAnimationSpeedTimescaleIndependent'", nullptr);
+            return 0;
+        }
+        cobj->setAnimationSpeedTimescaleIndependent(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setAnimationSpeedTimescaleIndependent",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setAnimationSpeedTimescaleIndependent'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getHSVVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getHSVVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getHSVVar'", nullptr);
+            return 0;
+        }
+        const cocos2d::HSV& ret = cobj->getHSVVar();
+        #pragma warning NO CONVERSION FROM NATIVE FOR HSV;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getHSVVar",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getHSVVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setStartRadius(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setStartRadius'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setStartRadius");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setStartRadius'", nullptr);
+            return 0;
+        }
+        cobj->setStartRadius(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setStartRadius",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setStartRadius'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getResourceFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68221,6 +70940,53 @@ int lua_cocos2dx_ParticleSystem_getRotatePerSecond(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getRotatePerSecond'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_resetEmissionShapes(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_resetEmissionShapes'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_resetEmissionShapes'", nullptr);
+            return 0;
+        }
+        cobj->resetEmissionShapes();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:resetEmissionShapes",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_resetEmissionShapes'.",&tolua_err);
 #endif
 
     return 0;
@@ -68322,6 +71088,53 @@ int lua_cocos2dx_ParticleSystem_getDuration(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_getHSV(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getHSV'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getHSV'", nullptr);
+            return 0;
+        }
+        const cocos2d::HSV& ret = cobj->getHSV();
+        #pragma warning NO CONVERSION FROM NATIVE FOR HSV;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getHSV",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getHSV'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setSourcePosition(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68419,6 +71232,114 @@ int lua_cocos2dx_ParticleSystem_stop(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_isEmitterAnimated(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isEmitterAnimated'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isEmitterAnimated'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isEmitterAnimated();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isEmitterAnimated",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isEmitterAnimated'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setTimeScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setTimeScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setTimeScale'", nullptr);
+            return 0;
+        }
+        cobj->setTimeScale();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setTimeScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setTimeScale'", nullptr);
+            return 0;
+        }
+        cobj->setTimeScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setTimeScale",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setTimeScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_updateParticleQuads(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68509,6 +71430,53 @@ int lua_cocos2dx_ParticleSystem_getEndSpinVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getEndSpinVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_resetAnimationDescriptors(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_resetAnimationDescriptors'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_resetAnimationDescriptors'", nullptr);
+            return 0;
+        }
+        cobj->resetAnimationDescriptors();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:resetAnimationDescriptors",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_resetAnimationDescriptors'.",&tolua_err);
 #endif
 
     return 0;
@@ -68663,6 +71631,123 @@ int lua_cocos2dx_ParticleSystem_setAngleVar(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setAnimationIndicesAtlas(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setAnimationIndicesAtlas'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            unsigned int arg0;
+            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.ParticleSystem:setAnimationIndicesAtlas");
+
+            if (!ok) { break; }
+            cobj->setAnimationIndicesAtlas(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            unsigned int arg0;
+            ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.ParticleSystem:setAnimationIndicesAtlas");
+
+            if (!ok) { break; }
+            cocos2d::ParticleSystem::TexAnimDir arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.ParticleSystem:setAnimationIndicesAtlas");
+
+            if (!ok) { break; }
+            cobj->setAnimationIndicesAtlas(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 0) {
+            cobj->setAnimationIndicesAtlas();
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.ParticleSystem:setAnimationIndicesAtlas",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setAnimationIndicesAtlas'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setSpawnFadeIn(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setSpawnFadeIn'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setSpawnFadeIn");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setSpawnFadeIn'", nullptr);
+            return 0;
+        }
+        cobj->setSpawnFadeIn(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setSpawnFadeIn",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setSpawnFadeIn'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setRotationIsDir(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68806,6 +71891,53 @@ int lua_cocos2dx_ParticleSystem_setEndSizeVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setEndSizeVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_isLifeAnimated(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isLifeAnimated'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isLifeAnimated'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isLifeAnimated();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isLifeAnimated",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isLifeAnimated'.",&tolua_err);
 #endif
 
     return 0;
@@ -68957,6 +72089,57 @@ int lua_cocos2dx_ParticleSystem_getTangentialAccelVar(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_addEmissionShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_addEmissionShape'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::EmissionShape arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR EmissionShape
+		ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_addEmissionShape'", nullptr);
+            return 0;
+        }
+        cobj->addEmissionShape(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:addEmissionShape",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_addEmissionShape'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getEmitterMode(lua_State* tolua_S)
 {
     int argc = 0;
@@ -69050,6 +72233,178 @@ int lua_cocos2dx_ParticleSystem_setEndSpinVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setEndSpinVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getSpawnFadeIn(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getSpawnFadeIn'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getSpawnFadeIn'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getSpawnFadeIn();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getSpawnFadeIn",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getSpawnFadeIn'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getSpawnFadeInVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getSpawnFadeInVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getSpawnFadeInVar'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getSpawnFadeInVar();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getSpawnFadeInVar",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getSpawnFadeInVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_simulate(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_simulate'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_simulate'", nullptr);
+            return 0;
+        }
+        cobj->simulate();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:simulate");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_simulate'", nullptr);
+            return 0;
+        }
+        cobj->simulate(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        double arg0;
+        double arg1;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:simulate");
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:simulate");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_simulate'", nullptr);
+            return 0;
+        }
+        cobj->simulate(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:simulate",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_simulate'.",&tolua_err);
 #endif
 
     return 0;
@@ -69248,6 +72603,56 @@ int lua_cocos2dx_ParticleSystem_getRotatePerSecondVar(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setHueVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setHueVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setHueVar");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setHueVar'", nullptr);
+            return 0;
+        }
+        cobj->setHueVar(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setHueVar",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setHueVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getEndSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -69291,6 +72696,53 @@ int lua_cocos2dx_ParticleSystem_getEndSize(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getEndSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_isAnimationReversed(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isAnimationReversed'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isAnimationReversed'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isAnimationReversed();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isAnimationReversed",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isAnimationReversed'.",&tolua_err);
 #endif
 
     return 0;
@@ -69385,6 +72837,161 @@ int lua_cocos2dx_ParticleSystem_isPaused(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isPaused'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getSpawnScaleIn(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getSpawnScaleIn'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getSpawnScaleIn'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getSpawnScaleIn();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getSpawnScaleIn",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getSpawnScaleIn'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setFixedFPS(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setFixedFPS'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setFixedFPS'", nullptr);
+            return 0;
+        }
+        cobj->setFixedFPS();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setFixedFPS");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setFixedFPS'", nullptr);
+            return 0;
+        }
+        cobj->setFixedFPS(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setFixedFPS",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setFixedFPS'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_isHSV(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isHSV'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isHSV'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isHSV();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isHSV",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isHSV'.",&tolua_err);
 #endif
 
     return 0;
@@ -69586,6 +73193,103 @@ int lua_cocos2dx_ParticleSystem_postStep(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_isEmissionShapes(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_isEmissionShapes'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_isEmissionShapes'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isEmissionShapes();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:isEmissionShapes",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_isEmissionShapes'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setLoopAnimation(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setLoopAnimation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:setLoopAnimation");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setLoopAnimation'", nullptr);
+            return 0;
+        }
+        cobj->setLoopAnimation(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setLoopAnimation",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setLoopAnimation'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setEmissionRate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -69730,6 +73434,56 @@ int lua_cocos2dx_ParticleSystem_getRotationIsDir(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setSpawnScaleIn(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setSpawnScaleIn'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setSpawnScaleIn");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setSpawnScaleIn'", nullptr);
+            return 0;
+        }
+        cobj->setSpawnScaleIn(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setSpawnScaleIn",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setSpawnScaleIn'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getEmissionRate(lua_State* tolua_S)
 {
     int argc = 0;
@@ -69777,6 +73531,56 @@ int lua_cocos2dx_ParticleSystem_getEmissionRate(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setSpawnScaleInVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setSpawnScaleInVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:setSpawnScaleInVar");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setSpawnScaleInVar'", nullptr);
+            return 0;
+        }
+        cobj->setSpawnScaleInVar(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setSpawnScaleInVar",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setSpawnScaleInVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getEndColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -69820,6 +73624,56 @@ int lua_cocos2dx_ParticleSystem_getEndColor(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getEndColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setEmissionShapes(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setEmissionShapes'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:setEmissionShapes");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setEmissionShapes'", nullptr);
+            return 0;
+        }
+        cobj->setEmissionShapes(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setEmissionShapes",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setEmissionShapes'.",&tolua_err);
 #endif
 
     return 0;
@@ -69917,6 +73771,232 @@ int lua_cocos2dx_ParticleSystem_setStartSizeVar(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setStartSizeVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setMultiAnimationRandomSpecific(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setMultiAnimationRandomSpecific'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::vector<unsigned short> arg0;
+
+        ok &= luaval_to_std_vector_ushort(tolua_S, 2, &arg0, "cc.ParticleSystem:setMultiAnimationRandomSpecific");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setMultiAnimationRandomSpecific'", nullptr);
+            return 0;
+        }
+        cobj->setMultiAnimationRandomSpecific(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setMultiAnimationRandomSpecific",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setMultiAnimationRandomSpecific'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setHSV(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setHSV'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::HSV arg0;
+
+        #pragma warning NO CONVERSION TO NATIVE FOR HSV
+		ok = false;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setHSV'", nullptr);
+            return 0;
+        }
+        cobj->setHSV(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setHSV",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setHSV'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_resimulate(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_resimulate'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_resimulate'", nullptr);
+            return 0;
+        }
+        cobj->resimulate();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:resimulate");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_resimulate'", nullptr);
+            return 0;
+        }
+        cobj->resimulate(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        double arg0;
+        double arg1;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.ParticleSystem:resimulate");
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:resimulate");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_resimulate'", nullptr);
+            return 0;
+        }
+        cobj->resimulate(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:resimulate",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_resimulate'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_setMultiAnimationRandom(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setMultiAnimationRandom'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setMultiAnimationRandom'", nullptr);
+            return 0;
+        }
+        cobj->setMultiAnimationRandom();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setMultiAnimationRandom",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setMultiAnimationRandom'.",&tolua_err);
 #endif
 
     return 0;
@@ -70259,6 +74339,56 @@ int lua_cocos2dx_ParticleSystem_setRadialAccel(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setAnimationReverse(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setAnimationReverse'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.ParticleSystem:setAnimationReverse");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setAnimationReverse'", nullptr);
+            return 0;
+        }
+        cobj->setAnimationReverse(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setAnimationReverse",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setAnimationReverse'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_initWithDictionary(lua_State* tolua_S)
 {
     int argc = 0;
@@ -70509,6 +74639,56 @@ int lua_cocos2dx_ParticleSystem_setStartRadiusVar(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_setTotalParticles(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_setTotalParticles'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        int arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.ParticleSystem:setTotalParticles");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_setTotalParticles'", nullptr);
+            return 0;
+        }
+        cobj->setTotalParticles(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:setTotalParticles",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_setTotalParticles'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
@@ -70606,6 +74786,100 @@ int lua_cocos2dx_ParticleSystem_getEndRadiusVar(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_getSpawnAngleVar(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getSpawnAngleVar'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getSpawnAngleVar'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getSpawnAngleVar();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getSpawnAngleVar",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getSpawnAngleVar'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_getFixedFPS(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ParticleSystem* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ParticleSystem*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ParticleSystem_getFixedFPS'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_getFixedFPS'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getFixedFPS();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.ParticleSystem:getFixedFPS",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getFixedFPS'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getStartColorVar(lua_State* tolua_S)
 {
     int argc = 0;
@@ -70651,6 +74925,168 @@ int lua_cocos2dx_ParticleSystem_getStartColorVar(lua_State* tolua_S)
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getStartColorVar'.",&tolua_err);
 #endif
 
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createRectTorusShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 3)
+    {
+        cocos2d::Vec2 arg0;
+        cocos2d::Size arg1;
+        cocos2d::Size arg2;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createRectTorusShape");
+        ok &= luaval_to_size(tolua_S, 3, &arg1, "cc.ParticleSystem:createRectTorusShape");
+        ok &= luaval_to_size(tolua_S, 4, &arg2, "cc.ParticleSystem:createRectTorusShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createRectTorusShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createRectTorusShape(arg0, arg1, arg2);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createRectTorusShape",argc, 3);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createRectTorusShape'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createTorusShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 3)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createTorusShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createTorusShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createTorusShape(arg0, arg1, arg2);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 4)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        double arg3;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createTorusShape");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "cc.ParticleSystem:createTorusShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createTorusShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createTorusShape(arg0, arg1, arg2, arg3);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createTorusShape",argc, 3);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createTorusShape'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createConeShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 4)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        double arg3;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "cc.ParticleSystem:createConeShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createConeShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createConeShape(arg0, arg1, arg2, arg3);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 5)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        double arg3;
+        double arg4;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "cc.ParticleSystem:createConeShape");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.ParticleSystem:createConeShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createConeShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createConeShape(arg0, arg1, arg2, arg3, arg4);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createConeShape",argc, 4);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createConeShape'.",&tolua_err);
+#endif
     return 0;
 }
 int lua_cocos2dx_ParticleSystem_create(lua_State* tolua_S)
@@ -70725,6 +75161,243 @@ int lua_cocos2dx_ParticleSystem_createWithTotalParticles(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_cocos2dx_ParticleSystem_createPointShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        cocos2d::Vec2 arg0;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createPointShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createPointShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createPointShape(arg0);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createPointShape",argc, 1);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createPointShape'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createCircleShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createCircleShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createCircleShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createCircleShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createCircleShape(arg0, arg1);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 3)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createCircleShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createCircleShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createCircleShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createCircleShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createCircleShape(arg0, arg1, arg2);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createCircleShape",argc, 2);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createCircleShape'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createMaskShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleSystem:createMaskShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createMaskShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createMaskShape(arg0);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 2)
+    {
+        std::string_view arg0;
+        cocos2d::Vec2 arg1;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "cc.ParticleSystem:createMaskShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createMaskShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createMaskShape(arg0, arg1);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 3)
+    {
+        std::string_view arg0;
+        cocos2d::Vec2 arg1;
+        cocos2d::Vec2 arg2;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "cc.ParticleSystem:createMaskShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createMaskShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createMaskShape(arg0, arg1, arg2);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 4)
+    {
+        std::string_view arg0;
+        cocos2d::Vec2 arg1;
+        cocos2d::Vec2 arg2;
+        cocos2d::Vec2 arg3;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "cc.ParticleSystem:createMaskShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createMaskShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createMaskShape(arg0, arg1, arg2, arg3);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 5)
+    {
+        std::string_view arg0;
+        cocos2d::Vec2 arg1;
+        cocos2d::Vec2 arg2;
+        cocos2d::Vec2 arg3;
+        double arg4;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 3, &arg1, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "cc.ParticleSystem:createMaskShape");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.ParticleSystem:createMaskShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createMaskShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createMaskShape(arg0, arg1, arg2, arg3, arg4);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createMaskShape",argc, 1);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createMaskShape'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createRectShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        cocos2d::Vec2 arg0;
+        cocos2d::Size arg1;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createRectShape");
+        ok &= luaval_to_size(tolua_S, 3, &arg1, "cc.ParticleSystem:createRectShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createRectShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createRectShape(arg0, arg1);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createRectShape",argc, 2);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createRectShape'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_cocos2dx_ParticleSystem_getAllParticleSystems(lua_State* tolua_S)
 {
     int argc = 0;
@@ -70756,6 +75429,73 @@ int lua_cocos2dx_ParticleSystem_getAllParticleSystems(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_getAllParticleSystems'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_ParticleSystem_createConeTorusShape(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.ParticleSystem",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 5)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        double arg3;
+        double arg4;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.ParticleSystem:createConeTorusShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createConeTorusShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createConeTorusShape(arg0, arg1, arg2, arg3, arg4);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    if (argc == 6)
+    {
+        cocos2d::Vec2 arg0;
+        double arg1;
+        double arg2;
+        double arg3;
+        double arg4;
+        double arg5;
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 5,&arg3, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.ParticleSystem:createConeTorusShape");
+        ok &= luaval_to_number(tolua_S, 7,&arg5, "cc.ParticleSystem:createConeTorusShape");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ParticleSystem_createConeTorusShape'", nullptr);
+            return 0;
+        }
+        cocos2d::EmissionShape ret = cocos2d::ParticleSystem::createConeTorusShape(arg0, arg1, arg2, arg3, arg4, arg5);
+        #pragma warning NO CONVERSION FROM NATIVE FOR EmissionShape;
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ParticleSystem:createConeTorusShape",argc, 5);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ParticleSystem_createConeTorusShape'.",&tolua_err);
 #endif
     return 0;
 }
@@ -70810,23 +75550,30 @@ int lua_register_cocos2dx_ParticleSystem(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"ParticleSystem");
         tolua_function(tolua_S,"new",lua_cocos2dx_ParticleSystem_constructor);
         tolua_function(tolua_S,"getStartSizeVar",lua_cocos2dx_ParticleSystem_getStartSizeVar);
+        tolua_function(tolua_S,"setAnimationDescriptor",lua_cocos2dx_ParticleSystem_setAnimationDescriptor);
         tolua_function(tolua_S,"getTexture",lua_cocos2dx_ParticleSystem_getTexture);
         tolua_function(tolua_S,"isFull",lua_cocos2dx_ParticleSystem_isFull);
         tolua_function(tolua_S,"getBatchNode",lua_cocos2dx_ParticleSystem_getBatchNode);
         tolua_function(tolua_S,"getStartColor",lua_cocos2dx_ParticleSystem_getStartColor);
         tolua_function(tolua_S,"getPositionType",lua_cocos2dx_ParticleSystem_getPositionType);
+        tolua_function(tolua_S,"getSpawnAngle",lua_cocos2dx_ParticleSystem_getSpawnAngle);
         tolua_function(tolua_S,"setPosVar",lua_cocos2dx_ParticleSystem_setPosVar);
         tolua_function(tolua_S,"getEndSpin",lua_cocos2dx_ParticleSystem_getEndSpin);
+        tolua_function(tolua_S,"getSpawnScaleInVar",lua_cocos2dx_ParticleSystem_getSpawnScaleInVar);
         tolua_function(tolua_S,"setRotatePerSecondVar",lua_cocos2dx_ParticleSystem_setRotatePerSecondVar);
         tolua_function(tolua_S,"setSourcePositionCompatible",lua_cocos2dx_ParticleSystem_setSourcePositionCompatible);
         tolua_function(tolua_S,"getStartSpinVar",lua_cocos2dx_ParticleSystem_getStartSpinVar);
         tolua_function(tolua_S,"getRadialAccelVar",lua_cocos2dx_ParticleSystem_getRadialAccelVar);
         tolua_function(tolua_S,"getEndSizeVar",lua_cocos2dx_ParticleSystem_getEndSizeVar);
+        tolua_function(tolua_S,"resetAnimationIndices",lua_cocos2dx_ParticleSystem_resetAnimationIndices);
         tolua_function(tolua_S,"setTangentialAccel",lua_cocos2dx_ParticleSystem_setTangentialAccel);
+        tolua_function(tolua_S,"getTotalAnimationIndices",lua_cocos2dx_ParticleSystem_getTotalAnimationIndices);
         tolua_function(tolua_S,"getRadialAccel",lua_cocos2dx_ParticleSystem_getRadialAccel);
-        tolua_function(tolua_S,"setStartRadius",lua_cocos2dx_ParticleSystem_setStartRadius);
+        tolua_function(tolua_S,"getHue",lua_cocos2dx_ParticleSystem_getHue);
         tolua_function(tolua_S,"setRotatePerSecond",lua_cocos2dx_ParticleSystem_setRotatePerSecond);
         tolua_function(tolua_S,"setEndSize",lua_cocos2dx_ParticleSystem_setEndSize);
+        tolua_function(tolua_S,"isAnimationSpeedTimescaleIndependent",lua_cocos2dx_ParticleSystem_isAnimationSpeedTimescaleIndependent);
+        tolua_function(tolua_S,"setHSVVar",lua_cocos2dx_ParticleSystem_setHSVVar);
         tolua_function(tolua_S,"getGravity",lua_cocos2dx_ParticleSystem_getGravity);
         tolua_function(tolua_S,"resumeEmissions",lua_cocos2dx_ParticleSystem_resumeEmissions);
         tolua_function(tolua_S,"getTangentialAccel",lua_cocos2dx_ParticleSystem_getTangentialAccel);
@@ -70834,12 +75581,16 @@ int lua_register_cocos2dx_ParticleSystem(lua_State* tolua_S)
         tolua_function(tolua_S,"getSpeed",lua_cocos2dx_ParticleSystem_getSpeed);
         tolua_function(tolua_S,"pauseEmissions",lua_cocos2dx_ParticleSystem_pauseEmissions);
         tolua_function(tolua_S,"getAngle",lua_cocos2dx_ParticleSystem_getAngle);
+        tolua_function(tolua_S,"isLoopAnimated",lua_cocos2dx_ParticleSystem_isLoopAnimated);
+        tolua_function(tolua_S,"setLifeAnimation",lua_cocos2dx_ParticleSystem_setLifeAnimation);
         tolua_function(tolua_S,"setEndColor",lua_cocos2dx_ParticleSystem_setEndColor);
         tolua_function(tolua_S,"setStartSpin",lua_cocos2dx_ParticleSystem_setStartSpin);
         tolua_function(tolua_S,"setDuration",lua_cocos2dx_ParticleSystem_setDuration);
+        tolua_function(tolua_S,"addAnimationIndex",lua_cocos2dx_ParticleSystem_addAnimationIndex);
         tolua_function(tolua_S,"initWithTotalParticles",lua_cocos2dx_ParticleSystem_initWithTotalParticles);
         tolua_function(tolua_S,"addParticles",lua_cocos2dx_ParticleSystem_addParticles);
         tolua_function(tolua_S,"setTexture",lua_cocos2dx_ParticleSystem_setTexture);
+        tolua_function(tolua_S,"setSpawnFadeInVar",lua_cocos2dx_ParticleSystem_setSpawnFadeInVar);
         tolua_function(tolua_S,"getPosVar",lua_cocos2dx_ParticleSystem_getPosVar);
         tolua_function(tolua_S,"updateWithNoTime",lua_cocos2dx_ParticleSystem_updateWithNoTime);
         tolua_function(tolua_S,"isBlendAdditive",lua_cocos2dx_ParticleSystem_isBlendAdditive);
@@ -70848,58 +75599,95 @@ int lua_register_cocos2dx_ParticleSystem(lua_State* tolua_S)
         tolua_function(tolua_S,"stopSystem",lua_cocos2dx_ParticleSystem_stopSystem);
         tolua_function(tolua_S,"getSourcePosition",lua_cocos2dx_ParticleSystem_getSourcePosition);
         tolua_function(tolua_S,"setLifeVar",lua_cocos2dx_ParticleSystem_setLifeVar);
-        tolua_function(tolua_S,"setTotalParticles",lua_cocos2dx_ParticleSystem_setTotalParticles);
+        tolua_function(tolua_S,"setHue",lua_cocos2dx_ParticleSystem_setHue);
+        tolua_function(tolua_S,"useHSV",lua_cocos2dx_ParticleSystem_useHSV);
+        tolua_function(tolua_S,"setEmitterAnimation",lua_cocos2dx_ParticleSystem_setEmitterAnimation);
         tolua_function(tolua_S,"setEndColorVar",lua_cocos2dx_ParticleSystem_setEndColorVar);
         tolua_function(tolua_S,"getAtlasIndex",lua_cocos2dx_ParticleSystem_getAtlasIndex);
         tolua_function(tolua_S,"getStartSize",lua_cocos2dx_ParticleSystem_getStartSize);
+        tolua_function(tolua_S,"setEmissionShape",lua_cocos2dx_ParticleSystem_setEmissionShape);
         tolua_function(tolua_S,"setStartSpinVar",lua_cocos2dx_ParticleSystem_setStartSpinVar);
+        tolua_function(tolua_S,"getHueVar",lua_cocos2dx_ParticleSystem_getHueVar);
+        tolua_function(tolua_S,"setSpawnAngle",lua_cocos2dx_ParticleSystem_setSpawnAngle);
         tolua_function(tolua_S,"resetSystem",lua_cocos2dx_ParticleSystem_resetSystem);
         tolua_function(tolua_S,"setAtlasIndex",lua_cocos2dx_ParticleSystem_setAtlasIndex);
         tolua_function(tolua_S,"setTangentialAccelVar",lua_cocos2dx_ParticleSystem_setTangentialAccelVar);
         tolua_function(tolua_S,"setEndRadiusVar",lua_cocos2dx_ParticleSystem_setEndRadiusVar);
         tolua_function(tolua_S,"getEndRadius",lua_cocos2dx_ParticleSystem_getEndRadius);
+        tolua_function(tolua_S,"setRectForUndefinedIndices",lua_cocos2dx_ParticleSystem_setRectForUndefinedIndices);
         tolua_function(tolua_S,"isActive",lua_cocos2dx_ParticleSystem_isActive);
+        tolua_function(tolua_S,"getTimeScale",lua_cocos2dx_ParticleSystem_getTimeScale);
         tolua_function(tolua_S,"setRadialAccelVar",lua_cocos2dx_ParticleSystem_setRadialAccelVar);
+        tolua_function(tolua_S,"setSpawnAngleVar",lua_cocos2dx_ParticleSystem_setSpawnAngleVar);
         tolua_function(tolua_S,"setStartSize",lua_cocos2dx_ParticleSystem_setStartSize);
         tolua_function(tolua_S,"setSpeed",lua_cocos2dx_ParticleSystem_setSpeed);
         tolua_function(tolua_S,"getStartSpin",lua_cocos2dx_ParticleSystem_getStartSpin);
+        tolua_function(tolua_S,"setAnimationSpeedTimescaleIndependent",lua_cocos2dx_ParticleSystem_setAnimationSpeedTimescaleIndependent);
+        tolua_function(tolua_S,"getHSVVar",lua_cocos2dx_ParticleSystem_getHSVVar);
+        tolua_function(tolua_S,"setStartRadius",lua_cocos2dx_ParticleSystem_setStartRadius);
         tolua_function(tolua_S,"getResourceFile",lua_cocos2dx_ParticleSystem_getResourceFile);
         tolua_function(tolua_S,"getRotatePerSecond",lua_cocos2dx_ParticleSystem_getRotatePerSecond);
+        tolua_function(tolua_S,"resetEmissionShapes",lua_cocos2dx_ParticleSystem_resetEmissionShapes);
         tolua_function(tolua_S,"setEmitterMode",lua_cocos2dx_ParticleSystem_setEmitterMode);
         tolua_function(tolua_S,"getDuration",lua_cocos2dx_ParticleSystem_getDuration);
+        tolua_function(tolua_S,"getHSV",lua_cocos2dx_ParticleSystem_getHSV);
         tolua_function(tolua_S,"setSourcePosition",lua_cocos2dx_ParticleSystem_setSourcePosition);
         tolua_function(tolua_S,"stop",lua_cocos2dx_ParticleSystem_stop);
+        tolua_function(tolua_S,"isEmitterAnimated",lua_cocos2dx_ParticleSystem_isEmitterAnimated);
+        tolua_function(tolua_S,"setTimeScale",lua_cocos2dx_ParticleSystem_setTimeScale);
         tolua_function(tolua_S,"updateParticleQuads",lua_cocos2dx_ParticleSystem_updateParticleQuads);
         tolua_function(tolua_S,"getEndSpinVar",lua_cocos2dx_ParticleSystem_getEndSpinVar);
+        tolua_function(tolua_S,"resetAnimationDescriptors",lua_cocos2dx_ParticleSystem_resetAnimationDescriptors);
         tolua_function(tolua_S,"setBlendAdditive",lua_cocos2dx_ParticleSystem_setBlendAdditive);
         tolua_function(tolua_S,"setLife",lua_cocos2dx_ParticleSystem_setLife);
         tolua_function(tolua_S,"setAngleVar",lua_cocos2dx_ParticleSystem_setAngleVar);
+        tolua_function(tolua_S,"setAnimationIndicesAtlas",lua_cocos2dx_ParticleSystem_setAnimationIndicesAtlas);
+        tolua_function(tolua_S,"setSpawnFadeIn",lua_cocos2dx_ParticleSystem_setSpawnFadeIn);
         tolua_function(tolua_S,"setRotationIsDir",lua_cocos2dx_ParticleSystem_setRotationIsDir);
         tolua_function(tolua_S,"start",lua_cocos2dx_ParticleSystem_start);
         tolua_function(tolua_S,"setEndSizeVar",lua_cocos2dx_ParticleSystem_setEndSizeVar);
+        tolua_function(tolua_S,"isLifeAnimated",lua_cocos2dx_ParticleSystem_isLifeAnimated);
         tolua_function(tolua_S,"setAngle",lua_cocos2dx_ParticleSystem_setAngle);
         tolua_function(tolua_S,"setBatchNode",lua_cocos2dx_ParticleSystem_setBatchNode);
         tolua_function(tolua_S,"getTangentialAccelVar",lua_cocos2dx_ParticleSystem_getTangentialAccelVar);
+        tolua_function(tolua_S,"addEmissionShape",lua_cocos2dx_ParticleSystem_addEmissionShape);
         tolua_function(tolua_S,"getEmitterMode",lua_cocos2dx_ParticleSystem_getEmitterMode);
         tolua_function(tolua_S,"setEndSpinVar",lua_cocos2dx_ParticleSystem_setEndSpinVar);
+        tolua_function(tolua_S,"getSpawnFadeIn",lua_cocos2dx_ParticleSystem_getSpawnFadeIn);
+        tolua_function(tolua_S,"getSpawnFadeInVar",lua_cocos2dx_ParticleSystem_getSpawnFadeInVar);
+        tolua_function(tolua_S,"simulate",lua_cocos2dx_ParticleSystem_simulate);
         tolua_function(tolua_S,"initWithFile",lua_cocos2dx_ParticleSystem_initWithFile);
         tolua_function(tolua_S,"getAngleVar",lua_cocos2dx_ParticleSystem_getAngleVar);
         tolua_function(tolua_S,"setStartColor",lua_cocos2dx_ParticleSystem_setStartColor);
         tolua_function(tolua_S,"getRotatePerSecondVar",lua_cocos2dx_ParticleSystem_getRotatePerSecondVar);
+        tolua_function(tolua_S,"setHueVar",lua_cocos2dx_ParticleSystem_setHueVar);
         tolua_function(tolua_S,"getEndSize",lua_cocos2dx_ParticleSystem_getEndSize);
+        tolua_function(tolua_S,"isAnimationReversed",lua_cocos2dx_ParticleSystem_isAnimationReversed);
         tolua_function(tolua_S,"getLife",lua_cocos2dx_ParticleSystem_getLife);
         tolua_function(tolua_S,"isPaused",lua_cocos2dx_ParticleSystem_isPaused);
+        tolua_function(tolua_S,"getSpawnScaleIn",lua_cocos2dx_ParticleSystem_getSpawnScaleIn);
+        tolua_function(tolua_S,"setFixedFPS",lua_cocos2dx_ParticleSystem_setFixedFPS);
+        tolua_function(tolua_S,"isHSV",lua_cocos2dx_ParticleSystem_isHSV);
         tolua_function(tolua_S,"setSpeedVar",lua_cocos2dx_ParticleSystem_setSpeedVar);
         tolua_function(tolua_S,"setAutoRemoveOnFinish",lua_cocos2dx_ParticleSystem_setAutoRemoveOnFinish);
         tolua_function(tolua_S,"setGravity",lua_cocos2dx_ParticleSystem_setGravity);
         tolua_function(tolua_S,"postStep",lua_cocos2dx_ParticleSystem_postStep);
+        tolua_function(tolua_S,"isEmissionShapes",lua_cocos2dx_ParticleSystem_isEmissionShapes);
+        tolua_function(tolua_S,"setLoopAnimation",lua_cocos2dx_ParticleSystem_setLoopAnimation);
         tolua_function(tolua_S,"setEmissionRate",lua_cocos2dx_ParticleSystem_setEmissionRate);
         tolua_function(tolua_S,"getEndColorVar",lua_cocos2dx_ParticleSystem_getEndColorVar);
         tolua_function(tolua_S,"getRotationIsDir",lua_cocos2dx_ParticleSystem_getRotationIsDir);
+        tolua_function(tolua_S,"setSpawnScaleIn",lua_cocos2dx_ParticleSystem_setSpawnScaleIn);
         tolua_function(tolua_S,"getEmissionRate",lua_cocos2dx_ParticleSystem_getEmissionRate);
+        tolua_function(tolua_S,"setSpawnScaleInVar",lua_cocos2dx_ParticleSystem_setSpawnScaleInVar);
         tolua_function(tolua_S,"getEndColor",lua_cocos2dx_ParticleSystem_getEndColor);
+        tolua_function(tolua_S,"setEmissionShapes",lua_cocos2dx_ParticleSystem_setEmissionShapes);
         tolua_function(tolua_S,"getLifeVar",lua_cocos2dx_ParticleSystem_getLifeVar);
         tolua_function(tolua_S,"setStartSizeVar",lua_cocos2dx_ParticleSystem_setStartSizeVar);
+        tolua_function(tolua_S,"setMultiAnimationRandomSpecific",lua_cocos2dx_ParticleSystem_setMultiAnimationRandomSpecific);
+        tolua_function(tolua_S,"setHSV",lua_cocos2dx_ParticleSystem_setHSV);
+        tolua_function(tolua_S,"resimulate",lua_cocos2dx_ParticleSystem_resimulate);
+        tolua_function(tolua_S,"setMultiAnimationRandom",lua_cocos2dx_ParticleSystem_setMultiAnimationRandom);
         tolua_function(tolua_S,"getStartRadius",lua_cocos2dx_ParticleSystem_getStartRadius);
         tolua_function(tolua_S,"getParticleCount",lua_cocos2dx_ParticleSystem_getParticleCount);
         tolua_function(tolua_S,"getStartRadiusVar",lua_cocos2dx_ParticleSystem_getStartRadiusVar);
@@ -70907,17 +75695,29 @@ int lua_register_cocos2dx_ParticleSystem(lua_State* tolua_S)
         tolua_function(tolua_S,"setStartColorVar",lua_cocos2dx_ParticleSystem_setStartColorVar);
         tolua_function(tolua_S,"setEndSpin",lua_cocos2dx_ParticleSystem_setEndSpin);
         tolua_function(tolua_S,"setRadialAccel",lua_cocos2dx_ParticleSystem_setRadialAccel);
+        tolua_function(tolua_S,"setAnimationReverse",lua_cocos2dx_ParticleSystem_setAnimationReverse);
         tolua_function(tolua_S,"initWithDictionary",lua_cocos2dx_ParticleSystem_initWithDictionary);
         tolua_function(tolua_S,"isAutoRemoveOnFinish",lua_cocos2dx_ParticleSystem_isAutoRemoveOnFinish);
         tolua_function(tolua_S,"isSourcePositionCompatible",lua_cocos2dx_ParticleSystem_isSourcePositionCompatible);
         tolua_function(tolua_S,"getTotalParticles",lua_cocos2dx_ParticleSystem_getTotalParticles);
         tolua_function(tolua_S,"setStartRadiusVar",lua_cocos2dx_ParticleSystem_setStartRadiusVar);
+        tolua_function(tolua_S,"setTotalParticles",lua_cocos2dx_ParticleSystem_setTotalParticles);
         tolua_function(tolua_S,"setBlendFunc",lua_cocos2dx_ParticleSystem_setBlendFunc);
         tolua_function(tolua_S,"getEndRadiusVar",lua_cocos2dx_ParticleSystem_getEndRadiusVar);
+        tolua_function(tolua_S,"getSpawnAngleVar",lua_cocos2dx_ParticleSystem_getSpawnAngleVar);
+        tolua_function(tolua_S,"getFixedFPS",lua_cocos2dx_ParticleSystem_getFixedFPS);
         tolua_function(tolua_S,"getStartColorVar",lua_cocos2dx_ParticleSystem_getStartColorVar);
+        tolua_function(tolua_S,"createRectTorusShape", lua_cocos2dx_ParticleSystem_createRectTorusShape);
+        tolua_function(tolua_S,"createTorusShape", lua_cocos2dx_ParticleSystem_createTorusShape);
+        tolua_function(tolua_S,"createConeShape", lua_cocos2dx_ParticleSystem_createConeShape);
         tolua_function(tolua_S,"create", lua_cocos2dx_ParticleSystem_create);
         tolua_function(tolua_S,"createWithTotalParticles", lua_cocos2dx_ParticleSystem_createWithTotalParticles);
+        tolua_function(tolua_S,"createPointShape", lua_cocos2dx_ParticleSystem_createPointShape);
+        tolua_function(tolua_S,"createCircleShape", lua_cocos2dx_ParticleSystem_createCircleShape);
+        tolua_function(tolua_S,"createMaskShape", lua_cocos2dx_ParticleSystem_createMaskShape);
+        tolua_function(tolua_S,"createRectShape", lua_cocos2dx_ParticleSystem_createRectShape);
         tolua_function(tolua_S,"getAllParticleSystems", lua_cocos2dx_ParticleSystem_getAllParticleSystems);
+        tolua_function(tolua_S,"createConeTorusShape", lua_cocos2dx_ParticleSystem_createConeTorusShape);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(cocos2d::ParticleSystem).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ParticleSystem";
@@ -98117,1062 +102917,6 @@ int lua_register_cocos2dx_SpriteBatchNode(lua_State* tolua_S)
     return 1;
 }
 
-static int lua_cocos2dx_SpriteSheet_finalize(lua_State* tolua_S)
-{
-    printf("luabindings: finalizing LUA object (SpriteSheet)");
-    return 0;
-}
-
-int lua_register_cocos2dx_SpriteSheet(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"cc.SpriteSheet");
-    tolua_cclass(tolua_S,"SpriteSheet","cc.SpriteSheet","",nullptr);
-
-    tolua_beginmodule(tolua_S,"SpriteSheet");
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::SpriteSheet).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.SpriteSheet";
-    g_typeCast[typeName] = "cc.SpriteSheet";
-    return 1;
-}
-
-int lua_cocos2dx_SpriteFrameCache_reloadTexture(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_reloadTexture'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:reloadTexture");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_reloadTexture'", nullptr);
-            return 0;
-        }
-        bool ret = cobj->reloadTexture(arg0);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:reloadTexture",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_reloadTexture'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        unsigned int arg0;
-
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.SpriteFrameCache:getSpriteSheetLoader");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader'", nullptr);
-            return 0;
-        }
-        cocos2d::ISpriteSheetLoader* ret = cobj->getSpriteSheetLoader(arg0);
-        object_to_luaval<cocos2d::ISpriteSheetLoader>(tolua_S, "cc.ISpriteSheetLoader",(cocos2d::ISpriteSheetLoader*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:getSpriteSheetLoader",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_addSpriteFrame(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrame'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 2) 
-    {
-        cocos2d::SpriteFrame* arg0;
-        std::string_view arg1;
-
-        ok &= luaval_to_object<cocos2d::SpriteFrame>(tolua_S, 2, "cc.SpriteFrame",&arg0, "cc.SpriteFrameCache:addSpriteFrame");
-
-        ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFrame");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrame'", nullptr);
-            return 0;
-        }
-        cobj->addSpriteFrame(arg0, arg1);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:addSpriteFrame",argc, 2);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrame'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_findFrame(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_findFrame'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:findFrame");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_findFrame'", nullptr);
-            return 0;
-        }
-        cocos2d::SpriteFrame* ret = cobj->findFrame(arg0);
-        object_to_luaval<cocos2d::SpriteFrame>(tolua_S, "cc.SpriteFrame",(cocos2d::SpriteFrame*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:findFrame",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_findFrame'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cobj->addSpriteFramesWithFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            std::string_view arg1;
-            ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cobj->addSpriteFramesWithFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cobj->addSpriteFramesWithFile(arg0);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            unsigned int arg1;
-            ok &= luaval_to_uint32(tolua_S, 3,&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cobj->addSpriteFramesWithFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 2) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cocos2d::Texture2D* arg1;
-            ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 3, "cc.Texture2D",&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cobj->addSpriteFramesWithFile(arg0, arg1);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 3) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cocos2d::Texture2D* arg1;
-            ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 3, "cc.Texture2D",&arg1, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            unsigned int arg2;
-            ok &= luaval_to_uint32(tolua_S, 4,&arg2, "cc.SpriteFrameCache:addSpriteFramesWithFile");
-
-            if (!ok) { break; }
-            cobj->addSpriteFramesWithFile(arg0, arg1, arg2);
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.SpriteFrameCache:addSpriteFramesWithFile",argc, 2);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:getSpriteFrameByName");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName'", nullptr);
-            return 0;
-        }
-        cocos2d::SpriteFrame* ret = cobj->getSpriteFrameByName(arg0);
-        object_to_luaval<cocos2d::SpriteFrame>(tolua_S, "cc.SpriteFrame",(cocos2d::SpriteFrame*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:getSpriteFrameByName",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 3) 
-    {
-        cocos2d::SpriteFrame* arg0;
-        cocos2d::Rect arg1;
-        cocos2d::Texture2D* arg2;
-
-        ok &= luaval_to_object<cocos2d::SpriteFrame>(tolua_S, 2, "cc.SpriteFrame",&arg0, "cc.SpriteFrameCache:addSpriteFrameCapInset");
-
-        ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.SpriteFrameCache:addSpriteFrameCapInset");
-
-        ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 4, "cc.Texture2D",&arg2, "cc.SpriteFrameCache:addSpriteFrameCapInset");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset'", nullptr);
-            return 0;
-        }
-        cobj->addSpriteFrameCapInset(arg0, arg1, arg2);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:addSpriteFrameCapInset",argc, 3);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:removeSpriteFramesFromFile");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile'", nullptr);
-            return 0;
-        }
-        cobj->removeSpriteFramesFromFile(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFramesFromFile",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_init(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_init'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_init'", nullptr);
-            return 0;
-        }
-        bool ret = cobj->init();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:init",argc, 0);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_init'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_removeSpriteFrames(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrames'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrames'", nullptr);
-            return 0;
-        }
-        cobj->removeSpriteFrames();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFrames",argc, 0);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrames'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        unsigned int arg0;
-
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "cc.SpriteFrameCache:deregisterSpriteSheetLoader");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader'", nullptr);
-            return 0;
-        }
-        cobj->deregisterSpriteSheetLoader(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:deregisterSpriteSheetLoader",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames'", nullptr);
-            return 0;
-        }
-        cobj->removeUnusedSpriteFrames();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeUnusedSpriteFrames",argc, 0);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:removeSpriteFramesFromFileContent");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent'", nullptr);
-            return 0;
-        }
-        cobj->removeSpriteFramesFromFileContent(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFramesFromFileContent",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:removeSpriteFrameByName");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName'", nullptr);
-            return 0;
-        }
-        cobj->removeSpriteFrameByName(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFrameByName",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_eraseFrame(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_eraseFrame'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:eraseFrame");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_eraseFrame'", nullptr);
-            return 0;
-        }
-        bool ret = cobj->eraseFrame(arg0);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:eraseFrame",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_eraseFrame'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.SpriteFrameCache:isSpriteFramesWithFileLoaded");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded'", nullptr);
-            return 0;
-        }
-        bool ret = cobj->isSpriteFramesWithFileLoaded(arg0);
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:isSpriteFramesWithFileLoaded",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::SpriteFrameCache* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::SpriteFrameCache*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        cocos2d::Texture2D* arg0;
-
-        ok &= luaval_to_object<cocos2d::Texture2D>(tolua_S, 2, "cc.Texture2D",&arg0, "cc.SpriteFrameCache:removeSpriteFramesFromTexture");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture'", nullptr);
-            return 0;
-        }
-        cobj->removeSpriteFramesFromTexture(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.SpriteFrameCache:removeSpriteFramesFromTexture",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_destroyInstance(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_destroyInstance'", nullptr);
-            return 0;
-        }
-        cocos2d::SpriteFrameCache::destroyInstance();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.SpriteFrameCache:destroyInstance",argc, 0);
-    return 0;
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_destroyInstance'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_cocos2dx_SpriteFrameCache_getInstance(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.SpriteFrameCache",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_SpriteFrameCache_getInstance'", nullptr);
-            return 0;
-        }
-        cocos2d::SpriteFrameCache* ret = cocos2d::SpriteFrameCache::getInstance();
-        object_to_luaval<cocos2d::SpriteFrameCache>(tolua_S, "cc.SpriteFrameCache",(cocos2d::SpriteFrameCache*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.SpriteFrameCache:getInstance",argc, 0);
-    return 0;
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_SpriteFrameCache_getInstance'.",&tolua_err);
-#endif
-    return 0;
-}
-static int lua_cocos2dx_SpriteFrameCache_finalize(lua_State* tolua_S)
-{
-    printf("luabindings: finalizing LUA object (SpriteFrameCache)");
-    return 0;
-}
-
-int lua_register_cocos2dx_SpriteFrameCache(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"cc.SpriteFrameCache");
-    tolua_cclass(tolua_S,"SpriteFrameCache","cc.SpriteFrameCache","cc.Ref",nullptr);
-
-    tolua_beginmodule(tolua_S,"SpriteFrameCache");
-        tolua_function(tolua_S,"reloadTexture",lua_cocos2dx_SpriteFrameCache_reloadTexture);
-        tolua_function(tolua_S,"getSpriteSheetLoader",lua_cocos2dx_SpriteFrameCache_getSpriteSheetLoader);
-        tolua_function(tolua_S,"addSpriteFrame",lua_cocos2dx_SpriteFrameCache_addSpriteFrame);
-        tolua_function(tolua_S,"findFrame",lua_cocos2dx_SpriteFrameCache_findFrame);
-        tolua_function(tolua_S,"addSpriteFrames",lua_cocos2dx_SpriteFrameCache_addSpriteFramesWithFile);
-        tolua_function(tolua_S,"getSpriteFrame",lua_cocos2dx_SpriteFrameCache_getSpriteFrameByName);
-        tolua_function(tolua_S,"addSpriteFrameCapInset",lua_cocos2dx_SpriteFrameCache_addSpriteFrameCapInset);
-        tolua_function(tolua_S,"removeSpriteFramesFromFile",lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFile);
-        tolua_function(tolua_S,"init",lua_cocos2dx_SpriteFrameCache_init);
-        tolua_function(tolua_S,"removeSpriteFrames",lua_cocos2dx_SpriteFrameCache_removeSpriteFrames);
-        tolua_function(tolua_S,"deregisterSpriteSheetLoader",lua_cocos2dx_SpriteFrameCache_deregisterSpriteSheetLoader);
-        tolua_function(tolua_S,"removeUnusedSpriteFrames",lua_cocos2dx_SpriteFrameCache_removeUnusedSpriteFrames);
-        tolua_function(tolua_S,"removeSpriteFramesFromFileContent",lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromFileContent);
-        tolua_function(tolua_S,"removeSpriteFrameByName",lua_cocos2dx_SpriteFrameCache_removeSpriteFrameByName);
-        tolua_function(tolua_S,"eraseFrame",lua_cocos2dx_SpriteFrameCache_eraseFrame);
-        tolua_function(tolua_S,"isSpriteFramesWithFileLoaded",lua_cocos2dx_SpriteFrameCache_isSpriteFramesWithFileLoaded);
-        tolua_function(tolua_S,"removeSpriteFramesFromTexture",lua_cocos2dx_SpriteFrameCache_removeSpriteFramesFromTexture);
-        tolua_function(tolua_S,"destroyInstance", lua_cocos2dx_SpriteFrameCache_destroyInstance);
-        tolua_function(tolua_S,"getInstance", lua_cocos2dx_SpriteFrameCache_getInstance);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::SpriteFrameCache).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.SpriteFrameCache";
-    g_typeCast[typeName] = "cc.SpriteFrameCache";
-    return 1;
-}
-
 int lua_cocos2dx_ParallaxNode_addChild(lua_State* tolua_S)
 {
     int argc = 0;
@@ -106496,6 +110240,7 @@ TOLUA_API int register_all_cocos2dx(lua_State* tolua_S)
 	lua_register_cocos2dx_FadeOutDownTiles(tolua_S);
 	lua_register_cocos2dx_StopGrid(tolua_S);
 	lua_register_cocos2dx_Technique(tolua_S);
+	lua_register_cocos2dx_ParticleEmissionMaskCache(tolua_S);
 	lua_register_cocos2dx_SkewTo(tolua_S);
 	lua_register_cocos2dx_SkewBy(tolua_S);
 	lua_register_cocos2dx_EaseQuadraticActionOut(tolua_S);
@@ -106553,6 +110298,7 @@ TOLUA_API int register_all_cocos2dx(lua_State* tolua_S)
 	lua_register_cocos2dx_SpriteBatchNode(tolua_S);
 	lua_register_cocos2dx_ActionTween(tolua_S);
 	lua_register_cocos2dx_TransitionFadeDown(tolua_S);
+	lua_register_cocos2dx_TransitionPageTurn(tolua_S);
 	lua_register_cocos2dx_ParticleSun(tolua_S);
 	lua_register_cocos2dx_TransitionProgressHorizontal(tolua_S);
 	lua_register_cocos2dx_ParticleFire(tolua_S);
@@ -106615,7 +110361,6 @@ TOLUA_API int register_all_cocos2dx(lua_State* tolua_S)
 	lua_register_cocos2dx_Device(tolua_S);
 	lua_register_cocos2dx_TransitionProgressRadialCCW(tolua_S);
 	lua_register_cocos2dx_ScaleTo(tolua_S);
-	lua_register_cocos2dx_TransitionPageTurn(tolua_S);
 	lua_register_cocos2dx_RenderState(tolua_S);
 	lua_register_cocos2dx_Properties(tolua_S);
 	lua_register_cocos2dx_BezierBy(tolua_S);
