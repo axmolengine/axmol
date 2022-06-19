@@ -445,14 +445,13 @@ public:
      *
      * @param styleText The styleText for password mask, the default value is "*".
      */
-    void setPasswordStyleText(const char* styleText);
-
+    void setPasswordStyleText(std::string_view styleText);
     /**
      * @brief Query the password style text.
      *
      * @return A password style text.
      */
-    const char* getPasswordStyleText() const;
+    std::string_view getPasswordStyleText() const;
 
     virtual void update(float dt) override;
 
