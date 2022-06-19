@@ -21953,9 +21953,9 @@ int lua_cocos2dx_ui_TextField_setPasswordStyleText(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        const char* arg0;
+        std::string_view arg0;
 
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ccui.TextField:setPasswordStyleText"); arg0 = arg0_tmp.c_str();
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccui.TextField:setPasswordStyleText");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_setPasswordStyleText'", nullptr);
@@ -22973,8 +22973,8 @@ int lua_cocos2dx_ui_TextField_getPasswordStyleText(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_getPasswordStyleText'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getPasswordStyleText();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        std::string_view ret = cobj->getPasswordStyleText();
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.TextField:getPasswordStyleText",argc, 0);
