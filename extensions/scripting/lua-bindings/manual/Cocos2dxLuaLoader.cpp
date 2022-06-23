@@ -41,12 +41,7 @@ int cocos2dx_lua_loader(lua_State* L)
     auto relativePath = adxelua_tostr(L, 1);
 
     //  convert any '.' to '/'
-    size_t pos = relativePath.find_first_of('.');
-    while (pos != std::string::npos)
-    {
-        relativePath[pos] = '/';
-        pos               = relativePath.find_first_of('.');
-    }
+    std::replace(relativePath.begin(), relativePath.end(), '.', '/');
 
     // search file in package.path
     Data chunk;
@@ -72,7 +67,7 @@ int cocos2dx_lua_loader(lua_State* L)
         resolvedPath.reserve(prefix.length() + relativePath.length());
 
         resolvedPath.assign(prefix.data(), prefix.length());
-        pos = resolvedPath.find_last_of('?');
+        auto pos = resolvedPath.find_last_of('?');
         assert(pos != std::string::npos);  // package search path should have '?'
         if (pos != std::string::npos)
         {
