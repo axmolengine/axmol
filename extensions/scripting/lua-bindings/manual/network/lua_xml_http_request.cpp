@@ -219,7 +219,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
             if (!response->isSucceed())
             {
-                CCLOG("Response failed, statusCode: %s", response->getResponseCode());
+                CCLOG("Response failed, statusCode: %ld", response->getResponseCode());
                 if (statusCode == 0)
                 {
                     _errorFlag = true;
