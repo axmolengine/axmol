@@ -43,6 +43,8 @@ static void problemLoading(const char* filename)
 
 inline void setNodeIgnoreDesignScale(cocos2d::Node* node)
 {
+    CCASSERT(node, "node pointer cannot be null.");
+
     Size actualFrameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
     Size actualWinSize   = Director::getInstance()->getWinSizeInPixels();
     node->setScaleX(actualWinSize.width / actualFrameSize.width);
