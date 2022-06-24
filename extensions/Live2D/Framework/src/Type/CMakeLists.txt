@@ -1,0 +1,10 @@
+target_sources(${LIB_NAME}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmMap.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmRectF.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmRectF.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmString.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmString.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/csmVector.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismBasicType.hpp
+)
