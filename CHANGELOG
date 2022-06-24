@@ -1,5 +1,7 @@
 adxe-1.0  ??
 
+- [HIGHLIGHT] Add Particle System Animations, Alpha Masks & Improvements, thanks to @DelinWorks
+- [HIGHLIGHT] Imporve text rendering
 - [HIGHLIGHT] Improve windows workflow, support linking with engine prebuilt libs
 - [HIGHLIGHT] Implement Windows video player using microsoft media foundation
 - [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
@@ -25,7 +27,8 @@ adxe-1.0  ??
 - [HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
 - [HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoder not present, use software decoder)
 - [HIGHLIGHT] ImGui integrated for PC platforms
-- [HIGHLIGHT] Extension FairyGUI support
+- [HIGHLIGHT] Add extension 'FairyGUI' support
+- [HIGHLIGHT] Add extension 'Live2D' support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
 - [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
 - [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
@@ -49,6 +52,8 @@ adxe-1.0  ??
 - [FIX] Fix font atlas will leak when it does not exist in the atlas cache, thanks to @rh101
 - [FIX] Fix ScrollView shows incorrect position in vertical direction some time, thanks to @wzhengsen
 - [FIX] Fix Spine ClippingAttachment doesn't work
+- [REFINE] Allow the forced reformatting of RichText contents, thanks to @rh101
+- [REFINE] Upgrade android toolsets to ndk-r23 LTS
 - [REFINE] CCValue move construct and assign with std::string support
 - [REFINE] Improve windows dev workflow, use working directory instead copy resources to build binary directory
 - [REFINE] Add lua debug project file to lua project template
@@ -67,13 +72,15 @@ adxe-1.0  ??
 - [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
 - [REFINE] Fix some audio test case can't hear sound
 - [REFINE] Avoid OS_WINDOWS conflict with system macro
-- [REFINE] Update OpenSSL to v3.0.1
+- [REFINE] Update OpenSSL to v3.0.x latest
 - [REFINE] Update FreeType to latest
 - [REFINE] Use Freetype SDF render when label distance field enabled
 - [REFINE] Always enable string pooling for msvc on cmake
 - [REFINE] Change DrawNode api color parameters from `Color4F` to low `Color4B`
 - [REFINE] Improve DrawNode GC allocs
 - [REFINE] Use `jni.hpp` to improve jni call without method signature GC allocs
+- [REFINE] Rename is64BitIOSDevice to is64BitMobileDevice
+- [REFINE] Fix Android screen blank issue after unlocking device with application running, thanks to @rh101
 
 
 cocos2d-x-4.0  Dec.3 2019
