@@ -1,0 +1,15 @@
+target_sources(${LIB_NAME}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismMath.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismMath.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismMatrix44.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismMatrix44.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModelMatrix.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModelMatrix.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismTargetPoint.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismTargetPoint.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismVector2.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismVector2.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismViewMatrix.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismViewMatrix.hpp
+)
