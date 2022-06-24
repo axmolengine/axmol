@@ -31,21 +31,6 @@
 #include "renderer/backend/PixelFormatUtils.h"
 #include "platform/CCGL.h"
 
-// In desktop OpenGL 4+ and OpenGL ES 3.0+, specific GL formats GL_x_INTEGER are used for integer textures.
-// For older desktop OpenGL contexts, GL names without _INTEGER suffix were used.
-// See http://docs.gl/gl4/glTexImage2D, http://docs.gl/gl3/glTexImage2D, http://docs.gl/es3/glTexImage2D
-#if defined(GL_VERSION_4_0) || defined(CC_USE_GLES)
-#    define RED_INTEGER GL_RED_INTEGER
-#    define RG_INTEGER GL_RG_INTEGER
-#    define RGB_INTEGER GL_RGB_INTEGER
-#    define RGBA_INTEGER GL_RGBA_INTEGER
-#else
-#    define RED_INTEGER GL_RED
-#    define RG_INTEGER GL_RG
-#    define RGB_INTEGER GL_RGB
-#    define RGBA_INTEGER GL_RGBA
-#endif
-
 CC_BACKEND_BEGIN
 
 struct GPUTextureFormatInfo
@@ -61,10 +46,10 @@ struct GPUTextureFormatInfo
 static GPUTextureFormatInfo s_textureFormats[] =
 {
     /* pvrtc v1 */
-    { GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,          GL_COMPRESSED_SRGB_PVRTC_4BPPV1_EXT,          GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,   GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,                 GL_ZERO, }, // PVRTC4
-    { GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,         GL_COMPRESSED_SRGB_ALPHA_PVRTC_4BPPV1_EXT,    GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,  GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,                GL_ZERO, }, // PVRTC4A
-    { GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,          GL_COMPRESSED_SRGB_PVRTC_2BPPV1_EXT,          GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,  GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,                  GL_ZERO, },  // PVRTC2
-    { GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,         GL_COMPRESSED_SRGB_ALPHA_PVRTC_2BPPV1_EXT,    GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,  GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,                GL_ZERO, }, // PVRTC2A
+    { GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,          GL_COMPRESSED_SRGB_PVRTC_4BPPV1_EXT,          GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,         GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG,           GL_ZERO, }, // PVRTC4
+    { GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,         GL_COMPRESSED_SRGB_ALPHA_PVRTC_4BPPV1_EXT,    GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,        GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG,          GL_ZERO, }, // PVRTC4A
+    { GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,          GL_COMPRESSED_SRGB_PVRTC_2BPPV1_EXT,          GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,         GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG,           GL_ZERO, },  // PVRTC2
+    { GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,         GL_COMPRESSED_SRGB_ALPHA_PVRTC_2BPPV1_EXT,    GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,        GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG,          GL_ZERO, }, // PVRTC2A
 
     // { GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,         GL_ZERO,                                      GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,  GL_COMPRESSED_RGBA_PVRTC_4BPPV2_IMG,                GL_ZERO, }, // PVRTC4A v2
     // { GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,         GL_ZERO,                                      GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,  GL_COMPRESSED_RGBA_PVRTC_2BPPV2_IMG,                GL_ZERO, }, // PVRTC2A v2
@@ -94,12 +79,12 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR,     GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_ZERO, }, // ASTC10x5
 
     /* nomral */
-    { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE, }, // RGBA8
-    { GL_RGBA,                                     GL_SRGB8_ALPHA8_EXT,                          GL_BGRA_EXT,                                 GL_BGRA_EXT,                                 GL_UNSIGNED_BYTE, }, // BGRA8
-    { GL_RGB,                                      GL_SRGB_EXT,                                  GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE, }, // RGB8
+    { GL_RGBA,                                     GL_SRGB8_ALPHA8,                              GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE, }, // RGBA8
+    { GL_RGBA,                                     GL_SRGB8_ALPHA8,                              GL_BGRA,                                     GL_BGRA,                                     GL_UNSIGNED_BYTE, }, // BGRA8
+    { GL_RGB,                                      GL_SRGB8,                                     GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE, }, // RGB8
     { GL_RGB,                                      GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5}, // RGB565 === MTLPixelFormatB5G6R5Unorm
     { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_4_4_4_4}, // RGBA4 === MTLPixelFormatABGR4Unorm
-    { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA/*GL_BGRA_EXT*/,                      GL_UNSIGNED_SHORT_5_5_5_1}, // RGB5A1 === MTLPixelFormatA1BGR5Unorm
+    { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_5_5_5_1}, // RGB5A1 === MTLPixelFormatA1BGR5Unorm
     { GL_ALPHA,                                    GL_ZERO,                                      GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE, }, // A8
     { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE, }, // L8
     { GL_LUMINANCE_ALPHA,                          GL_ZERO,                                      GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
