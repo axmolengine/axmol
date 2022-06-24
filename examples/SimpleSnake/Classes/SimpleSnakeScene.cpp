@@ -41,6 +41,14 @@ static void problemLoading(const char* filename)
         "HelloWorldScene.cpp\n");
 }
 
+inline void setNodeIgnoreDesignScale(cocos2d::Node* node)
+{
+    Size actualFrameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
+    Size actualWinSize   = Director::getInstance()->getWinSizeInPixels();
+    node->setScaleX(actualWinSize.width / actualFrameSize.width);
+    node->setScaleY(actualWinSize.height / actualFrameSize.height);
+}
+
 // on "init" you need to initialize your instance
 bool SimpleSnake::init()
 {
@@ -107,6 +115,7 @@ bool SimpleSnake::init()
 
     // add "ADXE" splash screen"
     auto sprite = Sprite::create("ADXE_white.png"sv);
+    setNodeIgnoreDesignScale(sprite);
     if (sprite == nullptr)
     {
         problemLoading("'ADXE_white.png'");
