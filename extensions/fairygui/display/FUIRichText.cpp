@@ -341,8 +341,13 @@ void FUIRichText::handleTextRenderer(HtmlElement* element, const std::string& te
 
     int leftLength = findSplitPositionForWord(textRenderer, text);
 
-    //The minimum cut length is 1, otherwise will cause the infinite loop.
-    if (0 == leftLength) leftLength = 1;
+    //when leftLength == 0,should add new line,
+    if (0 == leftLength)
+    {
+        addNewLine();
+        handleTextRenderer(element, text);
+        return;
+    }
     std::string leftWords = getSubStringOfUTF8String(text, 0, leftLength);
     int rightStart = leftLength;
     if (std::isspace(text[rightStart], std::locale()))
