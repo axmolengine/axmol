@@ -66,10 +66,6 @@ if(AX_BUILD_TESTS)
     if(AX_ENABLE_EXT_FAIRYGUI)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
-    
-    if(AX_ENABLE_EXT_LIVE2D)
-      add_subdirectory(${ADXE_ROOT_PATH}/tests/live2d-tests ${ENGINE_BINARY_PATH}/tests/live2d-tests)
-    endif()
 
     if(AX_ENABLE_EXT_LUA)
       add_subdirectory(${ADXE_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
