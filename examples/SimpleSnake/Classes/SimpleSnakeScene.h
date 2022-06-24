@@ -21,7 +21,7 @@
 
 #include "cocos2d.h"
 
-const int snakeBodies = 10;
+const int snakeBodies = 9;
 const int StartBodies = 4;
 
 class SimpleSnake : public cocos2d::Scene
@@ -32,6 +32,7 @@ public:
     // a selector callback
     void menuCloseCallback(Ref* sender);
     virtual void update(float delta) override;
+    void drawAll(bool finish);
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 
     cocos2d::Vec2 offset;
@@ -49,7 +50,7 @@ public:
     float endLevelTime   = 0.0;
 
     int dir, num = StartBodies;
-    cocos2d::Label* myScoreLabel[snakeBodies + StartBodies + 1];
+    cocos2d::Label* myScoreLabel[snakeBodies + 1];
 };
 
 #endif  // __SIMPLE_SNAKE_SCENE_H__

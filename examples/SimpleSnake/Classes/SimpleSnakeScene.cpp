@@ -90,10 +90,10 @@ bool SimpleSnake::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    auto label = Label::createWithTTF("Example - Simple Snake", "fonts/Marker Felt.ttf", 24);
+    auto label = Label::createWithTTF("Example: Simple Snake", "fonts/arial.ttf", 24);
     if (label == nullptr)
     {
-        problemLoading("'fonts/Marker Felt.ttf'");
+        problemLoading("'fonts/arial.ttf'");
     }
     else
     {
@@ -105,11 +105,11 @@ bool SimpleSnake::init()
         this->addChild(label, 1);
     }
 
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("ADXE.png"sv);
+    // add "ADXE" splash screen"
+    auto sprite = Sprite::create("ADXE_white.png"sv);
     if (sprite == nullptr)
     {
-        problemLoading("'ADXE.png'");
+        problemLoading("'ADXE_white.png'");
     }
     else
     {
@@ -138,15 +138,15 @@ bool SimpleSnake::init()
 
     char buffer[1024];
 
-    for (int i = 0; i < snakeBodies; i++)
+    for (int i = 0; i < snakeBodies+1; i++)
     {
         myScore[i] = 0.0;
-        sprintf(buffer, "Level %i Time : %f", i + 1, myScore[i]);
-        myScoreLabel[i] = Label::createWithTTF(std::string(buffer), "fonts/Marker Felt.ttf", 24);
-        myScoreLabel[i]->setPosition(
-            Vec2(130, origin.y + visibleSize.height - label->getContentSize().height - i * 30));
+        sprintf(buffer, "Level %i: %f", i + 1, myScore[i]);
+        myScoreLabel[i] = Label::createWithTTF(std::string(buffer), "fonts/arial.ttf", 24);
+        myScoreLabel[i]->setPosition(Vec2(130, origin.y + visibleSize.height - label->getContentSize().height - i * 30));
         this->addChild(myScoreLabel[i], 1);
     }
+    myScoreLabel[snakeBodies]->setString("Eat as fast as you can!");
 
     scheduleUpdate();
     return true;
@@ -157,16 +157,20 @@ void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
     switch (keyCode)
     {
     case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        if (dir != 2) dir = 1;
+        if (dir != 2)
+            dir = 1;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        if (dir != 1) dir = 2;
+        if (dir != 1)
+            dir = 2;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-        if (dir != 3) dir = 0;
+        if (dir != 3)
+            dir = 0;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-        if (dir != 0) dir = 3;
+        if (dir != 0)
+            dir = 3;
         break;
     default:
         break;
@@ -200,19 +204,23 @@ void SimpleSnake::update(float delta)
         {
         case 0:
             s[0].y++;
-            if (s[0].y >= M) s[0].y = 0;
+            if (s[0].y >= M)
+                s[0].y = 0;
             break;
         case 1:
             s[0].x--;
-            if (s[0].x < 0) s[0].x = N;
+            if (s[0].x < 0)
+                s[0].x = N - 1;
             break;
         case 2:
             s[0].x++;
-            if (s[0].x >= N) s[0].x = 0;
+            if (s[0].x >= N)
+                s[0].x = 0;
             break;
         case 3:
             s[0].y--;
-            if (s[0].y < 0) s[0].y = M;
+            if (s[0].y < 0)
+                s[0].y = M - 1;
             break;
         default:
             break;
@@ -226,6 +234,7 @@ void SimpleSnake::update(float delta)
                 posOk = true;
                 f.x   = rand() % N;
                 f.y   = rand() % M;
+
                 for (int i = 0; i < num; i++)
                 {
                     if (f.x == s[i].x && f.y == s[i].y)
@@ -236,19 +245,14 @@ void SimpleSnake::update(float delta)
                 }
             } while (!posOk);
 
-            // score
-            char buffer[124];
-            myScore[num - StartBodies] = endLevelTime;
-            sprintf(buffer, "Level %i Time : %f", num - StartBodies + 1, myScore[num - StartBodies]);
-            myScoreLabel[num - StartBodies]->setString(buffer);
-            if (num >= (snakeBodies + StartBodies - 1))
-            {
-                myScoreLabel[num - StartBodies]->setString("FINISH");
-                finish = true;
-            }
-
             // next level
             num++;
+            if (num >= (snakeBodies + StartBodies - 1))
+            {
+                myScoreLabel[snakeBodies]->setString("FINISH");
+                finish = true;
+                drawAll(finish);
+            }
             level -= 0.01;
             startLevelTime = 0.0;
             endLevelTime   = startLevelTime;
@@ -256,15 +260,33 @@ void SimpleSnake::update(float delta)
         runTime = 0;
     }
 
-    //////// draw  ///////
+    if (!finish)
+    {
+        drawAll(finish);
+    }
+}
+
+void SimpleSnake::drawAll(bool finish)
+{
+    // score
+    char buffer[124];
+    myScore[num - StartBodies] = endLevelTime;
+    sprintf(buffer, "Level %i: %f", num - StartBodies + 1, myScore[num - StartBodies]);
+    myScoreLabel[num - StartBodies]->setString(buffer);
+
+
     mydraw->clear();
-
-    // Draw food
-    mydraw->drawDot(Vec2(size / 2 + f.x * size, size / 2 + f.y * size), size / 2, Color4B::GREEN);
-
-    // Draw snake
-    for (int i = 0; i < num; i++)
+    // draw snake body
+    for (int i = 1; i < num; i++)
     {
         mydraw->drawDot(Vec2(size / 2 + s[i].x * size, size / 2 + s[i].y * size), size / 2, Color4B::BLUE);
+    }
+    //draw snake head
+    mydraw->drawDot(Vec2(size / 2 + s[0].x * size, size / 2 + s[0].y * size), size / 2, Color4B::MAGENTA);
+
+    if (!finish)
+    {
+        // draw food
+        mydraw->drawDot(Vec2(size / 2 + f.x * size, size / 2 + f.y * size), size / 2, Color4B::GREEN);
     }
 }
