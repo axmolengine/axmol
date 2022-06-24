@@ -47,9 +47,12 @@ the callback function.
 */
 class CC_DLL CallbackCommand : public RenderCommand
 {
-public:
+    // only allow render to manage the callbackCommand
+    friend class Renderer;
     CallbackCommand();
+    ~CallbackCommand(){};
 
+public:
     void init(float globalZOrder);
     void init(float globalZorder, const Mat4& transform, unsigned int);
 

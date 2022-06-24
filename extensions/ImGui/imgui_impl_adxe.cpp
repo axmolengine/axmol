@@ -172,7 +172,7 @@ struct ImGui_ImplGlfw_Data
     Texture2D* FontTexture      = nullptr;
     Mat4 Projection;
 
-    std::vector<std::shared_ptr<CallbackCommand>> CallbackCommands{};
+    // std::vector<std::shared_ptr<CallbackCommand>> CallbackCommands{};
     std::vector<std::shared_ptr<CustomCommand>> CustomCommands{};
     Vector<ProgramState*> ProgramStates{};
 
@@ -1298,7 +1298,7 @@ void ImGui_ImplAdxe_Shutdown()
 
 IMGUI_IMPL_API void ImGui_ImplAdxe_NewFrame() { 
     auto bd = ImGui_ImplGlfw_GetBackendData();
-	bd->CallbackCommands.clear();
+	//bd->CallbackCommands.clear();
     bd->CustomCommands.clear();
     bd->ProgramStates.clear();
 
@@ -1509,11 +1509,11 @@ static void AddRendererCommand(const std::function<void()>& f)
 {
     auto bd             = ImGui_ImplGlfw_GetBackendData();
     const auto renderer = Director::getInstance()->getRenderer();
-    auto cmd            = std::make_shared<CallbackCommand>();
+    auto cmd            = renderer->nextCallbackCommand();
     cmd->init(0.f);
     cmd->func = f;
-    renderer->addCommand(cmd.get());
-    bd->CallbackCommands.push_back(cmd);
+    renderer->addCommand(cmd);
+    //bd->CallbackCommands.push_back(cmd);
 }
 
 static void ImGui_ImplAdxe_SaveRenderState(cocos2d::Renderer* renderer)

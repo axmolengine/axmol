@@ -48,14 +48,6 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     vertexLayout->setAttribute("a_color", _programState->getAttributeLocation("a_color"), backend::VertexFormat::FLOAT4,
                                offsetof(V3F_C4F, color), false);
     vertexLayout->setLayout(sizeof(V3F_C4F));
-
-    _beforeCommand.func = CC_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
-    _afterCommand.func  = CC_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
-
-    _beforeCommand.set3D(true);
-    _beforeCommand.setTransparent(true);
-    _afterCommand.set3D(true);
-    _afterCommand.setTransparent(true);
 }
 
 void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)
@@ -164,13 +156,23 @@ backend::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives 
 void NavMeshDebugDraw::draw(Renderer* renderer)
 {
     auto& transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    auto beforeCommand = renderer->nextCallbackCommand();
+    auto afterCommand  = renderer->nextCallbackCommand();
+    
+    beforeCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
+    afterCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
 
-    _beforeCommand.init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
-    _beforeCommand.init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
+    beforeCommand->func  = CC_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
+    afterCommand->func  = CC_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
+
+    beforeCommand->set3D(true);
+    beforeCommand->setTransparent(true);
+    afterCommand->set3D(true);
+    afterCommand->setTransparent(true);
 
     _programState->setUniform(_locMVP, transform.m, sizeof(transform.m));
 
-    renderer->addCommand(&_beforeCommand);
+    renderer->addCommand(beforeCommand);
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
@@ -216,7 +218,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
         idx++;
     }
 
-    renderer->addCommand(&_afterCommand);
+    renderer->addCommand(afterCommand);
 }
 
 void NavMeshDebugDraw::onBeforeVisitCmd()

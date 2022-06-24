@@ -26,6 +26,8 @@
 
 NS_CC_BEGIN
 
+static uint64_t s_nextId = 1;
+
 CallbackCommand::CallbackCommand()
 {
     _type = RenderCommand::Type::CALLBACK_COMMAND;
@@ -44,9 +46,7 @@ void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned in
 void CallbackCommand::execute()
 {
     if (func)
-    {
         func();
-    }
 }
 
 NS_CC_END

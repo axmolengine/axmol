@@ -303,6 +303,8 @@ public:
      */
     inline Sprite* getSprite() const { return _sprite; }
 
+    inline backend::RenderTarget* getRenderTarget() const { return _renderTarget; }
+
     /** Sets the Sprite being used.
      *
      * @param sprite A Sprite.
@@ -397,16 +399,16 @@ protected:
     Sprite* _sprite = nullptr;
 
     GroupCommand _groupCommand;
-    CallbackCommand _beginCommand;
-    CallbackCommand _endCommand;
+    //CallbackCommand _beginCommand;
+    //CallbackCommand _endCommand;
 
-    CallbackCommand _beforeClearAttachmentCommand;
-    CallbackCommand _afterClearAttachmentCommand;
+    //CallbackCommand _beforeClearAttachmentCommand;
+    //CallbackCommand _afterClearAttachmentCommand;
     /*this command is used to encapsulate saveToFile,
      call saveToFile twice will overwrite this command and callback
      and the command and callback will be executed twice.
     */
-    CallbackCommand _saveToFileCommand;
+    //CallbackCommand _saveToFileCommand;
     std::function<void(RenderTexture*, std::string_view)> _saveFileCallback = nullptr;
 
     Mat4 _oldTransMatrix, _oldProjMatrix;

@@ -111,8 +111,8 @@ protected:
 
 protected:
     MeshCommand _meshCommand;
-    CallbackCommand _beforeCommand;
-    CallbackCommand _afterCommand;
+    //CallbackCommand _beforeCommand;
+    //CallbackCommand _afterCommand;
     Texture2D* _texture                  = nullptr;
     backend::ProgramState* _programState = nullptr;
     backend::Buffer* _indexBuffer        = nullptr;  // index buffer

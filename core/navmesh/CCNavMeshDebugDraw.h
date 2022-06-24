@@ -107,8 +107,8 @@ private:
     backend::UniformLocation _locMVP;
     std::vector<CustomCommand> _commands;
 
-    CallbackCommand _beforeCommand;
-    CallbackCommand _afterCommand;
+    //CallbackCommand _beforeCommand;
+    //CallbackCommand _afterCommand;
 
     // renderer state cache variables
     bool _rendererDepthTestEnabled                 = true;

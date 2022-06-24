@@ -205,8 +205,8 @@ protected:
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(MotionStreak3D);
 
-    CallbackCommand _beforeCommand;
-    CallbackCommand _afterCommand;
+    //CallbackCommand _beforeCommand;
+    //CallbackCommand _afterCommand;
     backend::UniformLocation _locMVP;
     backend::UniformLocation _locTexture;
 

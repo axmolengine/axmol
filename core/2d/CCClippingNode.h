@@ -161,8 +161,8 @@ protected:
 
     GroupCommand _groupCommandStencil;
     GroupCommand _groupCommandChildren;
-    CallbackCommand _afterDrawStencilCmd;
-    CallbackCommand _afterVisitCmd;
+    //CallbackCommand _afterDrawStencilCmd;
+    //CallbackCommand _afterVisitCmd;
     std::unordered_map<Node*, backend::ProgramState*> _originalStencilProgramState;
 
 private:

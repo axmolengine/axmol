@@ -571,6 +571,9 @@ bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descri
 
     setRenderTarget(descriptor.textureUsage == TextureUsage::RENDER_TARGET);
 
+    if (_pixelFormat == PixelFormat::NONE)
+        _pixelFormat = descriptor.textureFormat;
+
     return true;
 }
 

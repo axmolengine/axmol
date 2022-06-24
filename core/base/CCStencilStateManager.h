@@ -77,8 +77,8 @@ private:
     int _currentLayerMask       = 0;
 
     CustomCommand _customCommand;
-    CallbackCommand _afterDrawStencilCmd;
-    CallbackCommand _afterVisitCmd;
+    //CallbackCommand _afterDrawStencilCmd;
+    //CallbackCommand _afterVisitCmd;
 
     backend::UniformLocation _mvpMatrixLocaiton;
     backend::UniformLocation _colorUniformLocation;

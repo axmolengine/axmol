@@ -31,24 +31,6 @@ static MTLStoreAction getStoreAction(const RenderPassDescriptor& params, TargetB
 RenderTargetMTL::RenderTargetMTL(bool defaultRenderTarget) : RenderTarget(defaultRenderTarget) {}
 RenderTargetMTL::~RenderTargetMTL() {}
 
-void RenderTargetMTL::bindFrameBuffer() const {}
-
-void RenderTargetMTL::unbindFrameBuffer() const {}
-void RenderTargetMTL::setColorAttachment(ColorAttachment attachment)
-{
-    RenderTarget::setColorAttachment(attachment);
-}
-
-void RenderTargetMTL::setDepthAttachment(TextureBackend* attachment, int level)
-{
-    RenderTarget::setDepthAttachment(attachment, level);
-}
-
-void RenderTargetMTL::setStencilAttachment(TextureBackend* attachment, int level)
-{
-    RenderTarget::setStencilAttachment(attachment, level);
-}
-
 void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& params,
                                                  MTLRenderPassDescriptor* descriptor) const
 {
@@ -73,7 +55,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
         if (bitmask::any(clearFlags, MRTColorFlag))
             descriptor.colorAttachments[i].clearColor =
                 MTLClearColorMake(params.clearColorValue[0], params.clearColorValue[1], params.clearColorValue[2],
-                                  params.clearColorValue[3]);
+                                params.clearColorValue[3]);
 #if 0
         if (multisampledColor[i]) {
             // We're rendering into our temporary MSAA texture and doing an automatic resolve.
@@ -140,6 +122,8 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
         }
     }
 #endif
+    
+    _dirty = false;
 }
 
 RenderTargetMTL::Attachment RenderTargetMTL::getColorAttachment(int index) const
