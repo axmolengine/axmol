@@ -82305,6 +82305,53 @@ int lua_cocos2dx_RenderTexture_setClearStencil(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_RenderTexture_getRenderTarget(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::RenderTexture* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.RenderTexture",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::RenderTexture*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_RenderTexture_getRenderTarget'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_RenderTexture_getRenderTarget'", nullptr);
+            return 0;
+        }
+        cocos2d::backend::RenderTarget* ret = cobj->getRenderTarget();
+        object_to_luaval<cocos2d::backend::RenderTarget>(tolua_S, "ccb.RenderTarget",(cocos2d::backend::RenderTarget*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.RenderTexture:getRenderTarget",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_RenderTexture_getRenderTarget'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_RenderTexture_setSprite(lua_State* tolua_S)
 {
     int argc = 0;
@@ -83578,6 +83625,7 @@ int lua_register_cocos2dx_RenderTexture(lua_State* tolua_S)
         tolua_function(tolua_S,"getClearDepth",lua_cocos2dx_RenderTexture_getClearDepth);
         tolua_function(tolua_S,"getClearStencil",lua_cocos2dx_RenderTexture_getClearStencil);
         tolua_function(tolua_S,"setClearStencil",lua_cocos2dx_RenderTexture_setClearStencil);
+        tolua_function(tolua_S,"getRenderTarget",lua_cocos2dx_RenderTexture_getRenderTarget);
         tolua_function(tolua_S,"setSprite",lua_cocos2dx_RenderTexture_setSprite);
         tolua_function(tolua_S,"getSprite",lua_cocos2dx_RenderTexture_getSprite);
         tolua_function(tolua_S,"isAutoDraw",lua_cocos2dx_RenderTexture_isAutoDraw);
@@ -97500,6 +97548,81 @@ int lua_cocos2dx_Renderer_getClearStencil(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_Renderer_addCallbackCommand(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Renderer* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Renderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Renderer*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Renderer_addCallbackCommand'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::function<void ()> arg0;
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_addCallbackCommand'", nullptr);
+            return 0;
+        }
+        cobj->addCallbackCommand(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        std::function<void ()> arg0;
+        double arg1;
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.Renderer:addCallbackCommand");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_addCallbackCommand'", nullptr);
+            return 0;
+        }
+        cobj->addCallbackCommand(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:addCallbackCommand",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Renderer_addCallbackCommand'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_Renderer_setStencilTest(lua_State* tolua_S)
 {
     int argc = 0;
@@ -98485,6 +98608,53 @@ int lua_cocos2dx_Renderer_addDrawnBatches(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_Renderer_nextCallbackCommand(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Renderer* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Renderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Renderer*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Renderer_nextCallbackCommand'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_nextCallbackCommand'", nullptr);
+            return 0;
+        }
+        cocos2d::CallbackCommand* ret = cobj->nextCallbackCommand();
+        object_to_luaval<cocos2d::CallbackCommand>(tolua_S, "cc.CallbackCommand",(cocos2d::CallbackCommand*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:nextCallbackCommand",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Renderer_nextCallbackCommand'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_Renderer_checkVisibility(lua_State* tolua_S)
 {
     int argc = 0;
@@ -98929,7 +99099,7 @@ int lua_cocos2dx_Renderer_getStencilDepthPassOperation(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_Renderer_setScissorTest(lua_State* tolua_S)
+int lua_cocos2dx_Renderer_getOffscreenRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
     cocos2d::Renderer* cobj = nullptr;
@@ -98949,32 +99119,29 @@ int lua_cocos2dx_Renderer_setScissorTest(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Renderer_setScissorTest'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Renderer_getOffscreenRenderTarget'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 0) 
     {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.Renderer:setScissorTest");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_setScissorTest'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_getOffscreenRenderTarget'", nullptr);
             return 0;
         }
-        cobj->setScissorTest(arg0);
-        lua_settop(tolua_S, 1);
+        cocos2d::backend::RenderTarget* ret = cobj->getOffscreenRenderTarget();
+        object_to_luaval<cocos2d::backend::RenderTarget>(tolua_S, "ccb.RenderTarget",(cocos2d::backend::RenderTarget*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:setScissorTest",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:getOffscreenRenderTarget",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Renderer_setScissorTest'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Renderer_getOffscreenRenderTarget'.",&tolua_err);
 #endif
 
     return 0;
@@ -99292,6 +99459,56 @@ int lua_cocos2dx_Renderer_beginRenderPass(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_Renderer_setScissorTest(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Renderer* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Renderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Renderer*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Renderer_setScissorTest'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "cc.Renderer:setScissorTest");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Renderer_setScissorTest'", nullptr);
+            return 0;
+        }
+        cobj->setScissorTest(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Renderer:setScissorTest",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Renderer_setScissorTest'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_Renderer_getDefaultRenderTarget(lua_State* tolua_S)
 {
     int argc = 0;
@@ -99589,6 +99806,7 @@ int lua_register_cocos2dx_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setStencilCompareFunction",lua_cocos2dx_Renderer_setStencilCompareFunction);
         tolua_function(tolua_S,"getViewport",lua_cocos2dx_Renderer_getViewport);
         tolua_function(tolua_S,"getClearStencil",lua_cocos2dx_Renderer_getClearStencil);
+        tolua_function(tolua_S,"addCallbackCommand",lua_cocos2dx_Renderer_addCallbackCommand);
         tolua_function(tolua_S,"setStencilTest",lua_cocos2dx_Renderer_setStencilTest);
         tolua_function(tolua_S,"getStencilFailureOperation",lua_cocos2dx_Renderer_getStencilFailureOperation);
         tolua_function(tolua_S,"getRenderTarget",lua_cocos2dx_Renderer_getRenderTarget);
@@ -99609,6 +99827,7 @@ int lua_register_cocos2dx_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"getStencilWriteMask",lua_cocos2dx_Renderer_getStencilWriteMask);
         tolua_function(tolua_S,"endRenderPass",lua_cocos2dx_Renderer_endRenderPass);
         tolua_function(tolua_S,"addDrawnBatches",lua_cocos2dx_Renderer_addDrawnBatches);
+        tolua_function(tolua_S,"nextCallbackCommand",lua_cocos2dx_Renderer_nextCallbackCommand);
         tolua_function(tolua_S,"checkVisibility",lua_cocos2dx_Renderer_checkVisibility);
         tolua_function(tolua_S,"setStencilOperation",lua_cocos2dx_Renderer_setStencilOperation);
         tolua_function(tolua_S,"getDepthWrite",lua_cocos2dx_Renderer_getDepthWrite);
@@ -99618,13 +99837,14 @@ int lua_register_cocos2dx_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setDepthCompareFunction",lua_cocos2dx_Renderer_setDepthCompareFunction);
         tolua_function(tolua_S,"setStencilWriteMask",lua_cocos2dx_Renderer_setStencilWriteMask);
         tolua_function(tolua_S,"getStencilDepthPassOperation",lua_cocos2dx_Renderer_getStencilDepthPassOperation);
-        tolua_function(tolua_S,"setScissorTest",lua_cocos2dx_Renderer_setScissorTest);
+        tolua_function(tolua_S,"getOffscreenRenderTarget",lua_cocos2dx_Renderer_getOffscreenRenderTarget);
         tolua_function(tolua_S,"setWinding",lua_cocos2dx_Renderer_setWinding);
         tolua_function(tolua_S,"clear",lua_cocos2dx_Renderer_clear);
         tolua_function(tolua_S,"setRenderTarget",lua_cocos2dx_Renderer_setRenderTarget);
         tolua_function(tolua_S,"readPixels",lua_cocos2dx_Renderer_readPixels);
         tolua_function(tolua_S,"getStencilReferenceValue",lua_cocos2dx_Renderer_getStencilReferenceValue);
         tolua_function(tolua_S,"beginRenderPass",lua_cocos2dx_Renderer_beginRenderPass);
+        tolua_function(tolua_S,"setScissorTest",lua_cocos2dx_Renderer_setScissorTest);
         tolua_function(tolua_S,"getDefaultRenderTarget",lua_cocos2dx_Renderer_getDefaultRenderTarget);
         tolua_function(tolua_S,"clean",lua_cocos2dx_Renderer_clean);
         tolua_function(tolua_S,"getDrawnBatches",lua_cocos2dx_Renderer_getDrawnBatches);
