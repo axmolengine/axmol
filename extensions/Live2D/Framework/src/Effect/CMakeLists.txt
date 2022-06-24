@@ -1,0 +1,9 @@
+target_sources(${LIB_NAME}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismBreath.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismBreath.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismEyeBlink.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismEyeBlink.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismPose.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismPose.hpp
+)

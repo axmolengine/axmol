@@ -16,6 +16,8 @@ option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
 
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 
+option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
+
 if(WINDOWS OR MACOSX OR LINUX)
   option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
@@ -117,9 +119,12 @@ if(AX_ENABLE_EXT_COCOSTUDIO)
   endif()
 endif()
 
+if(AX_ENABLE_EXT_LIVE2D)
+  add_subdirectory(Live2D)
+endif()
+
 if(AX_ENABLE_EXT_LUA)
   add_subdirectory(scripting/lua-bindings)
 endif()
-
 
 message(STATUS "Enabled adxe extensions:${_AX_EXTENSION_LIBS}")
