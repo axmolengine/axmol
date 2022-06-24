@@ -20,13 +20,6 @@ public:
     RenderTargetMTL(bool defaultRenderTarget);
     ~RenderTargetMTL();
 
-    void bindFrameBuffer() const override;
-    void unbindFrameBuffer() const override;
-
-    void setColorAttachment(ColorAttachment attachment) override;
-    void setDepthAttachment(TextureBackend* attachment, int level = 0) override;
-    void setStencilAttachment(TextureBackend* attachment, int level = 0) override;
-
     void applyRenderPassAttachments(const RenderPassDescriptor&, MTLRenderPassDescriptor*) const;
 
     Attachment getColorAttachment(int index) const;

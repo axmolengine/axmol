@@ -197,10 +197,18 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
-        _renderTarget = backend::Device::getInstance()->newRenderTarget(
-            _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
-            _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
-            _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
+        // _renderTarget = backend::Device::getInstance()->newRenderTarget(
+        //     _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
+        //     _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
+        //     _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
+        _renderTarget = _director->getRenderer()->getOffscreenRenderTarget();
+        _renderTarget->retain();
+
+        _renderTarget->setColorAttachment(_texture2D ? _texture2D->getBackendTexture() : nullptr);
+
+        auto depthStencilTexture = _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr;
+        _renderTarget->setDepthAttachment(depthStencilTexture);
+        _renderTarget->setStencilAttachment(depthStencilTexture);
 
         clearColorAttachment();
 
@@ -401,17 +409,20 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
     _saveFileCallback = callback;
 
     std::string fullpath = FileUtils::getInstance()->getWritablePath().append(fileName);
-    _saveToFileCommand.init(_globalZOrder);
-    _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
 
-    _director->getRenderer()->addCommand(&_saveToFileCommand);
+    auto renderer          = _director->getRenderer();
+    auto saveToFileCommand = renderer->nextCallbackCommand();
+    saveToFileCommand->init(_globalZOrder);
+    saveToFileCommand->func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
+
+    renderer->addCommand(saveToFileCommand);
     return true;
 }
 
 bool RenderTexture::saveToFile(std::string_view fileName,
                                Image::Format format,
                                bool isRGBA,
-                               std::function<void(RenderTexture*, std::string_view)> callback)
+                               SaveFileCallbackType callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
@@ -421,10 +432,13 @@ bool RenderTexture::saveToFile(std::string_view fileName,
     _saveFileCallback = callback;
 
     std::string fullpath = FileUtils::getInstance()->getWritablePath().append(fileName);
-    _saveToFileCommand.init(_globalZOrder);
-    _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
 
-    _director->getRenderer()->addCommand(&_saveToFileCommand);
+    auto renderer          = _director->getRenderer();
+    auto saveToFileCommand = renderer->nextCallbackCommand();
+    saveToFileCommand->init(_globalZOrder);
+    saveToFileCommand->func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
+
+    _director->getRenderer()->addCommand(saveToFileCommand);
     return true;
 }
 
@@ -586,18 +600,21 @@ void RenderTexture::begin()
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
-    _beginCommand.init(_globalZOrder);
-    _beginCommand.func = CC_CALLBACK_0(RenderTexture::onBegin, this);
-    renderer->addCommand(&_beginCommand);
+    auto beginCommand = renderer->nextCallbackCommand();
+    beginCommand->init(_globalZOrder);
+    beginCommand->func = CC_CALLBACK_0(RenderTexture::onBegin, this);
+    renderer->addCommand(beginCommand);
 }
 
 void RenderTexture::end()
 {
-    _endCommand.init(_globalZOrder);
-    _endCommand.func = CC_CALLBACK_0(RenderTexture::onEnd, this);
-
     Renderer* renderer = _director->getRenderer();
-    renderer->addCommand(&_endCommand);
+
+    auto endCommand = renderer->nextCallbackCommand();
+    endCommand->init(_globalZOrder);
+    endCommand->func = CC_CALLBACK_0(RenderTexture::onEnd, this);
+
+    renderer->addCommand(endCommand);
     renderer->popGroup();
 
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -615,18 +632,23 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 
 void RenderTexture::clearColorAttachment()
 {
-    auto renderer                      = _director->getRenderer();
-    _beforeClearAttachmentCommand.func = [=]() -> void {
+    auto renderer                     = _director->getRenderer();
+    auto beforeClearAttachmentCommand = renderer->nextCallbackCommand();
+    beforeClearAttachmentCommand->init(0);
+    beforeClearAttachmentCommand->func = [=]() -> void {
         _oldRenderTarget = renderer->getRenderTarget();
         renderer->setRenderTarget(_renderTarget);
     };
-    renderer->addCommand(&_beforeClearAttachmentCommand);
+    renderer->addCommand(beforeClearAttachmentCommand);
 
     Color4F color(0.f, 0.f, 0.f, 0.f);
     renderer->clear(ClearFlag::COLOR, color, 1, 0, _globalZOrder);
 
-    _afterClearAttachmentCommand.func = [=]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
-    renderer->addCommand(&_afterClearAttachmentCommand);
+    // auto renderer                    = _director->getRenderer();
+    auto afterClearAttachmentCommand = renderer->nextCallbackCommand();
+    afterClearAttachmentCommand->init(0);
+    afterClearAttachmentCommand->func = [=]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
+    renderer->addCommand(afterClearAttachmentCommand);
 }
 
 NS_CC_END

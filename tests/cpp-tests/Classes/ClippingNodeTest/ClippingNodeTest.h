@@ -192,8 +192,8 @@ protected:
     void initCommands();
 
     std::vector<cocos2d::CustomCommand> _renderCmds;
-    cocos2d::CallbackCommand _enableStencilCallback;
-    cocos2d::CallbackCommand _disableStencilCallback;
+//    cocos2d::CallbackCommand _enableStencilCallback;
+//    cocos2d::CallbackCommand _disableStencilCallback;
     cocos2d::Vector<cocos2d::Sprite*> _sprites;
     cocos2d::Vector<cocos2d::Sprite*> _spritesStencil;
     cocos2d::backend::UniformLocation _locColor;

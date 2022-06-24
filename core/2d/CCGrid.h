@@ -155,10 +155,10 @@ protected:
 
     GroupCommand _groupCommand;
     CustomCommand _drawCommand;
-    CallbackCommand _beforeDrawCommand;
-    CallbackCommand _afterDrawCommand;
-    CallbackCommand _beforeBlitCommand;
-    CallbackCommand _afterBlitCommand;
+    //CallbackCommand _beforeDrawCommand;
+    //CallbackCommand _afterDrawCommand;
+    //CallbackCommand _beforeBlitCommand;
+    //CallbackCommand _afterBlitCommand;
 
     // New
     backend::RenderTarget* _oldRenderTarget = nullptr;

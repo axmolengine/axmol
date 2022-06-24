@@ -95,8 +95,8 @@ protected:
 
     bool _oldScissorTest = false;
 
-    CallbackCommand _beforeVisitCmdScissor;
-    CallbackCommand _afterVisitCmdScissor;
+    CallbackCommand* _beforeVisitCmdScissor;
+    CallbackCommand* _afterVisitCmdScissor;
 };
 
 // end of _2d group

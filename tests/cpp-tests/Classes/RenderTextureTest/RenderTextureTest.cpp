@@ -527,25 +527,25 @@ void RenderTextureTestDepthStencil::draw(Renderer* renderer, const Mat4& transfo
 {
     _rtx->beginWithClear(0, 0, 0, 0, 0, 0);
 
-    _renderCmds[0].init(_globalZOrder);
-    _renderCmds[0].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
-    renderer->addCommand(&_renderCmds[0]);
+//    _renderCmds[0].init(_globalZOrder);
+//    _renderCmds[0].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
+    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
 
-    _renderCmds[1].init(_globalZOrder);
-    _renderCmds[1].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
-    renderer->addCommand(&_renderCmds[1]);
+//    _renderCmds[1].init(_globalZOrder);
+//    _renderCmds[1].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
+    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this), _globalZOrder);
 
     _spriteDS->visit();
 
-    _renderCmds[2].init(_globalZOrder);
-    _renderCmds[2].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
-    renderer->addCommand(&_renderCmds[2]);
+//    _renderCmds[2].init(_globalZOrder);
+//    _renderCmds[2].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
+    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
 
     _spriteDraw->visit();
 
-    _renderCmds[3].init(_globalZOrder);
-    _renderCmds[3].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
-    renderer->addCommand(&_renderCmds[3]);
+//    _renderCmds[3].init(_globalZOrder);
+//    _renderCmds[3].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
+    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
 
     /// !!!end will set current render target to default renderTarget
     /// !!!all render target share one depthStencilDesc, TODO: optimize me?

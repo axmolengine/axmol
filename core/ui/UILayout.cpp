@@ -260,9 +260,10 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
 
     _clippingStencil->visit(renderer, _modelViewTransform, flags);
 
-    _afterDrawStencilCmd.init(_globalZOrder);
-    _afterDrawStencilCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
-    renderer->addCommand(&_afterDrawStencilCmd);
+    auto afterDrawStencilCmd = renderer->nextCallbackCommand();
+    afterDrawStencilCmd->init(_globalZOrder);
+    afterDrawStencilCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
+    renderer->addCommand(afterDrawStencilCmd);
 
     int i = 0;  // used by _children
     int j = 0;  // used by _protectedChildren
@@ -307,9 +308,10 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
     for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
         (*it)->visit(renderer, _modelViewTransform, flags);
 
-    _afterVisitCmdStencil.init(_globalZOrder);
-    _afterVisitCmdStencil.func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
-    renderer->addCommand(&_afterVisitCmdStencil);
+    auto afterVisitCmdStencil = renderer->nextCallbackCommand();
+    afterVisitCmdStencil->init(_globalZOrder);
+    afterVisitCmdStencil->func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
+    renderer->addCommand(afterVisitCmdStencil);
 
     renderer->popGroup();
 
@@ -371,15 +373,17 @@ void Layout::scissorClippingVisit(Renderer* renderer, const Mat4& parentTransfor
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
-    _beforeVisitCmdScissor.init(_globalZOrder);
-    _beforeVisitCmdScissor.func = CC_CALLBACK_0(Layout::onBeforeVisitScissor, this);
-    renderer->addCommand(&_beforeVisitCmdScissor);
+    auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
+    beforeVisitCmdScissor->init(_globalZOrder);
+    beforeVisitCmdScissor->func = CC_CALLBACK_0(Layout::onBeforeVisitScissor, this);
+    renderer->addCommand(beforeVisitCmdScissor);
 
     ProtectedNode::visit(renderer, parentTransform, parentFlags);
 
-    _afterVisitCmdScissor.init(_globalZOrder);
-    _afterVisitCmdScissor.func = CC_CALLBACK_0(Layout::onAfterVisitScissor, this);
-    renderer->addCommand(&_afterVisitCmdScissor);
+    auto afterVisitCmdScissor = renderer->nextCallbackCommand();
+    afterVisitCmdScissor->init(_globalZOrder);
+    afterVisitCmdScissor->func = CC_CALLBACK_0(Layout::onAfterVisitScissor, this);
+    renderer->addCommand(afterVisitCmdScissor);
 
     renderer->popGroup();
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);

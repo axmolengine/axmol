@@ -75,6 +75,7 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     auto rtGL = static_cast<const RenderTargetGL*>(rt);
 
     rtGL->bindFrameBuffer();
+    rtGL->update();
 
     auto clearFlags = descirptor.flags.clear;
 
@@ -476,7 +477,8 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
                                  uint32_t bytesPerRow,
                                  PixelBufferDescriptor& pbd)
 {
-    rt->bindFrameBuffer();
+    auto rtGL = static_cast<RenderTargetGL*>(rt);
+    rtGL->bindFrameBuffer();
 
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
@@ -515,8 +517,8 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     glDeleteBuffers(1, &pbo);
 #endif
 
-    if (!rt->isDefaultRenderTarget())
-        rt->unbindFrameBuffer();
+    if (!rtGL->isDefaultRenderTarget())
+        rtGL->unbindFrameBuffer();
 }
 
 CC_BACKEND_END

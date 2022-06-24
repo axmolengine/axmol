@@ -209,7 +209,7 @@ void GridBase::beforeDraw()
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
-    _beforeDrawCommand.func = [=]() -> void {
+    auto beforeDrawCommandFunc = [=]() -> void {
         _directorProjection = director->getProjection();
         set2DProjection();
         Vec2 size = director->getWinSizeInPixels();
@@ -221,7 +221,7 @@ void GridBase::beforeDraw()
             backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
     };
-    renderer->addCommand(&_beforeDrawCommand);
+    renderer->addCallbackCommand(beforeDrawCommandFunc);
 
     // since we use clearCommand, should call at here to avoid iterator damage
     renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
@@ -233,13 +233,18 @@ void GridBase::afterDraw(cocos2d::Node* /*target*/)
     Director* director = Director::getInstance();
     auto renderer      = director->getRenderer();
 
-    _afterDrawCommand.func = [=]() -> void {
+    //_afterDrawCommand.func = [=]() -> void {
+    //    director->setProjection(_directorProjection);
+    //    const auto& vp = Camera::getDefaultViewport();
+    //    renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
+    //    renderer->setRenderTarget(_oldRenderTarget);
+    //};
+    renderer->addCallbackCommand([=]() -> void {
         director->setProjection(_directorProjection);
         const auto& vp = Camera::getDefaultViewport();
         renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
         renderer->setRenderTarget(_oldRenderTarget);
-    };
-    renderer->addCommand(&_afterDrawCommand);
+    });
 
     renderer->popGroup();
 
@@ -258,13 +263,13 @@ void GridBase::afterDraw(cocos2d::Node* /*target*/)
     // restore projection for default FBO .fixed bug #543 #544
     // TODO:         Director::getInstance()->setProjection(Director::getInstance()->getProjection());
     // TODO:         Director::getInstance()->applyOrientation();
-    _beforeBlitCommand.func = [=]() -> void { beforeBlit(); };
-    renderer->addCommand(&_beforeBlitCommand);
+    //_beforeBlitCommand.func = [=]() -> void { beforeBlit(); };
+    renderer->addCallbackCommand([=]() -> void { beforeBlit(); });
 
     blit();
 
-    _afterBlitCommand.func = [=]() -> void { afterBlit(); };
-    renderer->addCommand(&_afterBlitCommand);
+    //_afterBlitCommand.func = [=]() -> void { afterBlit(); };
+    renderer->addCallbackCommand([=]() -> void { afterBlit(); });
 }
 
 // implementation of Grid3D

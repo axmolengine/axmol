@@ -121,14 +121,13 @@ RenderTarget* DeviceMTL::newRenderTarget(TargetBufferFlags rtf,
                                          TextureBackend* depthAttachment,
                                          TextureBackend* stencilAttachhment)
 {
-    auto rtGL = new RenderTargetMTL(false);
-    rtGL->setTargetFlags(rtf);
-    rtGL->bindFrameBuffer();
+    auto rtMTL = new RenderTargetMTL(false);
+    rtMTL->setTargetFlags(rtf);
     RenderTarget::ColorAttachment colors{{colorAttachment, 0}};
-    rtGL->setColorAttachment(colors);
-    rtGL->setDepthAttachment(depthAttachment);
-    rtGL->setStencilAttachment(stencilAttachhment);
-    return rtGL;
+    rtMTL->setColorAttachment(colors);
+    rtMTL->setDepthAttachment(depthAttachment);
+    rtMTL->setStencilAttachment(stencilAttachhment);
+    return rtMTL;
 }
 
 ShaderModule* DeviceMTL::newShaderModule(ShaderStage stage, std::string_view source)

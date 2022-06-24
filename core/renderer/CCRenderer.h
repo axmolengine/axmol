@@ -145,6 +145,8 @@ public:
     // TODO: manage GLView inside Render itself
     void init();
 
+    void addCallbackCommand(std::function<void()> func, float globalZOrder = 0.0f);
+
     /** Adds a `RenderComamnd` into the renderer */
     void addCommand(RenderCommand* command);
 
@@ -189,6 +191,9 @@ public:
     void setRenderTarget(backend::RenderTarget* rt) { _currentRT = rt; };
 
     backend::RenderTarget* getDefaultRenderTarget() const { return _defaultRT; }
+
+    /* The offscreen render target for RenderTexture to share it */
+    backend::RenderTarget* getOffscreenRenderTarget();
 
     /**
     Set clear values for each attachment.
@@ -410,6 +415,8 @@ public:
     void beginRenderPass();  /// Begin a render pass.
     void endRenderPass();
 
+    CallbackCommand* nextCallbackCommand();
+
 protected:
     friend class Director;
     friend class GroupCommand;
@@ -481,8 +488,6 @@ protected:
 
     void popStateBlock();
 
-    CallbackCommand* nextClearCommand();
-
     backend::RenderPipeline* _renderPipeline = nullptr;
 
     Viewport _viewport;
@@ -495,8 +500,8 @@ protected:
 
     std::vector<TrianglesCommand*> _queuedTriangleCommands;
 
-    // the pool for clear commands
-    std::vector<CallbackCommand*> _clearCommandsPool;
+    // the pool for callback commands
+    std::vector<CallbackCommand*> _callbackCommandsPool;
 
     // for TrianglesCommand
     V3F_C4B_T2F _verts[VBO_SIZE];
@@ -543,6 +548,8 @@ protected:
 
     backend::RenderTarget* _defaultRT = nullptr;
     backend::RenderTarget* _currentRT = nullptr;  // weak ref
+
+    backend::RenderTarget* _offscreenRT = nullptr;
 
     Color4F _clearColor = Color4F::BLACK;
     ClearFlag _clearFlag;
