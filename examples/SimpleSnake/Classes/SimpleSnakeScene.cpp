@@ -18,7 +18,6 @@
 
 #include "SimpleSnakeScene.h"
 #include <time.h>
-#include <string>
 
 USING_NS_CC;
 
@@ -66,7 +65,6 @@ bool SimpleSnake::init()
     auto origin      = Director::getInstance()->getVisibleOrigin();
     auto safeArea    = Director::getInstance()->getSafeAreaRect();
     auto safeOrigin  = safeArea.origin;
-    offset                      = Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -102,33 +100,19 @@ bool SimpleSnake::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    auto label1 = Label::createWithTTF("Simple Snake", "fonts/arial.ttf", 24);
-    if (label1 == nullptr)
+    auto label = Label::createWithTTF("Example: Simple Snake", "fonts/arial.ttf", 24);
+    if (label == nullptr)
     {
         problemLoading("'fonts/arial.ttf'");
     }
     else
     {
         // position the label on the center of the screen
-        label1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                origin.y + visibleSize.height - label1->getContentSize().height*2 - visibleSize.height/2));
-        // add the label as a child to this layer
-        this->addChild(label1, 1);
-    }
-    auto label2 = Label::createWithTTF("Eat as fast as you can!", "fonts/arial.ttf", 24);
-    if (label2 == nullptr)
-    {
-        problemLoading("'fonts/arial.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label2->setPosition(
-            Vec2(origin.x + visibleSize.width / 2,
-                 origin.y + visibleSize.height - label2->getContentSize().height * 3 - visibleSize.height/2));
+        label->setPosition(
+            Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - label->getContentSize().height));
 
         // add the label as a child to this layer
-        this->addChild(label2, 1);
+        this->addChild(label, 1);
     }
 
     // add "ADXE" splash screen"
@@ -141,13 +125,14 @@ bool SimpleSnake::init()
     else
     {
         // position the sprite on the center of the screen
+        offset = Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
         sprite->setPosition(offset);
 
         // add the sprite as a child to this layer
-        this->addChild(sprite, 9);
+        this->addChild(sprite, 0);
         auto drawNode = DrawNode::create();
         drawNode->setPosition(Vec2(0, 0));
-        addChild(drawNode, 20);
+        addChild(drawNode);
 
         drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
     }
@@ -156,11 +141,6 @@ bool SimpleSnake::init()
 
     mydraw = DrawNode::create();
     addChild(mydraw, 10);
-
-    background = Sprite::create("Background.png");
-    background->setPosition(offset);
-    background->setScale(1.1);
-    addChild(background, 0);
 
     f.x    = 10;
     f.y    = 10;
@@ -172,13 +152,12 @@ bool SimpleSnake::init()
     for (int i = 0; i < snakeBodies+1; i++)
     {
         myScore[i] = 0.0;
-        sprintf(buffer, "%i: %f", i + 1, myScore[i]);
-        myScoreLabel[i] = Label::createWithTTF(std::string(buffer), "fonts/arial.ttf", 20);
-        myScoreLabel[i]->setAnchorPoint(Vec2(0, 1));
-        myScoreLabel[i]->setPosition(Vec2(10, origin.y + visibleSize.height - 10 - i * 20));
+        sprintf(buffer, "Level %i: %f", i + 1, myScore[i]);
+        myScoreLabel[i] = Label::createWithTTF(std::string(buffer), "fonts/arial.ttf", 24);
+        myScoreLabel[i]->setPosition(Vec2(130, origin.y + visibleSize.height - label->getContentSize().height - i * 30));
         this->addChild(myScoreLabel[i], 1);
     }
-    myScoreLabel[snakeBodies]->setString("");//"Eat as fast as you can!");
+    myScoreLabel[snakeBodies]->setString("Eat as fast as you can!");
 
     scheduleUpdate();
     return true;
@@ -221,14 +200,8 @@ void SimpleSnake::update(float delta)
     runTime += delta;
     endLevelTime += delta;
 
-
-
     if (finish)
     {
-        float myScale = runTime + 1.1;
-        if (myScale > 3.0)
-            myScale = 3.0;
-        background->setScale(myScale);
         return;
     }
 
@@ -242,19 +215,23 @@ void SimpleSnake::update(float delta)
         {
         case 0:
             s[0].y++;
-            if (s[0].y >= M) s[0].y = 0;
+            if (s[0].y >= M)
+                s[0].y = 0;
             break;
         case 1:
             s[0].x--;
-            if (s[0].x < 0) s[0].x = N - 1;
+            if (s[0].x < 0)
+                s[0].x = N - 1;
             break;
         case 2:
             s[0].x++;
-            if (s[0].x >= N) s[0].x = 0;
+            if (s[0].x >= N)
+                s[0].x = 0;
             break;
         case 3:
             s[0].y--;
-            if (s[0].y < 0) s[0].y = M - 1;
+            if (s[0].y < 0)
+                s[0].y = M - 1;
             break;
         default:
             break;
@@ -283,7 +260,7 @@ void SimpleSnake::update(float delta)
             num++;
             if (num >= (snakeBodies + StartBodies - 1))
             {
-                myScoreLabel[snakeBodies]->setString("!!! FINISH !!!");
+                myScoreLabel[snakeBodies]->setString("FINISH");
                 finish = true;
                 drawAll(finish);
             }
@@ -305,7 +282,7 @@ void SimpleSnake::drawAll(bool finish)
     // score
     char buffer[124];
     myScore[num - StartBodies] = endLevelTime;
-    sprintf(buffer, "%i: %f", num - StartBodies + 1, myScore[num - StartBodies]);
+    sprintf(buffer, "Level %i: %f", num - StartBodies + 1, myScore[num - StartBodies]);
     myScoreLabel[num - StartBodies]->setString(buffer);
 
 
