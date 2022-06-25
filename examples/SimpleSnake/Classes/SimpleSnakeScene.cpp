@@ -221,10 +221,13 @@ void SimpleSnake::update(float delta)
     runTime += delta;
     endLevelTime += delta;
 
+
+
     if (finish)
     {
         float myScale = runTime + 1.1;
-        if (myScale > 3.0) myScale = 3.0;
+        if (myScale > 3.0)
+            myScale = 3.0;
         background->setScale(myScale);
         return;
     }
