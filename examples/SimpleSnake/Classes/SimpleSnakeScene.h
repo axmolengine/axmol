@@ -39,7 +39,7 @@ public:
     cocos2d::DrawNode* mydraw;
 
     // game stuff
-    int N = 64, M = 36;
+    int N = 36, M = 36;
     int size    = 20;
     int w       = size * N;
     int h       = size * M;
@@ -51,6 +51,7 @@ public:
 
     int dir, num = StartBodies;
     cocos2d::Label* myScoreLabel[snakeBodies + 1];
+    cocos2d::Sprite* background;
 };
 
 #endif  // __SIMPLE_SNAKE_SCENE_H__
