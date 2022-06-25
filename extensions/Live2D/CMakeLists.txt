@@ -35,7 +35,7 @@ if(NOT IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/Core)
 endif()
 
 add_subdirectory(Core)
-target_link_libraries(${LIB_NAME} Live2DCubismCore adxe)
+target_link_libraries(${LIB_NAME} Live2DCubismCore)
 
 setup_cocos_extension_config(${LIB_NAME})
 
