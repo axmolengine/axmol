@@ -109,8 +109,6 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   2. Execute the following command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
-     - for any device   
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake```
      - for arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  
