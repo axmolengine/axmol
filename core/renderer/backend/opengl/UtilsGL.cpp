@@ -79,15 +79,15 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR,     GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_COMPRESSED_RGBA_ASTC_10x5_KHR,            GL_ZERO, }, // ASTC10x5
 
     /* nomral */
-    { GL_RGBA,                                     GL_SRGB8_ALPHA8,                              GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE, }, // RGBA8
-    { GL_RGBA,                                     GL_SRGB8_ALPHA8,                              GL_BGRA,                                     GL_BGRA,                                     GL_UNSIGNED_BYTE, }, // BGRA8
-    { GL_RGB,                                      GL_SRGB8,                                     GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE, }, // RGB8
-    { GL_RGB,                                      GL_ZERO,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5}, // RGB565 === MTLPixelFormatB5G6R5Unorm
-    { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_4_4_4_4}, // RGBA4 === MTLPixelFormatABGR4Unorm
-    { GL_RGBA,                                     GL_ZERO,                                      GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_5_5_5_1}, // RGB5A1 === MTLPixelFormatA1BGR5Unorm
-    { GL_ALPHA,                                    GL_ZERO,                                      GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE, }, // A8
-    { GL_LUMINANCE,                                GL_ZERO,                                      GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE, }, // L8
-    { GL_LUMINANCE_ALPHA,                          GL_ZERO,                                      GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
+    { GL_RGBA,                                     GL_SRGB_ALPHA,                                GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_BYTE, }, // RGBA8
+    { GL_RGBA,                                     GL_SRGB_ALPHA,                                GL_BGRA,                                     GL_BGRA,                                     GL_UNSIGNED_BYTE, }, // BGRA8
+    { GL_RGB,                                      GL_SRGB,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_BYTE, }, // RGB8
+    { GL_RGB,                                      GL_SRGB,                                      GL_RGB,                                      GL_RGB,                                      GL_UNSIGNED_SHORT_5_6_5}, // RGB565 === MTLPixelFormatB5G6R5Unorm
+    { GL_RGBA,                                     GL_SRGB_ALPHA,                                GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_4_4_4_4}, // RGBA4 === MTLPixelFormatABGR4Unorm
+    { GL_RGBA,                                     GL_SRGB_ALPHA,                                GL_RGBA,                                     GL_RGBA,                                     GL_UNSIGNED_SHORT_5_5_5_1}, // RGB5A1 === MTLPixelFormatA1BGR5Unorm
+    { GL_ALPHA,                                    GL_ALPHA,                                     GL_ALPHA,                                    GL_ALPHA,                                    GL_UNSIGNED_BYTE, }, // A8
+    { GL_LUMINANCE,                                GL_SLUMINANCE,                                GL_LUMINANCE,                                GL_LUMINANCE,                                GL_UNSIGNED_BYTE, }, // L8
+    { GL_LUMINANCE_ALPHA,                          GL_SLUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
     
     /* depth stencil internalFormat | internalFormatSrgb | format | formatSrgb | type */
 #if defined(CC_USE_GLES)
