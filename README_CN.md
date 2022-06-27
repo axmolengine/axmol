@@ -84,8 +84,6 @@
   2. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. 生成xcode工程, 进入adxe根目录执行如下命令之一:  
-     - for any device:   
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake```
      - for arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  
