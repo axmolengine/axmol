@@ -201,6 +201,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
+        CC_SAFE_RELEASE(_renderTarget);
+
         if (sharedRenderTarget)
         {
             _renderTarget = _director->getRenderer()->getOffscreenRenderTarget();
