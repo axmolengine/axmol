@@ -110,7 +110,7 @@ bool Director::init()
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
     
-    _lastFrameTime = std::chrono::steady_clock::now().time_since_epoch();
+    _lastFrameTime = std::chrono::steady_clock::now();
 
     _console = new Console;
 
@@ -1393,9 +1393,12 @@ void Director::startAnimation(SetIntervalReason reason)
 
 void Director::mainLoop()
 {
-    auto now = std::chrono::steady_clock::now().time_since_epoch();
+    constexpr std::chrono::milliseconds _1ms{1};
+
+    auto now      = std::chrono::steady_clock::now();
     auto interval = now - _lastFrameTime;
-    if(interval >= _animationIntervalNS) {
+    if (interval >= _animationIntervalNS)
+    {
         _lastFrameTime = now;
 
         if (_purgeDirectorInNextLoop)
@@ -1416,10 +1419,13 @@ void Director::mainLoop()
             PoolManager::getInstance()->getCurrentPool()->clear();
         }
     }
-    else {
-        auto waitDuration = (_animationIntervalNS - interval - std::chrono::milliseconds(1));
-        if(waitDuration.count() > 0) std::this_thread::sleep_for(waitDuration);
-        else std::this_thread::yield();
+    else
+    {
+        auto waitMS = std::chrono::duration_cast<std::chrono::milliseconds>(_animationIntervalNS - interval) - _1ms;
+        if (waitMS > _1ms)
+            std::this_thread::sleep_for(waitMS);
+        else
+            std::this_thread::yield();
     }
 }
 

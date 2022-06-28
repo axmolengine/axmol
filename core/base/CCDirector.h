@@ -659,7 +659,7 @@ protected:
     std::thread::id _cocos2d_thread_id;
 
     /* For frame rate control */
-    std::chrono::nanoseconds _lastFrameTime;
+    std::chrono::steady_clock::time_point _lastFrameTime;
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;

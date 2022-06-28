@@ -74,12 +74,6 @@ int Application::run()
         timeBeginPeriod(wTimerRes);
     }
 
-    // Main message loop:
-    LARGE_INTEGER nLast;
-    LARGE_INTEGER nNow;
-
-    QueryPerformanceCounter(&nLast);
-
     initGLContextAttrs();
 
     // Initialize instance and cocos2d.
