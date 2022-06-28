@@ -108,11 +108,11 @@ void RenderTexture::listenToForeground(EventCustom* /*event*/)
 #endif
 }
 
-RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
+RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
-    if (ret->initWithWidthAndHeight(w, h, eFormat))
+    if (ret->initWithWidthAndHeight(w, h, eFormat, sharedRenderTarget))
     {
         ret->autorelease();
         return ret;
@@ -121,11 +121,11 @@ RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
     return nullptr;
 }
 
-RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat)
+RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
-    if (ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
+    if (ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat, sharedRenderTarget))
     {
         ret->autorelease();
         return ret;
@@ -134,11 +134,11 @@ RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat,
     return nullptr;
 }
 
-RenderTexture* RenderTexture::create(int w, int h)
+RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
 {
     RenderTexture* ret = new RenderTexture();
 
-    if (ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE))
+    if (ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8, PixelFormat::NONE, sharedRenderTarget))
     {
         ret->autorelease();
         return ret;
@@ -147,12 +147,16 @@ RenderTexture* RenderTexture::create(int w, int h)
     return nullptr;
 }
 
-bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat eFormat)
+bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat eFormat, bool sharedRenderTarget)
 {
-    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::NONE);
+    return initWithWidthAndHeight(w, h, eFormat, PixelFormat::NONE, sharedRenderTarget);
 }
 
-bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat format, PixelFormat depthStencilFormat)
+bool RenderTexture::initWithWidthAndHeight(int w,
+                                           int h,
+                                           backend::PixelFormat format,
+                                           PixelFormat depthStencilFormat,
+                                           bool sharedRenderTarget)
 {
     CCASSERT(format != backend::PixelFormat::A8, "only RGB and RGBA formats are valid for a render texture");
 
@@ -197,12 +201,18 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
-        // _renderTarget = backend::Device::getInstance()->newRenderTarget(
-        //     _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
-        //     _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
-        //     _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);
-        _renderTarget = _director->getRenderer()->getOffscreenRenderTarget();
-        _renderTarget->retain();
+        if (sharedRenderTarget)
+        {
+            _renderTarget = _director->getRenderer()->getOffscreenRenderTarget();
+            _renderTarget->retain();
+        }
+        else
+        {
+             _renderTarget = backend::Device::getInstance()->newRenderTarget(
+                 _renderTargetFlags, _texture2D ? _texture2D->getBackendTexture() : nullptr,
+                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr,
+                 _depthStencilTexture ? _depthStencilTexture->getBackendTexture() : nullptr);	        
+        }
 
         _renderTarget->setColorAttachment(_texture2D ? _texture2D->getBackendTexture() : nullptr);
 
@@ -271,6 +281,11 @@ void RenderTexture::setVirtualViewport(const Vec2& rtBegin, const Rect& fullRect
     _fullRect = fullRect;
 
     _fullviewPort = fullViewport;
+}
+
+bool RenderTexture::isSharedRenderTarget() const
+{
+    return _renderTarget == _director->getRenderer()->getOffscreenRenderTarget();
 }
 
 void RenderTexture::beginWithClear(float r, float g, float b, float a)
