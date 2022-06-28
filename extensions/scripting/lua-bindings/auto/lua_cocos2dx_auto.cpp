@@ -83319,53 +83319,6 @@ int lua_cocos2dx_RenderTexture_clear(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_RenderTexture_isSharedRenderTarget(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::RenderTexture* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.RenderTexture",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::RenderTexture*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_RenderTexture_isSharedRenderTarget'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_RenderTexture_isSharedRenderTarget'", nullptr);
-            return 0;
-        }
-        bool ret = cobj->isSharedRenderTarget();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.RenderTexture:isSharedRenderTarget",argc, 0);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_RenderTexture_isSharedRenderTarget'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_cocos2dx_RenderTexture_getClearFlags(lua_State* tolua_S)
 {
     int argc = 0;
@@ -83509,34 +83462,6 @@ int lua_cocos2dx_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
     }while(0);
     ok  = true;
     do{
-        if (argc == 5) {
-            int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            cocos2d::backend::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            cocos2d::backend::PixelFormat arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2, arg3, arg4);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
         if (argc == 3) {
             int arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.RenderTexture:initWithWidthAndHeight");
@@ -83551,30 +83476,6 @@ int lua_cocos2dx_RenderTexture_initWithWidthAndHeight(lua_State* tolua_S)
 
             if (!ok) { break; }
             bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2);
-            tolua_pushboolean(tolua_S,(bool)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 4) {
-            int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            cocos2d::backend::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.RenderTexture:initWithWidthAndHeight");
-
-            if (!ok) { break; }
-            bool ret = cobj->initWithWidthAndHeight(arg0, arg1, arg2, arg3);
             tolua_pushboolean(tolua_S,(bool)ret);
             return 1;
         }
@@ -83636,57 +83537,10 @@ int lua_cocos2dx_RenderTexture_create(lua_State* tolua_S)
             cocos2d::backend::PixelFormat arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.RenderTexture:create");
             if (!ok) { break; }
-            bool arg3;
-            ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            cocos2d::RenderTexture* ret = cocos2d::RenderTexture::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<cocos2d::RenderTexture>(tolua_S, "cc.RenderTexture",(cocos2d::RenderTexture*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 4)
-        {
-            int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            cocos2d::backend::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.RenderTexture:create");
-            if (!ok) { break; }
             cocos2d::backend::PixelFormat arg3;
             ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "cc.RenderTexture:create");
             if (!ok) { break; }
             cocos2d::RenderTexture* ret = cocos2d::RenderTexture::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<cocos2d::RenderTexture>(tolua_S, "cc.RenderTexture",(cocos2d::RenderTexture*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 5)
-        {
-            int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            cocos2d::backend::PixelFormat arg2;
-            ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            cocos2d::backend::PixelFormat arg3;
-            ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            bool arg4;
-            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            cocos2d::RenderTexture* ret = cocos2d::RenderTexture::create(arg0, arg1, arg2, arg3, arg4);
             object_to_luaval<cocos2d::RenderTexture>(tolua_S, "cc.RenderTexture",(cocos2d::RenderTexture*)ret);
             return 1;
         }
@@ -83703,25 +83557,6 @@ int lua_cocos2dx_RenderTexture_create(lua_State* tolua_S)
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.RenderTexture:create");
             if (!ok) { break; }
             cocos2d::RenderTexture* ret = cocos2d::RenderTexture::create(arg0, arg1);
-            object_to_luaval<cocos2d::RenderTexture>(tolua_S, "cc.RenderTexture",(cocos2d::RenderTexture*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 3)
-        {
-            int arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            int arg1;
-            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            bool arg2;
-            ok &= luaval_to_boolean(tolua_S, 4,&arg2, "cc.RenderTexture:create");
-            if (!ok) { break; }
-            cocos2d::RenderTexture* ret = cocos2d::RenderTexture::create(arg0, arg1, arg2);
             object_to_luaval<cocos2d::RenderTexture>(tolua_S, "cc.RenderTexture",(cocos2d::RenderTexture*)ret);
             return 1;
         }
@@ -83806,7 +83641,6 @@ int lua_register_cocos2dx_RenderTexture(lua_State* tolua_S)
         tolua_function(tolua_S,"clearDepth",lua_cocos2dx_RenderTexture_clearDepth);
         tolua_function(tolua_S,"getClearColor",lua_cocos2dx_RenderTexture_getClearColor);
         tolua_function(tolua_S,"clear",lua_cocos2dx_RenderTexture_clear);
-        tolua_function(tolua_S,"isSharedRenderTarget",lua_cocos2dx_RenderTexture_isSharedRenderTarget);
         tolua_function(tolua_S,"getClearFlags",lua_cocos2dx_RenderTexture_getClearFlags);
         tolua_function(tolua_S,"setClearDepth",lua_cocos2dx_RenderTexture_setClearDepth);
         tolua_function(tolua_S,"initWithWidthAndHeight",lua_cocos2dx_RenderTexture_initWithWidthAndHeight);
@@ -101831,56 +101665,6 @@ int lua_cocos2dx_Application_getVersion(lua_State* tolua_S)
 
     return 0;
 }
-int lua_cocos2dx_Application_setAnimationInterval(lua_State* tolua_S)
-{
-    int argc = 0;
-    cocos2d::Application* cobj = nullptr;
-    bool ok  = true;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.Application",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (cocos2d::Application*)tolua_tousertype(tolua_S,1,0);
-
-#if COCOS2D_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Application_setAnimationInterval'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        double arg0;
-
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.Application:setAnimationInterval");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Application_setAnimationInterval'", nullptr);
-            return 0;
-        }
-        cobj->setAnimationInterval(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Application:setAnimationInterval",argc, 1);
-    return 0;
-
-#if COCOS2D_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Application_setAnimationInterval'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_cocos2dx_Application_getInstance(lua_State* tolua_S)
 {
     int argc = 0;
@@ -101932,7 +101716,6 @@ int lua_register_cocos2dx_Application(lua_State* tolua_S)
         tolua_function(tolua_S,"getCurrentLanguageCode",lua_cocos2dx_Application_getCurrentLanguageCode);
         tolua_function(tolua_S,"openURL",lua_cocos2dx_Application_openURL);
         tolua_function(tolua_S,"getVersion",lua_cocos2dx_Application_getVersion);
-        tolua_function(tolua_S,"setAnimationInterval",lua_cocos2dx_Application_setAnimationInterval);
         tolua_function(tolua_S,"getInstance", lua_cocos2dx_Application_getInstance);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(cocos2d::Application).name(); // rtti is literal storage

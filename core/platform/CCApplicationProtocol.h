@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -85,14 +86,6 @@ public:
      * @lua NA
      */
     virtual void applicationWillEnterForeground() = 0;
-
-    /**
-     * @brief    Callback by Director for limit FPS.
-     * @param interval The time, expressed in seconds, between current frame and next.
-     * @js NA
-     * @lua NA
-     */
-    virtual void setAnimationInterval(float interval) = 0;
 
     /** Subclass override the function to set OpenGL context attribution instead of use default value.
      * And now can only set six attributions:redBits,greenBits,blueBits,alphaBits,depthBits,stencilBits.

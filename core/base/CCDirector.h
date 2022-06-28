@@ -4,7 +4,7 @@
  Copyright (c) 2011      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -591,6 +591,7 @@ protected:
 
     float _animationInterval    = 0.0f;
     float _oldAnimationInterval = 0.0f;
+    std::chrono::nanoseconds _animationIntervalNS{};
 
     bool _displayStats = false;
     float _accumDt     = 0.0f;
@@ -656,6 +657,9 @@ protected:
 
     /* cocos2d thread id */
     std::thread::id _cocos2d_thread_id;
+
+    /* For frame rate control */
+    std::chrono::steady_clock::time_point _lastFrameTime;
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;
