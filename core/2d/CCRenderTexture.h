@@ -69,8 +69,9 @@ public:
      * @param h The RenderTexture object height.
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
      * @param depthStencilFormat The depthStencil format.
+     * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat);
+    static RenderTexture* create(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat, bool sharedRenderTarget = true);
 
     /** Creates a RenderTexture object with width and height in Points and a pixel format, only RGB and RGBA formats are
      * valid.
@@ -78,15 +79,17 @@ public:
      * @param w The RenderTexture object width.
      * @param h The RenderTexture object height.
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
+     * @param sharedRenderTarget Select whether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h, backend::PixelFormat format);
+    static RenderTexture* create(int w, int h, backend::PixelFormat format, bool sharedRenderTarget = true);
 
     /** Creates a RenderTexture object with width and height in Points, pixel format is RGBA8888.
      *
      * @param w The RenderTexture object width.
      * @param h The RenderTexture object height.
+     * @param sharedRenderTarget Select wether to use a new or shared render target.
      */
-    static RenderTexture* create(int w, int h);
+    static RenderTexture* create(int w, int h, bool sharedRenderTarget = true);
 
     // Overrides
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
@@ -325,6 +328,12 @@ public:
      */
     void setVirtualViewport(const Vec2& rtBegin, const Rect& fullRect, const Rect& fullViewport);
 
+    /** Check if the render target is shared
+     *
+     * @return Returns true if this using a shared render target.
+     */
+    bool isSharedRenderTarget() const;
+
 public:
     /** FIXME: should be protected.
      * but due to a bug in PowerVR + Android,
@@ -344,9 +353,10 @@ public:
      * @param w The RenderTexture object width.
      * @param h The RenderTexture object height.
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
+     * @param sharedRenderTarget Select whether to use a new or shared render target.
      * @return If succeed, it will return true.
      */
-    bool initWithWidthAndHeight(int w, int h, backend::PixelFormat format);
+    bool initWithWidthAndHeight(int w, int h, backend::PixelFormat format, bool sharedRenderTarget = true);
     /** Initializes a RenderTexture object with width and height in Points and a pixel format( only RGB and RGBA formats
      * are valid ) and depthStencil format.
      *
@@ -354,9 +364,14 @@ public:
      * @param h The RenderTexture object height.
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
      * @param depthStencilFormat The depthStencil format.
+     * @param sharedRenderTarget Select whether to use a new or shared render target.
      * @return If succeed, it will return true.
      */
-    bool initWithWidthAndHeight(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat);
+    bool initWithWidthAndHeight(int w,
+                                int h,
+                                backend::PixelFormat format,
+                                backend::PixelFormat depthStencilFormat,
+                                bool sharedRenderTarget = true);
 
 protected:
     virtual void
