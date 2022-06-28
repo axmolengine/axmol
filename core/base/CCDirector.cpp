@@ -1385,8 +1385,6 @@ void Director::startAnimation(SetIntervalReason reason)
 
     _cocos2d_thread_id = std::this_thread::get_id();
 
-    // Application::getInstance()->setAnimationInterval(_animationInterval);
-
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
     setNextDeltaTimeZero(true);
 }
