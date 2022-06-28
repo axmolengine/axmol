@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -36,19 +37,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-static int32_t getCurrentMillSecond()
-{
-    int32_t lLastTime = 0;
-    struct timeval stCurrentTime;
-
-    gettimeofday(&stCurrentTime, NULL);
-    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001;  // milliseconds
-    return lLastTime;
-}
-
 Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application() : _animationInterval(1.0f / 60.0f * 1000.0f)
+Application::Application()
 {
     CCASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
     sm_pSharedApplication = this;
@@ -68,9 +59,6 @@ int Application::run()
         return 1;
     }
 
-    int32_t lastTime = 0L;
-    int32_t curTime  = 0L;
-
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
 
@@ -79,16 +67,7 @@ int Application::run()
 
     while (!glview->windowShouldClose())
     {
-        lastTime = getCurrentMillSecond();
-
         director->mainLoop();
-        glview->pollEvents();
-
-        curTime = getCurrentMillSecond();
-        if (curTime - lastTime < _animationInterval)
-        {
-            usleep(static_cast<useconds_t>((_animationInterval - curTime + lastTime) * 1000));
-        }
     }
 
     /* Only work on Desktop
@@ -107,10 +86,6 @@ int Application::run()
     return 0;
 }
 
-void Application::setAnimationInterval(float interval)
-{
-    _animationInterval = interval * 1000.0f;
-}
 
 Application::Platform Application::getTargetPlatform()
 {
