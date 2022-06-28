@@ -1,7 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2011 cocos2d-x.org
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -84,7 +83,27 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(final GL10 gl) {
-        Cocos2dxRenderer.nativeRender();
+        /*
+         * Fix 60fps limiting doesn't work when high-end device is working in 120fps mode.
+         */
+        if (Cocos2dxRenderer.sAnimationInterval <= 1.0f / 1200.0f * Cocos2dxRenderer.NANOSECONDSPERSECOND) {
+            Cocos2dxRenderer.nativeRender();
+        } else {
+            final long now = System.nanoTime();
+            final long interval = now - this.mLastTickInNanoSeconds;
+        
+            if (interval < Cocos2dxRenderer.sAnimationInterval) {
+                try {
+                    Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval) / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);
+                } catch (final Exception e) {
+                }
+            }
+            /*
+             * Render time MUST be counted in, or the FPS will slower than appointed.
+            */
+            this.mLastTickInNanoSeconds = System.nanoTime();
+            Cocos2dxRenderer.nativeRender();
+        }
     }
 
     // ===========================================================

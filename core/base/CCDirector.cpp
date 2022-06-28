@@ -109,8 +109,6 @@ bool Director::init()
 
     // FPS
     _lastUpdate = std::chrono::steady_clock::now();
-    
-    _lastFrameTime = std::chrono::steady_clock::now().time_since_epoch();
 
     _console = new Console;
 
@@ -330,7 +328,6 @@ void Director::drawScene()
     }
 
     _renderer->endFrame();
-
 
     if (_displayStats)
     {
@@ -791,7 +788,7 @@ void Director::runWithScene(Scene* scene)
     CCASSERT(scene != nullptr,
              "This command can only be used to start the Director. There is already a scene present.");
     CCASSERT(_runningScene == nullptr, "_runningScene should be null");
-    
+
     pushScene(scene);
     startAnimation();
 }
@@ -1385,7 +1382,7 @@ void Director::startAnimation(SetIntervalReason reason)
 
     _cocos2d_thread_id = std::this_thread::get_id();
 
-    // Application::getInstance()->setAnimationInterval(_animationInterval);
+    Application::getInstance()->setAnimationInterval(_animationInterval);
 
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
     setNextDeltaTimeZero(true);
@@ -1393,33 +1390,22 @@ void Director::startAnimation(SetIntervalReason reason)
 
 void Director::mainLoop()
 {
-    auto now = std::chrono::steady_clock::now().time_since_epoch();
-    auto interval = now - _lastFrameTime;
-    if(interval >= _animationIntervalNS) {
-        _lastFrameTime = now;
-
-        if (_purgeDirectorInNextLoop)
-        {
-            _purgeDirectorInNextLoop = false;
-            purgeDirector();
-        }
-        else if (_restartDirectorInNextLoop)
-        {
-            _restartDirectorInNextLoop = false;
-            restartDirector();
-        }
-        else if (!_invalid)
-        {
-            drawScene();
-
-            // release the objects
-            PoolManager::getInstance()->getCurrentPool()->clear();
-        }
+    if (_purgeDirectorInNextLoop)
+    {
+        _purgeDirectorInNextLoop = false;
+        purgeDirector();
     }
-    else {
-        auto waitDuration = (_animationIntervalNS - interval - std::chrono::milliseconds(1));
-        if(waitDuration.count() > 0) std::this_thread::sleep_for(waitDuration);
-        else std::this_thread::yield();
+    else if (_restartDirectorInNextLoop)
+    {
+        _restartDirectorInNextLoop = false;
+        restartDirector();
+    }
+    else if (!_invalid)
+    {
+        drawScene();
+
+        // release the objects
+        PoolManager::getInstance()->getCurrentPool()->clear();
     }
 }
 
@@ -1442,8 +1428,7 @@ void Director::setAnimationInterval(float interval)
 
 void Director::setAnimationInterval(float interval, SetIntervalReason reason)
 {
-    _animationInterval = interval; // interval in seconds
-    _animationIntervalNS = std::chrono::nanoseconds{static_cast<int64_t>(std::nano::den * interval)};
+    _animationInterval = interval;
     if (!_invalid)
     {
         stopAnimation();

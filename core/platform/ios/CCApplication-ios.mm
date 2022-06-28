@@ -2,7 +2,6 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -40,8 +39,6 @@ Application::Application()
 {
     CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
-
-    [[CCDirectorCaller sharedDirectorCaller] setAnimationInterval:1/60.0];
 }
 
 Application::~Application()
@@ -59,6 +56,10 @@ int Application::run()
     return 0;
 }
 
+void Application::setAnimationInterval(float interval)
+{
+    [[CCDirectorCaller sharedDirectorCaller] setAnimationInterval:interval];
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // static member function
