@@ -1391,40 +1391,34 @@ void Director::startAnimation(SetIntervalReason reason)
 
 void Director::mainLoop()
 {
+    if (_purgeDirectorInNextLoop)
+    {
+        _purgeDirectorInNextLoop = false;
+        purgeDirector();
+    }
+    else if (_restartDirectorInNextLoop)
+    {
+        _restartDirectorInNextLoop = false;
+        restartDirector();
+    }
+    else if (!_invalid)
+    {
+        drawScene();
+
+        // release the objects
+        PoolManager::getInstance()->getCurrentPool()->clear();
+    }
+
     constexpr std::chrono::milliseconds _1ms{1};
 
-    auto now      = std::chrono::steady_clock::now();
-    auto interval = now - _lastFrameTime;
-    if (interval >= _animationIntervalNS)
-    {
-        _lastFrameTime = now;
-
-        if (_purgeDirectorInNextLoop)
-        {
-            _purgeDirectorInNextLoop = false;
-            purgeDirector();
-        }
-        else if (_restartDirectorInNextLoop)
-        {
-            _restartDirectorInNextLoop = false;
-            restartDirector();
-        }
-        else if (!_invalid)
-        {
-            drawScene();
-
-            // release the objects
-            PoolManager::getInstance()->getCurrentPool()->clear();
-        }
-    }
+    auto interval = std::chrono::steady_clock::now() - _lastFrameTime;
+    auto waitMS = std::chrono::duration_cast<std::chrono::milliseconds>(_animationIntervalNS - interval);
+    if (waitMS > _1ms)
+        std::this_thread::sleep_for(waitMS);
     else
-    {
-        auto waitMS = std::chrono::duration_cast<std::chrono::milliseconds>(_animationIntervalNS - interval) - _1ms;
-        if (waitMS > _1ms)
-            std::this_thread::sleep_for(waitMS);
-        else
-            std::this_thread::yield();
-    }
+        std::this_thread::yield();
+
+    _lastFrameTime = std::chrono::steady_clock::now();
 }
 
 void Director::mainLoop(float dt)
