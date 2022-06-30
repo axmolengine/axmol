@@ -153,7 +153,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexdata->setIndexData(index);
 #endif
-        vertexdata->_indexs.pushBack(indexdata);
+        vertexdata->_indices.pushBack(indexdata);
     }
 
     vertexdata->autorelease();
@@ -162,7 +162,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
 
 MeshIndexData* MeshVertexData::getMeshIndexDataById(std::string_view id) const
 {
-    for (auto it : _indexs)
+    for (auto it : _indices)
     {
         if (it->getId() == id)
             return it;
@@ -193,7 +193,7 @@ MeshVertexData::MeshVertexData()
 MeshVertexData::~MeshVertexData()
 {
     CC_SAFE_RELEASE(_vertexBuffer);
-    _indexs.clear();
+    _indices.clear();
     _vertexData.clear();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
