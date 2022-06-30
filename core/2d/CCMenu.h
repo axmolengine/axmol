@@ -45,7 +45,7 @@ class Touch;
  *  - You can add MenuItem objects in runtime using addChild.
  *  - But the only accepted children are MenuItem objects.
  */
-class CC_DLL Menu : public Layer
+class CC_DLL Menu : public Node
 {
 public:
     /**
