@@ -1409,12 +1409,11 @@ void Director::mainLoop()
         PoolManager::getInstance()->getCurrentPool()->clear();
     }
 
-    constexpr std::chrono::milliseconds _1ms{1};
-
+    constexpr std::chrono::nanoseconds _1ms{1000000};
     auto interval = std::chrono::steady_clock::now() - _lastFrameTime;
-    auto waitMS = std::chrono::duration_cast<std::chrono::milliseconds>(_animationIntervalNS - interval);
-    if (waitMS > _1ms)
-        std::this_thread::sleep_for(waitMS);
+    auto waitDuration = std::chrono::duration_cast<std::chrono::milliseconds>(_animationIntervalNS - interval - _1ms);
+    if (waitDuration.count() > 0)
+        std::this_thread::sleep_for(waitDuration);
     else
         std::this_thread::yield();
 
