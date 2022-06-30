@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 #include <string>
-#include <chrono>
 
 NS_CC_BEGIN
 
@@ -100,7 +99,7 @@ public:
 protected:
     static Application* sm_pSharedApplication;
 
-    std::chrono::nanoseconds _animationInterval;  // nano second
+    int32_t _animationInterval;  // micro second
     std::string _resourceRootPath;
     std::string _startupScriptFilename;
 };

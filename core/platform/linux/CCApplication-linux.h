@@ -28,7 +28,6 @@ THE SOFTWARE.
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 #include <string>
-#include <chrono>
 
 NS_CC_BEGIN
 class Rect;
@@ -105,7 +104,7 @@ public:
     virtual Platform getTargetPlatform() override;
 
 protected:
-    std::chrono::nanoseconds _animationInterval;  // nano seconds
+    int32_t _animationInterval;  // micro second
     std::string _resourceRootPath;
 
     static Application* sm_pSharedApplication;
