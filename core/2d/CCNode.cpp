@@ -205,6 +205,13 @@ bool Node::init()
     return true;
 }
 
+bool Node::initLayer() {
+    _ignoreAnchorPointForPosition = true;
+    setAnchorPoint(Vec2(0.5f, 0.5f));
+    setContentSize(_director->getWinSize());
+    return true;
+}
+
 void Node::cleanup()
 {
 #if CC_ENABLE_SCRIPT_BINDING
