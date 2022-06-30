@@ -56,6 +56,7 @@ Layer* Layer::create()
 {
     auto ret = new Layer();
     ret->initLayer();
+    ret->autorelease();
     return ret;
 }
 
