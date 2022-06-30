@@ -261,4 +261,5 @@
 
 ## Some third party libs supporting adxe too:
    - Live2D for cocos2d-x, with lua binding:  https://github.com/Xrysnow/cocos2d-x-live2d
+     - Live2D is also part of the 'extensions'.
 
