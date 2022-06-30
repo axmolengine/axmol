@@ -2,7 +2,6 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -37,7 +36,17 @@ NS_CC_BEGIN
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application()
+static int32_t getCurrentMillSecond()
+{
+    int32_t lLastTime;
+    struct timeval stCurrentTime;
+
+    gettimeofday(&stCurrentTime, NULL);
+    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001;  // milliseconds
+    return lLastTime;
+}
+
+Application::Application() : _animationInterval(1.0f / 60.0f * 1000.0f)
 {
     CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
@@ -58,6 +67,9 @@ int Application::run()
         return 0;
     }
 
+    int32_t lastTime = 0L;
+    int32_t curTime  = 0L;
+
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
 
@@ -66,7 +78,16 @@ int Application::run()
 
     while (!glview->windowShouldClose())
     {
+        lastTime = getCurrentMillSecond();
+
         director->mainLoop();
+        glview->pollEvents();
+
+        curTime = getCurrentMillSecond();
+        if (curTime - lastTime < _animationInterval)
+        {
+            usleep((_animationInterval - curTime + lastTime) * 1000);
+        }
     }
     /* Only work on Desktop
      *  Director::mainLoop is really one frame logic
@@ -81,6 +102,12 @@ int Application::run()
     }
     glview->release();
     return EXIT_SUCCESS;
+}
+
+void Application::setAnimationInterval(float interval)
+{
+    // TODO do something else
+    _animationInterval = interval * 1000.0f;
 }
 
 void Application::setResourceRootPath(std::string_view rootResDir)
