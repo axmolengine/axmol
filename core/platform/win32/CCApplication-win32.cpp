@@ -2,7 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
+Copyright (c) 2021 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -48,6 +48,7 @@ Application* Application::sm_pSharedApplication = nullptr;
 Application::Application() : _instance(nullptr), _accelTable(nullptr)
 {
     _instance                   = GetModuleHandle(nullptr);
+    _animationInterval.QuadPart = 0;
     CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
@@ -74,6 +75,12 @@ int Application::run()
         timeBeginPeriod(wTimerRes);
     }
 
+    // Main message loop:
+    LARGE_INTEGER nLast;
+    LARGE_INTEGER nNow;
+
+    QueryPerformanceCounter(&nLast);
+
     initGLContextAttrs();
 
     // Initialize instance and cocos2d.
@@ -88,9 +95,33 @@ int Application::run()
     // Retain glview to avoid glview being released in the while loop
     glview->retain();
 
+    LONGLONG interval = 0LL;
+    LONG waitMS       = 0L;
+
+    LARGE_INTEGER freq;
+    QueryPerformanceFrequency(&freq);
+
     while (!glview->windowShouldClose())
     {
-        director->mainLoop();
+        QueryPerformanceCounter(&nNow);
+        interval = nNow.QuadPart - nLast.QuadPart;
+        if (interval >= _animationInterval.QuadPart)
+        {
+            nLast.QuadPart = nNow.QuadPart;
+            director->mainLoop();
+            glview->pollEvents();
+        }
+        else
+        {
+            // The precision of timer on Windows is set to highest (1ms) by 'timeBeginPeriod' from above code,
+            // but it's still not precise enough. For example, if the precision of timer is 1ms,
+            // Sleep(3) may make a sleep of 2ms or 4ms. Therefore, we subtract 1ms here to make Sleep time shorter.
+            // If 'waitMS' is equal or less than 1ms, don't sleep and run into next loop to
+            // boost CPU to next frame accurately.
+            waitMS = static_cast<LONG>((_animationInterval.QuadPart - interval) * 1000LL / freq.QuadPart - 1L);
+            if (waitMS > 1L)
+                Sleep(waitMS);
+        }
     }
 
     // Director should still do a cleanup if the window was closed manually.
@@ -110,6 +141,13 @@ int Application::run()
         timeEndPeriod(wTimerRes);
     }
     return 0;
+}
+
+void Application::setAnimationInterval(float interval)
+{
+    LARGE_INTEGER freq;
+    QueryPerformanceFrequency(&freq);
+    _animationInterval.QuadPart = (LONGLONG)(interval * freq.QuadPart);
 }
 
 //////////////////////////////////////////////////////////////////////////
