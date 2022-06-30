@@ -29,8 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SWEEP_CONTEXT_H
-#define SWEEP_CONTEXT_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -183,5 +182,3 @@ inline Point* SweepContext::tail() const
 }
 
 }
-
-#endif

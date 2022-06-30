@@ -63,6 +63,7 @@ void AppDelegate::initGLContextAttrs()
 static Size resourceSize(960, 640);
 static Size designSize(480, 320);
 
+
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // As an example, load config file
