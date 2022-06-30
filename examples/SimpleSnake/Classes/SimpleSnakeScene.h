@@ -30,6 +30,12 @@ public:
     virtual bool init() override;
 
     // a selector callback
+    void startGame(Ref* sender);
+    void showCredits();
+    void showHighScore();
+
+
+
     void menuCloseCallback(Ref* sender);
     virtual void update(float delta) override;
     void drawAll(bool finish);

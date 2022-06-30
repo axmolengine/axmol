@@ -66,30 +66,87 @@ bool SimpleSnake::init()
     auto origin      = Director::getInstance()->getVisibleOrigin();
     auto safeArea    = Director::getInstance()->getSafeAreaRect();
     auto safeOrigin  = safeArea.origin;
-    offset                      = Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
+    offset           = Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y);
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-                                           CC_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
-
-    if (closeItem == nullptr || closeItem->getContentSize().width <= 0 || closeItem->getContentSize().height <= 0)
+    // add "Background" splash screen"
+    background = Sprite::create("Background.png");
+    if (background == nullptr)
+        problemLoading("'Background.png'");
+    else
     {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+        background->setPosition(offset);
+        background->setScale(1.1);
+        addChild(background, 0);
+    }
+
+    // add "ADXE" splash screen"
+    auto sprite = Sprite::create("ADXE_white.png"sv);
+    setNodeIgnoreDesignScale(sprite);
+    if (sprite == nullptr)
+        problemLoading("'ADXE_white.png'");
+    else
+    {
+        sprite->setPosition(offset - Vec2(0, visibleSize.height / 3));
+        this->addChild(sprite, 9);
+    }
+    auto label0 = Label::createWithTTF("POWERED", "fonts/arial.ttf", 16);
+    if (label0 == nullptr)
+    {
+        problemLoading("'fonts/arial.ttf'");
     }
     else
     {
-        float x = safeOrigin.x + safeArea.size.width - closeItem->getContentSize().width / 2;
-        float y = safeOrigin.y + closeItem->getContentSize().height / 2;
-        closeItem->setPosition(Vec2(x, y));
+        // position the label on the center of the screen
+        label0->setPosition(offset - Vec2(0, visibleSize.height / 2.5));
+        this->addChild(label0, 1);
     }
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+    auto label1 = Label::createWithTTF("Simple Snake", "fonts/arial.ttf", 50);
+    label1->enableGlow(Color4B::BLUE);
+    if (label1 == nullptr)
+    {
+        problemLoading("'fonts/arial.ttf'");
+    }
+    else
+    {
+        // position the label on the center of the screen
+        label1->setPosition(offset + Vec2(0, visibleSize.height / 3));
+        this->addChild(label1, 1);
+    }
+    auto label2 = Label::createWithTTF("Eat as fast as you can!", "fonts/arial.ttf", 24);
+    if (label2 == nullptr)
+    {
+        problemLoading("'fonts/arial.ttf'");
+    }
+    else
+    {
+        // position the label on the center of the screen
+        label2->setPosition(offset + Vec2(0, visibleSize.height / 4 + 20));
+        // add the label as a child to this layer
+        this->addChild(label2, 1);
+    }
+
+    // Events
+    MenuItemFont::setFontName("fonts/Marker Felt.ttf");
+    // Bugs Item
+    auto Start = MenuItemFont::create("Start", CC_CALLBACK_1(SimpleSnake::startGame, this));
+
+    // Font Item
+    auto Credits = MenuItemFont::create("Credits", CC_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
+
+    auto Highscore = MenuItemFont::create("Highscore", CC_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
+
+    /*  auto color_action = TintBy::create(0.5f, 0, -255, -255);
+      auto color_back   = color_action->reverse();
+      auto seq          = Sequence::create(color_action, color_back, nullptr);
+      item7->runAction(RepeatForever::create(seq));*/
+
+    auto menu = Menu::create(Start, Credits, Highscore, nullptr);
+    menu->alignItemsVertically();
     this->addChild(menu, 1);
 
     /////////////////////////////
@@ -102,74 +159,22 @@ bool SimpleSnake::init()
     // add a label shows "Hello World"
     // create and initialize a label
 
-    auto label1 = Label::createWithTTF("Simple Snake", "fonts/arial.ttf", 24);
-    if (label1 == nullptr)
-    {
-        problemLoading("'fonts/arial.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label1->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                origin.y + visibleSize.height - label1->getContentSize().height*2 - visibleSize.height/2));
-        // add the label as a child to this layer
-        this->addChild(label1, 1);
-    }
-    auto label2 = Label::createWithTTF("Eat as fast as you can!", "fonts/arial.ttf", 24);
-    if (label2 == nullptr)
-    {
-        problemLoading("'fonts/arial.ttf'");
-    }
-    else
-    {
-        // position the label on the center of the screen
-        label2->setPosition(
-            Vec2(origin.x + visibleSize.width / 2,
-                 origin.y + visibleSize.height - label2->getContentSize().height * 3 - visibleSize.height/2));
+    auto traps = Sprite::create("hole_effect.png"sv);
 
-        // add the label as a child to this layer
-        this->addChild(label2, 1);
-    }
+    return true;
+}
 
-    // add "ADXE" splash screen"
-    auto sprite = Sprite::create("ADXE_white.png"sv);
-    setNodeIgnoreDesignScale(sprite);
-    if (sprite == nullptr)
-    {
-        problemLoading("'ADXE_white.png'");
-    }
-    else
-    {
-        // position the sprite on the center of the screen
-        sprite->setPosition(offset);
-
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 9);
-        auto drawNode = DrawNode::create();
-        drawNode->setPosition(Vec2(0, 0));
-        addChild(drawNode, 20);
-
-        drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
-    }
-
-    srand(time(0));
-
-    mydraw = DrawNode::create();
-    addChild(mydraw, 10);
-
-    background = Sprite::create("Background.png");
-    background->setPosition(offset);
-    background->setScale(1.1);
-    addChild(background, 0);
-
-    f.x    = 10;
-    f.y    = 10;
-    s[0].x = 20;
-    s[0].y = 20;
-
+void SimpleSnake::startGame(Ref* sender)
+{
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto origin      = Director::getInstance()->getVisibleOrigin();
+    f.x              = 10;
+    f.y              = 10;
+    s[0].x           = 20;
+    s[0].y           = 20;
     char buffer[1024];
 
-    for (int i = 0; i < snakeBodies+1; i++)
+    for (int i = 0; i < snakeBodies + 1; i++)
     {
         myScore[i] = 0.0;
         sprintf(buffer, "%i: %f", i + 1, myScore[i]);
@@ -178,11 +183,17 @@ bool SimpleSnake::init()
         myScoreLabel[i]->setPosition(Vec2(10, origin.y + visibleSize.height - 10 - i * 20));
         this->addChild(myScoreLabel[i], 1);
     }
-    myScoreLabel[snakeBodies]->setString("");//"Eat as fast as you can!");
+    myScoreLabel[snakeBodies]->setString("");  //"Eat as fast as you can!");
+
+    srand(time(0));
+
+    mydraw = DrawNode::create();
+    addChild(mydraw, 10);
 
     scheduleUpdate();
-    return true;
 }
+void SimpleSnake::showCredits() {}
+void SimpleSnake::showHighScore() {}
 
 void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
@@ -221,8 +232,6 @@ void SimpleSnake::update(float delta)
     runTime += delta;
     endLevelTime += delta;
 
-
-
     if (finish)
     {
         float myScale = runTime + 1.1;
@@ -242,19 +251,23 @@ void SimpleSnake::update(float delta)
         {
         case 0:
             s[0].y++;
-            if (s[0].y >= M) s[0].y = 0;
+            if (s[0].y >= M)
+                s[0].y = 0;
             break;
         case 1:
             s[0].x--;
-            if (s[0].x < 0) s[0].x = N - 1;
+            if (s[0].x < 0)
+                s[0].x = N - 1;
             break;
         case 2:
             s[0].x++;
-            if (s[0].x >= N) s[0].x = 0;
+            if (s[0].x >= N)
+                s[0].x = 0;
             break;
         case 3:
             s[0].y--;
-            if (s[0].y < 0) s[0].y = M - 1;
+            if (s[0].y < 0)
+                s[0].y = M - 1;
             break;
         default:
             break;
@@ -308,14 +321,13 @@ void SimpleSnake::drawAll(bool finish)
     sprintf(buffer, "%i: %f", num - StartBodies + 1, myScore[num - StartBodies]);
     myScoreLabel[num - StartBodies]->setString(buffer);
 
-
     mydraw->clear();
     // draw snake body
     for (int i = 1; i < num; i++)
     {
         mydraw->drawDot(Vec2(size / 2 + s[i].x * size, size / 2 + s[i].y * size), size / 2, Color4B::BLUE);
     }
-    //draw snake head
+    // draw snake head
     mydraw->drawDot(Vec2(size / 2 + s[0].x * size, size / 2 + s[0].y * size), size / 2, Color4B::MAGENTA);
 
     if (!finish)
