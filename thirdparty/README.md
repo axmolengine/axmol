@@ -174,7 +174,7 @@
 
 ## poly2tri
 - Upstream: https://github.com/jhasse/poly2tri
-- Version: git 3380f5c  (until 25 Mar 2022)
+- Version: git 81612cb  (until May 20, 2022)
 - License: BSD-3-Clause
 
 ## pugixml

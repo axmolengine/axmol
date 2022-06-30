@@ -201,7 +201,9 @@ if(AX_WITH_CONVERTUTF)
 endif(AX_WITH_CONVERTUTF)
 if(AX_WITH_POLY2TRI)
     add_subdirectory(poly2tri)
-    target_link_libraries(thirdparty poly2tri)
+    target_link_libraries(thirdparty poly2tri)  
+    # Build static lib
+    target_compile_definitions(poly2tri PUBLIC P2T_STATIC_EXPORTS)
     configure_target_outdir(poly2tri)
 endif(AX_WITH_POLY2TRI)
 

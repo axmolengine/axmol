@@ -29,8 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef UTILS_H
-#define UTILS_H
+#pragma once
 
 // Otherwise #defines like M_PI are undeclared under Visual Studio
 #define _USE_MATH_DEFINES
@@ -129,5 +128,3 @@ bool InScanArea(const Point& pa, const Point& pb, const Point& pc, const Point& 
 }
 
 }
-
-#endif
