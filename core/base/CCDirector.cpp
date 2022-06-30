@@ -1407,16 +1407,6 @@ void Director::mainLoop()
         // release the objects
         PoolManager::getInstance()->getCurrentPool()->clear();
     }
-
-    constexpr std::chrono::nanoseconds _1ms{1000000};
-    auto interval = std::chrono::steady_clock::now() - _lastFrameTime;
-    auto waitDuration = std::chrono::duration_cast<std::chrono::milliseconds>(_animationIntervalNS - interval - _1ms);
-    if (waitDuration.count() > 0)
-        std::this_thread::sleep_for(waitDuration);
-    else
-        std::this_thread::yield();
-
-    _lastFrameTime = std::chrono::steady_clock::now();
 }
 
 void Director::mainLoop(float dt)
