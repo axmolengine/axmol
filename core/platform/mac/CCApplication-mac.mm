@@ -26,6 +26,7 @@ THE SOFTWARE.
 #import <Cocoa/Cocoa.h>
 #import <Metal/Metal.h>
 #include <algorithm>
+#include <thread>
 
 #include "platform/CCApplication.h"
 #include "platform/CCFileUtils.h"
@@ -36,19 +37,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-static int32_t getCurrentMillSecond()
-{
-    int32_t lLastTime = 0;
-    struct timeval stCurrentTime;
-
-    gettimeofday(&stCurrentTime, NULL);
-    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001;  // milliseconds
-    return lLastTime;
-}
-
 Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application() : _animationInterval(1.0f / 60.0f * 1000.0f)
+Application::Application() : _animationInterval(16666667)
 {
     CCASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
     sm_pSharedApplication = this;
@@ -68,8 +59,7 @@ int Application::run()
         return 1;
     }
 
-    int32_t lastTime = 0L;
-    int32_t curTime  = 0L;
+    std::chrono::steady_clock::time_point lastTime{};
 
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
@@ -79,15 +69,20 @@ int Application::run()
 
     while (!glview->windowShouldClose())
     {
-        lastTime = getCurrentMillSecond();
+        lastTime = std::chrono::steady_clock::now();
 
         director->mainLoop();
         glview->pollEvents();
 
-        curTime = getCurrentMillSecond();
-        if (curTime - lastTime < _animationInterval)
+        auto interval = std::chrono::steady_clock::now() - lastTime;
+        if (interval < _animationInterval)
         {
-            usleep(static_cast<useconds_t>((_animationInterval - curTime + lastTime) * 1000));
+            auto waitDuration = _animationInterval - interval;
+            std::this_thread::sleep_for(waitDuration);
+        }
+        else
+        {
+            std::this_thread::yield();
         }
     }
 
@@ -109,7 +104,8 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    _animationInterval = interval * 1000.0f;
+    _animationInterval =
+        std::chrono::nanoseconds{static_cast<std::chrono::nanoseconds::rep>(std::nano::den * interval)};
 }
 
 Application::Platform Application::getTargetPlatform()
