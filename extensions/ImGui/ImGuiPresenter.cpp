@@ -34,7 +34,7 @@ public:
     bool initWithScene(Scene* scene)
     {
 #ifdef CC_PLATFORM_PC
-        _trackLayer = utils::newInstance<Node>(&Node::initLayer);
+        _trackLayer = utils::newInstance<Layer>();
 
         // note: when at the first click to focus the window, this will not take effect
         auto listener = EventListenerTouchOneByOne::create();
@@ -86,7 +86,7 @@ public:
     }
 
 private:
-    Node* _trackLayer = nullptr;
+    Layer* _trackLayer = nullptr;
 };
 
 class ImGuiGlobalEventTracker : public ImGuiEventTracker
