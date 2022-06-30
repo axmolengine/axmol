@@ -83,8 +83,26 @@ bool SimpleSnake::init()
         addChild(background, 0);
     }
 
+    /////////////////////////////
+    // 3. add your codes below...
+
+    goBack();
+
+    // add a label shows "Hello World"
+    // create and initialize a label
+
+    auto traps = Sprite::create("hole_effect.png"sv);
+
+    return true;
+}
+
+void SimpleSnake::goBack()
+{
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto origin      = Director::getInstance()->getVisibleOrigin();
     // add "ADXE" splash screen"
-    auto sprite = Sprite::create("ADXE_white.png"sv);
+    //  auto sprite = Sprite::create("ADXE_white.png"sv);
+    auto sprite = Sprite::create("axe_logo.png"sv);
     setNodeIgnoreDesignScale(sprite);
     if (sprite == nullptr)
         problemLoading("'ADXE_white.png'");
@@ -132,36 +150,18 @@ bool SimpleSnake::init()
 
     // Events
     MenuItemFont::setFontName("fonts/Marker Felt.ttf");
-    // Bugs Item
-    auto Start = MenuItemFont::create("Start", CC_CALLBACK_1(SimpleSnake::startGame, this));
-
-    // Font Item
-    auto Credits = MenuItemFont::create("Credits", CC_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
-
-    auto Highscore = MenuItemFont::create("Highscore", CC_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
-
-    /*  auto color_action = TintBy::create(0.5f, 0, -255, -255);
-      auto color_back   = color_action->reverse();
-      auto seq          = Sequence::create(color_action, color_back, nullptr);
-      item7->runAction(RepeatForever::create(seq));*/
+    auto Start     = MenuItemFont::create("Start", CC_CALLBACK_1(SimpleSnake::startGame, this));
+    auto Credits   = MenuItemFont::create("Credits", CC_CALLBACK_1(SimpleSnake::showCredits, this));
+    auto Highscore = MenuItemFont::create("Highscore", CC_CALLBACK_1(SimpleSnake::showHighScore, this));
+   // auto Back      = MenuItemFont::create("Highscore", CC_CALLBACK_1(SimpleSnake::goBack, this));
 
     auto menu = Menu::create(Start, Credits, Highscore, nullptr);
     menu->alignItemsVertically();
     this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
-
     auto listener          = EventListenerKeyboard::create();
     listener->onKeyPressed = CC_CALLBACK_2(SimpleSnake::onKeyPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    auto traps = Sprite::create("hole_effect.png"sv);
-
-    return true;
 }
 
 void SimpleSnake::startGame(Ref* sender)
@@ -192,8 +192,53 @@ void SimpleSnake::startGame(Ref* sender)
 
     scheduleUpdate();
 }
-void SimpleSnake::showCredits() {}
-void SimpleSnake::showHighScore() {}
+void SimpleSnake::showCredits(Ref* sender)
+{
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto origin      = Director::getInstance()->getVisibleOrigin();
+
+    auto c1 = Label::createWithTTF("Credits:  Cocos2D 4.0\nADXE\nFamTrinli (original source of a snake game)",
+                                   "fonts/arial.ttf", 20);
+    // position the label on the center of the screen
+    c1->setPosition(offset + Vec2(0, visibleSize.height / 3));
+    this->addChild(c1, 1);
+}
+void SimpleSnake::showHighScore(Ref* sender)
+{
+
+    auto scene = Scene::create();
+    Director::getInstance()->pushScene(scene);
+
+    // add "Background" splash screen"
+    background = Sprite::create("Background.png");
+    if (background == nullptr)
+        problemLoading("'Background.png'");
+    else
+    {
+        background->setPosition(offset);
+        background->setScale(1.1);
+        addChild(background, 0);
+    }
+
+    // Events
+    MenuItemFont::setFontName("fonts/Marker Felt.ttf");
+    // Bugs Item
+    auto Start = MenuItemFont::create("Start", CC_CALLBACK_1(SimpleSnake::startGame, this));
+
+    // Font Item
+    auto Credits = MenuItemFont::create("Credits", CC_CALLBACK_1(SimpleSnake::showCredits, this));
+
+    auto Highscore = MenuItemFont::create("Highscore", CC_CALLBACK_1(SimpleSnake::showHighScore, this));
+
+    /*  auto color_action = TintBy::create(0.5f, 0, -255, -255);
+      auto color_back   = color_action->reverse();
+      auto seq          = Sequence::create(color_action, color_back, nullptr);
+      item7->runAction(RepeatForever::create(seq));*/
+
+    auto menu = Menu::create(Start, Credits, Highscore, nullptr);
+    menu->alignItemsVertically();
+    this->addChild(menu, 1);
+}
 
 void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {

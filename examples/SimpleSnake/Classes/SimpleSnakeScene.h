@@ -31,9 +31,9 @@ public:
 
     // a selector callback
     void startGame(Ref* sender);
-    void showCredits();
-    void showHighScore();
-
+    void showCredits(Ref* sender);
+    void showHighScore(Ref* sender);
+    void goBack();
 
 
     void menuCloseCallback(Ref* sender);
