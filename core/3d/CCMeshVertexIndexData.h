@@ -124,9 +124,9 @@ public:
     const MeshVertexAttrib& getMeshVertexAttrib(ssize_t index) const { return _attribs[index]; }
 
     /** get index data count */
-    ssize_t getMeshIndexDataCount() const { return _indexs.size(); }
+    ssize_t getMeshIndexDataCount() const { return _indices.size(); }
     /** get index data by index */
-    MeshIndexData* getMeshIndexDataByIndex(int index) const { return _indexs.at(index); }
+    MeshIndexData* getMeshIndexDataByIndex(int index) const { return _indices.at(index); }
     /** get index data by id */
     MeshIndexData* getMeshIndexDataById(std::string_view id) const;
 
@@ -144,8 +144,8 @@ public:
 protected:
     backend::Buffer* _vertexBuffer = nullptr;  // vertex buffer
     ssize_t _sizePerVertex         = -1;
-    Vector<MeshIndexData*> _indexs;          // index data
-    std::vector<MeshVertexAttrib> _attribs;  // vertex attributes
+    Vector<MeshIndexData*> _indices;           // index data
+    std::vector<MeshVertexAttrib> _attribs;    // vertex attributes
 
     int _vertexCount = 0;  // vertex count
     std::vector<float> _vertexData;
