@@ -176,8 +176,12 @@ public:
     ssize_t getDrawnVertices() const { return _drawnVertices; }
     /* RenderCommands (except) TrianglesCommand should update this value */
     void addDrawnVertices(ssize_t number) { _drawnVertices += number; };
+    /* returns the number of modified gpu buffers in the last frame */
+    ssize_t getModifiedBuffers() const { return _modifiedBuffers; }
+    /* adds a number of modified gpu buffers in the last frame */
+    void addModifiedBuffers(ssize_t number) { _modifiedBuffers += number; };
     /* clear draw stats */
-    void clearDrawStats() { _drawnBatches = _drawnVertices = 0; }
+    void clearDrawStats() { _drawnBatches = _drawnVertices = _modifiedBuffers = 0; }
 
     /**
      Set render targets. If not set, will use default render targets. It will effect all commands.
@@ -538,6 +542,7 @@ protected:
     // stats
     size_t _drawnBatches  = 0;
     size_t _drawnVertices = 0;
+    size_t _modifiedBuffers = 0;
     // the flag for checking whether renderer is rendering
     bool _isRendering      = false;
     bool _isDepthTestFor2D = false;
