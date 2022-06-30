@@ -28,6 +28,7 @@
 #include "platform/CCGL.h"
 #include "base/CCEventListenerCustom.h"
 #include "base/CCDirector.h"
+#include "renderer/CCRenderer.h"
 
 #include <vector>
 
