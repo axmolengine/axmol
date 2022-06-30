@@ -114,7 +114,7 @@ bool Menu::init()
 
 bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
 {
-    if (Layer::init())
+    if (Node::initLayer())
     {
         _enabled = true;
         // menu in the center of the screen
@@ -161,29 +161,29 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
  */
 void Menu::addChild(Node* child)
 {
-    Layer::addChild(child);
+    Node::addChild(child);
 }
 
 void Menu::addChild(Node* child, int zOrder)
 {
-    Layer::addChild(child, zOrder);
+    Node::addChild(child, zOrder);
 }
 
 void Menu::addChild(Node* child, int zOrder, int tag)
 {
     CCASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
-    Layer::addChild(child, zOrder, tag);
+    Node::addChild(child, zOrder, tag);
 }
 
 void Menu::addChild(Node* child, int zOrder, std::string_view name)
 {
     CCASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
-    Layer::addChild(child, zOrder, name);
+    Node::addChild(child, zOrder, name);
 }
 
 void Menu::onEnter()
 {
-    Layer::onEnter();
+    Node::onEnter();
 }
 
 void Menu::onExit()
@@ -199,7 +199,7 @@ void Menu::onExit()
         _state = Menu::State::WAITING;
     }
 
-    Layer::onExit();
+    Node::onExit();
 }
 
 void Menu::removeChild(Node* child, bool cleanup)
