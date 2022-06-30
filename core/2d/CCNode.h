@@ -1838,6 +1838,9 @@ public:
 
     virtual bool init();
 
+    // Compatible old Layer::create
+    bool initLayer();
+
 protected:
     /// lazy allocs
     void childrenAlloc();
