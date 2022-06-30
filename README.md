@@ -35,10 +35,7 @@
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
-* ['Upstream-Version-License'](thirdparty/README.md) 
-  * Clearer third-party libs for easier publishing of your commercial apps based on adxe. 
-  * Also some links to third party libs which support adxe too.
-  * Extensions having own license as part of the there package.
+* **clearer third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easier publishing of your commercial apps based on adxe. Also some links to third party libs which support adxe too.**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even though it was marked as deprecated, but still available.
