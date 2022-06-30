@@ -40,7 +40,7 @@ NS_CC_BEGIN
  * @{
  */
 
-/* !!!hack me, The memory model Layer is identical*/
+/* !!!HACK, the memory model of 'Layer' is identical to 'Node' */
 class CC_DLL Layer : public Node
 {
 public:
@@ -307,7 +307,7 @@ public:
     Color3B getEndColor3B() const;
 
     void setBlendFunc(const BlendFunc& blendFunc);
-    BlendFunc getBlendFunc() const;
+    const BlendFunc& getBlendFunc() const;
 
     LayerRadialGradient();
     virtual ~LayerRadialGradient();

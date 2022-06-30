@@ -564,7 +564,7 @@ void LayerRadialGradient::setBlendFunc(const BlendFunc& blendFunc)
     _blendFunc = blendFunc;
 }
 
-BlendFunc LayerRadialGradient::getBlendFunc() const
+const BlendFunc& LayerRadialGradient::getBlendFunc() const
 {
     return _blendFunc;
 }
