@@ -60,6 +60,8 @@ int Application::run()
     }
 
     std::chrono::steady_clock::time_point lastTime{};
+    
+    constexpr std::chrono::nanoseconds _1ms{1000000};
 
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
@@ -75,15 +77,11 @@ int Application::run()
         glview->pollEvents();
 
         auto interval = std::chrono::steady_clock::now() - lastTime;
-        if (interval < _animationInterval)
-        {
-            auto waitDuration = _animationInterval - interval;
+        auto waitDuration = _animationInterval - interval - _1ms;
+        if (waitDuration.count() > 0)
             std::this_thread::sleep_for(waitDuration);
-        }
         else
-        {
             std::this_thread::yield();
-        }
     }
 
     /* Only work on Desktop
