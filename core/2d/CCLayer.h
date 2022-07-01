@@ -306,8 +306,8 @@ public:
     Color4B getEndColor() const;
     Color3B getEndColor3B() const;
 
-    void setBlendFunc(const BlendFunc& blendFunc);
-    const BlendFunc& getBlendFunc() const;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
+    const BlendFunc& getBlendFunc() const override;
 
     LayerRadialGradient();
     virtual ~LayerRadialGradient();
