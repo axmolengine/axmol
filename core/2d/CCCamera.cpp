@@ -451,17 +451,12 @@ void Camera::applyCustomProperties()
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, _nearPlane, _farPlane);
-        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
         break;
     }
     case Director::Projection::_3D:
     {
-        float zeye = _director->getZEye();
         initPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
-            up(0.0f, 1.0f, 0.0f);
-        _eyeZdistance = eye.z;
-        setPosition3D(eye);
+        _eyeZdistance = _director->getZEye();
         break;
     }
     }
