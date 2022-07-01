@@ -426,6 +426,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     [layer setPixelFormat:MTLPixelFormatBGRA8Unorm];
     [layer setFramebufferOnly:YES];
     [layer setDrawableSize:size];
+    layer.displaySyncEnabled = _glContextAttrs.vsync;
     [contentView setLayer:layer];
     backend::DeviceMTL::setCAMetalLayer(layer);
 #endif
@@ -453,6 +454,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
 
 #if defined(CC_USE_GL)
     glfwMakeContextCurrent(_mainWindow);
+    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 #endif
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
