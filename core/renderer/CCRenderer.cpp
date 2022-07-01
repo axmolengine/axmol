@@ -2,6 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -764,7 +765,8 @@ void Renderer::flush2D()
 
 void Renderer::flush3D()
 {
-    // TODO 3d batch rendering
+    // TODO 3d instanced rendering
+    // https://learnopengl.com/Advanced-OpenGL/Instancing
 }
 
 void Renderer::flushTriangles()
@@ -871,6 +873,7 @@ CallbackCommand* Renderer::nextCallbackCommand()
     if (!_callbackCommandsPool.empty())
     {
         cmd = _callbackCommandsPool.back();
+        cmd->reset();
         _callbackCommandsPool.pop_back();
     }
     else

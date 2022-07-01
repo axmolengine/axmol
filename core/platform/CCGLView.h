@@ -90,8 +90,8 @@ struct GLContextAttrs
     int multisamplingCount;
     bool visible   = true;
     bool decorated = true;
-#if defined(_WIN32)
     bool vsync       = false;
+#if defined(_WIN32)
     void* viewParent = nullptr;
 #endif
 };
