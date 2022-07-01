@@ -501,8 +501,8 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
 #endif
     CHECK_GL_ERROR_DEBUG();
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-    ::glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 #endif
 
     //    // GLFW v3.2 no longer emits "onGLFWWindowSizeFunCallback" at creation time. Force default viewport:
