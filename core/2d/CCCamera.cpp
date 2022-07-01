@@ -77,6 +77,7 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, fl
 
 Camera* Camera::getDefaultCamera()
 {
+    // camera nullptr scene init fix #690
     auto scene        = Director::getInstance()->getRunningScene();
     auto sceneInitRef = Director::getInstance()->getRunningSceneInitRef();
     if (scene && scene == sceneInitRef)
