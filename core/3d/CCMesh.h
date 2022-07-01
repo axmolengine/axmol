@@ -69,7 +69,8 @@ public:
     static Mesh* create(const std::vector<float>& positions,
                         const std::vector<float>& normals,
                         const std::vector<float>& texs,
-                        const IndexArray& indices);
+                        const IndexArray& indices,
+                        CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /**
      * @lua NA
@@ -77,7 +78,8 @@ public:
     static Mesh* create(const std::vector<float>& vertices,
                         int perVertexSizeInFloat,
                         const IndexArray& indices,
-                        const std::vector<MeshVertexAttrib>& attribs);
+                        const std::vector<MeshVertexAttrib>& attribs,
+                        CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /**
      * create mesh
