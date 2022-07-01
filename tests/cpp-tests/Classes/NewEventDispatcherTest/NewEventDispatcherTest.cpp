@@ -468,6 +468,39 @@ void LabelKeyboardEventTest::onEnter()
         sprintf(buf, "Key %d was pressed!", (int)keyCode);
         auto label = static_cast<Label*>(event->getCurrentTarget());
         label->setString(buf);
+
+        switch (keyCode)
+        {
+        case cocos2d::EventKeyboard::KeyCode::KEY_1:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTBOTTOM);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_4:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTMIDDLE);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_7:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTTOP);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_8:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLETOP);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_9:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTTOP);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_6:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTMIDDLE);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_3:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTBOTTOM);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_2:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLEBOTTOM);
+            break;
+        case cocos2d::EventKeyboard::KeyCode::KEY_5:
+            Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLEMIDDLE);
+            break;
+        default:
+            break;
+        }
     };
 
     listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
@@ -487,7 +520,7 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-    return "Please click keyboard\n(Only available on Desktop, Android\nand Windows Universal Apps)";
+    return "Please click keyboard: [1-9] set FPS position!";
 }
 
 // SpriteAccelerationEventTest

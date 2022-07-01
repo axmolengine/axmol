@@ -208,8 +208,6 @@ TODO: should remove it.
 
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
 
-    inline void setIndexFormat(IndexFormat format) { _indexFormat = format; }
-
     /**
      * set a callback which will be invoke before rendering
      */

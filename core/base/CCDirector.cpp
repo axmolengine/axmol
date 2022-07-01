@@ -153,7 +153,6 @@ Director::~Director()
     CC_SAFE_RELEASE(_FPSLabel);
     CC_SAFE_RELEASE(_drawnVerticesLabel);
     CC_SAFE_RELEASE(_drawnBatchesLabel);
-    CC_SAFE_RELEASE(_drawnBuffersLabel);
 
     CC_SAFE_RELEASE(_runningScene);
     CC_SAFE_RELEASE(_notificationNode);
@@ -1020,7 +1019,6 @@ void Director::reset()
     CC_SAFE_RELEASE_NULL(_FPSLabel);
     CC_SAFE_RELEASE_NULL(_drawnBatchesLabel);
     CC_SAFE_RELEASE_NULL(_drawnVerticesLabel);
-    CC_SAFE_RELEASE_NULL(_drawnBuffersLabel);
 
     // purge bitmap cache
     FontFNT::purgeCachedData();
@@ -1185,12 +1183,11 @@ void Director::showStats()
 
     static uint32_t prevCalls = 0;
     static uint32_t prevVerts = 0;
-    static uint32_t prevBuffers = 0;
 
     ++_frames;
     _accumDt += _deltaTime;
 
-    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel && _drawnBuffersLabel)
+    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
         char buffer[30] = {0};
 
@@ -1207,32 +1204,23 @@ void Director::showStats()
 
         auto currentCalls = (uint32_t)_renderer->getDrawnBatches();
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
-        auto currentBuffers = (uint32_t)_renderer->getModifiedBuffers();
         if (currentCalls != prevCalls)
         {
-            sprintf(buffer, "GL calls  :%6u", currentCalls);
+            sprintf(buffer, "GL calls:%6u", currentCalls);
             _drawnBatchesLabel->setString(buffer);
             prevCalls = currentCalls;
         }
 
         if (currentVerts != prevVerts)
         {
-            sprintf(buffer, "GL verts  :%6u", currentVerts);
+            sprintf(buffer, "GL verts:%6u", currentVerts);
             _drawnVerticesLabel->setString(buffer);
             prevVerts = currentVerts;
-        }
-
-        if (currentBuffers != prevBuffers)
-        {
-            sprintf(buffer, "GL buffers:%6u", currentBuffers);
-            _drawnBuffersLabel->setString(buffer);
-            prevBuffers = currentBuffers;
         }
 
         const Mat4& identity = Mat4::IDENTITY;
         _drawnVerticesLabel->visit(_renderer, identity, 0);
         _drawnBatchesLabel->visit(_renderer, identity, 0);
-        _drawnBuffersLabel->visit(_renderer, identity, 0);
         _FPSLabel->visit(_renderer, identity, 0);
     }
 }
@@ -1260,18 +1248,15 @@ void Director::createStatsLabel()
     std::string fpsString          = "00.0";
     std::string drawBatchString    = "000";
     std::string drawVerticesString = "00000";
-    std::string drawBuffersString  = "000";
     if (_FPSLabel)
     {
         fpsString          = _FPSLabel->getString();
         drawBatchString    = _drawnBatchesLabel->getString();
         drawVerticesString = _drawnVerticesLabel->getString();
-        drawBuffersString  = _drawnBuffersLabel->getString();
 
         CC_SAFE_RELEASE_NULL(_FPSLabel);
         CC_SAFE_RELEASE_NULL(_drawnBatchesLabel);
         CC_SAFE_RELEASE_NULL(_drawnVerticesLabel);
-        CC_SAFE_RELEASE_NULL(_drawnBuffersLabel);
         _textureCache->removeTextureForKey("/cc_fps_images");
         FileUtils::getInstance()->purgeCachedEntries();
     }
@@ -1318,17 +1303,89 @@ void Director::createStatsLabel()
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
     _drawnVerticesLabel->setScale(scaleFactor);
 
-    _drawnBuffersLabel = LabelAtlas::create(drawVerticesString, texture, 12, 32, '.');
-    _drawnBuffersLabel->retain();
-    _drawnBuffersLabel->setIgnoreContentScaleFactor(true);
-    _drawnBuffersLabel->setScale(scaleFactor);
+    setFPSPos();
+}
 
-    auto safeOrigin          = getSafeAreaRect().origin;
-    const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
-    _drawnBuffersLabel->setPosition(Vec2(0, height_spacing * 3.0f) + safeOrigin);
-    _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + safeOrigin);
-    _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + safeOrigin);
-    _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + safeOrigin);
+// Set the FPS position on disply like the numbers on numpad
+void Director::setFPSPos(FPSPosition FPSposition)
+{
+    Vec2 _fpsPosition;
+    _FPSPosition = FPSposition;
+
+    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
+    {
+        auto safeOrigin          = getSafeAreaRect().origin;
+        auto safeSize          = getSafeAreaRect().size;
+        const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
+
+        switch (_FPSPosition)
+        {
+        case FPSPosition::LEFTBOTTOM:
+            _fpsPosition = Vec2(0, 0);
+            _drawnVerticesLabel->setAnchorPoint({0, 0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        case FPSPosition::LEFTMIDDLE:
+            _fpsPosition = Vec2(0, safeSize.y / 2 - height_spacing * 1.5);
+            _drawnVerticesLabel->setAnchorPoint({0, 0.0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0.0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        case FPSPosition::LEFTTOP:
+            _fpsPosition = Vec2(0, safeSize.y - height_spacing * 3);
+            _drawnVerticesLabel->setAnchorPoint({0, 0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        case FPSPosition::RIGHTBOTTOM:
+            _fpsPosition = Vec2(safeSize.x, 0);
+            _drawnVerticesLabel->setAnchorPoint({1, 0});
+            _drawnBatchesLabel->setAnchorPoint({1, 0});
+            _FPSLabel->setAnchorPoint({1, 0});
+            break;
+        case FPSPosition::RIGHTMIDDLE:
+            _fpsPosition = Vec2(safeSize.x, safeSize.y / 2 - height_spacing * 1.5);
+            _drawnVerticesLabel->setAnchorPoint({1, 0.0});
+            _drawnBatchesLabel->setAnchorPoint({1, 0.0});
+            _FPSLabel->setAnchorPoint({1, 0.0});
+            break;
+        case FPSPosition::RIGHTTOP:
+            _fpsPosition = Vec2(safeSize.x, safeSize.y - height_spacing * 3);
+            _drawnVerticesLabel->setAnchorPoint({1, 0});
+            _drawnBatchesLabel->setAnchorPoint({1, 0});
+            _FPSLabel->setAnchorPoint({1, 0});
+            break;
+        case FPSPosition::MIDDLEBOTTOM:
+            _fpsPosition = Vec2(safeSize.x / 2, 0);
+            _drawnVerticesLabel->setAnchorPoint({0.5, 0});
+            _drawnBatchesLabel->setAnchorPoint({0.5, 0});
+            _FPSLabel->setAnchorPoint({0.5, 0});
+            break;
+        case FPSPosition::MIDDLEMIDDLE:
+            _fpsPosition = Vec2(safeSize.x / 2, safeSize.y / 2 - height_spacing * 1.5);
+            _drawnVerticesLabel->setAnchorPoint({0.5, 0.0});
+            _drawnBatchesLabel->setAnchorPoint({0.5, 0.0});
+            _FPSLabel->setAnchorPoint({0.5, 0.0});
+            break;
+        case FPSPosition::MIDDLETOP:
+            _fpsPosition = Vec2(safeSize.x / 2, safeSize.y - height_spacing * 3);
+            _drawnVerticesLabel->setAnchorPoint({0.5, 0});
+            _drawnBatchesLabel->setAnchorPoint({0.5, 0});
+            _FPSLabel->setAnchorPoint({0.5, 0});
+            break;
+        default:  // FPSPosition::LEFTBOTTOM
+            _fpsPosition = Vec2(0, 0);
+            _drawnVerticesLabel->setAnchorPoint({0, 0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        }
+
+        _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + _fpsPosition);
+        _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + _fpsPosition);
+        _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + _fpsPosition);
+    }
 }
 
 #endif  // #if !CC_STRIP_FPS
