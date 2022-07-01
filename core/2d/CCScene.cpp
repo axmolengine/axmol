@@ -107,6 +107,7 @@ bool Scene::init()
 
 bool Scene::initWithSize(const Vec2& size)
 {
+    Director::getInstance()->setRunningSceneInitRef(this);
     initDefaultCamera();
     setContentSize(size);
     return true;
