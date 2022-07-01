@@ -134,7 +134,7 @@ struct NodeDatas
  */
 struct MeshData
 {
-    typedef std::vector<unsigned short> IndexArray;
+    typedef std::vector<unsigned int> IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
