@@ -2,7 +2,6 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -27,6 +26,7 @@ THE SOFTWARE.
 #import <Cocoa/Cocoa.h>
 #import <Metal/Metal.h>
 #include <algorithm>
+#include <thread>
 
 #include "platform/CCApplication.h"
 #include "platform/CCFileUtils.h"
@@ -39,7 +39,7 @@ NS_CC_BEGIN
 
 Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application()
+Application::Application() : _animationInterval(16666667)
 {
     CCASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
     sm_pSharedApplication = this;
@@ -59,6 +59,10 @@ int Application::run()
         return 1;
     }
 
+    std::chrono::steady_clock::time_point lastTime{};
+    
+    constexpr std::chrono::nanoseconds _1ms{1000000};
+
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
 
@@ -67,7 +71,17 @@ int Application::run()
 
     while (!glview->windowShouldClose())
     {
+        lastTime = std::chrono::steady_clock::now();
+
         director->mainLoop();
+        glview->pollEvents();
+
+        auto interval = std::chrono::steady_clock::now() - lastTime;
+        auto waitDuration = _animationInterval - interval - _1ms;
+        if (waitDuration.count() > 0)
+            std::this_thread::sleep_for(waitDuration);
+        else
+            std::this_thread::yield();
     }
 
     /* Only work on Desktop
@@ -86,6 +100,11 @@ int Application::run()
     return 0;
 }
 
+void Application::setAnimationInterval(float interval)
+{
+    _animationInterval =
+        std::chrono::nanoseconds{static_cast<std::chrono::nanoseconds::rep>(std::nano::den * interval)};
+}
 
 Application::Platform Application::getTargetPlatform()
 {

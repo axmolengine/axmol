@@ -2,7 +2,6 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -28,6 +27,7 @@ THE SOFTWARE.
 #include <unistd.h>
 #include <sys/time.h>
 #include <string>
+#include <thread>
 #include "base/CCDirector.h"
 #include "base/ccUtils.h"
 #include "platform/CCFileUtils.h"
@@ -37,7 +37,7 @@ NS_CC_BEGIN
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
 
-Application::Application()
+Application::Application() : _animationInterval(16666667)
 {
     CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
@@ -58,6 +58,8 @@ int Application::run()
         return 0;
     }
 
+    std::chrono::steady_clock::time_point lastTime{};
+
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
 
@@ -66,7 +68,21 @@ int Application::run()
 
     while (!glview->windowShouldClose())
     {
+        lastTime = std::chrono::steady_clock::now();
+
         director->mainLoop();
+        glview->pollEvents();
+
+        auto interval = std::chrono::steady_clock::now() - lastTime;
+        if (interval < _animationInterval)
+        {
+            auto waitDuration = _animationInterval - interval;
+            std::this_thread::sleep_for(waitDuration);
+        }
+        else
+        {
+            std::this_thread::yield();
+        }
     }
     /* Only work on Desktop
      *  Director::mainLoop is really one frame logic
@@ -81,6 +97,13 @@ int Application::run()
     }
     glview->release();
     return EXIT_SUCCESS;
+}
+
+void Application::setAnimationInterval(float interval)
+{
+    // TODO do something else
+    _animationInterval =
+        std::chrono::nanoseconds{static_cast<std::chrono::nanoseconds::rep>(std::nano::den * interval)};
 }
 
 void Application::setResourceRootPath(std::string_view rootResDir)

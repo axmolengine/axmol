@@ -2,7 +2,6 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
 
 https://adxeproject.github.io/
 
@@ -29,6 +28,7 @@ THE SOFTWARE.
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 #include <string>
+#include <chrono>
 
 NS_CC_BEGIN
 class Rect;
@@ -45,6 +45,12 @@ public:
      * @lua NA
      */
     virtual ~Application();
+
+    /**
+     @brief Callback by Director for limit FPS.
+     @param interval    The time, which expressed in second in second, between current frame and next.
+     */
+    virtual void setAnimationInterval(float interval) override;
 
     /**
      @brief Run the message loop.
@@ -99,6 +105,7 @@ public:
     virtual Platform getTargetPlatform() override;
 
 protected:
+    std::chrono::nanoseconds _animationInterval;  // nano seconds
     std::string _resourceRootPath;
 
     static Application* sm_pSharedApplication;

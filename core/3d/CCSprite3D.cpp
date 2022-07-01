@@ -52,7 +52,6 @@ static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVerte
 
 Sprite3D* Sprite3D::create()
 {
-    //
     auto sprite = new Sprite3D();
     if (sprite->init())
     {
