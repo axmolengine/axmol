@@ -831,6 +831,7 @@ void Director::replaceScene(Scene* scene)
     _scenesStack.replace(index, scene);
 
     _nextScene = scene;
+    _runningScene = nullptr;
 }
 
 void Director::pushScene(Scene* scene)
@@ -847,7 +848,8 @@ void Director::pushScene(Scene* scene)
     }
 #endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _scenesStack.pushBack(scene);
-    _nextScene = scene;
+    _nextScene    = scene;
+    _runningScene = nullptr;
 }
 
 void Director::popScene()

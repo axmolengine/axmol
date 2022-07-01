@@ -78,16 +78,12 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, fl
 Camera* Camera::getDefaultCamera()
 {
     // camera nullptr scene init fix #690
-    auto scene        = Director::getInstance()->getRunningScene();
-    auto sceneInitRef = Director::getInstance()->getRunningSceneInitRef();
-    if (scene && scene == sceneInitRef)
-    {
-        return scene->getDefaultCamera();
-    }
-    else if (sceneInitRef)
-    {
-        return sceneInitRef->getDefaultCamera();
-    }
+
+    auto scene = Director::getInstance()->getRunningScene();
+
+    CCASSERT(scene, "Scene is not done initializing, please use this->_defaultCamera instead.");
+
+    return scene->getDefaultCamera();
 
     return nullptr;
 }

@@ -153,12 +153,6 @@ public:
     /** Gets the current running Scene. Director can only run one Scene at a time. */
     Scene* getRunningScene() { return _runningScene; }
 
-    /** Sets the current scene being initialized. this is invoked internally in Camera class. */
-    void setRunningSceneInitRef(Scene* scene) { _runningSceneInitRef = scene; }
-
-    /** Gets the current scene being initialized. this is invoked internally in Camera class. */
-    Scene* getRunningSceneInitRef() { return _runningSceneInitRef; }
-
     /** Gets the FPS value. */
     float getAnimationInterval() { return _animationInterval; }
     /** Sets the FPS value. FPS = 1/interval. */
@@ -616,9 +610,6 @@ protected:
 
     /* The running scene */
     Scene* _runningScene = nullptr;
-
-    /* Scene that the director should run with in the next frame to avoid nullptr default cameras on scene initializations. */
-    Scene* _runningSceneInitRef;
 
     /* will be the next 'runningScene' in the next frame
      nextScene is a weak reference. */
