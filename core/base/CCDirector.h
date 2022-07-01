@@ -150,20 +150,26 @@ public:
 
     // attribute
 
-    /** Gets current running Scene. Director can only run one Scene at a time. */
+    /** Gets the current running Scene. Director can only run one Scene at a time. */
     Scene* getRunningScene() { return _runningScene; }
+
+    /** Sets the current scene being initialized. this is invoked internally in Camera class. */
+    void setRunningSceneInitRef(Scene* scene) { _runningSceneInitRef = scene; }
+
+    /** Gets the current scene being initialized. this is invoked internally in Camera class. */
+    Scene* getRunningSceneInitRef() { return _runningSceneInitRef; }
 
     /** Gets the FPS value. */
     float getAnimationInterval() { return _animationInterval; }
     /** Sets the FPS value. FPS = 1/interval. */
     void setAnimationInterval(float interval);
 
-    /** Whether or not displaying the FPS on the bottom-left corner of the screen. */
+    /** Whether or not displaying the FPS on the bottom-left corner of the screen is enabled or not. */
     bool isDisplayStats() { return _displayStats; }
     /** Display the FPS on the bottom-left corner of the screen. */
     void setDisplayStats(bool displayStats) { _displayStats = displayStats; }
 
-    /** Get seconds per frame. */
+    /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
     /**
@@ -599,7 +605,6 @@ protected:
     LabelAtlas* _FPSLabel           = nullptr;
     LabelAtlas* _drawnBatchesLabel  = nullptr;
     LabelAtlas* _drawnVerticesLabel = nullptr;
-    LabelAtlas* _drawnBuffersLabel = nullptr;
 
     /** Whether or not the Director is paused */
     bool _paused = false;
@@ -611,6 +616,9 @@ protected:
 
     /* The running scene */
     Scene* _runningScene = nullptr;
+
+    /* Scene that the director should run with in the next frame to avoid nullptr default cameras on scene initializations. */
+    Scene* _runningSceneInitRef;
 
     /* will be the next 'runningScene' in the next frame
      nextScene is a weak reference. */

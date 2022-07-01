@@ -113,7 +113,6 @@ Mesh::Mesh()
     , _visible(true)
     , _isTransparent(false)
     , _force2DQueue(false)
-    , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
     , _meshIndexData(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
     , _blendDirty(true)
@@ -729,18 +728,12 @@ CustomCommand::PrimitiveType Mesh::getPrimitiveType() const
 
 ssize_t Mesh::getIndexCount() const
 {
-    return _meshIndexData->getIndexBuffer()->getSize() /
-           (meshIndexFormat == CustomCommand::IndexFormat::U_INT ? sizeof(uint32_t) : sizeof(uint16_t));
+    return _meshIndexData->getIndexBuffer()->getSize() / sizeof(uint16_t);
 }
 
 CustomCommand::IndexFormat Mesh::getIndexFormat() const
 {
-    return meshIndexFormat;
-}
-
-void Mesh::setIndexFormat(CustomCommand::IndexFormat indexFormat)
-{
-    meshIndexFormat = indexFormat;
+    return CustomCommand::IndexFormat::U_SHORT;
 }
 
 backend::Buffer* Mesh::getIndexBuffer() const

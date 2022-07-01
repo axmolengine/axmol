@@ -108,8 +108,6 @@ void BufferGL::updateData(void* data, std::size_t size)
 
     if (_buffer)
     {
-        Director::getInstance()->getRenderer()->addModifiedBuffers(1);
-
         if (BufferType::VERTEX == _type)
         {
             glBindBuffer(GL_ARRAY_BUFFER, _buffer);
@@ -137,8 +135,6 @@ void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
 
     if (_buffer)
     {
-        Director::getInstance()->getRenderer()->addModifiedBuffers(1);
-
         CHECK_GL_ERROR_DEBUG();
         if (BufferType::VERTEX == _type)
         {

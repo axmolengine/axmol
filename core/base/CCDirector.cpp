@@ -153,7 +153,6 @@ Director::~Director()
     CC_SAFE_RELEASE(_FPSLabel);
     CC_SAFE_RELEASE(_drawnVerticesLabel);
     CC_SAFE_RELEASE(_drawnBatchesLabel);
-    CC_SAFE_RELEASE(_drawnBuffersLabel);
 
     CC_SAFE_RELEASE(_runningScene);
     CC_SAFE_RELEASE(_notificationNode);
@@ -1020,7 +1019,6 @@ void Director::reset()
     CC_SAFE_RELEASE_NULL(_FPSLabel);
     CC_SAFE_RELEASE_NULL(_drawnBatchesLabel);
     CC_SAFE_RELEASE_NULL(_drawnVerticesLabel);
-    CC_SAFE_RELEASE_NULL(_drawnBuffersLabel);
 
     // purge bitmap cache
     FontFNT::purgeCachedData();
@@ -1185,12 +1183,11 @@ void Director::showStats()
 
     static uint32_t prevCalls = 0;
     static uint32_t prevVerts = 0;
-    static uint32_t prevBuffers = 0;
 
     ++_frames;
     _accumDt += _deltaTime;
 
-    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel && _drawnBuffersLabel)
+    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
         char buffer[30] = {0};
 
@@ -1207,32 +1204,23 @@ void Director::showStats()
 
         auto currentCalls = (uint32_t)_renderer->getDrawnBatches();
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
-        auto currentBuffers = (uint32_t)_renderer->getModifiedBuffers();
         if (currentCalls != prevCalls)
         {
-            sprintf(buffer, "GL calls  :%6u", currentCalls);
+            sprintf(buffer, "GL calls:%6u", currentCalls);
             _drawnBatchesLabel->setString(buffer);
             prevCalls = currentCalls;
         }
 
         if (currentVerts != prevVerts)
         {
-            sprintf(buffer, "GL verts  :%6u", currentVerts);
+            sprintf(buffer, "GL verts:%6u", currentVerts);
             _drawnVerticesLabel->setString(buffer);
             prevVerts = currentVerts;
-        }
-
-        if (currentBuffers != prevBuffers)
-        {
-            sprintf(buffer, "GL buffers:%6u", currentBuffers);
-            _drawnBuffersLabel->setString(buffer);
-            prevBuffers = currentBuffers;
         }
 
         const Mat4& identity = Mat4::IDENTITY;
         _drawnVerticesLabel->visit(_renderer, identity, 0);
         _drawnBatchesLabel->visit(_renderer, identity, 0);
-        _drawnBuffersLabel->visit(_renderer, identity, 0);
         _FPSLabel->visit(_renderer, identity, 0);
     }
 }
@@ -1260,18 +1248,15 @@ void Director::createStatsLabel()
     std::string fpsString          = "00.0";
     std::string drawBatchString    = "000";
     std::string drawVerticesString = "00000";
-    std::string drawBuffersString  = "000";
     if (_FPSLabel)
     {
         fpsString          = _FPSLabel->getString();
         drawBatchString    = _drawnBatchesLabel->getString();
         drawVerticesString = _drawnVerticesLabel->getString();
-        drawBuffersString  = _drawnBuffersLabel->getString();
 
         CC_SAFE_RELEASE_NULL(_FPSLabel);
         CC_SAFE_RELEASE_NULL(_drawnBatchesLabel);
         CC_SAFE_RELEASE_NULL(_drawnVerticesLabel);
-        CC_SAFE_RELEASE_NULL(_drawnBuffersLabel);
         _textureCache->removeTextureForKey("/cc_fps_images");
         FileUtils::getInstance()->purgeCachedEntries();
     }
@@ -1318,14 +1303,8 @@ void Director::createStatsLabel()
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
     _drawnVerticesLabel->setScale(scaleFactor);
 
-    _drawnBuffersLabel = LabelAtlas::create(drawVerticesString, texture, 12, 32, '.');
-    _drawnBuffersLabel->retain();
-    _drawnBuffersLabel->setIgnoreContentScaleFactor(true);
-    _drawnBuffersLabel->setScale(scaleFactor);
-
     auto safeOrigin          = getSafeAreaRect().origin;
     const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
-    _drawnBuffersLabel->setPosition(Vec2(0, height_spacing * 3.0f) + safeOrigin);
     _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + safeOrigin);
     _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + safeOrigin);
     _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + safeOrigin);
