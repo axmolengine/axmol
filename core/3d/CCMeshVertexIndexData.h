@@ -112,7 +112,7 @@ class CC_DLL MeshVertexData : public Ref
 
 public:
     /**create*/
-    static MeshVertexData* create(const MeshData& meshdata);
+    static MeshVertexData* create(const MeshData& meshdata, CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /** get vertexbuffer */
     backend::Buffer* getVertexBuffer() const { return _vertexBuffer; }

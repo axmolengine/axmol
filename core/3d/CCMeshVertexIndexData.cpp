@@ -108,7 +108,7 @@ void MeshVertexData::setVertexData(const std::vector<float>& vertexData)
 #endif
 }
 
-MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
+MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::IndexFormat format)
 {
     auto vertexdata           = new MeshVertexData();
     vertexdata->_vertexBuffer = backend::Device::getInstance()->newBuffer(
@@ -132,14 +132,21 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
     bool needCalcAABB = (meshdata.subMeshAABB.size() != meshdata.subMeshIndices.size());
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
-        auto& index      = meshdata.subMeshIndices[i];
+        auto& index = meshdata.subMeshIndices[i];
+        auto indexSize = format == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t);
         auto indexBuffer = backend::Device::getInstance()->newBuffer(
-            index.size() * sizeof(index[0]), backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+            index.size() * indexSize, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        indexBuffer->updateData((void*)index.data(), index.size() * sizeof(index[0]));
+        if (format == CustomCommand::IndexFormat::U_SHORT)
+        {
+            std::vector<unsigned short> shortIndexFormat(index.begin(), index.end());
+            indexBuffer->updateData((void*)shortIndexFormat.data(), shortIndexFormat.size() * indexSize);
+        }
+        else
+            indexBuffer->updateData((void*)index.data(), index.size() * indexSize);
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;
