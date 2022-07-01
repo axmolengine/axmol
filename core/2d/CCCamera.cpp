@@ -445,7 +445,6 @@ void Camera::applyCustomProperties()
     }
 
     auto& size = _director->getWinSize();
-    // create default camera
     switch (_projectionType)
     {
     case Director::Projection::_2D:
