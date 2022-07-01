@@ -764,7 +764,8 @@ void Renderer::flush2D()
 
 void Renderer::flush3D()
 {
-    // TODO 3d batch rendering
+    // TODO 3d instanced rendering
+    // https://learnopengl.com/Advanced-OpenGL/Instancing
 }
 
 void Renderer::flushTriangles()
