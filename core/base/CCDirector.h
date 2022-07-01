@@ -131,6 +131,22 @@ public:
     };
 
     /**
+     * @brief FPS dpositions on display like the numbers on the numpad
+     */
+    enum FPSPosition
+    {
+        LEFTBOTTOM   = 1,
+        LEFTMIDDLE   = 4,
+        LEFTTOP      = 7,
+        RIGHTBOTTOM  = 3,
+        RIGHTMIDDLE  = 6,
+        RIGHTTOP     = 9,
+        MIDDLEBOTTOM = 2,
+        MIDDLEMIDDLE = 5,
+        MIDDLETOP    = 8,
+    } _FPSPosition;
+
+    /**
      * Returns a shared instance of the director.
      * @js _getInstance
      */
@@ -165,6 +181,11 @@ public:
 
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
+
+    /** Set the FPS position like a numpad [1-9] on display. */
+    void setFPSPos(FPSPosition FPSposition = FPSPosition::LEFTBOTTOM);
+
+    /** Sets the FPS value. */
 
     /**
      * Get the GLView.
