@@ -77,13 +77,11 @@ Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, fl
 
 Camera* Camera::getDefaultCamera()
 {
-    // camera nullptr scene init fix #690
-
     auto scene = Director::getInstance()->getRunningScene();
-
-    CCASSERT(scene, "Scene is not done initializing, please use this->_defaultCamera instead.");
-
-    return scene->getDefaultCamera();
+    if (scene)
+    {
+        return scene->getDefaultCamera();
+    }
 
     return nullptr;
 }
@@ -445,17 +443,23 @@ void Camera::applyCustomProperties()
     }
 
     auto& size = _director->getWinSize();
+    // create default camera
     switch (_projectionType)
     {
     case Director::Projection::_2D:
     {
         initOrthographic(size.width, size.height, _nearPlane, _farPlane);
+        setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
         break;
     }
     case Director::Projection::_3D:
     {
+        float zeye = _director->getZEye();
         initPerspective(_fieldOfView, _aspectRatio, _nearPlane, _farPlane);
-        _eyeZdistance = _director->getZEye();
+        Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+            up(0.0f, 1.0f, 0.0f);
+        _eyeZdistance = eye.z;
+        setPosition3D(eye);
         break;
     }
     }

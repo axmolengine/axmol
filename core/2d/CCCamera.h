@@ -375,8 +375,7 @@ protected:
     static Camera* _visitingCamera;
     static Viewport _defaultViewport;
 
-    //* Scene that owns this camera.
-    Scene* _scene = nullptr;
+    Scene* _scene = nullptr;  // Scene that owns this camera.
     Mat4 _projection;
     mutable Mat4 _view;
     mutable Mat4 _viewInv;

@@ -150,7 +150,7 @@ public:
 
     // attribute
 
-    /** Gets the current running Scene. Director can only run one Scene at a time. */
+    /** Gets current running Scene. Director can only run one Scene at a time. */
     Scene* getRunningScene() { return _runningScene; }
 
     /** Gets the FPS value. */
@@ -158,12 +158,12 @@ public:
     /** Sets the FPS value. FPS = 1/interval. */
     void setAnimationInterval(float interval);
 
-    /** Whether or not displaying the FPS on the bottom-left corner of the screen is enabled or not. */
+    /** Whether or not displaying the FPS on the bottom-left corner of the screen. */
     bool isDisplayStats() { return _displayStats; }
     /** Display the FPS on the bottom-left corner of the screen. */
     void setDisplayStats(bool displayStats) { _displayStats = displayStats; }
 
-    /** Gets the seconds per frame. */
+    /** Get seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
     /**
