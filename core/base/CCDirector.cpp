@@ -1305,9 +1305,47 @@ void Director::createStatsLabel()
 
     auto safeOrigin          = getSafeAreaRect().origin;
     const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
-    _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + safeOrigin);
-    _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + safeOrigin);
-    _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + safeOrigin);
+
+
+    Vec2 _fpsPosition = {100, 0};  
+
+    switch (_FPSPosition)
+    {
+    case FPSPosition::LEFTBOTTOM:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::LEFTMIDDLE:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::LEFTTOP:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::RIGHTBOTTOM:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::RIGHTMIDDLE:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::RIGHTTOP:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::MIDDLEBOTTOM:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::MIDDLEMIDDLE:
+        _fpsPosition = {0, 0};
+        break;
+    case FPSPosition::MIDDLETOP:
+        _fpsPosition = {0, 0};
+        break;
+    default:
+        _fpsPosition = {0, 0};
+        break;
+    }
+    _fpsPosition = {100, 0};  
+    _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + safeOrigin + _fpsPosition);
+    _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + safeOrigin + _fpsPosition);
+    _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + safeOrigin + _fpsPosition);
 }
 
 #endif  // #if !CC_STRIP_FPS

@@ -130,6 +130,21 @@ public:
         DEFAULT = _3D,
     };
 
+    enum FPSPosition
+    {
+        LEFTBOTTOM   = 1,
+        LEFTMIDDLE   = 4,
+        LEFTTOP      = 7,
+        RIGHTBOTTOM  = 3,
+        RIGHTMIDDLE  = 6,
+        RIGHTTOP     = 9,
+        MIDDLEBOTTOM = 2,
+        MIDDLEMIDDLE = 5,
+        MIDDLETOP    = 8,
+    } _FPSPosition;
+
+
+
     /**
      * Returns a shared instance of the director.
      * @js _getInstance
