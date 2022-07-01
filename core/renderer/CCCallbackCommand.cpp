@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -41,6 +42,15 @@ void CallbackCommand::init(float globalOrder)
 void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned int flags)
 {
     RenderCommand::init(globalOrder, transform, flags);
+}
+
+void CallbackCommand::reset()
+{
+    _globalOrder = 0.0f;
+    _isTransparent = true;
+    _skipBatching = false;
+    _is3D = false;
+    _depth = 0.0f;
 }
 
 void CallbackCommand::execute()

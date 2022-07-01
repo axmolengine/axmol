@@ -2,6 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -871,6 +872,7 @@ CallbackCommand* Renderer::nextCallbackCommand()
     if (!_callbackCommandsPool.empty())
     {
         cmd = _callbackCommandsPool.back();
+        cmd->reset();
         _callbackCommandsPool.pop_back();
     }
     else
