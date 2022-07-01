@@ -847,7 +847,7 @@ void Director::pushScene(Scene* scene)
     }
 #endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _scenesStack.pushBack(scene);
-    _nextScene = scene;
+    _nextScene    = scene;
 }
 
 void Director::popScene()
