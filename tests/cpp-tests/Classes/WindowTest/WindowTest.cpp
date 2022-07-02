@@ -72,6 +72,7 @@ bool WindowTestFullscreen1::init()
     // correct with full screen window size
     GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
     view->setFullscreen();
+    Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTMIDDLE);
     return WindowTest::init();
 }
 
