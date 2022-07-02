@@ -23,22 +23,36 @@
  ****************************************************************************/
  
 
-const char* CC2D_sprite_vert = R"(
-                                              
-attribute vec4 a_position;
-attribute vec4 a_color;
-attribute vec2 a_texCoord;
+const char* CC2D_quadTexture_frag = R"(
 
-varying vec2 TextureCoordOut;
+#ifdef GL_ES
+varying mediump vec2 TextureCoordOut;
+varying mediump vec4 ColorOut;
+#else
 varying vec4 ColorOut;
+varying vec2 TextureCoordOut;
+#endif
+uniform vec4 u_color;
 
-uniform mat4 u_PMatrix;
-void main()
+uniform sampler2D u_texture;
+
+void main(void)
 {
-    ColorOut = a_color;
-    TextureCoordOut = a_texCoord;
-    TextureCoordOut.y = 1.0 - TextureCoordOut.y;
-    gl_Position = u_PMatrix * a_position;
+    gl_FragColor = texture2D(u_texture, TextureCoordOut) * ColorOut * u_color;
 }
+)";
 
+const char* CC2D_quadColor_frag = R"(
+
+#ifdef GL_ES
+varying mediump vec4 ColorOut;
+#else
+varying vec4 ColorOut;
+#endif
+uniform vec4 u_color;
+
+void main(void)
+{
+    gl_FragColor = ColorOut * u_color;
+}
 )";
