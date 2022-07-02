@@ -135,15 +135,15 @@ public:
      */
     enum FPSPosition
     {
-        LEFTBOTTOM   = 1,
-        LEFTMIDDLE   = 4,
-        LEFTTOP      = 7,
-        RIGHTBOTTOM  = 3,
-        RIGHTMIDDLE  = 6,
-        RIGHTTOP     = 9,
-        MIDDLEBOTTOM = 2,
-        MIDDLEMIDDLE = 5,
-        MIDDLETOP    = 8,
+        TOP_LEFT       = 7,
+        TOP_CENTER     = 8,
+        TOP_RIGHT      = 9,
+        CENTER_LEFT    = 4,
+        CENTER         = 5,
+        CENTER_RIGHT   = 6,
+        BOTTOM_LEFT    = 1,
+        BOTTOM_CENTER  = 2,
+        BOTTOM_RIGHT   = 3
     } _FPSPosition;
 
     /**
@@ -183,7 +183,7 @@ public:
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
     /** Set the FPS position like a numpad [1-9] on display. */
-    void setFPSPos(FPSPosition FPSposition = FPSPosition::LEFTBOTTOM);
+    void setFPSPos(FPSPosition FPSposition = FPSPosition::BOTTOM_LEFT);
 
     /** Sets the FPS value. */
 
