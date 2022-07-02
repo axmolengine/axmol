@@ -205,31 +205,31 @@ void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             dir = 3;
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_1:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTBOTTOM);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_LEFT);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_4:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTMIDDLE);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::CENTER_LEFT);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_7:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTTOP);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_LEFT);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_8:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLETOP);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_CENTER);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_9:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTTOP);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_RIGHT);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_6:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTMIDDLE);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::CENTER_RIGHT);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_3:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTBOTTOM);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_RIGHT);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_2:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLEBOTTOM);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_CENTER);
         break;
     case cocos2d::EventKeyboard::KeyCode::KEY_5:
-        Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLEMIDDLE);
+        Director::getInstance()->setFPSPos(Director::FPSPosition::CENTER);
         break;
     default:
         break;
