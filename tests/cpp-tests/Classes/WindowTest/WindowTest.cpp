@@ -46,7 +46,6 @@ void WindowTestWindowed1::onEnter()
 {
     WindowTest::onEnter();
     GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-    Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_RIGHT);
     view->setWindowed(480, 320);
 }
 

@@ -144,7 +144,7 @@ public:
         BOTTOM_LEFT    = 1,
         BOTTOM_CENTER  = 2,
         BOTTOM_RIGHT   = 3
-    } _FPSPosition;
+    };
 
     /**
      * Returns a shared instance of the director.
