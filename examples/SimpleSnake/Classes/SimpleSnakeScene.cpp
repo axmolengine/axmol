@@ -204,6 +204,33 @@ void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         if (dir != 0)
             dir = 3;
         break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_1:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTBOTTOM);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_4:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTMIDDLE);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_7:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::LEFTTOP);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_8:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLETOP);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_9:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTTOP);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_6:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTMIDDLE);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_3:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::RIGHTBOTTOM);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_2:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLEBOTTOM);
+        break;
+    case cocos2d::EventKeyboard::KeyCode::KEY_5:
+        Director::getInstance()->setFPSPos(Director::FPSPosition::MIDDLEMIDDLE);
+        break;
     default:
         break;
     }
