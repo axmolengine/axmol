@@ -147,7 +147,7 @@ struct MeshData
 public:
     /**
      * Get per vertex size
-     * @return return the sum of each vertex's all attribute size.
+     * @return return the sum size of all vertex attributes.
      */
     int getPerVertexSize() const
     {

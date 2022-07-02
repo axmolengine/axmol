@@ -142,8 +142,8 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
 #endif
         if (format == CustomCommand::IndexFormat::U_SHORT)
         {
-            std::vector<unsigned short> shortIndexFormat(index.begin(), index.end());
-            indexBuffer->updateData((void*)shortIndexFormat.data(), shortIndexFormat.size() * indexSize);
+            std::vector<unsigned short> shortIndex(index.begin(), index.end());
+            indexBuffer->updateData((void*)shortIndex.data(), shortIndex.size() * indexSize);
         }
         else
             indexBuffer->updateData((void*)index.data(), index.size() * indexSize);

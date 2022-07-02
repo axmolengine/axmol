@@ -599,7 +599,6 @@ protected:
     LabelAtlas* _FPSLabel           = nullptr;
     LabelAtlas* _drawnBatchesLabel  = nullptr;
     LabelAtlas* _drawnVerticesLabel = nullptr;
-    LabelAtlas* _drawnBuffersLabel = nullptr;
 
     /** Whether or not the Director is paused */
     bool _paused = false;

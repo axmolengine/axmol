@@ -431,6 +431,8 @@ struct ProgramType
         PARTICLE_TEXTURE_3D,                   // CC3D_particle_vert,                   CC3D_particleTexture_frag
         PARTICLE_COLOR_3D,                     // CC3D_particle_vert,                   CC3D_particleColor_frag
 
+        SPRITE_TEXTURE_2D,                     // CC2D_sprite_vert,                     CC3D_particle_frag
+
         HSV,
         HSV_DUAL_SAMPLER,
         HSV_ETC1 = HSV_DUAL_SAMPLER,
