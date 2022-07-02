@@ -1206,14 +1206,14 @@ void Director::showStats()
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
         if (currentCalls != prevCalls)
         {
-            sprintf(buffer, "GL calls  :%6u", currentCalls);
+            sprintf(buffer, "GL calls:%6u", currentCalls);
             _drawnBatchesLabel->setString(buffer);
             prevCalls = currentCalls;
         }
 
         if (currentVerts != prevVerts)
         {
-            sprintf(buffer, "GL verts  :%6u", currentVerts);
+            sprintf(buffer, "GL verts:%6u", currentVerts);
             _drawnVerticesLabel->setString(buffer);
             prevVerts = currentVerts;
         }
