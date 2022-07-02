@@ -23,21 +23,22 @@
  ****************************************************************************/
  
 
-const char* CC2D_spriteTexture_frag = R"(
+const char* CC2D_quad_vert = R"(
+                                              
+attribute vec4 a_position;
+attribute vec4 a_color;
+attribute vec2 a_texCoord;
 
-#ifdef GL_ES
-varying mediump vec2 TextureCoordOut;
-varying mediump vec4 ColorOut;
-#else
-varying vec4 ColorOut;
 varying vec2 TextureCoordOut;
-#endif
-uniform vec4 u_color;
+varying vec4 ColorOut;
 
-uniform sampler2D u_texture;
-
-void main(void)
+uniform mat4 u_PMatrix;
+void main()
 {
-    gl_FragColor = texture2D(u_texture, TextureCoordOut) * ColorOut * u_color;
+    ColorOut = a_color;
+    TextureCoordOut = a_texCoord;
+    TextureCoordOut.y = 1.0 - TextureCoordOut.y;
+    gl_Position = u_PMatrix * a_position;
 }
+
 )";

@@ -123,7 +123,8 @@ bool ProgramCache::init()
     registerProgramFactory(ProgramType::TERRAIN_3D, CC3D_terrain_vert, CC3D_terrain_frag);
     registerProgramFactory(ProgramType::PARTICLE_TEXTURE_3D, CC3D_particle_vert, CC3D_particleTexture_frag);
     registerProgramFactory(ProgramType::PARTICLE_COLOR_3D, CC3D_particle_vert, CC3D_particleColor_frag);
-    registerProgramFactory(ProgramType::SPRITE_TEXTURE_2D, CC2D_sprite_vert, CC2D_spriteTexture_frag);
+    registerProgramFactory(ProgramType::QUAD_COLOR_2D, CC2D_quad_vert, CC2D_quadColor_frag);
+    registerProgramFactory(ProgramType::QUAD_TEXTURE_2D, CC2D_quad_vert, CC2D_quadTexture_frag);
     registerProgramFactory(ProgramType::HSV, positionTextureColor_vert, hsv_frag);
     registerProgramFactory(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag);
 

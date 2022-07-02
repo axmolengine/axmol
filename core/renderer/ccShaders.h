@@ -78,8 +78,9 @@ extern CC_DLL const char* CC3D_skybox_vert;
 extern CC_DLL const char* CC3D_terrain_frag;
 extern CC_DLL const char* CC3D_terrain_vert;
 
-extern CC_DLL const char* CC2D_spriteTexture_frag;
-extern CC_DLL const char* CC2D_sprite_vert;
+extern CC_DLL const char* CC2D_quadTexture_frag;
+extern CC_DLL const char* CC2D_quadColor_frag;
+extern CC_DLL const char* CC2D_quad_vert;
 
 extern CC_DLL const char* hsv_frag;
 extern CC_DLL const char* dualSampler_hsv_frag;
