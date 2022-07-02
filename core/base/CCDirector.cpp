@@ -1318,7 +1318,7 @@ void Director::setFPSPos(FPSPosition FPSposition)
 
     if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
-        auto safeOri22gin          = getSafeAreaRect().origin;
+        auto safeOrigin          = getSafeAreaRect().origin;
         auto safeSize          = getSafeAreaRect().size;
         const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
 
@@ -1386,9 +1386,9 @@ void Director::setFPSPos(FPSPosition FPSposition)
             break;
         }
 
-        _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + _fpsPosition);
-        _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + _fpsPosition);
-        _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + _fpsPosition);
+        _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + _fpsPosition + safeOrigin);
+        _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + _fpsPosition + safeOrigin);
+        _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + _fpsPosition + safeOrigin);
     }
 }
 
