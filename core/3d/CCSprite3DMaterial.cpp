@@ -51,6 +51,8 @@ Sprite3DMaterial* Sprite3DMaterial::_vertexLitMaterialSkin     = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_diffuseMaterialSkin       = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_bumpedDiffuseMaterialSkin = nullptr;
 
+Sprite3DMaterial* Sprite3DMaterial::_spriteMaterial = nullptr;
+
 backend::ProgramState* Sprite3DMaterial::_unLitMaterialProgState         = nullptr;
 backend::ProgramState* Sprite3DMaterial::_unLitNoTexMaterialProgState    = nullptr;
 backend::ProgramState* Sprite3DMaterial::_vertexLitMaterialProgState     = nullptr;
@@ -62,6 +64,8 @@ backend::ProgramState* Sprite3DMaterial::_unLitMaterialSkinProgState         = n
 backend::ProgramState* Sprite3DMaterial::_vertexLitMaterialSkinProgState     = nullptr;
 backend::ProgramState* Sprite3DMaterial::_diffuseMaterialSkinProgState       = nullptr;
 backend::ProgramState* Sprite3DMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
+
+backend::ProgramState* Sprite3DMaterial::_spriteMaterialProgState            = nullptr;
 
 void Sprite3DMaterial::createBuiltInMaterial()
 {
@@ -128,6 +132,14 @@ void Sprite3DMaterial::createBuiltInMaterial()
         _bumpedDiffuseMaterialSkin->initWithProgramState(_bumpedDiffuseMaterialSkinProgState))
     {
         _bumpedDiffuseMaterialSkin->_type = Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE;
+    }
+
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::SPRITE_TEXTURE_2D);
+    _spriteMaterialProgState = new backend::ProgramState(program);
+    _spriteMaterial          = new Sprite3DMaterial();
+    if (_spriteMaterial && _spriteMaterial->initWithProgramState(_spriteMaterialProgState))
+    {
+        _spriteMaterial->_type = Sprite3DMaterial::MaterialType::SPRITE;
     }
 }
 
@@ -214,7 +226,7 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
         break;
 
     case Sprite3DMaterial::MaterialType::VERTEX_LIT:
-        CCASSERT(0, "not implement");
+        CCASSERT(0, "not implemented");
         break;
 
     case Sprite3DMaterial::MaterialType::DIFFUSE:
@@ -227,6 +239,10 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
 
     case Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE:
         material = skinned ? _bumpedDiffuseMaterialSkin : _bumpedDiffuseMaterial;
+        break;
+
+    case Sprite3DMaterial::MaterialType::SPRITE:
+        material = _spriteMaterial;
         break;
 
     default:

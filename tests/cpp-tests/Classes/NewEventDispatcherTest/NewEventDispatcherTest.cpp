@@ -468,39 +468,6 @@ void LabelKeyboardEventTest::onEnter()
         sprintf(buf, "Key %d was pressed!", (int)keyCode);
         auto label = static_cast<Label*>(event->getCurrentTarget());
         label->setString(buf);
-
-        switch (keyCode)
-        {
-        case cocos2d::EventKeyboard::KeyCode::KEY_1:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_LEFT);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_4:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::CENTER_LEFT);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_7:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_LEFT);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_8:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_CENTER);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_9:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::TOP_RIGHT);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_6:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::CENTER_RIGHT);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_3:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_RIGHT);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_2:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_CENTER);
-            break;
-        case cocos2d::EventKeyboard::KeyCode::KEY_5:
-            Director::getInstance()->setFPSPos(Director::FPSPosition::CENTER);
-            break;
-        default:
-            break;
-        }
     };
 
     listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
@@ -520,7 +487,7 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-    return "Please click keyboard: [1-9] set FPS position!";
+    return "Please click keyboard\n(Only available on Desktop, Android\nand Windows Universal Apps)";
 }
 
 // SpriteAccelerationEventTest

@@ -134,7 +134,7 @@ struct NodeDatas
  */
 struct MeshData
 {
-    typedef std::vector<unsigned short> IndexArray;
+    typedef std::vector<unsigned int> IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
@@ -147,7 +147,7 @@ struct MeshData
 public:
     /**
      * Get per vertex size
-     * @return return the sum of each vertex's all attribute size.
+     * @return return the sum size of all vertex attributes.
      */
     int getPerVertexSize() const
     {
