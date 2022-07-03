@@ -1303,13 +1303,18 @@ void Director::createStatsLabel()
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
     _drawnVerticesLabel->setScale(scaleFactor);
 
-    setFPSPos();
+    setStatsAnchor();
 }
 
-// Set the FPS position on disply like the numbers on numpad
-void Director::setFPSPos(FPSPosition fpsPosition)
+void Director::setStatsAnchor(AnchorPreset fpsPosition)
 {
-    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
+    if (!_displayStats)
+        return;
+    
+    // Initialize stat counters
+    if (!_FPSLabel)
+        showStats();
+
     {
         static Vec2 _fpsPosition          = {0, 0};
         auto safeOrigin        = getSafeAreaRect().origin;
@@ -1318,55 +1323,55 @@ void Director::setFPSPos(FPSPosition fpsPosition)
 
         switch (fpsPosition)
         {
-         case FPSPosition::BOTTOM_LEFT:
+        case AnchorPreset::BOTTOM_LEFT:
             _fpsPosition = Vec2(0, 0);
             _drawnVerticesLabel->setAnchorPoint({0, 0});
             _drawnBatchesLabel->setAnchorPoint({0, 0});
             _FPSLabel->setAnchorPoint({0, 0});
             break;
-         case FPSPosition::CENTER_LEFT:
+        case AnchorPreset::CENTER_LEFT:
             _fpsPosition = Vec2(0, safeSize.height / 2 - height_spacing * 1.5);
             _drawnVerticesLabel->setAnchorPoint({0, 0.0});
             _drawnBatchesLabel->setAnchorPoint({0, 0.0});
             _FPSLabel->setAnchorPoint({0, 0});
             break;
-        case FPSPosition::TOP_LEFT:
+        case AnchorPreset::TOP_LEFT:
             _fpsPosition = Vec2(0, safeSize.height - height_spacing * 3);
             _drawnVerticesLabel->setAnchorPoint({0, 0});
             _drawnBatchesLabel->setAnchorPoint({0, 0});
             _FPSLabel->setAnchorPoint({0, 0});
             break;
-        case FPSPosition::BOTTOM_RIGHT:
+        case AnchorPreset::BOTTOM_RIGHT:
             _fpsPosition = Vec2(safeSize.width, 0);
             _drawnVerticesLabel->setAnchorPoint({1, 0});
             _drawnBatchesLabel->setAnchorPoint({1, 0});
             _FPSLabel->setAnchorPoint({1, 0});
             break;
-        case FPSPosition::CENTER_RIGHT:
+        case AnchorPreset::CENTER_RIGHT:
             _fpsPosition = Vec2(safeSize.width, safeSize.height / 2 - height_spacing * 1.5);
             _drawnVerticesLabel->setAnchorPoint({1, 0.0});
             _drawnBatchesLabel->setAnchorPoint({1, 0.0});
             _FPSLabel->setAnchorPoint({1, 0.0});
             break;
-        case FPSPosition::TOP_RIGHT:
+        case AnchorPreset::TOP_RIGHT:
             _fpsPosition = Vec2(safeSize.width, safeSize.height - height_spacing * 3);
             _drawnVerticesLabel->setAnchorPoint({1, 0});
             _drawnBatchesLabel->setAnchorPoint({1, 0});
             _FPSLabel->setAnchorPoint({1, 0});
             break;
-        case FPSPosition::BOTTOM_CENTER:
+        case AnchorPreset::BOTTOM_CENTER:
             _fpsPosition = Vec2(safeSize.width / 2, 0);
             _drawnVerticesLabel->setAnchorPoint({0.5, 0});
             _drawnBatchesLabel->setAnchorPoint({0.5, 0});
             _FPSLabel->setAnchorPoint({0.5, 0});
             break;
-        case FPSPosition::CENTER:
+        case AnchorPreset::CENTER:
             _fpsPosition = Vec2(safeSize.width / 2, safeSize.height / 2 - height_spacing * 1.5);
             _drawnVerticesLabel->setAnchorPoint({0.5, 0.0});
             _drawnBatchesLabel->setAnchorPoint({0.5, 0.0});
             _FPSLabel->setAnchorPoint({0.5, 0.0});
             break;
-        case FPSPosition::TOP_CENTER:
+        case AnchorPreset::TOP_CENTER:
             _fpsPosition = Vec2(safeSize.width / 2, safeSize.height - height_spacing * 3);
             _drawnVerticesLabel->setAnchorPoint({0.5, 0});
             _drawnBatchesLabel->setAnchorPoint({0.5, 0});
