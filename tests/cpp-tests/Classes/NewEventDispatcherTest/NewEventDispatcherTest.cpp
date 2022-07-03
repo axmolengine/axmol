@@ -600,12 +600,12 @@ void LabelKeyboardEventTest::onEnter()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, statusLabel);
 #else
     auto& layerSize = this->getContentSize();
-    static Director::FPSPosition posType = Director::FPSPosition::BOTTOM_LEFT;
-    posType = Director::FPSPosition::BOTTOM_LEFT;
+    static FPSPosition posType = FPSPosition::BOTTOM_LEFT;
+    posType = FPSPosition::BOTTOM_LEFT;
     auto playPrev = TextButton::create("Show Fps Prev Pos", [=](TextButton* button) {
-        if (posType > Director::FPSPosition::BOTTOM_LEFT)
+        if (posType > FPSPosition::BOTTOM_LEFT)
         {
-            posType = static_cast<Director::FPSPosition>((int)posType - 1);
+            posType = static_cast<FPSPosition>((int)posType - 1);
             Director::getInstance()->setFPSPos(posType);
         }
     });
@@ -613,15 +613,15 @@ void LabelKeyboardEventTest::onEnter()
     addChild(playPrev);
 
     auto playNext = TextButton::create("Show Fps Next Pos", [=](TextButton* button) {
-        if (posType < Director::FPSPosition::TOP_RIGHT)
+        if (posType < FPSPosition::TOP_RIGHT)
         {
-            posType = static_cast<Director::FPSPosition>((int)posType + 1);
+            posType = static_cast<FPSPosition>((int)posType + 1);
             Director::getInstance()->setFPSPos(posType);
         }
     });
     playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
     addChild(playNext);
-    Director::getInstance()->setFPSPos(Director::FPSPosition::BOTTOM_LEFT);
+    Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
 #endif
 }
 

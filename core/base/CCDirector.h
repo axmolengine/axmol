@@ -77,6 +77,23 @@ enum class MATRIX_STACK_TYPE
     MATRIX_STACK_TEXTURE
 };
 
+
+/**
+ * @brief FPS dpositions on display like the numbers on the numpad
+ */
+enum FPSPosition
+{
+    TOP_LEFT       = 7,
+    TOP_CENTER     = 8,
+    TOP_RIGHT      = 9,
+    CENTER_LEFT    = 4,
+    CENTER         = 5,
+    CENTER_RIGHT   = 6,
+    BOTTOM_LEFT    = 1,
+    BOTTOM_CENTER  = 2,
+    BOTTOM_RIGHT   = 3
+};
+
 /**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
@@ -128,22 +145,6 @@ public:
 
         /// Default projection is 3D projection.
         DEFAULT = _3D,
-    };
-
-    /**
-     * @brief FPS dpositions on display like the numbers on the numpad
-     */
-    enum FPSPosition
-    {
-        TOP_LEFT       = 7,
-        TOP_CENTER     = 8,
-        TOP_RIGHT      = 9,
-        CENTER_LEFT    = 4,
-        CENTER         = 5,
-        CENTER_RIGHT   = 6,
-        BOTTOM_LEFT    = 1,
-        BOTTOM_CENTER  = 2,
-        BOTTOM_RIGHT   = 3
     };
 
     /**
