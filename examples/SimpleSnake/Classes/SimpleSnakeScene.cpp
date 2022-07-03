@@ -188,47 +188,47 @@ void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
     switch (keyCode)
     {
-    case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+    case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
         if (dir != 2)
             dir = 1;
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+    case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
         if (dir != 1)
             dir = 2;
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
+    case EventKeyboard::KeyCode::KEY_UP_ARROW:
         if (dir != 3)
             dir = 0;
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+    case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
         if (dir != 0)
             dir = 3;
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_1:
+    case EventKeyboard::KeyCode::KEY_1:
         Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_4:
+    case EventKeyboard::KeyCode::KEY_4:
         Director::getInstance()->setFPSPos(FPSPosition::CENTER_LEFT);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_7:
+    case EventKeyboard::KeyCode::KEY_7:
         Director::getInstance()->setFPSPos(FPSPosition::TOP_LEFT);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_8:
+    case EventKeyboard::KeyCode::KEY_8:
         Director::getInstance()->setFPSPos(FPSPosition::TOP_CENTER);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_9:
+    case EventKeyboard::KeyCode::KEY_9:
         Director::getInstance()->setFPSPos(FPSPosition::TOP_RIGHT);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_6:
+    case EventKeyboard::KeyCode::KEY_6:
         Director::getInstance()->setFPSPos(FPSPosition::CENTER_RIGHT);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_3:
+    case EventKeyboard::KeyCode::KEY_3:
         Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_RIGHT);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_2:
+    case EventKeyboard::KeyCode::KEY_2:
         Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_CENTER);
         break;
-    case cocos2d::EventKeyboard::KeyCode::KEY_5:
+    case EventKeyboard::KeyCode::KEY_5:
         Director::getInstance()->setFPSPos(FPSPosition::CENTER);
         break;
     default:
