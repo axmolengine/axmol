@@ -51,6 +51,9 @@ Sprite3DMaterial* Sprite3DMaterial::_vertexLitMaterialSkin     = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_diffuseMaterialSkin       = nullptr;
 Sprite3DMaterial* Sprite3DMaterial::_bumpedDiffuseMaterialSkin = nullptr;
 
+Sprite3DMaterial* Sprite3DMaterial::_quadTextureMaterial = nullptr;
+Sprite3DMaterial* Sprite3DMaterial::_quadColorMaterial = nullptr;
+
 backend::ProgramState* Sprite3DMaterial::_unLitMaterialProgState         = nullptr;
 backend::ProgramState* Sprite3DMaterial::_unLitNoTexMaterialProgState    = nullptr;
 backend::ProgramState* Sprite3DMaterial::_vertexLitMaterialProgState     = nullptr;
@@ -62,6 +65,9 @@ backend::ProgramState* Sprite3DMaterial::_unLitMaterialSkinProgState         = n
 backend::ProgramState* Sprite3DMaterial::_vertexLitMaterialSkinProgState     = nullptr;
 backend::ProgramState* Sprite3DMaterial::_diffuseMaterialSkinProgState       = nullptr;
 backend::ProgramState* Sprite3DMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
+
+backend::ProgramState* Sprite3DMaterial::_quadTextureMaterialProgState            = nullptr;
+backend::ProgramState* Sprite3DMaterial::_quadColorMaterialProgState            = nullptr;
 
 void Sprite3DMaterial::createBuiltInMaterial()
 {
@@ -128,6 +134,22 @@ void Sprite3DMaterial::createBuiltInMaterial()
         _bumpedDiffuseMaterialSkin->initWithProgramState(_bumpedDiffuseMaterialSkinProgState))
     {
         _bumpedDiffuseMaterialSkin->_type = Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE;
+    }
+
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::QUAD_TEXTURE_2D);
+    _quadTextureMaterialProgState = new backend::ProgramState(program);
+    _quadTextureMaterial          = new Sprite3DMaterial();
+    if (_quadTextureMaterial && _quadTextureMaterial->initWithProgramState(_quadTextureMaterialProgState))
+    {
+        _quadTextureMaterial->_type = Sprite3DMaterial::MaterialType::QUAD_TEXTURE;
+    }
+
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::QUAD_COLOR_2D);
+    _quadColorMaterialProgState = new backend::ProgramState(program);
+    _quadColorMaterial          = new Sprite3DMaterial();
+    if (_quadColorMaterial && _quadColorMaterial->initWithProgramState(_quadColorMaterialProgState))
+    {
+        _quadColorMaterial->_type = Sprite3DMaterial::MaterialType::QUAD_COLOR;
     }
 }
 
@@ -214,7 +236,7 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
         break;
 
     case Sprite3DMaterial::MaterialType::VERTEX_LIT:
-        CCASSERT(0, "not implement");
+        CCASSERT(0, "not implemented");
         break;
 
     case Sprite3DMaterial::MaterialType::DIFFUSE:
@@ -227,6 +249,14 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
 
     case Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE:
         material = skinned ? _bumpedDiffuseMaterialSkin : _bumpedDiffuseMaterial;
+        break;
+
+    case Sprite3DMaterial::MaterialType::QUAD_TEXTURE:
+        material = _quadTextureMaterial;
+        break;
+
+    case Sprite3DMaterial::MaterialType::QUAD_COLOR:
+        material = _quadColorMaterial;
         break;
 
     default:

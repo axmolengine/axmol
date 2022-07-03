@@ -113,6 +113,7 @@ Mesh::Mesh()
     , _visible(true)
     , _isTransparent(false)
     , _force2DQueue(false)
+    , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
     , _meshIndexData(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
     , _blendDirty(true)
@@ -158,7 +159,8 @@ int Mesh::getVertexSizeInBytes() const
 Mesh* Mesh::create(const std::vector<float>& positions,
                    const std::vector<float>& normals,
                    const std::vector<float>& texs,
-                   const IndexArray& indices)
+                   const IndexArray& indices,
+                   CustomCommand::IndexFormat format)
 {
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
@@ -209,23 +211,27 @@ Mesh* Mesh::create(const std::vector<float>& positions,
             vertices.push_back(texs[i * 2 + 1]);
         }
     }
-    return create(vertices, perVertexSizeInFloat, indices, attribs);
+    return create(vertices, perVertexSizeInFloat, indices, attribs, format);
 }
 
 Mesh* Mesh::create(const std::vector<float>& vertices,
                    int /*perVertexSizeInFloat*/,
                    const IndexArray& indices,
-                   const std::vector<MeshVertexAttrib>& attribs)
+                   const std::vector<MeshVertexAttrib>& attribs,
+                   CustomCommand::IndexFormat format)
 {
     MeshData meshdata;
     meshdata.attribs = attribs;
     meshdata.vertex  = vertices;
     meshdata.subMeshIndices.push_back(indices);
     meshdata.subMeshIds.push_back("");
-    auto meshvertexdata = MeshVertexData::create(meshdata);
+    auto meshvertexdata = MeshVertexData::create(meshdata, format);
     auto indexData      = meshvertexdata->getMeshIndexDataByIndex(0);
 
-    return create("", indexData);
+    auto mesh = create("", indexData);
+    mesh->setIndexFormat(format);
+
+    return mesh;
 }
 
 Mesh* Mesh::create(std::string_view name, MeshIndexData* indexData, MeshSkin* skin)
@@ -728,12 +734,18 @@ CustomCommand::PrimitiveType Mesh::getPrimitiveType() const
 
 ssize_t Mesh::getIndexCount() const
 {
-    return _meshIndexData->getIndexBuffer()->getSize() / sizeof(uint16_t);
+    return _meshIndexData->getIndexBuffer()->getSize() /
+           (meshIndexFormat == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t));
 }
 
 CustomCommand::IndexFormat Mesh::getIndexFormat() const
 {
-    return CustomCommand::IndexFormat::U_SHORT;
+    return meshIndexFormat;
+}
+
+void Mesh::setIndexFormat(CustomCommand::IndexFormat indexFormat)
+{
+    meshIndexFormat = indexFormat;
 }
 
 backend::Buffer* Mesh::getIndexBuffer() const

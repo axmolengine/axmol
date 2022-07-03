@@ -108,7 +108,7 @@ void MeshVertexData::setVertexData(const std::vector<float>& vertexData)
 #endif
 }
 
-MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
+MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::IndexFormat format)
 {
     auto vertexdata           = new MeshVertexData();
     vertexdata->_vertexBuffer = backend::Device::getInstance()->newBuffer(
@@ -132,20 +132,21 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
     bool needCalcAABB = (meshdata.subMeshAABB.size() != meshdata.subMeshIndices.size());
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
-        auto& index      = meshdata.subMeshIndices[i];
+        auto& index = meshdata.subMeshIndices[i];
+        auto indexSize = format == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t);
         auto indexBuffer = backend::Device::getInstance()->newBuffer(
-            index.size() * sizeof(index[0]), backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+            index.size() * indexSize, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        indexBuffer->updateData((void*)index.data(), index.size() * sizeof(index[0]));
+        indexBuffer->updateData((void*)index.data(), index.size()/* * indexSize*/);
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;
         if (needCalcAABB)
         {
-            auto aabb = Bundle3D::calculateAABB(meshdata.vertex, meshdata.getPerVertexSize(), index);
+            auto aabb = Bundle3D::calculateAABB(meshdata.vertex, meshdata.getPerVertexSize(), index, format);
             indexdata = MeshIndexData::create(id, vertexdata, indexBuffer, aabb);
         }
         else
@@ -153,7 +154,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexdata->setIndexData(index);
 #endif
-        vertexdata->_indexs.pushBack(indexdata);
+        vertexdata->_indices.pushBack(indexdata);
     }
 
     vertexdata->autorelease();
@@ -162,7 +163,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
 
 MeshIndexData* MeshVertexData::getMeshIndexDataById(std::string_view id) const
 {
-    for (auto it : _indexs)
+    for (auto it : _indices)
     {
         if (it->getId() == id)
             return it;
@@ -193,7 +194,7 @@ MeshVertexData::MeshVertexData()
 MeshVertexData::~MeshVertexData()
 {
     CC_SAFE_RELEASE(_vertexBuffer);
-    _indexs.clear();
+    _indices.clear();
     _vertexData.clear();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);

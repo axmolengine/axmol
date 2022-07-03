@@ -64,12 +64,13 @@ class CC_DLL Mesh : public Ref
     friend class Sprite3D;
 
 public:
-    typedef std::vector<unsigned short> IndexArray;
+
     /**create mesh from positions, normals, and so on, single SubMesh*/
     static Mesh* create(const std::vector<float>& positions,
                         const std::vector<float>& normals,
                         const std::vector<float>& texs,
-                        const IndexArray& indices);
+                        const IndexArray& indices,
+                        CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /**
      * @lua NA
@@ -77,7 +78,8 @@ public:
     static Mesh* create(const std::vector<float>& vertices,
                         int perVertexSizeInFloat,
                         const IndexArray& indices,
-                        const std::vector<MeshVertexAttrib>& attribs);
+                        const std::vector<MeshVertexAttrib>& attribs,
+                        CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
 
     /**
      * create mesh
@@ -192,6 +194,12 @@ public:
      */
     CustomCommand::IndexFormat getIndexFormat() const;
     /**
+     * set index format
+     *
+     * @lua NA
+     */
+    void setIndexFormat(CustomCommand::IndexFormat indexFormat);
+    /**
      * get index buffer
      *
      * @lua NA
@@ -253,6 +261,7 @@ protected:
     bool _visible;                                        // is the submesh visible
     bool _isTransparent;  // is this mesh transparent, it is a property of material in fact
     bool _force2DQueue;   // add this mesh to 2D render queue
+    CustomCommand::IndexFormat meshIndexFormat;
 
     std::string _name;
     MeshIndexData* _meshIndexData;
