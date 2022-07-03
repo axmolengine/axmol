@@ -632,7 +632,11 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-    return "Please click keyboard: [1-9] set FPS position!";
+#if defined(CC_PLATFORM_PC)
+    return "Please click keyboard\n[1-9] Sets Fps position like on numpad!";
+#else
+    return "Set FPS position like numpad [1-9]";
+#endif
 }
 
 // SpriteAccelerationEventTest
