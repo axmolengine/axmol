@@ -160,7 +160,8 @@ enum class TextureUsage : uint32_t
 enum class IndexFormat : uint32_t
 {
     U_SHORT,
-    U_INT
+    U_INT,
+    UNSPEC = 0xff,
 };
 
 enum class VertexStepMode : uint32_t

@@ -159,8 +159,7 @@ int Mesh::getVertexSizeInBytes() const
 Mesh* Mesh::create(const std::vector<float>& positions,
                    const std::vector<float>& normals,
                    const std::vector<float>& texs,
-                   const IndexArray& indices,
-                   CustomCommand::IndexFormat format)
+                   const IndexArray& indices)
 {
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
@@ -211,25 +210,24 @@ Mesh* Mesh::create(const std::vector<float>& positions,
             vertices.push_back(texs[i * 2 + 1]);
         }
     }
-    return create(vertices, perVertexSizeInFloat, indices, attribs, format);
+    return create(vertices, perVertexSizeInFloat, indices, attribs);
 }
 
 Mesh* Mesh::create(const std::vector<float>& vertices,
                    int /*perVertexSizeInFloat*/,
                    const IndexArray& indices,
-                   const std::vector<MeshVertexAttrib>& attribs,
-                   CustomCommand::IndexFormat format)
+                   const std::vector<MeshVertexAttrib>& attribs)
 {
     MeshData meshdata;
     meshdata.attribs = attribs;
     meshdata.vertex  = vertices;
     meshdata.subMeshIndices.push_back(indices);
     meshdata.subMeshIds.push_back("");
-    auto meshvertexdata = MeshVertexData::create(meshdata, format);
+    auto meshvertexdata = MeshVertexData::create(meshdata, indices.format());
     auto indexData      = meshvertexdata->getMeshIndexDataByIndex(0);
 
     auto mesh = create("", indexData);
-    mesh->setIndexFormat(format);
+    mesh->setIndexFormat(indices.format());
 
     return mesh;
 }
