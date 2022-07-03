@@ -151,8 +151,8 @@ public:
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
-    /** Sets the stats corner on disply. */
-    void setStatsAnchor(AnchorPreset anchor = AnchorPreset::BOTTOM_LEFT);
+    /** Sets the stats corner displayed on screen if display stats is enabled. */
+    void setStatsAnchor(AnchorPreset anchor = (AnchorPreset)0);
 
     /** Sets the FPS value. */
 

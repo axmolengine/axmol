@@ -103,17 +103,17 @@ enum class MATRIX_STACK_TYPE
 /**
  * @brief Anchor presets used to position nodes in corners
  */
-enum AnchorPreset
+enum class AnchorPreset
 {
-    BOTTOM_LEFT   = 1,
-    BOTTOM_CENTER = 2,
-    BOTTOM_RIGHT  = 3,
-    CENTER_LEFT   = 4,
-    CENTER        = 5,
-    CENTER_RIGHT  = 6,
-    TOP_LEFT      = 7,
-    TOP_CENTER    = 8,
-    TOP_RIGHT     = 9
+    BOTTOM_LEFT   = 0,
+    BOTTOM_CENTER = 1,
+    BOTTOM_RIGHT  = 2,
+    CENTER_LEFT   = 3,
+    CENTER        = 4,
+    CENTER_RIGHT  = 5,
+    TOP_LEFT      = 6,
+    TOP_CENTER    = 7,
+    TOP_RIGHT     = 8
 };
 
 /**
