@@ -152,7 +152,7 @@ public:
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
     /** Sets the stats corner on disply. */
-    void setStatsAnchor(AnchorPreset FPSposition = AnchorPreset::BOTTOM_LEFT);
+    void setStatsAnchor(AnchorPreset anchor = AnchorPreset::BOTTOM_LEFT);
 
     /** Sets the FPS value. */
 
