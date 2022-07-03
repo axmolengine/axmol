@@ -108,6 +108,7 @@ public:
     const uint8_t* data() const noexcept { return _buffer.data(); }
 
     size_t size() const { return _buffer.size(); }
+    bool empty() const { return _buffer.size() == 0; }
 
     void resize(size_t size) { _buffer.resize(size * sizeof(uint16_t)); }
     void resize(size_t size, std::true_type) { _buffer.resize(size * sizeof(uint32_t)); }

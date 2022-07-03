@@ -75,7 +75,7 @@ MeshIndexData::MeshIndexData()
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        _indexBuffer->updateData((void*)_indexData.data(), _indexData.size() * sizeof(_indexData[0]));
+        _indexBuffer->updateData((void*)_indexData.data(), _indexData.size());
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
@@ -152,7 +152,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
         else
             indexdata = MeshIndexData::create(id, vertexdata, indexBuffer, meshdata.subMeshAABB[i]);
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-        indexdata->setIndexData(index);
+        indexdata->setIndexData(indices);
 #endif
         vertexdata->_indices.pushBack(indexdata);
     }
