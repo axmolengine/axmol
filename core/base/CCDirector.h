@@ -63,21 +63,6 @@ class Camera;
 class Console;
 
 /**
- * @brief Matrix stack type.
- */
-enum class MATRIX_STACK_TYPE
-{
-    /// Model view matrix stack
-    MATRIX_STACK_MODELVIEW,
-
-    /// projection matrix stack
-    MATRIX_STACK_PROJECTION,
-
-    /// texture matrix stack
-    MATRIX_STACK_TEXTURE
-};
-
-/**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
 
@@ -165,6 +150,11 @@ public:
 
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
+
+    /** Sets the stats corner on disply. */
+    void setStatsAnchor(AnchorPreset FPSposition = AnchorPreset::BOTTOM_LEFT);
+
+    /** Sets the FPS value. */
 
     /**
      * Get the GLView.
