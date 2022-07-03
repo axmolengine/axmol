@@ -77,6 +77,23 @@ enum class MATRIX_STACK_TYPE
     MATRIX_STACK_TEXTURE
 };
 
+
+/**
+ * @brief FPS position on display like the numbers on the numpad
+ */
+enum FPSPosition
+{
+    BOTTOM_LEFT    = 1,
+    BOTTOM_CENTER  = 2,
+    BOTTOM_RIGHT   = 3, 
+    CENTER_LEFT    = 4,
+    CENTER         = 5,
+    CENTER_RIGHT   = 6,
+    TOP_LEFT       = 7,
+    TOP_CENTER     = 8,
+    TOP_RIGHT      = 9
+};
+
 /**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
@@ -165,6 +182,11 @@ public:
 
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
+
+    /** Set the FPS position like a numpad [1-9] on display. */
+    void setFPSPos(FPSPosition FPSposition = FPSPosition::BOTTOM_LEFT);
+
+    /** Sets the FPS value. */
 
     /**
      * Get the GLView.
