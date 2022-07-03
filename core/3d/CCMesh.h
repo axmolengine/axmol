@@ -64,7 +64,7 @@ class CC_DLL Mesh : public Ref
     friend class Sprite3D;
 
 public:
-    typedef std::vector<unsigned int> IndexArray;
+
     /**create mesh from positions, normals, and so on, single SubMesh*/
     static Mesh* create(const std::vector<float>& positions,
                         const std::vector<float>& normals,

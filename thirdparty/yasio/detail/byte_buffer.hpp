@@ -41,6 +41,7 @@ The byte_buffer concepts:
 #include <algorithm>
 #include <type_traits>
 #include <stdexcept>
+#include <initializer_list>
 #include "yasio/compiler/feature_test.hpp"
 
 namespace yasio
@@ -48,9 +49,10 @@ namespace yasio
 struct default_allocator {
   static void* reallocate(void* old_block, size_t /*old_size*/, size_t new_size) { return ::realloc(old_block, new_size); }
 };
-template <typename _Elem, typename _Alloc = default_allocator> class basic_byte_buffer final {
+template <typename _Elem, typename _Alloc = default_allocator> class basic_byte_buffer {
   static_assert(std::is_same<_Elem, char>::value || std::is_same<_Elem, unsigned char>::value,
                 "The basic_byte_buffer only accept type which is char or unsigned char!");
+
 public:
   using pointer       = _Elem*;
   using const_pointer = const _Elem*;
@@ -61,19 +63,29 @@ public:
   basic_byte_buffer(size_t count, std::true_type /*fit*/) { resize_fit(count); }
   basic_byte_buffer(size_t count, _Elem val) { resize(count, val); }
   basic_byte_buffer(size_t count, _Elem val, std::true_type /*fit*/) { resize_fit(count, val); }
-  template <typename _Iter> basic_byte_buffer(_Iter first, _Iter last) { _Assign_range(first, last); }
-  template <typename _Iter> basic_byte_buffer(_Iter first, _Iter last, std::true_type /*fit*/) { _Assign_range(first, last, std::true_type{}); }
-  basic_byte_buffer(const basic_byte_buffer& rhs) { _Assign_range(rhs.begin(), rhs.end()); };
-  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/) { _Assign_range(rhs.begin(), rhs.end(), std::true_type{}); };
-  basic_byte_buffer(basic_byte_buffer&& rhs) noexcept { _Assign_rv(std::move(rhs)); }
+  template <typename _Iter> basic_byte_buffer(_Iter first, _Iter last) { assign(first, last); }
+  template <typename _Iter> basic_byte_buffer(_Iter first, _Iter last, std::true_type /*fit*/) { assign(first, last, std::true_type{}); }
+  basic_byte_buffer(const basic_byte_buffer& rhs) { assign(rhs); };
+  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/) { assign(rhs, std::true_type{}); };
+  basic_byte_buffer(basic_byte_buffer&& rhs) noexcept { assign(std::move(rhs)); }
+  template <typename _Ty> basic_byte_buffer(std::initializer_list<_Ty> rhs) { assign(rhs); }
+  template <typename _Ty> basic_byte_buffer(std::initializer_list<_Ty> rhs, std::true_type /*fit*/) { assign(rhs, std::true_type{}); }
   ~basic_byte_buffer() { shrink_to_fit(0); }
-  basic_byte_buffer& operator=(const basic_byte_buffer& rhs) { return assign(rhs.begin(), rhs.end()); }
-  basic_byte_buffer& operator=(basic_byte_buffer&& rhs) noexcept { return this->swap(rhs); }
-  template <typename _Iter> basic_byte_buffer& assign(const _Iter first, const _Iter last)
+  basic_byte_buffer& operator=(const basic_byte_buffer& rhs)
   {
-    clear();
-    _Assign_range(first, last);
+    assign(rhs);
     return *this;
+  }
+  basic_byte_buffer& operator=(basic_byte_buffer&& rhs) noexcept { return this->swap(rhs); }
+  template <typename _Iter> void assign(const _Iter first, const _Iter last) { _Assign_range(first, last); }
+  template <typename _Iter> void assign(const _Iter first, const _Iter last, std::true_type /*fit*/) { _Assign_range(first, last, std::true_type{}); }
+  void assign(const basic_byte_buffer& rhs) { _Assign_range(rhs.begin(), rhs.end()); }
+  void assign(const basic_byte_buffer& rhs, std::true_type) { _Assign_range(rhs.begin(), rhs.end(), std::true_type{}); }
+  void assign(basic_byte_buffer&& rhs) { _Assign_rv(std::move(rhs)); }
+  template <typename _Ty> void assign(std::initializer_list<_Ty> rhs) { _Assign_range((_Elem*)rhs.begin(), (_Elem*)rhs.end()); }
+  template <typename _Ty> void assign(std::initializer_list<_Ty> rhs, std::true_type /*fit*/)
+  {
+    _Assign_range((_Elem*)rhs.begin(), (_Elem*)rhs.end(), std::true_type{});
   }
   basic_byte_buffer& swap(basic_byte_buffer& rhs) noexcept
   {
@@ -217,11 +229,13 @@ public:
 private:
   template <typename _Iter> void _Assign_range(_Iter first, _Iter last)
   {
+    _Mylast = _Myfirst;
     if (last > first)
       std::copy(first, last, resize(std::distance(first, last)));
   }
   template <typename _Iter> void _Assign_range(_Iter first, _Iter last, std::true_type)
   {
+    _Mylast = _Myfirst;
     if (last > first)
       std::copy(first, last, resize_fit(std::distance(first, last)));
   }

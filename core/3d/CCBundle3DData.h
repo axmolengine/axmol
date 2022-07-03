@@ -39,7 +39,58 @@
 
 #include "3d/CC3DProgramInfo.h"
 
+#include "yasio/detail/byte_buffer.hpp"
+
 NS_CC_BEGIN
+
+class IndexArray
+{
+public:
+    IndexArray() {}
+    IndexArray(std::initializer_list<unsigned short> rhs) : _buffer(rhs) {}
+
+    IndexArray(std::initializer_list<unsigned int> rhs, std::true_type /*U_INT*/) : _buffer(rhs) {}
+
+    void push_back(u_short val) { _buffer.append_n((uint8_t*)&val, sizeof(val)); }
+
+    void push_back(unsigned int val, std::true_type /*U_INT*/) { _buffer.append_n((uint8_t*)&val, sizeof(val)); }
+
+    void insert(uint8_t* where, std::initializer_list<unsigned short> ilist)
+    {
+        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
+    }
+
+    void insert(uint8_t* where, std::initializer_list<unsigned int> ilist, std::true_type)
+    {
+        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
+    }
+
+    template <typename _Iter>
+    void insert(uint8_t* where, _Iter first, const _Iter last)
+    {
+        _buffer.insert(where, first, last);
+    }
+
+    u_short& operator[](size_t index) { return (u_short&) _buffer[index * sizeof(u_short)]; }
+
+    uint8_t* begin() noexcept { return _buffer.begin(); }
+    uint8_t* end() noexcept { return _buffer.end(); }
+    const uint8_t* begin() const noexcept { return _buffer.begin(); }
+    const uint8_t* end() const noexcept { return _buffer.end(); }
+
+    uint8_t* data() noexcept { return _buffer.data(); }
+    const uint8_t* data() const noexcept { return _buffer.data(); }
+
+    size_t size() const { return _buffer.size(); }
+
+    void resize(size_t size) { _buffer.resize(size * sizeof(u_short)); }
+    void resize(size_t size, std::true_type) { _buffer.resize(size * sizeof(unsigned int)); }
+
+    void clear() { _buffer.clear(); }
+
+protected:
+    yasio::byte_buffer _buffer;
+};
 
 /**mesh vertex attribute
  * @js NA
@@ -128,13 +179,14 @@ struct NodeDatas
     }
 };
 
+
 /**mesh data
  * @js NA
  * @lua NA
  */
 struct MeshData
 {
-    typedef std::vector<unsigned int> IndexArray;
+    using IndexArray = ::cocos2d::IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;

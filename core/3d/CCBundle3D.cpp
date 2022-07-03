@@ -205,7 +205,8 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
                        MaterialDatas& materialdatas,
                        NodeDatas& nodedatas,
                        std::string_view fullPath,
-                       const char* mtl_basepath)
+                       const char* mtl_basepath,
+                       CustomCommand::IndexFormat format)
 {
     meshdatas.resetData();
     materialdatas.resetData();
@@ -298,14 +299,28 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             }
 
             // split into submesh according to material
-            std::map<int, std::vector<unsigned int>> subMeshMap;
-            for (size_t k = 0, size = mesh.material_ids.size(); k < size; ++k)
+            std::map<int, IndexArray> subMeshMap;
+            if (format == CustomCommand::IndexFormat::U_SHORT)
             {
-                int id     = mesh.material_ids[k];
-                size_t idx = k * 3;
-                subMeshMap[id].push_back(mesh.indices[idx]);
-                subMeshMap[id].push_back(mesh.indices[idx + 1]);
-                subMeshMap[id].push_back(mesh.indices[idx + 2]);
+                for (size_t k = 0, size = mesh.material_ids.size(); k < size; ++k)
+                {
+                    int id     = mesh.material_ids[k];
+                    size_t idx = k * 3;
+                    subMeshMap[id].push_back(mesh.indices[idx]);
+                    subMeshMap[id].push_back(mesh.indices[idx + 1]);
+                    subMeshMap[id].push_back(mesh.indices[idx + 2]);
+                }
+            }
+            else
+            {
+                for (size_t k = 0, size = mesh.material_ids.size(); k < size; ++k)
+                {
+                    int id     = mesh.material_ids[k];
+                    size_t idx = k * 3;
+                    subMeshMap[id].push_back(mesh.indices[idx], std::true_type{});
+                    subMeshMap[id].push_back(mesh.indices[idx + 1], std::true_type{});
+                    subMeshMap[id].push_back(mesh.indices[idx + 2], std::true_type{});
+                }
             }
 
             auto node = new NodeData();
@@ -314,7 +329,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             {
                 meshdata->subMeshIndices.push_back(submesh.second);
                 meshdata->subMeshAABB.push_back(
-                    calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), submesh.second));
+                    calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), submesh.second, format));
                 sprintf(str, "%d", ++i);
                 meshdata->subMeshIds.push_back(str);
 
@@ -362,7 +377,8 @@ bool Bundle3D::loadAnimationData(std::string_view id, Animation3DData* animation
 }
 
 // since 3.3, to support reskin
-bool Bundle3D::loadMeshDatas(MeshDatas& meshdatas)
+bool Bundle3D::loadMeshDatas(MeshDatas& meshdatas,
+                             CustomCommand::IndexFormat format)
 {
     meshdatas.resetData();
     if (_isBinary)
@@ -373,7 +389,7 @@ bool Bundle3D::loadMeshDatas(MeshDatas& meshdatas)
         }
         else
         {
-            return loadMeshDatasBinary(meshdatas);
+            return loadMeshDatasBinary(meshdatas, format);
         }
     }
     else
@@ -389,7 +405,7 @@ bool Bundle3D::loadMeshDatas(MeshDatas& meshdatas)
     }
     return true;
 }
-bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
+bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas, CustomCommand::IndexFormat format)
 {
     if (!seekToFirstType(BUNDLE_TYPE_MESH))
         return false;
@@ -447,7 +463,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
 
         for (unsigned int k = 0; k < meshPartCount; ++k)
         {
-            std::vector<unsigned int> indexArray;
+            IndexArray indexArray;
             std::string meshPartid = _binaryReader.readString();
             meshData->subMeshIds.push_back(meshPartid);
             unsigned int nIndexCount;
@@ -457,7 +473,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
                 goto FAILED;
             }
             indexArray.resize(nIndexCount);
-            if (_binaryReader.read(&indexArray[0], 2, nIndexCount) != nIndexCount)
+            if (_binaryReader.read(indexArray.data(), 2, nIndexCount) != nIndexCount)
             {
                 CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
                 goto FAILED;
@@ -480,7 +496,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
             else
             {
                 meshData->subMeshAABB.push_back(
-                    calculateAABB(meshData->vertex, meshData->getPerVertexSize(), indexArray));
+                    calculateAABB(meshData->vertex, meshData->getPerVertexSize(), indexArray, format));
             }
         }
         meshdatas.meshDatas.push_back(meshData);
@@ -599,9 +615,9 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
             return false;
         }
 
-        std::vector<unsigned int> indices;
+        IndexArray indices;
         indices.resize(nIndexCount);
-        if (_binaryReader.read(&indices[0], 2, nIndexCount) != nIndexCount)
+        if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
             CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
             CC_SAFE_DELETE(meshdata);
@@ -609,7 +625,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         }
 
         meshdata->subMeshIndices.push_back(indices);
-        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices));
+        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices, CustomCommand::IndexFormat::U_SHORT));
     }
 
     meshdatas.meshDatas.push_back(meshdata);
@@ -720,9 +736,9 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
             return false;
         }
 
-        std::vector<unsigned int> indices;
+        IndexArray indices;
         indices.resize(nIndexCount);
-        if (_binaryReader.read(&indices[0], 2, nIndexCount) != nIndexCount)
+        if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
             CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
             CC_SAFE_DELETE(meshdata);
@@ -730,7 +746,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         }
 
         meshdata->subMeshIndices.push_back(indices);
-        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices));
+        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices, CustomCommand::IndexFormat::U_SHORT));
     }
 
     meshdatas.meshDatas.push_back(meshdata);
@@ -777,7 +793,7 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
         const rapidjson::Value& mesh_part_array = mesh_data[PARTS];
         for (rapidjson::SizeType i = 0, mesh_part_array_size = mesh_part_array.Size(); i < mesh_part_array_size; ++i)
         {
-            std::vector<unsigned int> indexArray;
+            IndexArray indexArray;
             const rapidjson::Value& mesh_part = mesh_part_array[i];
             meshData->subMeshIds.push_back(mesh_part[ID].GetString());
             // index_number
@@ -805,13 +821,13 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
                 else
                 {
                     meshData->subMeshAABB.push_back(
-                        calculateAABB(meshData->vertex, meshData->getPerVertexSize(), indexArray));
+                        calculateAABB(meshData->vertex, meshData->getPerVertexSize(), indexArray, CustomCommand::IndexFormat::U_SHORT));
                 }
             }
             else
             {
-                meshData->subMeshAABB.push_back(
-                    calculateAABB(meshData->vertex, meshData->getPerVertexSize(), indexArray));
+                meshData->subMeshAABB.push_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(),
+                                                              indexArray, CustomCommand::IndexFormat::U_SHORT));
             }
         }
         meshdatas.meshDatas.push_back(meshData);
@@ -1185,15 +1201,16 @@ bool Bundle3D::loadMeshDataJson_0_1(MeshDatas& meshdatas)
     unsigned int indexnum = mesh_data_body_array_0[INDEXNUM].GetUint();
 
     // indices
-    std::vector<unsigned int> indices;
+    IndexArray indices;
     indices.resize(indexnum);
 
     const rapidjson::Value& indices_val_array = mesh_data_body_array_0[INDICES];
     for (rapidjson::SizeType i = 0; i < indices_val_array.Size(); ++i)
-        indices[i] = (unsigned int)indices_val_array[i].GetUint();
+        indices[i] = (unsigned short)indices_val_array[i].GetUint();
 
     meshdata->subMeshIndices.push_back(indices);
-    meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices));
+    meshdata->subMeshAABB.push_back(
+        calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices, CustomCommand::IndexFormat::U_SHORT));
     meshdatas.meshDatas.push_back(meshdata);
     return true;
 }
@@ -1239,15 +1256,16 @@ bool Bundle3D::loadMeshDataJson_0_2(MeshDatas& meshdatas)
         unsigned int indexnum = mesh_submesh_val[INDEXNUM].GetUint();
 
         // indices
-        std::vector<unsigned int> indices;
+        IndexArray indices;
         indices.resize(indexnum);
 
         const rapidjson::Value& indices_val_array = mesh_submesh_val[INDICES];
         for (rapidjson::SizeType j = 0; j < indices_val_array.Size(); ++j)
-            indices[j] = (unsigned int)indices_val_array[j].GetUint();
+            indices[j] = (unsigned short)indices_val_array[j].GetUint();
 
         meshdata->subMeshIndices.push_back(indices);
-        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices));
+        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), indices,
+                                                      CustomCommand::IndexFormat::U_SHORT));
     }
     meshdatas.meshDatas.push_back(meshdata);
     return true;
@@ -2324,14 +2342,33 @@ Bundle3D::~Bundle3D()
 
 cocos2d::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
                                       int stride,
-                                      const std::vector<unsigned int>& index)
+                                      const IndexArray& index,
+                                      CustomCommand::IndexFormat format)
 {
     AABB aabb;
     stride /= 4;
-    for (const auto& it : index)
+    // for (const auto& it : index)
+    // {
+    //     Vec3 point(vertex[it * stride], vertex[it * stride + 1], vertex[it * stride + 2]);
+    //     aabb.updateMinMax(&point, 1);
+    // }
+    if (format == CustomCommand::IndexFormat::U_SHORT)
     {
-        Vec3 point(vertex[it * stride], vertex[it * stride + 1], vertex[it * stride + 2]);
-        aabb.updateMinMax(&point, 1);
+        for (auto it = (const u_short*)index.begin(); it != (const u_short*)index.end(); ++it)
+        {
+            auto val = *it;
+            Vec3 point(vertex[val * stride], vertex[val * stride + 1], vertex[val * stride + 2]);
+            aabb.updateMinMax(&point, 1);
+        }
+    }
+    else
+    {
+        for (auto it = (const unsigned int*)index.begin(); it != (const unsigned int*)index.end(); ++it)
+        {
+            auto val = *it;
+            Vec3 point(vertex[val * stride], vertex[val * stride + 1], vertex[val * stride + 2]);
+            aabb.updateMinMax(&point, 1);
+        }
     }
     return aabb;
 }

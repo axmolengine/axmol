@@ -140,19 +140,13 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        if (format == CustomCommand::IndexFormat::U_SHORT)
-        {
-            std::vector<unsigned short> shortIndex(index.begin(), index.end());
-            indexBuffer->updateData((void*)shortIndex.data(), shortIndex.size() * indexSize);
-        }
-        else
-            indexBuffer->updateData((void*)index.data(), index.size() * indexSize);
+        indexBuffer->updateData((void*)index.data(), index.size()/* * indexSize*/);
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;
         if (needCalcAABB)
         {
-            auto aabb = Bundle3D::calculateAABB(meshdata.vertex, meshdata.getPerVertexSize(), index);
+            auto aabb = Bundle3D::calculateAABB(meshdata.vertex, meshdata.getPerVertexSize(), index, format);
             indexdata = MeshIndexData::create(id, vertexdata, indexBuffer, aabb);
         }
         else
