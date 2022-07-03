@@ -93,8 +93,7 @@ public:
     virtual bool loadAnimationData(std::string_view id, Animation3DData* animationdata);
 
     // since 3.3, to support reskin
-    virtual bool loadMeshDatas(MeshDatas& meshdatas,
-                               CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
+    virtual bool loadMeshDatas(MeshDatas& meshdatas);
     // since 3.3, to support reskin
     virtual bool loadNodes(NodeDatas& nodedatas);
     // since 3.3, to support reskin
@@ -111,13 +110,11 @@ public:
                         MaterialDatas& materialdatas,
                         NodeDatas& nodedatas,
                         std::string_view fullPath,
-                        const char* mtl_basepath = nullptr,
-                        CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
+                        const char* mtl_basepath = nullptr);
 
     // calculate aabb
     static AABB calculateAABB(const std::vector<float>& vertex,
-                              int stride,
-                              const IndexArray& index, CustomCommand::IndexFormat format);
+                              int stride, const IndexArray& indices);
 
     Bundle3D();
     virtual ~Bundle3D();
@@ -127,8 +124,7 @@ protected:
     bool loadMeshDatasJson(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_1(MeshDatas& meshdatas);
     bool loadMeshDataJson_0_2(MeshDatas& meshdatas);
-    bool loadMeshDatasBinary(
-        MeshDatas& meshdatas, CustomCommand::IndexFormat format = CustomCommand::IndexFormat::U_SHORT);
+    bool loadMeshDatasBinary(MeshDatas& meshdatas);
     bool loadMeshDatasBinary_0_1(MeshDatas& meshdatas);
     bool loadMeshDatasBinary_0_2(MeshDatas& meshdatas);
     bool loadMaterialsJson(MaterialDatas& materialdatas);

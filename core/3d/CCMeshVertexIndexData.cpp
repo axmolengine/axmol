@@ -132,21 +132,21 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     bool needCalcAABB = (meshdata.subMeshAABB.size() != meshdata.subMeshIndices.size());
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
-        auto& index = meshdata.subMeshIndices[i];
-        auto indexSize = format == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t);
+        auto& indices = meshdata.subMeshIndices[i];
+        // auto indexSize = format == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t);
         auto indexBuffer = backend::Device::getInstance()->newBuffer(
-            index.size() * indexSize, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+            indices.size()/* * indexSize*/, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        indexBuffer->updateData((void*)index.data(), index.size()/* * indexSize*/);
+        indexBuffer->updateData((void*)indices.data(), indices.size() /* * indexSize*/);
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;
         if (needCalcAABB)
         {
-            auto aabb = Bundle3D::calculateAABB(meshdata.vertex, meshdata.getPerVertexSize(), index, format);
+            auto aabb = Bundle3D::calculateAABB(meshdata.vertex, meshdata.getPerVertexSize(), indices);
             indexdata = MeshIndexData::create(id, vertexdata, indexBuffer, aabb);
         }
         else
