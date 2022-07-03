@@ -64,7 +64,6 @@ THE SOFTWARE.
 #include "base/ccConfig.h"
 #include "base/ccMacros.h"
 #include "base/ccTypes.h"
-#include "base/ccEnums.h"
 #include "base/ccUTF8.h"
 #include "base/ccUtils.h"
 
