@@ -1306,7 +1306,7 @@ void Director::createStatsLabel()
     setStatsAnchor();
 }
 
-void Director::setStatsAnchor(AnchorPreset fpsPosition)
+void Director::setStatsAnchor(AnchorPreset anchor)
 {
     if (!_displayStats)
         return;
@@ -1321,7 +1321,7 @@ void Director::setStatsAnchor(AnchorPreset fpsPosition)
         auto safeSize          = getSafeAreaRect().size;
         const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
 
-        switch (fpsPosition)
+        switch (anchor)
         {
         case AnchorPreset::BOTTOM_LEFT:
             _fpsPosition = Vec2(0, 0);
