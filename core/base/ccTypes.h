@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include "math/CCMath.h"
 #include "base/CCRef.h"
 #include "renderer/backend/Types.h"
-#include "ccEnums.h"
 
 /**
  * @addtogroup base
@@ -623,6 +622,24 @@ struct CC_DLL FontDefinition
     int _overflow = 0;
 };
 
+/**
+ * @brief Effects used by `Label`
+ *
+ */
+enum class LabelEffect
+{
+    // FIXME: Covert them to bitwise. More than one effect should be supported
+    NORMAL,
+    OUTLINE,
+    SHADOW,
+    GLOW,
+    ITALICS,
+    BOLD,
+    UNDERLINE,
+    STRIKETHROUGH,
+    ALL
+};
+
 /** @struct Acceleration
  * The device accelerometer reports values for each axis in units of g-force.
  */
@@ -639,6 +656,15 @@ public:
 extern const std::string CC_DLL STD_STRING_EMPTY;
 extern const ssize_t CC_DLL CC_INVALID_INDEX;
 
+enum class SetIntervalReason : char
+{
+    BY_GAME = 0,
+    BY_ENGINE,
+    BY_SYSTEM,
+    BY_SCENE_CHANGE,
+    BY_DIRECTOR_PAUSE
+};
+
 struct CC_DLL Viewport
 {
     int x          = 0;
@@ -653,6 +679,26 @@ struct CC_DLL ScissorRect
     float y      = 0;
     float width  = 0;
     float height = 0;
+};
+
+struct TextureFlag
+{
+    enum
+    {
+        NONE               = 0,
+        ANTIALIAS_ENABLED  = 1 << 1,
+        PREMULTIPLIEDALPHA = 1 << 2,
+        RENDERTARGET       = 1 << 3,
+    };
+};
+
+struct TextureSamplerFlag
+{
+    enum
+    {
+        DEFAULT      = 0,
+        DUAL_SAMPLER = 1 << 1,
+    };
 };
 
 using TextureUsage = backend::TextureUsage;
