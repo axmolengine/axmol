@@ -559,31 +559,31 @@ void LabelKeyboardEventTest::onEnter()
         switch (keyCode)
         {
         case EventKeyboard::KeyCode::KEY_1:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
+            Director::getInstance()->setFPSPos(NumPadPosType::BOTTOM_LEFT);
             break;
         case EventKeyboard::KeyCode::KEY_4:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER_LEFT);
+            Director::getInstance()->setFPSPos(NumPadPosType::CENTER_LEFT);
             break;
         case EventKeyboard::KeyCode::KEY_7:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_LEFT);
+            Director::getInstance()->setFPSPos(NumPadPosType::TOP_LEFT);
             break;
         case EventKeyboard::KeyCode::KEY_8:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_CENTER);
+            Director::getInstance()->setFPSPos(NumPadPosType::TOP_CENTER);
             break;
         case EventKeyboard::KeyCode::KEY_9:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_RIGHT);
+            Director::getInstance()->setFPSPos(NumPadPosType::TOP_RIGHT);
             break;
         case EventKeyboard::KeyCode::KEY_6:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER_RIGHT);
+            Director::getInstance()->setFPSPos(NumPadPosType::CENTER_RIGHT);
             break;
         case EventKeyboard::KeyCode::KEY_3:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_RIGHT);
+            Director::getInstance()->setFPSPos(NumPadPosType::BOTTOM_RIGHT);
             break;
         case EventKeyboard::KeyCode::KEY_2:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_CENTER);
+            Director::getInstance()->setFPSPos(NumPadPosType::BOTTOM_CENTER);
             break;
         case EventKeyboard::KeyCode::KEY_5:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER);
+            Director::getInstance()->setFPSPos(NumPadPosType::CENTER);
             break;
         default:
             break;

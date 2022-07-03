@@ -79,9 +79,10 @@ enum class MATRIX_STACK_TYPE
 
 
 /**
- * @brief FPS position on display like the numbers on the numpad
+ * @brief NumPadPosType can be used for all situations where to set the position on object like the numbers on the
+ * numpad
  */
-enum FPSPosition
+enum NumPadPosType
 {
     BOTTOM_LEFT    = 1,
     BOTTOM_CENTER  = 2,
@@ -147,21 +148,6 @@ public:
         DEFAULT = _3D,
     };
 
-    enum FPSPosition
-    {
-        LEFTBOTTOM   = 1,
-        LEFTMIDDLE   = 4,
-        LEFTTOP      = 7,
-        RIGHTBOTTOM  = 3,
-        RIGHTMIDDLE  = 6,
-        RIGHTTOP     = 9,
-        MIDDLEBOTTOM = 2,
-        MIDDLEMIDDLE = 5,
-        MIDDLETOP    = 8,
-    } _FPSPosition;
-
-
-
     /**
      * Returns a shared instance of the director.
      * @js _getInstance
@@ -199,7 +185,7 @@ public:
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
     /** Set the FPS position like a numpad [1-9] on display. */
-    void setFPSPos(FPSPosition FPSposition = FPSPosition::BOTTOM_LEFT);
+    void setFPSPos(NumPadPosType FPSposition = NumPadPosType::BOTTOM_LEFT);
 
     /** Sets the FPS value. */
 
