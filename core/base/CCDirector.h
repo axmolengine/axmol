@@ -79,19 +79,19 @@ enum class MATRIX_STACK_TYPE
 
 
 /**
- * @brief FPS dpositions on display like the numbers on the numpad
+ * @brief FPS position on display like the numbers on the numpad
  */
 enum FPSPosition
 {
-    TOP_LEFT       = 7,
-    TOP_CENTER     = 8,
-    TOP_RIGHT      = 9,
+    BOTTOM_LEFT    = 1,
+    BOTTOM_CENTER  = 2,
+    BOTTOM_RIGHT   = 3, 
     CENTER_LEFT    = 4,
     CENTER         = 5,
     CENTER_RIGHT   = 6,
-    BOTTOM_LEFT    = 1,
-    BOTTOM_CENTER  = 2,
-    BOTTOM_RIGHT   = 3
+    TOP_LEFT       = 7,
+    TOP_CENTER     = 8,
+    TOP_RIGHT      = 9
 };
 
 /**
