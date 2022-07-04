@@ -303,9 +303,9 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             {
                 int id     = mesh.material_ids[k];
                 size_t idx = k * 3;
-                subMeshMap[id].push_back(mesh.indices[idx], std::true_type{});
-                subMeshMap[id].push_back(mesh.indices[idx + 1], std::true_type{});
-                subMeshMap[id].push_back(mesh.indices[idx + 2], std::true_type{});
+                subMeshMap[id].push_back(mesh.indices[idx]);
+                subMeshMap[id].push_back(mesh.indices[idx + 1]);
+                subMeshMap[id].push_back(mesh.indices[idx + 2]);
             }
 
             auto node = new NodeData();
