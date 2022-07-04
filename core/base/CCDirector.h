@@ -143,10 +143,10 @@ public:
     /** Sets the FPS value. FPS = 1/interval. */
     void setAnimationInterval(float interval);
 
-    /** Whether or not displaying the FPS on the bottom-left corner of the screen is enabled or not. */
-    bool isDisplayStats() { return _displayStats; }
+    /** Whether or not the FPS on the bottom-left corner of the screen is shown. */
+    bool isStatsDisplay() { return _displayStats; }
     /** Display the FPS on the bottom-left corner of the screen. */
-    void setDisplayStats(bool displayStats) { _displayStats = displayStats; }
+    void setStatsDisplay(bool displayStats) { _displayStats = displayStats; }
 
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
