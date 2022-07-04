@@ -49,10 +49,27 @@ public:
     IndexArray() : _format(backend::IndexFormat::U_SHORT) {}
     IndexArray(backend::IndexFormat format) : _format(format) {}
     IndexArray(std::initializer_list<unsigned short> rhs) : _format(backend::IndexFormat::U_SHORT), _buffer(rhs) {}
-
     IndexArray(std::initializer_list<unsigned int> rhs, std::true_type /*U_INT*/)
         : _format(backend::IndexFormat::U_INT), _buffer(rhs)
     {}
+
+    IndexArray(const IndexArray& rhs) : _format(rhs._format), _buffer(rhs._buffer) {}
+    IndexArray(IndexArray&& rhs) : _format(rhs._format), _buffer(std::move(rhs._buffer)) {}
+
+    IndexArray& operator=(const IndexArray& rhs) {
+        _format = rhs._format;
+        _buffer = rhs._buffer;
+        return *this;
+    }
+    IndexArray& operator=(IndexArray&& rhs) {
+        this->swap(rhs);
+        return *this;
+    }
+
+    void swap(IndexArray& rhs) {
+        std::swap(_format, rhs._format);
+        _buffer.swap(rhs._buffer);
+    }
 
     void clear(backend::IndexFormat format = backend::IndexFormat::UNSPEC)
     { 
@@ -108,7 +125,7 @@ public:
     const uint8_t* data() const noexcept { return _buffer.data(); }
 
     size_t size() const { return _buffer.size(); }
-    bool empty() const { return _buffer.size() == 0; }
+    bool empty() const { return _buffer.empty(); }
 
     void resize(size_t size) { _buffer.resize(size * sizeof(uint16_t)); }
     void resize(size_t size, std::true_type) { _buffer.resize(size * sizeof(uint32_t)); }
