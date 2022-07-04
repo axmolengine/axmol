@@ -106,18 +106,14 @@ public:
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
     }
 
-    //template <typename _Iter>
-    //void insert(uint8_t* where, _Iter first, const _Iter last)
-    //{
-    //    _buffer.insert(where, first, last);
-    //}
-
-    template<typename _Ty>
+    template <typename _Ty>
     _Ty& at(size_t idx)
     {
         assert((sizeof(_Ty) == sizeof(uint16_t) && _format == backend::IndexFormat::U_SHORT) ||
                (sizeof(_Ty) == sizeof(uint32_t) && _format == backend::IndexFormat::U_INT));
-        return (_Ty&)_buffer[idx * sizeof(_Ty)];
+        if (idx < this->size())
+            return (_Ty&)_buffer[idx * sizeof(_Ty)];
+        throw std::out_of_range("IndexArray: out of range!");
     }
 
     uint8_t* begin() noexcept { return _buffer.begin(); }
