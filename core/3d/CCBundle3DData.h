@@ -150,10 +150,10 @@ public:
         return _stride == 2 ? backend::IndexFormat::U_SHORT : backend::IndexFormat::U_INT;
     }
 
-    /** returns the format of the index array. */
+    /** sets the format of the index array. */
     void format(backend::IndexFormat format)
     {
-        _stride = (format == backend::IndexFormat::U_SHORT ? 2 : 4);
+        _stride = format == backend::IndexFormat::U_SHORT ? 2 : 4;
     }
 
     template <typename _Fty>
