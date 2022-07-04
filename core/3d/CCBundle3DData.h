@@ -128,23 +128,23 @@ public:
     uint8_t* data() noexcept { return _buffer.data(); }
     const uint8_t* data() const noexcept { return _buffer.data(); }
 
-    /** returns the count of indices in the container. */
+    /** Returns the count of indices in the container. */
     size_t size() const { return _buffer.size() / _stride; }
-    /** returns the size of the container in bytes. */
+    /** Returns the size of the container in bytes. */
     size_t bsize() const { return _buffer.size(); }
 
-    /** resizes the count of indices in the container. */
+    /** Resizes the count of indices in the container. */
     void resize(size_t size) { _buffer.resize(size * _stride); }
-    /** resizes the container in bytes. */
+    /** Resizes the container in bytes. */
     void bresize(size_t size) { _buffer.resize(size); }
 
-    /** returns true if the container is empty. Otherwise, false. */
+    /** Returns true if the container is empty. Otherwise, false. */
     bool empty() const { return _buffer.empty(); }
 
-    /** returns the format of the index array. */
+    /** Returns the format of the index array. */
     backend::IndexFormat format() const { return strideToFormat(_stride); }
 
-    /** clears the buffer and sets the format specified. */
+    /** Clears the buffer and sets the format specified. */
     void format(backend::IndexFormat format = backend::IndexFormat::U_SHORT)
     {
         clear();
