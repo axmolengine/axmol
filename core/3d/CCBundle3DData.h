@@ -159,7 +159,7 @@ public:
     template <typename _Fty>
     void for_each(_Fty cb) const
     {
-        assert(_stride != 0);
+        assert(_stride == 2 || _stride == 4);
         for (auto it = _buffer.begin(); it != _buffer.end(); it += _stride)
         {
             uint32_t val = 0;
