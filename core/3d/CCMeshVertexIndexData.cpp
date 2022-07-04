@@ -133,14 +133,13 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     for (size_t i = 0, size = meshdata.subMeshIndices.size(); i < size; ++i)
     {
         auto& indices = meshdata.subMeshIndices[i];
-        // auto indexSize = format == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t);
         auto indexBuffer = backend::Device::getInstance()->newBuffer(
             indices.bsize() /* * indexSize*/, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        indexBuffer->updateData((void*)indices.data(), indices.bsize() /* * indexSize*/);
+        indexBuffer->updateData((void*)indices.data(), indices.bsize());
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;
