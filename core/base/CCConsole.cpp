@@ -1249,7 +1249,7 @@ void Console::commandFileUtilsSubCommandFlush(socket_native_type /*fd*/, std::st
 
 void Console::commandFps(socket_native_type fd, std::string_view /*args*/)
 {
-    Console::Utility::mydprintf(fd, "FPS is: %s\n", Director::getInstance()->isDisplayStats() ? "on" : "off");
+    Console::Utility::mydprintf(fd, "FPS is: %s\n", Director::getInstance()->isStatsDisplay() ? "on" : "off");
 }
 
 void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, std::string_view args)
@@ -1257,7 +1257,7 @@ void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, std::string_v
     bool state       = (args.compare("on") == 0);
     Director* dir    = Director::getInstance();
     Scheduler* sched = dir->getScheduler();
-    sched->performFunctionInCocosThread(std::bind(&Director::setDisplayStats, dir, state));
+    sched->performFunctionInCocosThread(std::bind(&Director::setStatsDisplay, dir, state));
 }
 
 void Console::commandHelp(socket_native_type fd, std::string_view /*args*/)

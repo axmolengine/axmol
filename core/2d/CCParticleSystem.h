@@ -52,28 +52,6 @@ struct particle_point
  * emission mask
  * @since adxe-1.0.0b8
  */
-enum class EmissionShapeType
-{
-    // Emission shape of type point
-    POINT,
-    // Emission shape of type rectangle
-    RECT,
-    // Emission shape of type rectangular torus
-    RECTTORUS,
-    // Emission shape of type circle or cone
-    CIRCLE,
-    // Emission shape of type torus or cone torus
-    TORUS,
-    // Emission shape of type texture alpha mask
-    TEXTURE_ALPHA_MASK
-};
-
-/**
- * Particle emission shapes.
- * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha
- * emission mask
- * @since adxe-1.0.0b8
- */
 struct EmissionShape
 {
     EmissionShapeType type;
