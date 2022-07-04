@@ -86,14 +86,8 @@ public:
         _buffer.swap(rhs._buffer);
     }
 
+    /** Clears the internal byte buffer. */
     void clear() { _buffer.clear(); }
-
-    /** clear with new index format */
-    void clear(backend::IndexFormat format)
-    {
-        clear();
-        _stride = formatToStride(format);
-    }
 
     /** Pushes back a value. */
     void push_back(uint32_t val)
@@ -149,6 +143,13 @@ public:
 
     /** returns the format of the index array. */
     backend::IndexFormat format() const { return strideToFormat(_stride); }
+
+    /** clears the buffer and sets the format specified. */
+    void format(backend::IndexFormat format = backend::IndexFormat::U_SHORT)
+    {
+        clear();
+        _stride = formatToStride(format);
+    }
 
     template <typename _Fty>
     void for_each(_Fty cb) const
