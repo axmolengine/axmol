@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "math/CCMath.h"
 #include "base/CCRef.h"
 #include "renderer/backend/Types.h"
+
 #include "ccEnums.h"
 
 /**
