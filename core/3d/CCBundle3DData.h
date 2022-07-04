@@ -44,7 +44,7 @@
 NS_CC_BEGIN
 
 using uint16_index_format  = std::bool_constant<true>;
-using uint32_index_format  = std::bool_constant<true>;
+using uint32_index_format  = std::bool_constant<false>;
 
 class IndexArray
 {
