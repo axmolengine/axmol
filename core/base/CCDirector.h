@@ -63,38 +63,6 @@ class Camera;
 class Console;
 
 /**
- * @brief Matrix stack type.
- */
-enum class MATRIX_STACK_TYPE
-{
-    /// Model view matrix stack
-    MATRIX_STACK_MODELVIEW,
-
-    /// projection matrix stack
-    MATRIX_STACK_PROJECTION,
-
-    /// texture matrix stack
-    MATRIX_STACK_TEXTURE
-};
-
-
-/**
- * @brief FPS position on display like the numbers on the numpad
- */
-enum FPSPosition
-{
-    BOTTOM_LEFT    = 1,
-    BOTTOM_CENTER  = 2,
-    BOTTOM_RIGHT   = 3, 
-    CENTER_LEFT    = 4,
-    CENTER         = 5,
-    CENTER_RIGHT   = 6,
-    TOP_LEFT       = 7,
-    TOP_CENTER     = 8,
-    TOP_RIGHT      = 9
-};
-
-/**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
 
@@ -175,16 +143,16 @@ public:
     /** Sets the FPS value. FPS = 1/interval. */
     void setAnimationInterval(float interval);
 
-    /** Whether or not displaying the FPS on the bottom-left corner of the screen is enabled or not. */
-    bool isDisplayStats() { return _displayStats; }
+    /** Whether the FPS on the bottom-left corner of the screen is displayed or not. */
+    bool isStatsDisplay() { return _displayStats; }
     /** Display the FPS on the bottom-left corner of the screen. */
-    void setDisplayStats(bool displayStats) { _displayStats = displayStats; }
+    void setStatsDisplay(bool displayStats) { _displayStats = displayStats; }
 
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
 
-    /** Set the FPS position like a numpad [1-9] on display. */
-    void setFPSPos(FPSPosition FPSposition = FPSPosition::BOTTOM_LEFT);
+    /** Sets the stats corner displayed on screen if display stats is enabled. */
+    void setStatsAnchor(AnchorPreset anchor = (AnchorPreset)0);
 
     /** Sets the FPS value. */
 
