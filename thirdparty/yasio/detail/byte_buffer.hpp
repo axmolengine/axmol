@@ -129,6 +129,11 @@ public:
     memcpy(this, _Tmp, sizeof(_Tmp));
   }
   template <typename _Iter>
+  void insert(size_t offset, _Iter first, const _Iter last)
+  {
+    insert((std::min)(_Myfirst + offset, _Mylast), first, last);
+  }
+  template <typename _Iter>
   void insert(_Elem* where, _Iter first, const _Iter last)
   {
     if (where == _Mylast)
