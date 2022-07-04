@@ -53,13 +53,14 @@ public:
 
     using PrimitiveType = backend::PrimitiveType;
     /**
-    Buffer usage of vertex/index buffer. If the contents is not updated every frame,
-    then use STATIC, other use DYNAMIC.
+    Buffer usage of vertex/index buffer. If the contents are not updated every frame,
+    then STATIC should be used. Otherwise, DYNAMIC should be used.
+    This flag is not improtant because most GPU drivers ignore it, so it's best left to STATIC.
     */
     using BufferUsage = backend::BufferUsage;
     /**
-    The index format determine the size for index data. U_SHORT is enough for most
-    cases.
+    The index format that determines the size of index data. U_SHORT (65535 vertices) is enough for most
+    cases, But support for U_INT (4294967295 vertices) has been added.
     */
     using IndexFormat = backend::IndexFormat;
 
@@ -207,6 +208,8 @@ TODO: should remove it.
     inline float getLineWidth() const { return _lineWidth; }
 
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
+
+    inline void setIndexFormat(IndexFormat format) { _indexFormat = format; }
 
     /**
      * set a callback which will be invoke before rendering

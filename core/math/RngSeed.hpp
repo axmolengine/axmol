@@ -1,10 +1,7 @@
-#pragma warning(suppress : 4244)
-
 #ifndef RNGSEED_H_
 #define RNGSEED_H_
 
 /** A more effective seeded random number generator struct, made by kiss rng.
- * The numbers that are generated are inclusive of rhs value
  * @since adxe-1.0.0b8
  */
 struct RngSeed
