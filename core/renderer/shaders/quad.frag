@@ -34,7 +34,7 @@ varying vec2 TextureCoordOut;
 #endif
 uniform vec4 u_color;
 
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 void main(void)
 {
