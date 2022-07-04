@@ -109,7 +109,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     _programState                   = new backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocation              = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation                = pipelineDescriptor.programState->getUniformLocation("u_tex0");
+    _textureLocation                = pipelineDescriptor.programState->getUniformLocation("u_texture");
 
 #define VERTEX_POSITION_SIZE 3
 #define VERTEX_TEXCOORD_SIZE 2

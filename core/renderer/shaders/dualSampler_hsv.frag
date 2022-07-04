@@ -6,8 +6,8 @@ precision mediump float;
 varying vec2 v_texCoord;  
 varying vec4 v_fragmentColor;
 
-uniform sampler2D u_tex0;
-uniform sampler2D u_tex1;
+uniform sampler2D u_texture;
+uniform sampler2D u_texture1;
 
 // HSV matrix
 uniform mat3 u_mix_hsv;
@@ -35,7 +35,7 @@ vec3 hsv2rgb(vec3 c)
 
 void main() 
 { 
-    vec4 texColor = vec4(texture2D(u_tex0, v_texCoord).rgb, texture2D(u_tex1, v_texCoord).r);
+    vec4 texColor = vec4(texture2D(u_texture, v_texCoord).rgb, texture2D(u_texture1, v_texCoord).r);
     texColor.rgb *= texColor.a; // Premultiply with Alpha channel
     
     vec3 rgbColor = u_mix_hsv * texColor.rgb;

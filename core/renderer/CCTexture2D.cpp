@@ -735,7 +735,7 @@ void Texture2D::initProgram()
     auto* program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
     _programState      = new cocos2d::backend::ProgramState(program);
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = _programState->getUniformLocation("u_tex0");
+    _textureLocation   = _programState->getUniformLocation("u_texture");
 
     pipelineDescriptor.programState = _programState;
 

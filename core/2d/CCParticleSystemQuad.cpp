@@ -55,7 +55,7 @@ ParticleSystemQuad::ParticleSystemQuad()
     pipelinePS = (new backend::ProgramState(program));
 
     _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = pipelinePS->getUniformLocation("u_tex0");
+    _textureLocation   = pipelinePS->getUniformLocation("u_texture");
 
     auto vertexLayout         = pipelinePS->getVertexLayout();
     const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
@@ -660,7 +660,7 @@ void ParticleSystemQuad::updateParticleQuads()
     // And wether if every property's memory of the particle system is continuous,
     // for the purpose of improving cache hit rate, we should process only one property in one for-loop.
     // It was proved to be effective especially for low-end devices.
-    if ((_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated) && _isAnimAllocated)
+    if (_isLifeAnimated || _isEmitterAnimated || _isLoopAnimated || _isAnimAllocated)
     {
         V3F_C4B_T2F_Quad* quad    = startQuad;
         unsigned short* cellIndex = _particleData.animCellIndex;

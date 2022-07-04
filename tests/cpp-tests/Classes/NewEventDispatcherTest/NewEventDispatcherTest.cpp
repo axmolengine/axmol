@@ -544,7 +544,7 @@ void LabelKeyboardEventTest::onEnter()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
-#if defined(CC_PLATFORM_PC)
+#ifdef CC_PLATFORM_PC
     auto statusLabel = Label::createWithSystemFont("No keyboard event received!", "", 20);
     statusLabel->setPosition(origin + Vec2(size.width / 2, size.height / 2));
     addChild(statusLabel);
@@ -559,31 +559,31 @@ void LabelKeyboardEventTest::onEnter()
         switch (keyCode)
         {
         case EventKeyboard::KeyCode::KEY_1:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_LEFT);
             break;
         case EventKeyboard::KeyCode::KEY_4:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER_LEFT);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::CENTER_LEFT);
             break;
         case EventKeyboard::KeyCode::KEY_7:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_LEFT);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::TOP_LEFT);
             break;
         case EventKeyboard::KeyCode::KEY_8:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_CENTER);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::TOP_CENTER);
             break;
         case EventKeyboard::KeyCode::KEY_9:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_RIGHT);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::TOP_RIGHT);
             break;
         case EventKeyboard::KeyCode::KEY_6:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER_RIGHT);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::CENTER_RIGHT);
             break;
         case EventKeyboard::KeyCode::KEY_3:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_RIGHT);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_RIGHT);
             break;
         case EventKeyboard::KeyCode::KEY_2:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_CENTER);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_CENTER);
             break;
         case EventKeyboard::KeyCode::KEY_5:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER);
+            Director::getInstance()->setStatsAnchor(AnchorPreset::CENTER);
             break;
         default:
             break;
@@ -600,28 +600,28 @@ void LabelKeyboardEventTest::onEnter()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, statusLabel);
 #else
     auto& layerSize = this->getContentSize();
-    static FPSPosition posType = FPSPosition::BOTTOM_LEFT;
-    posType = FPSPosition::BOTTOM_LEFT;
+    static AnchorPreset anchor = AnchorPreset::BOTTOM_LEFT;
+    anchor = AnchorPreset::BOTTOM_LEFT;
     auto playPrev = TextButton::create("Show Fps Prev Pos", [=](TextButton* button) {
-        if (posType > FPSPosition::BOTTOM_LEFT)
+        if (anchor > AnchorPreset::BOTTOM_LEFT)
         {
-            posType = static_cast<FPSPosition>((int)posType - 1);
-            Director::getInstance()->setFPSPos(posType);
+            anchor = static_cast<AnchorPreset>((int)anchor - 1);
+            Director::getInstance()->setStatsAnchor(anchor);
         }
     });
     playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
     addChild(playPrev);
 
     auto playNext = TextButton::create("Show Fps Next Pos", [=](TextButton* button) {
-        if (posType < FPSPosition::TOP_RIGHT)
+        if (anchor < AnchorPreset::TOP_RIGHT)
         {
-            posType = static_cast<FPSPosition>((int)posType + 1);
-            Director::getInstance()->setFPSPos(posType);
+            anchor = static_cast<AnchorPreset>((int)anchor + 1);
+            Director::getInstance()->setStatsAnchor(anchor);
         }
     });
     playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
     addChild(playNext);
-    Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
+    Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_LEFT);
 #endif
 }
 
@@ -632,10 +632,10 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-#if defined(CC_PLATFORM_PC)
-    return "Please click keyboard\n[1-9] Sets Fps position like on numpad!";
+#ifdef CC_PLATFORM_PC
+    return "Press keys 1 through 9 to change the stats anchor on the screen.";
 #else
-    return "Set FPS position like numpad [1-9]";
+    return "Change the stats anchor [1-9]";
 #endif
 }
 

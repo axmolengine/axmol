@@ -481,7 +481,7 @@ void FastTMXLayer::updatePrimitives()
             }
             vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
             _mvpMatrixLocaiton = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
-            _textureLocation   = pipelineDescriptor.programState->getUniformLocation("u_tex0");
+            _textureLocation   = pipelineDescriptor.programState->getUniformLocation("u_texture");
             pipelineDescriptor.programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
             command->init(_globalZOrder, blendfunc);
 

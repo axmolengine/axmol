@@ -170,7 +170,7 @@ void MotionStreak3D::initCustomCommand()
     blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = _blendFunc.dst;
 
     _locMVP     = _programState->getUniformLocation("u_MVPMatrix");
-    _locTexture = _programState->getUniformLocation("u_tex0");
+    _locTexture = _programState->getUniformLocation("u_texture");
 
     _customCommand.createVertexBuffer(sizeof(VertexData), _vertexData.size(), CustomCommand::BufferUsage::DYNAMIC);
 }

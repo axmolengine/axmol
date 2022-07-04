@@ -34,11 +34,11 @@ varying vec2 TextureCoordOut;
 #endif
 uniform vec4 u_color;
 
-uniform sampler2D u_tex0;
+uniform sampler2D u_texture;
 
 void main(void)
 {
-    gl_FragColor = texture2D(u_tex0, TextureCoordOut) * ColorOut * u_color;
+    gl_FragColor = texture2D(u_texture, TextureCoordOut) * ColorOut * u_color;
 }
 )";
 

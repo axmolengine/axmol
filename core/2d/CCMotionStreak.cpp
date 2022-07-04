@@ -232,7 +232,7 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool nee
         pipelineDescriptor.programState = _programState;
 
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
-        _textureLocation   = _programState->getUniformLocation("u_tex0");
+        _textureLocation   = _programState->getUniformLocation("u_texture");
 
         auto vertexLayout         = _programState->getVertexLayout();
         const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();

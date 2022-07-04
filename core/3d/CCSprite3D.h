@@ -272,7 +272,6 @@ protected:
         void* callbackParam;
         bool result;  // sprite load result
         std::string modelPath;
-        std::string modelFullPath;
         std::string texPath;  //
         MeshDatas* meshdatas;
         MaterialDatas* materialdatas;

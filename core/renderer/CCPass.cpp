@@ -150,7 +150,7 @@ void Pass::initUniformLocations()
     _locPMatrix      = ps->getUniformLocation("u_PMatrix");
     _locNormalMatrix = ps->getUniformLocation("u_NormalMatrix");
 
-    _locTexture       = ps->getUniformLocation("u_tex0");
+    _locTexture       = ps->getUniformLocation("u_texture");
     _locNormalTexture = ps->getUniformLocation("u_normalTex");
 
     _locColor         = ps->getUniformLocation("u_color");
