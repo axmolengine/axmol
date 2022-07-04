@@ -46,26 +46,26 @@ class ProgramState;
 }
 
 /**
- * @brief MeshRendererMaterial: Material for MeshRenderer.
+ * @brief MeshRendererMaterial: a mesh material for MeshRenderers.
  */
 class CC_DLL MeshRendererMaterial : public Material
 {
 public:
     /**
-     * Material type, there are mainly two types of materials. Built in materials and Custom material
+     * Material types, there are mainly two types of materials. Built-in materials and Custom materials.
      */
     enum class MaterialType
     {
-        // Built in material
+        // Built in materials
         UNLIT,           // unlit material
-        UNLIT_NOTEX,     // unlit material without texture
+        UNLIT_NOTEX,     // unlit material (without texture)
         VERTEX_LIT,      // vertex lit
         DIFFUSE,         // diffuse (pixel lighting)
         DIFFUSE_NOTEX,   // diffuse (without texture)
         BUMPED_DIFFUSE,  // bumped diffuse
 
         // Custom material
-        CUSTOM,  // Create from material file
+        CUSTOM,  // Create from a material file
     };
 
     /**
@@ -77,35 +77,34 @@ public:
     /**
      * Create built in material from material type
      * @param type Material type
-     * @param skinned Has skin?
-     * @return Created material
+     * @param skinned Has hardware skinning?
+     * @return An autorelease material object
      */
     static MeshRendererMaterial* createBuiltInMaterial(MaterialType type, bool skinned);
 
     /**
      * Create material with file name, it creates material from cache if it is previously loaded
      * @param path Path of material file
-     * @return Created material
+     * @return An autorelease material object
      */
     static MeshRendererMaterial* createWithFilename(std::string_view path);
 
     /**
-     * Create material with GLProgramState
+     * Create material with a ProgramState
      * @param programState GLProgramState instance
-     * @return Created material
+     * @return An autorelease material object
      */
-    //    static MeshRendererMaterial* createWithGLStateProgram(GLProgramState* programState);
     static MeshRendererMaterial* createWithProgramState(backend::ProgramState* programState);
 
     void setTexture(Texture2D* tex, NTextureData::Usage usage);
 
     /**
-     * Create all build in materials
+     * Create all built-in materials
      */
     static void createBuiltInMaterial();
 
     /**
-     * Release all built in materials
+     * Release all built-in materials
      */
     static void releaseBuiltInMaterial();
 
@@ -115,7 +114,7 @@ public:
     static void releaseCachedMaterial();
 
     /**
-     * Clone material
+     * Clone this material.
      */
     virtual Material* clone() const override;
 
@@ -148,36 +147,33 @@ protected:
 };
 
 /**
- * @brief the MeshRenderer material is only texture for now
+ * @brief MeshRendererMaterialCache: the MeshRenderer material cache, it can only cache textures for now.
  * @js NA
  * @lua NA
  */
 class MeshRendererMaterialCache
 {
 public:
-    /**get & destroy cache*/
     static MeshRendererMaterialCache* getInstance();
-
-    /**destroy the instance*/
     static void destroyInstance();
 
-    /**add to cache*/
+    /** add a material to cache */
     bool addMeshRendererMaterial(std::string_view key, Texture2D* tex);
 
-    /**get material from cache*/
+    /** get material from cache */
     Texture2D* getMeshRendererMaterial(std::string_view key);
 
-    /** remove all mesh materials */
+    /** remove all cached materials */
     void removeAllMeshRendererMaterial();
-    /** remove unused mesh materials */
+    /** remove unused cached materials */
     void removeUnusedMeshRendererMaterial();
 
     MeshRendererMaterialCache();
     ~MeshRendererMaterialCache();
 
 protected:
-    static MeshRendererMaterialCache* _cacheInstance;  // instance
-    hlookup::string_map<Texture2D*> _materials;    // cached material
+    static MeshRendererMaterialCache* _cacheInstance;  // cache instance
+    hlookup::string_map<Texture2D*> _materials;    // cached materials
 };
 
 // end of 3d group

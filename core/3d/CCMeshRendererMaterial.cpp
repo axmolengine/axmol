@@ -173,7 +173,6 @@ Material* MeshRendererMaterial::clone() const
 {
     auto material = new MeshRendererMaterial();
 
-    // RenderState::cloneInto(material);
     material->_renderState = _renderState;
 
     for (const auto& technique : _techniques)
@@ -214,7 +213,7 @@ MeshRendererMaterial* MeshRendererMaterial::createBuiltInMaterial(MaterialType t
         break;
 
     case MeshRendererMaterial::MaterialType::VERTEX_LIT:
-        CCASSERT(0, "not implement");
+        CCASSERT(0, "not implemented.");
         break;
 
     case MeshRendererMaterial::MaterialType::DIFFUSE:
@@ -262,7 +261,7 @@ MeshRendererMaterial* MeshRendererMaterial::createWithFilename(std::string_view 
 
 MeshRendererMaterial* MeshRendererMaterial::createWithProgramState(backend::ProgramState* programState)
 {
-    CCASSERT(programState, "Invalid GL Program State");
+    CCASSERT(programState, "Invalid program state.");
 
     auto mat = new MeshRendererMaterial();
     if (mat->initWithProgramState(programState))
@@ -348,7 +347,7 @@ void MeshRendererMaterialCache::removeUnusedMeshRendererMaterial()
         auto value = it->second;
         if (value->getReferenceCount() == 1)
         {
-            CCLOG("cocos2d: MeshRendererMaterialCache: removing unused MeshRendererMaterial");
+            CCLOG("cocos2d: MeshRendererMaterialCache: removing unused mesh renderer materials.");
 
             value->release();
             it = _materials.erase(it);

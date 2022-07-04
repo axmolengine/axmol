@@ -64,7 +64,7 @@ MeshRenderer* MeshRenderer::create()
 
 MeshRenderer* MeshRenderer::create(std::string_view modelPath)
 {
-    CCASSERT(modelPath.length() >= 4, "invalid filename for MeshRenderer");
+    CCASSERT(modelPath.length() >= 4, "Invalid filename.");
 
     auto mesh = new MeshRenderer();
     if (mesh->initWithFile(modelPath))
@@ -176,7 +176,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
         }
         else
         {
-            CCLOG("file load failed: %s ", asyncParam->modelPath.c_str());
+            CCLOG("file load failed: %s\n", asyncParam->modelPath.c_str());
         }
         asyncParam->afterLoadCallback(this, asyncParam->callbackParam);
     }
@@ -473,7 +473,7 @@ void MeshRenderer::setMaterial(Material* material)
 void MeshRenderer::setMaterial(Material* material, int meshIndex)
 {
     CCASSERT(material, "Invalid Material");
-    CCASSERT(meshIndex == -1 || (meshIndex >= 0 && meshIndex < _meshes.size()), "Invalid meshIndex");
+    CCASSERT(meshIndex == -1 || (meshIndex >= 0 && meshIndex < _meshes.size()), "Invalid meshIndex.");
 
     if (meshIndex == -1)
     {
@@ -493,7 +493,7 @@ void MeshRenderer::setMaterial(Material* material, int meshIndex)
 
 Material* MeshRenderer::getMaterial(int meshIndex) const
 {
-    CCASSERT(meshIndex >= 0 && meshIndex < _meshes.size(), "Invalid meshIndex");
+    CCASSERT(meshIndex >= 0 && meshIndex < _meshes.size(), "Invalid meshIndex.");
     return _meshes.at(meshIndex)->getMaterial();
 }
 
@@ -505,7 +505,7 @@ void MeshRenderer::genMaterial(bool useLight)
     for (auto meshVertexData : _meshVertexDatas)
     {
         auto material = getMeshRendererMaterialForAttribs(meshVertexData, useLight);
-        CCASSERT(material, "material should not be null");
+        CCASSERT(material, "material should cannot be null.");
         materials[meshVertexData] = material;
     }
 
@@ -898,7 +898,6 @@ void MeshRenderer::setCullFace(CullFaceSide side)
     for (auto& it : _meshes)
     {
         it->getMaterial()->getStateBlock().setCullFaceSide(side);
-        //        it->getMeshCommand().setCullFace(cullFace);
     }
 }
 
@@ -907,13 +906,12 @@ void MeshRenderer::setCullFaceEnabled(bool enable)
     for (auto& it : _meshes)
     {
         it->getMaterial()->getStateBlock().setCullFace(enable);
-        //        it->getMeshCommand().setCullFaceEnabled(enable);
     }
 }
 
 Mesh* MeshRenderer::getMeshByIndex(int index) const
 {
-    CCASSERT(index < _meshes.size(), "invalid index");
+    CCASSERT(index < _meshes.size(), "Invalid index.");
     return _meshes.at(index);
 }
 
