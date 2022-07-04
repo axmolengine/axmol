@@ -35,92 +35,6 @@
 
 USING_NS_CC;
 
-namespace {
-
-    class TextButton : public Label {
-    public:
-        static TextButton *
-        create(std::string_view text, const std::function<void(TextButton *)> &onTriggered) {
-            auto ret = new TextButton();
-
-            TTFConfig ttfconfig("fonts/arial.ttf", 25);
-            if (ret->setTTFConfig(ttfconfig)) {
-                ret->setString(text);
-                ret->_onTriggered = onTriggered;
-
-                ret->autorelease();
-
-                return ret;
-            }
-
-            delete ret;
-            return nullptr;
-        }
-
-        void setEnabled(bool enabled) {
-            _enabled = enabled;
-            if (_enabled) {
-                this->setColor(Color3B::WHITE);
-            } else {
-                this->setColor(Color3B::GRAY);
-            }
-        }
-
-    private:
-        TextButton() : _onTriggered(nullptr), _enabled(true) {
-            auto listener = EventListenerTouchOneByOne::create();
-            listener->setSwallowTouches(true);
-
-            listener->onTouchBegan = CC_CALLBACK_2(TextButton::onTouchBegan, this);
-            listener->onTouchEnded = CC_CALLBACK_2(TextButton::onTouchEnded, this);
-            listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
-
-            _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-        }
-
-        bool touchHits(Touch *touch) {
-            auto hitPos = this->convertToNodeSpace(touch->getLocation());
-            if (hitPos.x >= 0 && hitPos.y >= 0 && hitPos.x <= _contentSize.width &&
-                hitPos.y <= _contentSize.height) {
-                return true;
-            }
-            return false;
-        }
-
-        bool onTouchBegan(Touch *touch, Event *event) {
-            auto hits = touchHits(touch);
-            if (hits) {
-                scaleButtonTo(0.95f);
-            }
-            return hits;
-        }
-
-        void onTouchEnded(Touch *touch, Event *event) {
-            if (_enabled) {
-                auto hits = touchHits(touch);
-                if (hits && _onTriggered) {
-                    _onTriggered(this);
-                }
-            }
-
-            scaleButtonTo(1);
-        }
-
-        void onTouchCancelled(Touch *touch, Event *event) { scaleButtonTo(1); }
-
-        void scaleButtonTo(float scale) {
-            auto action = ScaleTo::create(0.05f, scale);
-            action->setTag(10000);
-            stopActionByTag(10000);
-            runAction(action);
-        }
-
-        std::function<void(TextButton *)> _onTriggered;
-
-        bool _enabled;
-    };
-}
-
 EventDispatcherTests::EventDispatcherTests()
 {
     ADD_TEST_CASE(TouchableSpriteTest);
@@ -544,7 +458,6 @@ void LabelKeyboardEventTest::onEnter()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
-#if defined(CC_PLATFORM_PC)
     auto statusLabel = Label::createWithSystemFont("No keyboard event received!", "", 20);
     statusLabel->setPosition(origin + Vec2(size.width / 2, size.height / 2));
     addChild(statusLabel);
@@ -555,39 +468,6 @@ void LabelKeyboardEventTest::onEnter()
         sprintf(buf, "Key %d was pressed!", (int)keyCode);
         auto label = static_cast<Label*>(event->getCurrentTarget());
         label->setString(buf);
-
-        switch (keyCode)
-        {
-        case EventKeyboard::KeyCode::KEY_1:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
-            break;
-        case EventKeyboard::KeyCode::KEY_4:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER_LEFT);
-            break;
-        case EventKeyboard::KeyCode::KEY_7:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_LEFT);
-            break;
-        case EventKeyboard::KeyCode::KEY_8:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_CENTER);
-            break;
-        case EventKeyboard::KeyCode::KEY_9:
-            Director::getInstance()->setFPSPos(FPSPosition::TOP_RIGHT);
-            break;
-        case EventKeyboard::KeyCode::KEY_6:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER_RIGHT);
-            break;
-        case EventKeyboard::KeyCode::KEY_3:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_RIGHT);
-            break;
-        case EventKeyboard::KeyCode::KEY_2:
-            Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_CENTER);
-            break;
-        case EventKeyboard::KeyCode::KEY_5:
-            Director::getInstance()->setFPSPos(FPSPosition::CENTER);
-            break;
-        default:
-            break;
-        }
     };
 
     listener->onKeyReleased = [](EventKeyboard::KeyCode keyCode, Event* event) {
@@ -598,31 +478,6 @@ void LabelKeyboardEventTest::onEnter()
     };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, statusLabel);
-#else
-    auto& layerSize = this->getContentSize();
-    static FPSPosition posType = FPSPosition::BOTTOM_LEFT;
-    posType = FPSPosition::BOTTOM_LEFT;
-    auto playPrev = TextButton::create("Show Fps Prev Pos", [=](TextButton* button) {
-        if (posType > FPSPosition::BOTTOM_LEFT)
-        {
-            posType = static_cast<FPSPosition>((int)posType - 1);
-            Director::getInstance()->setFPSPos(posType);
-        }
-    });
-    playPrev->setPosition(layerSize.width * 0.35f, layerSize.height * 0.5f);
-    addChild(playPrev);
-
-    auto playNext = TextButton::create("Show Fps Next Pos", [=](TextButton* button) {
-        if (posType < FPSPosition::TOP_RIGHT)
-        {
-            posType = static_cast<FPSPosition>((int)posType + 1);
-            Director::getInstance()->setFPSPos(posType);
-        }
-    });
-    playNext->setPosition(layerSize.width * 0.65f, layerSize.height * 0.5f);
-    addChild(playNext);
-    Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
-#endif
 }
 
 std::string LabelKeyboardEventTest::title() const
@@ -632,11 +487,7 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-#if defined(CC_PLATFORM_PC)
-    return "Please click keyboard\n[1-9] Sets Fps position like on numpad!";
-#else
-    return "Set FPS position like numpad [1-9]";
-#endif
+    return "Please click keyboard\n(Only available on Desktop, Android\nand Windows Universal Apps)";
 }
 
 // SpriteAccelerationEventTest
