@@ -8,7 +8,7 @@ varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 
 uniform vec2 resolution;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 uniform vec4 u_Time;
 uniform vec2 u_screenSize;
 
@@ -29,6 +29,6 @@ void main(void)
 	vec2 fragCoord = gl_FragCoord.xy;
 #endif
 	gl_FragColor.xyz = intensity * noise(fragCoord / sin(resolution.xy * u_Time[1] * 0.01)) + (1. - intensity) *
-			texture2D(u_texture,v_texCoord.xy).xyz;
+			texture2D(u_tex0,v_texCoord.xy).xyz;
 	gl_FragColor.w = 1.;
 }

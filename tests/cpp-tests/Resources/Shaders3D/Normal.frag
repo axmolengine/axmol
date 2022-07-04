@@ -10,11 +10,11 @@ uniform vec4  u_lightPosInLocalSpace;
 uniform vec2  u_contentSize;
 uniform vec3  u_diffuseL;
 
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 void main(void)
 {
-    vec4 texColor=texture2D(u_texture, v_texCoord);
+    vec4 texColor=texture2D(u_tex0, v_texCoord);
     vec3 normal=texture2D(u_normalMap, v_texCoord).rgb;
 	normal=normal*2.0-1.0;
 	normal.y=-normal.y;
