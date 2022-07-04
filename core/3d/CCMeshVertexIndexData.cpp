@@ -75,7 +75,7 @@ MeshIndexData::MeshIndexData()
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
-        _indexBuffer->updateData((void*)_indexData.data(), _indexData.size());
+        _indexBuffer->updateData((void*)_indexData.data(), _indexData.bsize());
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
