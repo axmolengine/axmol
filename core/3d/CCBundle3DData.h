@@ -39,135 +39,7 @@
 
 #include "3d/CC3DProgramInfo.h"
 
-#include "yasio/detail/byte_buffer.hpp"
-
 NS_CC_BEGIN
-
-class IndexArray
-{
-    static constexpr unsigned int formatToStride(backend::IndexFormat fmt) { return 1 << (int)fmt; }
-    static constexpr backend::IndexFormat strideToFormat(unsigned int stride)
-    {
-        return (backend::IndexFormat)(stride >> 1);
-    }
-
-public:
-    IndexArray() : _stride(formatToStride(backend::IndexFormat::U_SHORT)) {}
-    IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
-
-    IndexArray(std::initializer_list<uint16_t> rhs)
-        : _stride(formatToStride(backend::IndexFormat::U_SHORT)), _buffer(rhs)
-    {}
-    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/)
-        : _stride(formatToStride(backend::IndexFormat::U_INT)), _buffer(rhs)
-    {}
-
-    IndexArray(const IndexArray& rhs) : _stride(rhs._stride), _buffer(rhs._buffer) {}
-    IndexArray(IndexArray&& rhs) noexcept : _stride(rhs._stride), _buffer(std::move(rhs._buffer)) {}
-
-    IndexArray& operator=(const IndexArray& rhs)
-    {
-        _stride = rhs._stride;
-        _buffer = rhs._buffer;
-        return *this;
-    }
-    IndexArray& operator=(IndexArray&& rhs) noexcept
-    {
-        this->swap(rhs);
-        return *this;
-    }
-
-    void swap(IndexArray& rhs)
-    {
-        std::swap(_stride, rhs._stride);
-        _buffer.swap(rhs._buffer);
-    }
-
-    void clear() { _buffer.clear(); }
-
-    /** clear with new index format */
-    void clear(backend::IndexFormat format)
-    {
-        clear();
-        _stride = formatToStride(format);
-    }
-
-    /** Pushes back a value. */
-    void push_back(uint32_t val)
-    {
-        assert(_stride == 2 || _stride == 4);
-        _buffer.append_n((uint8_t*)&val, _stride);
-    }
-
-    /** Inserts a list containing unsigned short (uint16_t) data. */
-    void insert(uint8_t* where, std::initializer_list<uint16_t> ilist)
-    {
-        assert(_stride == 2);
-        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
-    }
-
-    /** Inserts a list containing unsigned int (uint32_t) data. */
-    void insert(uint8_t* where, std::initializer_list<uint32_t> ilist, std::true_type)
-    {
-        assert(_stride == 4);
-        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
-    }
-
-    /** Inserts range data. */
-    void insert(uint8_t* where, const void* first, const void* last)
-    {
-        _buffer.insert(where, (const uint8_t*)first, (const uint8_t*)last);
-    }
-
-    template <typename _Ty>
-    _Ty& at(size_t idx)
-    {
-        assert(sizeof(_Ty) == _stride);
-        if (idx < this->size())
-            return (_Ty&)_buffer[idx * sizeof(_Ty)];
-        throw std::out_of_range("IndexArray: out of range!");
-    }
-
-    uint8_t* begin() noexcept { return _buffer.begin(); }
-    uint8_t* end() noexcept { return _buffer.end(); }
-    const uint8_t* begin() const noexcept { return _buffer.begin(); }
-    const uint8_t* end() const noexcept { return _buffer.end(); }
-
-    uint8_t* data() noexcept { return _buffer.data(); }
-    const uint8_t* data() const noexcept { return _buffer.data(); }
-
-    /** returns the count of indices in the container. */
-    size_t size() const { return _buffer.size() / _stride; }
-    /** returns the size of the container in bytes. */
-    size_t bsize() const { return _buffer.size(); }
-
-    /** resizes the count of indices in the container. */
-    void resize(size_t size) { _buffer.resize(size * _stride); }
-    /** resizes the container in bytes. */
-    void bresize(size_t size) { _buffer.resize(size); }
-
-    /** returns true if the container is empty. Otherwise, false. */
-    bool empty() const { return _buffer.empty(); }
-
-    /** returns the format of the index array. */
-    backend::IndexFormat format() const { return strideToFormat(_stride); }
-
-    template <typename _Fty>
-    void for_each(_Fty cb) const
-    {
-        assert(_stride == 2 || _stride == 4);
-        for (auto it = _buffer.begin(); it != _buffer.end(); it += _stride)
-        {
-            uint32_t val = 0;
-            memcpy(&val, it, _stride);
-            cb(val);
-        }
-    }
-
-protected:
-    unsigned int _stride;
-    yasio::byte_buffer _buffer;
-};
 
 /**mesh vertex attribute
  * @js NA
@@ -256,14 +128,13 @@ struct NodeDatas
     }
 };
 
-
 /**mesh data
  * @js NA
  * @lua NA
  */
 struct MeshData
 {
-    using IndexArray = ::cocos2d::IndexArray;
+    typedef std::vector<unsigned short> IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
@@ -276,7 +147,7 @@ struct MeshData
 public:
     /**
      * Get per vertex size
-     * @return return the sum size of all vertex attributes.
+     * @return return the sum of each vertex's all attribute size.
      */
     int getPerVertexSize() const
     {

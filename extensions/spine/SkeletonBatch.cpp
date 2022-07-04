@@ -105,7 +105,7 @@ backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* c
 
 
 		command->_locMVP = currentState->getUniformLocation("u_MVPMatrix");
-		command->_locTexture = currentState->getUniformLocation("u_texture");
+		command->_locTexture = currentState->getUniformLocation("u_tex0");
 	}
 	return currentState;
 }

@@ -118,7 +118,7 @@ void SpriteBatchNode::setUniformLocation()
 {
     CCASSERT(_programState, "programState should not be nullptr");
     _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = _programState->getUniformLocation("u_texture");
+    _textureLocation   = _programState->getUniformLocation("u_tex0");
 }
 
 void SpriteBatchNode::setVertexLayout()

@@ -31,13 +31,13 @@ const char* dualSampler_gray_frag = R"(
 varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 
-uniform sampler2D u_texture;
-uniform sampler2D u_texture1;
+uniform sampler2D u_tex0;
+uniform sampler2D u_tex1;
 
 void main()
 {
-    vec4 texColor = texture2D(u_texture, v_texCoord);
-    texColor.a = texture2D(u_texture1, v_texCoord).r;
+    vec4 texColor = texture2D(u_tex0, v_texCoord);
+    texColor.a = texture2D(u_tex1, v_texCoord).r;
     texColor.rgb *= texColor.a; // premultiply alpha channel
 
     texColor = v_fragmentColor * texColor;

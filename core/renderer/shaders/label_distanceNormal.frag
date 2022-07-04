@@ -32,11 +32,11 @@ varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 
 uniform vec4 u_textColor;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 void main()
 {
-    vec4 color = texture2D(u_texture, v_texCoord);
+    vec4 color = texture2D(u_tex0, v_texCoord);
     //the texture use dual channel 16-bit output for distance_map
     //float dist = color.b+color.g/256.0;
     // the texture use single channel 8-bit output for distance_map
