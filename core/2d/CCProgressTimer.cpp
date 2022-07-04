@@ -90,7 +90,7 @@ backend::ProgramState* initPipelineDescriptor(cocos2d::CustomCommand& command,
     }
 
     locMVP     = programState->getUniformLocation("u_MVPMatrix");
-    locTexture = programState->getUniformLocation("u_texture");
+    locTexture = programState->getUniformLocation("u_tex0");
 
     return programState;
 }

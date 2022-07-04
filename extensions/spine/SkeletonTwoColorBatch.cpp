@@ -81,13 +81,13 @@ namespace {
         \n#ifdef GL_ES\n
         precision lowp float;
     \n#endif\n
-        uniform sampler2D u_texture;
+        uniform sampler2D u_tex0;
     varying vec4 v_light;
     varying vec4 v_dark;
     varying vec2 v_texCoord;
 
     void main() {
-        vec4 texColor = texture2D(u_texture, v_texCoord);
+        vec4 texColor = texture2D(u_tex0, v_texCoord);
         float alpha = texColor.a * v_light.a;
         gl_FragColor.a = alpha;
         gl_FragColor.rgb = ((texColor.a - 1.0) * v_dark.a + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;
@@ -101,7 +101,7 @@ namespace {
 
     static void updateProgramStateLayout(backend::ProgramState* programState) {
         __locPMatrix = programState->getUniformLocation("u_PMatrix");
-        __locTexture = programState->getUniformLocation("u_texture");
+        __locTexture = programState->getUniformLocation("u_tex0");
 
         auto layout = programState->getVertexLayout();
 

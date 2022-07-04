@@ -160,8 +160,7 @@ enum class TextureUsage : uint32_t
 enum class IndexFormat : uint32_t
 {
     U_SHORT,
-    U_INT,
-    UNSPEC = 0xff,
+    U_INT
 };
 
 enum class VertexStepMode : uint32_t
@@ -432,9 +431,6 @@ struct ProgramType
         PARTICLE_TEXTURE_3D,                   // CC3D_particle_vert,                   CC3D_particleTexture_frag
         PARTICLE_COLOR_3D,                     // CC3D_particle_vert,                   CC3D_particleColor_frag
 
-        QUAD_COLOR_2D,                         // CC2D_quad_vert,                       CC2D_quadColor_frag
-        QUAD_TEXTURE_2D,                       // CC2D_quad_vert,                       CC2D_quadTexture_frag
-
         HSV,
         HSV_DUAL_SAMPLER,
         HSV_ETC1 = HSV_DUAL_SAMPLER,
@@ -447,10 +443,10 @@ struct ProgramType
 
 /// built-in uniform name
 static const char* UNIFORM_NAME_MVP_MATRIX   = "u_MVPMatrix";
-static const char* UNIFORM_NAME_TEXTURE      = "u_texture";
-static const char* UNIFORM_NAME_TEXTURE1     = "u_texture1";
-static const char* UNIFORM_NAME_TEXTURE2     = "u_texture2";
-static const char* UNIFORM_NAME_TEXTURE3     = "u_texture3";
+static const char* UNIFORM_NAME_TEXTURE      = "u_tex0";
+static const char* UNIFORM_NAME_TEXTURE1     = "u_tex1";
+static const char* UNIFORM_NAME_TEXTURE2     = "u_tex2";
+static const char* UNIFORM_NAME_TEXTURE3     = "u_tex3";
 static const char* UNIFORM_NAME_TEXT_COLOR   = "u_textColor";
 static const char* UNIFORM_NAME_EFFECT_COLOR = "u_effectColor";
 static const char* UNIFORM_NAME_EFFECT_TYPE  = "u_effectType";

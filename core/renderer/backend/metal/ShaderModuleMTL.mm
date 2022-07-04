@@ -202,14 +202,14 @@ void ShaderModuleMTL::setBuiltinUniformLocation()
         _uniformLocation[Uniform::EFFECT_TYPE] = iter->second.location;
     }
 
-    /// u_texture
+    /// u_tex0
     iter = _uniformInfos.find(UNIFORM_NAME_TEXTURE);
     if (iter != _uniformInfos.end())
     {
         _uniformLocation[Uniform::TEXTURE] = iter->second.location;
     }
 
-    /// u_texture1
+    /// u_tex1
     iter = _uniformInfos.find(UNIFORM_NAME_TEXTURE1);
     if (iter != _uniformInfos.end())
     {
