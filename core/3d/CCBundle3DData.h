@@ -39,122 +39,7 @@
 
 #include "3d/CC3DProgramInfo.h"
 
-#include "yasio/detail/byte_buffer.hpp"
-
 NS_CC_BEGIN
-
-class IndexArray
-{
-public:
-    IndexArray() : _format(backend::IndexFormat::U_SHORT) {}
-    IndexArray(backend::IndexFormat format) : _format(format) {}
-    IndexArray(std::initializer_list<unsigned short> rhs) : _format(backend::IndexFormat::U_SHORT), _buffer(rhs) {}
-    IndexArray(std::initializer_list<unsigned int> rhs, std::true_type /*U_INT*/)
-        : _format(backend::IndexFormat::U_INT), _buffer(rhs)
-    {}
-
-    IndexArray(const IndexArray& rhs) : _format(rhs._format), _buffer(rhs._buffer) {}
-    IndexArray(IndexArray&& rhs) : _format(rhs._format), _buffer(std::move(rhs._buffer)) {}
-
-    IndexArray& operator=(const IndexArray& rhs) {
-        _format = rhs._format;
-        _buffer = rhs._buffer;
-        return *this;
-    }
-    IndexArray& operator=(IndexArray&& rhs) {
-        this->swap(rhs);
-        return *this;
-    }
-
-    void swap(IndexArray& rhs) {
-        std::swap(_format, rhs._format);
-        _buffer.swap(rhs._buffer);
-    }
-
-    void clear(backend::IndexFormat format = backend::IndexFormat::UNSPEC)
-    { 
-        _buffer.clear(); 
-        if (format != backend::IndexFormat::UNSPEC)
-            _format = format;
-    }
-
-    void push_back(u_short val)
-    {
-        assert(_format == backend::IndexFormat::U_SHORT);
-        _buffer.append_n((uint8_t*)&val, sizeof(val));
-    }
-
-    void push_back(unsigned int val, std::true_type /*U_INT*/)
-    {
-        assert(_format == backend::IndexFormat::U_INT);
-        _buffer.append_n((uint8_t*)&val, sizeof(val));
-    }
-
-    void insert(uint8_t* where, std::initializer_list<unsigned short> ilist)
-    {
-        assert(_format == backend::IndexFormat::U_SHORT);
-        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
-    }
-
-    void insert(uint8_t* where, std::initializer_list<unsigned int> ilist, std::true_type)
-    {
-        assert(_format == backend::IndexFormat::U_INT);
-        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
-    }
-
-    //template <typename _Iter>
-    //void insert(uint8_t* where, _Iter first, const _Iter last)
-    //{
-    //    _buffer.insert(where, first, last);
-    //}
-
-    template<typename _Ty>
-    _Ty& at(size_t idx)
-    {
-        assert((sizeof(_Ty) == sizeof(uint16_t) && _format == backend::IndexFormat::U_SHORT) ||
-               (sizeof(_Ty) == sizeof(uint32_t) && _format == backend::IndexFormat::U_INT));
-        return (_Ty&)_buffer[idx * sizeof(_Ty)];
-    }
-
-    uint8_t* begin() noexcept { return _buffer.begin(); }
-    uint8_t* end() noexcept { return _buffer.end(); }
-    const uint8_t* begin() const noexcept { return _buffer.begin(); }
-    const uint8_t* end() const noexcept { return _buffer.end(); }
-
-    uint8_t* data() noexcept { return _buffer.data(); }
-    const uint8_t* data() const noexcept { return _buffer.data(); }
-
-    size_t size() const { return _buffer.size(); }
-    bool empty() const { return _buffer.empty(); }
-
-    void resize(size_t size) { _buffer.resize(size * sizeof(uint16_t)); }
-    void resize(size_t size, std::true_type) { _buffer.resize(size * sizeof(uint32_t)); }
-
-    backend::IndexFormat format() const { return _format; }
-
-    template<typename _Fty>
-    void for_each(_Fty cb) const
-    {
-        if (_format == backend::IndexFormat::U_SHORT)
-        {
-            for (auto it = (uint16_t*)_buffer.begin(); it != (uint16_t*)_buffer.end(); ++it)
-            {
-                cb(static_cast<uint32_t>(*it));
-            }
-        }
-        else if (_format == backend::IndexFormat::U_INT)
-        {
-            for (auto it = (uint32_t*)_buffer.begin(); it != (uint32_t*)_buffer.end(); ++it)
-            {
-                cb(*it);
-            }
-        }
-    }
-
-protected:
-    backend::IndexFormat _format;
-    yasio::byte_buffer _buffer;
-};
 
 /**mesh vertex attribute
  * @js NA
@@ -243,14 +128,13 @@ struct NodeDatas
     }
 };
 
-
 /**mesh data
  * @js NA
  * @lua NA
  */
 struct MeshData
 {
-    using IndexArray = ::cocos2d::IndexArray;
+    typedef std::vector<unsigned short> IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
@@ -263,7 +147,7 @@ struct MeshData
 public:
     /**
      * Get per vertex size
-     * @return return the sum size of all vertex attributes.
+     * @return return the sum of each vertex's all attribute size.
      */
     int getPerVertexSize() const
     {
