@@ -12,7 +12,6 @@ set(COCOS_MATH_HEADER
     math/MathUtil.h
     math/CCMath.h
     math/Rect.h
-    math/RngSeed.hpp
     )
 
 set(COCOS_MATH_SRC
