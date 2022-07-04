@@ -599,7 +599,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
             return false;
         }
 
-        IndexArray indices;
+        IndexArray indices{};
         indices.resize(nIndexCount);
         if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
@@ -720,7 +720,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
             return false;
         }
 
-        IndexArray indices{CustomCommand::IndexFormat::U_SHORT}; /* TODO: _version == 1.3 use U_INT?*/
+        IndexArray indices{}; /* TODO: _version == 1.3 use U_INT?*/
         indices.resize(nIndexCount);
         if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
@@ -777,7 +777,7 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
         const rapidjson::Value& mesh_part_array = mesh_data[PARTS];
         for (rapidjson::SizeType i = 0, mesh_part_array_size = mesh_part_array.Size(); i < mesh_part_array_size; ++i)
         {
-            IndexArray indexArray;
+            IndexArray indexArray{};
             const rapidjson::Value& mesh_part = mesh_part_array[i];
             meshData->subMeshIds.push_back(mesh_part[ID].GetString());
             // index_number
@@ -1184,7 +1184,7 @@ bool Bundle3D::loadMeshDataJson_0_1(MeshDatas& meshdatas)
     unsigned int indexnum = mesh_data_body_array_0[INDEXNUM].GetUint();
 
     // indices
-    IndexArray indices;
+    IndexArray indices{};
     indices.resize(indexnum);
 
     const rapidjson::Value& indices_val_array = mesh_data_body_array_0[INDICES];
@@ -1238,7 +1238,7 @@ bool Bundle3D::loadMeshDataJson_0_2(MeshDatas& meshdatas)
         unsigned int indexnum = mesh_submesh_val[INDEXNUM].GetUint();
 
         // indices
-        IndexArray indices;
+        IndexArray indices{};
         indices.resize(indexnum);
 
         const rapidjson::Value& indices_val_array = mesh_submesh_val[INDICES];
