@@ -134,7 +134,7 @@ public:
         return _buffer.size() / (_format == backend::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t));
     }
     /** returns the size of the container in bytes. */
-    size_t sizeInBytes() const { return _buffer.size(); }
+    size_t bsize() const { return _buffer.size(); }
 
     /** resizes the count of indices in the container. */
     void resize(size_t size)
@@ -142,7 +142,7 @@ public:
         _buffer.resize(size * (_format == backend::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t)));
     }
     /** resizes the container in bytes. */
-    void resizeInBytes(size_t size) { _buffer.resize(size); }
+    void bresize(size_t size) { _buffer.resize(size); }
 
     /** returns true if the container is empty. Otherwise, false. */
     bool empty() const { return _buffer.empty(); }
