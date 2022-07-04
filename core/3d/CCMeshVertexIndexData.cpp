@@ -134,7 +134,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
     {
         auto& indices = meshdata.subMeshIndices[i];
         auto indexBuffer = backend::Device::getInstance()->newBuffer(
-            indices.bsize() /* * indexSize*/, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+            indices.bsize(), backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
