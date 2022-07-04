@@ -59,7 +59,7 @@ public:
         format(backend::IndexFormat::U_INT);
     }
 
-    IndexArray(const IndexArray& rhs) : _buffer(rhs._buffer) { format(rhs.format()); }
+    IndexArray(const IndexArray& rhs) : _stride(rhs._stride), _buffer(rhs._buffer) {}
     IndexArray(IndexArray&& rhs) noexcept :  _stride(rhs._stride), _buffer(std::move(rhs._buffer)) {}
 
     IndexArray& operator=(const IndexArray& rhs) {
