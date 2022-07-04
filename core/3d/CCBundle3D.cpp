@@ -784,7 +784,7 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
             const rapidjson::Value& indices_val_array = mesh_part[INDICES];
             for (rapidjson::SizeType j = 0, indices_val_array_size = indices_val_array.Size();
                  j < indices_val_array_size; ++j)
-                indexArray.push_back((unsigned int)indices_val_array[j].GetUint());
+                indexArray.push_back((unsigned short)indices_val_array[j].GetUint());
 
             meshData->subMeshIndices.push_back(indexArray);
             meshData->numIndex = (int)meshData->subMeshIndices.size();
