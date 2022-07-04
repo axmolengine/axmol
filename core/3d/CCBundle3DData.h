@@ -144,8 +144,8 @@ public:
     /** Returns the format of the index array. */
     backend::IndexFormat format() const { return strideToFormat(_stride); }
 
-    /** Clears the buffer and sets the format specified. */
-    void format(backend::IndexFormat format = backend::IndexFormat::U_SHORT)
+    /** Clears the internal byte buffer and sets the format specified. */
+    void clear(backend::IndexFormat format)
     {
         clear();
         _stride = formatToStride(format);
