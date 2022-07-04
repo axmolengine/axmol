@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCSPRITE3D_H__
-#define __CCSPRITE3D_H__
+#ifndef __CCMESHRENDERER_H__
+#define __CCMESHRENDERER_H__
 
 #include <unordered_map>
 
@@ -50,39 +50,39 @@ class Texture2D;
 class MeshSkin;
 class AttachNode;
 struct NodeData;
-/** @brief Sprite3D: A sprite can be loaded from 3D model files, .obj, .c3t, .c3b, then can be drawn as sprite */
-class CC_DLL Sprite3D : public Node, public BlendProtocol
+/** @brief MeshRenderer: A mesh can be loaded from 3D model files, .obj, .c3t, .c3b */
+class CC_DLL MeshRenderer : public Node, public BlendProtocol
 {
 public:
     /**
-     * Creates an empty sprite3D without 3D model and texture.
+     * Creates an empty MeshRenderer without 3D model and texture.
      *
-     * @return An autoreleased sprite3D object.
+     * @return An autoreleased MeshRenderer object.
      */
-    static Sprite3D* create();
+    static MeshRenderer* create();
 
-    /** creates a Sprite3D*/
-    static Sprite3D* create(std::string_view modelPath);
+    /** creates a MeshRenderer*/
+    static MeshRenderer* create(std::string_view modelPath);
 
-    // creates a Sprite3D. It only supports one texture, and overrides the internal texture with 'texturePath'
-    static Sprite3D* create(std::string_view modelPath, std::string_view texturePath);
+    // creates a MeshRenderer. It only supports one texture, and overrides the internal texture with 'texturePath'
+    static MeshRenderer* create(std::string_view modelPath, std::string_view texturePath);
 
-    /** create 3d sprite asynchronously
-     * If the 3d model was previously loaded, it will create a new 3d sprite and the callback will be called at once.
-     * Otherwise it will load the model file in a new thread, and when the 3d sprite is loaded, the callback will be
-     * called with the created Sprite3D and a user-defined parameter. The callback will be called from the main thread,
+    /** create 3d mesh asynchronously
+     * If the 3d model was previously loaded, it will create a new 3d mesh and the callback will be called at once.
+     * Otherwise it will load the model file in a new thread, and when the 3d mesh is loaded, the callback will be
+     * called with the created MeshRenderer and a user-defined parameter. The callback will be called from the main thread,
      * so it is safe to create any cocos2d object from the callback.
      * @param modelPath model to be loaded
      * @param callback callback after loading
      * @param callbackparam user defined parameter for the callback
      */
     static void createAsync(std::string_view modelPath,
-                            const std::function<void(Sprite3D*, void*)>& callback,
+                            const std::function<void(MeshRenderer*, void*)>& callback,
                             void* callbackparam);
 
     static void createAsync(std::string_view modelPath,
                             std::string_view texturePath,
-                            const std::function<void(Sprite3D*, void*)>& callback,
+                            const std::function<void(MeshRenderer*, void*)>& callback,
                             void* callbackparam);
 
     /**set diffuse texture, set the first if multiple textures exist*/
@@ -129,7 +129,7 @@ public:
 
     /*
      * Get AABB
-     * If the sprite has animation, it can't be calculated accurately,
+     * If the mesh has animation, it can't be calculated accurately,
      * because bone can drive the vertices, we just use the origin vertices
      * to calculate the AABB.
      */
@@ -137,14 +137,14 @@ public:
 
     /*
      * Get AABB Recursively
-     * Because some times we may have an empty Sprite3D Node as parent, but
-     * the Sprite3D don't contain any meshes, so getAABB()
+     * Because some times we may have an empty MeshRenderer Node as parent, but
+     * the MeshRenderer don't contain any meshes, so getAABB()
      * will return a wrong value at that time.
      */
     AABB getAABBRecursively();
 
     /**
-     * Executes an action, and returns the action that is executed. For Sprite3D special logic are needed to take care
+     * Executes an action, and returns the action that is executed. For MeshRenderer special logic are needed to take care
      * of Fading.
      *
      * This node becomes the action's target. Refer to Action::getTarget()
@@ -179,36 +179,36 @@ public:
     /**draw*/
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
-    /** Adds a new material to the sprite.
-     The Material will be applied to all the meshes that belong to the sprite.
+    /** Adds a new material to the mesh.
+     The Material will be applied to all the meshes that belong to the mesh.
      Internally it will call `setMaterial(material,-1)`
      */
     void setMaterial(Material* material);
 
-    /** Adds a new material to a particular mesh of the sprite.
+    /** Adds a new material to a particular mesh of the mesh.
      meshIndex is the mesh that will be applied to.
-     if meshIndex == -1, then it will be applied to all the meshes that belong to the sprite.
+     if meshIndex == -1, then it will be applied to all the meshes that belong to the mesh.
      */
     void setMaterial(Material* material, int meshIndex);
 
-    /** Adds a new material to a particular mesh of the sprite.
+    /** Adds a new material to a particular mesh of the mesh.
      meshIndex is the mesh that will be applied to.
-     if meshIndex == -1, then it will be applied to all the meshes that belong to the sprite.
+     if meshIndex == -1, then it will be applied to all the meshes that belong to the mesh.
      */
     Material* getMaterial(int meshIndex) const;
 
     /**
-     * force set this Sprite3D to 2D render queue
+     * force set this MeshRenderer to 2D render queue
      */
     void setForce2DQueue(bool force2D);
 
     /**
-     * Get meshes used in sprite 3d
+     * Get meshes used in mesh renderer
      */
     const Vector<Mesh*>& getMeshes() const { return _meshes; }
 
-    Sprite3D();
-    virtual ~Sprite3D();
+    MeshRenderer();
+    virtual ~MeshRenderer();
 
     virtual bool init() override;
 
@@ -216,7 +216,7 @@ public:
 
     bool initFrom(const NodeDatas& nodedatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas);
 
-    /**load sprite3d from cache, return true if succeed, false otherwise*/
+    /**load MeshRenderer from cache, return true if succeed, false otherwise*/
     bool loadFromCache(std::string_view path);
 
     /** load file and set it to meshedatas, nodedatas and materialdatas, obj file .mtl file should be at the same
@@ -224,7 +224,7 @@ public:
     bool loadFromFile(std::string_view path, NodeDatas* nodedatas, MeshDatas* meshdatas, MaterialDatas* materialdatas);
 
     /**
-     * Visits this Sprite3D's children and draw them recursively.
+     * Visits this MeshRenderer's children and draw them recursively.
      * Note: all its children will rendered as 3D objects
      */
     virtual void visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
@@ -232,9 +232,9 @@ public:
     /**generate default material*/
     void genMaterial(bool useLight = false);
 
-    void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite);
-    void createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas);
-    Sprite3D* createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
+    void createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleMesh);
+    void createAttachMeshRendererNode(NodeData* nodedata, const MaterialDatas& materialdatas);
+    MeshRenderer* createMeshRendererNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas);
 
     /**get MeshIndexData by Id*/
     MeshIndexData* getMeshIndexData(std::string_view indexId) const;
@@ -268,9 +268,9 @@ protected:
 
     struct AsyncLoadParam
     {
-        std::function<void(Sprite3D*, void*)> afterLoadCallback;  // callback after load
+        std::function<void(MeshRenderer*, void*)> afterLoadCallback;  // callback after load
         void* callbackParam;
-        bool result;  // sprite load result
+        bool result;  // mesh load result
         std::string modelPath;
         std::string modelFullPath;
         std::string texPath;  //
@@ -283,19 +283,19 @@ protected:
 
 ///////////////////////////////////////////////////////
 /**
- * Sprite3DCache
- * @brief the cache data of Sprite3D, use to speed up Sprite3D::create
+ * MeshRendererCache
+ * @brief the cache data of MeshRenderer, use to speed up MeshRenderer::create
  */
-class CC_DLL Sprite3DCache
+class CC_DLL MeshRendererCache
 {
 public:
-    struct Sprite3DData
+    struct MeshRendererData
     {
         Vector<MeshVertexData*> meshVertexDatas;
         Vector<backend::ProgramState*> programStates;
         NodeDatas* nodedatas;
         MaterialDatas* materialdatas;
-        ~Sprite3DData()
+        ~MeshRendererData()
         {
             if (nodedatas)
                 delete nodedatas;
@@ -307,39 +307,39 @@ public:
     };
 
     /**get & destroy*/
-    static Sprite3DCache* getInstance();
+    static MeshRendererCache* getInstance();
     static void destroyInstance();
 
     /**
-     * get the SpriteData struct
+     * get the MeshData struct
      *
      * @lua NA
      */
-    Sprite3DData* getSpriteData(std::string_view key) const;
+    MeshRendererData* getMeshData(std::string_view key) const;
 
     /**
-     * add the SpriteData into Sprite3D by given the specified key
+     * add the MeshData into MeshRenderer by given the specified key
      *
      * @lua NA
      */
-    bool addSprite3DData(std::string_view key, Sprite3DData* spritedata);
+    bool addMeshRendererData(std::string_view key, MeshRendererData* meshdata);
 
-    /**remove the SpriteData from Sprite3D by given the specified key*/
-    void removeSprite3DData(std::string_view key);
+    /**remove the MeshData from MeshRenderer by given the specified key*/
+    void removeMeshRendererData(std::string_view key);
 
-    /**remove all the SpriteData from Sprite3D*/
-    void removeAllSprite3DData();
+    /**remove all the MeshData from MeshRenderer*/
+    void removeAllMeshRendererData();
 
-    Sprite3DCache();
-    ~Sprite3DCache();
+    MeshRendererCache();
+    ~MeshRendererCache();
 
 protected:
-    static Sprite3DCache* _cacheInstance;
-    hlookup::string_map<Sprite3DData*> _spriteDatas;  // cached sprite data
+    static MeshRendererCache* _cacheInstance;
+    hlookup::string_map<MeshRendererData*> _meshDatas;  // cached mesh data
 };
 
 // end of 3d group
 /// @}
 
 NS_CC_END
-#endif  // __SPRITE3D_H_
+#endif  // __MeshRenderer_H_

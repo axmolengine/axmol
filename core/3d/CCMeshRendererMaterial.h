@@ -46,9 +46,9 @@ class ProgramState;
 }
 
 /**
- * @brief Sprite3DMaterial: Material for Sprite3D.
+ * @brief MeshRendererMaterial: Material for MeshRenderer.
  */
-class CC_DLL Sprite3DMaterial : public Material
+class CC_DLL MeshRendererMaterial : public Material
 {
 public:
     /**
@@ -80,22 +80,22 @@ public:
      * @param skinned Has skin?
      * @return Created material
      */
-    static Sprite3DMaterial* createBuiltInMaterial(MaterialType type, bool skinned);
+    static MeshRendererMaterial* createBuiltInMaterial(MaterialType type, bool skinned);
 
     /**
      * Create material with file name, it creates material from cache if it is previously loaded
      * @param path Path of material file
      * @return Created material
      */
-    static Sprite3DMaterial* createWithFilename(std::string_view path);
+    static MeshRendererMaterial* createWithFilename(std::string_view path);
 
     /**
      * Create material with GLProgramState
      * @param programState GLProgramState instance
      * @return Created material
      */
-    //    static Sprite3DMaterial* createWithGLStateProgram(GLProgramState* programState);
-    static Sprite3DMaterial* createWithProgramState(backend::ProgramState* programState);
+    //    static MeshRendererMaterial* createWithGLStateProgram(GLProgramState* programState);
+    static MeshRendererMaterial* createWithProgramState(backend::ProgramState* programState);
 
     void setTexture(Texture2D* tex, NTextureData::Usage usage);
 
@@ -121,18 +121,18 @@ public:
 
 protected:
     MaterialType _type;
-    static std::unordered_map<std::string, Sprite3DMaterial*> _materials;  // cached material
-    static Sprite3DMaterial* _unLitMaterial;
-    static Sprite3DMaterial* _unLitNoTexMaterial;
-    static Sprite3DMaterial* _vertexLitMaterial;
-    static Sprite3DMaterial* _diffuseMaterial;
-    static Sprite3DMaterial* _diffuseNoTexMaterial;
-    static Sprite3DMaterial* _bumpedDiffuseMaterial;
+    static std::unordered_map<std::string, MeshRendererMaterial*> _materials;  // cached material
+    static MeshRendererMaterial* _unLitMaterial;
+    static MeshRendererMaterial* _unLitNoTexMaterial;
+    static MeshRendererMaterial* _vertexLitMaterial;
+    static MeshRendererMaterial* _diffuseMaterial;
+    static MeshRendererMaterial* _diffuseNoTexMaterial;
+    static MeshRendererMaterial* _bumpedDiffuseMaterial;
 
-    static Sprite3DMaterial* _unLitMaterialSkin;
-    static Sprite3DMaterial* _vertexLitMaterialSkin;
-    static Sprite3DMaterial* _diffuseMaterialSkin;
-    static Sprite3DMaterial* _bumpedDiffuseMaterialSkin;
+    static MeshRendererMaterial* _unLitMaterialSkin;
+    static MeshRendererMaterial* _vertexLitMaterialSkin;
+    static MeshRendererMaterial* _diffuseMaterialSkin;
+    static MeshRendererMaterial* _bumpedDiffuseMaterialSkin;
 
     static backend::ProgramState* _unLitMaterialProgState;
     static backend::ProgramState* _unLitNoTexMaterialProgState;
@@ -148,35 +148,35 @@ protected:
 };
 
 /**
- * @brief the sprite3D material is only texture for now
+ * @brief the MeshRenderer material is only texture for now
  * @js NA
  * @lua NA
  */
-class Sprite3DMaterialCache
+class MeshRendererMaterialCache
 {
 public:
     /**get & destroy cache*/
-    static Sprite3DMaterialCache* getInstance();
+    static MeshRendererMaterialCache* getInstance();
 
     /**destroy the instance*/
     static void destroyInstance();
 
     /**add to cache*/
-    bool addSprite3DMaterial(std::string_view key, Texture2D* tex);
+    bool addMeshRendererMaterial(std::string_view key, Texture2D* tex);
 
     /**get material from cache*/
-    Texture2D* getSprite3DMaterial(std::string_view key);
+    Texture2D* getMeshRendererMaterial(std::string_view key);
 
-    /**remove all spritematerial*/
-    void removeAllSprite3DMaterial();
-    /**remove unused spritematerial*/
-    void removeUnusedSprite3DMaterial();
+    /** remove all mesh materials */
+    void removeAllMeshRendererMaterial();
+    /** remove unused mesh materials */
+    void removeUnusedMeshRendererMaterial();
 
-    Sprite3DMaterialCache();
-    ~Sprite3DMaterialCache();
+    MeshRendererMaterialCache();
+    ~MeshRendererMaterialCache();
 
 protected:
-    static Sprite3DMaterialCache* _cacheInstance;  // instance
+    static MeshRendererMaterialCache* _cacheInstance;  // instance
     hlookup::string_map<Texture2D*> _materials;    // cached material
 };
 
