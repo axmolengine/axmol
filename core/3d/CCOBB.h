@@ -36,9 +36,9 @@ NS_CC_BEGIN
  */
 
 /**
- * Oriented Bounding Box(OBB)
- * @brief the OBB is similar to the AABB but the bounding box has the same direction as Sprite3D. so it's collision
- * detection more precise than AABB
+ *
+ * @brief Oriented Bounding Box(OBB): OBB is similar to AABB except the bounding box has the same direction as the
+ * MeshRenderer. so collision detection is more precise than AABB.
  * @js NA
  */
 class CC_DLL OBB

@@ -42,18 +42,18 @@ NS_CC_BEGIN
  */
 
 /**
- * @brief Convenient class to create a rigid body with Sprite3D
+ * @brief Convenient class to create a rigid body with a MeshRenderer
  */
 class CC_DLL PhysicsMeshRenderer : public cocos2d::MeshRenderer
 {
 public:
-    /** creates a PhysicsSprite3D*/
+    /** creates a PhysicsMeshRenderer */
     static PhysicsMeshRenderer* create(std::string_view modelPath,
                                    Physics3DRigidBodyDes* rigidDes,
                                    const cocos2d::Vec3& translateInPhysics = cocos2d::Vec3::ZERO,
                                    const cocos2d::Quaternion& rotInPhsyics = cocos2d::Quaternion::ZERO);
 
-    /** creates a PhysicsSprite3D with a collider */
+    /** creates a PhysicsMeshRenderer with a collider */
     static PhysicsMeshRenderer* createWithCollider(std::string_view modelPath,
                                                Physics3DColliderDes* colliderDes,
                                                const cocos2d::Vec3& translateInPhysics = cocos2d::Vec3::ZERO,
