@@ -156,22 +156,15 @@ public:
         _stride = (format == backend::IndexFormat::U_SHORT ? 2 : 4);
     }
 
-    template<typename _Fty>
+    template <typename _Fty>
     void for_each(_Fty cb) const
     {
-        if (format() == backend::IndexFormat::U_SHORT)
+        assert(_stride != 0);
+        for (auto it = _buffer.begin(); it != _buffer.end(); it += _stride)
         {
-            for (auto it = (uint16_t*)_buffer.begin(); it != (uint16_t*)_buffer.end(); ++it)
-            {
-                cb(static_cast<uint32_t>(*it));
-            }
-        }
-        else if (format() == backend::IndexFormat::U_INT)
-        {
-            for (auto it = (uint32_t*)_buffer.begin(); it != (uint32_t*)_buffer.end(); ++it)
-            {
-                cb(*it);
-            }
+            uint32_t val = 0;
+            memcpy(&val, it, _stride);
+            cb(val);
         }
     }
 
