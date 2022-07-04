@@ -45,24 +45,28 @@ NS_CC_BEGIN
 
 class IndexArray
 {
+    static constexpr unsigned int formatToStride(backend::IndexFormat fmt) { return 1 << (int)fmt; }
+    static constexpr backend::IndexFormat strideToFormat(unsigned int stride)
+    {
+        return (backend::IndexFormat)(stride >> 1);
+    }
+
 public:
-    IndexArray() { format(backend::IndexFormat::U_SHORT); }
-    IndexArray(backend::IndexFormat indexFormat) { format(indexFormat); }
+    IndexArray() : _stride(formatToStride(backend::IndexFormat::U_SHORT)) {}
+    IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
 
-    IndexArray(std::initializer_list<uint16_t> rhs) : _buffer(rhs)
-    {
-        format(backend::IndexFormat::U_SHORT);
-    }
-
-    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/) : _buffer(rhs)
-    {
-        format(backend::IndexFormat::U_INT);
-    }
+    IndexArray(std::initializer_list<uint16_t> rhs)
+        : _stride(formatToStride(backend::IndexFormat::U_SHORT)), _buffer(rhs)
+    {}
+    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/)
+        : _stride(formatToStride(backend::IndexFormat::U_INT)), _buffer(rhs)
+    {}
 
     IndexArray(const IndexArray& rhs) : _stride(rhs._stride), _buffer(rhs._buffer) {}
-    IndexArray(IndexArray&& rhs) noexcept :  _stride(rhs._stride), _buffer(std::move(rhs._buffer)) {}
+    IndexArray(IndexArray&& rhs) noexcept : _stride(rhs._stride), _buffer(std::move(rhs._buffer)) {}
 
-    IndexArray& operator=(const IndexArray& rhs) {
+    IndexArray& operator=(const IndexArray& rhs)
+    {
         _stride = rhs._stride;
         _buffer = rhs._buffer;
         return *this;
@@ -73,30 +77,26 @@ public:
         return *this;
     }
 
-    void swap(IndexArray& rhs) {
+    void swap(IndexArray& rhs)
+    {
         std::swap(_stride, rhs._stride);
         _buffer.swap(rhs._buffer);
     }
 
-    void clear(backend::IndexFormat format = backend::IndexFormat::UNSPEC)
-    { 
-        _buffer.clear(); 
-        if (format != backend::IndexFormat::UNSPEC)
-            _stride = format == backend::IndexFormat::U_SHORT ? 2 : 4;
+    void clear() { _buffer.clear(); }
+
+    /** clear with new index format */
+    void clear(backend::IndexFormat format)
+    {
+        clear();
+        _stride = formatToStride(format);
     }
 
-    /** Pushes back a value if type unsigned short (uint16_t). */
-    void push_back(uint16_t val)
+    /** Pushes back a value. */
+    void push_back(uint32_t val)
     {
-        assert(_stride == 2);
-        _buffer.append_n((uint8_t*)&val, sizeof(val));
-    }
-
-    /** Pushes back a value if type unsigned int (uint32_t). */
-    void push_back(uint32_t val, std::true_type /*U_INT*/)
-    {
-        assert(_stride == 4);
-        _buffer.append_n((uint8_t*)&val, sizeof(val));
+        assert(_stride == 2 || _stride == 4);
+        _buffer.append_n((uint8_t*)&val, _stride);
     }
 
     /** Inserts a list containing unsigned short (uint16_t) data. */
@@ -113,11 +113,16 @@ public:
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
     }
 
+    /** Inserts range data. */
+    void insert(uint8_t* where, const void* first, const void* last)
+    {
+        _buffer.insert(where, (const uint8_t*)first, (const uint8_t*)last);
+    }
+
     template <typename _Ty>
     _Ty& at(size_t idx)
     {
-        assert((sizeof(_Ty) == sizeof(uint16_t) && _stride == 2) ||
-               (sizeof(_Ty) == sizeof(uint32_t) && _stride == 4));
+        assert(sizeof(_Ty) == _stride);
         if (idx < this->size())
             return (_Ty&)_buffer[idx * sizeof(_Ty)];
         throw std::out_of_range("IndexArray: out of range!");
@@ -145,16 +150,7 @@ public:
     bool empty() const { return _buffer.empty(); }
 
     /** returns the format of the index array. */
-    backend::IndexFormat format() const
-    {
-        return _stride == 2 ? backend::IndexFormat::U_SHORT : backend::IndexFormat::U_INT;
-    }
-
-    /** sets the format of the index array. */
-    void format(backend::IndexFormat format)
-    {
-        _stride = format == backend::IndexFormat::U_SHORT ? 2 : 4;
-    }
+    backend::IndexFormat format() const { return strideToFormat(_stride); }
 
     template <typename _Fty>
     void for_each(_Fty cb) const
@@ -169,7 +165,7 @@ public:
     }
 
 protected:
-    uint8_t _stride;
+    unsigned int _stride;
     yasio::byte_buffer _buffer;
 };
 
