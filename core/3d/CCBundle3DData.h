@@ -85,11 +85,6 @@ public:
         std::swap(_stride, rhs._stride);
         _buffer.swap(rhs._buffer);
     }
-    void insert(size_t offset, _Iter first, const _Iter last)
-    {
-        insert((std::min)(_Myfirst + offset, _Mylast), first, last);
-    }
-    template <typename _Iter>
 
     void clear() { _buffer.clear(); }
 
@@ -108,23 +103,23 @@ public:
     }
 
     /** Inserts a list containing unsigned short (uint16_t) data. */
-    void insert(uint8_t* where, std::initializer_list<uint16_t> ilist, uint16_index_format /*U_SHORT*/)
+    void insert(size_t offset, std::initializer_list<uint16_t> ilist, uint16_index_format /*U_SHORT*/)
     {
         assert(_stride == 2);
-        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
+        binsert(offset * _stride, ilist.begin(), ilist.end());
     }
 
     /** Inserts a list containing unsigned int (uint32_t) data. */
-    void insert(uint8_t* where, std::initializer_list<uint32_t> ilist, uint32_index_format /*U_INT*/)
+    void insert(size_t offset, std::initializer_list<uint32_t> ilist, uint32_index_format /*U_INT*/)
     {
         assert(_stride == 4);
-        _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
+        binsert(offset * _stride, ilist.begin(), ilist.end());
     }
 
-    /** Inserts range data. */
-    void insert(uint8_t* where, const void* first, const void* last)
+    /** Inserts range data based on an offset in bytes. */
+    void binsert(size_t offset, const void* first, const void* last)
     {
-        _buffer.insert(where, (const uint8_t*)first, (const uint8_t*)last);
+        _buffer.insert(offset, (const uint8_t*)first, (const uint8_t*)last);
     }
 
     template <typename _Ty>
