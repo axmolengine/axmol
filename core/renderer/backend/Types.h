@@ -159,8 +159,8 @@ enum class TextureUsage : uint32_t
 
 enum class IndexFormat : uint32_t
 {
-    U_SHORT = 1,
-    U_INT = 2,
+    U_SHORT,
+    U_INT
 };
 
 enum class VertexStepMode : uint32_t
@@ -430,9 +430,6 @@ struct ProgramType
         SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,  // CC3D_skinPositionNormalTexture_vert,  CC3D_colorNormalTexture_frag
         PARTICLE_TEXTURE_3D,                   // CC3D_particle_vert,                   CC3D_particleTexture_frag
         PARTICLE_COLOR_3D,                     // CC3D_particle_vert,                   CC3D_particleColor_frag
-
-        QUAD_COLOR_2D,                         // CC2D_quad_vert,                       CC2D_quadColor_frag
-        QUAD_TEXTURE_2D,                       // CC2D_quad_vert,                       CC2D_quadTexture_frag
 
         HSV,
         HSV_DUAL_SAMPLER,
