@@ -46,9 +46,9 @@ class ProgramState;
 }
 
 /**
- * @brief MeshRendererMaterial: a mesh material for MeshRenderers.
+ * @brief MeshMaterial: a mesh material for MeshRenderers.
  */
-class CC_DLL MeshRendererMaterial : public Material
+class CC_DLL MeshMaterial : public Material
 {
 public:
     /**
@@ -80,21 +80,21 @@ public:
      * @param skinned Has hardware skinning?
      * @return An autorelease material object
      */
-    static MeshRendererMaterial* createBuiltInMaterial(MaterialType type, bool skinned);
+    static MeshMaterial* createBuiltInMaterial(MaterialType type, bool skinned);
 
     /**
      * Create material with file name, it creates material from cache if it is previously loaded
      * @param path Path of material file
      * @return An autorelease material object
      */
-    static MeshRendererMaterial* createWithFilename(std::string_view path);
+    static MeshMaterial* createWithFilename(std::string_view path);
 
     /**
      * Create material with a ProgramState
      * @param programState GLProgramState instance
      * @return An autorelease material object
      */
-    static MeshRendererMaterial* createWithProgramState(backend::ProgramState* programState);
+    static MeshMaterial* createWithProgramState(backend::ProgramState* programState);
 
     void setTexture(Texture2D* tex, NTextureData::Usage usage);
 
@@ -120,18 +120,18 @@ public:
 
 protected:
     MaterialType _type;
-    static std::unordered_map<std::string, MeshRendererMaterial*> _materials;  // cached material
-    static MeshRendererMaterial* _unLitMaterial;
-    static MeshRendererMaterial* _unLitNoTexMaterial;
-    static MeshRendererMaterial* _vertexLitMaterial;
-    static MeshRendererMaterial* _diffuseMaterial;
-    static MeshRendererMaterial* _diffuseNoTexMaterial;
-    static MeshRendererMaterial* _bumpedDiffuseMaterial;
+    static std::unordered_map<std::string, MeshMaterial*> _materials;  // cached material
+    static MeshMaterial* _unLitMaterial;
+    static MeshMaterial* _unLitNoTexMaterial;
+    static MeshMaterial* _vertexLitMaterial;
+    static MeshMaterial* _diffuseMaterial;
+    static MeshMaterial* _diffuseNoTexMaterial;
+    static MeshMaterial* _bumpedDiffuseMaterial;
 
-    static MeshRendererMaterial* _unLitMaterialSkin;
-    static MeshRendererMaterial* _vertexLitMaterialSkin;
-    static MeshRendererMaterial* _diffuseMaterialSkin;
-    static MeshRendererMaterial* _bumpedDiffuseMaterialSkin;
+    static MeshMaterial* _unLitMaterialSkin;
+    static MeshMaterial* _vertexLitMaterialSkin;
+    static MeshMaterial* _diffuseMaterialSkin;
+    static MeshMaterial* _bumpedDiffuseMaterialSkin;
 
     static backend::ProgramState* _unLitMaterialProgState;
     static backend::ProgramState* _unLitNoTexMaterialProgState;
@@ -147,32 +147,32 @@ protected:
 };
 
 /**
- * @brief MeshRendererMaterialCache: the MeshRenderer material cache, it can only cache textures for now.
+ * @brief MeshMaterialCache: the MeshRenderer material cache, it can only cache textures for now.
  * @js NA
  * @lua NA
  */
-class MeshRendererMaterialCache
+class MeshMaterialCache
 {
 public:
-    static MeshRendererMaterialCache* getInstance();
+    static MeshMaterialCache* getInstance();
     static void destroyInstance();
 
     /** add a material to cache */
-    bool addMeshRendererMaterial(std::string_view key, Texture2D* tex);
+    bool addMeshMaterial(std::string_view key, Texture2D* tex);
 
     /** get material from cache */
-    Texture2D* getMeshRendererMaterial(std::string_view key);
+    Texture2D* getMeshMaterial(std::string_view key);
 
     /** remove all cached materials */
-    void removeAllMeshRendererMaterial();
+    void removeAllMeshMaterial();
     /** remove unused cached materials */
-    void removeUnusedMeshRendererMaterial();
+    void removeUnusedMeshMaterial();
 
-    MeshRendererMaterialCache();
-    ~MeshRendererMaterialCache();
+    MeshMaterialCache();
+    ~MeshMaterialCache();
 
 protected:
-    static MeshRendererMaterialCache* _cacheInstance;  // cache instance
+    static MeshMaterialCache* _cacheInstance;  // cache instance
     hlookup::string_map<Texture2D*> _materials;    // cached materials
 };
 
