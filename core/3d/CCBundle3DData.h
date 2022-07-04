@@ -85,6 +85,11 @@ public:
         std::swap(_stride, rhs._stride);
         _buffer.swap(rhs._buffer);
     }
+    void insert(size_t offset, _Iter first, const _Iter last)
+    {
+        insert((std::min)(_Myfirst + offset, _Mylast), first, last);
+    }
+    template <typename _Iter>
 
     void clear() { _buffer.clear(); }
 
