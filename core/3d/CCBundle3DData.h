@@ -48,13 +48,13 @@ using uint32_index_format  = std::integral_constant<int, 2>;
 
 class IndexArray
 {
-    static constexpr unsigned int formatToStride(backend::IndexFormat fmt) { return 1 << (int)fmt; }
+public:
+    static constexpr unsigned int formatToStride(backend::IndexFormat format) { return 1 << (int)format; }
     static constexpr backend::IndexFormat strideToFormat(unsigned int stride)
     {
         return (backend::IndexFormat)(stride >> 1);
     }
 
-public:
     IndexArray() : _stride(formatToStride(backend::IndexFormat::U_SHORT)) {}
     IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
 

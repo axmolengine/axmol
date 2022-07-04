@@ -732,8 +732,7 @@ CustomCommand::PrimitiveType Mesh::getPrimitiveType() const
 
 ssize_t Mesh::getIndexCount() const
 {
-    return _meshIndexData->getIndexBuffer()->getSize() /
-           (meshIndexFormat == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t));
+    return _meshIndexData->getIndexBuffer()->getSize() / IndexArray::formatToStride(meshIndexFormat);
 }
 
 CustomCommand::IndexFormat Mesh::getIndexFormat() const
