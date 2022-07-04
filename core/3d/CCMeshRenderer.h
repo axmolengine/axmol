@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCMESHRENDERER_H__
-#define __CCMESHRENDERER_H__
+#ifndef __CC_MESH_RENDERER_H__
+#define __CC_MESH_RENDERER_H__
 
 #include <unordered_map>
 
@@ -341,4 +341,4 @@ protected:
 /// @}
 
 NS_CC_END
-#endif  // __MESHRENDERER_H_
+#endif  // __CC_MESH_RENDERER_H__

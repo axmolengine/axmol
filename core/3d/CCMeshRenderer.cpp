@@ -27,7 +27,7 @@
 #include "3d/CCObjLoader.h"
 #include "3d/CCMeshSkin.h"
 #include "3d/CCBundle3D.h"
-#include "3d/CCMeshRendererMaterial.h"
+#include "3d/CCMeshMaterial.h"
 #include "3d/CCAttachNode.h"
 #include "3d/CCMesh.h"
 
@@ -48,7 +48,7 @@
 
 NS_CC_BEGIN
 
-static MeshRendererMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
+static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
 
 MeshRenderer* MeshRenderer::create()
 {
@@ -501,7 +501,7 @@ void MeshRenderer::genMaterial(bool useLight)
 {
     _shaderUsingLight = useLight;
 
-    std::unordered_map<const MeshVertexData*, MeshRendererMaterial*> materials;
+    std::unordered_map<const MeshVertexData*, MeshMaterial*> materials;
     for (auto meshVertexData : _meshVertexDatas)
     {
         auto material = getMeshRendererMaterialForAttribs(meshVertexData, useLight);
@@ -1015,7 +1015,7 @@ MeshRendererCache::~MeshRendererCache()
     removeAllMeshRendererData();
 }
 
-static MeshRendererMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)
+static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)
 {
     bool textured = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD);
     bool hasSkin  = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX) &&
@@ -1023,27 +1023,27 @@ static MeshRendererMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* m
     bool hasNormal       = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL);
     bool hasTangentSpace = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TANGENT) &&
                            meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BINORMAL);
-    MeshRendererMaterial::MaterialType type;
+    MeshMaterial::MaterialType type;
     if (textured)
     {
         if (hasTangentSpace)
         {
-            type = hasNormal && usesLight ? MeshRendererMaterial::MaterialType::BUMPED_DIFFUSE
-                                          : MeshRendererMaterial::MaterialType::UNLIT;
+            type = hasNormal && usesLight ? MeshMaterial::MaterialType::BUMPED_DIFFUSE
+                                          : MeshMaterial::MaterialType::UNLIT;
         }
         else
         {
-            type = hasNormal && usesLight ? MeshRendererMaterial::MaterialType::DIFFUSE
-                                          : MeshRendererMaterial::MaterialType::UNLIT;
+            type = hasNormal && usesLight ? MeshMaterial::MaterialType::DIFFUSE
+                                          : MeshMaterial::MaterialType::UNLIT;
         }
     }
     else
     {
-        type = hasNormal && usesLight ? MeshRendererMaterial::MaterialType::DIFFUSE_NOTEX
-                                      : MeshRendererMaterial::MaterialType::UNLIT_NOTEX;
+        type = hasNormal && usesLight ? MeshMaterial::MaterialType::DIFFUSE_NOTEX
+                                      : MeshMaterial::MaterialType::UNLIT_NOTEX;
     }
 
-    return MeshRendererMaterial::createBuiltInMaterial(type, hasSkin);
+    return MeshMaterial::createBuiltInMaterial(type, hasSkin);
 }
 
 NS_CC_END

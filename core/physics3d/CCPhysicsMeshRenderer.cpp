@@ -31,12 +31,12 @@
 
 NS_CC_BEGIN
 
-PhysicsSprite3D* PhysicsSprite3D::create(std::string_view modelPath,
+PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
                                          Physics3DRigidBodyDes* rigidDes,
                                          const cocos2d::Vec3& translateInPhysics,
                                          const cocos2d::Quaternion& rotInPhsyics)
 {
-    auto ret = new PhysicsSprite3D();
+    auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
     {
         auto obj               = Physics3DRigidBody::create(rigidDes);
@@ -50,12 +50,12 @@ PhysicsSprite3D* PhysicsSprite3D::create(std::string_view modelPath,
     return ret;
 }
 
-PhysicsSprite3D* PhysicsSprite3D::createWithCollider(std::string_view modelPath,
+PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view modelPath,
                                                      Physics3DColliderDes* colliderDes,
                                                      const cocos2d::Vec3& translateInPhysics,
                                                      const cocos2d::Quaternion& rotInPhsyics)
 {
-    auto ret = new PhysicsSprite3D();
+    auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
     {
         auto obj               = Physics3DCollider::create(colliderDes);
@@ -69,31 +69,31 @@ PhysicsSprite3D* PhysicsSprite3D::createWithCollider(std::string_view modelPath,
     return ret;
 }
 
-Physics3DObject* PhysicsSprite3D::getPhysicsObj() const
+Physics3DObject* PhysicsMeshRenderer::getPhysicsObj() const
 {
     return _physicsComponent->getPhysics3DObject();
 }
 
-void PhysicsSprite3D::setSyncFlag(Physics3DComponent::PhysicsSyncFlag syncFlag)
+void PhysicsMeshRenderer::setSyncFlag(Physics3DComponent::PhysicsSyncFlag syncFlag)
 {
     if (_physicsComponent)
         _physicsComponent->setSyncFlag(syncFlag);
 }
 
-void PhysicsSprite3D::syncNodeToPhysics()
+void PhysicsMeshRenderer::syncNodeToPhysics()
 {
     if (_physicsComponent)
         _physicsComponent->syncNodeToPhysics();
 }
 
-void PhysicsSprite3D::syncPhysicsToNode()
+void PhysicsMeshRenderer::syncPhysicsToNode()
 {
     if (_physicsComponent)
         _physicsComponent->syncPhysicsToNode();
 }
 
-PhysicsSprite3D::PhysicsSprite3D() : _physicsComponent(nullptr) {}
-PhysicsSprite3D::~PhysicsSprite3D() {}
+PhysicsMeshRenderer::PhysicsMeshRenderer() : _physicsComponent(nullptr) {}
+PhysicsMeshRenderer::~PhysicsMeshRenderer() {}
 
 NS_CC_END
 
