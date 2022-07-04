@@ -135,12 +135,12 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
         auto& indices = meshdata.subMeshIndices[i];
         // auto indexSize = format == CustomCommand::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t);
         auto indexBuffer = backend::Device::getInstance()->newBuffer(
-            indices.size()/* * indexSize*/, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
+            indices.sizeInBytes() /* * indexSize*/, backend::BufferType::INDEX, backend::BufferUsage::STATIC);
         indexBuffer->autorelease();
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         indexBuffer->usingDefaultStoredData(false);
 #endif
-        indexBuffer->updateData((void*)indices.data(), indices.size() /* * indexSize*/);
+        indexBuffer->updateData((void*)indices.data(), indices.sizeInBytes() /* * indexSize*/);
 
         std::string id           = (i < meshdata.subMeshIds.size() ? meshdata.subMeshIds[i] : "");
         MeshIndexData* indexdata = nullptr;

@@ -48,8 +48,8 @@ class IndexArray
 public:
     IndexArray() : _format(backend::IndexFormat::U_SHORT) {}
     IndexArray(backend::IndexFormat format) : _format(format) {}
-    IndexArray(std::initializer_list<unsigned short> rhs) : _format(backend::IndexFormat::U_SHORT), _buffer(rhs) {}
-    IndexArray(std::initializer_list<unsigned int> rhs, std::true_type /*U_INT*/)
+    IndexArray(std::initializer_list<uint16_t> rhs) : _format(backend::IndexFormat::U_SHORT), _buffer(rhs) {}
+    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/)
         : _format(backend::IndexFormat::U_INT), _buffer(rhs)
     {}
 
@@ -78,25 +78,29 @@ public:
             _format = format;
     }
 
-    void push_back(u_short val)
+    /** Pushes back a value if type unsigned short (uint16_t). */
+    void push_back(uint16_t val)
     {
         assert(_format == backend::IndexFormat::U_SHORT);
         _buffer.append_n((uint8_t*)&val, sizeof(val));
     }
 
-    void push_back(unsigned int val, std::true_type /*U_INT*/)
+    /** Pushes back a value if type unsigned int (uint32_t). */
+    void push_back(uint32_t val, std::true_type /*U_INT*/)
     {
         assert(_format == backend::IndexFormat::U_INT);
         _buffer.append_n((uint8_t*)&val, sizeof(val));
     }
 
+    /** Inserts a list containing unsigned short (uint16_t) data. */
     void insert(uint8_t* where, std::initializer_list<unsigned short> ilist)
     {
         assert(_format == backend::IndexFormat::U_SHORT);
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
     }
 
-    void insert(uint8_t* where, std::initializer_list<unsigned int> ilist, std::true_type)
+    /** Inserts a list containing unsigned int (uint32_t) data. */
+    void insert(uint8_t* where, std::initializer_list<uint32_t> ilist, std::true_type)
     {
         assert(_format == backend::IndexFormat::U_INT);
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
@@ -124,12 +128,26 @@ public:
     uint8_t* data() noexcept { return _buffer.data(); }
     const uint8_t* data() const noexcept { return _buffer.data(); }
 
-    size_t size() const { return _buffer.size(); }
+    /** returns the count of indices in the container. */
+    size_t size() const
+    {
+        return _buffer.size() / (_format == backend::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t));
+    }
+    /** returns the size of the container in bytes. */
+    size_t sizeInBytes() const { return _buffer.size(); }
+
+    /** resizes the count of indices in the container. */
+    void resize(size_t size)
+    {
+        _buffer.resize(size * (_format == backend::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t)));
+    }
+    /** resizes the container in bytes. */
+    void resizeInBytes(size_t size) { _buffer.resize(size); }
+
+    /** returns true if the container is empty. Otherwise, false. */
     bool empty() const { return _buffer.empty(); }
 
-    void resize(size_t size) { _buffer.resize(size * sizeof(uint16_t)); }
-    void resize(size_t size, std::true_type) { _buffer.resize(size * sizeof(uint32_t)); }
-
+    /** returns the format of the index array. */
     backend::IndexFormat format() const { return _format; }
 
     template<typename _Fty>
