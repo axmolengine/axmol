@@ -46,28 +46,35 @@ NS_CC_BEGIN
 class IndexArray
 {
 public:
-    IndexArray() : _format(backend::IndexFormat::U_SHORT) {}
-    IndexArray(backend::IndexFormat format) : _format(format) {}
-    IndexArray(std::initializer_list<uint16_t> rhs) : _format(backend::IndexFormat::U_SHORT), _buffer(rhs) {}
-    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/)
-        : _format(backend::IndexFormat::U_INT), _buffer(rhs)
-    {}
+    IndexArray() { format(backend::IndexFormat::U_SHORT); }
+    IndexArray(backend::IndexFormat indexFormat) { format(indexFormat); }
 
-    IndexArray(const IndexArray& rhs) : _format(rhs._format), _buffer(rhs._buffer) {}
-    IndexArray(IndexArray&& rhs) : _format(rhs._format), _buffer(std::move(rhs._buffer)) {}
+    IndexArray(std::initializer_list<uint16_t> rhs) : _buffer(rhs)
+    {
+        format(backend::IndexFormat::U_SHORT);
+    }
+
+    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/) : _buffer(rhs)
+    {
+        format(backend::IndexFormat::U_INT);
+    }
+
+    IndexArray(const IndexArray& rhs) : _buffer(rhs._buffer) { format(rhs.format()); }
+    IndexArray(IndexArray&& rhs) noexcept : _buffer(std::move(rhs._buffer)) { this->format(rhs.format()); }
 
     IndexArray& operator=(const IndexArray& rhs) {
-        _format = rhs._format;
+        _stride = rhs._stride;
         _buffer = rhs._buffer;
         return *this;
     }
-    IndexArray& operator=(IndexArray&& rhs) {
+    IndexArray& operator=(IndexArray&& rhs) noexcept
+    {
         this->swap(rhs);
         return *this;
     }
 
     void swap(IndexArray& rhs) {
-        std::swap(_format, rhs._format);
+        std::swap(_stride, rhs._stride);
         _buffer.swap(rhs._buffer);
     }
 
@@ -75,42 +82,42 @@ public:
     { 
         _buffer.clear(); 
         if (format != backend::IndexFormat::UNSPEC)
-            _format = format;
+            _stride = format == backend::IndexFormat::U_SHORT ? 2 : 4;
     }
 
     /** Pushes back a value if type unsigned short (uint16_t). */
     void push_back(uint16_t val)
     {
-        assert(_format == backend::IndexFormat::U_SHORT);
+        assert(_stride == 2);
         _buffer.append_n((uint8_t*)&val, sizeof(val));
     }
 
     /** Pushes back a value if type unsigned int (uint32_t). */
     void push_back(uint32_t val, std::true_type /*U_INT*/)
     {
-        assert(_format == backend::IndexFormat::U_INT);
+        assert(_stride == 4);
         _buffer.append_n((uint8_t*)&val, sizeof(val));
     }
 
     /** Inserts a list containing unsigned short (uint16_t) data. */
-    void insert(uint8_t* where, std::initializer_list<unsigned short> ilist)
+    void insert(uint8_t* where, std::initializer_list<uint16_t> ilist)
     {
-        assert(_format == backend::IndexFormat::U_SHORT);
+        assert(_stride == 2);
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
     }
 
     /** Inserts a list containing unsigned int (uint32_t) data. */
     void insert(uint8_t* where, std::initializer_list<uint32_t> ilist, std::true_type)
     {
-        assert(_format == backend::IndexFormat::U_INT);
+        assert(_stride == 4);
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
     }
 
     template <typename _Ty>
     _Ty& at(size_t idx)
     {
-        assert((sizeof(_Ty) == sizeof(uint16_t) && _format == backend::IndexFormat::U_SHORT) ||
-               (sizeof(_Ty) == sizeof(uint32_t) && _format == backend::IndexFormat::U_INT));
+        assert((sizeof(_Ty) == sizeof(uint16_t) && _stride == 2) ||
+               (sizeof(_Ty) == sizeof(uint32_t) && _stride == 4));
         if (idx < this->size())
             return (_Ty&)_buffer[idx * sizeof(_Ty)];
         throw std::out_of_range("IndexArray: out of range!");
@@ -125,18 +132,12 @@ public:
     const uint8_t* data() const noexcept { return _buffer.data(); }
 
     /** returns the count of indices in the container. */
-    size_t size() const
-    {
-        return _buffer.size() / (_format == backend::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t));
-    }
+    size_t size() const { return _buffer.size() / _stride; }
     /** returns the size of the container in bytes. */
     size_t bsize() const { return _buffer.size(); }
 
     /** resizes the count of indices in the container. */
-    void resize(size_t size)
-    {
-        _buffer.resize(size * (_format == backend::IndexFormat::U_SHORT ? sizeof(uint16_t) : sizeof(uint32_t)));
-    }
+    void resize(size_t size) { _buffer.resize(size * _stride); }
     /** resizes the container in bytes. */
     void bresize(size_t size) { _buffer.resize(size); }
 
@@ -144,19 +145,28 @@ public:
     bool empty() const { return _buffer.empty(); }
 
     /** returns the format of the index array. */
-    backend::IndexFormat format() const { return _format; }
+    backend::IndexFormat format() const
+    {
+        return _stride == 2 ? backend::IndexFormat::U_SHORT : backend::IndexFormat::U_INT;
+    }
+
+    /** returns the format of the index array. */
+    void format(backend::IndexFormat format)
+    {
+        _stride = (format == backend::IndexFormat::U_SHORT ? 2 : 4);
+    }
 
     template<typename _Fty>
     void for_each(_Fty cb) const
     {
-        if (_format == backend::IndexFormat::U_SHORT)
+        if (format() == backend::IndexFormat::U_SHORT)
         {
             for (auto it = (uint16_t*)_buffer.begin(); it != (uint16_t*)_buffer.end(); ++it)
             {
                 cb(static_cast<uint32_t>(*it));
             }
         }
-        else if (_format == backend::IndexFormat::U_INT)
+        else if (format() == backend::IndexFormat::U_INT)
         {
             for (auto it = (uint32_t*)_buffer.begin(); it != (uint32_t*)_buffer.end(); ++it)
             {
@@ -166,7 +176,7 @@ public:
     }
 
 protected:
-    backend::IndexFormat _format;
+    uint8_t _stride;
     yasio::byte_buffer _buffer;
 };
 
