@@ -131,11 +131,6 @@ public:
         throw std::out_of_range("IndexArray: out of range!");
     }
 
-    uint8_t* begin() noexcept { return _buffer.begin(); }
-    uint8_t* end() noexcept { return _buffer.end(); }
-    const uint8_t* begin() const noexcept { return _buffer.begin(); }
-    const uint8_t* end() const noexcept { return _buffer.end(); }
-
     uint8_t* data() noexcept { return _buffer.data(); }
     const uint8_t* data() const noexcept { return _buffer.data(); }
 
