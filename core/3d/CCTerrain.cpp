@@ -829,14 +829,14 @@ void Terrain::cacheUniformAttribLocation()
     _lightMapCheckLocation      = _programState->getUniformLocation("u_has_light_map");
     if (!_alphaMap)
     {
-        _detailMapLocation[0] = _programState->getUniformLocation("u_texture0");
+        _detailMapLocation[0] = _programState->getUniformLocation("u_tex0");
     }
     else
     {
         for (int i = 0; i < _maxDetailMapValue; ++i)
         {
             char str[20];
-            sprintf(str, "u_texture%d", i);
+            sprintf(str, "u_tex%d", i);
             _detailMapLocation[i] = _programState->getUniformLocation(str);
         }
 

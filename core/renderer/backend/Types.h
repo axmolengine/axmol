@@ -446,10 +446,10 @@ struct ProgramType
 
 /// built-in uniform name
 static const char* UNIFORM_NAME_MVP_MATRIX   = "u_MVPMatrix";
-static const char* UNIFORM_NAME_TEXTURE      = "u_texture";
-static const char* UNIFORM_NAME_TEXTURE1     = "u_texture1";
-static const char* UNIFORM_NAME_TEXTURE2     = "u_texture2";
-static const char* UNIFORM_NAME_TEXTURE3     = "u_texture3";
+static const char* UNIFORM_NAME_TEXTURE      = "u_tex0";
+static const char* UNIFORM_NAME_TEXTURE1     = "u_tex1";
+static const char* UNIFORM_NAME_TEXTURE2     = "u_tex2";
+static const char* UNIFORM_NAME_TEXTURE3     = "u_tex3";
 static const char* UNIFORM_NAME_TEXT_COLOR   = "u_textColor";
 static const char* UNIFORM_NAME_EFFECT_COLOR = "u_effectColor";
 static const char* UNIFORM_NAME_EFFECT_TYPE  = "u_effectType";

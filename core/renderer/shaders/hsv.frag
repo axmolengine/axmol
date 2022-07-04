@@ -6,7 +6,7 @@ precision mediump float;
 
 varying vec2 v_texCoord;  
 varying vec4 v_fragmentColor;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 // HSV matrix
 uniform mat3 u_mix_hsv;
@@ -34,7 +34,7 @@ vec3 hsv2rgb(vec3 c)
 
 void main() 
 { 
-    vec4 pixColor = texture2D(u_texture, v_texCoord);  // * v_fragmentColor; 
+    vec4 pixColor = texture2D(u_tex0, v_texCoord);  // * v_fragmentColor; 
     vec3 rgbColor = u_mix_hsv * pixColor.rgb;
 
     float sum = pixColor.r + pixColor.g + pixColor.b;

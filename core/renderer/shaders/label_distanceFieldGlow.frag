@@ -33,11 +33,11 @@ varying vec2 v_texCoord;
 
 uniform vec4 u_effectColor;
 uniform vec4 u_textColor;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 void main()
 {
-    float dist = texture2D(u_texture, v_texCoord).a;
+    float dist = texture2D(u_tex0, v_texCoord).a;
     //TODO: Implementation 'fwidth' for glsl 1.0
     //float width = fwidth(dist);
     //assign width for constant will lead to a little bit fuzzy,it's temporary measure.
