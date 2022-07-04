@@ -43,6 +43,9 @@
 
 NS_CC_BEGIN
 
+using uint16_index_format  = std::bool_constant<true>;
+using uint32_index_format  = std::bool_constant<true>;
+
 class IndexArray
 {
     static constexpr unsigned int formatToStride(backend::IndexFormat fmt) { return 1 << (int)fmt; }
@@ -55,10 +58,10 @@ public:
     IndexArray() : _stride(formatToStride(backend::IndexFormat::U_SHORT)) {}
     IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
 
-    IndexArray(std::initializer_list<uint16_t> rhs)
+    IndexArray(std::initializer_list<uint16_t> rhs, uint16_index_format /*U_SHORT*/)
         : _stride(formatToStride(backend::IndexFormat::U_SHORT)), _buffer(rhs)
     {}
-    IndexArray(std::initializer_list<uint32_t> rhs, std::true_type /*U_INT*/)
+    IndexArray(std::initializer_list<uint32_t> rhs, uint32_index_format /*U_INT*/)
         : _stride(formatToStride(backend::IndexFormat::U_INT)), _buffer(rhs)
     {}
 
@@ -100,14 +103,14 @@ public:
     }
 
     /** Inserts a list containing unsigned short (uint16_t) data. */
-    void insert(uint8_t* where, std::initializer_list<uint16_t> ilist)
+    void insert(uint8_t* where, std::initializer_list<uint16_t> ilist, uint16_index_format /*U_SHORT*/)
     {
         assert(_stride == 2);
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
     }
 
     /** Inserts a list containing unsigned int (uint32_t) data. */
-    void insert(uint8_t* where, std::initializer_list<uint32_t> ilist, std::true_type)
+    void insert(uint8_t* where, std::initializer_list<uint32_t> ilist, uint32_index_format /*U_INT*/)
     {
         assert(_stride == 4);
         _buffer.insert(where, (uint8_t*)ilist.begin(), (uint8_t*)ilist.end());
@@ -165,7 +168,7 @@ public:
     }
 
 protected:
-    unsigned int _stride;
+    unsigned char _stride;
     yasio::byte_buffer _buffer;
 };
 
