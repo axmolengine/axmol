@@ -6,16 +6,16 @@
  */
 struct RngSeed
 {
-    const unsigned long RNG_RAND_MAX        = 4294967295;
-    const unsigned long RNG_RAND_MAX_SIGNED = 2147483647;
-    unsigned long _x                        = 1;
-    unsigned long _y                        = 2;
-    unsigned long _z                        = 4;
-    unsigned long _w                        = 8;
-    unsigned long _carry                    = 0;
-    unsigned long _k                        = 0;
-    unsigned long _m                        = 0;
-    unsigned long _seed                     = 0;
+    const uint32_t RNG_RAND_MAX        = 4294967295;
+    const uint32_t RNG_RAND_MAX_SIGNED = 2147483647;
+    uint32_t _x                        = 1;
+    uint32_t _y                        = 2;
+    uint32_t _z                        = 4;
+    uint32_t _w                        = 8;
+    uint32_t _carry                    = 0;
+    uint32_t _k                        = 0;
+    uint32_t _m                        = 0;
+    uint32_t _seed                     = 0;
 
     RngSeed() { seed_rand(time(NULL)); }
 
@@ -31,7 +31,7 @@ struct RngSeed
     }
 
     // returns an unsigned long random value
-    unsigned long rand()
+    uint32_t rand()
     {
         _x = _x * 69069 + 1;
         _y ^= _y << 13;
@@ -46,13 +46,13 @@ struct RngSeed
     }
 
     // returns a random integer from min to max
-    int range(int min, int max)
+    int32_t range(int32_t min, int32_t max)
     {
         return floor(min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min))));
     }
 
     // returns a random unsigned integer from min to max
-    unsigned int rangeu(unsigned int min, unsigned int max)
+    uint32_t rangeu(uint32_t min, uint32_t max)
     {
         return floor(min + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - min))));
     }
@@ -64,13 +64,13 @@ struct RngSeed
     }
 
     // returns a random integer from 0 to max
-    int max(int max = INT_MAX)
+    int32_t max(int32_t max = INT_MAX)
     {
         return floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))));
     }
 
     // returns a random unsigned integer from 0 to max
-    unsigned int maxu(unsigned int max = UINT_MAX)
+    uint32_t maxu(uint32_t max = UINT_MAX)
     {
         return floor(0 + static_cast<float>(rand()) / (static_cast<float>(RNG_RAND_MAX / (max - 0))));
     }
