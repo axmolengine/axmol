@@ -7,7 +7,7 @@ precision lowp float;
 varying vec2 v_texCoord;
 
 uniform vec2 u_screenSize;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 void main(void)
 {
@@ -30,5 +30,5 @@ void main(void)
 	else if(y == 9) optColor = vec4(0.5,0.5,1,1);
 	
 	// inline to prevent "float" loss and keep using lowp
-	gl_FragColor = optColor * texture2D(u_texture, v_texCoord);
+	gl_FragColor = optColor * texture2D(u_tex0, v_texCoord);
 }

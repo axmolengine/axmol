@@ -188,11 +188,11 @@ void ProgramGL::computeLocations()
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] =
         _activeUniformInfos[UNIFORM_NAME_EFFECT_TYPE].bufferOffset;
 
-    /// u_texture
+    /// u_tex0
     location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE);
     _builtinUniformLocation[Uniform::TEXTURE].location[0] = location;
 
-    /// u_texture1
+    /// u_tex1
     location                                               = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1);
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
 }

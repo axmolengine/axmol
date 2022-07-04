@@ -55,7 +55,7 @@ ParticleSystemQuad::ParticleSystemQuad()
     pipelinePS = (new backend::ProgramState(program));
 
     _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = pipelinePS->getUniformLocation("u_texture");
+    _textureLocation   = pipelinePS->getUniformLocation("u_tex0");
 
     auto vertexLayout         = pipelinePS->getVertexLayout();
     const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();

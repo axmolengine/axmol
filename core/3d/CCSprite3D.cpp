@@ -112,6 +112,7 @@ void Sprite3D::createAsync(std::string_view modelPath,
     sprite->_asyncLoadParam.afterLoadCallback = callback;
     sprite->_asyncLoadParam.texPath           = texturePath;
     sprite->_asyncLoadParam.modelPath         = modelPath;
+    sprite->_asyncLoadParam.modelFullPath     = FileUtils::getInstance()->fullPathForFilename(modelPath);
     sprite->_asyncLoadParam.callbackParam     = callbackparam;
     sprite->_asyncLoadParam.materialdatas     = new MaterialDatas();
     sprite->_asyncLoadParam.meshdatas         = new MeshDatas();
@@ -120,7 +121,7 @@ void Sprite3D::createAsync(std::string_view modelPath,
         AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite3D::afterAsyncLoad, sprite),
         (void*)(&sprite->_asyncLoadParam), [sprite]() {
             sprite->_asyncLoadParam.result =
-                sprite->loadFromFile(sprite->_asyncLoadParam.modelPath, sprite->_asyncLoadParam.nodeDatas,
+                sprite->loadFromFile(sprite->_asyncLoadParam.modelFullPath, sprite->_asyncLoadParam.nodeDatas,
                                      sprite->_asyncLoadParam.meshdatas, sprite->_asyncLoadParam.materialdatas);
         });
 }

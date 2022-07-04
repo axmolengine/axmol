@@ -80,8 +80,8 @@ varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 #endif
 
-uniform sampler2D u_texture; // Y sample
-uniform sampler2D u_texture1; // UV sample
+uniform sampler2D u_tex0; // Y sample
+uniform sampler2D u_tex1; // UV sample
 uniform vec2 uv_scale;
 uniform float out_w;
 
@@ -105,13 +105,13 @@ void main()
 
     /* For dual sampler */
     //vec2 tXY = v_texCoord;
-    //YUV.x = texture2D(u_texture, tXY).x;
+    //YUV.x = texture2D(u_tex0, tXY).x;
     //tXY.y += 0.015625; // why needs adjust 1.0/64 ?
-    //YUV.yz = texture2D(u_texture1, tXY).xw;
+    //YUV.yz = texture2D(u_tex1, tXY).xw;
 
     /* For single sampler */
     vec2 tXY = v_texCoord * uv_scale;
-    YUV.x = texture2D(u_texture, tXY).x;
+    YUV.x = texture2D(u_tex0, tXY).x;
     
     tXY.y *= 0.5;
     tXY.y += 2.0 / 3.0;
@@ -120,8 +120,8 @@ void main()
     float UPos = ((UVOffs * uv_scale.x) + 0.5) / out_w;
     float VPos = ((UVOffs * uv_scale.x) + 1.5) / out_w;
     
-    YUV.y = texture2D(u_texture, vec2(UPos, tXY.y)).x;
-    YUV.z = texture2D(u_texture, vec2(VPos, tXY.y)).x;
+    YUV.y = texture2D(u_tex0, vec2(UPos, tXY.y)).x;
+    YUV.z = texture2D(u_tex0, vec2(VPos, tXY.y)).x;
 
     /* Convert YUV to RGB */
     vec4 OutColor;
@@ -144,8 +144,8 @@ varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 #endif
 
-uniform sampler2D u_texture; // Y sample
-uniform sampler2D u_texture1; // UV sample
+uniform sampler2D u_tex0; // Y sample
+uniform sampler2D u_tex1; // UV sample
 uniform vec2 uv_scale;
 uniform float out_w; // texture width
 
@@ -170,13 +170,13 @@ void main()
     vec3 YUV;
     
     /* For dual sampler */
-    YUV.yz = texture2D(u_texture1, tXY).yw;
-    YUV.x = texture2D(u_texture, tXY).x;
+    YUV.yz = texture2D(u_tex1, tXY).yw;
+    YUV.x = texture2D(u_tex0, tXY).x;
 	
     /* For single sampler */
-    //YUV.yz = texture2D(u_texture, tXY).yw;
+    //YUV.yz = texture2D(u_tex0, tXY).yw;
     //
-    //vec4 YUY2P = texture2D(u_texture, tXY);
+    //vec4 YUY2P = texture2D(u_tex0, tXY);
     //float Pos = v_texCoord.x * out_w;
     //YUV.x = floor(mod(Pos, 2.0)) == 0.0 ? YUY2P.z : YUY2P.x;
 

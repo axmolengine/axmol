@@ -10,7 +10,7 @@ uniform vec2 textureResolution;
 
 
 uniform vec4 u_Time;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 /*by musk License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  
@@ -23,11 +23,11 @@ uniform sampler2D u_texture;
 
 float noise(float t)
 {
-	return texture2D(u_texture,vec2(t,.0)/textureResolution.xy).x;
+	return texture2D(u_tex0,vec2(t,.0)/textureResolution.xy).x;
 }
 float noise(vec2 t)
 {
-	return texture2D(u_texture,t/textureResolution.xy).x;
+	return texture2D(u_tex0,t/textureResolution.xy).x;
 }
 
 vec3 lensflare(vec2 uv,vec2 pos)
