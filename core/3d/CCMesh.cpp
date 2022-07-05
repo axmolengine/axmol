@@ -113,6 +113,7 @@ Mesh::Mesh()
     , _visible(true)
     , _isTransparent(false)
     , _force2DQueue(false)
+    , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
     , _meshIndexData(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
     , _blendDirty(true)
@@ -222,10 +223,13 @@ Mesh* Mesh::create(const std::vector<float>& vertices,
     meshdata.vertex  = vertices;
     meshdata.subMeshIndices.push_back(indices);
     meshdata.subMeshIds.push_back("");
-    auto meshvertexdata = MeshVertexData::create(meshdata);
+    auto meshvertexdata = MeshVertexData::create(meshdata, indices.format());
     auto indexData      = meshvertexdata->getMeshIndexDataByIndex(0);
 
-    return create("", indexData);
+    auto mesh = create("", indexData);
+    mesh->setIndexFormat(indices.format());
+
+    return mesh;
 }
 
 Mesh* Mesh::create(std::string_view name, MeshIndexData* indexData, MeshSkin* skin)
@@ -728,12 +732,17 @@ CustomCommand::PrimitiveType Mesh::getPrimitiveType() const
 
 ssize_t Mesh::getIndexCount() const
 {
-    return _meshIndexData->getIndexBuffer()->getSize() / sizeof(uint16_t);
+    return _meshIndexData->getIndexBuffer()->getSize() / IndexArray::formatToStride(meshIndexFormat);
 }
 
 CustomCommand::IndexFormat Mesh::getIndexFormat() const
 {
-    return CustomCommand::IndexFormat::U_SHORT;
+    return meshIndexFormat;
+}
+
+void Mesh::setIndexFormat(CustomCommand::IndexFormat indexFormat)
+{
+    meshIndexFormat = indexFormat;
 }
 
 backend::Buffer* Mesh::getIndexBuffer() const

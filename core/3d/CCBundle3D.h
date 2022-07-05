@@ -113,7 +113,8 @@ public:
                         const char* mtl_basepath = nullptr);
 
     // calculate aabb
-    static AABB calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index);
+    static AABB calculateAABB(const std::vector<float>& vertex,
+                              int stride, const IndexArray& indices);
 
     Bundle3D();
     virtual ~Bundle3D();
