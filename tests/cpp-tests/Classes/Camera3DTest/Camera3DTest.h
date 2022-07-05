@@ -26,7 +26,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "../BaseTest.h"
-#include "../Sprite3DTest/DrawNode3D.h"
+#include "../MeshRendererTest/DrawNode3D.h"
 
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Types.h"
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 namespace cocos2d
 {
-class Sprite3D;
+class MeshRenderer;
 class Delay;
 }  // namespace cocos2d
 
@@ -142,7 +142,7 @@ public:
 protected:
     std::string _title;
     cocos2d::Layer* _layer3D;
-    cocos2d::Sprite3D* _sprite3D;
+    cocos2d::MeshRenderer* _mesh;
     cocos2d::Vec3 _targetPos;
     CameraType _cameraType;
     cocos2d::MenuItem* _incRot;
@@ -176,15 +176,15 @@ public:
     virtual std::string title() const override;
     void reachEndCallBack();
     void switchViewCallback(cocos2d::Ref* sender);
-    void addSpriteCallback(cocos2d::Ref* sender);
-    void delSpriteCallback(cocos2d::Ref* sender);
+    void addMeshCallback(cocos2d::Ref* sender);
+    void delMeshCallback(cocos2d::Ref* sender);
 
     void drawCameraFrustum();
 
 protected:
-    cocos2d::Label* _labelSprite3DCount;
+    cocos2d::Label* _labelMeshCount;
     cocos2d::Layer* _layer3D;
-    std::vector<cocos2d::Sprite3D*> _objects;
+    std::vector<cocos2d::MeshRenderer*> _objects;
     CameraType _cameraType;
     cocos2d::Camera* _cameraFirst;
     cocos2d::Camera* _cameraThird;
@@ -232,8 +232,8 @@ protected:
     OperateCamType _operate;  // switch rotate or zoom
     cocos2d::Vec3 _center;    // camera look target
     int _target;              // switch camera look target
-    cocos2d::Sprite3D* _sprite3D1;
-    cocos2d::Sprite3D* _sprite3D2;
+    cocos2d::MeshRenderer* _mesh1;
+    cocos2d::MeshRenderer* _mesh2;
 };
 
 class FogTestDemo : public CameraBaseTest
@@ -259,8 +259,8 @@ protected:
     CameraType _cameraType                         = CameraType::Free;
     cocos2d::Layer* _layer3D                       = nullptr;
     cocos2d::Camera* _camera                       = nullptr;
-    cocos2d::Sprite3D* _sprite3D1                  = nullptr;
-    cocos2d::Sprite3D* _sprite3D2                  = nullptr;
+    cocos2d::MeshRenderer* _mesh1                  = nullptr;
+    cocos2d::MeshRenderer* _mesh2                  = nullptr;
     cocos2d::backend::ProgramState* _programState1 = nullptr;
     cocos2d::backend::ProgramState* _programState2 = nullptr;
 

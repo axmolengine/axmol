@@ -41,7 +41,7 @@ NS_CC_BEGIN
 class ParticleSystem3D;
 class Renderer;
 class MeshCommand;
-class Sprite3D;
+class MeshRenderer;
 class GLProgramState;
 class IndexBuffer;
 class VertexBuffer;
@@ -141,7 +141,7 @@ protected:
     bool _rendererDepthWrite                       = false;
 };
 
-// particle render for Sprite3D
+// particle renderer using MeshRenderer
 class CC_EX_DLL Particle3DModelRender : public Particle3DRender
 {
 public:
@@ -154,10 +154,10 @@ public:
     virtual ~Particle3DModelRender();
 
 protected:
-    std::vector<Sprite3D*> _spriteList;
+    std::vector<MeshRenderer*> _meshList;
     std::string _modelFile;
     std::string _texFile;
-    Vec3 _spriteSize;
+    Vec3 _meshSize;
 };
 
 NS_CC_END

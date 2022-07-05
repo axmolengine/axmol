@@ -136,7 +136,7 @@ TerrainWalkThru::TerrainWalkThru()
 
     _terrain->setSkirtHeightRatio(3);
     _terrain->setLODDistance(64, 128, 192);
-    _player = Player::create("Sprite3DTest/girl.c3b", _camera, _terrain);
+    _player = Player::create("MeshRendererTest/girl.c3b", _camera, _terrain);
     _player->setCameraMask(2);
     _player->setScale(0.08f);
     _player->setPositionY(_terrain->getHeight(_player->getPositionX(), _player->getPositionZ()) + PLAYER_HEIGHT);
@@ -154,7 +154,7 @@ TerrainWalkThru::TerrainWalkThru()
     billboard->setCameraMask((unsigned short)CameraFlag::USER1);
     _player->addChild(billboard);
 
-    auto animation = Animation3D::create("Sprite3DTest/girl.c3b", "Take 001");
+    auto animation = Animation3D::create("MeshRendererTest/girl.c3b", "Take 001");
     if (animation)
     {
         auto animate = Animate3D::create(animation);
@@ -210,7 +210,7 @@ bool Player::isDone() const
 
 void Player::update(float dt)
 {
-    auto player = (Sprite3D*)this;
+    auto player = (MeshRenderer*)this;
     switch (_playerState)
     {
     case PLAYER_STATE_IDLE:
@@ -301,7 +301,7 @@ void Player::backward()
 
 void Player::updateState()
 {
-    auto player = (Sprite3D*)this;
+    auto player = (MeshRenderer*)this;
     switch (_playerState)
     {
     case PLAYER_STATE_FORWARD:
@@ -323,18 +323,18 @@ void Player::updateState()
 Player* Player::create(const char* file, Camera* cam, Terrain* terrain)
 {
     //
-    auto sprite = new Player();
-    if (sprite->initWithFile(file))
+    auto player = new Player();
+    if (player->initWithFile(file))
     {
-        sprite->_headingAngle = 0;
-        sprite->_playerState  = PLAYER_STATE_IDLE;
-        sprite->_cam          = cam;
-        sprite->_terrain      = terrain;
-        sprite->autorelease();
-        sprite->scheduleUpdate();
-        return sprite;
+        player->_headingAngle = 0;
+        player->_playerState  = PLAYER_STATE_IDLE;
+        player->_cam          = cam;
+        player->_terrain      = terrain;
+        player->autorelease();
+        player->scheduleUpdate();
+        return player;
     }
-    CC_SAFE_DELETE(sprite);
+    CC_SAFE_DELETE(player);
     return nullptr;
 }
 

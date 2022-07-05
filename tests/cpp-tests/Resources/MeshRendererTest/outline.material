@@ -55,7 +55,7 @@ material
 				fragmentShader = Shaders3D/3d_color_tex.frag
 				sampler u_sampler0
 				{
-					path = Sprite3DTest/boss.png
+					path = MeshRendererTest/boss.png
 				}
 			}
 		}
@@ -113,7 +113,7 @@ material
 				fragmentShader = Shaders3D/3d_color_tex.frag
 				sampler u_sampler0
 				{
-					path = Sprite3DTest/monguger.tga
+					path = MeshRendererTest/monguger.tga
 				}
 			}
 		}

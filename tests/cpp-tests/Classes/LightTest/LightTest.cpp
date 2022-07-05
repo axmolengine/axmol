@@ -108,8 +108,8 @@ void LightTest::addSprite()
     auto s = Director::getInstance()->getWinSize();
 
     //{
-    //    std::string fileName = "Sprite3DTest/plane.c3b";
-    //    auto sprite = Sprite3D::create(fileName);
+    //    std::string fileName = "MeshRendererTest/plane.c3b";
+    //    auto sprite = MeshRenderer::create(fileName);
     //    sprite->setRotation3D(Vec3(-90.0, 0.0, 0.0));
     //    sprite->setScale(5.0f);
     //    sprite->setPosition(Vec2(0.0, -50.0));
@@ -118,35 +118,35 @@ void LightTest::addSprite()
     //}
 
     {
-        std::string fileName = "Sprite3DTest/orc.c3b";
-        auto sprite          = Sprite3D::create(fileName);
-        sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-        sprite->setPosition(Vec2(0.0f, 0.0f));
-        sprite->setScale(2.0);
-        auto sp = Sprite3D::create("Sprite3DTest/axe.c3b");
-        sprite->getAttachNode("Bip001 R Hand")->addChild(sp);
+        std::string fileName = "MeshRendererTest/orc.c3b";
+        auto mesh            = MeshRenderer::create(fileName);
+        mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+        mesh->setPosition(Vec2(0.0f, 0.0f));
+        mesh->setScale(2.0);
+        auto m = MeshRenderer::create("MeshRendererTest/axe.c3b");
+        mesh->getAttachNode("Bip001 R Hand")->addChild(m);
         auto animation = Animation3D::create(fileName);
         if (animation)
         {
             auto animate = Animate3D::create(animation);
-            sprite->runAction(RepeatForever::create(animate));
+            mesh->runAction(RepeatForever::create(animate));
         }
 
-        addChild(sprite);
-        sprite->setCameraMask(2);
+        addChild(mesh);
+        mesh->setCameraMask(2);
     }
 
     {
-        std::string fileName = "Sprite3DTest/sphere.c3b";
-        auto sprite          = Sprite3D::create(fileName);
+        std::string fileName = "MeshRendererTest/sphere.c3b";
+        auto sprite          = MeshRenderer::create(fileName);
         sprite->setPosition(Vec2(30.0f, 0.0f));
         addChild(sprite);
         sprite->setCameraMask(2);
     }
 
     {
-        std::string fileName = "Sprite3DTest/sphere.c3b";
-        auto sprite          = Sprite3D::create(fileName);
+        std::string fileName = "MeshRendererTest/sphere.c3b";
+        auto sprite          = MeshRenderer::create(fileName);
         sprite->setScale(0.5f);
         sprite->setPosition(Vec2(-50.0f, 0.0f));
         addChild(sprite);
@@ -154,8 +154,8 @@ void LightTest::addSprite()
     }
 
     {
-        std::string fileName = "Sprite3DTest/sphere.c3b";
-        auto sprite          = Sprite3D::create(fileName);
+        std::string fileName = "MeshRendererTest/sphere.c3b";
+        auto sprite          = MeshRenderer::create(fileName);
         sprite->setScale(0.5f);
         sprite->setPosition(Vec2(-30.0f, 10.0f));
         addChild(sprite);

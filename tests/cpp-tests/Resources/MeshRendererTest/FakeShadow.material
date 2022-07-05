@@ -7,21 +7,21 @@ material FakeShadow
         {
             shader
             {
-                vertexShader = Sprite3DTest/simple_shadow.vert
-                fragmentShader = Sprite3DTest/simple_shadow.frag
+                vertexShader = MeshRendererTest/simple_shadow.vert
+                fragmentShader = MeshRendererTest/simple_shadow.frag
                 // sampler:
                 //   responsible for setting the texture and its parameters
                 //   the Id of the sampler is the uniform name
                 sampler u_sampler0
                 {
-                    path = Sprite3DTest/plane.png
+                    path = MeshRendererTest/plane.png
                     wrapS = REPEAT
                     wrapT = REPEAT
                 }
 
                 sampler u_sampler1
                 {
-                    path = Sprite3DTest/shadowCircle.png
+                    path = MeshRendererTest/shadowCircle.png
                     wrapS = CLAMP_TO_EDGE
                     wrapT = CLAMP_TO_EDGE
                     minFilter = LINEAR

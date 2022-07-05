@@ -24,10 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "Sprite3DTest.h"
+#include "MeshRendererTest.h"
 #include "DrawNode3D.h"
 #include "2d/CCCameraBackgroundBrush.h"
-#include "3d/CCSprite3DMaterial.h"
+#include "3d/CCMeshMaterial.h"
 #include "3d/CCMotionStreak3D.h"
 
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
@@ -37,65 +37,65 @@
 
 USING_NS_CC;
 
-Sprite3DTests::Sprite3DTests()
+MeshRendererTests::MeshRendererTests()
 {
-    ADD_TEST_CASE(Sprite3DBasicTest);
-    ADD_TEST_CASE(Sprite3DHitTest);
-    ADD_TEST_CASE(AsyncLoadSprite3DTest);
+    ADD_TEST_CASE(MeshRendererBasicTest);
+    ADD_TEST_CASE(MeshRendererHitTest);
+    ADD_TEST_CASE(AsyncLoadMeshRendererTest);
     //    // 3DEffect use custom shader which is not supported on WP8/WinRT yet.
-    ADD_TEST_CASE(Sprite3DEffectTest);
-    ADD_TEST_CASE(Sprite3DUVAnimationTest);
-    ADD_TEST_CASE(Sprite3DFakeShadowTest);
-    ADD_TEST_CASE(Sprite3DBasicToonShaderTest);
-    ADD_TEST_CASE(Sprite3DLightMapTest);
-    ADD_TEST_CASE(Sprite3DWithSkinTest);
-    ADD_TEST_CASE(Sprite3DWithSkinOutlineTest);
+    ADD_TEST_CASE(MeshRendererEffectTest);
+    ADD_TEST_CASE(MeshRendererUVAnimationTest);
+    ADD_TEST_CASE(MeshRendererFakeShadowTest);
+    ADD_TEST_CASE(MeshRendererBasicToonShaderTest);
+    ADD_TEST_CASE(MeshRendererLightMapTest);
+    ADD_TEST_CASE(MeshRendererWithSkinTest);
+    ADD_TEST_CASE(MeshRendererWithSkinOutlineTest);
     ADD_TEST_CASE(Animate3DTest);
     ADD_TEST_CASE(AttachmentTest);
-    ADD_TEST_CASE(Sprite3DReskinTest);
-    ADD_TEST_CASE(Sprite3DWithOBBPerformanceTest);
-    ADD_TEST_CASE(Sprite3DMirrorTest);
+    ADD_TEST_CASE(MeshRendererReskinTest);
+    ADD_TEST_CASE(MeshRendererWithOBBPerformanceTest);
+    ADD_TEST_CASE(MeshRendererMirrorTest);
     ADD_TEST_CASE(QuaternionTest);
-    ADD_TEST_CASE(Sprite3DEmptyTest);
-    ADD_TEST_CASE(UseCaseSprite3D);
-    ADD_TEST_CASE(Sprite3DForceDepthTest);
-    ADD_TEST_CASE(Sprite3DCubeMapTest);
+    ADD_TEST_CASE(MeshRendererEmptyTest);
+    ADD_TEST_CASE(UseCaseMeshRenderer);
+    ADD_TEST_CASE(MeshRendererForceDepthTest);
+    ADD_TEST_CASE(MeshRendererCubeMapTest);
     ADD_TEST_CASE(NodeAnimationTest);
     ADD_TEST_CASE(Issue9767);
-    ADD_TEST_CASE(Sprite3DClippingTest);
+    ADD_TEST_CASE(MeshRendererClippingTest);
     ADD_TEST_CASE(Animate3DCallbackTest);
     ADD_TEST_CASE(CameraBackgroundClearTest);
-    ADD_TEST_CASE(Sprite3DVertexColorTest);
+    ADD_TEST_CASE(MeshRendererVertexColorTest);
     ADD_TEST_CASE(MotionStreak3DTest);
-    ADD_TEST_CASE(Sprite3DPropertyTest);
-    ADD_TEST_CASE(Sprite3DNormalMappingTest);
+    ADD_TEST_CASE(MeshRendererPropertyTest);
+    ADD_TEST_CASE(MeshRendererNormalMappingTest);
     ADD_TEST_CASE(Issue16155Test);
 };
 
 //------------------------------------------------------------------
 //
-// SpriteTestDemo
+// MeshRendererTestDemo
 //
 //------------------------------------------------------------------
 
-std::string Sprite3DTestDemo::title() const
+std::string MeshRendererTestDemo::title() const
 {
     return "No title";
 }
 
-Sprite3DTestDemo::~Sprite3DTestDemo()
+MeshRendererTestDemo::~MeshRendererTestDemo()
 {
-    Sprite3DMaterial::releaseCachedMaterial();
+    MeshMaterial::releaseCachedMaterial();
 }
 
 //------------------------------------------------------------------
 //
-// Sprite3DForceDepthTest
+// MeshRendererForceDepthTest
 //
 //------------------------------------------------------------------
-Sprite3DForceDepthTest::Sprite3DForceDepthTest()
+MeshRendererForceDepthTest::MeshRendererForceDepthTest()
 {
-    auto orc = cocos2d::Sprite3D::create("Sprite3DTest/orc.c3b");
+    auto orc = cocos2d::MeshRenderer::create("MeshRendererTest/orc.c3b");
     orc->setScale(5);
     orc->setPositionNormalized(Vec2(.5f, .3f));
     orc->setPositionZ(40);
@@ -104,9 +104,9 @@ Sprite3DForceDepthTest::Sprite3DForceDepthTest()
 
     addChild(orc);
 
-    auto ship = Sprite3D::create("Sprite3DTest/boss1.obj");
+    auto ship = MeshRenderer::create("MeshRendererTest/boss1.obj");
     ship->setScale(5);
-    ship->setTexture("Sprite3DTest/boss.png");
+    ship->setTexture("MeshRendererTest/boss.png");
     ship->setPositionNormalized(Vec2(.5f, .5f));
     ship->setRotation3D(Vec3(90.0f, 0.0f, 0.0f));
     ship->setForceDepthWrite(true);
@@ -114,24 +114,24 @@ Sprite3DForceDepthTest::Sprite3DForceDepthTest()
     addChild(ship);
 }
 
-std::string Sprite3DForceDepthTest::title() const
+std::string MeshRendererForceDepthTest::title() const
 {
     return "Force Depth Write Error Test";
 }
 
-std::string Sprite3DForceDepthTest::subtitle() const
+std::string MeshRendererForceDepthTest::subtitle() const
 {
     return "Ship should always appear behind orc";
 }
 
 //------------------------------------------------------------------
 //
-// Sprite3DEmptyTest
+// MeshRendererEmptyTest
 //
 //------------------------------------------------------------------
-Sprite3DEmptyTest::Sprite3DEmptyTest()
+MeshRendererEmptyTest::MeshRendererEmptyTest()
 {
-    auto s = Sprite3D::create();
+    auto s = MeshRenderer::create();
     s->setPositionNormalized(Vec2(.5f, .5f));
     auto l = Label::create();
     l->setString("Test");
@@ -139,53 +139,53 @@ Sprite3DEmptyTest::Sprite3DEmptyTest()
     addChild(s);
 }
 
-std::string Sprite3DEmptyTest::title() const
+std::string MeshRendererEmptyTest::title() const
 {
-    return "Testing Sprite3D Container";
+    return "Testing MeshRenderer Container";
 }
 
-std::string Sprite3DEmptyTest::subtitle() const
+std::string MeshRendererEmptyTest::subtitle() const
 {
-    return "Sprite3D can act as containers for 2D objects";
+    return "MeshRenderer can act as containers for 2D objects";
 }
 
 //------------------------------------------------------------------
 //
-// Sprite3DBasicTest
+// MeshRendererBasicTest
 //
 //------------------------------------------------------------------
 
-Sprite3DBasicTest::Sprite3DBasicTest()
+MeshRendererBasicTest::MeshRendererBasicTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DBasicTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererBasicTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
-void Sprite3DBasicTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
 {
     // int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
     // int x = (idx%5) * 85;
     // int y = (idx/5) * 121;
 
     //    //option 1: load a obj that contain the texture in it
-    //    auto sprite = Sprite3D::create("sprite3dTest/scene01.obj");
+    //    auto mesh = MeshRenderer::create("mesh3dTest/scene01.obj");
 
     // option 2: load obj and assign the texture
-    auto sprite = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite->setScale(3.f);
-    sprite->setTexture("Sprite3DTest/boss.png");
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
 
     //
-    // sprite->setEffect(cocos2d::EFFECT_OUTLINE);
+    // mesh->setEffect(cocos2d::EFFECT_OUTLINE);
 
     // add to scene
-    addChild(sprite);
+    addChild(mesh);
 
-    sprite->setPosition(Vec2(p.x, p.y));
+    mesh->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
     float random = CCRANDOM_0_1();
@@ -203,36 +203,36 @@ void Sprite3DBasicTest::addNewSpriteWithCoords(Vec2 p)
     auto action_back = action->reverse();
     auto seq         = Sequence::create(action, action_back, nullptr);
 
-    sprite->runAction(RepeatForever::create(seq));
+    mesh->runAction(RepeatForever::create(seq));
 }
 
-void Sprite3DBasicTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void MeshRendererBasicTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto touch : touches)
     {
         auto location = touch->getLocation();
 
-        addNewSpriteWithCoords(location);
+        addNewMeshWithCoords(location);
     }
 }
 
-std::string Sprite3DBasicTest::title() const
+std::string MeshRendererBasicTest::title() const
 {
-    return "Testing Sprite3D";
+    return "Testing MeshRenderer";
 }
 
-std::string Sprite3DBasicTest::subtitle() const
+std::string MeshRendererBasicTest::subtitle() const
 {
-    return "Tap screen to add more sprites";
+    return "Tap screen to add more meshes";
 }
 
 //------------------------------------------------------------------
 //
-// Sprite3DUVAnimationTest
+// MeshRendererUVAnimationTest
 //
 //------------------------------------------------------------------
 
-Sprite3DUVAnimationTest::Sprite3DUVAnimationTest()
+MeshRendererUVAnimationTest::MeshRendererUVAnimationTest()
 {
     // the offset use to translating texture
     _cylinder_texture_offset = 0;
@@ -244,8 +244,8 @@ Sprite3DUVAnimationTest::Sprite3DUVAnimationTest()
     camera->setCameraFlag(CameraFlag::USER1);
 
     // create cylinder
-    auto cylinder = Sprite3D::create("Sprite3DTest/cylinder.c3b");
-    auto mat      = Sprite3DMaterial::createWithFilename("Sprite3DTest/UVAnimation.material");
+    auto cylinder = MeshRenderer::create("MeshRendererTest/cylinder.c3b");
+    auto mat      = MeshMaterial::createWithFilename("MeshRendererTest/UVAnimation.material");
     _state        = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
     cylinder->setMaterial(mat);
 
@@ -258,11 +258,11 @@ Sprite3DUVAnimationTest::Sprite3DUVAnimationTest()
     cylinder->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
 
     // the callback function update cylinder's texcoord
-    schedule(CC_SCHEDULE_SELECTOR(Sprite3DUVAnimationTest::cylinderUpdate));
+    schedule(CC_SCHEDULE_SELECTOR(MeshRendererUVAnimationTest::cylinderUpdate));
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [=](EventCustom*) {
-        auto mat = Sprite3DMaterial::createWithFilename("Sprite3DTest/UVAnimation.material");
+        auto mat = MeshMaterial::createWithFilename("MeshRendererTest/UVAnimation.material");
 
         cylinder->setMaterial(mat);
         _state = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
@@ -271,24 +271,24 @@ Sprite3DUVAnimationTest::Sprite3DUVAnimationTest()
 #endif
 }
 
-Sprite3DUVAnimationTest::~Sprite3DUVAnimationTest()
+MeshRendererUVAnimationTest::~MeshRendererUVAnimationTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-std::string Sprite3DUVAnimationTest::title() const
+std::string MeshRendererUVAnimationTest::title() const
 {
     return "Testing UV Animation";
 }
 
-std::string Sprite3DUVAnimationTest::subtitle() const
+std::string MeshRendererUVAnimationTest::subtitle() const
 {
     return "";
 }
 
-void Sprite3DUVAnimationTest::cylinderUpdate(float dt)
+void MeshRendererUVAnimationTest::cylinderUpdate(float dt)
 {
     // callback function to update cylinder's texcoord
     static bool fade_in = true;
@@ -316,17 +316,17 @@ void Sprite3DUVAnimationTest::cylinderUpdate(float dt)
 
 //------------------------------------------------------------------
 //
-// Sprite3DFakeShadowTest
+// MeshRendererFakeShadowTest
 //
 //------------------------------------------------------------------
-Sprite3DFakeShadowTest::Sprite3DFakeShadowTest()
+MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
 {
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(Sprite3DFakeShadowTest::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(Sprite3DFakeShadowTest::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DFakeShadowTest::onTouchesEnded, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesBegan, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesMoved, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto layer = Layer::create();
@@ -338,10 +338,10 @@ Sprite3DFakeShadowTest::Sprite3DFakeShadowTest()
     _camera->setRotation3D(Vec3(-60.0f, 0.0f, 0.0f));
 
     // create a plane
-    _plane = Sprite3D::create("Sprite3DTest/plane.c3t");
+    _plane = MeshRenderer::create("MeshRendererTest/plane.c3t");
     _plane->setRotation3D(Vec3(90.0f, 0.0f, 0.0f));
 
-    auto mat = Sprite3DMaterial::createWithFilename("Sprite3DTest/FakeShadow.material");
+    auto mat = MeshMaterial::createWithFilename("MeshRendererTest/FakeShadow.material");
     _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
     _plane->setMaterial(mat);
 
@@ -352,7 +352,7 @@ Sprite3DFakeShadowTest::Sprite3DFakeShadowTest()
     layer->addChild(_plane);
 
     // create the orc
-    _orc = Sprite3D::create("Sprite3DTest/orc.c3b");
+    _orc = MeshRenderer::create("MeshRendererTest/orc.c3b");
     _orc->setScale(0.2f);
     _orc->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     _orc->setPosition3D(Vec3(0.0f, 0.0f, 10.0f));
@@ -363,11 +363,11 @@ Sprite3DFakeShadowTest::Sprite3DFakeShadowTest()
     layer->addChild(_camera);
     layer->setCameraMask(2);
 
-    schedule(CC_SCHEDULE_SELECTOR(Sprite3DFakeShadowTest::updateCamera), 0.0f);
+    schedule(CC_SCHEDULE_SELECTOR(MeshRendererFakeShadowTest::updateCamera), 0.0f);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
-        auto mat = Sprite3DMaterial::createWithFilename("Sprite3DTest/FakeShadow.material");
+        auto mat = MeshMaterial::createWithFilename("MeshRendererTest/FakeShadow.material");
         _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
         _plane->setMaterial(mat);
         backend::UniformLocation loc = _state->getUniformLocation("u_model_matrix");
@@ -381,29 +381,29 @@ Sprite3DFakeShadowTest::Sprite3DFakeShadowTest()
 #endif
 }
 
-Sprite3DFakeShadowTest::~Sprite3DFakeShadowTest()
+MeshRendererFakeShadowTest::~MeshRendererFakeShadowTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-std::string Sprite3DFakeShadowTest::title() const
+std::string MeshRendererFakeShadowTest::title() const
 {
     return "fake shadow effect";
 }
 
-std::string Sprite3DFakeShadowTest::subtitle() const
+std::string MeshRendererFakeShadowTest::subtitle() const
 {
     return "touch the screen to move around";
 }
 
-void Sprite3DFakeShadowTest::Move(cocos2d::Ref* sender, int value)
+void MeshRendererFakeShadowTest::Move(cocos2d::Ref* sender, int value)
 {
     _orc->setPositionX(_orc->getPositionX() + value);
 }
 
-void Sprite3DFakeShadowTest::updateCamera(float fDelta)
+void MeshRendererFakeShadowTest::updateCamera(float fDelta)
 {
     updateState(fDelta);
     if (isState(_curState, State_Move))
@@ -448,7 +448,7 @@ void Sprite3DFakeShadowTest::updateCamera(float fDelta)
     }
 }
 
-void Sprite3DFakeShadowTest::move3D(float elapsedTime)
+void MeshRendererFakeShadowTest::move3D(float elapsedTime)
 {
     Vec3 curPos     = _orc->getPosition3D();
     Vec3 newFaceDir = _targetPos - curPos;
@@ -465,7 +465,7 @@ void Sprite3DFakeShadowTest::move3D(float elapsedTime)
     _state->setUniform(location, &position, sizeof(position));
 }
 
-void Sprite3DFakeShadowTest::updateState(float elapsedTime)
+void MeshRendererFakeShadowTest::updateState(float elapsedTime)
 {
     Vec3 curPos = _orc->getPosition3D();
     Vec3 curFaceDir;
@@ -493,16 +493,16 @@ void Sprite3DFakeShadowTest::updateState(float elapsedTime)
     }
 }
 
-bool Sprite3DFakeShadowTest::isState(unsigned int state, unsigned int bit) const
+bool MeshRendererFakeShadowTest::isState(unsigned int state, unsigned int bit) const
 {
     return (state & bit) == bit;
 }
 
-void Sprite3DFakeShadowTest::onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
+void MeshRendererFakeShadowTest::onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
 
-void Sprite3DFakeShadowTest::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
+void MeshRendererFakeShadowTest::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
 
-void Sprite3DFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void MeshRendererFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::Event* event)
 {
     for (auto& item : touches)
     {
@@ -543,17 +543,17 @@ void Sprite3DFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, 
 
 //------------------------------------------------------------------
 //
-// Sprite3DBasicToonShaderTest
+// MeshRendererBasicToonShaderTest
 //
 //------------------------------------------------------------------
-Sprite3DBasicToonShaderTest::Sprite3DBasicToonShaderTest()
+MeshRendererBasicToonShaderTest::MeshRendererBasicToonShaderTest()
 {
     Size visibleSize = Director::getInstance()->getVisibleSize();
     auto _camera     = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 0.1f, 200);
     _camera->setCameraFlag(CameraFlag::USER1);
     // create a teapot
-    auto teapot = Sprite3D::create("Sprite3DTest/teapot.c3b");
-    auto mat    = Sprite3DMaterial::createWithFilename("Sprite3DTest/BasicToon.material");
+    auto teapot = MeshRenderer::create("MeshRendererTest/teapot.c3b");
+    auto mat    = MeshMaterial::createWithFilename("MeshRendererTest/BasicToon.material");
     _state      = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
     teapot->setMaterial(mat);
 
@@ -566,7 +566,7 @@ Sprite3DBasicToonShaderTest::Sprite3DBasicToonShaderTest()
     setCameraMask(2);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [=](EventCustom*) {
-        auto mat = Sprite3DMaterial::createWithFilename("Sprite3DTest/BasicToon.material");
+        auto mat = MeshMaterial::createWithFilename("MeshRendererTest/BasicToon.material");
         _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
         teapot->setMaterial(mat);
     });
@@ -574,29 +574,29 @@ Sprite3DBasicToonShaderTest::Sprite3DBasicToonShaderTest()
 #endif
 }
 
-Sprite3DBasicToonShaderTest::~Sprite3DBasicToonShaderTest()
+MeshRendererBasicToonShaderTest::~MeshRendererBasicToonShaderTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-std::string Sprite3DBasicToonShaderTest::title() const
+std::string MeshRendererBasicToonShaderTest::title() const
 {
     return "basic toon shader test";
 }
 
-std::string Sprite3DBasicToonShaderTest::subtitle() const
+std::string MeshRendererBasicToonShaderTest::subtitle() const
 {
     return " ";
 }
 
 //------------------------------------------------------------------
 //
-// Sprite3DLightMapTest
+// MeshRendererLightMapTest
 //
 //------------------------------------------------------------------
-Sprite3DLightMapTest::Sprite3DLightMapTest()
+MeshRendererLightMapTest::MeshRendererLightMapTest()
 {
     // the assets are from the OpenVR demo
     // get the visible size.
@@ -605,7 +605,7 @@ Sprite3DLightMapTest::Sprite3DLightMapTest()
     _camera->setCameraFlag(CameraFlag::USER1);
     _camera->setPosition3D(Vec3(0.0f, 25.0f, 15.0f));
     _camera->setRotation3D(Vec3(-35.0f, 0.0f, 0.0f));
-    auto LightMapScene = Sprite3D::create("Sprite3DTest/LightMapScene.c3b");
+    auto LightMapScene = MeshRenderer::create("MeshRendererTest/LightMapScene.c3b");
     LightMapScene->setScale(0.1f);
     addChild(LightMapScene);
     addChild(_camera);
@@ -620,21 +620,21 @@ Sprite3DLightMapTest::Sprite3DLightMapTest()
 
     // create a listener
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = CC_CALLBACK_2(Sprite3DLightMapTest::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererLightMapTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
-Sprite3DLightMapTest::~Sprite3DLightMapTest() {}
-std::string Sprite3DLightMapTest::title() const
+MeshRendererLightMapTest::~MeshRendererLightMapTest() {}
+std::string MeshRendererLightMapTest::title() const
 {
     return "light map test";
 }
 
-std::string Sprite3DLightMapTest::subtitle() const
+std::string MeshRendererLightMapTest::subtitle() const
 {
     return "drag the screen to move around";
 }
 
-void Sprite3DLightMapTest::onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void MeshRendererLightMapTest::onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
 {
     if (touches.size() == 1)
     {
@@ -661,45 +661,45 @@ void Sprite3DLightMapTest::onTouchesMoved(const std::vector<cocos2d::Touch*>& to
 
 //------------------------------------------------------------------
 //
-// Sprite3DHitTest
+// MeshRendererHitTest
 //
 //------------------------------------------------------------------
-Sprite3DHitTest::Sprite3DHitTest()
+MeshRendererHitTest::MeshRendererHitTest()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto sprite1 = Sprite3D::create("Sprite3DTest/boss1.obj");
+    auto mesh1 = MeshRenderer::create("MeshRendererTest/boss1.obj");
 
-    sprite1->setScale(4.f);
-    sprite1->setTexture("Sprite3DTest/boss.png");
-    sprite1->setPosition(Vec2(s.width / 2, s.height / 2));
-
-    // add to scene
-    addChild(sprite1);
-    sprite1->runAction(RepeatForever::create(RotateBy::create(3.0f, 360.0f)));
-
-    auto sprite2 = Sprite3D::create("Sprite3DTest/boss1.obj");
-
-    sprite2->setScale(4.f);
-    sprite2->setTexture("Sprite3DTest/boss.png");
-    sprite2->setPosition(Vec2(s.width / 2, s.height / 2));
-    sprite2->setAnchorPoint(Vec2(0.5f, 0.5f));
+    mesh1->setScale(4.f);
+    mesh1->setTexture("MeshRendererTest/boss.png");
+    mesh1->setPosition(Vec2(s.width / 2, s.height / 2));
 
     // add to scene
-    addChild(sprite2);
-    sprite2->runAction(RepeatForever::create(RotateBy::create(3.0f, -360.0f)));
+    addChild(mesh1);
+    mesh1->runAction(RepeatForever::create(RotateBy::create(3.0f, 360.0f)));
 
-    // Make sprite1 touchable
+    auto mesh2 = MeshRenderer::create("MeshRendererTest/boss1.obj");
+
+    mesh2->setScale(4.f);
+    mesh2->setTexture("MeshRendererTest/boss.png");
+    mesh2->setPosition(Vec2(s.width / 2, s.height / 2));
+    mesh2->setAnchorPoint(Vec2(0.5f, 0.5f));
+
+    // add to scene
+    addChild(mesh2);
+    mesh2->runAction(RepeatForever::create(RotateBy::create(3.0f, -360.0f)));
+
+    // Make mesh1 touchable
     auto listener1 = EventListenerTouchOneByOne::create();
     listener1->setSwallowTouches(true);
 
     listener1->onTouchBegan = [](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite3D*>(event->getCurrentTarget());
+        auto target = static_cast<MeshRenderer*>(event->getCurrentTarget());
 
         Rect rect = target->getBoundingBox();
         if (rect.containsPoint(touch->getLocation()))
         {
-            log("sprite3d began... x = %f, y = %f", touch->getLocation().x, touch->getLocation().y);
+            log("mesh3d began... x = %f, y = %f", touch->getLocation().x, touch->getLocation().y);
             target->setOpacity(100);
             return true;
         }
@@ -707,81 +707,81 @@ Sprite3DHitTest::Sprite3DHitTest()
     };
 
     listener1->onTouchMoved = [](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite3D*>(event->getCurrentTarget());
+        auto target = static_cast<MeshRenderer*>(event->getCurrentTarget());
         target->setPosition(target->getPosition() + touch->getDelta());
     };
 
     listener1->onTouchEnded = [=](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite3D*>(event->getCurrentTarget());
-        log("sprite3d onTouchesEnded.. ");
+        auto target = static_cast<MeshRenderer*>(event->getCurrentTarget());
+        log("mesh3d onTouchesEnded.. ");
         target->setOpacity(255);
     };
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, sprite1);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite2);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, mesh1);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), mesh2);
 }
 
-std::string Sprite3DHitTest::title() const
+std::string MeshRendererHitTest::title() const
 {
-    return "Testing Sprite3D Touch in 2D";
+    return "Testing MeshRenderer Touch in 2D";
 }
 
-std::string Sprite3DHitTest::subtitle() const
+std::string MeshRendererHitTest::subtitle() const
 {
-    return "Tap Sprite3D and Drag";
+    return "Tap MeshRenderer and Drag";
 }
 
-Sprite3DEffectTest::Sprite3DEffectTest()
+MeshRendererEffectTest::MeshRendererEffectTest()
 {
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DEffectTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererEffectTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
-        auto material = Sprite3DMaterial::createWithFilename("Sprite3DTest/outline.material");
+        auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_noneskinned");
-        for (auto& sprite : _sprites)
+        for (auto& mesh : _meshes)
         {
-            sprite->setMaterial(material->clone());
+            mesh->setMaterial(material->clone());
         }
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
 }
 
-Sprite3DEffectTest::~Sprite3DEffectTest()
+MeshRendererEffectTest::~MeshRendererEffectTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-std::string Sprite3DEffectTest::title() const
+std::string MeshRendererEffectTest::title() const
 {
-    return "Testing Sprite3D";
+    return "Testing MeshRenderer";
 }
-std::string Sprite3DEffectTest::subtitle() const
+std::string MeshRendererEffectTest::subtitle() const
 {
-    return "Sprite3d with effects";
+    return "MeshRenderer with effects";
 }
 
-void Sprite3DEffectTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
 {
     // option 2: load obj and assign the texture
-    auto sprite   = Sprite3D::create("Sprite3DTest/boss1.obj");
-    auto material = Sprite3DMaterial::createWithFilename("Sprite3DTest/outline.material");
+    auto mesh   = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
     material->setTechnique("outline_noneskinned");
-    sprite->setMaterial(material);
-    sprite->setScale(6.f);
+    mesh->setMaterial(material);
+    mesh->setScale(6.f);
     Director::getInstance()->getTextureCache()->removeUnusedTextures();
 
     // add to scene
-    addChild(sprite);
+    addChild(mesh);
 
-    sprite->setPosition(Vec2(p.x, p.y));
+    mesh->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
     float random = CCRANDOM_0_1();
@@ -799,31 +799,31 @@ void Sprite3DEffectTest::addNewSpriteWithCoords(Vec2 p)
     auto action_back = action->reverse();
     auto seq         = Sequence::create(action, action_back, nullptr);
 
-    sprite->runAction(RepeatForever::create(seq));
-    _sprites.push_back(sprite);
+    mesh->runAction(RepeatForever::create(seq));
+    _meshes.push_back(mesh);
 }
 
-void Sprite3DEffectTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void MeshRendererEffectTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto touch : touches)
     {
         auto location = touch->getLocation();
 
-        addNewSpriteWithCoords(location);
+        addNewMeshWithCoords(location);
     }
 }
 
-AsyncLoadSprite3DTest::AsyncLoadSprite3DTest()
+AsyncLoadMeshRendererTest::AsyncLoadMeshRendererTest()
 {
-    _paths.push_back("Sprite3DTest/girl.c3b");
-    _paths.push_back("Sprite3DTest/orc.c3b");
-    _paths.push_back("Sprite3DTest/ReskinGirl.c3b");
-    _paths.push_back("Sprite3DTest/axe.c3b");
+    _paths.push_back("MeshRendererTest/girl.c3b");
+    _paths.push_back("MeshRendererTest/orc.c3b");
+    _paths.push_back("MeshRendererTest/ReskinGirl.c3b");
+    _paths.push_back("MeshRendererTest/axe.c3b");
 
     TTFConfig ttfConfig("fonts/arial.ttf", 15);
-    auto label1 = Label::createWithTTF(ttfConfig, "AsyncLoad Sprite3D");
+    auto label1 = Label::createWithTTF(ttfConfig, "AsyncLoad MeshRenderer");
     auto item1 =
-        MenuItemLabel::create(label1, CC_CALLBACK_1(AsyncLoadSprite3DTest::menuCallback_asyncLoadSprite, this));
+        MenuItemLabel::create(label1, CC_CALLBACK_1(AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh, this));
 
     auto s = Director::getInstance()->getWinSize();
     item1->setPosition(s.width * .5f, s.height * .8f);
@@ -836,90 +836,90 @@ AsyncLoadSprite3DTest::AsyncLoadSprite3DTest()
     node->setTag(101);
     this->addChild(node);
 
-    menuCallback_asyncLoadSprite(nullptr);
+    menuCallback_asyncLoadMesh(nullptr);
 }
 
-AsyncLoadSprite3DTest::~AsyncLoadSprite3DTest() {}
+AsyncLoadMeshRendererTest::~AsyncLoadMeshRendererTest() {}
 
-std::string AsyncLoadSprite3DTest::title() const
+std::string AsyncLoadMeshRendererTest::title() const
 {
-    return "Testing Sprite3D::createAsync";
+    return "Testing MeshRenderer::createAsync";
 }
-std::string AsyncLoadSprite3DTest::subtitle() const
+std::string AsyncLoadMeshRendererTest::subtitle() const
 {
     return "";
 }
 
-void AsyncLoadSprite3DTest::menuCallback_asyncLoadSprite(Ref* sender)
+void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Ref* sender)
 {
     // Note that you must stop the tasks before leaving the scene.
     AsyncTaskPool::getInstance()->stopTasks(AsyncTaskPool::TaskType::TASK_IO);
 
     auto node = getChildByTag(101);
-    node->removeAllChildren();  // remove all loaded sprite
+    node->removeAllChildren();  // remove all loaded mesh
 
     // remove cache data
-    Sprite3DCache::getInstance()->removeAllSprite3DData();
+    MeshRendererCache::getInstance()->removeAllMeshRendererData();
     int32_t index = 0;
     for (const auto& path : _paths)
     {
-        Sprite3D::createAsync(path, CC_CALLBACK_2(AsyncLoadSprite3DTest::asyncLoad_Callback, this), (void*)index++);
+        MeshRenderer::createAsync(path, CC_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this), (void*)index++);
     }
 }
 
-void AsyncLoadSprite3DTest::asyncLoad_Callback(Sprite3D* sprite, void* param)
+void AsyncLoadMeshRendererTest::asyncLoad_Callback(MeshRenderer* mesh, void* param)
 {
     auto index  = static_cast<int>((uintptr_t)param);
     auto node   = getChildByTag(101);
     auto s      = Director::getInstance()->getWinSize();
     float width = s.width / _paths.size();
     Vec2 point(width * (0.5f + index), s.height / 2.f);
-    sprite->setPosition(point);
-    node->addChild(sprite);
+    mesh->setPosition(point);
+    node->addChild(mesh);
 }
 
-Sprite3DWithSkinTest::Sprite3DWithSkinTest()
+MeshRendererWithSkinTest::MeshRendererWithSkinTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DWithSkinTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererWithSkinTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    // switch animation quality. In fact, you can set the sprite3d out of frustum to Animate3DQuality::QUALITY_NONE, it
+    // switch animation quality. In fact, you can set the mesh3d out of frustum to Animate3DQuality::QUALITY_NONE, it
     // can save a lot of cpu time
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(15);
     _animateQuality = (int)Animate3DQuality::QUALITY_LOW;
     _menuItem       = MenuItemFont::create(getAnimationQualityMessage(),
-                                           CC_CALLBACK_1(Sprite3DWithSkinTest::switchAnimationQualityCallback, this));
+                                           CC_CALLBACK_1(MeshRendererWithSkinTest::switchAnimationQualityCallback, this));
     _menuItem->setColor(Color3B(0, 200, 20));
     auto menu = Menu::create(_menuItem, NULL);
     menu->setPosition(Vec2::ZERO);
     _menuItem->setPosition(VisibleRect::left().x + 50, VisibleRect::top().y - 70);
     addChild(menu, 1);
 
-    _sprits.clear();
+    _meshes.clear();
 
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
-std::string Sprite3DWithSkinTest::title() const
+std::string MeshRendererWithSkinTest::title() const
 {
-    return "Testing Sprite3D";
+    return "Testing MeshRenderer";
 }
-std::string Sprite3DWithSkinTest::subtitle() const
+std::string MeshRendererWithSkinTest::subtitle() const
 {
-    return "Tap screen to add more sprite3D";
+    return "Tap screen to add more mesh3D";
 }
 
-void Sprite3DWithSkinTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererWithSkinTest::addNewMeshWithCoords(Vec2 p)
 {
-    std::string fileName = "Sprite3DTest/orc.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setScale(3);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    sprite->setPosition(Vec2(p.x, p.y));
-    addChild(sprite);
-    _sprits.push_back(sprite);
+    std::string fileName = "MeshRendererTest/orc.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setScale(3);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    mesh->setPosition(Vec2(p.x, p.y));
+    addChild(mesh);
+    _meshes.push_back(mesh);
 
     auto animation = Animation3D::create(fileName);
     if (animation)
@@ -942,11 +942,11 @@ void Sprite3DWithSkinTest::addNewSpriteWithCoords(Vec2 p)
         animate->setQuality((Animate3DQuality)_animateQuality);
         auto repeat = RepeatForever::create(animate);
         repeat->setTag(110);
-        sprite->runAction(repeat);
+        mesh->runAction(repeat);
     }
 }
 
-std::string Sprite3DWithSkinTest::getAnimationQualityMessage() const
+std::string MeshRendererWithSkinTest::getAnimationQualityMessage() const
 {
     if (_animateQuality == (int)Animate3DQuality::QUALITY_NONE)
         return "None Quality";
@@ -958,7 +958,7 @@ std::string Sprite3DWithSkinTest::getAnimationQualityMessage() const
     return "";
 }
 
-void Sprite3DWithSkinTest::switchAnimationQualityCallback(Ref* sender)
+void MeshRendererWithSkinTest::switchAnimationQualityCallback(Ref* sender)
 {
     ++_animateQuality;
     if (_animateQuality > (int)Animate3DQuality::QUALITY_HIGH)
@@ -966,7 +966,7 @@ void Sprite3DWithSkinTest::switchAnimationQualityCallback(Ref* sender)
 
     _menuItem->setString(getAnimationQualityMessage());
 
-    for (auto iter : _sprits)
+    for (auto iter : _meshes)
     {
         RepeatForever* repAction = dynamic_cast<RepeatForever*>(iter->getActionByTag(110));
         Animate3D* animate3D     = dynamic_cast<Animate3D*>(repAction->getInnerAction());
@@ -974,66 +974,66 @@ void Sprite3DWithSkinTest::switchAnimationQualityCallback(Ref* sender)
     }
 }
 
-void Sprite3DWithSkinTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void MeshRendererWithSkinTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto touch : touches)
     {
         auto location = touch->getLocation();
 
-        addNewSpriteWithCoords(location);
+        addNewMeshWithCoords(location);
     }
 }
 
-Sprite3DWithSkinOutlineTest::Sprite3DWithSkinOutlineTest()
+MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DWithSkinOutlineTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererWithSkinOutlineTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
-        auto material = Sprite3DMaterial::createWithFilename("Sprite3DTest/outline.material");
+        auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_skinned");
-        for (auto& sprite : _sprites)
+        for (auto& mesh : _meshes)
         {
-            sprite->setMaterial(material->clone());
+            mesh->setMaterial(material->clone());
         }
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
 }
-Sprite3DWithSkinOutlineTest::~Sprite3DWithSkinOutlineTest()
+MeshRendererWithSkinOutlineTest::~MeshRendererWithSkinOutlineTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
-std::string Sprite3DWithSkinOutlineTest::title() const
+std::string MeshRendererWithSkinOutlineTest::title() const
 {
-    return "Testing Sprite3D for skinned outline";
+    return "Testing MeshRenderer for skinned outline";
 }
-std::string Sprite3DWithSkinOutlineTest::subtitle() const
+std::string MeshRendererWithSkinOutlineTest::subtitle() const
 {
-    return "Tap screen to add more sprite3D";
+    return "Tap screen to add more mesh3D";
 }
 
-void Sprite3DWithSkinOutlineTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererWithSkinOutlineTest::addNewMeshWithCoords(Vec2 p)
 {
 
-    std::string fileName = "Sprite3DTest/orc.c3b";
-    auto sprite          = Sprite3D::create(fileName);
+    std::string fileName = "MeshRendererTest/orc.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
 
-    auto material = Sprite3DMaterial::createWithFilename("Sprite3DTest/outline.material");
+    auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
     material->setTechnique("outline_skinned");
-    sprite->setMaterial(material);
+    mesh->setMaterial(material);
 
-    sprite->setScale(3);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    addChild(sprite);
-    sprite->setPosition(Vec2(p.x, p.y));
+    mesh->setScale(3);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    addChild(mesh);
+    mesh->setPosition(Vec2(p.x, p.y));
 
     auto animation = Animation3D::create(fileName);
     if (animation)
@@ -1053,24 +1053,24 @@ void Sprite3DWithSkinOutlineTest::addNewSpriteWithCoords(Vec2 p)
         }
         animate->setSpeed(inverse ? -speed : speed);
 
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
 }
 
-void Sprite3DWithSkinOutlineTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
+void MeshRendererWithSkinOutlineTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto touch : touches)
     {
         auto location = touch->getLocation();
 
-        addNewSpriteWithCoords(location);
+        addNewMeshWithCoords(location);
     }
 }
 
 Animate3DTest::Animate3DTest()
-    : _sprite(nullptr), _swim(nullptr), _hurt(nullptr), _elapseTransTime(0.f), _moveAction(nullptr)
+    : _mesh(nullptr), _swim(nullptr), _hurt(nullptr), _elapseTransTime(0.f), _moveAction(nullptr)
 {
-    addSprite3D();
+    addMeshRenderer();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesEnded = CC_CALLBACK_2(Animate3DTest::onTouchesEnded, this);
@@ -1104,7 +1104,7 @@ void Animate3DTest::update(float dt)
 
         if (_elapseTransTime >= Animate3D::getTransitionTime())
         {
-            _sprite->stopAction(_hurt);
+            _mesh->stopAction(_hurt);
             _state = State::SWIMMING;
         }
     }
@@ -1113,27 +1113,27 @@ void Animate3DTest::update(float dt)
         _elapseTransTime += dt;
         if (_elapseTransTime >= Animate3D::getTransitionTime())
         {
-            _sprite->stopAction(_swim);
+            _mesh->stopAction(_swim);
             _state = State::HURT;
         }
     }
 }
 
-void Animate3DTest::addSprite3D()
+void Animate3DTest::addMeshRenderer()
 {
-    std::string fileName = "Sprite3DTest/tortoise.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setScale(0.1f);
+    std::string fileName = "MeshRendererTest/tortoise.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setScale(0.1f);
     auto s = Director::getInstance()->getWinSize();
-    sprite->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
-    addChild(sprite);
-    _sprite        = sprite;
+    mesh->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
+    addChild(mesh);
+    _mesh        = mesh;
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation, 0.f, 1.933f);
         _swim        = RepeatForever::create(animate);
-        sprite->runAction(_swim);
+        mesh->runAction(_swim);
 
         _swim->retain();
         _hurt = Animate3D::create(animation, 1.933f, 2.8f);
@@ -1146,14 +1146,14 @@ void Animate3DTest::addSprite3D()
     auto seq =
         Sequence::create(_moveAction, CallFunc::create(CC_CALLBACK_0(Animate3DTest::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
-    sprite->runAction(seq);
+    mesh->runAction(seq);
 }
 
 void Animate3DTest::reachEndCallBack()
 {
     auto s = Director::getInstance()->getWinSize();
-    _sprite->stopActionByTag(100);
-    auto inverse = MoveTo::create(4.f, Vec2(s.width - _sprite->getPositionX(), s.height / 2.f));
+    _mesh->stopActionByTag(100);
+    auto inverse = MoveTo::create(4.f, Vec2(s.width - _mesh->getPositionX(), s.height / 2.f));
     inverse->retain();
     _moveAction->release();
     _moveAction = inverse;
@@ -1161,13 +1161,13 @@ void Animate3DTest::reachEndCallBack()
     auto seq    = Sequence::create(rot, _moveAction,
                                    CallFunc::create(CC_CALLBACK_0(Animate3DTest::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
-    _sprite->runAction(seq);
+    _mesh->runAction(seq);
 }
 
 void Animate3DTest::renewCallBack()
 {
     // rerun swim action
-    _sprite->runAction(_swim);
+    _mesh->runAction(_swim);
     _state           = State::HURT_TO_SWIMMING;
     _elapseTransTime = 0.0f;
 }
@@ -1178,9 +1178,9 @@ void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
     {
         auto location = touch->getLocation();
 
-        if (_sprite)
+        if (_mesh)
         {
-            float len = (_sprite->getPosition() - location).length();
+            float len = (_mesh->getPosition() - location).length();
             if (len < 40)
             {
                 // hurt the tortoise
@@ -1188,13 +1188,13 @@ void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
                 {
                     _elapseTransTime = 0.0f;
                     _state           = State::SWIMMING_TO_HURT;
-                    _sprite->stopAction(_hurt);
-                    _sprite->runAction(_hurt);
+                    _mesh->stopAction(_hurt);
+                    _mesh->runAction(_hurt);
                     auto delay = DelayTime::create(_hurt->getDuration() - Animate3D::getTransitionTime());
                     auto seq   = Sequence::create(
                           delay, CallFunc::create(CC_CALLBACK_0(Animate3DTest::renewCallBack, this)), nullptr);
                     seq->setTag(101);
-                    _sprite->runAction(seq);
+                    _mesh->runAction(seq);
                 }
                 return;
             }
@@ -1202,10 +1202,10 @@ void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
     }
 }
 
-AttachmentTest::AttachmentTest() : _hasWeapon(false), _sprite(nullptr)
+AttachmentTest::AttachmentTest() : _hasWeapon(false), _mesh(nullptr)
 {
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesEnded = CC_CALLBACK_2(AttachmentTest::onTouchesEnded, this);
@@ -1213,34 +1213,34 @@ AttachmentTest::AttachmentTest() : _hasWeapon(false), _sprite(nullptr)
 }
 std::string AttachmentTest::title() const
 {
-    return "Testing Sprite3D Attachment";
+    return "Testing MeshRenderer Attachment";
 }
 std::string AttachmentTest::subtitle() const
 {
     return "touch to switch weapon";
 }
 
-void AttachmentTest::addNewSpriteWithCoords(Vec2 p)
+void AttachmentTest::addNewMeshWithCoords(Vec2 p)
 {
-    std::string fileName = "Sprite3DTest/orc.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setScale(5);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    addChild(sprite);
-    sprite->setPosition(Vec2(p.x, p.y));
+    std::string fileName = "MeshRendererTest/orc.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setScale(5);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    addChild(mesh);
+    mesh->setPosition(Vec2(p.x, p.y));
 
     // test attach
-    auto sp = Sprite3D::create("Sprite3DTest/axe.c3b");
-    sprite->getAttachNode("Bip001 R Hand")->addChild(sp);
+    auto sp = MeshRenderer::create("MeshRendererTest/axe.c3b");
+    mesh->getAttachNode("Bip001 R Hand")->addChild(sp);
 
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation);
 
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
-    _sprite    = sprite;
+    _mesh    = mesh;
     _hasWeapon = true;
 }
 
@@ -1248,35 +1248,35 @@ void AttachmentTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* e
 {
     if (_hasWeapon)
     {
-        _sprite->removeAllAttachNode();
+        _mesh->removeAllAttachNode();
     }
     else
     {
-        auto sp = Sprite3D::create("Sprite3DTest/axe.c3b");
-        _sprite->getAttachNode("Bip001 R Hand")->addChild(sp);
+        auto sp = MeshRenderer::create("MeshRendererTest/axe.c3b");
+        _mesh->getAttachNode("Bip001 R Hand")->addChild(sp);
     }
     _hasWeapon = !_hasWeapon;
 }
 
-Sprite3DReskinTest::Sprite3DReskinTest() : _sprite(nullptr)
+MeshRendererReskinTest::MeshRendererReskinTest() : _mesh(nullptr)
 {
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DReskinTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererReskinTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
     auto label1 = Label::createWithTTF(ttfConfig, "Hair");
-    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(Sprite3DReskinTest::menuCallback_reSkin, this));
+    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label2 = Label::createWithTTF(ttfConfig, "Glasses");
-    auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(Sprite3DReskinTest::menuCallback_reSkin, this));
+    auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label3 = Label::createWithTTF(ttfConfig, "Coat");
-    auto item3  = MenuItemLabel::create(label3, CC_CALLBACK_1(Sprite3DReskinTest::menuCallback_reSkin, this));
+    auto item3  = MenuItemLabel::create(label3, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label4 = Label::createWithTTF(ttfConfig, "Pants");
-    auto item4  = MenuItemLabel::create(label4, CC_CALLBACK_1(Sprite3DReskinTest::menuCallback_reSkin, this));
+    auto item4  = MenuItemLabel::create(label4, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label5 = Label::createWithTTF(ttfConfig, "Shoes");
-    auto item5  = MenuItemLabel::create(label5, CC_CALLBACK_1(Sprite3DReskinTest::menuCallback_reSkin, this));
+    auto item5  = MenuItemLabel::create(label5, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     item1->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 4));
     item2->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 5));
     item3->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 6));
@@ -1291,7 +1291,7 @@ Sprite3DReskinTest::Sprite3DReskinTest() : _sprite(nullptr)
     pMenu1->setPosition(Vec2(0.0f, 0.0f));
     this->addChild(pMenu1, 10);
 }
-void Sprite3DReskinTest::menuCallback_reSkin(Ref* sender)
+void MeshRendererReskinTest::menuCallback_reSkin(Ref* sender)
 {
     auto index = static_cast<int>((uintptr_t)(((MenuItemLabel*)sender)->getUserData()));
     if (index < (int)SkinType::MAX_TYPE)
@@ -1301,31 +1301,31 @@ void Sprite3DReskinTest::menuCallback_reSkin(Ref* sender)
     }
 }
 
-std::string Sprite3DReskinTest::title() const
+std::string MeshRendererReskinTest::title() const
 {
-    return "Testing Sprite3D Reskin";
+    return "Testing MeshRenderer Reskin";
 }
-std::string Sprite3DReskinTest::subtitle() const
+std::string MeshRendererReskinTest::subtitle() const
 {
     return "";
 }
 
-void Sprite3DReskinTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererReskinTest::addNewMeshWithCoords(Vec2 p)
 {
-    std::string fileName = "Sprite3DTest/ReskinGirl.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setScale(4);
-    sprite->setRotation3D(Vec3(0.0f, 0.0f, 0.0f));
-    addChild(sprite);
-    sprite->setPosition(Vec2(p.x, p.y - 60));
+    std::string fileName = "MeshRendererTest/ReskinGirl.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setScale(4);
+    mesh->setRotation3D(Vec3(0.0f, 0.0f, 0.0f));
+    addChild(mesh);
+    mesh->setPosition(Vec2(p.x, p.y - 60));
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation);
 
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
-    _sprite = sprite;
+    _mesh = mesh;
 
     auto& body = _skins[(int)SkinType::UPPER_BODY];
     body.push_back("Girl_UpperBody01");
@@ -1360,13 +1360,13 @@ void Sprite3DReskinTest::addNewSpriteWithCoords(Vec2 p)
     applyCurSkin();
 }
 
-void Sprite3DReskinTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event) {}
+void MeshRendererReskinTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event) {}
 
-void Sprite3DReskinTest::applyCurSkin()
+void MeshRendererReskinTest::applyCurSkin()
 {
-    for (ssize_t i = 0; i < _sprite->getMeshCount(); i++)
+    for (ssize_t i = 0; i < _mesh->getMeshCount(); i++)
     {
-        auto mesh      = _sprite->getMeshByIndex(static_cast<int>(i));
+        auto mesh      = _mesh->getMeshByIndex(static_cast<int>(i));
         bool isVisible = false;
         for (int j = 0; j < (int)SkinType::MAX_TYPE; j++)
         {
@@ -1376,26 +1376,26 @@ void Sprite3DReskinTest::applyCurSkin()
                 break;
             }
         }
-        _sprite->getMeshByIndex(static_cast<int>(i))->setVisible(isVisible);
+        _mesh->getMeshByIndex(static_cast<int>(i))->setVisible(isVisible);
     }
 }
 
-Sprite3DWithOBBPerformanceTest::Sprite3DWithOBBPerformanceTest()
+MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(Sprite3DWithOBBPerformanceTest::onTouchesBegan, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DWithOBBPerformanceTest::onTouchesEnded, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(Sprite3DWithOBBPerformanceTest::onTouchesMoved, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesBegan, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesEnded, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     auto s = Director::getInstance()->getWinSize();
     initDrawBox();
 
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
-    auto decrease = MenuItemFont::create(" - ", CC_CALLBACK_1(Sprite3DWithOBBPerformanceTest::delOBBCallback, this));
+    auto decrease = MenuItemFont::create(" - ", CC_CALLBACK_1(MeshRendererWithOBBPerformanceTest::delOBBCallback, this));
     decrease->setColor(Color3B(0, 200, 20));
-    auto increase = MenuItemFont::create(" + ", CC_CALLBACK_1(Sprite3DWithOBBPerformanceTest::addOBBCallback, this));
+    auto increase = MenuItemFont::create(" + ", CC_CALLBACK_1(MeshRendererWithOBBPerformanceTest::addOBBCallback, this));
     increase->setColor(Color3B(0, 200, 20));
 
     auto menu = Menu::create(decrease, increase, nullptr);
@@ -1412,15 +1412,15 @@ Sprite3DWithOBBPerformanceTest::Sprite3DWithOBBPerformanceTest()
     addOBBCallback(nullptr);
     scheduleUpdate();
 }
-std::string Sprite3DWithOBBPerformanceTest::title() const
+std::string MeshRendererWithOBBPerformanceTest::title() const
 {
     return "OBB Collision Performance Test";
 }
-std::string Sprite3DWithOBBPerformanceTest::subtitle() const
+std::string MeshRendererWithOBBPerformanceTest::subtitle() const
 {
     return "";
 }
-void Sprite3DWithOBBPerformanceTest::addNewOBBWithCoords(Vec2 p)
+void MeshRendererWithOBBPerformanceTest::addNewOBBWithCoords(Vec2 p)
 {
     Vec3 extents = Vec3(10, 10, 10);
     AABB aabb(-extents, extents);
@@ -1429,7 +1429,7 @@ void Sprite3DWithOBBPerformanceTest::addNewOBBWithCoords(Vec2 p)
     _obb.push_back(obb);
 }
 
-void Sprite3DWithOBBPerformanceTest::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
+void MeshRendererWithOBBPerformanceTest::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
 {
     for (const auto& touch : touches)
     {
@@ -1452,9 +1452,9 @@ void Sprite3DWithOBBPerformanceTest::onTouchesBegan(const std::vector<Touch*>& t
     }
 }
 
-void Sprite3DWithOBBPerformanceTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event) {}
+void MeshRendererWithOBBPerformanceTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event) {}
 
-void Sprite3DWithOBBPerformanceTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
+void MeshRendererWithOBBPerformanceTest::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 {
     for (const auto& touch : touches)
     {
@@ -1469,7 +1469,7 @@ void Sprite3DWithOBBPerformanceTest::onTouchesMoved(const std::vector<Touch*>& t
     }
 }
 
-void Sprite3DWithOBBPerformanceTest::update(float dt)
+void MeshRendererWithOBBPerformanceTest::update(float dt)
 {
     char szText[16];
     sprintf(szText, "%lu cubes", static_cast<unsigned long>(_obb.size()));
@@ -1479,7 +1479,7 @@ void Sprite3DWithOBBPerformanceTest::update(float dt)
     {
         _drawDebug->clear();
 
-        Mat4 mat = _sprite->getNodeToWorldTransform();
+        Mat4 mat = _mesh->getNodeToWorldTransform();
 
         _obbt = _obbtOri;
         _obbt.transform(mat);
@@ -1501,65 +1501,65 @@ void Sprite3DWithOBBPerformanceTest::update(float dt)
     }
 }
 
-void Sprite3DWithOBBPerformanceTest::initDrawBox()
+void MeshRendererWithOBBPerformanceTest::initDrawBox()
 {
     _drawOBB = DrawNode3D::create();
     addChild(_drawOBB);
 }
 
-void Sprite3DWithOBBPerformanceTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
 {
-    std::string fileName = "Sprite3DTest/tortoise.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    AABB aabb            = sprite->getAABB();
+    std::string fileName = "MeshRendererTest/tortoise.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    AABB aabb            = mesh->getAABB();
     _obbt                = OBB(aabb);
     _obbtOri             = _obbt;
 
-    sprite->setScale(0.1f);
+    mesh->setScale(0.1f);
     auto s = Director::getInstance()->getWinSize();
-    sprite->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
-    addChild(sprite);
-    _sprite        = sprite;
+    mesh->setPosition(Vec2(s.width * 4.f / 5.f, s.height / 2.f));
+    addChild(mesh);
+    _mesh        = mesh;
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation, 0.f, 1.933f);
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
 
     _moveAction = MoveTo::create(4.f, Vec2(s.width / 5.f, s.height / 2.f));
     _moveAction->retain();
     auto seq = Sequence::create(
-        _moveAction, CallFunc::create(CC_CALLBACK_0(Sprite3DWithOBBPerformanceTest::reachEndCallBack, this)), nullptr);
+        _moveAction, CallFunc::create(CC_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
-    sprite->runAction(seq);
+    mesh->runAction(seq);
 
     _drawDebug = DrawNode3D::create();
     addChild(_drawDebug);
 }
 
-void Sprite3DWithOBBPerformanceTest::reachEndCallBack()
+void MeshRendererWithOBBPerformanceTest::reachEndCallBack()
 {
     auto s = Director::getInstance()->getWinSize();
-    _sprite->stopActionByTag(100);
-    auto inverse = MoveTo::create(4.f, Vec2(s.width - _sprite->getPositionX(), s.height / 2.f));
+    _mesh->stopActionByTag(100);
+    auto inverse = MoveTo::create(4.f, Vec2(s.width - _mesh->getPositionX(), s.height / 2.f));
     inverse->retain();
     _moveAction->release();
     _moveAction = inverse;
     auto rot    = RotateBy::create(1.0f, Vec3(0.f, 180.f, 0.f));
     auto seq    = Sequence::create(rot, _moveAction,
-                                   CallFunc::create(CC_CALLBACK_0(Sprite3DWithOBBPerformanceTest::reachEndCallBack, this)),
+                                   CallFunc::create(CC_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)),
                                    nullptr);
     seq->setTag(100);
-    _sprite->runAction(seq);
+    _mesh->runAction(seq);
 }
 
-void Sprite3DWithOBBPerformanceTest::addOBBCallback(Ref* sender)
+void MeshRendererWithOBBPerformanceTest::addOBBCallback(Ref* sender)
 {
     addOBBWithCount(10);
 }
 
-void Sprite3DWithOBBPerformanceTest::addOBBWithCount(float value)
+void MeshRendererWithOBBPerformanceTest::addOBBWithCount(float value)
 {
     for (int i = 0; i < value; i++)
     {
@@ -1573,12 +1573,12 @@ void Sprite3DWithOBBPerformanceTest::addOBBWithCount(float value)
     }
 }
 
-void Sprite3DWithOBBPerformanceTest::delOBBCallback(Ref* sender)
+void MeshRendererWithOBBPerformanceTest::delOBBCallback(Ref* sender)
 {
     delOBBWithCount(10);
 }
 
-void Sprite3DWithOBBPerformanceTest::delOBBWithCount(float value)
+void MeshRendererWithOBBPerformanceTest::delOBBWithCount(float value)
 {
     if (_obb.size() >= 10)
     {
@@ -1588,7 +1588,7 @@ void Sprite3DWithOBBPerformanceTest::delOBBWithCount(float value)
     else
         return;
 }
-void Sprite3DWithOBBPerformanceTest::unproject(const Mat4& viewProjection, const Size* viewport, Vec3* src, Vec3* dst)
+void MeshRendererWithOBBPerformanceTest::unproject(const Mat4& viewProjection, const Size* viewport, Vec3* src, Vec3* dst)
 {
     assert(dst);
 
@@ -1611,7 +1611,7 @@ void Sprite3DWithOBBPerformanceTest::unproject(const Mat4& viewProjection, const
     dst->set(screen.x, screen.y, screen.z);
 }
 
-void Sprite3DWithOBBPerformanceTest::calculateRayByLocationInView(Ray* ray, const Vec2& location)
+void MeshRendererWithOBBPerformanceTest::calculateRayByLocationInView(Ray* ray, const Vec2& location)
 {
     auto dir  = Director::getInstance();
     auto view = dir->getWinSize();
@@ -1633,70 +1633,70 @@ void Sprite3DWithOBBPerformanceTest::calculateRayByLocationInView(Ray* ray, cons
     ray->_direction = direction;
 }
 
-Sprite3DMirrorTest::Sprite3DMirrorTest() : _sprite(nullptr), _mirrorSprite(nullptr)
+MeshRendererMirrorTest::MeshRendererMirrorTest() : _mesh(nullptr), _mirrorMesh(nullptr)
 {
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
-std::string Sprite3DMirrorTest::title() const
+std::string MeshRendererMirrorTest::title() const
 {
-    return "Sprite3D Mirror Test";
+    return "MeshRenderer Mirror Test";
 }
-std::string Sprite3DMirrorTest::subtitle() const
+std::string MeshRendererMirrorTest::subtitle() const
 {
     return "";
 }
 
-void Sprite3DMirrorTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererMirrorTest::addNewMeshWithCoords(Vec2 p)
 {
-    std::string fileName = "Sprite3DTest/orc.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setScale(5);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    addChild(sprite);
-    sprite->setPosition(Vec2(p.x - 80, p.y));
+    std::string fileName = "MeshRendererTest/orc.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setScale(5);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    addChild(mesh);
+    mesh->setPosition(Vec2(p.x - 80, p.y));
 
     // test attach
-    auto sp = Sprite3D::create("Sprite3DTest/axe.c3b");
-    sprite->getAttachNode("Bip001 R Hand")->addChild(sp);
+    auto sp = MeshRenderer::create("MeshRendererTest/axe.c3b");
+    mesh->getAttachNode("Bip001 R Hand")->addChild(sp);
 
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation);
 
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
-    _sprite    = sprite;
+    _mesh    = mesh;
     _hasWeapon = true;
 
-    // create mirror Sprite3D
-    sprite = Sprite3D::create(fileName);
-    sprite->setScale(5);
-    sprite->setScaleX(-5);
-    sprite->setCullFace(CullFaceSide::FRONT);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    addChild(sprite);
-    sprite->setPosition(Vec2(p.x + 80, p.y));
+    // create mirror MeshRenderer
+    mesh = MeshRenderer::create(fileName);
+    mesh->setScale(5);
+    mesh->setScaleX(-5);
+    mesh->setCullFace(CullFaceSide::FRONT);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    addChild(mesh);
+    mesh->setPosition(Vec2(p.x + 80, p.y));
 
     // test attach
-    sp = Sprite3D::create("Sprite3DTest/axe.c3b");
-    sprite->getAttachNode("Bip001 R Hand")->addChild(sp);
+    sp = MeshRenderer::create("MeshRendererTest/axe.c3b");
+    mesh->getAttachNode("Bip001 R Hand")->addChild(sp);
 
     animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation);
 
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
-    _mirrorSprite = sprite;
+    _mirrorMesh = mesh;
 }
 
 QuaternionTest::QuaternionTest() : _arcSpeed(CC_DEGREES_TO_RADIANS(90)), _radius(100.f), _accAngle(0.f)
 {
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2.f, s.height / 2.f));
+    addNewMeshWithCoords(Vec2(s.width / 2.f, s.height / 2.f));
     scheduleUpdate();
 }
 std::string QuaternionTest::title() const
@@ -1708,20 +1708,20 @@ std::string QuaternionTest::subtitle() const
     return "";
 }
 
-void QuaternionTest::addNewSpriteWithCoords(Vec2 p)
+void QuaternionTest::addNewMeshWithCoords(Vec2 p)
 {
-    std::string fileName = "Sprite3DTest/tortoise.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setScale(0.1f);
+    std::string fileName = "MeshRendererTest/tortoise.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setScale(0.1f);
     auto s = Director::getInstance()->getWinSize();
-    sprite->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
-    addChild(sprite);
-    _sprite        = sprite;
+    mesh->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
+    addChild(mesh);
+    _mesh        = mesh;
     auto animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation, 0.f, 1.933f);
-        sprite->runAction(RepeatForever::create(animate));
+        mesh->runAction(RepeatForever::create(animate));
     }
 }
 
@@ -1733,18 +1733,18 @@ void QuaternionTest::update(float delta)
         _accAngle -= 2 * pi;
 
     auto s = Director::getInstance()->getWinSize();
-    _sprite->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
+    _mesh->setPosition(Vec2(s.width / 2.f + _radius * cosf(_accAngle), s.height / 2.f + _radius * sinf(_accAngle)));
 
     Quaternion quat;
     Quaternion::createFromAxisAngle(Vec3(0.f, 0.f, 1.f), _accAngle - pi * 0.5f, &quat);
-    _sprite->setRotationQuat(quat);
+    _mesh->setRotationQuat(quat);
 }
 
-UseCaseSprite3D::UseCaseSprite3D() : _caseIdx(0)
+UseCaseMeshRenderer::UseCaseMeshRenderer() : _caseIdx(0)
 {
     auto s = Director::getInstance()->getWinSize();
 
-    _useCaseTitles[0] = "transparent 3d sprite and 2d sprite";
+    _useCaseTitles[0] = "transparent 3d mesh and 2d mesh";
     _useCaseTitles[1] = "ui - 3d - ui";
 
     auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
@@ -1783,53 +1783,53 @@ UseCaseSprite3D::UseCaseSprite3D() : _caseIdx(0)
     switchCase();
 }
 
-std::string UseCaseSprite3D::title() const
+std::string UseCaseMeshRenderer::title() const
 {
     return "Use Case For 2D + 3D";
 }
 
-std::string UseCaseSprite3D::subtitle() const
+std::string UseCaseMeshRenderer::subtitle() const
 {
     return "";
 }
 
-void UseCaseSprite3D::switchCase()
+void UseCaseMeshRenderer::switchCase()
 {
     removeChildByTag(101);
 
     auto s = Director::getInstance()->getWinSize();
     _label->setString(_useCaseTitles[_caseIdx]);
-    if (_caseIdx == 0)  // use case 1, 3d transparent sprite + 2d sprite
+    if (_caseIdx == 0)  // use case 1, 3d transparent mesh + 2d mesh
     {
-        std::string filename = "Sprite3DTest/girl.c3b";
-        auto sprite          = Sprite3D::create(filename);
-        sprite->setScale(0.15f);
+        std::string filename = "MeshRendererTest/girl.c3b";
+        auto mesh          = MeshRenderer::create(filename);
+        mesh->setScale(0.15f);
         auto animation = Animation3D::create(filename);
         if (animation)
         {
             auto animate = Animate3D::create(animation);
-            sprite->runAction(RepeatForever::create(animate));
+            mesh->runAction(RepeatForever::create(animate));
         }
 
-        auto circleBack = Sprite3D::create();
-        auto circle     = Sprite::create("Sprite3DTest/circle.png");
+        auto circleBack = MeshRenderer::create();
+        auto circle     = Sprite::create("MeshRendererTest/circle.png");
         circleBack->setScale(0.5f);
         circleBack->addChild(circle);
         circle->runAction(RepeatForever::create(RotateBy::create(3, Vec3(0.f, 0.f, 360.f))));
 
         circleBack->setRotation3D(Vec3(-90.0f, -90.0f, 0.0f));
 
-        auto pos = sprite->getPosition3D();
+        auto pos = mesh->getPosition3D();
         circleBack->setPosition3D(Vec3(pos.x, pos.y, pos.z - 1));
 
-        sprite->setOpacity(250);
-        sprite->setCameraMask(2);
+        mesh->setOpacity(250);
+        mesh->setCameraMask(2);
         circleBack->setCameraMask(2);
-        sprite->setTag(3);
+        mesh->setTag(3);
         circleBack->setTag(2);
 
         auto node = Node::create();
-        node->addChild(sprite);
+        node->addChild(mesh);
         node->addChild(circleBack);
         node->setTag(101);
         addChild(node);
@@ -1844,23 +1844,23 @@ void UseCaseSprite3D::switchCase()
         layer->setGlobalZOrder(-1);
         addChild(layer);
 
-        std::string filename = "Sprite3DTest/girl.c3b";
-        auto sprite          = Sprite3D::create(filename);
-        sprite->setScale(0.5f);
+        std::string filename = "MeshRendererTest/girl.c3b";
+        auto mesh          = MeshRenderer::create(filename);
+        mesh->setScale(0.5f);
         auto animation = Animation3D::create(filename);
         if (animation)
         {
             auto animate = Animate3D::create(animation);
-            sprite->runAction(RepeatForever::create(animate));
+            mesh->runAction(RepeatForever::create(animate));
         }
-        sprite->setPosition(s.width * 0.25f, s.height * 0.125f);
-        layer->addChild(sprite);
+        mesh->setPosition(s.width * 0.25f, s.height * 0.125f);
+        layer->addChild(mesh);
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Message");
-        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UseCaseSprite3D::menuCallback_Message, this));
+        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UseCaseMeshRenderer::menuCallback_Message, this));
         auto label2 = Label::createWithTTF(ttfConfig, "Message");
-        auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(UseCaseSprite3D::menuCallback_Message, this));
+        auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(UseCaseMeshRenderer::menuCallback_Message, this));
 
         item1->setPosition(Vec2(s.width * 0.5f - item1->getContentSize().width * 0.5f,
                                 s.height * 0.5f - item1->getContentSize().height));
@@ -1875,7 +1875,7 @@ void UseCaseSprite3D::switchCase()
     }
 }
 
-void UseCaseSprite3D::menuCallback_Message(Ref* sender)
+void UseCaseMeshRenderer::menuCallback_Message(Ref* sender)
 {
     auto layer   = getChildByTag(101);
     auto message = layer->getChildByTag(102);  // message layer
@@ -1897,7 +1897,7 @@ void UseCaseSprite3D::menuCallback_Message(Ref* sender)
     }
 }
 
-void UseCaseSprite3D::update(float delta)
+void UseCaseMeshRenderer::update(float delta)
 {
     if (_caseIdx == 0)
     {
@@ -1908,11 +1908,11 @@ void UseCaseSprite3D::update(float delta)
         float x = cosf(accAngle) * radius, z = sinf(accAngle) * radius;
 
         auto node     = getChildByTag(101);
-        auto sprite3d = node->getChildByTag(3);
+        auto mesh3d = node->getChildByTag(3);
         auto circle   = node->getChildByTag(2);
 
-        sprite3d->setPositionX(x);
-        sprite3d->setPositionZ(z);
+        mesh3d->setPositionX(x);
+        mesh3d->setPositionZ(z);
         circle->setPositionX(x);
         circle->setPositionZ(z);
     }
@@ -1925,27 +1925,27 @@ NodeAnimationTest::NodeAnimationTest() : _vectorIndex(0)
     auto s = Director::getInstance()->getWinSize();
 
     auto itemPrev = MenuItemImage::create("Images/b1.png", "Images/b2.png", [&](Ref* sender) {
-        _sprites[_vectorIndex]->setVisible(false);
+        _meshes[_vectorIndex]->setVisible(false);
 
         int tIndex = _vectorIndex - 1;
         if (tIndex < 0)
-            _vectorIndex = (int)_sprites.size() - 1;
+            _vectorIndex = (int)_meshes.size() - 1;
         else
             _vectorIndex--;
 
-        _sprites[_vectorIndex]->setVisible(true);
+        _meshes[_vectorIndex]->setVisible(true);
     });
 
     auto itemNext = MenuItemImage::create("Images/f1.png", "Images/f2.png", [&](Ref* sender) {
-        _sprites[_vectorIndex]->setVisible(false);
+        _meshes[_vectorIndex]->setVisible(false);
 
         int tIndex = _vectorIndex + 1;
-        if (tIndex >= static_cast<int>(_sprites.size()))
+        if (tIndex >= static_cast<int>(_meshes.size()))
             _vectorIndex = 0;
         else
             _vectorIndex++;
 
-        _sprites[_vectorIndex]->setVisible(true);
+        _meshes[_vectorIndex]->setVisible(true);
     });
 
     auto menu = Menu::create(itemPrev, itemNext, nullptr);
@@ -1955,7 +1955,7 @@ NodeAnimationTest::NodeAnimationTest() : _vectorIndex(0)
     menu->setPosition(Vec2(s.width / 2, 70.0f));
     addChild(menu);
 
-    addNewSpriteWithCoords(Vec2(s.width / 2.f, s.height / 2.f));
+    addNewMeshWithCoords(Vec2(s.width / 2.f, s.height / 2.f));
 }
 std::string NodeAnimationTest::title() const
 {
@@ -1966,17 +1966,17 @@ std::string NodeAnimationTest::subtitle() const
     return "Jumping animation";
 }
 
-void NodeAnimationTest::addNewSpriteWithCoords(Vec2 p)
+void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
 {
     auto s = Director::getInstance()->getWinSize();
 
     // add jumping ball
-    std::string fileName = "Sprite3DTest/ball.c3b";
-    auto sprite          = Sprite3D::create(fileName);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    sprite->setScale(3);
-    sprite->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
-    sprite->setTexture("Sprite3DTest/teapot.png");
+    std::string fileName = "MeshRendererTest/ball.c3b";
+    auto mesh          = MeshRenderer::create(fileName);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    mesh->setScale(3);
+    mesh->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
+    mesh->setTexture("MeshRendererTest/teapot.png");
 
     auto light1 = PointLight::create(Vec3(s.width * 0.2f, s.height * 0.8f, 100.0f), Color3B(200, 200, 200), 10000.0f);
     addChild(light1);
@@ -1989,37 +1989,37 @@ void NodeAnimationTest::addNewSpriteWithCoords(Vec2 p)
         auto animate = Animate3D::create(animation);
         auto act     = RepeatForever::create(animate);
         act->setTag(0);
-        sprite->runAction(act);
+        mesh->runAction(act);
     }
-    addChild(sprite);
-    _sprites.push_back(sprite);
+    addChild(mesh);
+    _meshes.push_back(mesh);
 
     // add jumping orc
-    fileName = "Sprite3DTest/orc_jump.c3t";
-    sprite   = Sprite3D::create(fileName);
-    sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    sprite->setScale(3);
-    sprite->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
-    sprite->setVisible(false);
+    fileName = "MeshRendererTest/orc_jump.c3t";
+    mesh   = MeshRenderer::create(fileName);
+    mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    mesh->setScale(3);
+    mesh->setPosition(Vec2(s.width / 2.f, s.height / 3.f));
+    mesh->setVisible(false);
     animation = Animation3D::create(fileName);
     if (animation)
     {
         auto animate = Animate3D::create(animation);
         auto act     = RepeatForever::create(animate);
         act->setTag(0);
-        sprite->runAction(act);
+        mesh->runAction(act);
     }
-    addChild(sprite);
-    _sprites.push_back(sprite);
+    addChild(mesh);
+    _meshes.push_back(mesh);
 }
 
-Sprite3DCubeMapTest::Sprite3DCubeMapTest() : _textureCube(nullptr), _skyBox(nullptr), _teapot(nullptr)
+MeshRendererCubeMapTest::MeshRendererCubeMapTest() : _textureCube(nullptr), _skyBox(nullptr), _teapot(nullptr)
 {
     auto s = Director::getInstance()->getWinSize();
-    addNewSpriteWithCoords(Vec2(s.width / 2, s.height / 2));
+    addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 }
 
-Sprite3DCubeMapTest::~Sprite3DCubeMapTest()
+MeshRendererCubeMapTest::~MeshRendererCubeMapTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
@@ -2030,17 +2030,17 @@ Sprite3DCubeMapTest::~Sprite3DCubeMapTest()
     _textureCube->release();
 }
 
-std::string Sprite3DCubeMapTest::title() const
+std::string MeshRendererCubeMapTest::title() const
 {
     return "CubeMap & Skybox Test";
 }
 
-std::string Sprite3DCubeMapTest::subtitle() const
+std::string MeshRendererCubeMapTest::subtitle() const
 {
     return "";
 }
 
-void Sprite3DCubeMapTest::addNewSpriteWithCoords(Vec2 p)
+void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 {
     Size visibleSize = Director::getInstance()->getVisibleSize();
     _camera          = Camera::createPerspective(60, visibleSize.width / visibleSize.height, 10, 1000);
@@ -2048,17 +2048,17 @@ void Sprite3DCubeMapTest::addNewSpriteWithCoords(Vec2 p)
     _camera->setCameraFlag(CameraFlag::USER1);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = CC_CALLBACK_2(Sprite3DCubeMapTest::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererCubeMapTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a teapot
-    _teapot = Sprite3D::create("Sprite3DTest/teapot.c3b");
+    _teapot = MeshRenderer::create("MeshRendererTest/teapot.c3b");
     _teapot->retain();
 
     // create the second texture for cylinder
-    _textureCube = TextureCube::create("Sprite3DTest/skybox/left.jpg", "Sprite3DTest/skybox/right.jpg",
-                                       "Sprite3DTest/skybox/top.jpg", "Sprite3DTest/skybox/bottom.jpg",
-                                       "Sprite3DTest/skybox/front.jpg", "Sprite3DTest/skybox/back.jpg");
+    _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
+                                       "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
+                                       "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
 
     _textureCube->retain();
 
@@ -2070,7 +2070,7 @@ void Sprite3DCubeMapTest::addNewSpriteWithCoords(Vec2 p)
     tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
     _textureCube->setTexParameters(tRepeatParams);
 
-    auto mat   = Sprite3DMaterial::createWithFilename("Sprite3DTest/CubeMap.material");
+    auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");
     auto state = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
     _teapot->setMaterial(mat);
 
@@ -2100,9 +2100,9 @@ void Sprite3DCubeMapTest::addNewSpriteWithCoords(Vec2 p)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         CC_SAFE_RELEASE(_textureCube);
-        _textureCube = TextureCube::create("Sprite3DTest/skybox/left.jpg", "Sprite3DTest/skybox/right.jpg",
-                                           "Sprite3DTest/skybox/top.jpg", "Sprite3DTest/skybox/bottom.jpg",
-                                           "Sprite3DTest/skybox/front.jpg", "Sprite3DTest/skybox/back.jpg");
+        _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
+                                           "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
+                                           "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
 
         _textureCube->retain();
         // set texture parameters
@@ -2113,7 +2113,7 @@ void Sprite3DCubeMapTest::addNewSpriteWithCoords(Vec2 p)
         tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         _textureCube->setTexParameters(tRepeatParams);
 
-        auto mat   = Sprite3DMaterial::createWithFilename("Sprite3DTest/CubeMap.material");
+        auto mat   = MeshMaterial::createWithFilename("MeshRendererTest/CubeMap.material");
         auto state = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
         _teapot->setMaterial(mat);
         _skyBox->setTexture(_textureCube);
@@ -2125,7 +2125,7 @@ void Sprite3DCubeMapTest::addNewSpriteWithCoords(Vec2 p)
 #endif
 }
 
-void Sprite3DCubeMapTest::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void MeshRendererCubeMapTest::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event)
 {
     if (touches.size())
     {
@@ -2144,12 +2144,12 @@ Issue9767::Issue9767()
     _shaderType = Issue9767::ShaderType::SHADER_TEX;
 
     auto s      = Director::getInstance()->getWinSize();
-    auto sprite = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite->setScale(3.f);
-    sprite->setTexture("Sprite3DTest/boss.png");
-    addChild(sprite);
-    sprite->setPosition(Vec2(s.width / 2, s.height / 2));
-    _sprite = sprite;
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
+    addChild(mesh);
+    mesh->setPosition(Vec2(s.width / 2, s.height / 2));
+    _mesh = mesh;
 
     TTFConfig ttfConfig("fonts/arial.ttf", 15);
     auto label1 = Label::createWithTTF(ttfConfig, "switch shader");
@@ -2180,7 +2180,7 @@ void Issue9767::menuCallback_SwitchShader(cocos2d::Ref* sender)
         auto program  = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D);
         _programState = new backend::ProgramState(program);
     }
-    _sprite->setProgramState(_programState);
+    _mesh->setProgramState(_programState);
 }
 
 std::string Issue9767::title() const
@@ -2193,38 +2193,38 @@ std::string Issue9767::subtitle() const
     return "";
 }
 
-Sprite3DClippingTest::Sprite3DClippingTest()
+MeshRendererClippingTest::MeshRendererClippingTest()
 {
     auto size         = Director::getInstance()->getWinSize();
     auto stencil      = Sprite::create("Images/close.png");
-    auto clipSprite3D = ClippingNode::create();
-    clipSprite3D->setStencil(stencil);
-    this->addChild(clipSprite3D);
-    clipSprite3D->setScale(3.0f);
+    auto clipMeshRenderer = ClippingNode::create();
+    clipMeshRenderer->setStencil(stencil);
+    this->addChild(clipMeshRenderer);
+    clipMeshRenderer->setScale(3.0f);
 
-    auto sprite3D = Sprite3D::create("Sprite3DTest/orc.c3b");
-    sprite3D->setScale(1.0f);
-    sprite3D->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    clipSprite3D->addChild(sprite3D);  // 5
+    auto mesh3D = MeshRenderer::create("MeshRendererTest/orc.c3b");
+    mesh3D->setScale(1.0f);
+    mesh3D->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    clipMeshRenderer->addChild(mesh3D);  // 5
 
-    clipSprite3D->setPosition(Vec2(size.width / 2, size.height / 2));
+    clipMeshRenderer->setPosition(Vec2(size.width / 2, size.height / 2));
 
     auto seq = Sequence::create(ScaleTo::create(2.f, 3), ScaleTo::create(2.f, 0.5f), NULL);
-    sprite3D->runAction(RepeatForever::create(seq));
-    auto animation = Animation3D::create("Sprite3DTest/orc.c3b");
+    mesh3D->runAction(RepeatForever::create(seq));
+    auto animation = Animation3D::create("MeshRendererTest/orc.c3b");
     auto animate   = Animate3D::create(animation);
-    sprite3D->runAction(RepeatForever::create(animate));
-    sprite3D->setForce2DQueue(true);
+    mesh3D->runAction(RepeatForever::create(animate));
+    mesh3D->setForce2DQueue(true);
 }
 
-Sprite3DClippingTest::~Sprite3DClippingTest() {}
+MeshRendererClippingTest::~MeshRendererClippingTest() {}
 
-std::string Sprite3DClippingTest::title() const
+std::string MeshRendererClippingTest::title() const
 {
-    return "Sprite3D Clipping Test";
+    return "MeshRenderer Clipping Test";
 }
 
-std::string Sprite3DClippingTest::subtitle() const
+std::string MeshRendererClippingTest::subtitle() const
 {
     return "";
 }
@@ -2235,27 +2235,27 @@ Animate3DCallbackTest::Animate3DCallbackTest()
     FileUtils::getInstance()->addSearchPath("Particle3D/scripts");
 
     auto s    = Director::getInstance()->getWinSize();
-    _sprite3d = Sprite3D::create("Sprite3DTest/ReskinGirl.c3b");
-    _sprite3d->setPosition(Vec2(s.width / 2.0f, s.height / 3.0f));
-    _sprite3d->setScale(3.0f);
-    _sprite3d->setRotation3D(Vec3(0.0f, 90.0f, 0.0f));
-    this->addChild(_sprite3d);
+    _meshRenderer = MeshRenderer::create("MeshRendererTest/ReskinGirl.c3b");
+    _meshRenderer->setPosition(Vec2(s.width / 2.0f, s.height / 3.0f));
+    _meshRenderer->setScale(3.0f);
+    _meshRenderer->setRotation3D(Vec3(0.0f, 90.0f, 0.0f));
+    this->addChild(_meshRenderer);
 
-    _sprite3d->getMeshByName("Girl_UpperBody02")->setVisible(false);
-    _sprite3d->getMeshByName("Girl_LowerBody02")->setVisible(false);
-    _sprite3d->getMeshByName("Girl_Shoes02")->setVisible(false);
-    _sprite3d->getMeshByName("Girl_Hair02")->setVisible(false);
+    _meshRenderer->getMeshByName("Girl_UpperBody02")->setVisible(false);
+    _meshRenderer->getMeshByName("Girl_LowerBody02")->setVisible(false);
+    _meshRenderer->getMeshByName("Girl_Shoes02")->setVisible(false);
+    _meshRenderer->getMeshByName("Girl_Hair02")->setVisible(false);
 
     auto rootps = PUParticleSystem3D::create("explosionSystem.pu");
     rootps->stopParticleSystem();
     rootps->setScale(4.0f);
     this->addChild(rootps, 0, 100);
 
-    auto animation = Animation3D::create("Sprite3DTest/ReskinGirl.c3b");
+    auto animation = Animation3D::create("MeshRendererTest/ReskinGirl.c3b");
     if (animation)
     {
         auto animate = Animate3D::create(animation);
-        _sprite3d->runAction(RepeatForever::create(animate));
+        _meshRenderer->runAction(RepeatForever::create(animate));
 
         ValueMap valuemap0;
         animate->setKeyFrameUserInfo(275, valuemap0);
@@ -2265,8 +2265,8 @@ Animate3DCallbackTest::Animate3DCallbackTest()
             auto node = getChildByTag(100);
             if (node)
             {
-                auto mat = _sprite3d->getNodeToWorldTransform() *
-                           _sprite3d->getSkeleton()->getBoneByName("Bip01 R Hand")->getWorldMat();
+                auto mat = _meshRenderer->getNodeToWorldTransform() *
+                           _meshRenderer->getSkeleton()->getBoneByName("Bip01 R Hand")->getWorldMat();
                 node->setPosition3D(Vec3(mat.m[12] + 100, mat.m[13], mat.m[14]));
                 ((PUParticleSystem3D*)node)->startParticleSystem();
             }
@@ -2289,19 +2289,19 @@ std::string Animate3DCallbackTest::subtitle() const
     return "";
 }
 
-Sprite3DVertexColorTest::Sprite3DVertexColorTest()
+MeshRendererVertexColorTest::MeshRendererVertexColorTest()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto sprite = Sprite3D::create("Sprite3DTest/box_VertexCol.c3t");
-    sprite->setPosition(Vec2(0.0f, 0.0f));
-    sprite->setScale(1.0f);
-    sprite->setCameraMask(2);
-    auto mat = Sprite3DMaterial::createWithFilename("Sprite3DTest/VertexColor.material");
-    sprite->setMaterial(mat);
-    sprite->runAction(RepeatForever::create(RotateBy::create(1.0f, Vec3(10.0f, 50.0f, 10.0f))));
+    auto mesh = MeshRenderer::create("MeshRendererTest/box_VertexCol.c3t");
+    mesh->setPosition(Vec2(0.0f, 0.0f));
+    mesh->setScale(1.0f);
+    mesh->setCameraMask(2);
+    auto mat = MeshMaterial::createWithFilename("MeshRendererTest/VertexColor.material");
+    mesh->setMaterial(mat);
+    mesh->runAction(RepeatForever::create(RotateBy::create(1.0f, Vec3(10.0f, 50.0f, 10.0f))));
 
-    this->addChild(sprite);
+    this->addChild(mesh);
 
     // setup camera
     auto camera = Camera::createPerspective(40, s.width / s.height, 0.01f, 1000.f);
@@ -2312,26 +2312,26 @@ Sprite3DVertexColorTest::Sprite3DVertexColorTest()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [=](EventCustom*) {
-        auto mat = Sprite3DMaterial::createWithFilename("Sprite3DTest/VertexColor.material");
-        sprite->setMaterial(mat);
+        auto mat = MeshMaterial::createWithFilename("MeshRendererTest/VertexColor.material");
+        mesh->setMaterial(mat);
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
 }
 
-Sprite3DVertexColorTest::~Sprite3DVertexColorTest()
+MeshRendererVertexColorTest::~MeshRendererVertexColorTest()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-std::string Sprite3DVertexColorTest::title() const
+std::string MeshRendererVertexColorTest::title() const
 {
     return "Testing Vertex Color";
 }
 
-std::string Sprite3DVertexColorTest::subtitle() const
+std::string MeshRendererVertexColorTest::subtitle() const
 {
     return "";
 }
@@ -2356,9 +2356,9 @@ CameraBackgroundClearTest::CameraBackgroundClearTest()
     _camera->lookAt(Vec3(0.f, 0.f, 0.f));
     addChild(_camera);
 
-    auto sprite = Sprite3D::create("Sprite3DTest/orc.c3b");
-    addChild(sprite);
-    sprite->setCameraMask(2);
+    auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
+    addChild(mesh);
+    mesh->setCameraMask(2);
 
     _label = Label::createWithTTF(ttfConfig, "Depth Clear Brush");
     addChild(_label);
@@ -2393,8 +2393,8 @@ void CameraBackgroundClearTest::switch_CameraClearMode(cocos2d::Ref* sender)
     else if (type == CameraBackgroundBrush::BrushType::COLOR)
     {
         _camera->setBackgroundBrush(CameraBackgroundBrush::createSkyboxBrush(
-            "Sprite3DTest/skybox/left.jpg", "Sprite3DTest/skybox/right.jpg", "Sprite3DTest/skybox/top.jpg",
-            "Sprite3DTest/skybox/bottom.jpg", "Sprite3DTest/skybox/front.jpg", "Sprite3DTest/skybox/back.jpg"));
+            "MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg", "MeshRendererTest/skybox/top.jpg",
+            "MeshRendererTest/skybox/bottom.jpg", "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg"));
         _label->setString("Skybox Clear Brush");
     }
     else if (type == CameraBackgroundBrush::BrushType::SKYBOX)
@@ -2424,16 +2424,16 @@ MotionStreak3DTest::MotionStreak3DTest()
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
     addChild(camera);
 
-    auto sprite = Sprite3D::create("Sprite3DTest/orc.c3b");
-    sprite->setPosition(20.f, 0.f);
-    addChild(sprite);
+    auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
+    mesh->setPosition(20.f, 0.f);
+    addChild(mesh);
 
     auto streak = MotionStreak3D::create(1.0f, 1.0f, 5.f, Color3B(255, 255, 0), "Images/Icon.png");
     addChild(streak);
 
     setCameraMask(2);
 
-    _sprite = sprite;
+    _mesh = mesh;
     _streak = streak;
     scheduleUpdate();
 }
@@ -2453,36 +2453,36 @@ void MotionStreak3DTest::update(float delta)
     float angle = t * M_PI;
     float r     = 20.f;
 
-    _sprite->setPosition3D(Vec3(r * cosf(angle), 0, r * sinf(angle)));
-    _streak->setPosition3D(_sprite->getPosition3D());
+    _mesh->setPosition3D(Vec3(r * cosf(angle), 0, r * sinf(angle)));
+    _streak->setPosition3D(_mesh->getPosition3D());
     _streak->setSweepAxis(Vec3(cosf(angle), 0, sinf(angle)));
 }
 
-Sprite3DNormalMappingTest::Sprite3DNormalMappingTest()
+MeshRendererNormalMappingTest::MeshRendererNormalMappingTest()
 {
     auto s = Director::getInstance()->getWinSize();
 
     {
-        auto sprite = Sprite3D::create("Sprite3DTest/sphere.c3b");
-        sprite->setPosition(Vec2(-30.0f, 0.0f));
-        sprite->setRotation3D(Vec3(90.0f, 0.0f, 0.0f));
-        sprite->setScale(2.0);
-        sprite->setCameraMask(2);
-        sprite->setTexture("Sprite3DTest/brickwork-texture.jpg");
-        addChild(sprite);
+        auto mesh = MeshRenderer::create("MeshRendererTest/sphere.c3b");
+        mesh->setPosition(Vec2(-30.0f, 0.0f));
+        mesh->setRotation3D(Vec3(90.0f, 0.0f, 0.0f));
+        mesh->setScale(2.0);
+        mesh->setCameraMask(2);
+        mesh->setTexture("MeshRendererTest/brickwork-texture.jpg");
+        addChild(mesh);
     }
 
     int maxAttributes = Configuration::getInstance()->getMaxAttributes();
     CCASSERT(maxAttributes > 8, "attributes supported must be greater than 8");
     if (maxAttributes > 8)
     {
-        auto sprite = Sprite3D::create("Sprite3DTest/sphere_bumped.c3b");
-        sprite->setPosition(Vec2(30.0f, 0.0f));
-        sprite->setRotation3D(Vec3(90.0f, 0.0f, 0.0f));
-        sprite->setScale(20.0);
-        sprite->setCameraMask(2);
-        sprite->setTexture("Sprite3DTest/brickwork-texture.jpg");
-        addChild(sprite);
+        auto mesh = MeshRenderer::create("MeshRendererTest/sphere_bumped.c3b");
+        mesh->setPosition(Vec2(30.0f, 0.0f));
+        mesh->setRotation3D(Vec3(90.0f, 0.0f, 0.0f));
+        mesh->setScale(20.0);
+        mesh->setCameraMask(2);
+        mesh->setTexture("MeshRendererTest/brickwork-texture.jpg");
+        addChild(mesh);
     }
 
     // setup camera
@@ -2499,7 +2499,7 @@ Sprite3DNormalMappingTest::Sprite3DNormalMappingTest()
     scheduleUpdate();
 }
 
-void Sprite3DNormalMappingTest::update(float dt)
+void MeshRendererNormalMappingTest::update(float dt)
 {
     static float angle     = 0.0f;
     static bool reverseDir = false;
@@ -2521,19 +2521,19 @@ void Sprite3DNormalMappingTest::update(float dt)
     }
 }
 
-Sprite3DNormalMappingTest::~Sprite3DNormalMappingTest() {}
+MeshRendererNormalMappingTest::~MeshRendererNormalMappingTest() {}
 
-std::string Sprite3DNormalMappingTest::title() const
+std::string MeshRendererNormalMappingTest::title() const
 {
     return "NormalMapping Test";
 }
 
-std::string Sprite3DNormalMappingTest::subtitle() const
+std::string MeshRendererNormalMappingTest::subtitle() const
 {
     return "";
 }
 
-Sprite3DPropertyTest::Sprite3DPropertyTest()
+MeshRendererPropertyTest::MeshRendererPropertyTest()
 {
     auto s = Director::getInstance()->getWinSize();
 
@@ -2543,27 +2543,27 @@ Sprite3DPropertyTest::Sprite3DPropertyTest()
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
     addChild(camera);
 
-    _sprite = Sprite3D::create("Sprite3DTest/orc.c3b");
-    _sprite->setPosition(20.f, 0.f);
-    _sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-    _meshTex = _sprite->getMesh()->getTexture();
+    _mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
+    _mesh->setPosition(20.f, 0.f);
+    _mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+    _meshTex = _mesh->getMesh()->getTexture();
     _texFile = _meshTex->getPath();
-    addChild(_sprite);
+    addChild(_mesh);
 
     setCameraMask(2);
 
     // auto listener = EventListenerTouchAllAtOnce::create();
-    ////listener->onTouchesEnded = CC_CALLBACK_2(Sprite3DReskinTest::onTouchesEnded, this);
+    ////listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererReskinTest::onTouchesEnded, this);
     //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
 
     auto label1 = Label::createWithTTF(ttfConfig, "Print Mesh Name");
-    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(Sprite3DPropertyTest::printMeshName, this));
+    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(MeshRendererPropertyTest::printMeshName, this));
     auto label2 = Label::createWithTTF(ttfConfig, "Remove Used Texture");
-    auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(Sprite3DPropertyTest::removeUsedTexture, this));
+    auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(MeshRendererPropertyTest::removeUsedTexture, this));
     auto label3 = Label::createWithTTF(ttfConfig, "Reset");
-    auto item3  = MenuItemLabel::create(label3, CC_CALLBACK_1(Sprite3DPropertyTest::resetTexture, this));
+    auto item3  = MenuItemLabel::create(label3, CC_CALLBACK_1(MeshRendererPropertyTest::resetTexture, this));
 
     item1->setPosition(Vec2(VisibleRect::left().x + 100, VisibleRect::bottom().y + item1->getContentSize().height * 4));
     item2->setPosition(Vec2(VisibleRect::left().x + 100, VisibleRect::bottom().y + item1->getContentSize().height * 5));
@@ -2575,47 +2575,47 @@ Sprite3DPropertyTest::Sprite3DPropertyTest()
 
     scheduleUpdate();
 }
-std::string Sprite3DPropertyTest::title() const
+std::string MeshRendererPropertyTest::title() const
 {
-    return "Sprite3DPropertyTest Test";
+    return "MeshRendererPropertyTest Test";
 }
-std::string Sprite3DPropertyTest::subtitle() const
+std::string MeshRendererPropertyTest::subtitle() const
 {
     return "";
 }
 
-void Sprite3DPropertyTest::update(float delta) {}
-void Sprite3DPropertyTest::printMeshName(cocos2d::Ref* sender)
+void MeshRendererPropertyTest::update(float delta) {}
+void MeshRendererPropertyTest::printMeshName(cocos2d::Ref* sender)
 {
     CCLOG("MeshName Begin");
-    Vector<Mesh*> meshes = _sprite->getMeshes();
+    Vector<Mesh*> meshes = _mesh->getMeshes();
     for (Mesh* mesh : meshes)
     {
         log("MeshName: %s ", mesh->getName().data());
     }
     CCLOG("MeshName End");
 }
-void Sprite3DPropertyTest::removeUsedTexture(cocos2d::Ref* sender)
+void MeshRendererPropertyTest::removeUsedTexture(cocos2d::Ref* sender)
 {
     if (_meshTex != nullptr)
     {
         Director::getInstance()->getTextureCache()->removeTexture(_meshTex);
-        this->refreshSpriteRender();
+        this->refreshMeshRender();
     }
 }
 
-void Sprite3DPropertyTest::resetTexture(cocos2d::Ref* sender)
+void MeshRendererPropertyTest::resetTexture(cocos2d::Ref* sender)
 {
     if (_meshTex != nullptr)
     {
         _meshTex = Director::getInstance()->getTextureCache()->addImage(_texFile);
-        this->refreshSpriteRender();
+        this->refreshMeshRender();
     }
 }
 
-void Sprite3DPropertyTest::refreshSpriteRender()
+void MeshRendererPropertyTest::refreshMeshRender()
 {
-    Vector<Mesh*> meshes = _sprite->getMeshes();
+    Vector<Mesh*> meshes = _mesh->getMeshes();
     for (Mesh* mesh : meshes)
     {
         std::string file    = mesh->getTextureFileName();
@@ -2639,11 +2639,11 @@ Issue16155Test::Issue16155Test()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto sprite = Sprite3D::create("Sprite3DTest/orc.c3b");
+    auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
 
-    int rcBefore = sprite->getMeshByIndex(0)->getTexture()->getReferenceCount();
-    addChild(sprite);
-    removeChild(sprite);
+    int rcBefore = mesh->getMeshByIndex(0)->getTexture()->getReferenceCount();
+    addChild(mesh);
+    removeChild(mesh);
 
     cocos2d::log("Issue 16155: Ref count:%d. Run this test again. RC should be the same", rcBefore);
 }

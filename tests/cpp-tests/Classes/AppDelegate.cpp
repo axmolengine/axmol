@@ -85,7 +85,12 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
     director->setStatsDisplay(true);
+
+#ifdef CC_PLATFORM_PC
+    director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
+#else
     director->setAnimationInterval(1.0f / 60);
+#endif
 
     auto screenSize = glview->getFrameSize();
 
