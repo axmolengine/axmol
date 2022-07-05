@@ -5028,10 +5028,10 @@ int lua_register_cocos2dx_3d_MeshRendererCache(lua_State* tolua_S)
     return 1;
 }
 
-int lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType(lua_State* tolua_S)
+int lua_cocos2dx_3d_MeshMaterial_getMaterialType(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::MeshRendererMaterial* cobj = nullptr;
+    cocos2d::MeshMaterial* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5040,15 +5040,15 @@ int lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.MeshRendererMaterial",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"cc.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::MeshRendererMaterial*)tolua_tousertype(tolua_S,1,0);
+    cobj = (cocos2d::MeshMaterial*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_3d_MeshMaterial_getMaterialType'", nullptr);
         return 0;
     }
 #endif
@@ -5058,24 +5058,24 @@ int lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshMaterial_getMaterialType'", nullptr);
             return 0;
         }
         int ret = (int)cobj->getMaterialType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.MeshRendererMaterial:getMaterialType",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.MeshMaterial:getMaterialType",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshMaterial_getMaterialType'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_cocos2dx_3d_MeshRendererMaterial_createWithFilename(lua_State* tolua_S)
+int lua_cocos2dx_3d_MeshMaterial_createWithFilename(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -5085,7 +5085,7 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createWithFilename(lua_State* tolua_S)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.MeshRendererMaterial",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"cc.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -5093,25 +5093,25 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createWithFilename(lua_State* tolua_S)
     if (argc == 1)
     {
         std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.MeshRendererMaterial:createWithFilename");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.MeshMaterial:createWithFilename");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshRendererMaterial_createWithFilename'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshMaterial_createWithFilename'", nullptr);
             return 0;
         }
-        cocos2d::MeshRendererMaterial* ret = cocos2d::MeshRendererMaterial::createWithFilename(arg0);
-        object_to_luaval<cocos2d::MeshRendererMaterial>(tolua_S, "cc.MeshRendererMaterial",(cocos2d::MeshRendererMaterial*)ret);
+        cocos2d::MeshMaterial* ret = cocos2d::MeshMaterial::createWithFilename(arg0);
+        object_to_luaval<cocos2d::MeshMaterial>(tolua_S, "cc.MeshMaterial",(cocos2d::MeshMaterial*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshRendererMaterial:createWithFilename",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshMaterial:createWithFilename",argc, 1);
     return 0;
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshRendererMaterial_createWithFilename'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshMaterial_createWithFilename'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_cocos2dx_3d_MeshRendererMaterial_releaseCachedMaterial(lua_State* tolua_S)
+int lua_cocos2dx_3d_MeshMaterial_releaseCachedMaterial(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -5121,7 +5121,7 @@ int lua_cocos2dx_3d_MeshRendererMaterial_releaseCachedMaterial(lua_State* tolua_
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.MeshRendererMaterial",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"cc.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -5130,22 +5130,22 @@ int lua_cocos2dx_3d_MeshRendererMaterial_releaseCachedMaterial(lua_State* tolua_
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshRendererMaterial_releaseCachedMaterial'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshMaterial_releaseCachedMaterial'", nullptr);
             return 0;
         }
-        cocos2d::MeshRendererMaterial::releaseCachedMaterial();
+        cocos2d::MeshMaterial::releaseCachedMaterial();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshRendererMaterial:releaseCachedMaterial",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshMaterial:releaseCachedMaterial",argc, 0);
     return 0;
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshRendererMaterial_releaseCachedMaterial'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshMaterial_releaseCachedMaterial'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_cocos2dx_3d_MeshRendererMaterial_createBuiltInMaterial(lua_State* tolua_S)
+int lua_cocos2dx_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -5154,7 +5154,7 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createBuiltInMaterial(lua_State* tolua_
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.MeshRendererMaterial",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"cc.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S)-1;
@@ -5163,7 +5163,7 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createBuiltInMaterial(lua_State* tolua_
     {
         if (argc == 0)
         {
-            cocos2d::MeshRendererMaterial::createBuiltInMaterial();
+            cocos2d::MeshMaterial::createBuiltInMaterial();
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -5173,27 +5173,27 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createBuiltInMaterial(lua_State* tolua_
     {
         if (argc == 2)
         {
-            cocos2d::MeshRendererMaterial::MaterialType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.MeshRendererMaterial:createBuiltInMaterial");
+            cocos2d::MeshMaterial::MaterialType arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.MeshMaterial:createBuiltInMaterial");
             if (!ok) { break; }
             bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.MeshRendererMaterial:createBuiltInMaterial");
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.MeshMaterial:createBuiltInMaterial");
             if (!ok) { break; }
-            cocos2d::MeshRendererMaterial* ret = cocos2d::MeshRendererMaterial::createBuiltInMaterial(arg0, arg1);
-            object_to_luaval<cocos2d::MeshRendererMaterial>(tolua_S, "cc.MeshRendererMaterial",(cocos2d::MeshRendererMaterial*)ret);
+            cocos2d::MeshMaterial* ret = cocos2d::MeshMaterial::createBuiltInMaterial(arg0, arg1);
+            object_to_luaval<cocos2d::MeshMaterial>(tolua_S, "cc.MeshMaterial",(cocos2d::MeshMaterial*)ret);
             return 1;
         }
     } while (0);
     ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "cc.MeshRendererMaterial:createBuiltInMaterial",argc, 2);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "cc.MeshMaterial:createBuiltInMaterial",argc, 2);
     return 0;
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshRendererMaterial_createBuiltInMaterial'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshMaterial_createBuiltInMaterial'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_cocos2dx_3d_MeshRendererMaterial_releaseBuiltInMaterial(lua_State* tolua_S)
+int lua_cocos2dx_3d_MeshMaterial_releaseBuiltInMaterial(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -5203,7 +5203,7 @@ int lua_cocos2dx_3d_MeshRendererMaterial_releaseBuiltInMaterial(lua_State* tolua
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.MeshRendererMaterial",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"cc.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -5212,22 +5212,22 @@ int lua_cocos2dx_3d_MeshRendererMaterial_releaseBuiltInMaterial(lua_State* tolua
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshRendererMaterial_releaseBuiltInMaterial'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshMaterial_releaseBuiltInMaterial'", nullptr);
             return 0;
         }
-        cocos2d::MeshRendererMaterial::releaseBuiltInMaterial();
+        cocos2d::MeshMaterial::releaseBuiltInMaterial();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshRendererMaterial:releaseBuiltInMaterial",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshMaterial:releaseBuiltInMaterial",argc, 0);
     return 0;
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshRendererMaterial_releaseBuiltInMaterial'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshMaterial_releaseBuiltInMaterial'.",&tolua_err);
 #endif
     return 0;
 }
-int lua_cocos2dx_3d_MeshRendererMaterial_createWithProgramState(lua_State* tolua_S)
+int lua_cocos2dx_3d_MeshMaterial_createWithProgramState(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
@@ -5237,7 +5237,7 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createWithProgramState(lua_State* tolua
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"cc.MeshRendererMaterial",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertable(tolua_S,1,"cc.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     argc = lua_gettop(tolua_S) - 1;
@@ -5245,46 +5245,46 @@ int lua_cocos2dx_3d_MeshRendererMaterial_createWithProgramState(lua_State* tolua
     if (argc == 1)
     {
         cocos2d::backend::ProgramState* arg0;
-        ok &= luaval_to_object<cocos2d::backend::ProgramState>(tolua_S, 2, "ccb.ProgramState",&arg0, "cc.MeshRendererMaterial:createWithProgramState");
+        ok &= luaval_to_object<cocos2d::backend::ProgramState>(tolua_S, 2, "ccb.ProgramState",&arg0, "cc.MeshMaterial:createWithProgramState");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshRendererMaterial_createWithProgramState'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_3d_MeshMaterial_createWithProgramState'", nullptr);
             return 0;
         }
-        cocos2d::MeshRendererMaterial* ret = cocos2d::MeshRendererMaterial::createWithProgramState(arg0);
-        object_to_luaval<cocos2d::MeshRendererMaterial>(tolua_S, "cc.MeshRendererMaterial",(cocos2d::MeshRendererMaterial*)ret);
+        cocos2d::MeshMaterial* ret = cocos2d::MeshMaterial::createWithProgramState(arg0);
+        object_to_luaval<cocos2d::MeshMaterial>(tolua_S, "cc.MeshMaterial",(cocos2d::MeshMaterial*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshRendererMaterial:createWithProgramState",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.MeshMaterial:createWithProgramState",argc, 1);
     return 0;
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshRendererMaterial_createWithProgramState'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_3d_MeshMaterial_createWithProgramState'.",&tolua_err);
 #endif
     return 0;
 }
-static int lua_cocos2dx_3d_MeshRendererMaterial_finalize(lua_State* tolua_S)
+static int lua_cocos2dx_3d_MeshMaterial_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (MeshRendererMaterial)");
+    printf("luabindings: finalizing LUA object (MeshMaterial)");
     return 0;
 }
 
-int lua_register_cocos2dx_3d_MeshRendererMaterial(lua_State* tolua_S)
+int lua_register_cocos2dx_3d_MeshMaterial(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"cc.MeshRendererMaterial");
-    tolua_cclass(tolua_S,"MeshRendererMaterial","cc.MeshRendererMaterial","cc.Material",nullptr);
+    tolua_usertype(tolua_S,"cc.MeshMaterial");
+    tolua_cclass(tolua_S,"MeshMaterial","cc.MeshMaterial","cc.Material",nullptr);
 
-    tolua_beginmodule(tolua_S,"MeshRendererMaterial");
-        tolua_function(tolua_S,"getMaterialType",lua_cocos2dx_3d_MeshRendererMaterial_getMaterialType);
-        tolua_function(tolua_S,"createWithFilename", lua_cocos2dx_3d_MeshRendererMaterial_createWithFilename);
-        tolua_function(tolua_S,"releaseCachedMaterial", lua_cocos2dx_3d_MeshRendererMaterial_releaseCachedMaterial);
-        tolua_function(tolua_S,"createBuiltInMaterial", lua_cocos2dx_3d_MeshRendererMaterial_createBuiltInMaterial);
-        tolua_function(tolua_S,"releaseBuiltInMaterial", lua_cocos2dx_3d_MeshRendererMaterial_releaseBuiltInMaterial);
-        tolua_function(tolua_S,"createWithProgramState", lua_cocos2dx_3d_MeshRendererMaterial_createWithProgramState);
+    tolua_beginmodule(tolua_S,"MeshMaterial");
+        tolua_function(tolua_S,"getMaterialType",lua_cocos2dx_3d_MeshMaterial_getMaterialType);
+        tolua_function(tolua_S,"createWithFilename", lua_cocos2dx_3d_MeshMaterial_createWithFilename);
+        tolua_function(tolua_S,"releaseCachedMaterial", lua_cocos2dx_3d_MeshMaterial_releaseCachedMaterial);
+        tolua_function(tolua_S,"createBuiltInMaterial", lua_cocos2dx_3d_MeshMaterial_createBuiltInMaterial);
+        tolua_function(tolua_S,"releaseBuiltInMaterial", lua_cocos2dx_3d_MeshMaterial_releaseBuiltInMaterial);
+        tolua_function(tolua_S,"createWithProgramState", lua_cocos2dx_3d_MeshMaterial_createWithProgramState);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::MeshRendererMaterial).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.MeshRendererMaterial";
-    g_typeCast[typeName] = "cc.MeshRendererMaterial";
+    auto typeName = typeid(cocos2d::MeshMaterial).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.MeshMaterial";
+    g_typeCast[typeName] = "cc.MeshMaterial";
     return 1;
 }
 
@@ -6996,7 +6996,7 @@ TOLUA_API int register_all_cocos2dx_3d(lua_State* tolua_S)
 	lua_register_cocos2dx_3d_AttachNode(tolua_S);
 	lua_register_cocos2dx_3d_Animation3D(tolua_S);
 	lua_register_cocos2dx_3d_Skeleton3D(tolua_S);
-	lua_register_cocos2dx_3d_MeshRendererMaterial(tolua_S);
+	lua_register_cocos2dx_3d_MeshMaterial(tolua_S);
 	lua_register_cocos2dx_3d_MeshRendererCache(tolua_S);
 	lua_register_cocos2dx_3d_Terrain(tolua_S);
 	lua_register_cocos2dx_3d_Bundle3D(tolua_S);
