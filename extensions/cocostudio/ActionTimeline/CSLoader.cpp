@@ -69,7 +69,7 @@
 #include "WidgetReader/ListViewReader/ListViewReader.h"
 #include "WidgetReader/ArmatureNodeReader/ArmatureNodeReader.h"
 #include "WidgetReader/Node3DReader/Node3DReader.h"
-#include "WidgetReader/Sprite3DReader/Sprite3DReader.h"
+#include "WidgetReader/MeshReader/MeshReader.h"
 #include "WidgetReader/UserCameraReader/UserCameraReader.h"
 #include "WidgetReader/Particle3DReader/Particle3DReader.h"
 #include "WidgetReader/GameNode3DReader/GameNode3DReader.h"
@@ -226,7 +226,7 @@ CSLoader::CSLoader()
 
     CREATE_CLASS_NODE_READER_INFO(ArmatureNodeReader);
     CREATE_CLASS_NODE_READER_INFO(Node3DReader);
-    CREATE_CLASS_NODE_READER_INFO(Sprite3DReader);
+    CREATE_CLASS_NODE_READER_INFO(MeshReader);
     CREATE_CLASS_NODE_READER_INFO(UserCameraReader);
     CREATE_CLASS_NODE_READER_INFO(Particle3DReader);
     CREATE_CLASS_NODE_READER_INFO(GameNode3DReader);
