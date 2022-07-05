@@ -31,7 +31,7 @@
 namespace cocos2d
 {
 class Animate3D;
-class Sprite3D;
+class MeshRenderer;
 class Delay;
 class Ray;
 class DrawNode3D;
@@ -39,53 +39,53 @@ class GLProgramState;
 class MotionStreak3D;
 }  // namespace cocos2d
 
-DEFINE_TEST_SUITE(Sprite3DTests);
+DEFINE_TEST_SUITE(MeshRendererTests);
 
-class Sprite3DTestDemo : public TestCase
+class MeshRendererTestDemo : public TestCase
 {
 public:
     // overrides
     virtual std::string title() const override;
 
-    virtual ~Sprite3DTestDemo();
+    virtual ~MeshRendererTestDemo();
 };
 
-class Sprite3DForceDepthTest : public Sprite3DTestDemo
+class MeshRendererForceDepthTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DForceDepthTest);
-    Sprite3DForceDepthTest();
+    CREATE_FUNC(MeshRendererForceDepthTest);
+    MeshRendererForceDepthTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
-class Sprite3DEmptyTest : public Sprite3DTestDemo
+class MeshRendererEmptyTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DEmptyTest);
-    Sprite3DEmptyTest();
+    CREATE_FUNC(MeshRendererEmptyTest);
+    MeshRendererEmptyTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
-class Sprite3DBasicTest : public Sprite3DTestDemo
+class MeshRendererBasicTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DBasicTest);
-    Sprite3DBasicTest();
+    CREATE_FUNC(MeshRendererBasicTest);
+    MeshRendererBasicTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 };
 
-class Sprite3DUVAnimationTest : public Sprite3DTestDemo
+class MeshRendererUVAnimationTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DUVAnimationTest);
-    Sprite3DUVAnimationTest();
-    virtual ~Sprite3DUVAnimationTest();
+    CREATE_FUNC(MeshRendererUVAnimationTest);
+    MeshRendererUVAnimationTest();
+    virtual ~MeshRendererUVAnimationTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -101,7 +101,7 @@ protected:
 #endif
 };
 
-class Sprite3DFakeShadowTest : public Sprite3DTestDemo
+class MeshRendererFakeShadowTest : public MeshRendererTestDemo
 {
 public:
     enum State
@@ -111,9 +111,9 @@ public:
         State_Move   = 0x02,
         State_Rotate = 0x04
     };
-    CREATE_FUNC(Sprite3DFakeShadowTest);
-    Sprite3DFakeShadowTest();
-    virtual ~Sprite3DFakeShadowTest();
+    CREATE_FUNC(MeshRendererFakeShadowTest);
+    MeshRendererFakeShadowTest();
+    virtual ~MeshRendererFakeShadowTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void Move(cocos2d::Ref* sender, int value);
@@ -129,8 +129,8 @@ private:
     cocos2d::Camera* _camera;
     cocos2d::Vec3 _targetPos;
     unsigned int _curState;
-    cocos2d::Sprite3D* _plane;
-    cocos2d::Sprite3D* _orc;
+    cocos2d::MeshRenderer* _plane;
+    cocos2d::MeshRenderer* _orc;
     cocos2d::backend::ProgramState* _state = nullptr;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -138,12 +138,12 @@ private:
 #endif
 };
 
-class Sprite3DLightMapTest : public Sprite3DTestDemo
+class MeshRendererLightMapTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DLightMapTest);
-    Sprite3DLightMapTest();
-    virtual ~Sprite3DLightMapTest();
+    CREATE_FUNC(MeshRendererLightMapTest);
+    MeshRendererLightMapTest();
+    virtual ~MeshRendererLightMapTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
@@ -152,12 +152,12 @@ private:
     cocos2d::Camera* _camera;
 };
 
-class Sprite3DBasicToonShaderTest : public Sprite3DTestDemo
+class MeshRendererBasicToonShaderTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DBasicToonShaderTest);
-    Sprite3DBasicToonShaderTest();
-    virtual ~Sprite3DBasicToonShaderTest();
+    CREATE_FUNC(MeshRendererBasicToonShaderTest);
+    MeshRendererBasicToonShaderTest();
+    virtual ~MeshRendererBasicToonShaderTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -169,62 +169,62 @@ protected:
 #endif
 };
 
-class Sprite3DHitTest : public Sprite3DTestDemo
+class MeshRendererHitTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DHitTest);
-    Sprite3DHitTest();
+    CREATE_FUNC(MeshRendererHitTest);
+    MeshRendererHitTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
-class Sprite3DEffectTest : public Sprite3DTestDemo
+class MeshRendererEffectTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DEffectTest);
-    Sprite3DEffectTest();
-    virtual ~Sprite3DEffectTest();
+    CREATE_FUNC(MeshRendererEffectTest);
+    MeshRendererEffectTest();
+    virtual ~MeshRendererEffectTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
 protected:
-    std::vector<cocos2d::Sprite3D*> _sprites;
+    std::vector<cocos2d::MeshRenderer*> _meshes;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
-class AsyncLoadSprite3DTest : public Sprite3DTestDemo
+class AsyncLoadMeshRendererTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(AsyncLoadSprite3DTest);
-    AsyncLoadSprite3DTest();
-    virtual ~AsyncLoadSprite3DTest();
+    CREATE_FUNC(AsyncLoadMeshRendererTest);
+    AsyncLoadMeshRendererTest();
+    virtual ~AsyncLoadMeshRendererTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void menuCallback_asyncLoadSprite(cocos2d::Ref* sender);
+    void menuCallback_asyncLoadMesh(cocos2d::Ref* sender);
 
-    void asyncLoad_Callback(cocos2d::Sprite3D* sprite, void* param);
+    void asyncLoad_Callback(cocos2d::MeshRenderer* mesh, void* param);
 
 protected:
     std::vector<std::string> _paths;  // model paths to be loaded
 };
 
-class Sprite3DWithSkinTest : public Sprite3DTestDemo
+class MeshRendererWithSkinTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DWithSkinTest);
-    Sprite3DWithSkinTest();
+    CREATE_FUNC(MeshRendererWithSkinTest);
+    MeshRendererWithSkinTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
     void switchAnimationQualityCallback(cocos2d::Ref* sender);
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
@@ -232,33 +232,33 @@ public:
     std::string getAnimationQualityMessage() const;
 
 private:
-    std::vector<cocos2d::Sprite3D*> _sprits;
+    std::vector<cocos2d::MeshRenderer*> _meshes;
     int _animateQuality;
     cocos2d::MenuItemFont* _menuItem;
 };
 
-class Sprite3DWithSkinOutlineTest : public Sprite3DTestDemo
+class MeshRendererWithSkinOutlineTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DWithSkinOutlineTest);
-    Sprite3DWithSkinOutlineTest();
-    virtual ~Sprite3DWithSkinOutlineTest();
+    CREATE_FUNC(MeshRendererWithSkinOutlineTest);
+    MeshRendererWithSkinOutlineTest();
+    virtual ~MeshRendererWithSkinOutlineTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
 protected:
-    std::vector<cocos2d::Sprite3D*> _sprites;
+    std::vector<cocos2d::MeshRenderer*> _meshes;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
-class Animate3DTest : public Sprite3DTestDemo
+class Animate3DTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(Animate3DTest);
@@ -272,7 +272,7 @@ public:
     virtual void update(float dt) override;
 
 protected:
-    void addSprite3D();
+    void addMeshRenderer();
 
     enum class State
     {
@@ -286,7 +286,7 @@ protected:
 
     void renewCallBack();
 
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
 
     cocos2d::Action* _swim;
     cocos2d::Animate3D* _hurt;
@@ -298,7 +298,7 @@ protected:
     cocos2d::MoveTo* _moveAction;
 };
 
-class AttachmentTest : public Sprite3DTestDemo
+class AttachmentTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(AttachmentTest);
@@ -308,22 +308,22 @@ public:
 
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
 protected:
     bool _hasWeapon;
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
 };
 
-class Sprite3DReskinTest : public Sprite3DTestDemo
+class MeshRendererReskinTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DReskinTest);
-    Sprite3DReskinTest();
+    CREATE_FUNC(MeshRendererReskinTest);
+    MeshRendererReskinTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
     void menuCallback_reSkin(cocos2d::Ref* sender);
 
@@ -344,19 +344,19 @@ protected:
 
     std::vector<std::string> _skins[(int)SkinType::MAX_TYPE];  // all skins
     int _curSkin[(int)SkinType::MAX_TYPE];                     // current skin index
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
 };
 
-class Sprite3DWithOBBPerformanceTest : public Sprite3DTestDemo
+class MeshRendererWithOBBPerformanceTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DWithOBBPerformanceTest);
-    Sprite3DWithOBBPerformanceTest();
+    CREATE_FUNC(MeshRendererWithOBBPerformanceTest);
+    MeshRendererWithOBBPerformanceTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void update(float dt) override;
     void addNewOBBWithCoords(cocos2d::Vec2 p);
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
     void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
     void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
     void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
@@ -366,7 +366,7 @@ public:
     void delOBBWithCount(float value);
 
 protected:
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
     std::vector<cocos2d::OBB> _obb;
     cocos2d::DrawNode3D* _drawOBB;
     cocos2d::Label* _labelCubeCount;
@@ -386,23 +386,23 @@ protected:
     void calculateRayByLocationInView(cocos2d::Ray* ray, const cocos2d::Vec2& location);
 };
 
-class Sprite3DMirrorTest : public Sprite3DTestDemo
+class MeshRendererMirrorTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DMirrorTest);
-    Sprite3DMirrorTest();
+    CREATE_FUNC(MeshRendererMirrorTest);
+    MeshRendererMirrorTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
 protected:
     bool _hasWeapon;
-    cocos2d::Sprite3D* _sprite;
-    cocos2d::Sprite3D* _mirrorSprite;
+    cocos2d::MeshRenderer* _mesh;
+    cocos2d::MeshRenderer* _mirrorMesh;
 };
 
-class QuaternionTest : public Sprite3DTestDemo
+class QuaternionTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(QuaternionTest);
@@ -410,22 +410,22 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
     virtual void update(float delta) override;
 
 protected:
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
     float _arcSpeed;
     float _radius;
     float _accAngle;
 };
 
 // 3d + 2d use case
-class UseCaseSprite3D : public Sprite3DTestDemo
+class UseCaseMeshRenderer : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(UseCaseSprite3D);
-    UseCaseSprite3D();
+    CREATE_FUNC(UseCaseMeshRenderer);
+    UseCaseMeshRenderer();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -448,7 +448,7 @@ protected:
 };
 
 // node animation test, cocos2d-x supports both skeletal animation and node animation
-class NodeAnimationTest : public Sprite3DTestDemo
+class NodeAnimationTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(NodeAnimationTest);
@@ -456,10 +456,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
+    void addNewMeshWithCoords(cocos2d::Vec2 p);
 
 protected:
-    std::vector<cocos2d::Sprite3D*> _sprites;
+    std::vector<cocos2d::MeshRenderer*> _meshes;
     int _vectorIndex;
 };
 
@@ -469,23 +469,23 @@ class TextureCube;
 class Skybox;
 }  // namespace cocos2d
 
-class Sprite3DCubeMapTest : public Sprite3DTestDemo
+class MeshRendererCubeMapTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DCubeMapTest);
-    Sprite3DCubeMapTest();
-    ~Sprite3DCubeMapTest();
+    CREATE_FUNC(MeshRendererCubeMapTest);
+    MeshRendererCubeMapTest();
+    ~MeshRendererCubeMapTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2);
+    void addNewMeshWithCoords(cocos2d::Vec2);
 
     void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
 
 protected:
     cocos2d::TextureCube* _textureCube;
     cocos2d::Skybox* _skyBox;
-    cocos2d::Sprite3D* _teapot;
+    cocos2d::MeshRenderer* _teapot;
     cocos2d::Camera* _camera;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -494,7 +494,7 @@ protected:
 };
 
 /// issue 9767 setGLProgram
-class Issue9767 : public Sprite3DTestDemo
+class Issue9767 : public MeshRendererTestDemo
 {
     enum class ShaderType
     {
@@ -513,21 +513,21 @@ public:
 
 protected:
     ShaderType _shaderType;
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
 };
 
-/// Clipping Sprite3D
-class Sprite3DClippingTest : public Sprite3DTestDemo
+/// Clipping MeshRenderer
+class MeshRendererClippingTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DClippingTest);
-    Sprite3DClippingTest();
-    ~Sprite3DClippingTest();
+    CREATE_FUNC(MeshRendererClippingTest);
+    MeshRendererClippingTest();
+    ~MeshRendererClippingTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
 
-class Animate3DCallbackTest : public Sprite3DTestDemo
+class Animate3DCallbackTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(Animate3DCallbackTest);
@@ -537,10 +537,10 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    cocos2d::Sprite3D* _sprite3d;
+    cocos2d::MeshRenderer* _meshRenderer;
 };
 
-class CameraBackgroundClearTest : public Sprite3DTestDemo
+class CameraBackgroundClearTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(CameraBackgroundClearTest);
@@ -555,24 +555,24 @@ protected:
     cocos2d::Label* _label;
 };
 
-class Sprite3DVertexColorTest : public Sprite3DTestDemo
+class MeshRendererVertexColorTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DVertexColorTest);
-    Sprite3DVertexColorTest();
+    CREATE_FUNC(MeshRendererVertexColorTest);
+    MeshRendererVertexColorTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    virtual ~Sprite3DVertexColorTest();
+    virtual ~MeshRendererVertexColorTest();
 
 protected:
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
-class MotionStreak3DTest : public Sprite3DTestDemo
+class MotionStreak3DTest : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(MotionStreak3DTest);
@@ -582,27 +582,27 @@ public:
     virtual void update(float delta) override;
 
 protected:
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
     cocos2d::MotionStreak3D* _streak;
 };
 
-class Sprite3DNormalMappingTest : public Sprite3DTestDemo
+class MeshRendererNormalMappingTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DNormalMappingTest);
-    Sprite3DNormalMappingTest();
+    CREATE_FUNC(MeshRendererNormalMappingTest);
+    MeshRendererNormalMappingTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void update(float dt) override;
 
-    virtual ~Sprite3DNormalMappingTest();
+    virtual ~MeshRendererNormalMappingTest();
 };
 
-class Sprite3DPropertyTest : public Sprite3DTestDemo
+class MeshRendererPropertyTest : public MeshRendererTestDemo
 {
 public:
-    CREATE_FUNC(Sprite3DPropertyTest);
-    Sprite3DPropertyTest();
+    CREATE_FUNC(MeshRendererPropertyTest);
+    MeshRendererPropertyTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void update(float delta) override;
@@ -611,15 +611,15 @@ public:
     void removeUsedTexture(cocos2d::Ref* sender);
     void resetTexture(cocos2d::Ref* sender);
 
-    void refreshSpriteRender();
+    void refreshMeshRender();
 
 protected:
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
     cocos2d::Texture2D* _meshTex;
     std::string _texFile;
 };
 
-class Issue16155Test : public Sprite3DTestDemo
+class Issue16155Test : public MeshRendererTestDemo
 {
 public:
     CREATE_FUNC(Issue16155Test);

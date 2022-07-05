@@ -7,21 +7,21 @@ material UVAnimation
         {
             shader
             {
-                vertexShader = Sprite3DTest/cylinder.vert
-                fragmentShader = Sprite3DTest/cylinder.frag
+                vertexShader = MeshRendererTest/cylinder.vert
+                fragmentShader = MeshRendererTest/cylinder.frag
                 // sampler:
                 //   responsible for setting the texture and its parameters
                 //   the Id of the sampler is the uniform name
                 sampler u_sampler0
                 {
-                    path = Sprite3DTest/dragon.png
+                    path = MeshRendererTest/dragon.png
                     wrapS = REPEAT
                     wrapT = REPEAT
                 }
 
                 sampler u_sampler1
                 {
-                    path = Sprite3DTest/caustics.png
+                    path = MeshRendererTest/caustics.png
                     wrapS = REPEAT
                     wrapT = REPEAT
                 }

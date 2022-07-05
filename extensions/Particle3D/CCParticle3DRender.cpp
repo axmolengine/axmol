@@ -34,7 +34,7 @@
 #include "renderer/backend/Device.h"
 #include "renderer/ccShaders.h"
 #include "base/CCDirector.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "2d/CCCamera.h"
 
 NS_CC_BEGIN
@@ -280,10 +280,10 @@ void Particle3DQuadRender::reset()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-Particle3DModelRender::Particle3DModelRender() : _spriteSize(Vec3::ONE) {}
+Particle3DModelRender::Particle3DModelRender() : _meshSize(Vec3::ONE) {}
 Particle3DModelRender::~Particle3DModelRender()
 {
-    for (auto iter : _spriteList)
+    for (auto iter : _meshList)
     {
         iter->release();
     }
@@ -302,26 +302,26 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
     if (!_isVisible)
         return;
 
-    if (_spriteList.empty())
+    if (_meshList.empty())
     {
         for (unsigned int i = 0; i < particleSystem->getParticleQuota(); ++i)
         {
-            Sprite3D* sprite = Sprite3D::create(_modelFile);
-            if (sprite == nullptr)
+            MeshRenderer* mesh = MeshRenderer::create(_modelFile);
+            if (mesh == nullptr)
             {
                 CCLOG("failed to load file %s", _modelFile.c_str());
                 continue;
             }
-            sprite->setTexture(_texFile);
-            sprite->retain();
-            _spriteList.push_back(sprite);
+            mesh->setTexture(_texFile);
+            mesh->retain();
+            _meshList.push_back(mesh);
         }
-        if (!_spriteList.empty())
+        if (!_meshList.empty())
         {
-            const AABB& aabb = _spriteList[0]->getAABB();
+            const AABB& aabb = _meshList[0]->getAABB();
             Vec3 corners[8];
             aabb.getCorners(corners);
-            _spriteSize = corners[3] - corners[6];
+            _meshSize = corners[3] - corners[6];
         }
     }
 
@@ -337,24 +337,24 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
     {
         auto particle = iter;
         Mat4::createRotation(q * particle->orientation, &rotMat);
-        sclMat.m[0]  = particle->width / _spriteSize.x;
-        sclMat.m[5]  = particle->height / _spriteSize.y;
-        sclMat.m[10] = particle->depth / _spriteSize.z;
+        sclMat.m[0]  = particle->width / _meshSize.x;
+        sclMat.m[5]  = particle->height / _meshSize.y;
+        sclMat.m[10] = particle->depth / _meshSize.z;
         mat          = rotMat * sclMat;
         mat.m[12]    = particle->position.x;
         mat.m[13]    = particle->position.y;
         mat.m[14]    = particle->position.z;
-        _spriteList[index++]->draw(renderer, mat, 0);
+        _meshList[index++]->draw(renderer, mat, 0);
     }
 }
 
 void Particle3DModelRender::reset()
 {
-    for (auto iter : _spriteList)
+    for (auto iter : _meshList)
     {
         iter->release();
     }
-    _spriteList.clear();
+    _meshList.clear();
 }
 
 // MARK: Particle3DRender

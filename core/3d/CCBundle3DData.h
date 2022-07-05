@@ -109,7 +109,7 @@ struct NodeData
 struct NodeDatas
 {
     std::vector<NodeData*> skeleton;  // skeleton
-    std::vector<NodeData*> nodes;     // nodes, CCNode, Sprite3D or part of Sprite3D
+    std::vector<NodeData*> nodes;     // nodes, CCNode, MeshRenderer or parts of MeshRenderer
 
     virtual ~NodeDatas() { resetData(); }
 

@@ -95,7 +95,7 @@ protected:
     MeshData::IndexArray _indexData;
 
     friend class MeshVertexData;
-    friend class Sprite3D;
+    friend class MeshRenderer;
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
@@ -107,7 +107,7 @@ protected:
  */
 class CC_DLL MeshVertexData : public Ref
 {
-    friend class Sprite3D;
+    friend class MeshRenderer;
     friend class Mesh;
 
 public:

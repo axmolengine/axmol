@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "3d/CCAnimate3D.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCSkeleton3D.h"
 #include "platform/CCFileUtils.h"
 #include "base/CCConfiguration.h"
@@ -156,9 +156,9 @@ void Animate3D::startWithTarget(Node* target)
         _nodeCurves.clear();
 
         bool hasCurve    = false;
-        Sprite3D* sprite = dynamic_cast<Sprite3D*>(target);
+        MeshRenderer* mesh = dynamic_cast<MeshRenderer*>(target);
 
-        if (sprite)
+        if (mesh)
         {
             if (_animation)
             {
@@ -166,7 +166,7 @@ void Animate3D::startWithTarget(Node* target)
                 for (const auto& iter : boneCurves)
                 {
                     std::string_view boneName = iter.first;
-                    auto skin                 = sprite->getSkeleton();
+                    auto skin                 = mesh->getSkeleton();
                     if (skin)
                     {
                         auto bone = skin->getBoneByName(boneName);

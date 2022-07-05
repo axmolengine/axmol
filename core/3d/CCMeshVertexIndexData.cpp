@@ -30,7 +30,7 @@
 
 #include "3d/CCMeshVertexIndexData.h"
 #include "3d/CCObjLoader.h"
-#include "3d/CCSprite3DMaterial.h"
+#include "3d/CCMeshMaterial.h"
 #include "3d/CCMesh.h"
 #include "3d/CCBundle3D.h"
 

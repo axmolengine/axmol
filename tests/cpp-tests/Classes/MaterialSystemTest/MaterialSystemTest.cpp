@@ -45,8 +45,8 @@ MaterialSystemTest::MaterialSystemTest()
     ADD_TEST_CASE(Material_AutoBindings);
     ADD_TEST_CASE(Material_setTechnique);
     ADD_TEST_CASE(Material_clone);
-    ADD_TEST_CASE(Material_MultipleSprite3D);
-    ADD_TEST_CASE(Material_Sprite3DTest);
+    ADD_TEST_CASE(Material_MultipleMeshRenderer);
+    ADD_TEST_CASE(Material_MeshRendererTest);
     ADD_TEST_CASE(Material_parsePerformance);
 }
 
@@ -57,30 +57,30 @@ std::string MaterialSystemBaseTest::title() const
 
 // MARK: Tests start here
 
-void Material_Sprite3DTest::onEnter()
+void Material_MeshRendererTest::onEnter()
 {
     MaterialSystemBaseTest::onEnter();
 
-    auto sprite = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite->setScale(8.f);
-    sprite->setTexture("Sprite3DTest/boss.png");
-    this->addChild(sprite);
-    sprite->setPositionNormalized(Vec2(0.5f, 0.5f));
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(8.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
+    this->addChild(mesh);
+    mesh->setPositionNormalized(Vec2(0.5f, 0.5f));
 }
 
-std::string Material_Sprite3DTest::subtitle() const
+std::string Material_MeshRendererTest::subtitle() const
 {
-    return "Material System on Sprite3D";
+    return "Material System on MeshRenderer";
 }
 
-void Material_MultipleSprite3D::onEnter()
+void Material_MultipleMeshRenderer::onEnter()
 {
     MaterialSystemBaseTest::onEnter();
 
     const char* names[] = {
-        "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b", "MeshRendererTest/ReskinGirl.c3b", "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b", "MeshRendererTest/ReskinGirl.c3b", "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b", "MeshRendererTest/ReskinGirl.c3b",
     };
 
     const int totalNames = sizeof(names) / sizeof(names[0]);
@@ -89,14 +89,14 @@ void Material_MultipleSprite3D::onEnter()
 
     for (int i = 0; i < totalNames; i++)
     {
-        auto sprite = Sprite3D::create(names[i]);
-        this->addChild(sprite);
-        sprite->setPosition(Vec2((size.width / (totalNames + 1)) * (i + 1), size.height / 4));
-        sprite->setScale(3);
+        auto mesh = MeshRenderer::create(names[i]);
+        this->addChild(mesh);
+        mesh->setPosition(Vec2((size.width / (totalNames + 1)) * (i + 1), size.height / 4));
+        mesh->setScale(3);
     }
 }
 
-std::string Material_MultipleSprite3D::subtitle() const
+std::string Material_MultipleMeshRenderer::subtitle() const
 {
     return "Sprites with multiple meshes";
 }
@@ -115,40 +115,40 @@ void Material_2DEffects::onEnter()
 
     Material* mat1 = Material::createWithProperties(properties);
 
-    auto spriteBlur = Sprite::create("Images/grossini.png");
-    spriteBlur->setPositionNormalized(Vec2(0.2f, 0.5f));
-    this->addChild(spriteBlur);
-    spriteBlur->setProgramState(mat1->getTechniqueByName("blur")->getPassByIndex(0)->getProgramState());
+    auto meshBlur = Sprite::create("Images/grossini.png");
+    meshBlur->setPositionNormalized(Vec2(0.2f, 0.5f));
+    this->addChild(meshBlur);
+    meshBlur->setProgramState(mat1->getTechniqueByName("blur")->getPassByIndex(0)->getProgramState());
 
-    auto spriteOutline = Sprite::create("Images/grossini.png");
-    spriteOutline->setPositionNormalized(Vec2(0.4f, 0.5f));
-    this->addChild(spriteOutline);
-    spriteOutline->setProgramState(mat1->getTechniqueByName("outline")->getPassByIndex(0)->getProgramState());
+    auto meshOutline = Sprite::create("Images/grossini.png");
+    meshOutline->setPositionNormalized(Vec2(0.4f, 0.5f));
+    this->addChild(meshOutline);
+    meshOutline->setProgramState(mat1->getTechniqueByName("outline")->getPassByIndex(0)->getProgramState());
 
-    auto spriteNoise = Sprite::create("Images/grossini.png");
-    spriteNoise->setPositionNormalized(Vec2(0.6f, 0.5f));
-    this->addChild(spriteNoise);
-    spriteNoise->setProgramState(mat1->getTechniqueByName("noise")->getPassByIndex(0)->getProgramState());
+    auto meshNoise = Sprite::create("Images/grossini.png");
+    meshNoise->setPositionNormalized(Vec2(0.6f, 0.5f));
+    this->addChild(meshNoise);
+    meshNoise->setProgramState(mat1->getTechniqueByName("noise")->getPassByIndex(0)->getProgramState());
 
-    auto spriteEdgeDetect = Sprite::create("Images/grossini.png");
-    spriteEdgeDetect->setPositionNormalized(Vec2(0.8f, 0.5f));
-    this->addChild(spriteEdgeDetect);
-    spriteEdgeDetect->setProgramState(mat1->getTechniqueByName("edge_detect")->getPassByIndex(0)->getProgramState());
+    auto meshEdgeDetect = Sprite::create("Images/grossini.png");
+    meshEdgeDetect->setPositionNormalized(Vec2(0.8f, 0.5f));
+    this->addChild(meshEdgeDetect);
+    meshEdgeDetect->setProgramState(mat1->getTechniqueByName("edge_detect")->getPassByIndex(0)->getProgramState());
 
     timeUniforms.clear();
 
-#define FETCH_CCTIME_LOCATION(sprite)                                   \
+#define FETCH_CCTIME_LOCATION(mesh)                                   \
     do                                                                  \
     {                                                                   \
-        auto programState = sprite->getProgramState();                  \
+        auto programState = mesh->getProgramState();                  \
         auto location     = programState->getUniformLocation("u_Time"); \
         timeUniforms.emplace_back(programState, location);              \
     } while (0)
 
-    FETCH_CCTIME_LOCATION(spriteBlur);
-    FETCH_CCTIME_LOCATION(spriteOutline);
-    FETCH_CCTIME_LOCATION(spriteNoise);
-    FETCH_CCTIME_LOCATION(spriteEdgeDetect);
+    FETCH_CCTIME_LOCATION(meshBlur);
+    FETCH_CCTIME_LOCATION(meshOutline);
+    FETCH_CCTIME_LOCATION(meshNoise);
+    FETCH_CCTIME_LOCATION(meshEdgeDetect);
 
     schedule(CC_SCHEDULE_SELECTOR(Material_2DEffects::updateCCTimeUniforms));
 
@@ -245,27 +245,27 @@ void Material_AutoBindings::onEnter()
 
     Material* mat1 = Material::createWithProperties(properties);
 
-    auto spriteBlur = Sprite::create("Images/grossini.png");
-    spriteBlur->setPositionNormalized(Vec2(0.2f, 0.5f));
-    this->addChild(spriteBlur);
-    spriteBlur->setProgramState(mat1->getTechniqueByName("blur")->getPassByIndex(0)->getProgramState());
+    auto meshBlur = Sprite::create("Images/grossini.png");
+    meshBlur->setPositionNormalized(Vec2(0.2f, 0.5f));
+    this->addChild(meshBlur);
+    meshBlur->setProgramState(mat1->getTechniqueByName("blur")->getPassByIndex(0)->getProgramState());
 
-    auto spriteOutline = Sprite::create("Images/grossini.png");
-    spriteOutline->setPositionNormalized(Vec2(0.4f, 0.5f));
-    this->addChild(spriteOutline);
-    spriteOutline->setProgramState(mat1->getTechniqueByName("outline")->getPassByIndex(0)->getProgramState());
+    auto meshOutline = Sprite::create("Images/grossini.png");
+    meshOutline->setPositionNormalized(Vec2(0.4f, 0.5f));
+    this->addChild(meshOutline);
+    meshOutline->setProgramState(mat1->getTechniqueByName("outline")->getPassByIndex(0)->getProgramState());
 
-    auto spriteNoise = Sprite::create("Images/grossini.png");
-    spriteNoise->setPositionNormalized(Vec2(0.6f, 0.5f));
-    this->addChild(spriteNoise);
-    spriteNoise->setProgramState(mat1->getTechniqueByName("noise")->getPassByIndex(0)->getProgramState());
+    auto meshNoise = Sprite::create("Images/grossini.png");
+    meshNoise->setPositionNormalized(Vec2(0.6f, 0.5f));
+    this->addChild(meshNoise);
+    meshNoise->setProgramState(mat1->getTechniqueByName("noise")->getPassByIndex(0)->getProgramState());
 
-    auto spriteEdgeDetect = Sprite::create("Images/grossini.png");
-    spriteEdgeDetect->setPositionNormalized(Vec2(0.8f, 0.5f));
-    this->addChild(spriteEdgeDetect);
-    spriteEdgeDetect->setProgramState(mat1->getTechniqueByName("edge_detect")->getPassByIndex(0)->getProgramState());
+    auto meshEdgeDetect = Sprite::create("Images/grossini.png");
+    meshEdgeDetect->setPositionNormalized(Vec2(0.8f, 0.5f));
+    this->addChild(meshEdgeDetect);
+    meshEdgeDetect->setProgramState(mat1->getTechniqueByName("edge_detect")->getPassByIndex(0)->getProgramState());
 
-    _noiseProgramState = spriteNoise->getProgramState();
+    _noiseProgramState = meshNoise->getProgramState();
     _locationTime      = _noiseProgramState->getUniformLocation("u_Time");
 
     schedule(CC_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
@@ -292,14 +292,14 @@ void Material_setTechnique::onEnter()
 {
     MaterialSystemBaseTest::onEnter();
 
-    auto sprite = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite->setScale(6);
-    this->addChild(sprite);
-    sprite->setPositionNormalized(Vec2(0.5f, 0.5f));
-    _sprite = sprite;
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(6);
+    this->addChild(mesh);
+    mesh->setPositionNormalized(Vec2(0.5f, 0.5f));
+    _mesh = mesh;
 
     Material* mat = Material::createWithFilename("Materials/3d_effects.material");
-    sprite->setMaterial(mat);
+    mesh->setMaterial(mat);
 
     // lights
     auto light1 = AmbientLight::create(Color3B::RED);
@@ -313,7 +313,7 @@ void Material_setTechnique::onEnter()
 
     auto rot    = RotateBy::create(5, Vec3(30.0f, 60.0f, 270.0f));
     auto repeat = RepeatForever::create(rot);
-    sprite->runAction(repeat);
+    mesh->runAction(repeat);
 }
 
 std::string Material_setTechnique::subtitle() const
@@ -327,13 +327,13 @@ void Material_setTechnique::changeMaterial(float dt)
     switch (_techniqueState)
     {
     case 0:
-        _sprite->getMaterial(0)->setTechnique("lit");
+        _mesh->getMaterial(0)->setTechnique("lit");
         break;
     case 1:
-        _sprite->getMaterial(0)->setTechnique("normal");
+        _mesh->getMaterial(0)->setTechnique("normal");
         break;
     case 2:
-        _sprite->getMaterial(0)->setTechnique("outline");
+        _mesh->getMaterial(0)->setTechnique("outline");
         break;
     default:
         break;
@@ -349,40 +349,40 @@ void Material_clone::onEnter()
 {
     MaterialSystemBaseTest::onEnter();
 
-    auto sprite = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite->setScale(3);
-    this->addChild(sprite);
-    sprite->setPositionNormalized(Vec2(0.25f, 0.5f));
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3);
+    this->addChild(mesh);
+    mesh->setPositionNormalized(Vec2(0.25f, 0.5f));
 
     Material* mat = Material::createWithFilename("Materials/3d_effects.material");
-    sprite->setMaterial(mat);
+    mesh->setMaterial(mat);
 
     auto rot    = RotateBy::create(5, Vec3(360.0f, 240.0f, 120.0f));
     auto repeat = RepeatForever::create(rot);
-    sprite->runAction(repeat);
+    mesh->runAction(repeat);
 
-    // sprite 2... using same material
-    auto sprite2 = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite2->setScale(3);
-    this->addChild(sprite2);
-    sprite2->setPositionNormalized(Vec2(0.5f, 0.5f));
-    sprite2->setMaterial(mat);
-    sprite2->runAction(repeat->clone());
+    // mesh 2... using same material
+    auto mesh2 = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh2->setScale(3);
+    this->addChild(mesh2);
+    mesh2->setPositionNormalized(Vec2(0.5f, 0.5f));
+    mesh2->setMaterial(mat);
+    mesh2->runAction(repeat->clone());
 
-    // sprite 3... using cloned material
-    auto sprite3 = Sprite3D::create("Sprite3DTest/boss1.obj");
-    sprite3->setScale(3);
-    this->addChild(sprite3);
-    sprite3->setPositionNormalized(Vec2(0.75f, 0.5f));
+    // mesh 3... using cloned material
+    auto mesh3 = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh3->setScale(3);
+    this->addChild(mesh3);
+    mesh3->setPositionNormalized(Vec2(0.75f, 0.5f));
     auto mat2 = mat->clone();
-    sprite3->setMaterial(mat2);
-    sprite3->runAction(repeat->clone());
+    mesh3->setMaterial(mat2);
+    mesh3->runAction(repeat->clone());
 
     // testing clone
-    // should affect both sprite 1 and sprite 2
+    // should affect both mesh 1 and mesh 2
     mat->setTechnique("outline");
 
-    // should affect only sprite 3
+    // should affect only mesh 3
     //    mat2->setTechnique("normal");
 }
 

@@ -39,19 +39,19 @@ public:
     virtual std::string title() const override;
 };
 
-class Material_Sprite3DTest : public MaterialSystemBaseTest
+class Material_MeshRendererTest : public MaterialSystemBaseTest
 {
 public:
-    CREATE_FUNC(Material_Sprite3DTest);
+    CREATE_FUNC(Material_MeshRendererTest);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 };
 
-class Material_MultipleSprite3D : public MaterialSystemBaseTest
+class Material_MultipleMeshRenderer : public MaterialSystemBaseTest
 {
 public:
-    CREATE_FUNC(Material_MultipleSprite3D);
+    CREATE_FUNC(Material_MultipleMeshRenderer);
 
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
@@ -110,7 +110,7 @@ public:
 private:
     void changeMaterial(float dt);
 
-    cocos2d::Sprite3D* _sprite;
+    cocos2d::MeshRenderer* _mesh;
     int _techniqueState;
 };
 

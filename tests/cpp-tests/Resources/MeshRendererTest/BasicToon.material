@@ -7,12 +7,12 @@ material BasicToon
         {
             shader
             {
-                vertexShader = Sprite3DTest/toon.vert
-                fragmentShader = Sprite3DTest/toon.frag
+                vertexShader = MeshRendererTest/toon.vert
+                fragmentShader = MeshRendererTest/toon.frag
 
                 sampler u_sampler0
                 {
-                    path = Sprite3DTest/teapot.png
+                    path = MeshRendererTest/teapot.png
                 }
             }
         }
