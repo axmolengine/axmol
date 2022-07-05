@@ -51,6 +51,9 @@ MeshMaterial* MeshMaterial::_vertexLitMaterialSkin     = nullptr;
 MeshMaterial* MeshMaterial::_diffuseMaterialSkin       = nullptr;
 MeshMaterial* MeshMaterial::_bumpedDiffuseMaterialSkin = nullptr;
 
+MeshMaterial* MeshMaterial::_quadTextureMaterial = nullptr;
+MeshMaterial* MeshMaterial::_quadColorMaterial = nullptr;
+
 backend::ProgramState* MeshMaterial::_unLitMaterialProgState         = nullptr;
 backend::ProgramState* MeshMaterial::_unLitNoTexMaterialProgState    = nullptr;
 backend::ProgramState* MeshMaterial::_vertexLitMaterialProgState     = nullptr;
@@ -62,6 +65,9 @@ backend::ProgramState* MeshMaterial::_unLitMaterialSkinProgState         = nullp
 backend::ProgramState* MeshMaterial::_vertexLitMaterialSkinProgState     = nullptr;
 backend::ProgramState* MeshMaterial::_diffuseMaterialSkinProgState       = nullptr;
 backend::ProgramState* MeshMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
+
+backend::ProgramState* MeshMaterial::_quadTextureMaterialProgState            = nullptr;
+backend::ProgramState* MeshMaterial::_quadColorMaterialProgState            = nullptr;
 
 void MeshMaterial::createBuiltInMaterial()
 {
@@ -128,6 +134,22 @@ void MeshMaterial::createBuiltInMaterial()
         _bumpedDiffuseMaterialSkin->initWithProgramState(_bumpedDiffuseMaterialSkinProgState))
     {
         _bumpedDiffuseMaterialSkin->_type = MeshMaterial::MaterialType::BUMPED_DIFFUSE;
+    }
+
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::QUAD_TEXTURE_2D);
+    _quadTextureMaterialProgState = new backend::ProgramState(program);
+    _quadTextureMaterial          = new MeshMaterial();
+    if (_quadTextureMaterial && _quadTextureMaterial->initWithProgramState(_quadTextureMaterialProgState))
+    {
+        _quadTextureMaterial->_type = MeshMaterial::MaterialType::QUAD_TEXTURE;
+    }
+
+    program = backend::Program::getBuiltinProgram(backend::ProgramType::QUAD_COLOR_2D);
+    _quadColorMaterialProgState = new backend::ProgramState(program);
+    _quadColorMaterial          = new MeshMaterial();
+    if (_quadColorMaterial && _quadColorMaterial->initWithProgramState(_quadColorMaterialProgState))
+    {
+        _quadColorMaterial->_type = MeshMaterial::MaterialType::QUAD_COLOR;
     }
 }
 
@@ -213,7 +235,7 @@ MeshMaterial* MeshMaterial::createBuiltInMaterial(MaterialType type, bool skinne
         break;
 
     case MeshMaterial::MaterialType::VERTEX_LIT:
-        CCASSERT(0, "not implemented.");
+        CCASSERT(0, "not implemented");
         break;
 
     case MeshMaterial::MaterialType::DIFFUSE:
@@ -226,6 +248,14 @@ MeshMaterial* MeshMaterial::createBuiltInMaterial(MaterialType type, bool skinne
 
     case MeshMaterial::MaterialType::BUMPED_DIFFUSE:
         material = skinned ? _bumpedDiffuseMaterialSkin : _bumpedDiffuseMaterial;
+        break;
+
+    case MeshMaterial::MaterialType::QUAD_TEXTURE:
+        material = _quadTextureMaterial;
+        break;
+
+    case MeshMaterial::MaterialType::QUAD_COLOR:
+        material = _quadColorMaterial;
         break;
 
     default:

@@ -63,6 +63,8 @@ public:
         DIFFUSE,         // diffuse (pixel lighting)
         DIFFUSE_NOTEX,   // diffuse (without texture)
         BUMPED_DIFFUSE,  // bumped diffuse
+        QUAD_TEXTURE,    // textured quad material
+        QUAD_COLOR,      // colored quad material (without texture)
 
         // Custom material
         CUSTOM,  // Create from a material file
@@ -133,6 +135,9 @@ protected:
     static MeshMaterial* _diffuseMaterialSkin;
     static MeshMaterial* _bumpedDiffuseMaterialSkin;
 
+    static MeshMaterial* _quadTextureMaterial;
+    static MeshMaterial* _quadColorMaterial;
+
     static backend::ProgramState* _unLitMaterialProgState;
     static backend::ProgramState* _unLitNoTexMaterialProgState;
     static backend::ProgramState* _vertexLitMaterialProgState;
@@ -144,6 +149,9 @@ protected:
     static backend::ProgramState* _vertexLitMaterialSkinProgState;
     static backend::ProgramState* _diffuseMaterialSkinProgState;
     static backend::ProgramState* _bumpedDiffuseMaterialSkinProgState;
+
+    static backend::ProgramState* _quadTextureMaterialProgState;
+    static backend::ProgramState* _quadColorMaterialProgState;
 };
 
 /**
