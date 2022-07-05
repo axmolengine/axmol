@@ -205,31 +205,31 @@ void SimpleSnake::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
             dir = 3;
         break;
     case EventKeyboard::KeyCode::KEY_1:
-        Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_LEFT);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_LEFT);
         break;
     case EventKeyboard::KeyCode::KEY_4:
-        Director::getInstance()->setFPSPos(FPSPosition::CENTER_LEFT);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::CENTER_LEFT);
         break;
     case EventKeyboard::KeyCode::KEY_7:
-        Director::getInstance()->setFPSPos(FPSPosition::TOP_LEFT);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::TOP_LEFT);
         break;
     case EventKeyboard::KeyCode::KEY_8:
-        Director::getInstance()->setFPSPos(FPSPosition::TOP_CENTER);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::TOP_CENTER);
         break;
     case EventKeyboard::KeyCode::KEY_9:
-        Director::getInstance()->setFPSPos(FPSPosition::TOP_RIGHT);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::TOP_RIGHT);
         break;
     case EventKeyboard::KeyCode::KEY_6:
-        Director::getInstance()->setFPSPos(FPSPosition::CENTER_RIGHT);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::CENTER_RIGHT);
         break;
     case EventKeyboard::KeyCode::KEY_3:
-        Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_RIGHT);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_RIGHT);
         break;
     case EventKeyboard::KeyCode::KEY_2:
-        Director::getInstance()->setFPSPos(FPSPosition::BOTTOM_CENTER);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::BOTTOM_CENTER);
         break;
     case EventKeyboard::KeyCode::KEY_5:
-        Director::getInstance()->setFPSPos(FPSPosition::CENTER);
+        Director::getInstance()->setStatsAnchor(AnchorPreset::CENTER);
         break;
     default:
         break;
