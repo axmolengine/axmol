@@ -187,7 +187,7 @@ protected:
     float _textureCoordsColStep;
 };
 
-// particle render for Sprite3D
+// particle render for MeshRenderer
 class CC_EX_DLL PUParticle3DModelRender : public PURender
 {
 public:
