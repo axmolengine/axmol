@@ -33,7 +33,6 @@ set(COCOS_RENDERER_HEADER
     renderer/backend/Texture.h
     renderer/backend/PixelFormatUtils.h
     renderer/backend/Types.h
-    renderer/backend/Enums.h
     renderer/backend/VertexLayout.h
     renderer/backend/ProgramState.h
     renderer/backend/ProgramStateRegistry.h
