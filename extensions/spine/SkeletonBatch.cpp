@@ -40,6 +40,7 @@ using std::max;
 
 #include "renderer/ccShaders.h"
 #include "renderer/backend/Device.h"
+#include "renderer/backend/Types.h"
 
 namespace spine {
 
@@ -105,7 +106,7 @@ backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* c
 
 
 		command->_locMVP = currentState->getUniformLocation("u_MVPMatrix");
-		command->_locTexture = currentState->getUniformLocation("u_tex0");
+		command->_locTexture = currentState->getUniformLocation(backend::UNIFORM_NAME_TEXTURE);
 	}
 	return currentState;
 }
