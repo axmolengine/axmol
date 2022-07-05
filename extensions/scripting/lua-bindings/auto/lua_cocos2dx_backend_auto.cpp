@@ -144,8 +144,8 @@ int lua_register_cocos2dx_backend_IndexFormat(lua_State* tolua_S)
 {
     tolua_module(tolua_S, "IndexFormat", 0);
     tolua_beginmodule(tolua_S,"IndexFormat");
-        tolua_constant(tolua_S, "U_SHORT", 0);
-        tolua_constant(tolua_S, "U_INT", 1);
+        tolua_constant(tolua_S, "U_SHORT", 1);
+        tolua_constant(tolua_S, "U_INT", 2);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(cocos2d::backend::IndexFormat).name(); // rtti is literal storage
