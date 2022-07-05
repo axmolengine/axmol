@@ -61,7 +61,7 @@ class Buffer;
  */
 class CC_DLL Mesh : public Ref
 {
-    friend class Sprite3D;
+    friend class MeshRenderer;
 
 public:
     typedef std::vector<unsigned short> IndexArray;
@@ -234,7 +234,7 @@ public:
     void calculateAABB();
 
     /**
-     * force set this Sprite3D to 2D render queue
+     * force set this Mesh renderer to 2D render queue
      */
     void setForce2DQueue(bool force2D) { _force2DQueue = force2D; }
 

@@ -48,7 +48,7 @@ Particle3DTests::Particle3DTests()
     ADD_TEST_CASE(Particle3DCanOfWormsDemo);
     ADD_TEST_CASE(Particle3DRibbonTrailDemo);
     ADD_TEST_CASE(Particle3DWeaponTrailDemo);
-    ADD_TEST_CASE(Particle3DWithSprite3DDemo);
+    ADD_TEST_CASE(Particle3DWithMeshRendererDemo);
 }
 
 std::string Particle3DTestDemo::title() const
@@ -63,7 +63,7 @@ bool Particle3DTestDemo::init()
 
     FileUtils::getInstance()->addSearchPath("Particle3D/materials");
     FileUtils::getInstance()->addSearchPath("Particle3D/scripts");
-    FileUtils::getInstance()->addSearchPath("Sprite3DTest");
+    FileUtils::getInstance()->addSearchPath("MeshRendererTest");
     // FileUtils::getInstance()->addSearchPath("Particle3D/textures");
 
     Size size = Director::getInstance()->getWinSize();
@@ -427,18 +427,18 @@ bool Particle3DWeaponTrailDemo::init()
     return true;
 }
 
-std::string Particle3DWithSprite3DDemo::subtitle() const
+std::string Particle3DWithMeshRendererDemo::subtitle() const
 {
-    return "Particle3DWithSprite3D";
+    return "Particle3DWithMeshRenderer";
 }
 
-bool Particle3DWithSprite3DDemo::init()
+bool Particle3DWithMeshRendererDemo::init()
 {
     if (!Particle3DTestDemo::init())
         return false;
 
-    std::string c3bfileName = "Sprite3DTest/orc.c3b";
-    auto sprite             = Sprite3D::create(c3bfileName);
+    std::string c3bfileName = "MeshRendererTest/orc.c3b";
+    auto sprite             = MeshRenderer::create(c3bfileName);
     this->addChild(sprite);
     sprite->setPosition3D(Vec3(-20.0f, 0.0f, 0.0f));
     sprite->setRotation3D(Vec3(0, 180, 0));

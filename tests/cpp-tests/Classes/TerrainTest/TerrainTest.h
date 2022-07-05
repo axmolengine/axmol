@@ -24,12 +24,12 @@
 
 #ifndef TERRAIN_TESH_H
 
-#    include "../BaseTest.h"
+#include "../BaseTest.h"
 
-#    include "3d/CCSprite3D.h"
-#    include "3d/CCTerrain.h"
-#    include "2d/CCCamera.h"
-#    include "2d/CCAction.h"
+#include "3d/CCMeshRenderer.h"
+#include "3d/CCTerrain.h"
+#include "2d/CCCamera.h"
+#include "2d/CCAction.h"
 
 DEFINE_TEST_SUITE(TerrainTests);
 
@@ -59,7 +59,7 @@ protected:
 #    define PLAYER_STATE_FORWARD 3
 #    define PLAYER_STATE_BACKWARD 4
 
-class Player : public cocos2d::Sprite3D
+class Player : public cocos2d::MeshRenderer
 {
 public:
     static Player* create(const char* file, cocos2d::Camera* cam, cocos2d::Terrain* terrain);

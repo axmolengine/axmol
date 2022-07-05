@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/CCSprite3DMaterial.h"
+#include "3d/CCMeshMaterial.h"
 #include "3d/CCMesh.h"
 #include "platform/CCFileUtils.h"
 #include "renderer/CCTexture2D.h"
@@ -36,102 +36,102 @@
 
 NS_CC_BEGIN
 
-Sprite3DMaterialCache* Sprite3DMaterialCache::_cacheInstance = nullptr;
+MeshMaterialCache* MeshMaterialCache::_cacheInstance = nullptr;
 
-std::unordered_map<std::string, Sprite3DMaterial*> Sprite3DMaterial::_materials;
-Sprite3DMaterial* Sprite3DMaterial::_unLitMaterial         = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_unLitNoTexMaterial    = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_vertexLitMaterial     = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_diffuseMaterial       = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_diffuseNoTexMaterial  = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_bumpedDiffuseMaterial = nullptr;
+std::unordered_map<std::string, MeshMaterial*> MeshMaterial::_materials;
+MeshMaterial* MeshMaterial::_unLitMaterial         = nullptr;
+MeshMaterial* MeshMaterial::_unLitNoTexMaterial    = nullptr;
+MeshMaterial* MeshMaterial::_vertexLitMaterial     = nullptr;
+MeshMaterial* MeshMaterial::_diffuseMaterial       = nullptr;
+MeshMaterial* MeshMaterial::_diffuseNoTexMaterial  = nullptr;
+MeshMaterial* MeshMaterial::_bumpedDiffuseMaterial = nullptr;
 
-Sprite3DMaterial* Sprite3DMaterial::_unLitMaterialSkin         = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_vertexLitMaterialSkin     = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_diffuseMaterialSkin       = nullptr;
-Sprite3DMaterial* Sprite3DMaterial::_bumpedDiffuseMaterialSkin = nullptr;
+MeshMaterial* MeshMaterial::_unLitMaterialSkin         = nullptr;
+MeshMaterial* MeshMaterial::_vertexLitMaterialSkin     = nullptr;
+MeshMaterial* MeshMaterial::_diffuseMaterialSkin       = nullptr;
+MeshMaterial* MeshMaterial::_bumpedDiffuseMaterialSkin = nullptr;
 
-backend::ProgramState* Sprite3DMaterial::_unLitMaterialProgState         = nullptr;
-backend::ProgramState* Sprite3DMaterial::_unLitNoTexMaterialProgState    = nullptr;
-backend::ProgramState* Sprite3DMaterial::_vertexLitMaterialProgState     = nullptr;
-backend::ProgramState* Sprite3DMaterial::_diffuseMaterialProgState       = nullptr;
-backend::ProgramState* Sprite3DMaterial::_diffuseNoTexMaterialProgState  = nullptr;
-backend::ProgramState* Sprite3DMaterial::_bumpedDiffuseMaterialProgState = nullptr;
+backend::ProgramState* MeshMaterial::_unLitMaterialProgState         = nullptr;
+backend::ProgramState* MeshMaterial::_unLitNoTexMaterialProgState    = nullptr;
+backend::ProgramState* MeshMaterial::_vertexLitMaterialProgState     = nullptr;
+backend::ProgramState* MeshMaterial::_diffuseMaterialProgState       = nullptr;
+backend::ProgramState* MeshMaterial::_diffuseNoTexMaterialProgState  = nullptr;
+backend::ProgramState* MeshMaterial::_bumpedDiffuseMaterialProgState = nullptr;
 
-backend::ProgramState* Sprite3DMaterial::_unLitMaterialSkinProgState         = nullptr;
-backend::ProgramState* Sprite3DMaterial::_vertexLitMaterialSkinProgState     = nullptr;
-backend::ProgramState* Sprite3DMaterial::_diffuseMaterialSkinProgState       = nullptr;
-backend::ProgramState* Sprite3DMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
+backend::ProgramState* MeshMaterial::_unLitMaterialSkinProgState         = nullptr;
+backend::ProgramState* MeshMaterial::_vertexLitMaterialSkinProgState     = nullptr;
+backend::ProgramState* MeshMaterial::_diffuseMaterialSkinProgState       = nullptr;
+backend::ProgramState* MeshMaterial::_bumpedDiffuseMaterialSkinProgState = nullptr;
 
-void Sprite3DMaterial::createBuiltInMaterial()
+void MeshMaterial::createBuiltInMaterial()
 {
     auto* program               = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_TEXTURE_3D);
     _unLitMaterialSkinProgState = new backend::ProgramState(program);
-    _unLitMaterialSkin          = new Sprite3DMaterial();
+    _unLitMaterialSkin          = new MeshMaterial();
     if (_unLitMaterialSkin && _unLitMaterialSkin->initWithProgramState(_unLitMaterialSkinProgState))
     {
-        _unLitMaterialSkin->_type = Sprite3DMaterial::MaterialType::UNLIT;
+        _unLitMaterialSkin->_type = MeshMaterial::MaterialType::UNLIT;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D);
     _diffuseMaterialSkinProgState = new backend::ProgramState(program);
-    _diffuseMaterialSkin          = new Sprite3DMaterial();
+    _diffuseMaterialSkin          = new MeshMaterial();
     if (_diffuseMaterialSkin && _diffuseMaterialSkin->initWithProgramState(_diffuseMaterialSkinProgState))
     {
-        _diffuseMaterialSkin->_type = Sprite3DMaterial::MaterialType::DIFFUSE;
+        _diffuseMaterialSkin->_type = MeshMaterial::MaterialType::DIFFUSE;
     }
 
     program                   = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_NORMAL_TEXTURE_3D);
     _diffuseMaterialProgState = new backend::ProgramState(program);
-    _diffuseMaterial          = new Sprite3DMaterial();
+    _diffuseMaterial          = new MeshMaterial();
     if (_diffuseMaterial && _diffuseMaterial->initWithProgramState(_diffuseMaterialProgState))
     {
-        _diffuseMaterial->_type = Sprite3DMaterial::MaterialType::DIFFUSE;
+        _diffuseMaterial->_type = MeshMaterial::MaterialType::DIFFUSE;
     }
 
     program                 = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D);
     _unLitMaterialProgState = new backend::ProgramState(program);
-    _unLitMaterial          = new Sprite3DMaterial();
+    _unLitMaterial          = new MeshMaterial();
     if (_unLitMaterial && _unLitMaterial->initWithProgramState(_unLitMaterialProgState))
     {
-        _unLitMaterial->_type = Sprite3DMaterial::MaterialType::UNLIT;
+        _unLitMaterial->_type = MeshMaterial::MaterialType::UNLIT;
     }
 
     program                      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_3D);
     _unLitNoTexMaterialProgState = new backend::ProgramState(program);
-    _unLitNoTexMaterial          = new Sprite3DMaterial();
+    _unLitNoTexMaterial          = new MeshMaterial();
     if (_unLitNoTexMaterial && _unLitNoTexMaterial->initWithProgramState(_unLitNoTexMaterialProgState))
     {
-        _unLitNoTexMaterial->_type = Sprite3DMaterial::MaterialType::UNLIT_NOTEX;
+        _unLitNoTexMaterial->_type = MeshMaterial::MaterialType::UNLIT_NOTEX;
     }
 
     program                        = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_NORMAL_3D);
     _diffuseNoTexMaterialProgState = new backend::ProgramState(program);
-    _diffuseNoTexMaterial          = new Sprite3DMaterial();
+    _diffuseNoTexMaterial          = new MeshMaterial();
     if (_diffuseNoTexMaterial && _diffuseNoTexMaterial->initWithProgramState(_diffuseNoTexMaterialProgState))
     {
-        _diffuseNoTexMaterial->_type = Sprite3DMaterial::MaterialType::DIFFUSE_NOTEX;
+        _diffuseNoTexMaterial->_type = MeshMaterial::MaterialType::DIFFUSE_NOTEX;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D);
     _bumpedDiffuseMaterialProgState = new backend::ProgramState(program);
-    _bumpedDiffuseMaterial          = new Sprite3DMaterial();
+    _bumpedDiffuseMaterial          = new MeshMaterial();
     if (_bumpedDiffuseMaterial && _bumpedDiffuseMaterial->initWithProgramState(_bumpedDiffuseMaterialProgState))
     {
-        _bumpedDiffuseMaterial->_type = Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE;
+        _bumpedDiffuseMaterial->_type = MeshMaterial::MaterialType::BUMPED_DIFFUSE;
     }
 
     program = backend::Program::getBuiltinProgram(backend::ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D);
     _bumpedDiffuseMaterialSkinProgState = new backend::ProgramState(program);
-    _bumpedDiffuseMaterialSkin          = new Sprite3DMaterial();
+    _bumpedDiffuseMaterialSkin          = new MeshMaterial();
     if (_bumpedDiffuseMaterialSkin &&
         _bumpedDiffuseMaterialSkin->initWithProgramState(_bumpedDiffuseMaterialSkinProgState))
     {
-        _bumpedDiffuseMaterialSkin->_type = Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE;
+        _bumpedDiffuseMaterialSkin->_type = MeshMaterial::MaterialType::BUMPED_DIFFUSE;
     }
 }
 
-void Sprite3DMaterial::releaseBuiltInMaterial()
+void MeshMaterial::releaseBuiltInMaterial()
 {
     CC_SAFE_RELEASE_NULL(_unLitMaterial);
     CC_SAFE_RELEASE_NULL(_unLitMaterialSkin);
@@ -159,7 +159,7 @@ void Sprite3DMaterial::releaseBuiltInMaterial()
     CC_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialSkinProgState);
 }
 
-void Sprite3DMaterial::releaseCachedMaterial()
+void MeshMaterial::releaseCachedMaterial()
 {
     for (auto& it : _materials)
     {
@@ -169,11 +169,10 @@ void Sprite3DMaterial::releaseCachedMaterial()
     _materials.clear();
 }
 
-Material* Sprite3DMaterial::clone() const
+Material* MeshMaterial::clone() const
 {
-    auto material = new Sprite3DMaterial();
+    auto material = new MeshMaterial();
 
-    // RenderState::cloneInto(material);
     material->_renderState = _renderState;
 
     for (const auto& technique : _techniques)
@@ -196,36 +195,36 @@ Material* Sprite3DMaterial::clone() const
     return material;
 }
 
-Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, bool skinned)
+MeshMaterial* MeshMaterial::createBuiltInMaterial(MaterialType type, bool skinned)
 {
     /////
     if (_diffuseMaterial == nullptr)
         createBuiltInMaterial();
 
-    Sprite3DMaterial* material = nullptr;
+    MeshMaterial* material = nullptr;
     switch (type)
     {
-    case Sprite3DMaterial::MaterialType::UNLIT:
+    case MeshMaterial::MaterialType::UNLIT:
         material = skinned ? _unLitMaterialSkin : _unLitMaterial;
         break;
 
-    case Sprite3DMaterial::MaterialType::UNLIT_NOTEX:
+    case MeshMaterial::MaterialType::UNLIT_NOTEX:
         material = _unLitNoTexMaterial;
         break;
 
-    case Sprite3DMaterial::MaterialType::VERTEX_LIT:
-        CCASSERT(0, "not implement");
+    case MeshMaterial::MaterialType::VERTEX_LIT:
+        CCASSERT(0, "not implemented.");
         break;
 
-    case Sprite3DMaterial::MaterialType::DIFFUSE:
+    case MeshMaterial::MaterialType::DIFFUSE:
         material = skinned ? _diffuseMaterialSkin : _diffuseMaterial;
         break;
 
-    case Sprite3DMaterial::MaterialType::DIFFUSE_NOTEX:
+    case MeshMaterial::MaterialType::DIFFUSE_NOTEX:
         material = _diffuseNoTexMaterial;
         break;
 
-    case Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE:
+    case MeshMaterial::MaterialType::BUMPED_DIFFUSE:
         material = skinned ? _bumpedDiffuseMaterialSkin : _bumpedDiffuseMaterial;
         break;
 
@@ -233,41 +232,41 @@ Sprite3DMaterial* Sprite3DMaterial::createBuiltInMaterial(MaterialType type, boo
         break;
     }
     if (material)
-        return (Sprite3DMaterial*)material->clone();
+        return (MeshMaterial*)material->clone();
 
     return nullptr;
 }
 
-Sprite3DMaterial* Sprite3DMaterial::createWithFilename(std::string_view path)
+MeshMaterial* MeshMaterial::createWithFilename(std::string_view path)
 {
     auto validfilename = FileUtils::getInstance()->fullPathForFilename(path);
     if (!validfilename.empty())
     {
         auto it = _materials.find(validfilename);
         if (it != _materials.end())
-            return (Sprite3DMaterial*)it->second->clone();
+            return (MeshMaterial*)it->second->clone();
 
-        auto material = new Sprite3DMaterial();
+        auto material = new MeshMaterial();
         if (material->initWithFile(path))
         {
-            material->_type           = Sprite3DMaterial::MaterialType::CUSTOM;
+            material->_type           = MeshMaterial::MaterialType::CUSTOM;
             _materials[validfilename] = material;
 
-            return (Sprite3DMaterial*)material->clone();
+            return (MeshMaterial*)material->clone();
         }
         CC_SAFE_DELETE(material);
     }
     return nullptr;
 }
 
-Sprite3DMaterial* Sprite3DMaterial::createWithProgramState(backend::ProgramState* programState)
+MeshMaterial* MeshMaterial::createWithProgramState(backend::ProgramState* programState)
 {
-    CCASSERT(programState, "Invalid GL Program State");
+    CCASSERT(programState, "Invalid program state.");
 
-    auto mat = new Sprite3DMaterial();
+    auto mat = new MeshMaterial();
     if (mat->initWithProgramState(programState))
     {
-        mat->_type = Sprite3DMaterial::MaterialType::CUSTOM;
+        mat->_type = MeshMaterial::MaterialType::CUSTOM;
         mat->autorelease();
         return mat;
     }
@@ -275,7 +274,7 @@ Sprite3DMaterial* Sprite3DMaterial::createWithProgramState(backend::ProgramState
     return nullptr;
 }
 
-void Sprite3DMaterial::setTexture(Texture2D* tex, NTextureData::Usage usage)
+void MeshMaterial::setTexture(Texture2D* tex, NTextureData::Usage usage)
 {
     const auto& passes = getTechnique()->getPasses();
     for (auto& pass : passes)
@@ -286,24 +285,24 @@ void Sprite3DMaterial::setTexture(Texture2D* tex, NTextureData::Usage usage)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Sprite3DMaterialCache::Sprite3DMaterialCache() {}
+MeshMaterialCache::MeshMaterialCache() {}
 
-Sprite3DMaterialCache::~Sprite3DMaterialCache()
+MeshMaterialCache::~MeshMaterialCache()
 {
-    removeAllSprite3DMaterial();
+    removeAllMeshMaterial();
 }
 
-Sprite3DMaterialCache* Sprite3DMaterialCache::getInstance()
+MeshMaterialCache* MeshMaterialCache::getInstance()
 {
     if (!_cacheInstance)
     {
-        _cacheInstance = new Sprite3DMaterialCache();
+        _cacheInstance = new MeshMaterialCache();
     }
 
     return _cacheInstance;
 }
 
-void Sprite3DMaterialCache::destroyInstance()
+void MeshMaterialCache::destroyInstance()
 {
     if (_cacheInstance)
     {
@@ -311,7 +310,7 @@ void Sprite3DMaterialCache::destroyInstance()
     }
 }
 
-bool Sprite3DMaterialCache::addSprite3DMaterial(std::string_view key, Texture2D* texture)
+bool MeshMaterialCache::addMeshMaterial(std::string_view key, Texture2D* texture)
 {
     auto itr = _materials.find(key);
     if (itr == _materials.end())
@@ -323,7 +322,7 @@ bool Sprite3DMaterialCache::addSprite3DMaterial(std::string_view key, Texture2D*
     return false;
 }
 
-Texture2D* Sprite3DMaterialCache::getSprite3DMaterial(std::string_view key)
+Texture2D* MeshMaterialCache::getMeshMaterial(std::string_view key)
 {
     auto itr = _materials.find(key);
     if (itr != _materials.end())
@@ -333,7 +332,7 @@ Texture2D* Sprite3DMaterialCache::getSprite3DMaterial(std::string_view key)
     return nullptr;
 }
 
-void Sprite3DMaterialCache::removeAllSprite3DMaterial()
+void MeshMaterialCache::removeAllMeshMaterial()
 {
     for (auto& itr : _materials)
     {
@@ -341,14 +340,14 @@ void Sprite3DMaterialCache::removeAllSprite3DMaterial()
     }
     _materials.clear();
 }
-void Sprite3DMaterialCache::removeUnusedSprite3DMaterial()
+void MeshMaterialCache::removeUnusedMeshMaterial()
 {
     for (auto it = _materials.cbegin(), itCend = _materials.cend(); it != itCend; /* nothing */)
     {
         auto value = it->second;
         if (value->getReferenceCount() == 1)
         {
-            CCLOG("cocos2d: Sprite3DMaterialCache: removing unused Sprite3DMaterial");
+            CCLOG("cocos2d: MeshMaterialCache: removing unused mesh renderer materials.");
 
             value->release();
             it = _materials.erase(it);

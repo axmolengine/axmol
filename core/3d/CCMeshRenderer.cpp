@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCObjLoader.h"
 #include "3d/CCMeshSkin.h"
 #include "3d/CCBundle3D.h"
-#include "3d/CCSprite3DMaterial.h"
+#include "3d/CCMeshMaterial.h"
 #include "3d/CCAttachNode.h"
 #include "3d/CCMesh.h"
 
@@ -48,87 +48,87 @@
 
 NS_CC_BEGIN
 
-static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
+static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
 
-Sprite3D* Sprite3D::create()
+MeshRenderer* MeshRenderer::create()
 {
-    auto sprite = new Sprite3D();
-    if (sprite->init())
+    auto mesh = new MeshRenderer();
+    if (mesh->init())
     {
-        sprite->autorelease();
-        return sprite;
+        mesh->autorelease();
+        return mesh;
     }
-    CC_SAFE_DELETE(sprite);
+    CC_SAFE_DELETE(mesh);
     return nullptr;
 }
 
-Sprite3D* Sprite3D::create(std::string_view modelPath)
+MeshRenderer* MeshRenderer::create(std::string_view modelPath)
 {
-    CCASSERT(modelPath.length() >= 4, "invalid filename for Sprite3D");
+    CCASSERT(modelPath.length() >= 4, "Invalid filename.");
 
-    auto sprite = new Sprite3D();
-    if (sprite->initWithFile(modelPath))
+    auto mesh = new MeshRenderer();
+    if (mesh->initWithFile(modelPath))
     {
-        sprite->_contentSize = sprite->getBoundingBox().size;
-        sprite->autorelease();
-        return sprite;
+        mesh->_contentSize = mesh->getBoundingBox().size;
+        mesh->autorelease();
+        return mesh;
     }
-    CC_SAFE_DELETE(sprite);
+    CC_SAFE_DELETE(mesh);
     return nullptr;
 }
-Sprite3D* Sprite3D::create(std::string_view modelPath, std::string_view texturePath)
+MeshRenderer* MeshRenderer::create(std::string_view modelPath, std::string_view texturePath)
 {
-    auto sprite = create(modelPath);
-    if (sprite)
+    auto mesh = create(modelPath);
+    if (mesh)
     {
-        sprite->setTexture(texturePath);
+        mesh->setTexture(texturePath);
     }
 
-    return sprite;
+    return mesh;
 }
 
-void Sprite3D::createAsync(std::string_view modelPath,
-                           const std::function<void(Sprite3D*, void*)>& callback,
+void MeshRenderer::createAsync(std::string_view modelPath,
+                           const std::function<void(MeshRenderer*, void*)>& callback,
                            void* callbackparam)
 {
     createAsync(modelPath, "", callback, callbackparam);
 }
 
-void Sprite3D::createAsync(std::string_view modelPath,
+void MeshRenderer::createAsync(std::string_view modelPath,
                            std::string_view texturePath,
-                           const std::function<void(Sprite3D*, void*)>& callback,
+                           const std::function<void(MeshRenderer*, void*)>& callback,
                            void* callbackparam)
 {
-    Sprite3D* sprite = new Sprite3D();
-    if (sprite->loadFromCache(modelPath))
+    MeshRenderer* mesh = new MeshRenderer();
+    if (mesh->loadFromCache(modelPath))
     {
-        sprite->autorelease();
+        mesh->autorelease();
         if (!texturePath.empty())
-            sprite->setTexture(texturePath);
-        callback(sprite, callbackparam);
+            mesh->setTexture(texturePath);
+        callback(mesh, callbackparam);
         return;
     }
 
-    sprite->_asyncLoadParam.afterLoadCallback = callback;
-    sprite->_asyncLoadParam.texPath           = texturePath;
-    sprite->_asyncLoadParam.modelPath         = modelPath;
-    sprite->_asyncLoadParam.modelFullPath     = FileUtils::getInstance()->fullPathForFilename(modelPath);
-    sprite->_asyncLoadParam.callbackParam     = callbackparam;
-    sprite->_asyncLoadParam.materialdatas     = new MaterialDatas();
-    sprite->_asyncLoadParam.meshdatas         = new MeshDatas();
-    sprite->_asyncLoadParam.nodeDatas         = new NodeDatas();
+    mesh->_asyncLoadParam.afterLoadCallback   = callback;
+    mesh->_asyncLoadParam.texPath             = texturePath;
+    mesh->_asyncLoadParam.modelPath           = modelPath;
+    mesh->_asyncLoadParam.modelFullPath       = FileUtils::getInstance()->fullPathForFilename(modelPath);
+    mesh->_asyncLoadParam.callbackParam       = callbackparam;
+    mesh->_asyncLoadParam.materialdatas       = new MaterialDatas();
+    mesh->_asyncLoadParam.meshdatas           = new MeshDatas();
+    mesh->_asyncLoadParam.nodeDatas           = new NodeDatas();
     AsyncTaskPool::getInstance()->enqueue(
-        AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(Sprite3D::afterAsyncLoad, sprite),
-        (void*)(&sprite->_asyncLoadParam), [sprite]() {
-            sprite->_asyncLoadParam.result =
-                sprite->loadFromFile(sprite->_asyncLoadParam.modelFullPath, sprite->_asyncLoadParam.nodeDatas,
-                                     sprite->_asyncLoadParam.meshdatas, sprite->_asyncLoadParam.materialdatas);
+        AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(MeshRenderer::afterAsyncLoad, mesh),
+        (void*)(&mesh->_asyncLoadParam), [mesh]() {
+            mesh->_asyncLoadParam.result =
+                mesh->loadFromFile(mesh->_asyncLoadParam.modelFullPath, mesh->_asyncLoadParam.nodeDatas,
+                                     mesh->_asyncLoadParam.meshdatas, mesh->_asyncLoadParam.materialdatas);
         });
 }
 
-void Sprite3D::afterAsyncLoad(void* param)
+void MeshRenderer::afterAsyncLoad(void* param)
 {
-    Sprite3D::AsyncLoadParam* asyncParam = (Sprite3D::AsyncLoadParam*)param;
+    MeshRenderer::AsyncLoadParam* asyncParam = (MeshRenderer::AsyncLoadParam*)param;
     autorelease();
     if (asyncParam)
     {
@@ -145,11 +145,11 @@ void Sprite3D::afterAsyncLoad(void* param)
             auto& nodeDatas     = asyncParam->nodeDatas;
             if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
             {
-                auto spritedata = Sprite3DCache::getInstance()->getSpriteData(asyncParam->modelPath);
-                if (spritedata == nullptr)
+                auto meshdata = MeshRendererCache::getInstance()->getMeshData(asyncParam->modelPath);
+                if (meshdata == nullptr)
                 {
                     // add to cache
-                    auto data             = new Sprite3DCache::Sprite3DData();
+                    auto data             = new MeshRendererCache::MeshRendererData();
                     data->materialdatas   = materialdatas;
                     data->nodedatas       = nodeDatas;
                     data->meshVertexDatas = _meshVertexDatas;
@@ -158,7 +158,7 @@ void Sprite3D::afterAsyncLoad(void* param)
                         data->programStates.pushBack(mesh->getProgramState());
                     }
 
-                    Sprite3DCache::getInstance()->addSprite3DData(asyncParam->modelPath, data);
+                    MeshRendererCache::getInstance()->addMeshRendererData(asyncParam->modelPath, data);
 
                     CC_SAFE_DELETE(meshdatas);
                     materialdatas = nullptr;
@@ -176,13 +176,13 @@ void Sprite3D::afterAsyncLoad(void* param)
         }
         else
         {
-            CCLOG("file load failed: %s ", asyncParam->modelPath.c_str());
+            CCLOG("file load failed: %s\n", asyncParam->modelPath.c_str());
         }
         asyncParam->afterLoadCallback(this, asyncParam->callbackParam);
     }
 }
 
-AABB Sprite3D::getAABBRecursivelyImp(Node* node)
+AABB MeshRenderer::getAABBRecursivelyImp(Node* node)
 {
     AABB aabb;
     for (auto iter : node->getChildren())
@@ -190,46 +190,46 @@ AABB Sprite3D::getAABBRecursivelyImp(Node* node)
         aabb.merge(getAABBRecursivelyImp(iter));
     }
 
-    Sprite3D* sprite3d = dynamic_cast<Sprite3D*>(node);
-    if (sprite3d)
-        aabb.merge(sprite3d->getAABB());
+    MeshRenderer* meshRenderer = dynamic_cast<MeshRenderer*>(node);
+    if (meshRenderer)
+        aabb.merge(meshRenderer->getAABB());
 
     return aabb;
 }
 
-bool Sprite3D::loadFromCache(std::string_view path)
+bool MeshRenderer::loadFromCache(std::string_view path)
 {
-    auto spritedata = Sprite3DCache::getInstance()->getSpriteData(path);
-    if (spritedata)
+    auto meshdata = MeshRendererCache::getInstance()->getMeshData(path);
+    if (meshdata)
     {
-        for (auto it : spritedata->meshVertexDatas)
+        for (auto it : meshdata->meshVertexDatas)
         {
             _meshVertexDatas.pushBack(it);
         }
-        _skeleton = Skeleton3D::create(spritedata->nodedatas->skeleton);
+        _skeleton = Skeleton3D::create(meshdata->nodedatas->skeleton);
         CC_SAFE_RETAIN(_skeleton);
 
-        const bool singleSprite = (spritedata->nodedatas->nodes.size() == 1);
-        for (const auto& it : spritedata->nodedatas->nodes)
+        const bool singleMesh = (meshdata->nodedatas->nodes.size() == 1);
+        for (const auto& it : meshdata->nodedatas->nodes)
         {
             if (it)
             {
-                createNode(it, this, *(spritedata->materialdatas), singleSprite);
+                createNode(it, this, *(meshdata->materialdatas), singleMesh);
             }
         }
 
-        for (const auto& it : spritedata->nodedatas->skeleton)
+        for (const auto& it : meshdata->nodedatas->skeleton)
         {
             if (it)
             {
-                createAttachSprite3DNode(it, *(spritedata->materialdatas));
+                createAttachMeshRendererNode(it, *(meshdata->materialdatas));
             }
         }
 
         for (ssize_t i = 0, size = _meshes.size(); i < size; ++i)
         {
-            // cloning is needed in order to have one state per sprite
-            auto glstate = spritedata->programStates.at(i);
+            // cloning is needed in order to have one state per mesh
+            auto glstate = meshdata->programStates.at(i);
             _meshes.at(i)->setProgramState(glstate->clone());
         }
         return true;
@@ -238,7 +238,7 @@ bool Sprite3D::loadFromCache(std::string_view path)
     return false;
 }
 
-bool Sprite3D::loadFromFile(std::string_view path,
+bool MeshRenderer::loadFromFile(std::string_view path,
                             NodeDatas* nodedatas,
                             MeshDatas* meshdatas,
                             MaterialDatas* materialdatas)
@@ -269,7 +269,7 @@ bool Sprite3D::loadFromFile(std::string_view path,
     return false;
 }
 
-Sprite3D::Sprite3D()
+MeshRenderer::MeshRenderer()
     : _skeleton(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
     , _aabbDirty(true)
@@ -279,7 +279,7 @@ Sprite3D::Sprite3D()
     , _usingAutogeneratedGLProgram(true)
 {}
 
-Sprite3D::~Sprite3D()
+MeshRenderer::~MeshRenderer()
 {
     _meshes.clear();
     _meshVertexDatas.clear();
@@ -287,7 +287,7 @@ Sprite3D::~Sprite3D()
     removeAllAttachNode();
 }
 
-bool Sprite3D::init()
+bool MeshRenderer::init()
 {
     if (Node::init())
     {
@@ -296,7 +296,7 @@ bool Sprite3D::init()
     return false;
 }
 
-bool Sprite3D::initWithFile(std::string_view path)
+bool MeshRenderer::initWithFile(std::string_view path)
 {
     _aabbDirty = true;
     _meshes.clear();
@@ -315,7 +315,7 @@ bool Sprite3D::initWithFile(std::string_view path)
         if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
         {
             // add to cache
-            auto data             = new Sprite3DCache::Sprite3DData();
+            auto data             = new MeshRendererCache::MeshRendererData();
             data->materialdatas   = materialdatas;
             data->nodedatas       = nodeDatas;
             data->meshVertexDatas = _meshVertexDatas;
@@ -324,7 +324,7 @@ bool Sprite3D::initWithFile(std::string_view path)
                 data->programStates.pushBack(mesh->getProgramState());
             }
 
-            Sprite3DCache::getInstance()->addSprite3DData(path, data);
+            MeshRendererCache::getInstance()->addMeshRendererData(path, data);
             CC_SAFE_DELETE(meshdatas);
             _contentSize = getBoundingBox().size;
             return true;
@@ -337,7 +337,7 @@ bool Sprite3D::initWithFile(std::string_view path)
     return false;
 }
 
-bool Sprite3D::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas)
+bool MeshRenderer::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, const MaterialDatas& materialdatas)
 {
     for (const auto& it : meshdatas.meshDatas)
     {
@@ -364,7 +364,7 @@ bool Sprite3D::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, 
     {
         if (it)
         {
-            createAttachSprite3DNode(it, materialdatas);
+            createAttachMeshRendererNode(it, materialdatas);
         }
     }
     genMaterial();
@@ -372,11 +372,11 @@ bool Sprite3D::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdatas, 
     return true;
 }
 
-Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas)
+MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData* modeldata, const MaterialDatas& materialdatas)
 {
-    auto sprite = new Sprite3D();
+    auto meshRenderer = new MeshRenderer();
 
-    sprite->setName(nodedata->id);
+    meshRenderer->setName(nodedata->id);
     auto mesh = Mesh::create(nodedata->id, getMeshIndexData(modeldata->subMeshId));
 
     if (_skeleton && modeldata->bones.size())
@@ -434,46 +434,46 @@ Sprite3D* Sprite3D::createSprite3DNode(NodeData* nodedata, ModelData* modeldata,
     Quaternion qua;
     Vec3 scale;
     nodedata->transform.decompose(&scale, &qua, &pos);
-    sprite->setPosition3D(pos);
-    sprite->setRotationQuat(qua);
-    sprite->setScaleX(scale.x);
-    sprite->setScaleY(scale.y);
-    sprite->setScaleZ(scale.z);
+    meshRenderer->setPosition3D(pos);
+    meshRenderer->setRotationQuat(qua);
+    meshRenderer->setScaleX(scale.x);
+    meshRenderer->setScaleY(scale.y);
+    meshRenderer->setScaleZ(scale.z);
 
-    sprite->addMesh(mesh);
-    sprite->autorelease();
-    sprite->genMaterial();
+    meshRenderer->addMesh(mesh);
+    meshRenderer->autorelease();
+    meshRenderer->genMaterial();
 
-    return sprite;
+    return meshRenderer;
 }
-void Sprite3D::createAttachSprite3DNode(NodeData* nodedata, const MaterialDatas& materialdatas)
+void MeshRenderer::createAttachMeshRendererNode(NodeData* nodedata, const MaterialDatas& materialdatas)
 {
     for (const auto& it : nodedata->modelNodeDatas)
     {
         if (it && getAttachNode(nodedata->id))
         {
-            auto sprite = createSprite3DNode(nodedata, it, materialdatas);
-            if (sprite)
+            auto mesh = createMeshRendererNode(nodedata, it, materialdatas);
+            if (mesh)
             {
-                getAttachNode(nodedata->id)->addChild(sprite);
+                getAttachNode(nodedata->id)->addChild(mesh);
             }
         }
     }
     for (const auto& it : nodedata->children)
     {
-        createAttachSprite3DNode(it, materialdatas);
+        createAttachMeshRendererNode(it, materialdatas);
     }
 }
 
-void Sprite3D::setMaterial(Material* material)
+void MeshRenderer::setMaterial(Material* material)
 {
     setMaterial(material, -1);
 }
 
-void Sprite3D::setMaterial(Material* material, int meshIndex)
+void MeshRenderer::setMaterial(Material* material, int meshIndex)
 {
     CCASSERT(material, "Invalid Material");
-    CCASSERT(meshIndex == -1 || (meshIndex >= 0 && meshIndex < _meshes.size()), "Invalid meshIndex");
+    CCASSERT(meshIndex == -1 || (meshIndex >= 0 && meshIndex < _meshes.size()), "Invalid meshIndex.");
 
     if (meshIndex == -1)
     {
@@ -491,21 +491,21 @@ void Sprite3D::setMaterial(Material* material, int meshIndex)
     _usingAutogeneratedGLProgram = false;
 }
 
-Material* Sprite3D::getMaterial(int meshIndex) const
+Material* MeshRenderer::getMaterial(int meshIndex) const
 {
-    CCASSERT(meshIndex >= 0 && meshIndex < _meshes.size(), "Invalid meshIndex");
+    CCASSERT(meshIndex >= 0 && meshIndex < _meshes.size(), "Invalid meshIndex.");
     return _meshes.at(meshIndex)->getMaterial();
 }
 
-void Sprite3D::genMaterial(bool useLight)
+void MeshRenderer::genMaterial(bool useLight)
 {
     _shaderUsingLight = useLight;
 
-    std::unordered_map<const MeshVertexData*, Sprite3DMaterial*> materials;
+    std::unordered_map<const MeshVertexData*, MeshMaterial*> materials;
     for (auto meshVertexData : _meshVertexDatas)
     {
-        auto material = getSprite3DMaterialForAttribs(meshVertexData, useLight);
-        CCASSERT(material, "material should not be null");
+        auto material = getMeshRendererMaterialForAttribs(meshVertexData, useLight);
+        CCASSERT(material, "material should cannot be null.");
         materials[meshVertexData] = material;
     }
 
@@ -526,16 +526,16 @@ void Sprite3D::genMaterial(bool useLight)
     }
 }
 
-void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleSprite)
+void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialDatas& materialdatas, bool singleMesh)
 {
     Node* node = nullptr;
     for (const auto& it : nodedata->modelNodeDatas)
     {
         if (it)
         {
-            if (!it->bones.empty() || singleSprite)
+            if (!it->bones.empty() || singleMesh)
             {
-                if (singleSprite && root != nullptr)
+                if (singleMesh && root != nullptr)
                     root->setName(nodedata->id);
                 auto mesh = Mesh::create(nodedata->id, getMeshIndexData(it->subMeshId));
                 if (mesh)
@@ -546,7 +546,7 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
                         auto skin = MeshSkin::create(_skeleton, it->bones, it->invBindPose);
                         mesh->setSkin(skin);
                     }
-                    mesh->_visibleChanged = std::bind(&Sprite3D::onAABBDirty, this);
+                    mesh->_visibleChanged = std::bind(&MeshRenderer::onAABBDirty, this);
 
                     if (it->materialId == "" && materialdatas.materials.size())
                     {
@@ -610,15 +610,15 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
             }
             else
             {
-                auto sprite = createSprite3DNode(nodedata, it, materialdatas);
-                if (sprite)
+                auto mesh = createMeshRendererNode(nodedata, it, materialdatas);
+                if (mesh)
                 {
                     if (root)
                     {
-                        root->addChild(sprite);
+                        root->addChild(mesh);
                     }
                 }
-                node = sprite;
+                node = mesh;
             }
         }
     }
@@ -654,7 +654,7 @@ void Sprite3D::createNode(NodeData* nodedata, Node* root, const MaterialDatas& m
     }
 }
 
-MeshIndexData* Sprite3D::getMeshIndexData(std::string_view indexId) const
+MeshIndexData* MeshRenderer::getMeshIndexData(std::string_view indexId) const
 {
     for (auto it : _meshVertexDatas)
     {
@@ -665,27 +665,27 @@ MeshIndexData* Sprite3D::getMeshIndexData(std::string_view indexId) const
     return nullptr;
 }
 
-void Sprite3D::addMesh(Mesh* mesh)
+void MeshRenderer::addMesh(Mesh* mesh)
 {
     auto meshVertex = mesh->getMeshIndexData()->_vertexData;
     _meshVertexDatas.pushBack(meshVertex);
     _meshes.pushBack(mesh);
 }
 
-void Sprite3D::setTexture(std::string_view texFile)
+void MeshRenderer::setTexture(std::string_view texFile)
 {
     auto tex = _director->getTextureCache()->addImage(texFile);
     setTexture(tex);
 }
 
-void Sprite3D::setTexture(Texture2D* texture)
+void MeshRenderer::setTexture(Texture2D* texture)
 {
     for (auto mesh : _meshes)
     {
         mesh->setTexture(texture);
     }
 }
-AttachNode* Sprite3D::getAttachNode(std::string_view boneName)
+AttachNode* MeshRenderer::getAttachNode(std::string_view boneName)
 {
     auto it = _attachments.find(boneName);
     if (it != _attachments.end())
@@ -706,7 +706,7 @@ AttachNode* Sprite3D::getAttachNode(std::string_view boneName)
     return nullptr;
 }
 
-void Sprite3D::removeAttachNode(std::string_view boneName)
+void MeshRenderer::removeAttachNode(std::string_view boneName)
 {
     auto it = _attachments.find(boneName);
     if (it != _attachments.end())
@@ -716,7 +716,7 @@ void Sprite3D::removeAttachNode(std::string_view boneName)
     }
 }
 
-void Sprite3D::removeAllAttachNode()
+void MeshRenderer::removeAllAttachNode()
 {
     for (auto& it : _attachments)
     {
@@ -725,7 +725,7 @@ void Sprite3D::removeAllAttachNode()
     _attachments.clear();
 }
 
-void Sprite3D::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void MeshRenderer::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -772,7 +772,7 @@ void Sprite3D::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTra
     _director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
-void Sprite3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
 #if CC_USE_CULLING
     // TODO new-renderer: interface isVisibleInFrustum removal
@@ -815,7 +815,7 @@ void Sprite3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
 }
 
-bool Sprite3D::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
     if (Node::setProgramState(programState, needsRetain))
     {
@@ -828,7 +828,7 @@ bool Sprite3D::setProgramState(backend::ProgramState* programState, bool needsRe
     return false;
 }
 
-void Sprite3D::setBlendFunc(const BlendFunc& blendFunc)
+void MeshRenderer::setBlendFunc(const BlendFunc& blendFunc)
 {
     if (_blend.src != blendFunc.src || _blend.dst != blendFunc.dst)
     {
@@ -840,17 +840,17 @@ void Sprite3D::setBlendFunc(const BlendFunc& blendFunc)
     }
 }
 
-const BlendFunc& Sprite3D::getBlendFunc() const
+const BlendFunc& MeshRenderer::getBlendFunc() const
 {
     return _blend;
 }
 
-AABB Sprite3D::getAABBRecursively()
+AABB MeshRenderer::getAABBRecursively()
 {
     return getAABBRecursivelyImp(this);
 }
 
-const AABB& Sprite3D::getAABB() const
+const AABB& MeshRenderer::getAABB() const
 {
     Mat4 nodeToWorldTransform(getNodeToWorldTransform());
 
@@ -880,45 +880,43 @@ const AABB& Sprite3D::getAABB() const
     return _aabb;
 }
 
-Action* Sprite3D::runAction(Action* action)
+Action* MeshRenderer::runAction(Action* action)
 {
     setForceDepthWrite(true);
     return Node::runAction(action);
 }
 
-Rect Sprite3D::getBoundingBox() const
+Rect MeshRenderer::getBoundingBox() const
 {
     AABB aabb = getAABB();
     Rect ret(aabb._min.x, aabb._min.y, (aabb._max.x - aabb._min.x), (aabb._max.y - aabb._min.y));
     return ret;
 }
 
-void Sprite3D::setCullFace(CullFaceSide side)
+void MeshRenderer::setCullFace(CullFaceSide side)
 {
     for (auto& it : _meshes)
     {
         it->getMaterial()->getStateBlock().setCullFaceSide(side);
-        //        it->getMeshCommand().setCullFace(cullFace);
     }
 }
 
-void Sprite3D::setCullFaceEnabled(bool enable)
+void MeshRenderer::setCullFaceEnabled(bool enable)
 {
     for (auto& it : _meshes)
     {
         it->getMaterial()->getStateBlock().setCullFace(enable);
-        //        it->getMeshCommand().setCullFaceEnabled(enable);
     }
 }
 
-Mesh* Sprite3D::getMeshByIndex(int index) const
+Mesh* MeshRenderer::getMeshByIndex(int index) const
 {
-    CCASSERT(index < _meshes.size(), "invalid index");
+    CCASSERT(index < _meshes.size(), "Invalid index.");
     return _meshes.at(index);
 }
 
 /**get Mesh by Name */
-Mesh* Sprite3D::getMeshByName(std::string_view name) const
+Mesh* MeshRenderer::getMeshByName(std::string_view name) const
 {
     for (const auto& it : _meshes)
     {
@@ -928,7 +926,7 @@ Mesh* Sprite3D::getMeshByName(std::string_view name) const
     return nullptr;
 }
 
-std::vector<Mesh*> Sprite3D::getMeshArrayByName(std::string_view name) const
+std::vector<Mesh*> MeshRenderer::getMeshArrayByName(std::string_view name) const
 {
     std::vector<Mesh*> meshes;
     for (const auto& it : _meshes)
@@ -939,7 +937,7 @@ std::vector<Mesh*> Sprite3D::getMeshArrayByName(std::string_view name) const
     return meshes;
 }
 
-Mesh* Sprite3D::getMesh() const
+Mesh* MeshRenderer::getMesh() const
 {
     if (_meshes.empty())
     {
@@ -948,7 +946,7 @@ Mesh* Sprite3D::getMesh() const
     return _meshes.at(0);
 }
 
-void Sprite3D::setForce2DQueue(bool force2D)
+void MeshRenderer::setForce2DQueue(bool force2D)
 {
     for (const auto& mesh : _meshes)
     {
@@ -957,14 +955,14 @@ void Sprite3D::setForce2DQueue(bool force2D)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-Sprite3DCache* Sprite3DCache::_cacheInstance = nullptr;
-Sprite3DCache* Sprite3DCache::getInstance()
+MeshRendererCache* MeshRendererCache::_cacheInstance = nullptr;
+MeshRendererCache* MeshRendererCache::getInstance()
 {
     if (_cacheInstance == nullptr)
-        _cacheInstance = new Sprite3DCache();
+        _cacheInstance = new MeshRendererCache();
     return _cacheInstance;
 }
-void Sprite3DCache::destroyInstance()
+void MeshRendererCache::destroyInstance()
 {
     if (_cacheInstance)
     {
@@ -973,54 +971,51 @@ void Sprite3DCache::destroyInstance()
     }
 }
 
-Sprite3DCache::Sprite3DData* Sprite3DCache::getSpriteData(std::string_view key) const
+MeshRendererCache::MeshRendererData* MeshRendererCache::getMeshData(std::string_view key) const
 {
-    auto it = _spriteDatas.find(key);
-    if (it != _spriteDatas.end())
+    auto it = _meshDatas.find(key);
+    if (it != _meshDatas.end())
         return it->second;
     return nullptr;
 }
 
-bool Sprite3DCache::addSprite3DData(std::string_view key, Sprite3DCache::Sprite3DData* spritedata)
+bool MeshRendererCache::addMeshRendererData(std::string_view key, MeshRendererCache::MeshRendererData* meshdata)
 {
-    auto it = _spriteDatas.find(key);
-    if (it == _spriteDatas.end())
+    auto it = _meshDatas.find(key);
+    if (it == _meshDatas.end())
     {
-        _spriteDatas.emplace(key, spritedata);  // _spriteDatas[key] = spritedata;
+        _meshDatas.emplace(key, meshdata);
         return true;
     }
     return false;
 }
 
-void Sprite3DCache::removeSprite3DData(std::string_view key)
+void MeshRendererCache::removeMeshRendererData(std::string_view key)
 {
-    auto it = _spriteDatas.find(key);
-    if (it != _spriteDatas.end())
+    auto it = _meshDatas.find(key);
+    if (it != _meshDatas.end())
     {
         delete it->second;
-        _spriteDatas.erase(it);
+        _meshDatas.erase(it);
     }
 }
 
-void Sprite3DCache::removeAllSprite3DData()
+void MeshRendererCache::removeAllMeshRendererData()
 {
-    for (auto& it : _spriteDatas)
+    for (auto& it : _meshDatas)
     {
         delete it.second;
     }
-    _spriteDatas.clear();
+    _meshDatas.clear();
 }
 
-Sprite3DCache::Sprite3DCache() {}
-Sprite3DCache::~Sprite3DCache()
+MeshRendererCache::MeshRendererCache() {}
+MeshRendererCache::~MeshRendererCache()
 {
-    removeAllSprite3DData();
+    removeAllMeshRendererData();
 }
 
-//
-// MARK: Helpers
-//
-static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)
+static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)
 {
     bool textured = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD);
     bool hasSkin  = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BLEND_INDEX) &&
@@ -1028,27 +1023,27 @@ static Sprite3DMaterial* getSprite3DMaterialForAttribs(MeshVertexData* meshVerte
     bool hasNormal       = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL);
     bool hasTangentSpace = meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_TANGENT) &&
                            meshVertexData->hasVertexAttrib(shaderinfos::VertexKey::VERTEX_ATTRIB_BINORMAL);
-    Sprite3DMaterial::MaterialType type;
+    MeshMaterial::MaterialType type;
     if (textured)
     {
         if (hasTangentSpace)
         {
-            type = hasNormal && usesLight ? Sprite3DMaterial::MaterialType::BUMPED_DIFFUSE
-                                          : Sprite3DMaterial::MaterialType::UNLIT;
+            type = hasNormal && usesLight ? MeshMaterial::MaterialType::BUMPED_DIFFUSE
+                                          : MeshMaterial::MaterialType::UNLIT;
         }
         else
         {
-            type = hasNormal && usesLight ? Sprite3DMaterial::MaterialType::DIFFUSE
-                                          : Sprite3DMaterial::MaterialType::UNLIT;
+            type = hasNormal && usesLight ? MeshMaterial::MaterialType::DIFFUSE
+                                          : MeshMaterial::MaterialType::UNLIT;
         }
     }
     else
     {
-        type = hasNormal && usesLight ? Sprite3DMaterial::MaterialType::DIFFUSE_NOTEX
-                                      : Sprite3DMaterial::MaterialType::UNLIT_NOTEX;
+        type = hasNormal && usesLight ? MeshMaterial::MaterialType::DIFFUSE_NOTEX
+                                      : MeshMaterial::MaterialType::UNLIT_NOTEX;
     }
 
-    return Sprite3DMaterial::createBuiltInMaterial(type, hasSkin);
+    return MeshMaterial::createBuiltInMaterial(type, hasSkin);
 }
 
 NS_CC_END

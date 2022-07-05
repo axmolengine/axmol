@@ -24,11 +24,11 @@
  ****************************************************************************/
 
 #include "2d/CCLight.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCAnimate3D.h"
 #include "3d/CCAnimation3D.h"
 #include "platform/CCFileUtils.h"
-#include "WidgetReader/Sprite3DReader/Sprite3DReader.h"
+#include "WidgetReader/MeshReader/MeshReader.h"
 
 #include "CSParseBinary_generated.h"
 #include "CSParse3DBinary_generated.h"
@@ -43,35 +43,35 @@ using namespace flatbuffers;
 
 namespace cocostudio
 {
-IMPLEMENT_CLASS_NODE_READER_INFO(Sprite3DReader)
+IMPLEMENT_CLASS_NODE_READER_INFO(MeshReader)
 
-Sprite3DReader::Sprite3DReader() {}
+MeshReader::MeshReader() {}
 
-Sprite3DReader::~Sprite3DReader() {}
+MeshReader::~MeshReader() {}
 
-static Sprite3DReader* _instanceSprite3DReader = nullptr;
+static MeshReader* _instanceMeshReader = nullptr;
 
-Sprite3DReader* Sprite3DReader::getInstance()
+MeshReader* MeshReader::getInstance()
 {
-    if (!_instanceSprite3DReader)
+    if (!_instanceMeshReader)
     {
-        _instanceSprite3DReader = new Sprite3DReader();
+        _instanceMeshReader = new MeshReader();
     }
 
-    return _instanceSprite3DReader;
+    return _instanceMeshReader;
 }
 
-void Sprite3DReader::purge()
+void MeshReader::purge()
 {
-    CC_SAFE_DELETE(_instanceSprite3DReader);
+    CC_SAFE_DELETE(_instanceMeshReader);
 }
 
-void Sprite3DReader::destroyInstance()
+void MeshReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceSprite3DReader);
+    CC_SAFE_DELETE(_instanceMeshReader);
 }
 
-Vec2 Sprite3DReader::getVec2Attribute(pugi::xml_attribute attribute) const
+Vec2 MeshReader::getVec2Attribute(pugi::xml_attribute attribute) const
 {
     if (!attribute)
         return Vec2::ZERO;
@@ -99,7 +99,7 @@ Vec2 Sprite3DReader::getVec2Attribute(pugi::xml_attribute attribute) const
     return ret;
 }
 
-Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
+Offset<Table> MeshReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                            flatbuffers::FlatBufferBuilder* builder)
 {
     auto temp          = Node3DReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
@@ -205,9 +205,9 @@ Offset<Table> Sprite3DReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void Sprite3DReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* sprite3DOptions)
+void MeshReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* sprite3DOptions)
 {
-    Sprite3D* sprite3D = static_cast<Sprite3D*>(node);
+    MeshRenderer* mesh = static_cast<MeshRenderer*>(node);
 
     auto options = (Sprite3DOptions*)sprite3DOptions;
 
@@ -224,7 +224,7 @@ void Sprite3DReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuff
         {
             Animate3D* animate = Animate3D::create(animation);
             Action* action     = RepeatForever::create(animate);
-            sprite3D->runAction(action);
+            mesh->runAction(action);
         }
     }
 
@@ -237,36 +237,36 @@ void Sprite3DReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuff
 
     if (alpha != 255)
     {
-        sprite3D->setOpacity(alpha);
+        mesh->setOpacity(alpha);
     }
     if (red != 255 || green != 255 || blue != 255)
     {
-        sprite3D->setColor(Color3B(red, green, blue));
+        mesh->setColor(Color3B(red, green, blue));
     }
     if (isFlipped)
     {
-        sprite3D->setCullFaceEnabled(true);
-        sprite3D->setCullFace(CullFaceSide::FRONT);
+        mesh->setCullFaceEnabled(true);
+        mesh->setCullFace(CullFaceSide::FRONT);
     }
 
     if (lightFlag <= 0)
     {
         lightFlag = 1;
     }
-    sprite3D->setLightMask(lightFlag);
+    mesh->setLightMask(lightFlag);
 
     auto node3DReader = Node3DReader::getInstance();
-    node3DReader->setPropsWithFlatBuffers(sprite3D, (Table*)(options->node3DOption()));
+    node3DReader->setPropsWithFlatBuffers(mesh, (Table*)(options->node3DOption()));
 }
 
-Node* Sprite3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* sprite3DOptions)
+Node* MeshReader::createNodeWithFlatBuffers(const flatbuffers::Table* sprite3DOptions)
 {
     auto options = (Sprite3DOptions*)sprite3DOptions;
 
     auto fileData    = options->fileData();
     std::string path = fileData->path()->c_str();
 
-    Sprite3D* ret = Sprite3D::create();
+    MeshRenderer* ret = MeshRenderer::create();
     if (FileUtils::getInstance()->isFileExist(path))
     {
         ret->initWithFile(path);

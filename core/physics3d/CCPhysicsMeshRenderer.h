@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __PHYSICS_SPRITE_3D_H__
-#define __PHYSICS_SPRITE_3D_H__
+#ifndef __PHYSICS_MESH_RENDERER_H__
+#define __PHYSICS_MESH_RENDERER_H__
 
 #include "base/ccConfig.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "physics3d/CCPhysics3DObject.h"
 #include "physics3d/CCPhysics3DComponent.h"
 
@@ -42,19 +42,19 @@ NS_CC_BEGIN
  */
 
 /**
- * @brief Convenient class to create a rigid body with Sprite3D
+ * @brief Convenient class to create a rigid body with a MeshRenderer
  */
-class CC_DLL PhysicsSprite3D : public cocos2d::Sprite3D
+class CC_DLL PhysicsMeshRenderer : public cocos2d::MeshRenderer
 {
 public:
-    /** creates a PhysicsSprite3D*/
-    static PhysicsSprite3D* create(std::string_view modelPath,
+    /** creates a PhysicsMeshRenderer */
+    static PhysicsMeshRenderer* create(std::string_view modelPath,
                                    Physics3DRigidBodyDes* rigidDes,
                                    const cocos2d::Vec3& translateInPhysics = cocos2d::Vec3::ZERO,
                                    const cocos2d::Quaternion& rotInPhsyics = cocos2d::Quaternion::ZERO);
 
-    /** creates a PhysicsSprite3D as a collider*/
-    static PhysicsSprite3D* createWithCollider(std::string_view modelPath,
+    /** creates a PhysicsMeshRenderer with a collider */
+    static PhysicsMeshRenderer* createWithCollider(std::string_view modelPath,
                                                Physics3DColliderDes* colliderDes,
                                                const cocos2d::Vec3& translateInPhysics = cocos2d::Vec3::ZERO,
                                                const cocos2d::Quaternion& rotInPhsyics = cocos2d::Quaternion::ZERO);
@@ -71,8 +71,8 @@ public:
     /** synchronize physics transformation to node. */
     void syncPhysicsToNode();
 
-    PhysicsSprite3D();
-    virtual ~PhysicsSprite3D();
+    PhysicsMeshRenderer();
+    virtual ~PhysicsMeshRenderer();
 
 protected:
     Physics3DComponent* _physicsComponent;
@@ -86,4 +86,4 @@ NS_CC_END
 
 #endif  // CC_USE_3D_PHYSICS
 
-#endif  // __PHYSICS_SPRITE_3D_H__
+#endif  // __PHYSICS_MESH_RENDERER_H__

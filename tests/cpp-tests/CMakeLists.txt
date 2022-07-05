@@ -160,8 +160,8 @@ list(APPEND GAME_HEADER
      Classes/ExtensionsTest/ExtensionsTest.h
      Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.h
      Classes/ExtensionsTest/TableViewTest/TableViewTestScene.h
-     Classes/Sprite3DTest/Sprite3DTest.h
-     Classes/Sprite3DTest/DrawNode3D.h
+     Classes/MeshRendererTest/MeshRendererTest.h
+     Classes/MeshRendererTest/DrawNode3D.h
      Classes/BaseTest.h
      Classes/SceneTest/SceneTest.h
      Classes/ReleasePoolTest/ReleasePoolTest.h
@@ -296,8 +296,8 @@ list(APPEND GAME_SOURCE
      Classes/ShaderTest/ShaderTest2.cpp
      Classes/SpineTest/SpineTest.cpp
     #  Classes/Scene3DTest/Scene3DTest.cpp
-     Classes/Sprite3DTest/DrawNode3D.cpp
-     Classes/Sprite3DTest/Sprite3DTest.cpp
+     Classes/MeshRendererTest/DrawNode3D.cpp
+     Classes/MeshRendererTest/MeshRendererTest.cpp
      Classes/SpritePolygonTest/SpritePolygonTest.cpp
      Classes/SpriteTest/SpriteTest.cpp
      Classes/TerrainTest/TerrainTest.cpp

@@ -3972,10 +3972,10 @@ int lua_register_cocos2dx_physics3d_Physics3DComponent(lua_State* tolua_S)
     return 1;
 }
 
-int lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics(lua_State* tolua_S)
+int lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::PhysicsSprite3D* cobj = nullptr;
+    cocos2d::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3984,15 +3984,15 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsSprite3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PhysicsSprite3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (cocos2d::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'", nullptr);
         return 0;
     }
 #endif
@@ -4002,27 +4002,27 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'", nullptr);
             return 0;
         }
         cobj->syncNodeToPhysics();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsSprite3D:syncNodeToPhysics",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsMeshRenderer:syncNodeToPhysics",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode(lua_State* tolua_S)
+int lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::PhysicsSprite3D* cobj = nullptr;
+    cocos2d::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4031,15 +4031,15 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsSprite3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PhysicsSprite3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (cocos2d::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'", nullptr);
         return 0;
     }
 #endif
@@ -4049,27 +4049,27 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'", nullptr);
             return 0;
         }
         cobj->syncPhysicsToNode();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsSprite3D:syncPhysicsToNode",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsMeshRenderer:syncPhysicsToNode",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj(lua_State* tolua_S)
+int lua_cocos2dx_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::PhysicsSprite3D* cobj = nullptr;
+    cocos2d::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4078,15 +4078,15 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsSprite3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PhysicsSprite3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (cocos2d::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
         return 0;
     }
 #endif
@@ -4096,27 +4096,27 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
             return 0;
         }
         cocos2d::Physics3DObject* ret = cobj->getPhysicsObj();
         object_to_luaval<cocos2d::Physics3DObject>(tolua_S, "cc.Physics3DObject",(cocos2d::Physics3DObject*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsSprite3D:getPhysicsObj",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsMeshRenderer:getPhysicsObj",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_getPhysicsObj'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag(lua_State* tolua_S)
+int lua_cocos2dx_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::PhysicsSprite3D* cobj = nullptr;
+    cocos2d::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4125,15 +4125,15 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag(lua_State* tolua_S)
 
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsSprite3D",0,&tolua_err)) goto tolua_lerror;
+    if (!tolua_isusertype(tolua_S,1,"cc.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PhysicsSprite3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (cocos2d::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
         return 0;
     }
 #endif
@@ -4143,30 +4143,30 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag(lua_State* tolua_S)
     {
         cocos2d::Physics3DComponent::PhysicsSyncFlag arg0;
 
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.PhysicsSprite3D:setSyncFlag");
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.PhysicsMeshRenderer:setSyncFlag");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
             return 0;
         }
         cobj->setSyncFlag(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsSprite3D:setSyncFlag",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsMeshRenderer:setSyncFlag",argc, 1);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_setSyncFlag'.",&tolua_err);
 #endif
 
     return 0;
 }
-int lua_cocos2dx_physics3d_PhysicsSprite3D_constructor(lua_State* tolua_S)
+int lua_cocos2dx_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::PhysicsSprite3D* cobj = nullptr;
+    cocos2d::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4180,47 +4180,47 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_constructor(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_constructor'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::PhysicsSprite3D();
+        cobj = new cocos2d::PhysicsMeshRenderer();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
-        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"cc.PhysicsSprite3D");
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"cc.PhysicsMeshRenderer");
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsSprite3D:PhysicsSprite3D",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.PhysicsMeshRenderer:PhysicsMeshRenderer",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
-    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_constructor'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_constructor'.",&tolua_err);
 #endif
 
     return 0;
 }
 
-static int lua_cocos2dx_physics3d_PhysicsSprite3D_finalize(lua_State* tolua_S)
+static int lua_cocos2dx_physics3d_PhysicsMeshRenderer_finalize(lua_State* tolua_S)
 {
-    printf("luabindings: finalizing LUA object (PhysicsSprite3D)");
+    printf("luabindings: finalizing LUA object (PhysicsMeshRenderer)");
     return 0;
 }
 
-int lua_register_cocos2dx_physics3d_PhysicsSprite3D(lua_State* tolua_S)
+int lua_register_cocos2dx_physics3d_PhysicsMeshRenderer(lua_State* tolua_S)
 {
-    tolua_usertype(tolua_S,"cc.PhysicsSprite3D");
-    tolua_cclass(tolua_S,"PhysicsSprite3D","cc.PhysicsSprite3D","cc.Sprite3D",nullptr);
+    tolua_usertype(tolua_S,"cc.PhysicsMeshRenderer");
+    tolua_cclass(tolua_S,"PhysicsMeshRenderer","cc.PhysicsMeshRenderer","cc.Sprite3D",nullptr);
 
-    tolua_beginmodule(tolua_S,"PhysicsSprite3D");
-        tolua_function(tolua_S,"new",lua_cocos2dx_physics3d_PhysicsSprite3D_constructor);
-        tolua_function(tolua_S,"syncNodeToPhysics",lua_cocos2dx_physics3d_PhysicsSprite3D_syncNodeToPhysics);
-        tolua_function(tolua_S,"syncPhysicsToNode",lua_cocos2dx_physics3d_PhysicsSprite3D_syncPhysicsToNode);
-        tolua_function(tolua_S,"getPhysicsObj",lua_cocos2dx_physics3d_PhysicsSprite3D_getPhysicsObj);
-        tolua_function(tolua_S,"setSyncFlag",lua_cocos2dx_physics3d_PhysicsSprite3D_setSyncFlag);
+    tolua_beginmodule(tolua_S,"PhysicsMeshRenderer");
+        tolua_function(tolua_S,"new",lua_cocos2dx_physics3d_PhysicsMeshRenderer_constructor);
+        tolua_function(tolua_S,"syncNodeToPhysics",lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncNodeToPhysics);
+        tolua_function(tolua_S,"syncPhysicsToNode",lua_cocos2dx_physics3d_PhysicsMeshRenderer_syncPhysicsToNode);
+        tolua_function(tolua_S,"getPhysicsObj",lua_cocos2dx_physics3d_PhysicsMeshRenderer_getPhysicsObj);
+        tolua_function(tolua_S,"setSyncFlag",lua_cocos2dx_physics3d_PhysicsMeshRenderer_setSyncFlag);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::PhysicsSprite3D).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsSprite3D";
-    g_typeCast[typeName] = "cc.PhysicsSprite3D";
+    auto typeName = typeid(cocos2d::PhysicsMeshRenderer).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.PhysicsMeshRenderer";
+    g_typeCast[typeName] = "cc.PhysicsMeshRenderer";
     return 1;
 }
 
@@ -12373,7 +12373,7 @@ TOLUA_API int register_all_cocos2dx_physics3d(lua_State* tolua_S)
 	lua_register_cocos2dx_physics3d_Physics3DComponent(tolua_S);
 	lua_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(tolua_S);
 	lua_register_cocos2dx_physics3d_Physics3DPointToPointConstraint(tolua_S);
-	lua_register_cocos2dx_physics3d_PhysicsSprite3D(tolua_S);
+	lua_register_cocos2dx_physics3d_PhysicsMeshRenderer(tolua_S);
 	lua_register_cocos2dx_physics3d_Physics3DHingeConstraint(tolua_S);
 	lua_register_cocos2dx_physics3d_Physics3DShape(tolua_S);
 

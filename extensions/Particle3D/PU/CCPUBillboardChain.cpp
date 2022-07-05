@@ -36,7 +36,7 @@
 #include "renderer/backend/Buffer.h"
 #include "renderer/backend/Device.h"
 #include "2d/CCCamera.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 
 NS_CC_BEGIN
 

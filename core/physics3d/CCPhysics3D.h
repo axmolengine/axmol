@@ -32,7 +32,7 @@
 #if CC_USE_3D_PHYSICS
 
 #    include "physics3d/CCPhysics3DShape.h"
-#    include "physics3d/CCPhysicsSprite3D.h"
+#    include "physics3d/CCPhysicsMeshRenderer.h"
 #    include "physics3d/CCPhysics3DWorld.h"
 #    include "physics3d/CCPhysics3DDebugDrawer.h"
 #    include "physics3d/CCPhysics3DObject.h"

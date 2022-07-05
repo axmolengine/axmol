@@ -32,15 +32,15 @@
 
 namespace cocostudio
 {
-class CCS_DLL Sprite3DReader : public cocos2d::Ref, public NodeReaderProtocol
+class CCS_DLL MeshReader : public cocos2d::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
 public:
-    Sprite3DReader();
-    ~Sprite3DReader();
+    MeshReader();
+    ~MeshReader();
 
-    static Sprite3DReader* getInstance();
+    static MeshReader* getInstance();
     /** @deprecated Use method destroyInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();

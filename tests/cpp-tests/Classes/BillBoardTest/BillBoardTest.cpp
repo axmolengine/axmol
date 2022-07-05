@@ -47,11 +47,11 @@ BillBoardTests::BillBoardTests()
 //------------------------------------------------------------------
 BillBoardRotationTest::BillBoardRotationTest()
 {
-    auto root = Sprite3D::create();
+    auto root = MeshRenderer::create();
     root->setPositionNormalized(Vec2(0.5f, 0.25f));
     addChild(root);
 
-    auto model = Sprite3D::create("Sprite3DTest/orc.c3b");
+    auto model = MeshRenderer::create("MeshRendererTest/orc.c3b");
     model->setScale(5);
     model->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     root->addChild(model);
@@ -150,11 +150,11 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
         _billboards.push_back(billboard);
         _billboards.push_back(billboard2);
 
-        auto sprite3d = Sprite3D::create("Sprite3DTest/orc.c3t");
-        sprite3d->setScale(2.0f);
-        sprite3d->addChild(billboard);
-        sprite3d->runAction(RepeatForever::create(RotateBy::create(10.0f, Vec3(0.0f, 360.0f, 0.0f))));
-        _layerBillBoard->addChild(sprite3d);
+        auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3t");
+        mesh->setScale(2.0f);
+        mesh->addChild(billboard);
+        mesh->runAction(RepeatForever::create(RotateBy::create(10.0f, Vec3(0.0f, 360.0f, 0.0f))));
+        _layerBillBoard->addChild(mesh);
     }
 
     addNewBillBoardWithCoords(Vec3(20.0f, 5.0f, 0.0f));

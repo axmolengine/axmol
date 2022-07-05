@@ -55,7 +55,7 @@ public:
 
 public:
     bool autoRotate;  // Means that the objects to render automatically rotate if the node to which the particle system
-                      // is attached, rotates.
+                      // is attached to rotates.
 
 protected:
     std::string _renderType;
@@ -203,10 +203,10 @@ public:
     virtual ~PUParticle3DModelRender();
 
 protected:
-    std::vector<Sprite3D*> _spriteList;
+    std::vector<MeshRenderer*> _meshList;
     std::string _modelFile;
     std::string _texFile;
-    Vec3 _spriteSize;
+    Vec3 _meshSize;
 };
 
 class CC_EX_DLL PUParticle3DBoxRender : public PUParticle3DEntityRender

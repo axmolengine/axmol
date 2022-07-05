@@ -196,25 +196,25 @@ void Physics3DTestDemo::shootBox(const cocos2d::Vec3& des)
     rbDes.originalTransform.translate(_camera->getPosition3D());
     rbDes.mass = 1.f;
     rbDes.shape = Physics3DShape::createBox(Vec3(0.5f, 0.5f, 0.5f));
-    auto sprite = PhysicsSprite3D::create("Sprite3DTest/box.c3t", &rbDes);
-    sprite->setTexture("Images/Icon.png");
+    auto mesh = PhysicsMeshRenderer::create("MeshRendererTest/box.c3t", &rbDes);
+    mesh->setTexture("Images/Icon.png");
 
-    auto rigidBody = static_cast<Physics3DRigidBody*>(sprite->getPhysicsObj());
+    auto rigidBody = static_cast<Physics3DRigidBody*>(mesh->getPhysicsObj());
     rigidBody->setLinearFactor(Vec3::ONE);
     rigidBody->setLinearVelocity(linearVel);
     rigidBody->setAngularVelocity(Vec3::ZERO);
     rigidBody->setCcdMotionThreshold(0.5f);
     rigidBody->setCcdSweptSphereRadius(0.4f);
 
-    this->addChild(sprite);
-    sprite->setPosition3D(_camera->getPosition3D());
-    sprite->setScale(0.5f);
-    sprite->syncNodeToPhysics();
+    this->addChild(mesh);
+    mesh->setPosition3D(_camera->getPosition3D());
+    mesh->setScale(0.5f);
+    mesh->syncNodeToPhysics();
 
     // optimize, only sync node to physics
-    sprite->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);  // sync node to physics
+    mesh->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);  // sync node to physics
 
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
 }
 
 std::string BasicPhysics3DDemo::subtitle() const
@@ -232,8 +232,8 @@ bool BasicPhysics3DDemo::init()
     rbDes.mass = 0.0f;
     rbDes.shape = Physics3DShape::createBox(Vec3(60.0f, 1.0f, 60.0f));
 
-    auto floor = PhysicsSprite3D::create("Sprite3DTest/box.c3t", &rbDes);
-    floor->setTexture("Sprite3DTest/plane.png");
+    auto floor = PhysicsMeshRenderer::create("MeshRendererTest/box.c3t", &rbDes);
+    floor->setTexture("MeshRendererTest/plane.png");
     floor->setScaleX(60);
     floor->setScaleZ(60);
     this->addChild(floor);
@@ -242,7 +242,7 @@ bool BasicPhysics3DDemo::init()
     // static object sync is not needed
     floor->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::NONE);
 
-    // create several boxes using PhysicsSprite3D
+    // create several boxes using PhysicsMeshRenderer
     rbDes.mass = 1.f;
     rbDes.shape = Physics3DShape::createBox(Vec3(0.8f, 0.8f, 0.8f));
     float start_x = START_POS_X - ARRAY_SIZE_X / 2;
@@ -259,14 +259,14 @@ bool BasicPhysics3DDemo::init()
                 float y = 5.0 + 1.0 * k + start_y;
                 float z = 1.0 * j + start_z;
 
-                auto sprite = PhysicsSprite3D::create("Sprite3DTest/box.c3t", &rbDes);
-                sprite->setTexture("Images/CyanSquare.png");
-                sprite->setPosition3D(Vec3(x, y, z));
-                sprite->syncNodeToPhysics();
-                sprite->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);
-                sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-                sprite->setScale(0.8f);
-                this->addChild(sprite);
+                auto mesh = PhysicsMeshRenderer::create("MeshRendererTest/box.c3t", &rbDes);
+                mesh->setTexture("Images/CyanSquare.png");
+                mesh->setPosition3D(Vec3(x, y, z));
+                mesh->syncNodeToPhysics();
+                mesh->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);
+                mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+                mesh->setScale(0.8f);
+                this->addChild(mesh);
             }
         }
     }
@@ -295,8 +295,8 @@ bool Physics3DKinematicDemo::init()
     Physics3DRigidBodyDes rbDes;
     rbDes.mass = 0.0f;
     rbDes.shape = Physics3DShape::createBox(Vec3(60.0f, 1.0f, 60.0f));
-    auto floor = PhysicsSprite3D::create("Sprite3DTest/box.c3t", &rbDes);
-    floor->setTexture("Sprite3DTest/plane.png");
+    auto floor = PhysicsMeshRenderer::create("MeshRendererTest/box.c3t", &rbDes);
+    floor->setTexture("MeshRendererTest/plane.png");
     floor->setScaleX(60);
     floor->setScaleZ(60);
     floor->setPosition3D(Vec3(0.f, -1.f, 0.f));
@@ -312,18 +312,18 @@ bool Physics3DKinematicDemo::init()
         rbDes.mass = 0.f;  // kinematic objects. zero mass so that it can not be affected by other dynamic objects
         rbDes.shape = Physics3DShape::createBox(Vec3(2.0f, 2.0f, 2.0f));
 
-        auto sprite = PhysicsSprite3D::create("Sprite3DTest/box.c3t", &rbDes);
-        sprite->setTexture("Images/CyanSquare.png");
-        sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-        auto rigidBody = static_cast<Physics3DRigidBody*>(sprite->getPhysicsObj());
+        auto mesh = PhysicsMeshRenderer::create("MeshRendererTest/box.c3t", &rbDes);
+        mesh->setTexture("Images/CyanSquare.png");
+        mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+        auto rigidBody = static_cast<Physics3DRigidBody*>(mesh->getPhysicsObj());
         rigidBody->setKinematic(true);
 
-        this->addChild(sprite);
+        this->addChild(mesh);
 
-        sprite->setScale(2.0f);
-        sprite->setPosition3D(Vec3(-15.0f, 0.0f, 15.0f - 15.0f * i));
+        mesh->setScale(2.0f);
+        mesh->setPosition3D(Vec3(-15.0f, 0.0f, 15.0f - 15.0f * i));
         auto moveby = MoveBy::create(2.0f + i, Vec3(30.0f, 0.0f, 0.0f));
-        sprite->runAction(RepeatForever::create(Sequence::create(moveby, moveby->reverse(), nullptr)));
+        mesh->runAction(RepeatForever::create(Sequence::create(moveby, moveby->reverse(), nullptr)));
     }
 
     // create Dynamic
@@ -347,15 +347,15 @@ bool Physics3DKinematicDemo::init()
                     rbDes.originalTransform.setIdentity();
                     rbDes.originalTransform.translate(x, y, z);
 
-                    auto sprite = PhysicsSprite3D::create("Sprite3DTest/sphere.c3b", &rbDes);
-                    sprite->setTexture("Sprite3DTest/plane.png");
-                    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-                    sprite->setScale(1.0f / sprite->getContentSize().width);
-                    this->addChild(sprite);
-                    sprite->setPosition3D(Vec3(x, y, z));
-                    sprite->syncNodeToPhysics();
+                    auto mesh = PhysicsMeshRenderer::create("MeshRendererTest/sphere.c3b", &rbDes);
+                    mesh->setTexture("MeshRendererTest/plane.png");
+                    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+                    mesh->setScale(1.0f / mesh->getContentSize().width);
+                    this->addChild(mesh);
+                    mesh->setPosition3D(Vec3(x, y, z));
+                    mesh->syncNodeToPhysics();
 
-                    sprite->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);
+                    mesh->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);
                 }
             }
         }
@@ -370,11 +370,11 @@ bool Physics3DConstraintDemo::init()
     if (!Physics3DTestDemo::init())
         return false;
 
-    // PhysicsSprite3D = Sprite3D + Physics3DComponent
+    // PhysicsMeshRenderer = MeshRenderer + Physics3DComponent
     Physics3DRigidBodyDes rbDes;
     rbDes.disableSleep = true;
     // create box
-    auto sprite = Sprite3D::create("Sprite3DTest/orc.c3b");
+    auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
     rbDes.mass = 10.f;
     rbDes.shape = Physics3DShape::createBox(Vec3(5.0f, 5.0f, 5.0f));
     auto rigidBody = Physics3DRigidBody::create(&rbDes);
@@ -382,11 +382,11 @@ bool Physics3DConstraintDemo::init()
     Quaternion::createFromAxisAngle(Vec3(0.f, 1.f, 0.f), CC_DEGREES_TO_RADIANS(180), &quat);
     auto component = Physics3DComponent::create(rigidBody, Vec3(0.f, -3.f, 0.f), quat);
 
-    sprite->addComponent(component);
-    addChild(sprite);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    sprite->setScale(0.4f);
-    sprite->setPosition3D(Vec3(-20.f, 5.f, 0.f));
+    mesh->addComponent(component);
+    addChild(mesh);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    mesh->setScale(0.4f);
+    mesh->setPosition3D(Vec3(-20.f, 5.f, 0.f));
     // sync node position to physics
     component->syncNodeToPhysics();
     // physics controlled, we will not set position for it, so we can skip sync node position to physics
@@ -403,14 +403,14 @@ bool Physics3DConstraintDemo::init()
     rbDes.shape = Physics3DShape::createBox(Vec3(8.0f, 8.0f, 1.f));
     rigidBody = Physics3DRigidBody::create(&rbDes);
     component = Physics3DComponent::create(rigidBody);
-    sprite = Sprite3D::create("Sprite3DTest/box.c3t");
-    sprite->setTexture("Sprite3DTest/plane.png");
-    sprite->setScaleX(8.f);
-    sprite->setScaleY(8.f);
-    sprite->setPosition3D(Vec3(5.f, 0.f, 0.f));
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    this->addChild(sprite);
+    mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
+    mesh->setTexture("MeshRendererTest/plane.png");
+    mesh->setScaleX(8.f);
+    mesh->setScaleY(8.f);
+    mesh->setPosition3D(Vec3(5.f, 0.f, 0.f));
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    this->addChild(mesh);
     component->syncNodeToPhysics();
     rigidBody->setAngularVelocity(Vec3(0, 3, 0));
     constraint = Physics3DHingeConstraint::create(rigidBody, Vec3(4.f, 4.f, 0.5f), Vec3(0.f, 1.f, 0.f));
@@ -421,14 +421,14 @@ bool Physics3DConstraintDemo::init()
     rbDes.shape = Physics3DShape::createBox(Vec3(3.0f, 2.0f, 3.f));
     rigidBody = Physics3DRigidBody::create(&rbDes);
     component = Physics3DComponent::create(rigidBody);
-    sprite = Sprite3D::create("Sprite3DTest/box.c3t");
-    sprite->setTexture("Sprite3DTest/plane.png");
-    sprite->setScaleX(3.f);
-    sprite->setScaleZ(3.f);
-    sprite->setPosition3D(Vec3(30.f, 15.f, 0.f));
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    this->addChild(sprite);
+    mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
+    mesh->setTexture("MeshRendererTest/plane.png");
+    mesh->setScaleX(3.f);
+    mesh->setScaleZ(3.f);
+    mesh->setPosition3D(Vec3(30.f, 15.f, 0.f));
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    this->addChild(mesh);
     component->syncNodeToPhysics();
     rigidBody->setLinearVelocity(Vec3(0, 3, 0));
 
@@ -436,13 +436,13 @@ bool Physics3DConstraintDemo::init()
     rbDes.shape = Physics3DShape::createBox(Vec3(3.0f, 3.0f, 3.f));
     auto rigidBodyB = Physics3DRigidBody::create(&rbDes);
     component = Physics3DComponent::create(rigidBodyB);
-    sprite = Sprite3D::create("Sprite3DTest/box.c3t");
-    sprite->setTexture("Sprite3DTest/plane.png");
-    sprite->setScale(3.f);
-    sprite->setPosition3D(Vec3(30.f, 5.f, 0.f));
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    this->addChild(sprite);
+    mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
+    mesh->setTexture("MeshRendererTest/plane.png");
+    mesh->setScale(3.f);
+    mesh->setPosition3D(Vec3(30.f, 5.f, 0.f));
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    this->addChild(mesh);
     component->syncNodeToPhysics();
 
     Mat4 frameInA, frameInB;
@@ -460,13 +460,13 @@ bool Physics3DConstraintDemo::init()
     rbDes.shape = Physics3DShape::createBox(Vec3(3.f, 3.f, 3.f));
     rigidBody = Physics3DRigidBody::create(&rbDes);
     component = Physics3DComponent::create(rigidBody);
-    sprite = Sprite3D::create("Sprite3DTest/box.c3t");
-    sprite->setTexture("Sprite3DTest/plane.png");
-    sprite->setScale(3.f);
-    sprite->setPosition3D(Vec3(-10.f, 5.f, 0.f));
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    this->addChild(sprite);
+    mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
+    mesh->setTexture("MeshRendererTest/plane.png");
+    mesh->setScale(3.f);
+    mesh->setPosition3D(Vec3(-10.f, 5.f, 0.f));
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    this->addChild(mesh);
     component->syncNodeToPhysics();
 
     Mat4::createRotationZ(CC_DEGREES_TO_RADIANS(90), &frameInA);
@@ -483,13 +483,13 @@ bool Physics3DConstraintDemo::init()
     rbDes.shape = Physics3DShape::createBox(Vec3(3.0f, 3.0f, 3.f));
     rigidBody = Physics3DRigidBody::create(&rbDes);
     component = Physics3DComponent::create(rigidBody);
-    sprite = Sprite3D::create("Sprite3DTest/box.c3t");
-    sprite->setTexture("Sprite3DTest/plane.png");
-    sprite->setScale(3.f);
-    sprite->setPosition3D(Vec3(30.f, -5.f, 0.f));
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    this->addChild(sprite);
+    mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
+    mesh->setTexture("MeshRendererTest/plane.png");
+    mesh->setScale(3.f);
+    mesh->setPosition3D(Vec3(30.f, -5.f, 0.f));
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    this->addChild(mesh);
     component->syncNodeToPhysics();
     frameInA.setIdentity();
     constraint = Physics3D6DofConstraint::create(rigidBody, frameInA, false);
@@ -617,30 +617,30 @@ bool Physics3DTerrainDemo::init()
                 float y = 5.0 + 1.0 * k + start_y;
                 float z = 1.0 * j + start_z;
 
-                auto sprite = PhysicsSprite3D::create("Sprite3DTest/sphere.c3b", &rbDes);
-                sprite->setTexture("Sprite3DTest/plane.png");
-                sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-                sprite->setScale(1.0f / sprite->getContentSize().width);
-                sprite->setPosition3D(Vec3(x, y, z));
-                this->addChild(sprite);
-                sprite->syncNodeToPhysics();
-                sprite->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);
+                auto mesh = PhysicsMeshRenderer::create("MeshRendererTest/sphere.c3b", &rbDes);
+                mesh->setTexture("MeshRendererTest/plane.png");
+                mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+                mesh->setScale(1.0f / mesh->getContentSize().width);
+                mesh->setPosition3D(Vec3(x, y, z));
+                this->addChild(mesh);
+                mesh->syncNodeToPhysics();
+                mesh->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::PHYSICS_TO_NODE);
             }
         }
     }
 
     // create mesh
-    std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("Sprite3DTest/boss.c3b");
+    std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("MeshRendererTest/boss.c3b");
 
     colliderDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
 
-    auto sprite = PhysicsSprite3D::createWithCollider("Sprite3DTest/boss.c3b", &colliderDes);
-    sprite->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
-    sprite->setPosition3D(Vec3(0.0f, 15.0f, 0.0f));
-    sprite->setCameraMask(2);
-    this->addChild(sprite);
-    sprite->syncNodeToPhysics();
-    sprite->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::NONE);
+    auto mesh = PhysicsMeshRenderer::createWithCollider("MeshRendererTest/boss.c3b", &colliderDes);
+    mesh->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
+    mesh->setPosition3D(Vec3(0.0f, 15.0f, 0.0f));
+    mesh->setCameraMask(2);
+    this->addChild(mesh);
+    mesh->syncNodeToPhysics();
+    mesh->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::NONE);
 
     std::vector<std::pair<Physics3DShape*, Mat4>> shapeList;
     {
@@ -668,13 +668,13 @@ bool Physics3DTerrainDemo::init()
         rbDes.shape = Physics3DShape::createCompoundShape(shapeList);
         auto rigidBody = Physics3DRigidBody::create(&rbDes);
         component = Physics3DComponent::create(rigidBody);
-        auto sprite = Sprite3D::create("Sprite3DTest/orc.c3b");
-        sprite->addComponent(component);
-        sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-        sprite->setPosition3D(Vec3(-5.0f, 20.0f, 0.0f));
-        sprite->setScale(0.4f);
-        sprite->setCameraMask(2);
-        this->addChild(sprite);
+        auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3b");
+        mesh->addComponent(component);
+        mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
+        mesh->setPosition3D(Vec3(-5.0f, 20.0f, 0.0f));
+        mesh->setScale(0.4f);
+        mesh->setCameraMask(2);
+        this->addChild(mesh);
     }
 
     physicsScene->setPhysics3DDebugCamera(_camera);
@@ -700,7 +700,7 @@ bool Physics3DCollisionCallbackDemo::init()
         Physics3DRigidBodyDes rbDes;
 
         float scale = 2.0f;
-        std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("Sprite3DTest/boss.c3b");
+        std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("MeshRendererTest/boss.c3b");
         for (auto& it : trianglesList)
         {
             it *= scale;
@@ -710,12 +710,12 @@ bool Physics3DCollisionCallbackDemo::init()
         rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
         auto rigidBody = Physics3DRigidBody::create(&rbDes);
         auto component = Physics3DComponent::create(rigidBody);
-        auto sprite = Sprite3D::create("Sprite3DTest/boss.c3b");
-        sprite->addComponent(component);
-        sprite->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
-        sprite->setScale(scale);
-        sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-        this->addChild(sprite);
+        auto mesh = MeshRenderer::create("MeshRendererTest/boss.c3b");
+        mesh->addComponent(component);
+        mesh->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
+        mesh->setScale(scale);
+        mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+        this->addChild(mesh);
         // preload
         //
         rigidBody->setCollisionCallback([=](const Physics3DCollisionInfo& ci) {
@@ -766,15 +766,15 @@ bool Physics3DColliderDemo::init()
     auto playerBody = Physics3DRigidBody::create(&rbDes);
     auto component = Physics3DComponent::create(playerBody);
     playerBody->setKinematic(true);
-    auto sprite = Sprite3D::create("Sprite3DTest/box.c3t");
-    sprite->setTexture("Sprite3DTest/plane.png");
-    sprite->setScale(3.f);
-    sprite->setPosition3D(Vec3(0.0f, 0.f, 30.f));
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
+    auto mesh = MeshRenderer::create("MeshRendererTest/box.c3t");
+    mesh->setTexture("MeshRendererTest/plane.png");
+    mesh->setScale(3.f);
+    mesh->setPosition3D(Vec3(0.0f, 0.f, 30.f));
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
     auto moveby = MoveBy::create(5.0f, Vec3(0.0f, 0.0f, -60.0f));
-    sprite->runAction(RepeatForever::create(Sequence::create(moveby, moveby->reverse(), nullptr)));
-    this->addChild(sprite);
+    mesh->runAction(RepeatForever::create(Sequence::create(moveby, moveby->reverse(), nullptr)));
+    this->addChild(mesh);
 
     {
         Physics3DColliderDes colliderDes;
@@ -793,8 +793,8 @@ bool Physics3DColliderDemo::init()
         auto rigidBody = Physics3DRigidBody::create(&rbDes);
         component = Physics3DComponent::create(rigidBody);
         rigidBody->setKinematic(true);
-        auto doorLeft = Sprite3D::create("Sprite3DTest/box.c3t");
-        doorLeft->setTexture("Sprite3DTest/plane.png");
+        auto doorLeft = MeshRenderer::create("MeshRendererTest/box.c3t");
+        doorLeft->setTexture("MeshRendererTest/plane.png");
         doorLeft->setScaleX(10.0f);
         doorLeft->setScaleY(10.0f);
         doorLeft->setScaleZ(1.0f);
@@ -808,8 +808,8 @@ bool Physics3DColliderDemo::init()
         rigidBody = Physics3DRigidBody::create(&rbDes);
         component = Physics3DComponent::create(rigidBody);
         rigidBody->setKinematic(true);
-        auto doorRight = Sprite3D::create("Sprite3DTest/box.c3t");
-        doorRight->setTexture("Sprite3DTest/plane.png");
+        auto doorRight = MeshRenderer::create("MeshRendererTest/box.c3t");
+        doorRight->setTexture("MeshRendererTest/plane.png");
         doorRight->setScaleX(10.0f);
         doorRight->setScaleY(10.0f);
         doorRight->setScaleZ(1.0f);

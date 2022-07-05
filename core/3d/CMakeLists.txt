@@ -2,7 +2,6 @@ set(COCOS_3D_HEADER
 
     3d/CCBillBoard.h
     3d/CCFrustum.h
-    3d/CCSprite3DMaterial.h
     3d/CCMeshVertexIndexData.h
     3d/CCPlane.h
     3d/CCRay.h
@@ -10,7 +9,8 @@ set(COCOS_3D_HEADER
     3d/CCAnimate3D.h
     3d/CCTerrain.h
     3d/CCAnimationCurve.h
-    3d/CCSprite3D.h
+    3d/CCMeshRenderer.h
+    3d/CCMeshMaterial.h
     3d/CCOBB.h
     3d/CCAnimation3D.h
     3d/CCMotionStreak3D.h
@@ -49,8 +49,8 @@ set(COCOS_3D_SRC
     3d/CCRay.cpp
     3d/CCSkeleton3D.cpp
     3d/CCSkybox.cpp
-    3d/CCSprite3D.cpp
-    3d/CCSprite3DMaterial.cpp
+    3d/CCMeshRenderer.cpp
+    3d/CCMeshMaterial.cpp
     3d/CCTerrain.cpp
     3d/CCVertexAttribBinding.cpp
     3d/CC3DProgramInfo.cpp

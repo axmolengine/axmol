@@ -24,7 +24,7 @@
 #include "WidgetReader/ListViewReader/ListViewReader.h"
 #include "WidgetReader/ArmatureNodeReader/ArmatureNodeReader.h"
 #include "WidgetReader/Node3DReader/Node3DReader.h"
-#include "WidgetReader/Sprite3DReader/Sprite3DReader.h"
+#include "WidgetReader/MeshReader/MeshReader.h"
 #include "WidgetReader/UserCameraReader/UserCameraReader.h"
 #include "WidgetReader/Particle3DReader/Particle3DReader.h"
 
@@ -57,7 +57,7 @@ void destroyCocosStudio()
 
     ArmatureNodeReader::destroyInstance();
     Node3DReader::destroyInstance();
-    Sprite3DReader::destroyInstance();
+    MeshReader::destroyInstance();
     UserCameraReader::destroyInstance();
     Particle3DReader::destroyInstance();
 

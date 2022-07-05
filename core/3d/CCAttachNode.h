@@ -38,9 +38,9 @@ class Bone3D;
 
 /**
  * @brief attach a node to a bone
- * usage: auto sprite = Sprite3D::create("girl.c3b");
- *        auto weapon = Sprite3D::create("weapon.c3b");
- *        auto attachNode = sprite->getAttachNode("left hand");
+ * usage: auto mesh = MeshRenderer::create("girl.c3b");
+ *        auto weapon = MeshRenderer::create("weapon.c3b");
+ *        auto attachNode = mesh->getAttachNode("left hand");
  *        attachNode->addChild(weapon);
  */
 class CC_DLL AttachNode : public Node
