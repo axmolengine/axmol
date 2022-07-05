@@ -27,29 +27,29 @@
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "3d/CCBundle3D.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCTerrain.h"
 
-int lua_cocos2dx_3d_Sprite3D_getAABB(lua_State* L)
+int lua_cocos2dx_3d_MeshRenderer_getAABB(lua_State* L)
 {
     int argc                = 0;
-    cocos2d::Sprite3D* cobj = nullptr;
+    cocos2d::MeshRenderer* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L, 1, "cc.Sprite3D", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "cc.MeshRenderer", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Sprite3D*)tolua_tousertype(L, 1, 0);
+    cobj = (cocos2d::MeshRenderer*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_3d_Sprite3D_getAABB'", nullptr);
+        tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_3d_MeshRenderer_getAABB'", nullptr);
         return 0;
     }
 #endif
@@ -61,17 +61,17 @@ int lua_cocos2dx_3d_Sprite3D_getAABB(lua_State* L)
         object_to_luaval<cocos2d::AABB>(L, "cc.AABB", (cocos2d::AABB*)ret);
         return 1;
     }
-    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Sprite3D:getAABB", argc, 0);
+    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.MeshRenderer:getAABB", argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'lua_cocos2dx_3d_Sprite3D_getAABB'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_3d_MeshRenderer_getAABB'.", &tolua_err);
 #endif
     return 0;
 }
 
-int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
+int lua_cocos2dx_3d_MeshRenderer_createAsync(lua_State* L)
 {
     int argc = 0;
     bool ok  = true;
@@ -80,7 +80,7 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(L, 1, "cc.Sprite3D", 0, &tolua_err))
+    if (!tolua_isusertable(L, 1, "cc.MeshRenderer", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -91,11 +91,11 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
         if (argc == 3)
         {
             std::string modelPath;
-            ok &= luaval_to_std_string(L, 2, &modelPath, "cc.Sprite3D:createAsync");
+            ok &= luaval_to_std_string(L, 2, &modelPath, "cc.MeshRenderer:createAsync");
             if (!ok)
                 break;
             std::string texturePath;
-            ok &= luaval_to_std_string(L, 3, &texturePath, "cc.Sprite3D:createAsync");
+            ok &= luaval_to_std_string(L, 3, &texturePath, "cc.MeshRenderer:createAsync");
             if (!ok)
                 break;
 
@@ -107,13 +107,13 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L, 4, 0);
 
-            cocos2d::Sprite3D::createAsync(
+            cocos2d::MeshRenderer::createAsync(
                 modelPath, texturePath,
-                [=](cocos2d::Sprite3D* sprite, void* callbackparam) {
+                [=](cocos2d::MeshRenderer* sprite, void* callbackparam) {
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (sprite) ? (int)sprite->_ID : -1;
                     int* luaID = (sprite) ? &sprite->_luaID : nullptr;
-                    toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)sprite, "cc.Sprite3D");
+                    toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)sprite, "cc.MeshRenderer");
                     stack->executeFunctionByHandler(handler, 1);
                 },
                 nullptr);
@@ -128,7 +128,7 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
         if (argc == 2)
         {
             std::string modelPath;
-            ok &= luaval_to_std_string(L, 2, &modelPath, "cc.Sprite3D:createAsync");
+            ok &= luaval_to_std_string(L, 2, &modelPath, "cc.MeshRenderer:createAsync");
             if (!ok)
                 break;
 
@@ -140,13 +140,13 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L, 3, 0);
 
-            cocos2d::Sprite3D::createAsync(
+            cocos2d::MeshRenderer::createAsync(
                 modelPath,
-                [=](cocos2d::Sprite3D* sprite, void* callbackparam) {
+                [=](cocos2d::MeshRenderer* sprite, void* callbackparam) {
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (sprite) ? (int)sprite->_ID : -1;
                     int* luaID = (sprite) ? &sprite->_luaID : nullptr;
-                    toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)sprite, "cc.Sprite3D");
+                    toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)sprite, "cc.MeshRenderer");
                     stack->executeFunctionByHandler(handler, 1);
                 },
                 nullptr);
@@ -156,23 +156,23 @@ int lua_cocos2dx_3d_Sprite3D_createAsync(lua_State* L)
         }
     } while (0);
     ok = true;
-    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d", "cc.Sprite3D:createAsync", argc, 3);
+    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d", "cc.MeshRenderer:createAsync", argc, 3);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'lua_cocos2dx_3d_Sprite3D_createAsync'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_3d_MeshRenderer_createAsync'.", &tolua_err);
 #endif
     return 0;
 }
 
-static void extendSprite3D(lua_State* L)
+static void extendMeshRenderer(lua_State* L)
 {
-    lua_pushstring(L, "cc.Sprite3D");
+    lua_pushstring(L, "cc.MeshRenderer");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "getAABB", lua_cocos2dx_3d_Sprite3D_getAABB);
-        tolua_function(L, "createAsync", lua_cocos2dx_3d_Sprite3D_createAsync);
+        tolua_function(L, "getAABB", lua_cocos2dx_3d_MeshRenderer_getAABB);
+        tolua_function(L, "createAsync", lua_cocos2dx_3d_MeshRenderer_createAsync);
     }
     lua_pop(L, 1);
 }
@@ -656,7 +656,7 @@ static int register_all_cocos2dx_3d_manual(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    extendSprite3D(L);
+    extendMeshRenderer(L);
     extendTerrain(L);
     extendBundle3D(L);
     return 0;
