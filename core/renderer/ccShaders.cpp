@@ -73,4 +73,7 @@ NS_CC_BEGIN
 #include "renderer/shaders/hsv.frag"
 #include "renderer/shaders/dualSampler_hsv.frag"
 
+#include "renderer/shaders/quad.vert"
+#include "renderer/shaders/quad.frag"
+
 NS_CC_END
