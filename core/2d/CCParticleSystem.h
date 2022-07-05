@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "base/CCValue.h"
 #include "2d/CCSpriteFrame.h"
 #include "2d/CCSpriteFrameCache.h"
-#include "math/FastRNG.h"
+#include "math/RngSeed.hpp"
 
 NS_CC_BEGIN
 
@@ -1681,7 +1681,7 @@ protected:
 
     static Vector<ParticleSystem*> __allInstances;
 
-    FastRNG _rng;
+    RngSeed _rng;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystem);
