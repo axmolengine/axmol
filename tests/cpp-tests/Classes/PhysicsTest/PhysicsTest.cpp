@@ -1750,6 +1750,11 @@ void PhysicsDemoBug5482::changeBodyCallback(Ref* /*sender*/)
     {
         _body->getOwner()->removeComponent(_body);
     }
+	
+	// very important to have always _body and sprite in sync (Fix: #712)
+    float rot = node->getRotation();
+    node->setRotation(node->getRotation() - rot); 
+	
     node->addComponent(_body);
     _bodyInA = !_bodyInA;
 }
