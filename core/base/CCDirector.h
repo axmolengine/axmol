@@ -144,9 +144,9 @@ public:
     void setAnimationInterval(float interval);
 
     /** Whether the FPS on the bottom-left corner of the screen is displayed or not. */
-    bool isStatsDisplay() { return _displayStats; }
+    bool isStatsDisplay() { return _statsDisplay; }
     /** Display the FPS on the bottom-left corner of the screen. */
-    void setStatsDisplay(bool displayStats) { _displayStats = displayStats; }
+    void setStatsDisplay(bool displayStats) { _statsDisplay = displayStats; }
 
     /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
@@ -582,7 +582,7 @@ protected:
     float _animationInterval    = 0.0f;
     float _oldAnimationInterval = 0.0f;
 
-    bool _displayStats = false;
+    bool _statsDisplay = false;
     float _accumDt     = 0.0f;
     float _frameRate   = 0.0f;
 
