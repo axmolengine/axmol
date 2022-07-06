@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
   <Type Name="yasio::basic_byte_buffer&lt;*&gt;">
-    <DisplayString>{{ size={_Mylast - _Myfirst} }}</DisplayString>
+    <DisplayString>{{ size={_Mylast - _Myfirst} {_Myfirst,[_Mylast - _Myfirst]s8} }}</DisplayString>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
       <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>

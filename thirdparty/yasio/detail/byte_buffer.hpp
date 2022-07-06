@@ -55,10 +55,12 @@ class basic_byte_buffer {
                 "The basic_byte_buffer only accept type which is char or unsigned char!");
 
 public:
-  using pointer       = _Elem*;
-  using const_pointer = const _Elem*;
-  using size_type     = size_t;
-  using value_type    = _Elem;
+  using pointer        = _Elem*;
+  using const_pointer  = const _Elem*;
+  using size_type      = size_t;
+  using value_type     = _Elem;
+  using iterator       = _Elem*;
+  using const_iterator = const _Elem*;
   basic_byte_buffer() {}
   explicit basic_byte_buffer(size_t count) { resize(count); }
   basic_byte_buffer(size_t count, std::true_type /*fit*/) { resize_fit(count); }
@@ -98,6 +100,16 @@ public:
     this->swap(rhs);
     return *this;
   }
+  template <typename _Cont>
+  basic_byte_buffer& operator+=(const _Cont& rhs)
+  {
+    return this->append(std::begin(rhs), std::end(rhs));
+  }
+  basic_byte_buffer& operator+=(const _Elem& rhs)
+  {
+    this->push_back(rhs);
+    return *this;
+  }
   template <typename _Iter>
   void assign(const _Iter first, const _Iter last)
   {
@@ -134,7 +146,7 @@ public:
     insert((std::min)(_Myfirst + offset, _Mylast), first, last);
   }
   template <typename _Iter>
-  void insert(_Elem* where, _Iter first, const _Iter last)
+  void insert(iterator where, _Iter first, const _Iter last)
   {
     if (where == _Mylast)
       append(first, last);
@@ -154,24 +166,32 @@ public:
     }
   }
   template <typename _Iter>
-  void append(_Iter first, const _Iter last)
+  basic_byte_buffer& append(_Iter first, const _Iter last)
   {
-    append_n(first, std::distance(first, last));
+    return append_n(first, std::distance(first, last));
   }
   template <typename _Iter>
-  void append_n(_Iter first, ptrdiff_t count)
+  basic_byte_buffer& append_n(_Iter first, ptrdiff_t count)
   {
-    if (count > 0)
+    if (count > 1)
     {
       auto old_size = _Mylast - _Myfirst;
       resize(old_size + count);
       std::copy_n(first, count, _Myfirst + old_size);
     }
+    else if (count == 1)
+      push_back(static_cast<_Elem>(*first));
+    return *this;
   }
   void push_back(_Elem v)
   {
     resize(this->size() + 1);
     *(_Mylast - 1) = v;
+  }
+  void erase(iterator first, iterator last)
+  {
+    _Verify_range(first, last);
+    _Mylast = std::move(last, _Mylast, first);
   }
   _Elem& front()
   {
@@ -186,10 +206,10 @@ public:
     throw std::out_of_range("byte_buffer: out of range!");
   }
   static constexpr size_t max_size() noexcept { return (std::numeric_limits<ptrdiff_t>::max)(); }
-  _Elem* begin() noexcept { return _Myfirst; }
-  _Elem* end() noexcept { return _Mylast; }
-  const _Elem* begin() const noexcept { return _Myfirst; }
-  const _Elem* end() const noexcept { return _Mylast; }
+  iterator begin() noexcept { return _Myfirst; }
+  iterator end() noexcept { return _Mylast; }
+  const_iterator begin() const noexcept { return _Myfirst; }
+  const_iterator end() const noexcept { return _Mylast; }
   pointer data() noexcept { return _Myfirst; }
   const_pointer data() const noexcept { return _Myfirst; }
   size_t capacity() const noexcept { return _Myend - _Myfirst; }
@@ -253,6 +273,18 @@ public:
       return _Myfirst[index];
     throw std::out_of_range("byte_buffer: out of range!");
   }
+  const _Elem& at(size_t index) const
+  {
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
+  }
+  _Elem& at(size_t index)
+  {
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
+  }
   void attach(void* ptr, size_t len) noexcept
   {
     if (ptr)
@@ -301,6 +333,12 @@ private:
     }
     else
       throw std::bad_alloc{};
+  }
+  void _Verify_range(iterator first, iterator last)
+  {
+    auto expr = (first <= last) && first >= _Myfirst && last <= _Mylast;
+    if (!expr)
+      throw std::out_of_range("byte_buffer: out of range!");
   }
   _Elem* _Myfirst = nullptr;
   _Elem* _Mylast  = nullptr;
