@@ -130,7 +130,7 @@ private:
 
     std::vector<std::string> _skins[(int)SkinType::MAX_TYPE];  // all skins
     int _curSkin[(int)SkinType::MAX_TYPE];                     // current skin index
-    cocos2d::Sprite3D* _reskinGirl;
+    cocos2d::MeshRenderer* _reskinGirl;
 
     // for capture screen
     static const int SNAPSHOT_TAG = 119;
@@ -364,13 +364,13 @@ void Scene3DTestScene::createWorld3D()
 {
     // create skybox
     // create and set our custom shader
-    auto shader = GLProgram::createWithFilenames("Sprite3DTest/cube_map.vert", "Sprite3DTest/cube_map.frag");
+    auto shader = GLProgram::createWithFilenames("MeshRendererTest/cube_map.vert", "MeshRendererTest/cube_map.frag");
     auto state  = GLProgramState::create(shader);
 
     // create the second texture for cylinder
-    _textureCube = TextureCube::create("Sprite3DTest/skybox/left.jpg", "Sprite3DTest/skybox/right.jpg",
-                                       "Sprite3DTest/skybox/top.jpg", "Sprite3DTest/skybox/bottom.jpg",
-                                       "Sprite3DTest/skybox/front.jpg", "Sprite3DTest/skybox/back.jpg");
+    _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
+                                       "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
+                                       "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
     // set texture parameters
     Texture2D::TexParams tRepeatParams;
     tRepeatParams.magFilter    = GL_LINEAR;
@@ -402,11 +402,11 @@ void Scene3DTestScene::createWorld3D()
     _terrain->setLODDistance(64, 128, 192);
 
     // create player
-    _player = Player::create("Sprite3DTest/girl.c3b", _gameCameras[CAMERA_WORLD_3D_SCENE], _terrain);
+    _player = Player::create("MeshRendererTest/girl.c3b", _gameCameras[CAMERA_WORLD_3D_SCENE], _terrain);
     _player->setScale(0.08f);
     _player->setPositionY(_terrain->getHeight(_player->getPositionX(), _player->getPositionZ()));
 
-    auto animation = Animation3D::create("Sprite3DTest/girl.c3b", "Take 001");
+    auto animation = Animation3D::create("MeshRendererTest/girl.c3b", "Take 001");
     if (animation)
     {
         auto animate = Animate3D::create(animation);
@@ -429,13 +429,13 @@ void Scene3DTestScene::createWorld3D()
     billboard->setPosition3D(Vec3(0, 180, 0));
     _player->addChild(billboard);
 
-    // create two Sprite3D monster, one is transparent
-    auto monster = Sprite3D::create("Sprite3DTest/orc.c3b");
+    // create two MeshRenderer monster, one is transparent
+    auto monster = MeshRenderer::create("MeshRendererTest/orc.c3b");
     monster->setRotation3D(Vec3(0, 180, 0));
     monster->setPosition3D(_player->getPosition3D() + Vec3(50, -10, 0));
     monster->setOpacity(128);
     _monsters[0] = monster;
-    monster      = Sprite3D::create("Sprite3DTest/orc.c3b");
+    monster      = MeshRenderer::create("MeshRendererTest/orc.c3b");
     monster->setRotation3D(Vec3(0, 180, 0));
     monster->setPosition3D(_player->getPosition3D() + Vec3(-50, -5, 0));
     _monsters[1] = monster;
@@ -575,8 +575,8 @@ void Scene3DTestScene::createPlayerDlg()
     _playerDlg->addChild(item);
 
     // second, add 3d actor, which on dialog layer
-    std::string filename = "Sprite3DTest/girl.c3b";
-    auto girl            = Sprite3D::create(filename);
+    std::string filename = "MeshRendererTest/girl.c3b";
+    auto girl            = MeshRenderer::create(filename);
     girl->setScale(0.5);
     girl->setPosition(bgSize.width / 2, margin * 2);
     girl->setCameraMask(s_CM[LAYER_MIDDLE]);
@@ -741,9 +741,9 @@ void Scene3DTestScene::createDescDlg()
     _descDlg->addChild(text);
 
     // second, add a 3D model
-    std::string fileName = "Sprite3DTest/ReskinGirl.c3b";
+    std::string fileName = "MeshRendererTest/ReskinGirl.c3b";
     Vec2 girlPos(textPos.x + textSize.width - 40, margin);
-    _reskinGirl = Sprite3D::create(fileName);
+    _reskinGirl = MeshRenderer::create(fileName);
     _reskinGirl->setCameraMask(s_CM[LAYER_MIDDLE]);
     _reskinGirl->setScale(2.5);
     _reskinGirl->setPosition(girlPos);
