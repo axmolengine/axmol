@@ -95,7 +95,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   Build excecutable in a command line (e.g. cpp-tests):
     ```msbuild .\build\adxe.sln -target:cpp_tests -maxCpuCount```
     
-#### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
+### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 See [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 
 #### Android

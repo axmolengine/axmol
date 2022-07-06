@@ -51,6 +51,8 @@ const int PhysicsWorld::DEBUGDRAW_JOINT   = 0x02;
 const int PhysicsWorld::DEBUGDRAW_CONTACT = 0x04;
 const int PhysicsWorld::DEBUGDRAW_ALL     = DEBUGDRAW_SHAPE | DEBUGDRAW_JOINT | DEBUGDRAW_CONTACT;
 
+const float _debugDrawThickness = 0.5f; // thickness of the DebugDraw lines, circles, dots, polygons
+
 namespace
 {
 typedef struct RayCastCallbackInfo
@@ -236,7 +238,7 @@ static void DrawCircle(cpVect p,
         Vec2 d(radius * cosf(angle), radius * sinf(angle));
         seg[i] = centre + d;
     }
-    drawNode->drawPolygon(seg, CIRCLE_SEG_NUM, fillColor, 1, outlineColor);
+    drawNode->drawPolygon(seg, CIRCLE_SEG_NUM, fillColor, _debugDrawThickness, outlineColor);
 }
 
 static void DrawFatSegment(cpVect a,
@@ -249,7 +251,7 @@ static void DrawFatSegment(cpVect a,
     const Color4F outlineColor(outline.r, outline.g, outline.b, outline.a);
     DrawNode* drawNode = static_cast<DrawNode*>(data);
     drawNode->drawSegment(PhysicsHelper::cpv2vec2(a), PhysicsHelper::cpv2vec2(b),
-                          PhysicsHelper::cpfloat2float(r == 0 ? 1 : r), outlineColor);
+                          PhysicsHelper::cpfloat2float(r == 0 ? _debugDrawThickness : r), outlineColor);
 }
 
 static void DrawSegment(cpVect a, cpVect b, cpSpaceDebugColor color, cpDataPointer data)
@@ -272,7 +274,7 @@ static void DrawPolygon(int count,
     for (int i = 0; i < num; ++i)
         seg[i] = PhysicsHelper::cpv2vec2(verts[i]);
 
-    drawNode->drawPolygon(seg, num, fillColor, 1.0f, outlineColor);
+    drawNode->drawPolygon(seg, num, fillColor, _debugDrawThickness, outlineColor);
 
     delete[] seg;
 }
@@ -281,7 +283,7 @@ static void DrawDot(cpFloat /*size*/, cpVect pos, cpSpaceDebugColor color, cpDat
 {
     const Color4F dotColor(color.r, color.g, color.b, color.a);
     DrawNode* drawNode = static_cast<DrawNode*>(data);
-    drawNode->drawDot(PhysicsHelper::cpv2vec2(pos), 2, dotColor);
+    drawNode->drawDot(PhysicsHelper::cpv2vec2(pos), _debugDrawThickness, dotColor);
 }
 
 static cpSpaceDebugColor ColorForShape(cpShape* shape, cpDataPointer /*data*/)
