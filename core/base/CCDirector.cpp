@@ -197,7 +197,7 @@ void Director::setDefaultValues()
     _oldAnimationInterval = _animationInterval = 1.0f / fps;
 
     // Display FPS
-    _displayStats = conf->getValue("adxe.display_fps", Value(false)).asBool();
+    _statsDisplay = conf->getValue("adxe.display_fps", Value(false)).asBool();
 
     // GL projection
     std::string projection = conf->getValue("adxe.gl.projection", Value("3d")).asString();
@@ -306,7 +306,7 @@ void Director::drawScene()
 
     updateFrameRate();
 
-    if (_displayStats)
+    if (_statsDisplay)
     {
 #if !CC_STRIP_FPS
         showStats();
@@ -329,7 +329,7 @@ void Director::drawScene()
 
     _renderer->endFrame();
 
-    if (_displayStats)
+    if (_statsDisplay)
     {
 #if !CC_STRIP_FPS
         calculateMPF();
@@ -1187,7 +1187,7 @@ void Director::showStats()
     ++_frames;
     _accumDt += _deltaTime;
 
-    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
+    if (_statsDisplay && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
         char buffer[30] = {0};
 
@@ -1308,7 +1308,7 @@ void Director::createStatsLabel()
 
 void Director::setStatsAnchor(AnchorPreset anchor)
 {
-    if (!_displayStats)
+    if (!_statsDisplay)
         return;
     
     // Initialize stat counters
