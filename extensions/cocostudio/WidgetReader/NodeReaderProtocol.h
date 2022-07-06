@@ -107,7 +107,7 @@ namespace cocos2d
 // builtin ui predecl
 class Sprite;
 class Camera;
-class MeshRenderer;
+class Sprite3D;
 class PUParticleSystem3D;
 class ParticleSystemQuad;
 namespace ui
@@ -176,7 +176,7 @@ CCS_DLL extern cocos2d::Node* (*aNode3D)();
 CCS_DLL extern cocos2d::Node* (*aGameNode3D)();
 CCS_DLL extern cocos2d::Node* (*aLight3D)();
 CCS_DLL extern cocos2d::Camera* (*aCamera)();
-CCS_DLL extern cocos2d::MeshRenderer* (*aSprite3D)();
+CCS_DLL extern cocos2d::Sprite3D* (*aSprite3D)();
 CCS_DLL extern cocos2d::Node* (*aParticleSystem3D)();
 };  // namespace wext
 };  // namespace cocos2d

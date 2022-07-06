@@ -90,7 +90,7 @@ cocos2d::Node* (*aNode3D)();
 cocos2d::Node* (*aGameNode3D)();
 cocos2d::Node* (*aLight3D)();
 cocos2d::Camera* (*aCamera)();
-cocos2d::MeshRenderer* (*aSprite3D)();
+cocos2d::Sprite3D* (*aSprite3D)();
 cocos2d::Node* (*aParticleSystem3D)();
 
 void resetReaderAllHooks()
