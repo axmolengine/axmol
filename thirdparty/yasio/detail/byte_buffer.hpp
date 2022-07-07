@@ -46,8 +46,23 @@ The byte_buffer concepts:
 
 namespace yasio
 {
+#define _YASIO_VERIFY_RANGE(cond, mesg)                 \
+  do                                                    \
+  {                                                     \
+    if (cond)                                           \
+      ; /* contextually convertible to bool paranoia */ \
+    else                                                \
+    {                                                   \
+      throw std::out_of_range(mesg);                    \
+    }                                                   \
+                                                        \
+  } while (false)
+
 struct default_allocator {
-  static void* reallocate(void* old_block, size_t /*old_size*/, size_t new_size) { return ::realloc(old_block, new_size); }
+  static void* reallocate(void* old_block, size_t /*old_size*/, size_t new_size)
+  {
+    return ::realloc(old_block, new_size);
+  }
 };
 template <typename _Elem, typename _Alloc = default_allocator>
 class basic_byte_buffer {
@@ -77,7 +92,10 @@ public:
     assign(first, last, std::true_type{});
   }
   basic_byte_buffer(const basic_byte_buffer& rhs) { assign(rhs); };
-  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/) { assign(rhs, std::true_type{}); };
+  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/)
+  {
+    assign(rhs, std::true_type{});
+  };
   basic_byte_buffer(basic_byte_buffer&& rhs) noexcept { assign(std::move(rhs)); }
   template <typename _Ty>
   basic_byte_buffer(std::initializer_list<_Ty> rhs)
@@ -121,7 +139,10 @@ public:
     _Assign_range(first, last, std::true_type{});
   }
   void assign(const basic_byte_buffer& rhs) { _Assign_range(rhs.begin(), rhs.end()); }
-  void assign(const basic_byte_buffer& rhs, std::true_type) { _Assign_range(rhs.begin(), rhs.end(), std::true_type{}); }
+  void assign(const basic_byte_buffer& rhs, std::true_type)
+  {
+    _Assign_range(rhs.begin(), rhs.end(), std::true_type{});
+  }
   void assign(basic_byte_buffer&& rhs) { _Assign_rv(std::move(rhs)); }
   template <typename _Ty>
   void assign(std::initializer_list<_Ty> rhs)
@@ -141,29 +162,26 @@ public:
     memcpy(this, _Tmp, sizeof(_Tmp));
   }
   template <typename _Iter>
-  void insert(size_t offset, _Iter first, const _Iter last)
+  iterator insert(iterator _Where, _Iter first, const _Iter last)
   {
-    insert((std::min)(_Myfirst + offset, _Mylast), first, last);
-  }
-  template <typename _Iter>
-  void insert(iterator where, _Iter first, const _Iter last)
-  {
-    if (where == _Mylast)
+    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last,
+                        "byte_buffer: out of range!");
+    auto insertion_pos = std::distance(_Myfirst, _Where);
+    if (_Where == _Mylast)
       append(first, last);
     else
     {
-      auto count         = std::distance(first, last);
-      auto insertion_pos = where - _Myfirst;
+      auto count = std::distance(first, last);
       if (count > 0 && insertion_pos >= 0)
       {
         auto old_size = _Mylast - _Myfirst;
-        resize(old_size + count);
-        where        = _Myfirst + insertion_pos;
-        auto move_to = where + count;
-        std::copy_n(where, _Mylast - move_to, move_to);
-        std::copy_n(first, count, where);
+        _Where        = resize(old_size + count) + insertion_pos;
+        auto move_to  = _Where + count;
+        std::copy_n(_Where, _Mylast - move_to, move_to);
+        std::copy_n(first, count, _Where);
       }
     }
+    return _Myfirst + insertion_pos;
   }
   template <typename _Iter>
   basic_byte_buffer& append(_Iter first, const _Iter last)
@@ -188,22 +206,28 @@ public:
     resize(this->size() + 1);
     *(_Mylast - 1) = v;
   }
-  void erase(iterator first, iterator last)
+  iterator erase(iterator _Where)
   {
-    _Verify_range(first, last);
+    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where < _Mylast, "byte_buffer: out of range!");
+    _Mylast = std::move(_Where + 1, _Mylast, _Where);
+    return _Where;
+  }
+  iterator erase(iterator first, iterator last)
+  {
+    _YASIO_VERIFY_RANGE((first <= last) && first >= _Myfirst && last <= _Mylast,
+                        "byte_buffer: out of range!");
     _Mylast = std::move(last, _Mylast, first);
+    return first;
   }
   _Elem& front()
   {
-    if (!this->empty())
-      return *_Myfirst;
-    throw std::out_of_range("byte_buffer: out of range!");
+    _YASIO_VERIFY_RANGE(_Myfirst < _Mylast, "byte_buffer: out of range!");
+    return *_Myfirst;
   }
   _Elem& back()
   {
-    if (!this->empty())
-      return *(_Mylast - 1);
-    throw std::out_of_range("byte_buffer: out of range!");
+    _YASIO_VERIFY_RANGE(_Myfirst < _Mylast, "byte_buffer: out of range!");
+    return *(_Mylast - 1);
   }
   static constexpr size_t max_size() noexcept { return (std::numeric_limits<ptrdiff_t>::max)(); }
   iterator begin() noexcept { return _Myfirst; }
@@ -261,29 +285,17 @@ public:
       _Mylast = _Myfirst + cur_size;
     }
   }
-  const _Elem& operator[](size_t index) const
-  {
-    if (index < this->size())
-      return _Myfirst[index];
-    throw std::out_of_range("byte_buffer: out of range!");
-  }
-  _Elem& operator[](size_t index)
-  {
-    if (index < this->size())
-      return _Myfirst[index];
-    throw std::out_of_range("byte_buffer: out of range!");
-  }
+  const _Elem& operator[](size_t index) const { return this->at(index); }
+  _Elem& operator[](size_t index) { return this->at(index); }
   const _Elem& at(size_t index) const
   {
-    if (index < this->size())
-      return _Myfirst[index];
-    throw std::out_of_range("byte_buffer: out of range!");
+    _YASIO_VERIFY_RANGE(index < this->size(), "byte_buffer: out of range!");
+    return _Myfirst[index];
   }
   _Elem& at(size_t index)
   {
-    if (index < this->size())
-      return _Myfirst[index];
-    throw std::out_of_range("byte_buffer: out of range!");
+    _YASIO_VERIFY_RANGE(index < this->size(), "byte_buffer: out of range!");
+    return _Myfirst[index];
   }
   void attach(void* ptr, size_t len) noexcept
   {
@@ -333,12 +345,6 @@ private:
     }
     else
       throw std::bad_alloc{};
-  }
-  void _Verify_range(iterator first, iterator last)
-  {
-    auto expr = (first <= last) && first >= _Myfirst && last <= _Mylast;
-    if (!expr)
-      throw std::out_of_range("byte_buffer: out of range!");
   }
   _Elem* _Myfirst = nullptr;
   _Elem* _Mylast  = nullptr;
