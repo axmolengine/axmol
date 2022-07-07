@@ -61,9 +61,9 @@ void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
 
         if (logLength > 1)
         {
-            cocos2d::Data errorLog{};
-            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.resize(logLength));
-            cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.getBytes(),
+            yasio::sbyte_buffer errorLog{static_cast<size_t>(logLength), std::true_type{}};
+            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.data());
+            cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.data(),
                          source.data());
         }
         else
