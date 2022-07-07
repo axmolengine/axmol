@@ -1,26 +1,26 @@
-# axis
+# adxe
 
-[![dev](https://img.shields.io/github/v/release/axis-project/axis?include_prereleases&label=release)](https://github.com/axis-project/axis/releases)
-[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axis-project/axis/blob/master/LICENSE)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/axis-project/axis?utm_source=github.com&utm_medium=referral&utm_content=axis-project/axis&utm_campaign=Badge_Grade_Settings)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axis-project/axis/pulls)
+[![dev](https://img.shields.io/github/v/release/adxeproject/adxe?include_prereleases&label=release)](https://github.com/adxeproject/adxe/releases)
+[![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
   
-![issues](https://img.shields.io/github/issues/axis-project/axis?style=plastic)
-![forks](https://img.shields.io/github/forks/axis-project/axis?style=plastic)
-![stars](https://img.shields.io/github/stars/axis-project/axis?style=plastic)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axis-project/axis?style=plastic)  
+![issues](https://img.shields.io/github/issues/adxeproject/adxe?style=plastic)
+![forks](https://img.shields.io/github/forks/adxeproject/adxe?style=plastic)
+![stars](https://img.shields.io/github/stars/adxeproject/adxe?style=plastic)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/adxeproject/adxe?style=plastic)  
   
-[![Windows Build Status](https://github.com/axis-project/axis/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axis-project/axis/actions/workflows/windows-ci.yml)
-[![Android Build Status](https://github.com/axis-project/axis/workflows/android/badge.svg)](https://github.com/axis-project/axis/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/axis-project/axis/workflows/ios/badge.svg)](https://github.com/axis-project/axis/actions?query=workflow%3Aios)
-[![Linux Build Status](https://github.com/axis-project/axis/workflows/linux/badge.svg)](https://github.com/axis-project/axis/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/axis-project/axis/workflows/osx/badge.svg)](https://github.com/axis-project/axis/actions?query=workflow%3Aosx)  
+[![Windows Build Status](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/adxeproject/adxe/actions/workflows/windows-ci.yml)
+[![Android Build Status](https://github.com/adxeproject/adxe/workflows/android/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aandroid)
+[![iOS Build Status](https://github.com/adxeproject/adxe/workflows/ios/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aios)
+[![Linux Build Status](https://github.com/adxeproject/adxe/workflows/linux/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Alinux)
+[![macOS Build Status](https://github.com/adxeproject/adxe/workflows/osx/badge.svg)](https://github.com/adxeproject/adxe/actions?query=workflow%3Aosx)  
 
 **This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and more! (see 'Highlighted Features' for more info).**  
 
 ### View code with vscode online: 
-- [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/axis-project/axis)
-- [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axis-project/axis)
+- [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/adxeproject/adxe)
+- [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/adxeproject/adxe)
   
   
 **[简体中文](README_CN.md)**
@@ -31,13 +31,13 @@
 * Bugfixes ASAP
   
 ### Highlighted Features
-* Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axis-project/axis/issues/564)
+* Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
 * ['Upstream-Version-License'](thirdparty/README.md) 
-  * Third-party license overview for easier publishing of your commercial apps based on axis framework. 
-  * Some links to third party libs which support axis too.
+  * Third-party license overview for easier publishing of your commercial apps based on adxe. 
+  * Some links to third party libs which support adxe too.
   * Extensions having own license as part of there package.
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
@@ -66,7 +66,7 @@
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
-Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axis-project/axis/milestones) for planed features too.
+Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/adxeproject/adxe/milestones) for planed features too.
 
 ### Quick Start
 
@@ -74,7 +74,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   * Python-2.7.17+, Python-3.7+ 
 
 #### Prerequisites
-  1. Enter ```axis``` root directory
+  1. Enter ```adxe``` root directory
   2. Run ```python setup.py```, restart the console after it has finished for environment variables to take effect
 
 #### Windows (64/32 bit  Visual Studio 2019/2022)
@@ -82,7 +82,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   2. Install Visual Studio 2019/2022 (it's recommended that you only use these versions)  
   3. Execute the following commands in a command line (Console, Window Terminal or Powershell)
   
-     ```cd axis ```
+     ```cd adxe ```
      - for 32 bit Visual Studio 2019:
      ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
      - for 64 bit Visual Studio 2019:
@@ -93,15 +93,15 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
   
   Build excecutable in a command line (e.g. cpp-tests):
-    ```msbuild .\build\axis.sln -target:cpp_tests -maxCpuCount```
+    ```msbuild .\build\adxe.sln -target:cpp_tests -maxCpuCount```
     
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
-See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
+See [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 
 #### Android
   1. Install Android Studio 2021.1.1+
   2. When starting Android Studio for the first time, It will guide you to install the SDK and other tools, just install them
-  3. Start Android and choose [Open an existing Android Studio Project] and select ```axis\tests\cpp-tests\proj.android```
+  3. Start Android and choose [Open an existing Android Studio Project] and select ```adxe\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 29 r5  
      * Android SDK Build-Tools 29.0.2  
@@ -116,24 +116,24 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
      - for arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$axis_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$axis_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
      - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$axis_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
 
   4. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
      - **The code signing is required to run the ios app on your device, just change the bundle identifier until the auto manage signing is solved**  
-     - **axis only provides armv7, arm64, x86_64 prebuilt libraries for ios**
+     - **adxe only provides armv7, arm64, x86_64 prebuilt libraries for ios**
 
 ### New Project
-- Cpp: `axis new -p org.axis.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
-- Lua: `axis new -p org.axis.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
+- Cpp: `adxe new -p org.adxe.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
+- Lua: `adxe new -p org.adxe.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
 ### Notes
   * ThreadLocalStorage (TLS) 
-    - ios x86 simulator ios>=10 and axis no longer provide x86 libraries
+    - ios x86 simulator ios>=10 and adxe no longer provide x86 libraries
     - ios x64 or devices (armv7, arm64) ios sdk>=9.0
     - the 'OpenAL Soft' maintained by kcat uses TLS
 
@@ -141,9 +141,9 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
   * Official Cocos2d-x Repo: https://github.com/cocos2d/cocos2d-x
 
 ### Contributing guide
-https://github.com/axis-project/axis/discussions/411
+https://github.com/adxeproject/adxe/discussions/411
 
-### The axis Active Contributors
+### The adxe Active Contributors
 
 - @halx99
 - @rh101
