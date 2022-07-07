@@ -28,9 +28,9 @@ COCOS2D_X = os.path.abspath(os.path.join(DIR_PATH, "../.."))
 ROOT_DIR = os.path.abspath(os.path.join(COCOS2D_X, ".."))
 
 # cmdlinetools download page: https://developer.android.com/studio#command-tools
-# commandlinetools-linux-8092744_latest.zip
-CMDLINETOOLS_REV = "8092744"
-NDK_VER = "19.2.5345600" # "r19c"
+# commandlinetools-win-8512546_latest.zip
+CMDLINETOOLS_REV = "8512546"
+NDK_VER = "23.2.8568313" # "r23c LTS"
 
 # ANDROID_NDK = os.path.join(ROOT_DIR, "android-ndk-" + NDK_VER)
 ANDROID_SDK = os.path.join(ROOT_DIR, "android-sdk")
@@ -115,16 +115,12 @@ def install_android_sdk():
 def export_environment(ndk_only):
     with open(os.path.join(ROOT_DIR, "environment.sh"), "a") as myfile:
         if not ndk_only:
-            myfile.write("export ANDROID_HOME=" + ANDROID_SDK + "\n")
-            myfile.write("export ANDROID_SDK_ROOT=" + ANDROID_SDK + "\n")
-        myfile.write("export ANDROID_NDK_HOME=" + ANDROID_NDK + "\n")
+            myfile.write("export ANDROID_SDK=" + ANDROID_SDK + "\n")
         myfile.write("export ANDROID_NDK=" + ANDROID_NDK + "\n")
 
     with open(os.path.join(ROOT_DIR, "environment.ps1"), "a") as myfile:
         if not ndk_only:
-            myfile.write("$env:ANDROID_HOME=\"" + ANDROID_SDK + "\"\n")
-            myfile.write("$env:ANDROID_SDK_ROOT=\"" + ANDROID_SDK + "\"\n")
-        myfile.write("$env:ANDROID_NDK_HOME=\"" + ANDROID_NDK + "\"\n")
+            myfile.write("$env:ANDROID_SDK=\"" + ANDROID_SDK + "\"\n")
         myfile.write("$env:ANDROID_NDK=\"" + ANDROID_NDK + "\"\n")
 
 def main(ndk_only):

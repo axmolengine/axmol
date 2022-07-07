@@ -1,6 +1,6 @@
 # adxe
 
-[![dev](https://img.shields.io/badge/v1.0.0-beta6-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/github/v/release/adxeproject/adxe?include_prereleases&label=release)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
@@ -35,7 +35,10 @@
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
-* **clearer third-party libs ['Upstream-Version-License'](thirdparty/README.md) for easier publishing of your commercial apps based on adxe. Also some links to third party libs which support adxe too.**
+* ['Upstream-Version-License'](thirdparty/README.md) 
+  * Third-party license overview for easier publishing of your commercial apps based on adxe. 
+  * Some links to third party libs which support adxe too.
+  * Extensions having own license as part of there package.
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even though it was marked as deprecated, but still available.
@@ -91,6 +94,9 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   
   Build excecutable in a command line (e.g. cpp-tests):
     ```msbuild .\build\adxe.sln -target:cpp_tests -maxCpuCount```
+    
+#### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
+See [windows workflow guide](https://github.com/adxeproject/adxe/issues/564)
 
 #### Android
   1. Install Android Studio 2021.1.1+
@@ -99,18 +105,16 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 29 r5  
      * Android SDK Build-Tools 29.0.2  
-     * NDK r19c+  
+     * NDK r23c+  
      * CMake 3.10+  
   5. Wait for ```Gradle sync``` finish.
   6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
 
 #### iOS
-  1. Ensure xcode11+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute the following command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
-     - for any device   
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake```
      - for arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$ADXE_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  

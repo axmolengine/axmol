@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -26,6 +27,8 @@
 
 NS_CC_BEGIN
 
+static uint64_t s_nextId = 1;
+
 CallbackCommand::CallbackCommand()
 {
     _type = RenderCommand::Type::CALLBACK_COMMAND;
@@ -41,12 +44,19 @@ void CallbackCommand::init(float globalOrder, const Mat4& transform, unsigned in
     RenderCommand::init(globalOrder, transform, flags);
 }
 
+void CallbackCommand::reset()
+{
+    _globalOrder = 0.0f;
+    _isTransparent = true;
+    _skipBatching = false;
+    _is3D = false;
+    _depth = 0.0f;
+}
+
 void CallbackCommand::execute()
 {
     if (func)
-    {
         func();
-    }
 }
 
 NS_CC_END

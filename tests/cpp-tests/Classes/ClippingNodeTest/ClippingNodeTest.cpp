@@ -554,12 +554,12 @@ void RawStencilBufferTest::setup()
 
 void RawStencilBufferTest::initCommands()
 {
-    auto renderer               = Director::getInstance()->getRenderer();
-    _enableStencilCallback.func = [=]() { renderer->setStencilTest(true); };
-    _enableStencilCallback.init(_globalZOrder);
-
-    _disableStencilCallback.func = [=]() { renderer->setStencilTest(false); };
-    _disableStencilCallback.init(_globalZOrder);
+//    auto renderer               = Director::getInstance()->getRenderer();
+//    _enableStencilCallback.func = [=]() { renderer->setStencilTest(true); };
+//    _enableStencilCallback.init(_globalZOrder);
+//
+//    _disableStencilCallback.func = [=]() { renderer->setStencilTest(false); };
+//    _disableStencilCallback.init(_globalZOrder);
 
     auto program              = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
     _programState             = new backend::ProgramState(program);
@@ -616,7 +616,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
     auto winPoint  = Vec2(Director::getInstance()->getWinSize());
     auto planeSize = winPoint * (1.0 / _planeCount);
 
-    renderer->addCommand(&_enableStencilCallback);
+    renderer->addCallbackCommand([=]() { renderer->setStencilTest(true); }, _globalZOrder);
 
     for (int i = 0, cmdIndex = 0; i < _planeCount; i++)
     {
@@ -648,7 +648,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 
-    renderer->addCommand(&_disableStencilCallback);
+    renderer->addCallbackCommand([=]() { renderer->setStencilTest(true); }, _globalZOrder);
 }
 
 void RawStencilBufferTest::onBeforeDrawClip(int planeIndex)

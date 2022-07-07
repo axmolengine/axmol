@@ -41,7 +41,7 @@ sudo apt-get install --allow-unauthenticated --yes $DEPENDS > /dev/null
 echo "Installing latest freetype for linux ..."
 mkdir buildsrc
 cd buildsrc
-git clone https://gitlab.freedesktop.org/freetype/freetype.git
+git clone https://github.com/freetype/freetype.git
 cd freetype
 git checkout VER-2-12-1
 sh autogen.sh

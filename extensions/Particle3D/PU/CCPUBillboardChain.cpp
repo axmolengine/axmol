@@ -36,7 +36,7 @@
 #include "renderer/backend/Buffer.h"
 #include "renderer/backend/Device.h"
 #include "2d/CCCamera.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 
 NS_CC_BEGIN
 
@@ -674,7 +674,7 @@ void PUBillboardChain::init(std::string_view texFile)
 
     _locColor   = _programState->getUniformLocation("u_color");
     _locPMatrix = _programState->getUniformLocation("u_PMatrix");
-    _locTexture = _programState->getUniformLocation("u_texture");
+    _locTexture = _programState->getUniformLocation("u_tex0");
 
     _meshCommand.setTransparent(true);
     _meshCommand.setSkipBatching(true);

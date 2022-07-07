@@ -4,9 +4,9 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
-https://adxeproject.github.io/
+https://adxeproject.github.io/adxe
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -14,10 +14,8 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,6 +27,7 @@ THE SOFTWARE.
 #pragma once
 
 #include "2d/CCNode.h"
+#include "2d/CCSprite.h"
 #include "base/CCProtocols.h"
 #include "renderer/CCCustomCommand.h"
 
@@ -41,35 +40,11 @@ NS_CC_BEGIN
  * @{
  */
 
-//
-// Layer
-//
-/** @class Layer
- * @brief Layer is a subclass of Node that implements the TouchEventsDelegate protocol.
-
-All features from Node are valid, plus the following new features:
-- It can receive iPhone Touches
-- It can receive Accelerometer input
-*/
+/* !!!HACK, the memory model of 'Layer' is identical to 'Node' */
 class CC_DLL Layer : public Node
 {
 public:
-    /** Creates a fullscreen black layer.
-     *
-     * @return An autoreleased Layer object.
-     */
     static Layer* create();
-
-    // Overrides
-    virtual std::string getDescription() const override;
-
-    Layer();
-    virtual ~Layer();
-
-    virtual bool init() override;
-
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Layer);
 };
 
 //
@@ -77,14 +52,14 @@ private:
 //
 /** @class LayerColor
  * @brief LayerColor is a subclass of Layer that implements the RGBAProtocol protocol.
-
 All features from Layer are valid, plus the following new features:
 - opacity
 - RGB colors
 */
-class CC_DLL LayerColor : public Layer, public BlendProtocol
+class CC_DLL LayerColor : public Sprite
 {
 public:
+
     /** Creates a fullscreen black layer.
      *
      * @return An autoreleased LayerColor object.
@@ -97,13 +72,13 @@ public:
      * @param height The height of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor* create(const Color4B& color, float width, float height);
+    static LayerColor * create(const Color4B& color, float width, float height);
     /** Creates a Layer with color. Width and height are the window size.
      *
      * @param color The color of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor* create(const Color4B& color);
+    static LayerColor * create(const Color4B& color);
 
     /** Change width in Points.
      *
@@ -122,48 +97,14 @@ public:
     @since v0.8
     */
     void changeWidthAndHeight(float w, float h);
-
-    //
-    // Overrides
-    //
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
-
-    virtual void setContentSize(const Vec2& var) override;
-    /** BlendFunction. Conforms to BlendProtocol protocol */
-    /**
-     * @lua NA
-     */
-    virtual const BlendFunc& getBlendFunc() const override;
-    /**
-     *@code
-     *When this function bound into js or lua,the parameter will be changed
-     *In js: var setBlendFunc(var src, var dst)
-     *In lua: local setBlendFunc(local src, local dst)
-     *@endcode
-     */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
-
     LayerColor();
-    virtual ~LayerColor();
-
     bool init() override;
     bool initWithColor(const Color4B& color, float width, float height);
     bool initWithColor(const Color4B& color);
 
-protected:
-    virtual void updateColor() override;
-    void updateVertexBuffer();
-
-    BlendFunc _blendFunc;
-    Vec2 _squareVertices[4];
-    CustomCommand _customCommand;
-
-    V3F_C4F _vertexData[4];
-
-    backend::UniformLocation _mvpMatrixLocation;
-
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(LayerColor);
+
 };
 
 //
@@ -316,7 +257,7 @@ protected:
  * @brief LayerRadialGradient is a subclass of Layer that draws radial gradients across the background.
  @since v3.16
  */
-class CC_DLL LayerRadialGradient : public Layer
+class CC_DLL LayerRadialGradient : public Node, BlendProtocol
 {
 public:
     /** Create a LayerRadialGradient
@@ -365,8 +306,8 @@ public:
     Color4B getEndColor() const;
     Color3B getEndColor3B() const;
 
-    void setBlendFunc(const BlendFunc& blendFunc);
-    BlendFunc getBlendFunc() const;
+    void setBlendFunc(const BlendFunc& blendFunc) override;
+    const BlendFunc& getBlendFunc() const override;
 
     LayerRadialGradient();
     virtual ~LayerRadialGradient();
@@ -408,7 +349,7 @@ Features:
 - It supports one or more children
 - Only one children will be active a time
 */
-class CC_DLL LayerMultiplex : public Layer
+class CC_DLL LayerMultiplex : public Node
 {
 public:
     /** Creates and initializes a LayerMultiplex object.

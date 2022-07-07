@@ -140,9 +140,12 @@ protected:
     friend class Renderer;
 
     std::vector<Camera*> _cameras;     // weak ref to Camera
-    Camera* _defaultCamera = nullptr;  // weak ref, default camera created by scene, _cameras[0], Caution that the
-                                       // default camera can not be added to _cameras before onEnter is called
-    bool _cameraOrderDirty = true;     // order is dirty, need sort
+
+    /* weak ref, default camera created by scene, at _cameras[0], Caution! the default camera can not be added to _cameras
+     before onEnter is called. */
+    Camera* _defaultCamera = nullptr;
+    /* indicates if the order is dirty and if so then it needs sorting */
+    bool _cameraOrderDirty = true;
     EventListenerCustom* _event;
 
     std::vector<BaseLight*> _lights;

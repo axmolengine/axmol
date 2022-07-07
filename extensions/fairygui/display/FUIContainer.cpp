@@ -428,9 +428,10 @@ void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & par
         }
         _stencilClippingSupport->_stencil->visit(renderer, _modelViewTransform, flags);
 
-        _stencilClippingSupport->_afterDrawStencilCmd.init(_globalZOrder);
-        _stencilClippingSupport->_afterDrawStencilCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilClippingSupport->_stencilStateManager);
-        renderer->addCommand(&_stencilClippingSupport->_afterDrawStencilCmd);
+        auto afterDrawStencilCmd = renderer->nextCallbackCommand();
+        afterDrawStencilCmd->init(_globalZOrder);
+        afterDrawStencilCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilClippingSupport->_stencilStateManager);
+        renderer->addCommand(afterDrawStencilCmd);
 
         int i = 0;
         bool visibleByCamera = isVisitableByVisitingCamera();
@@ -460,9 +461,10 @@ void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & par
             this->draw(renderer, _modelViewTransform, flags);
         }
 
-        _stencilClippingSupport->_afterVisitCmd.init(_globalZOrder);
-        _stencilClippingSupport->_afterVisitCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilClippingSupport->_stencilStateManager);
-        renderer->addCommand(&_stencilClippingSupport->_afterVisitCmd);
+        auto afterVisitCmd = renderer->nextCallbackCommand();
+        afterVisitCmd->init(_globalZOrder);
+        afterVisitCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilClippingSupport->_stencilStateManager);
+        renderer->addCommand(afterVisitCmd);
 
         renderer->popGroup();
 
@@ -479,15 +481,17 @@ void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & par
         renderer->addCommand(&_rectClippingSupport->_groupCommand);
         renderer->pushGroup(_rectClippingSupport->_groupCommand.getRenderQueueID());
 #endif
-        _rectClippingSupport->_beforeVisitCmdScissor.init(_globalZOrder);
-        _rectClippingSupport->_beforeVisitCmdScissor.func = CC_CALLBACK_0(FUIContainer::onBeforeVisitScissor, this);
-        renderer->addCommand(&_rectClippingSupport->_beforeVisitCmdScissor);
+        auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
+        beforeVisitCmdScissor->init(_globalZOrder);
+        beforeVisitCmdScissor->func = CC_CALLBACK_0(FUIContainer::onBeforeVisitScissor, this);
+        renderer->addCommand(beforeVisitCmdScissor);
 
         Node::visit(renderer, parentTransform, parentFlags);
 
-        _rectClippingSupport->_afterVisitCmdScissor.init(_globalZOrder);
-        _rectClippingSupport->_afterVisitCmdScissor.func = CC_CALLBACK_0(FUIContainer::onAfterVisitScissor, this);
-        renderer->addCommand(&_rectClippingSupport->_afterVisitCmdScissor);
+        auto afterVisitCmdScissor = renderer->nextCallbackCommand();
+        afterVisitCmdScissor->init(_globalZOrder);
+        afterVisitCmdScissor->func = CC_CALLBACK_0(FUIContainer::onAfterVisitScissor, this);
+        renderer->addCommand(afterVisitCmdScissor);
 #if COCOS2D_VERSION >= 0x00040000
         renderer->popGroup();
 #endif

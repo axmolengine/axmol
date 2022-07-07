@@ -1,6 +1,6 @@
 # adxe
 
-[![dev](https://img.shields.io/badge/v1.0.0-beta6-yellow.svg)](https://github.com/adxeproject/adxe/releases)
+[![dev](https://img.shields.io/github/v/release/adxeproject/adxe?include_prereleases&label=release)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/adxeproject/adxe/pulls)
@@ -73,19 +73,17 @@
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Platform 29 r5  (在SDK Platforms页签)
      * Android SDK Build-Tools 29.0.2  
-     * NDK r19c+  
+     * NDK r23c+  
      * CMake 3.10+  
 
   5. 等待Gradle sync完成后，Build APKs，安装运行  
   6. 如果使用非sdk自动安装的CMake版本, 需要下载[ninja](https://github.com/ninja-build/ninja/releases)， 并且拷贝```ninja.exe```到CMake的bin目录
 
 #### iOS
-  1. 确保已安装xcode11+和[cmake3.21+](https://github.com/Kitware/CMake/releases), 安装CMake命令行支持: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. 确保已安装xcode12+和[cmake3.21+](https://github.com/Kitware/CMake/releases), 安装CMake命令行支持: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. 生成xcode工程, 进入adxe根目录执行如下命令之一:  
-     - for any device:   
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake```
      - for arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  

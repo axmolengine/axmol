@@ -170,9 +170,11 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     }
     _stencil->visit(renderer, _modelViewTransform, flags);
 
-    _afterDrawStencilCmd.init(_globalZOrder);
-    _afterDrawStencilCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
-    renderer->addCommand(&_afterDrawStencilCmd);
+
+    auto afterDrawStencilCmd = renderer->nextCallbackCommand();
+    afterDrawStencilCmd->init(_globalZOrder);
+    afterDrawStencilCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
+    renderer->addCommand(afterDrawStencilCmd);
 
     bool visibleByCamera = isVisitableByVisitingCamera();
 
@@ -211,9 +213,10 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 
     renderer->popGroup();
 
-    _afterVisitCmd.init(_globalZOrder);
-    _afterVisitCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
-    renderer->addCommand(&_afterVisitCmd);
+    auto _afterVisitCmd = renderer->nextCallbackCommand();
+    _afterVisitCmd->init(_globalZOrder);
+    _afterVisitCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
+    renderer->addCommand(_afterVisitCmd);
 
     renderer->popGroup();
 

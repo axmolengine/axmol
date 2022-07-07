@@ -198,6 +198,9 @@ if (AX_WITH_YAML_CPP)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
+    include(${ADXE_ROOT_PATH}/cmake/Modules/CocosConfigDefine.cmake)
+    use_cocos2dx_compile_define(${APP_NAME})
+
     include(${ADXE_ROOT_PATH}/cmake/Modules/AdxeLinkHelpers.cmake)
     adxe_link_cxx_prebuilt(${APP_NAME} ${ADXE_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

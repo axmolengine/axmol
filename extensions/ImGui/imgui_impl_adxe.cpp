@@ -172,7 +172,7 @@ struct ImGui_ImplGlfw_Data
     Texture2D* FontTexture      = nullptr;
     Mat4 Projection;
 
-    std::vector<std::shared_ptr<CallbackCommand>> CallbackCommands{};
+    // std::vector<std::shared_ptr<CallbackCommand>> CallbackCommands{};
     std::vector<std::shared_ptr<CustomCommand>> CustomCommands{};
     Vector<ProgramState*> ProgramStates{};
 
@@ -1298,7 +1298,7 @@ void ImGui_ImplAdxe_Shutdown()
 
 IMGUI_IMPL_API void ImGui_ImplAdxe_NewFrame() { 
     auto bd = ImGui_ImplGlfw_GetBackendData();
-	bd->CallbackCommands.clear();
+	//bd->CallbackCommands.clear();
     bd->CustomCommands.clear();
     bd->ProgramStates.clear();
 
@@ -1420,23 +1420,23 @@ static bool ImGui_ImplAdxe_createShaderPrograms()
         "#ifdef GL_ES\n"
         "    precision mediump float;\n"
         "#endif\n"
-        "uniform sampler2D u_texture;\n"
+        "uniform sampler2D u_tex0;\n"
         "varying vec2 v_texCoord;\n"
         "varying vec4 v_fragmentColor;\n"
         "void main()\n"
         "{\n"
-        "    gl_FragColor = v_fragmentColor * texture2D(u_texture, v_texCoord);\n"
+        "    gl_FragColor = v_fragmentColor * texture2D(u_tex0, v_texCoord);\n"
         "}\n";
     auto fragment_shader_font =
         "#ifdef GL_ES\n"
         "    precision mediump float;\n"
         "#endif\n"
-        "uniform sampler2D u_texture;\n"
+        "uniform sampler2D u_tex0;\n"
         "varying vec2 v_texCoord;\n"
         "varying vec4 v_fragmentColor;\n"
         "void main()\n"
         "{\n"
-        "    float a = texture2D(u_texture, v_texCoord).a;\n"
+        "    float a = texture2D(u_tex0, v_texCoord).a;\n"
         "    gl_FragColor = vec4(v_fragmentColor.rgb, v_fragmentColor.a * a);\n"
         "}\n";
 
@@ -1509,11 +1509,11 @@ static void AddRendererCommand(const std::function<void()>& f)
 {
     auto bd             = ImGui_ImplGlfw_GetBackendData();
     const auto renderer = Director::getInstance()->getRenderer();
-    auto cmd            = std::make_shared<CallbackCommand>();
+    auto cmd            = renderer->nextCallbackCommand();
     cmd->init(0.f);
     cmd->func = f;
-    renderer->addCommand(cmd.get());
-    bd->CallbackCommands.push_back(cmd);
+    renderer->addCommand(cmd);
+    //bd->CallbackCommands.push_back(cmd);
 }
 
 static void ImGui_ImplAdxe_SaveRenderState(cocos2d::Renderer* renderer)

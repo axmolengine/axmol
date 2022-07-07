@@ -35,7 +35,7 @@ varying vec2 v_texCoord;
 
 uniform vec4 u_effectColor;
 uniform vec4 u_textColor;
-uniform sampler2D u_texture;
+uniform sampler2D u_tex0;
 
 #ifdef GL_ES
 uniform lowp int u_effectType; // 0: None (Draw text), 1: Outline, 2: Shadow
@@ -45,7 +45,7 @@ uniform int u_effectType;
 
 void main()
 {
-    vec4 sample = texture2D(u_texture, v_texCoord);
+    vec4 sample = texture2D(u_tex0, v_texCoord);
     // fontAlpha == 1 means the area of solid text (without edge)
     // fontAlpha == 0 means the area outside text, including outline area
     // fontAlpha == (0, 1) means the edge of text

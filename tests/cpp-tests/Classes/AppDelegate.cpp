@@ -63,6 +63,7 @@ void AppDelegate::initGLContextAttrs()
 static Size resourceSize(960, 640);
 static Size designSize(480, 320);
 
+
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // As an example, load config file
@@ -83,8 +84,13 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setOpenGLView(glview);
     }
 
-    director->setDisplayStats(true);
+    director->setStatsDisplay(true);
+
+#ifdef CC_PLATFORM_PC
+    director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
+#else
     director->setAnimationInterval(1.0f / 60);
+#endif
 
     auto screenSize = glview->getFrameSize();
 

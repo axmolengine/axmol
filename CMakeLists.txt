@@ -46,6 +46,7 @@ include(PreventInSourceBuilds)
 include(CocosBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
+option(AX_BUILD_EXAMPLES "Build examples" ON)
 
 set(AX_ENABLE_EXT_LUA ON) 
 
@@ -57,7 +58,7 @@ set(BUILD_ENGINE_DONE ON)
 if(AX_BUILD_TESTS)
     # add cpp-template-default into project(adxe) for tmp test
     add_subdirectory(${ADXE_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
-	
+
 	# add cpp tests default
     add_subdirectory(${ADXE_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
     
@@ -65,10 +66,19 @@ if(AX_BUILD_TESTS)
     if(AX_ENABLE_EXT_FAIRYGUI)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
+    
+    if(AX_ENABLE_EXT_LIVE2D)
+      add_subdirectory(${ADXE_ROOT_PATH}/tests/live2d-tests ${ENGINE_BINARY_PATH}/tests/live2d-tests)
+    endif()
 
     if(AX_ENABLE_EXT_LUA)
       add_subdirectory(${ADXE_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
       add_subdirectory(${ADXE_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
     endif(AX_ENABLE_EXT_LUA)
 
+endif()
+
+if(AX_BUILD_EXAMPLES)
+    # add examples/SimpleSnake into project(adxe) for tmp example
+    add_subdirectory(${ADXE_ROOT_PATH}/examples/SimpleSnake ${ENGINE_BINARY_PATH}/examples/SimpleSnake)
 endif()

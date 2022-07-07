@@ -1,0 +1,13 @@
+target_sources(${LIB_NAME}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismMoc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismMoc.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModel.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModelUserData.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModelUserData.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModelUserDataJson.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismModelUserDataJson.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismUserModel.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismUserModel.hpp
+)

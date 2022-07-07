@@ -876,7 +876,7 @@ void UIPackage::loadFont(PackageItem* item)
     }
 
     if (mainTexture != nullptr)
-        fontAtlas->addTexture(mainTexture, 0);
+        fontAtlas->setTexture(0, mainTexture);
     fontAtlas->setLineHeight(lineHeight);
     item->bitmapFont->_originalFontSize = fontSize;
 

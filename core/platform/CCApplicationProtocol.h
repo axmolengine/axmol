@@ -31,10 +31,6 @@ THE SOFTWARE.
 #include "base/CCAutoreleasePool.h"
 #include "base/ccTypes.h"
 
-#if defined(OS_WINDOWS)
-#    undef OS_WINDOWS
-#endif
-
 NS_CC_BEGIN
 
 /**
@@ -46,22 +42,15 @@ class CC_DLL ApplicationProtocol
 {
 public:
     /** Since WINDOWS and ANDROID are defined as macros, we could not just use these keywords in enumeration(Platform).
-     *  Therefore, 'OS_' prefix is added to avoid conflicts with the definitions of system macros.
+     *  Therefore, we use C# code style to define Platform enums to avoid conflicts with the definitions of system macros.
      */
     enum class Platform
     {
-        OS_WINDOWS, /**< Windows */
-        OS_LINUX,   /**< Linux */
-        OS_MAC,     /**< Mac OS X*/
-        OS_ANDROID, /**< Android */
-        OS_IPHONE,  /**< iPhone */
-        OS_IPAD     /**< iPad */
-        // OS_BLACKBERRY,  /**< BlackBerry */
-        // OS_NACL,        /**< Native Client in Chrome */
-        // OS_EMSCRIPTEN,  /**< Emscripten */
-        // OS_TIZEN,       /**< Tizen */
-        // OS_WINRT,       /**< Windows Runtime Applications */
-        // OS_WP8          /**< Windows Phone 8 Applications */
+        Windows, /**< Windows */
+        Linux,   /**< Linux */
+        macOS,     /**< macOS */
+        Android, /**< Android */
+        iOS,      /**< Apple iOS */
     };
 
     /**

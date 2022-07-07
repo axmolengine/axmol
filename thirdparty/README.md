@@ -80,6 +80,11 @@
 - Version: git d78c3d2
 - License: MIT
 
+## GHC (iOS devices only)
+- Upstream: https://github.com/gulrak/filesystem
+- Version: 1.5.12
+- License: MIT
+
 ## jni.hpp
 - Upstream: https://github.com/mapbox/jni.hpp
 - Version: v4.0.0
@@ -169,7 +174,7 @@
 
 ## poly2tri
 - Upstream: https://github.com/jhasse/poly2tri
-- Version: git 3380f5c  (until 25 Mar 2022)
+- Version: git 81612cb  (until May 20, 2022)
 - License: BSD-3-Clause
 
 ## pugixml
@@ -256,4 +261,5 @@
 
 ## Some third party libs supporting adxe too:
    - Live2D for cocos2d-x, with lua binding:  https://github.com/Xrysnow/cocos2d-x-live2d
+     - Live2D is also part of the 'extensions'.
 

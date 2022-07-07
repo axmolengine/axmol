@@ -186,7 +186,7 @@ void Physics3DWorld_HitResult_to_luaval(lua_State* L, const cocos2d::Physics3DWo
     lua_rawset(L, -3);
 }
 
-int lua_cocos2dx_physics3d_PhysicsSprite3D_create(lua_State* L)
+int lua_cocos2dx_physics3d_PhysicsMeshRenderer_create(lua_State* L)
 {
     int argc = 0;
     bool ok  = true;
@@ -196,7 +196,7 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_create(lua_State* L)
 #    endif
 
 #    if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(L, 1, "cc.PhysicsSprite3D", 0, &tolua_err))
+    if (!tolua_isusertable(L, 1, "cc.PhysicsMeshRenderer", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
@@ -206,15 +206,15 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_create(lua_State* L)
     {
         std::string arg0;
         cocos2d::Physics3DRigidBodyDes arg1;
-        ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsSprite3D:create");
-        ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsSprite3D:create");
+        ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsMeshRenderer:create");
+        ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsMeshRenderer:create");
         if (!ok)
         {
-            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_create'", nullptr);
+            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'", nullptr);
             return 0;
         }
-        cocos2d::PhysicsSprite3D* ret = cocos2d::PhysicsSprite3D::create(arg0, &arg1);
-        object_to_luaval<cocos2d::PhysicsSprite3D>(L, "cc.PhysicsSprite3D", (cocos2d::PhysicsSprite3D*)ret);
+        cocos2d::PhysicsMeshRenderer* ret = cocos2d::PhysicsMeshRenderer::create(arg0, &arg1);
+        object_to_luaval<cocos2d::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (cocos2d::PhysicsMeshRenderer*)ret);
         return 1;
     }
     if (argc == 3)
@@ -222,16 +222,16 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_create(lua_State* L)
         std::string arg0;
         cocos2d::Physics3DRigidBodyDes arg1;
         cocos2d::Vec3 arg2;
-        ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsSprite3D:create");
-        ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsSprite3D:create");
-        ok &= luaval_to_vec3(L, 4, &arg2, "cc.PhysicsSprite3D:create");
+        ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsMeshRenderer:create");
+        ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsMeshRenderer:create");
+        ok &= luaval_to_vec3(L, 4, &arg2, "cc.PhysicsMeshRenderer:create");
         if (!ok)
         {
-            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_create'", nullptr);
+            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'", nullptr);
             return 0;
         }
-        cocos2d::PhysicsSprite3D* ret = cocos2d::PhysicsSprite3D::create(arg0, &arg1, arg2);
-        object_to_luaval<cocos2d::PhysicsSprite3D>(L, "cc.PhysicsSprite3D", (cocos2d::PhysicsSprite3D*)ret);
+        cocos2d::PhysicsMeshRenderer* ret = cocos2d::PhysicsMeshRenderer::create(arg0, &arg1, arg2);
+        object_to_luaval<cocos2d::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (cocos2d::PhysicsMeshRenderer*)ret);
         return 1;
     }
     if (argc == 4)
@@ -240,35 +240,35 @@ int lua_cocos2dx_physics3d_PhysicsSprite3D_create(lua_State* L)
         cocos2d::Physics3DRigidBodyDes arg1;
         cocos2d::Vec3 arg2;
         cocos2d::Quaternion arg3;
-        ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsSprite3D:create");
-        ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsSprite3D:create");
-        ok &= luaval_to_vec3(L, 4, &arg2, "cc.PhysicsSprite3D:create");
+        ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsMeshRenderer:create");
+        ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsMeshRenderer:create");
+        ok &= luaval_to_vec3(L, 4, &arg2, "cc.PhysicsMeshRenderer:create");
         ok &= luaval_to_quaternion(L, 5, &arg3);
         if (!ok)
         {
-            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_create'", nullptr);
+            tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'", nullptr);
             return 0;
         }
-        cocos2d::PhysicsSprite3D* ret = cocos2d::PhysicsSprite3D::create(arg0, &arg1, arg2, arg3);
-        object_to_luaval<cocos2d::PhysicsSprite3D>(L, "cc.PhysicsSprite3D", (cocos2d::PhysicsSprite3D*)ret);
+        cocos2d::PhysicsMeshRenderer* ret = cocos2d::PhysicsMeshRenderer::create(arg0, &arg1, arg2, arg3);
+        object_to_luaval<cocos2d::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (cocos2d::PhysicsMeshRenderer*)ret);
         return 1;
     }
-    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.PhysicsSprite3D:create", argc, 2);
+    luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.PhysicsMeshRenderer:create", argc, 2);
     return 0;
 #    if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(L, "#ferror in function 'lua_cocos2dx_physics3d_PhysicsSprite3D_create'.", &tolua_err);
+    tolua_error(L, "#ferror in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'.", &tolua_err);
 #    endif
     return 0;
 }
 
-void extendPhysicsSprite3D(lua_State* L)
+void extendPhysicsMeshRenderer(lua_State* L)
 {
-    lua_pushstring(L, "cc.PhysicsSprite3D");
+    lua_pushstring(L, "cc.PhysicsMeshRenderer");
     lua_rawget(L, LUA_REGISTRYINDEX);
     if (lua_istable(L, -1))
     {
-        tolua_function(L, "create", lua_cocos2dx_physics3d_PhysicsSprite3D_create);
+        tolua_function(L, "create", lua_cocos2dx_physics3d_PhysicsMeshRenderer_create);
     }
     lua_pop(L, 1);
 }
@@ -847,7 +847,7 @@ int register_all_physics3d_manual(lua_State* L)
     if (nullptr == L)
         return 0;
 
-    extendPhysicsSprite3D(L);
+    extendPhysicsMeshRenderer(L);
     extendPhysics3DRigidBody(L);
     extendPhysics3DComponent(L);
     extendPhysics3DWorld(L);

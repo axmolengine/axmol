@@ -102,7 +102,7 @@ public:
         addTest("Node: Scene", []() { return new SceneTests(); });
         addTest("Node: Spine", []() { return new SpineTests(); });
         addTest("Node: Sprite", []() { return new SpriteTests(); });
-        addTest("Node: Sprite3D", []() { return new Sprite3DTests(); });
+        addTest("Node: MeshRenderer", []() { return new MeshRendererTests(); });
         addTest("Node: SpritePolygon", []() { return new SpritePolygonTest(); });
         addTest("Node: Terrain", []() { return new TerrainTests(); });
         addTest("Node: FastTileMap", []() { return new FastTileMapTests(); });

@@ -137,7 +137,7 @@ FontAtlas* FontCharMap::newFontAtlas()
         }
     }
 
-    tempAtlas->addTexture(_texture, 0);
+    tempAtlas->setTexture(0, _texture);
 
     return tempAtlas;
 }

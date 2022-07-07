@@ -319,7 +319,7 @@ void PhysicsDemoLogoSmash::onEnter()
     PhysicsDemo::onEnter();
 
     _physicsWorld->setGravity(Vec2(0.0f, 0.0f));
-    _physicsWorld->setUpdateRate(5.0f);
+    _physicsWorld->setUpdateRate(1);
 
     _ball = SpriteBatchNode::create("Images/ball.png", sizeof(LOGO_IMAGE) / sizeof(LOGO_IMAGE[0]));
     addChild(_ball);
@@ -350,7 +350,7 @@ void PhysicsDemoLogoSmash::onEnter()
     auto bullet = makeBall(Vec2(400.0f, 0.0f), 10, PhysicsMaterial(PHYSICS_INFINITY, 0, 0));
     bullet->getPhysicsBody()->setVelocity(Vec2(200.0f, 0.0f));
 
-    bullet->setPosition(Vec2(-500.0f, VisibleRect::getVisibleRect().size.height / 2));
+    bullet->setPosition(Vec2(-100.0f, VisibleRect::getVisibleRect().size.height / 2));
 
     _ball->addChild(bullet);
 }
@@ -484,9 +484,8 @@ void PhysicsDemoRayCast::onEnter()
 
     auto node = DrawNode::create();
     node->addComponent(PhysicsBody::createEdgeSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f),
-                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f)));
-    node->drawSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f), VisibleRect::rightBottom() + Vec2(0.0f, 50.0f), 1,
-                      STATIC_COLOR);
+                                                      VisibleRect::rightBottom() + Vec2(0.0f, 50.0f), PHYSICSBODY_MATERIAL_DEFAULT, 0.5f));
+    node->drawSegment(VisibleRect::leftBottom() + Vec2(0.0f, 50.0f), VisibleRect::rightBottom() + Vec2(0.0f, 50.0f), 0.5f, STATIC_COLOR);
     this->addChild(node);
 
     MenuItemFont::setFontSize(18);
@@ -543,7 +542,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
         auto func   = CC_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
 
         _physicsWorld->rayCast(func, point1, point2, &point3);
-        _node->drawSegment(point1, point3, 1, STATIC_COLOR);
+        _node->drawSegment(point1, point3, 0.5f, STATIC_COLOR);
 
         if (point2 != point3)
         {
@@ -721,7 +720,7 @@ void PhysicsDemoJoints::onEnter()
         {
             Vec2 offset(VisibleRect::leftBottom().x + 5 + j * width + width / 2,
                         VisibleRect::leftBottom().y + 50 + i * height + height / 2);
-            box->addShape(PhysicsShapeEdgeBox::create(Size(width, height), PHYSICSSHAPE_MATERIAL_DEFAULT, 1, offset));
+            box->addShape(PhysicsShapeEdgeBox::create(Size(width, height), PHYSICSSHAPE_MATERIAL_DEFAULT, 0.5, offset));
 
             switch (i * 4 + j)
             {
@@ -1750,6 +1749,11 @@ void PhysicsDemoBug5482::changeBodyCallback(Ref* /*sender*/)
     {
         _body->getOwner()->removeComponent(_body);
     }
+	
+	// very important to have always _body and sprite in sync (Fix: #712)
+    float rot = node->getRotation();
+    node->setRotation(node->getRotation() - rot); 
+	
     node->addComponent(_body);
     _bodyInA = !_bodyInA;
 }
@@ -1906,19 +1910,19 @@ void PhysicsIssue9959::onEnter()
     auto origin      = Director::getInstance()->getVisibleOrigin();
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
-    auto scale9Sprite1 = ui::Scale9Sprite::create("Images/ball.png");
+    auto scale9Sprite1 = ui::Scale9Sprite::create("Images/blocks.png");
     scale9Sprite1->setPosition(origin + visibleSize / 2);
     addChild(scale9Sprite1);
     scale9Sprite1->runAction(RepeatForever::create(
         Sequence::create(MoveBy::create(2.0f, Vec2(100.0f, 0.0f)), MoveBy::create(2.0f, Vec2(-100.0f, 0.0f)), NULL)));
 
-    auto scale9Sprite2 = ui::Scale9Sprite::create("Images/ball.png");
+    auto scale9Sprite2 = ui::Scale9Sprite::create("Images/blocks.png");
     scale9Sprite2->setPosition(origin + visibleSize / 2 + Vec2(0.0f, 50.0f));
     addChild(scale9Sprite2);
     scale9Sprite2->runAction(
         RepeatForever::create(Sequence::create(ScaleTo::create(2.0f, 1.5f), ScaleTo::create(2.0f, 1.0f), NULL)));
 
-    auto scale9Sprite3 = ui::Scale9Sprite::create("Images/ball.png");
+    auto scale9Sprite3 = ui::Scale9Sprite::create("Images/blocks.png");
     scale9Sprite3->setPosition(origin + visibleSize / 2 + Vec2(0.0f, -50.0f));
     addChild(scale9Sprite3);
     scale9Sprite3->runAction(RepeatForever::create(RotateBy::create(2.0f, 360.0f)));
@@ -1940,6 +1944,7 @@ void PhysicsIssue15932::onEnter()
     PhysicsDemo::onEnter();
 
     PhysicsBody* pb = PhysicsBody::createBox(Size(15, 5), PhysicsMaterial(0.1f, 0.0f, 1.0f));
+    this->removeComponent(pb);
     this->addComponent(pb);
     this->removeComponent(pb);
 }

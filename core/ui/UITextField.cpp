@@ -554,16 +554,16 @@ bool TextField::isPasswordEnabled() const
     return _textFieldRenderer->isPasswordEnabled();
 }
 
-void TextField::setPasswordStyleText(const char* styleText)
+void TextField::setPasswordStyleText(std::string_view styleText)
 {
     _textFieldRenderer->setPasswordStyleText(styleText);
 
     setString(getString());
 }
 
-const char* TextField::getPasswordStyleText() const
+std::string_view TextField::getPasswordStyleText() const
 {
-    return _textFieldRenderer->getPasswordTextStyle().data();
+    return _textFieldRenderer->getPasswordTextStyle();
 }
 
 void TextField::update(float /*dt*/)

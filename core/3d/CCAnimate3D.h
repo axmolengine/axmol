@@ -37,7 +37,7 @@
 NS_CC_BEGIN
 
 class Bone3D;
-class Sprite3D;
+class MeshRenderer;
 class EventCustom;
 
 enum class Animate3DQuality
@@ -54,7 +54,7 @@ enum class Animate3DQuality
  */
 
 /**
- * @brief Animate3D, Animates a Sprite3D given with an Animation3D
+ * @brief Animate3D, Animates a MeshRenderer given with an Animation3D
  */
 class CC_DLL Animate3D : public ActionInterval
 {
@@ -174,7 +174,7 @@ protected:
     std::unordered_map<int, EventCustom*> _keyFrameEvent;
     std::unordered_map<int, Animate3DDisplayedEventInfo> _displayedEventInfo;
 
-    // sprite animates
+    // mesh animations
     static std::unordered_map<Node*, Animate3D*> s_fadeInAnimates;
     static std::unordered_map<Node*, Animate3D*> s_fadeOutAnimates;
     static std::unordered_map<Node*, Animate3D*> s_runningAnimates;

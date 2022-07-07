@@ -22,8 +22,8 @@ public:
 
 #if COCOS2D_VERSION >= 0x00040000
     cocos2d::GroupCommand _groupCommand;
-    cocos2d::CallbackCommand _beforeVisitCmdScissor;
-    cocos2d::CallbackCommand _afterVisitCmdScissor;
+    //cocos2d::CallbackCommand _beforeVisitCmdScissor;
+    //cocos2d::CallbackCommand _afterVisitCmdScissor;
 #else
     cocos2d::CustomCommand _beforeVisitCmdScissor;
     cocos2d::CustomCommand _afterVisitCmdScissor;
@@ -40,9 +40,9 @@ public:
     cocos2d::GroupCommand _groupCommand;
 #if COCOS2D_VERSION >= 0x00040000
     cocos2d::backend::ProgramState* _originStencilProgram;
-    cocos2d::CallbackCommand _beforeVisitCmd;
-    cocos2d::CallbackCommand _afterDrawStencilCmd;
-    cocos2d::CallbackCommand _afterVisitCmd;
+    //cocos2d::CallbackCommand _beforeVisitCmd;
+    //cocos2d::CallbackCommand _afterDrawStencilCmd;
+    //cocos2d::CallbackCommand _afterVisitCmd;
 #else
     cocos2d::GLProgram* _originStencilProgram;
     cocos2d::CustomCommand _beforeVisitCmd;

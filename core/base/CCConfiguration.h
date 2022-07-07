@@ -176,34 +176,34 @@ public:
      */
     bool supportsMapBuffer() const;
 
-    /** Max support directional light in shader, for Sprite3D.
+    /** Max supported directional lights in a shader, for MeshRenderer.
      *
-     * @return Maximum supports directional light in shader.
+     * @return Maximum supported directional lights in a shader.
      * @since v3.3
      */
     int getMaxSupportDirLightInShader() const;
 
-    /** Max support point light in shader, for Sprite3D.
+    /** Max supported point lights in a shader, for MeshRenderer.
      *
-     * @return Maximum supports point light in shader.
+     * @return Maximum supported point lights in a shader.
      * @since v3.3
      */
     int getMaxSupportPointLightInShader() const;
 
-    /** Max support spot light in shader, for Sprite3D.
+    /** Max supported spot lights in a shader, for MeshRenderer.
      *
-     * @return Maximum supports spot light in shader.
+     * @return Maximum supported spot lights in a shader.
      * @since v3.3
      */
     int getMaxSupportSpotLightInShader() const;
 
-    /** get 3d animate quality*/
+    /** get 3d animate quality */
     Animate3DQuality getAnimate3DQuality() const;
 
-    /** Returns whether or not an OpenGL is supported.
+    /** Returns whether or not an OpenGL extension is supported.
      *
      * @param searchName A given search name.
-     * @return Is true if an OpenGL is supported.
+     * @return Is true if an OpenGL extension is supported.
      */
     bool checkForGLExtension(std::string_view searchName) const;
 

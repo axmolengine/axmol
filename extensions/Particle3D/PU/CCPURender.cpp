@@ -36,7 +36,7 @@
 #include "renderer/backend/Device.h"
 #include "renderer/backend/Buffer.h"
 #include "base/CCDirector.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCMesh.h"
 #include "2d/CCCamera.h"
 
@@ -501,28 +501,28 @@ void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, 
     if (!_isVisible)
         return;
 
-    if (_spriteList.empty())
+    if (_meshList.empty())
     {
         for (unsigned int i = 0; i < particleSystem->getParticleQuota(); ++i)
         {
-            Sprite3D* sprite = Sprite3D::create(_modelFile);
-            if (sprite == nullptr)
+            MeshRenderer* mesh = MeshRenderer::create(_modelFile);
+            if (mesh == nullptr)
             {
                 CCLOG("failed to load file %s", _modelFile.c_str());
                 continue;
             }
-            sprite->setTexture(_texFile);
-            sprite->setBlendFunc(particleSystem->getBlendFunc());
-            sprite->setCullFaceEnabled(false);
-            sprite->retain();
-            _spriteList.push_back(sprite);
+            mesh->setTexture(_texFile);
+            mesh->setBlendFunc(particleSystem->getBlendFunc());
+            mesh->setCullFaceEnabled(false);
+            mesh->retain();
+            _meshList.push_back(mesh);
         }
-        if (!_spriteList.empty())
+        if (!_meshList.empty())
         {
-            const AABB& aabb = _spriteList[0]->getAABB();
+            const AABB& aabb = _meshList[0]->getAABB();
             Vec3 corners[8];
             aabb.getCorners(corners);
-            _spriteSize = corners[3] - corners[6];
+            _meshSize = corners[3] - corners[6];
         }
         else
         {
@@ -543,19 +543,19 @@ void PUParticle3DModelRender::render(Renderer* renderer, const Mat4& transform, 
     {
         auto particle = static_cast<PUParticle3D*>(iter);
         Mat4::createRotation(q * particle->orientation, &rotMat);
-        sclMat.m[0]  = particle->width / _spriteSize.x;
-        sclMat.m[5]  = particle->height / _spriteSize.y;
-        sclMat.m[10] = particle->depth / _spriteSize.z;
+        sclMat.m[0]  = particle->width / _meshSize.x;
+        sclMat.m[5]  = particle->height / _meshSize.y;
+        sclMat.m[10] = particle->depth / _meshSize.z;
         mat          = rotMat * sclMat;
         mat.m[12]    = particle->position.x;
         mat.m[13]    = particle->position.y;
         mat.m[14]    = particle->position.z;
-        if (_spriteList[index]->getCameraMask() != particleSystem->getCameraMask())
-            _spriteList[index]->setCameraMask(particleSystem->getCameraMask());
-        _spriteList[index]->setColor(
+        if (_meshList[index]->getCameraMask() != particleSystem->getCameraMask())
+            _meshList[index]->setCameraMask(particleSystem->getCameraMask());
+        _meshList[index]->setColor(
             Color3B(particle->color.x * 255, particle->color.y * 255, particle->color.z * 255));
-        _spriteList[index]->setOpacity(particle->color.w * 255);
-        _spriteList[index]->visit(renderer, mat, Node::FLAGS_DIRTY_MASK);
+        _meshList[index]->setOpacity(particle->color.w * 255);
+        _meshList[index]->visit(renderer, mat, Node::FLAGS_DIRTY_MASK);
         ++index;
     }
 }
@@ -567,7 +567,7 @@ PUParticle3DModelRender::PUParticle3DModelRender()
 
 PUParticle3DModelRender::~PUParticle3DModelRender()
 {
-    for (auto iter : _spriteList)
+    for (auto iter : _meshList)
     {
         iter->release();
     }
@@ -587,11 +587,11 @@ PUParticle3DModelRender* PUParticle3DModelRender::clone()
 
 void PUParticle3DModelRender::reset()
 {
-    for (auto iter : _spriteList)
+    for (auto iter : _meshList)
     {
         iter->release();
     }
-    _spriteList.clear();
+    _meshList.clear();
 }
 
 PUParticle3DEntityRender::PUParticle3DEntityRender()
@@ -659,7 +659,7 @@ bool PUParticle3DEntityRender::initRender(std::string_view texFile)
 
     _locColor   = _programState->getUniformLocation("u_color");
     _locPMatrix = _programState->getUniformLocation("u_PMatrix");
-    _locTexture = _programState->getUniformLocation("u_texture");
+    _locTexture = _programState->getUniformLocation("u_tex0");
 
     _meshCommand.setTransparent(true);
     _meshCommand.setSkipBatching(true);

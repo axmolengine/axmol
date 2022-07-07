@@ -2,6 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -178,9 +179,9 @@ Renderer::~Renderer()
     _renderGroups.clear();
     _groupCommandManager->release();
 
-    for (auto clearCommand : _clearCommandsPool)
+    for (auto clearCommand : _callbackCommandsPool)
         delete clearCommand;
-    _clearCommandsPool.clear();
+    _callbackCommandsPool.clear();
 
     free(_triBatchesToDraw);
 
@@ -188,6 +189,7 @@ Renderer::~Renderer()
     CC_SAFE_RELEASE(_commandBuffer);
     CC_SAFE_RELEASE(_renderPipeline);
     CC_SAFE_RELEASE(_defaultRT);
+    CC_SAFE_RELEASE(_offscreenRT);
 }
 
 void Renderer::init()
@@ -209,6 +211,19 @@ void Renderer::init()
 
     _depthStencilState = device->newDepthStencilState();
     _commandBuffer->setDepthStencilState(_depthStencilState);
+}
+
+backend::RenderTarget* Renderer::getOffscreenRenderTarget() {
+    if (_offscreenRT != nullptr) return _offscreenRT;
+    return (_offscreenRT = backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR | TargetBufferFlags::DEPTH_AND_STENCIL));
+}
+
+void Renderer::addCallbackCommand(std::function<void()> func, float globalZOrder)
+{
+    auto cmd = nextCallbackCommand();
+    cmd->init(globalZOrder);
+    cmd->func = std::move(func);
+    addCommand(cmd);
 }
 
 void Renderer::addCommand(RenderCommand* command)
@@ -315,6 +330,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
     case RenderCommand::Type::CALLBACK_COMMAND:
         flush();
         static_cast<CallbackCommand*>(command)->execute();
+        _callbackCommandsPool.push_back(static_cast<CallbackCommand*>(command));
         break;
     default:
         assert(false);
@@ -749,7 +765,8 @@ void Renderer::flush2D()
 
 void Renderer::flush3D()
 {
-    // TODO 3d batch rendering
+    // TODO 3d instanced rendering
+    // https://learnopengl.com/Advanced-OpenGL/Instancing
 }
 
 void Renderer::flushTriangles()
@@ -825,9 +842,10 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
 {
     _clearFlag = flags;
 
-    CallbackCommand* command = nextClearCommand();
+    CallbackCommand* command = nextCallbackCommand();
     command->init(globalOrder);
     command->func = [=]() -> void {
+
         backend::RenderPassDescriptor descriptor;
 
         descriptor.flags.clear = flags;
@@ -845,23 +863,22 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
 
         _commandBuffer->beginRenderPass(_currentRT, descriptor);
         _commandBuffer->endRenderPass();
-
-        // push to pool for reuse
-        _clearCommandsPool.push_back(command);
     };
     addCommand(command);
 }
 
-CallbackCommand* Renderer::nextClearCommand()
+CallbackCommand* Renderer::nextCallbackCommand()
 {
-    if (!_clearCommandsPool.empty())
+    CallbackCommand* cmd = nullptr;
+    if (!_callbackCommandsPool.empty())
     {
-        auto clearCommand = _clearCommandsPool.back();
-        _clearCommandsPool.pop_back();
-        return clearCommand;
+        cmd = _callbackCommandsPool.back();
+        cmd->reset();
+        _callbackCommandsPool.pop_back();
     }
-
-    return new CallbackCommand();
+    else
+        cmd = new CallbackCommand();
+    return cmd;
 }
 
 const Color4F& Renderer::getClearColor() const

@@ -1,0 +1,9 @@
+target_sources(${LIB_NAME}
+  PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismDebug.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismDebug.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismJson.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismJson.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismString.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/CubismString.hpp
+)

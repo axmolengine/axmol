@@ -15,12 +15,10 @@ public:
     RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL);
     ~RenderTargetGL();
 
-    void bindFrameBuffer() const override;
-    void unbindFrameBuffer() const override;
+    void bindFrameBuffer() const;
+    void unbindFrameBuffer() const;
 
-    void setColorAttachment(ColorAttachment attachment) override;
-    void setDepthAttachment(TextureBackend* attachment, int level = 0) override;
-    void setStencilAttachment(TextureBackend* attachment, int level = 0) override;
+    void update() const;
 
 public:
     GLuint _FBO = 0;

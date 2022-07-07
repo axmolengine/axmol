@@ -32,7 +32,7 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/CCTextureCache.h"
 #include "base/CCDirector.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCMesh.h"
 #include "2d/CCCamera.h"
 #include <sstream>

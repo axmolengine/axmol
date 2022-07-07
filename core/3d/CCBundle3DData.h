@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -39,7 +40,182 @@
 
 #include "3d/CC3DProgramInfo.h"
 
+#include "yasio/detail/byte_buffer.hpp"
+
 NS_CC_BEGIN
+
+using ilist_u16_t = std::initializer_list<uint16_t>;
+using ilist_u32_t = std::initializer_list<uint32_t>;
+
+// The underlaying GL driver support U_INT8, U_SHORT, U_INT32, but we support U_SHORT and U_INT32 only
+template <typename _T>
+inline constexpr bool is_index_format_type_v = std::is_integral_v<_T> &&
+                                               (std::is_same_v<_T, uint16_t> || std::is_same_v<_T, uint32_t>);
+
+class IndexArray
+{
+public:
+    static constexpr unsigned int formatToStride(backend::IndexFormat format) { return 1 << (int)format; }
+    static constexpr backend::IndexFormat strideToFormat(unsigned int stride)
+    {
+        return (backend::IndexFormat)(stride >> 1);
+    }
+
+    IndexArray() : _stride(formatToStride(backend::IndexFormat::U_SHORT)) {}
+    IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    IndexArray(std::initializer_list<_Ty> rhs) : _stride(sizeof(_Ty)), _buffer(rhs)
+    {}
+
+    IndexArray(const IndexArray& rhs) : _stride(rhs._stride), _buffer(rhs._buffer) {}
+    IndexArray(IndexArray&& rhs) noexcept : _stride(rhs._stride), _buffer(std::move(rhs._buffer)) {}
+
+    IndexArray& operator=(const IndexArray& rhs)
+    {
+        _stride = rhs._stride;
+        _buffer = rhs._buffer;
+        return *this;
+    }
+    IndexArray& operator=(IndexArray&& rhs) noexcept
+    {
+        this->swap(rhs);
+        return *this;
+    }
+
+    void swap(IndexArray& rhs)
+    {
+        std::swap(_stride, rhs._stride);
+        _buffer.swap(rhs._buffer);
+    }
+
+    /** Returns the format of the index array. */
+    backend::IndexFormat format() const { return strideToFormat(_stride); }
+
+    /** Clears the internal byte buffer. */
+    void clear() { _buffer.clear(); }
+
+    /** Clears the internal byte buffer and sets the format specified. */
+    void clear(backend::IndexFormat format)
+    {
+        clear();
+        _stride = formatToStride(format);
+    }
+
+    /** Pushes back a value. */
+    template <typename _Ty, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    void push_back(const _Ty& val)
+    {
+        assert(_stride == sizeof(_Ty));
+        _buffer.append_n((uint8_t*)&val, _stride);
+    }
+
+    /** Inserts a list containing unsigned int (uint16_t/uint32_t) data. */
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    void insert(_Ty* position, std::initializer_list<_Ty> ilist)
+    {
+        insert(position, ilist.begin(), ilist.end());
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    void insert(_Ty* position, _Ty* first, _Ty* last)
+    {
+        assert(_stride == sizeof(_Ty));
+        binsert(position, first, last);
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    void insert(size_t offset, std::initializer_list<_Ty> ilist)
+    {
+        assert(_stride == sizeof(_Ty));
+        binsert(begin<_Ty>() + offset, ilist.begin(), ilist.end());
+    }
+
+    /** Inserts range data based on an offset in bytes. */
+    void binsert(uint8_t* position, const void* first, const void* last)
+    {
+        _buffer.insert(position, (const uint8_t*)first, (const uint8_t*)last);
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    const _Ty* begin() const
+    {
+        return (const _Ty*)_buffer.begin();
+    }
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    _Ty* begin()
+    {
+        return (_Ty*)_buffer.begin();
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    const _Ty* end() const
+    {
+        return (const _Ty*)_buffer.end();
+    }
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    _Ty* end()
+    {
+        return (_Ty*)_buffer.end();
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    _Ty* erase(_Ty* position)
+    {
+        return (_Ty*)_buffer.erase((uint8_t*)position);
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    _Ty* erase(_Ty* first, _Ty* last)
+    {
+        return (_Ty*)_buffer.erase((uint8_t*)first, (uint8_t*)last);
+    }
+
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    _Ty& at(size_t idx)
+    {
+        assert(sizeof(_Ty) == _stride);
+        return (_Ty&)_buffer[idx * sizeof(_Ty)];
+    }
+    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    const _Ty& at(size_t idx) const
+    {
+        assert(sizeof(_Ty) == _stride);
+        return (const _Ty&)_buffer[idx * sizeof(_Ty)];
+    }
+
+    uint8_t* data() noexcept { return _buffer.data(); }
+    const uint8_t* data() const noexcept { return _buffer.data(); }
+
+    /** Returns the count of indices in the container. */
+    size_t size() const { return _buffer.size() / _stride; }
+    /** Returns the size of the container in bytes. */
+    size_t bsize() const { return _buffer.size(); }
+
+    /** Resizes the count of indices in the container. */
+    void resize(size_t size) { _buffer.resize(size * _stride); }
+    /** Resizes the container in bytes. */
+    void bresize(size_t size) { _buffer.resize(size); }
+
+    /** Returns true if the container is empty. Otherwise, false. */
+    bool empty() const { return _buffer.empty(); }
+
+    template <typename _Fty>
+    void for_each(_Fty cb) const
+    {
+        assert(_stride == 2 || _stride == 4);
+        for (auto it = _buffer.begin(); it != _buffer.end(); it += _stride)
+        {
+            uint32_t val = 0;
+            memcpy(&val, it, _stride);
+            cb(val);
+        }
+    }
+
+protected:
+    unsigned char _stride;
+    yasio::byte_buffer _buffer;
+};
 
 /**mesh vertex attribute
  * @js NA
@@ -109,7 +285,7 @@ struct NodeData
 struct NodeDatas
 {
     std::vector<NodeData*> skeleton;  // skeleton
-    std::vector<NodeData*> nodes;     // nodes, CCNode, Sprite3D or part of Sprite3D
+    std::vector<NodeData*> nodes;     // nodes, CCNode, MeshRenderer or parts of MeshRenderer
 
     virtual ~NodeDatas() { resetData(); }
 
@@ -134,7 +310,7 @@ struct NodeDatas
  */
 struct MeshData
 {
-    typedef std::vector<unsigned short> IndexArray;
+    using IndexArray = ::cocos2d::IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
@@ -147,7 +323,7 @@ struct MeshData
 public:
     /**
      * Get per vertex size
-     * @return return the sum of each vertex's all attribute size.
+     * @return return the sum size of all vertex attributes.
      */
     int getPerVertexSize() const
     {

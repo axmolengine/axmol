@@ -197,7 +197,7 @@ void Director::setDefaultValues()
     _oldAnimationInterval = _animationInterval = 1.0f / fps;
 
     // Display FPS
-    _displayStats = conf->getValue("adxe.display_fps", Value(false)).asBool();
+    _statsDisplay = conf->getValue("adxe.display_fps", Value(false)).asBool();
 
     // GL projection
     std::string projection = conf->getValue("adxe.gl.projection", Value("3d")).asString();
@@ -306,7 +306,7 @@ void Director::drawScene()
 
     updateFrameRate();
 
-    if (_displayStats)
+    if (_statsDisplay)
     {
 #if !CC_STRIP_FPS
         showStats();
@@ -329,7 +329,7 @@ void Director::drawScene()
 
     _renderer->endFrame();
 
-    if (_displayStats)
+    if (_statsDisplay)
     {
 #if !CC_STRIP_FPS
         calculateMPF();
@@ -847,7 +847,7 @@ void Director::pushScene(Scene* scene)
     }
 #endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _scenesStack.pushBack(scene);
-    _nextScene = scene;
+    _nextScene    = scene;
 }
 
 void Director::popScene()
@@ -1187,7 +1187,7 @@ void Director::showStats()
     ++_frames;
     _accumDt += _deltaTime;
 
-    if (_displayStats && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
+    if (_statsDisplay && _FPSLabel && _drawnBatchesLabel && _drawnVerticesLabel)
     {
         char buffer[30] = {0};
 
@@ -1303,11 +1303,92 @@ void Director::createStatsLabel()
     _drawnVerticesLabel->setIgnoreContentScaleFactor(true);
     _drawnVerticesLabel->setScale(scaleFactor);
 
-    auto safeOrigin          = getSafeAreaRect().origin;
-    const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
-    _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + safeOrigin);
-    _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + safeOrigin);
-    _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + safeOrigin);
+    setStatsAnchor();
+}
+
+void Director::setStatsAnchor(AnchorPreset anchor)
+{
+    if (!_statsDisplay)
+        return;
+    
+    // Initialize stat counters
+    if (!_FPSLabel)
+        showStats();
+
+    {
+        static Vec2 _fpsPosition          = {0, 0};
+        auto safeOrigin        = getSafeAreaRect().origin;
+        auto safeSize          = getSafeAreaRect().size;
+        const int height_spacing = (int)(22 / CC_CONTENT_SCALE_FACTOR());
+
+        switch (anchor)
+        {
+        case AnchorPreset::BOTTOM_LEFT:
+            _fpsPosition = Vec2(0, 0);
+            _drawnVerticesLabel->setAnchorPoint({0, 0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        case AnchorPreset::CENTER_LEFT:
+            _fpsPosition = Vec2(0, safeSize.height / 2 - height_spacing * 1.5);
+            _drawnVerticesLabel->setAnchorPoint({0, 0.0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0.0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        case AnchorPreset::TOP_LEFT:
+            _fpsPosition = Vec2(0, safeSize.height - height_spacing * 3);
+            _drawnVerticesLabel->setAnchorPoint({0, 0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        case AnchorPreset::BOTTOM_RIGHT:
+            _fpsPosition = Vec2(safeSize.width, 0);
+            _drawnVerticesLabel->setAnchorPoint({1, 0});
+            _drawnBatchesLabel->setAnchorPoint({1, 0});
+            _FPSLabel->setAnchorPoint({1, 0});
+            break;
+        case AnchorPreset::CENTER_RIGHT:
+            _fpsPosition = Vec2(safeSize.width, safeSize.height / 2 - height_spacing * 1.5);
+            _drawnVerticesLabel->setAnchorPoint({1, 0.0});
+            _drawnBatchesLabel->setAnchorPoint({1, 0.0});
+            _FPSLabel->setAnchorPoint({1, 0.0});
+            break;
+        case AnchorPreset::TOP_RIGHT:
+            _fpsPosition = Vec2(safeSize.width, safeSize.height - height_spacing * 3);
+            _drawnVerticesLabel->setAnchorPoint({1, 0});
+            _drawnBatchesLabel->setAnchorPoint({1, 0});
+            _FPSLabel->setAnchorPoint({1, 0});
+            break;
+        case AnchorPreset::BOTTOM_CENTER:
+            _fpsPosition = Vec2(safeSize.width / 2, 0);
+            _drawnVerticesLabel->setAnchorPoint({0.5, 0});
+            _drawnBatchesLabel->setAnchorPoint({0.5, 0});
+            _FPSLabel->setAnchorPoint({0.5, 0});
+            break;
+        case AnchorPreset::CENTER:
+            _fpsPosition = Vec2(safeSize.width / 2, safeSize.height / 2 - height_spacing * 1.5);
+            _drawnVerticesLabel->setAnchorPoint({0.5, 0.0});
+            _drawnBatchesLabel->setAnchorPoint({0.5, 0.0});
+            _FPSLabel->setAnchorPoint({0.5, 0.0});
+            break;
+        case AnchorPreset::TOP_CENTER:
+            _fpsPosition = Vec2(safeSize.width / 2, safeSize.height - height_spacing * 3);
+            _drawnVerticesLabel->setAnchorPoint({0.5, 0});
+            _drawnBatchesLabel->setAnchorPoint({0.5, 0});
+            _FPSLabel->setAnchorPoint({0.5, 0});
+            break;
+        default:  // FPSPosition::BOTTOM_LEFT
+            _fpsPosition = Vec2(0, 0);
+            _drawnVerticesLabel->setAnchorPoint({0, 0});
+            _drawnBatchesLabel->setAnchorPoint({0, 0});
+            _FPSLabel->setAnchorPoint({0, 0});
+            break;
+        }
+
+        _drawnVerticesLabel->setPosition(Vec2(0, height_spacing * 2.0f) + _fpsPosition + safeOrigin);
+        _drawnBatchesLabel->setPosition(Vec2(0, height_spacing * 1.0f) + _fpsPosition + safeOrigin);
+        _FPSLabel->setPosition(Vec2(0, height_spacing * 0.0f) + _fpsPosition + safeOrigin);
+    }
 }
 
 #endif  // #if !CC_STRIP_FPS

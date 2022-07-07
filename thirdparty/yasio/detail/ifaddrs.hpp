@@ -372,7 +372,7 @@ static int open_netlink_session(netlink_session* session)
   assert(session != 0);
 
   memset(session, 0, sizeof(*session));
-  session->sock_fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
+  session->sock_fd = ::socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
   if (session->sock_fd == -1)
   {
     YASIO_LOG("Failed to create a netlink socket. %s", strerror(errno));
@@ -392,7 +392,7 @@ static int open_netlink_session(netlink_session* session)
 
   session->them.nl_family = AF_NETLINK;
 
-  if (bind(session->sock_fd, (struct sockaddr*)&session->us, sizeof(session->us)) < 0)
+  if (::bind(session->sock_fd, (struct sockaddr*)&session->us, sizeof(session->us)) < 0)
   {
     YASIO_LOG("Failed to bind to the netlink socket. %s", strerror(errno));
     return -1;
@@ -430,7 +430,7 @@ static int send_netlink_dump_request(netlink_session* session, int type)
   session->message_header.msg_iovlen  = 1;
   session->message_header.msg_iov     = &session->payload_vector;
 
-  if (sendmsg(session->sock_fd, (const struct msghdr*)&session->message_header, 0) < 0)
+  if (::sendmsg(session->sock_fd, (const struct msghdr*)&session->message_header, 0) < 0)
   {
     YASIO_LOG("Failed to send netlink message. %s", strerror(errno));
     return -1;
@@ -510,7 +510,7 @@ static int parse_netlink_reply(netlink_session* session, struct ifaddrs** ifaddr
     netlink_reply.msg_iovlen  = 1;
     netlink_reply.msg_iov     = &reply_vector;
 
-    length = recvmsg(session->sock_fd, &netlink_reply, 0);
+    length = ::recvmsg(session->sock_fd, &netlink_reply, 0);
     YASIO_LOGV("  length == %d", static_cast<int>(length));
 
     if (length < 0)

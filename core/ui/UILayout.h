@@ -640,11 +640,11 @@ protected:
     StencilStateManager* _stencilStateManager;
 
     GroupCommand _groupCommand;
-    CallbackCommand _beforeVisitCmdStencil;
-    CallbackCommand _afterDrawStencilCmd;
-    CallbackCommand _afterVisitCmdStencil;
-    CallbackCommand _beforeVisitCmdScissor;
-    CallbackCommand _afterVisitCmdScissor;
+    //CallbackCommand _beforeVisitCmdStencil;
+    //CallbackCommand _afterDrawStencilCmd;
+    //CallbackCommand _afterVisitCmdStencil;
+    //CallbackCommand _beforeVisitCmdScissor;
+    //CallbackCommand _afterVisitCmdScissor;
 
     bool _doLayoutDirty;
     bool _isInterceptTouch;

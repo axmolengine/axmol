@@ -1,0 +1,20 @@
+// A "Material" file can contain one or more materials
+material BasicToon
+{
+    technique normal
+    {
+        pass 0
+        {
+            shader
+            {
+                vertexShader = MeshRendererTest/toon.vert
+                fragmentShader = MeshRendererTest/toon.frag
+
+                sampler u_sampler0
+                {
+                    path = MeshRendererTest/teapot.png
+                }
+            }
+        }
+    }
+}

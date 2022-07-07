@@ -6462,7 +6462,7 @@ int lua_cocos2dx_Application_isIOS64bit(lua_State* tolua_S)
     {
         bool isIOS64bit                = false;
         Application::Platform platform = cocos2d::Application::getInstance()->getTargetPlatform();
-        if (Application::Platform::OS_IPHONE == platform || Application::Platform::OS_IPAD == platform)
+        if (Application::Platform::iOS == platform)
         {
 #if defined(__LP64__)
             isIOS64bit = true;
@@ -6484,7 +6484,7 @@ tolua_lerror:
     return 0;
 }
 
-int lua_cocos2dx_Application_is64BitIOSDevice(lua_State* tolua_S)
+int lua_cocos2dx_Application_is64BitMobileDevice(lua_State* tolua_S)
 {
     int argc                   = 0;
     cocos2d::Application* cobj = nullptr;
@@ -6503,7 +6503,7 @@ int lua_cocos2dx_Application_is64BitIOSDevice(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
-        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_cocos2dx_Application_is64BitIOSDevice'", nullptr);
+        tolua_error(tolua_S, "invalid 'cobj' in function 'lua_cocos2dx_Application_is64BitMobileDevice'", nullptr);
         return 0;
     }
 #endif
@@ -6511,26 +6511,26 @@ int lua_cocos2dx_Application_is64BitIOSDevice(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        bool is64BitIOSDevice          = false;
+        bool is64BitMobileDevice          = false;
         Application::Platform platform = cocos2d::Application::getInstance()->getTargetPlatform();
-        if (Application::Platform::OS_IPHONE == platform || Application::Platform::OS_IPAD == platform ||
-            Application::Platform::OS_ANDROID == platform)
+        if (Application::Platform::iOS == platform ||
+            Application::Platform::Android == platform)
         {
 #if defined(__arm64__) || defined(__aarch64__)
-            is64BitIOSDevice = true;
+            is64BitMobileDevice = true;
 #endif
         }
 
-        tolua_pushboolean(tolua_S, is64BitIOSDevice);
+        tolua_pushboolean(tolua_S, is64BitMobileDevice);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Application:is64BitIOSDevice",
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Application:is64BitMobileDevice",
                argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
-    tolua_error(tolua_S, "#ferror in function 'lua_cocos2dx_Application_is64BitIOSDevice'.", &tolua_err);
+    tolua_error(tolua_S, "#ferror in function 'lua_cocos2dx_Application_is64BitMobileDevice'.", &tolua_err);
 #endif
 
     return 0;
@@ -6543,7 +6543,7 @@ static void extendApplication(lua_State* tolua_S)
     if (lua_istable(tolua_S, -1))
     {
         tolua_function(tolua_S, "isIOS64bit", lua_cocos2dx_Application_isIOS64bit);
-        tolua_function(tolua_S, "is64BitIOSDevice", lua_cocos2dx_Application_is64BitIOSDevice);
+        tolua_function(tolua_S, "is64BitMobileDevice", lua_cocos2dx_Application_is64BitMobileDevice);
     }
     lua_pop(tolua_S, 1);
 }

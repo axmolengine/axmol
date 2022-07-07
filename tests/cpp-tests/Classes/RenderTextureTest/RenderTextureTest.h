@@ -102,7 +102,7 @@ public:
     virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
 
 private:
-    cocos2d::CallbackCommand _renderCmds[4];
+//    cocos2d::CallbackCommand _renderCmds[4];
     void onBeforeClear();
     void onBeforeStencil();
     void onBeforeDraw();
@@ -180,27 +180,6 @@ public:
     Issue16113Test();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-};
-
-class RenderTextureWithSprite3DIssue16894 : public RenderTextureTest
-{
-public:
-    CREATE_FUNC(RenderTextureWithSprite3DIssue16894);
-    RenderTextureWithSprite3DIssue16894();
-    virtual ~RenderTextureWithSprite3DIssue16894();
-
-    virtual void visit(cocos2d::Renderer* renderer,
-                       const cocos2d::Mat4& parentTransform,
-                       uint32_t parentFlags) override;
-
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-
-private:
-    cocos2d::Sprite3D* _ship[3];
-
-    cocos2d::RenderTexture* _renderTexDefault;
-    cocos2d::RenderTexture* _renderTexWithBuffer;
 };
 
 #endif

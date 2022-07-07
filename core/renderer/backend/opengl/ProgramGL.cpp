@@ -31,6 +31,7 @@
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
 #include "renderer/backend/opengl/UtilsGL.h"
+#include "yasio/detail/byte_buffer.hpp"
 
 CC_BACKEND_BEGIN
 
@@ -134,11 +135,11 @@ void ProgramGL::compileProgram()
     {
         GLint errorInfoLen = 0;
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
-        if (errorInfoLen)
+        if (errorInfoLen > 1)
         {
-            std::string errorInfo(errorInfoLen, '\0');
-            glGetProgramInfoLog(_program, errorInfoLen, NULL, &errorInfo.front());
-            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.c_str());
+            yasio::sbyte_buffer errorInfo{static_cast<size_t>(errorInfoLen), std::true_type{}};
+            glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.data());
+            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.data());
         }
         else
             log("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
@@ -188,11 +189,11 @@ void ProgramGL::computeLocations()
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] =
         _activeUniformInfos[UNIFORM_NAME_EFFECT_TYPE].bufferOffset;
 
-    /// u_texture
+    /// u_tex0
     location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE);
     _builtinUniformLocation[Uniform::TEXTURE].location[0] = location;
 
-    /// u_texture1
+    /// u_tex1
     location                                               = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1);
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
 }

@@ -25,39 +25,61 @@ public:
         CC_SAFE_RELEASE(_depth.texture);
         CC_SAFE_RELEASE(_stencil.texture);
     }
-    void setTargetFlags(TargetBufferFlags flags) { _flags = flags; }
+
+    bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
+
+    void addFlag(TargetBufferFlags flag) {
+        setTargetFlags(_flags |= flag);
+    }
+    void removeFlag(TargetBufferFlags flag) { 
+        setTargetFlags(_flags & ~flag);
+    }
+
     TargetBufferFlags getTargetFlags() const { return _flags; }
+    void setTargetFlags(TargetBufferFlags flags) { 
+        _flags = flags; 
+        _dirty = true;
+    }
 
-    void addFlag(TargetBufferFlags flag) { _flags |= flag; }
-    void removeFlag(TargetBufferFlags flag) { _flags &= ~flag; }
-
-    virtual void bindFrameBuffer() const {};
-    virtual void unbindFrameBuffer() const {};
-
-    virtual void setColorAttachment(ColorAttachment attachment)
+    void setColorAttachment(ColorAttachment attachment)
     {
         for (auto colorItem : _color)
             CC_SAFE_RELEASE(colorItem.texture);
         memcpy(_color, attachment, sizeof(ColorAttachment));
         for (auto colorItem : _color)
             CC_SAFE_RETAIN(colorItem.texture);
+
+        _dirty = true;
     };
-    virtual void setDepthAttachment(TextureBackend* attachment, int level = 0)
+
+    void setColorAttachment(TextureBackend* attachment, int level = 0, int index = 0) { 
+        CC_SAFE_RELEASE(_color[index].texture);
+        _color[index].texture = attachment;
+        _color[index].level   = level;
+        CC_SAFE_RETAIN(_color[index].texture);
+        _dirty = true;
+    }
+
+    void setDepthAttachment(TextureBackend* attachment, int level = 0)
     {
         CC_SAFE_RELEASE(_depth.texture);
         _depth.texture = attachment;
         _depth.level   = level;
         CC_SAFE_RETAIN(_depth.texture);
+
+        _dirty = true;
     };
-    virtual void setStencilAttachment(TextureBackend* attachment, int level = 0)
+    void setStencilAttachment(TextureBackend* attachment, int level = 0)
     {
         CC_SAFE_RELEASE(_stencil.texture);
         _stencil.texture = attachment;
         _stencil.level   = level;
         CC_SAFE_RETAIN(_stencil.texture);
-    };
 
-    bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
+        _dirty = true;
+    };
+    
+    bool isDirty() const { return _dirty; }
 
     ColorAttachment _color{};
     RenderBuffer _depth{};
@@ -66,6 +88,7 @@ public:
 
 protected:
     bool _defaultRenderTarget = false;
+    mutable bool _dirty = false;
     // uint8_t samples = 1;
 };
 

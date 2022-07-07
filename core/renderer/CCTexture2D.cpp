@@ -571,6 +571,9 @@ bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descri
 
     setRenderTarget(descriptor.textureUsage == TextureUsage::RENDER_TARGET);
 
+    if (_pixelFormat == PixelFormat::NONE)
+        _pixelFormat = descriptor.textureFormat;
+
     return true;
 }
 
@@ -732,7 +735,7 @@ void Texture2D::initProgram()
     auto* program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
     _programState      = new cocos2d::backend::ProgramState(program);
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
-    _textureLocation   = _programState->getUniformLocation("u_texture");
+    _textureLocation   = _programState->getUniformLocation("u_tex0");
 
     pipelineDescriptor.programState = _programState;
 

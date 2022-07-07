@@ -63,21 +63,6 @@ class Camera;
 class Console;
 
 /**
- * @brief Matrix stack type.
- */
-enum class MATRIX_STACK_TYPE
-{
-    /// Model view matrix stack
-    MATRIX_STACK_MODELVIEW,
-
-    /// projection matrix stack
-    MATRIX_STACK_PROJECTION,
-
-    /// texture matrix stack
-    MATRIX_STACK_TEXTURE
-};
-
-/**
  @brief Class that creates and handles the main Window and manages how
  and when to execute the Scenes.
 
@@ -150,7 +135,7 @@ public:
 
     // attribute
 
-    /** Gets current running Scene. Director can only run one Scene at a time. */
+    /** Gets the current running Scene. Director can only run one Scene at a time. */
     Scene* getRunningScene() { return _runningScene; }
 
     /** Gets the FPS value. */
@@ -158,13 +143,18 @@ public:
     /** Sets the FPS value. FPS = 1/interval. */
     void setAnimationInterval(float interval);
 
-    /** Whether or not displaying the FPS on the bottom-left corner of the screen. */
-    bool isDisplayStats() { return _displayStats; }
+    /** Whether the FPS on the bottom-left corner of the screen is displayed or not. */
+    bool isStatsDisplay() { return _statsDisplay; }
     /** Display the FPS on the bottom-left corner of the screen. */
-    void setDisplayStats(bool displayStats) { _displayStats = displayStats; }
+    void setStatsDisplay(bool displayStats) { _statsDisplay = displayStats; }
 
-    /** Get seconds per frame. */
+    /** Gets the seconds per frame. */
     float getSecondsPerFrame() { return _secondsPerFrame; }
+
+    /** Sets the stats corner displayed on screen if display stats is enabled. */
+    void setStatsAnchor(AnchorPreset anchor = (AnchorPreset)0);
+
+    /** Sets the FPS value. */
 
     /**
      * Get the GLView.
@@ -592,7 +582,7 @@ protected:
     float _animationInterval    = 0.0f;
     float _oldAnimationInterval = 0.0f;
 
-    bool _displayStats = false;
+    bool _statsDisplay = false;
     float _accumDt     = 0.0f;
     float _frameRate   = 0.0f;
 

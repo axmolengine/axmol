@@ -405,7 +405,7 @@ std::string getDataMD5Hash(const Data& data)
     return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
 }
 
-CC_DLL std::string computeDigest(std::string_view data, std::string_view algorithm)
+std::string computeDigest(std::string_view data, std::string_view algorithm)
 {
     const EVP_MD* md                       = nullptr;
     unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
@@ -778,6 +778,15 @@ std::string urlDecode(std::string_view st)
         }
     }
     return decoded;
+}
+
+CC_DLL uint32_t fourccValue(std::string_view str)
+{
+    if (str.empty() || str[0] != '#')
+        return (uint32_t)-1;
+    uint32_t value = 0;
+    memcpy(&value, str.data() + 1, std::min(sizeof(value), str.size() - 1));
+    return value;
 }
 
 }  // namespace utils

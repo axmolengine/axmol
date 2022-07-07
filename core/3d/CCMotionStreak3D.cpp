@@ -170,7 +170,7 @@ void MotionStreak3D::initCustomCommand()
     blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = _blendFunc.dst;
 
     _locMVP     = _programState->getUniformLocation("u_MVPMatrix");
-    _locTexture = _programState->getUniformLocation("u_texture");
+    _locTexture = _programState->getUniformLocation("u_tex0");
 
     _customCommand.createVertexBuffer(sizeof(VertexData), _vertexData.size(), CustomCommand::BufferUsage::DYNAMIC);
 }
@@ -420,8 +420,11 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
 {
     if (_nuPoints <= 1)
         return;
-    _beforeCommand.init(_globalZOrder);
-    _afterCommand.init(_globalZOrder);
+    auto beforeCommand = renderer->nextCallbackCommand();
+    auto afterCommand = renderer->nextCallbackCommand();
+
+    beforeCommand->init(_globalZOrder);
+    afterCommand->init(_globalZOrder);
     _customCommand.init(_globalZOrder, transform, flags);
 
     auto pmatrix   = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
@@ -429,16 +432,16 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
 
     _programState->setUniform(_locMVP, mvpMatrix.m, sizeof(mvpMatrix.m));
 
-    _beforeCommand.func = CC_CALLBACK_0(MotionStreak3D::onBeforeDraw, this);
-    _afterCommand.func  = CC_CALLBACK_0(MotionStreak3D::onAfterDraw, this);
+    beforeCommand->func = CC_CALLBACK_0(MotionStreak3D::onBeforeDraw, this);
+    afterCommand->func  = CC_CALLBACK_0(MotionStreak3D::onAfterDraw, this);
 
     _customCommand.updateVertexBuffer(_vertexData.data(), sizeof(_vertexData[0]) * _nuPoints * 2);
 
     _customCommand.setVertexDrawInfo(0, _nuPoints * 2);
 
-    renderer->addCommand(&_beforeCommand);
+    renderer->addCommand(beforeCommand);
     renderer->addCommand(&_customCommand);
-    renderer->addCommand(&_afterCommand);
+    renderer->addCommand(afterCommand);
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _nuPoints * 2);
 }
 

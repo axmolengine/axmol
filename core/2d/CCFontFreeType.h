@@ -2,7 +2,7 @@
  Copyright (c) 2013      Zynga Inc.
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -31,12 +31,14 @@
 /// @cond DO_NOT_SHOW
 
 #include "2d/CCFont.h"
-
-#include "ft2build.h"
 #include <string>
 
-#include FT_FREETYPE_H
-#include FT_STROKER_H
+/* freetype fwd decls */
+typedef struct FT_LibraryRec_* FT_Library;
+typedef struct FT_StreamRec_* FT_Stream;
+typedef struct FT_FaceRec_* FT_Face;
+typedef struct FT_StrokerRec_* FT_Stroker;
+typedef struct FT_BBox_ FT_BBox;
 
 NS_CC_BEGIN
 
@@ -45,7 +47,7 @@ class CC_DLL FontFreeType : public Font
 public:
     static const int DistanceMapSpread;
 
-    static FontFreeType* create(std::string_view fontName,
+    static FontFreeType* create(std::string_view fontPath,
                                 float fontSize,
                                 GlyphCollection glyphs,
                                 std::string_view customGlyphs,
@@ -62,6 +64,8 @@ public:
      */
     static void setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
     static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
+
+    static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
 
     /*
     **TrueType fonts with native bytecode hinting**
@@ -86,18 +90,12 @@ public:
                       int posX,
                       int posY,
                       unsigned char* bitmap,
-                      int32_t bitmapWidth,
-                      int32_t bitmapHeight);
-
-    FT_Encoding getEncoding() const { return _encoding; }
+                      int bitmapWidth,
+                      int bitmapHeight);
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
-    unsigned char* getGlyphBitmap(uint32_t theChar,
-                                  int32_t& outWidth,
-                                  int32_t& outHeight,
-                                  Rect& outRect,
-                                  int& xAdvance);
+    unsigned char* getGlyphBitmap(char32_t charCode, int& outWidth, int& outHeight, Rect& outRect, int& xAdvance);
 
     int getFontAscender() const;
     const char* getFontFamily() const;
@@ -115,11 +113,12 @@ private:
     static bool _FTInitialized;
     static bool _streamParsingEnabled;
     static bool _doNativeBytecodeHinting;
+    static char32_t _mssingGlyphCharacter;
 
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool loadFontFace(std::string_view fontName, float fontSize);
+    bool loadFontFace(std::string_view fontPath, float fontSize);
 
     static bool initFreeType();
 
@@ -130,9 +129,8 @@ private:
     std::string_view getGlyphCollection() const;
 
     FT_Face _fontFace;
-    std::unique_ptr<FT_StreamRec> _fontStream;
+    FT_Stream _fontStream;
     FT_Stroker _stroker;
-    FT_Encoding _encoding;
 
     std::string _fontName;
     float _fontSize;

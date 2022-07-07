@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -47,11 +48,20 @@ the callback function.
 */
 class CC_DLL CallbackCommand : public RenderCommand
 {
-public:
+    // only allow render to manage the callbackCommand
+    friend class Renderer;
     CallbackCommand();
+    ~CallbackCommand(){};
 
+public:
     void init(float globalZOrder);
     void init(float globalZorder, const Mat4& transform, unsigned int);
+
+    /**
+     * @brief Reset the command state for reuse
+     * 
+     */
+    void reset();
 
     /**
      Execute the render command and call callback functions.

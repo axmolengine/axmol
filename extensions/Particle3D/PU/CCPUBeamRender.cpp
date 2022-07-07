@@ -34,7 +34,7 @@
 #include "renderer/CCTextureCache.h"
 #include "renderer/backend/ProgramState.h"
 #include "base/CCDirector.h"
-#include "3d/CCSprite3D.h"
+#include "3d/CCMeshRenderer.h"
 #include "3d/CCMesh.h"
 #include "2d/CCCamera.h"
 #include <sstream>

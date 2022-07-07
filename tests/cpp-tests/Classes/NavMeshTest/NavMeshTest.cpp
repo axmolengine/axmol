@@ -146,10 +146,10 @@ void NavMeshBaseTestDemo::initScene()
     rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
     auto rigidBody = Physics3DRigidBody::create(&rbDes);
     auto component = Physics3DComponent::create(rigidBody);
-    auto sprite = Sprite3D::create("NavMesh/scene.obj");
-    sprite->addComponent(component);
-    sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-    this->addChild(sprite);
+    auto mesh = MeshRenderer::create("NavMesh/scene.obj");
+    mesh->addComponent(component);
+    mesh->setCameraMask((unsigned short)CameraFlag::USER1);
+    this->addChild(mesh);
     setPhysics3DDebugCamera(_camera);
 
     auto navMesh = NavMesh::create("NavMesh/all_tiles_tilecache.bin", "NavMesh/geomset.txt");
@@ -168,13 +168,13 @@ void NavMeshBaseTestDemo::initScene()
 
 void NavMeshBaseTestDemo::createAgent(const Vec3& pos)
 {
-    std::string filePath = "Sprite3DTest/girl.c3b";
+    std::string filePath = "MeshRendererTest/girl.c3b";
     NavMeshAgentParam param;
     param.radius = 2.0f;
     param.height = 8.0f;
     param.maxSpeed = 8.0f;
     auto agent = NavMeshAgent::create(param);
-    auto agentNode = Sprite3D::create(filePath);
+    auto agentNode = MeshRenderer::create(filePath);
     agent->setOrientationRefAxes(Vec3(-1.0f, 0.0f, 1.0f));
     AgentUserData* data = new AgentUserData{0.0f};
     agent->setUserData(data);
@@ -201,7 +201,7 @@ void NavMeshBaseTestDemo::createAgent(const Vec3& pos)
 void NavMeshBaseTestDemo::createObstacle(const Vec3& pos)
 {
     auto obstacle = NavMeshObstacle::create(2.0f, 8.0f);
-    auto obstacleNode = Sprite3D::create("Sprite3DTest/cylinder.c3b");
+    auto obstacleNode = MeshRenderer::create("MeshRendererTest/cylinder.c3b");
     obstacleNode->setPosition3D(pos + Vec3(0.0f, -0.5f, 0.0f));
     obstacleNode->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
     obstacleNode->setScale(0.3f);
