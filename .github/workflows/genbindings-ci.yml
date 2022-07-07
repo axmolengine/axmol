@@ -4,11 +4,7 @@ on:
   push:
     branches:
       - dev
-    paths:
-      - core/**/*
-      - extensions/**/*
-      - tools/tolua/*
-      - .github/workflows/genbindings-ci.yml
+
     paths-ignore:
       - '**.md'
 jobs:
