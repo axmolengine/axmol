@@ -184,19 +184,19 @@ public:
         return (const _Ty&)_buffer[idx * sizeof(_Ty)];
     }
 
-    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
-    _Ty& operator[](size_t idx)
-    {
-        assert(sizeof(_Ty) == _stride);
-        return (_Ty&)_buffer[idx * sizeof(_Ty)];
-    }
+    //template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    //_Ty& operator[](size_t idx)
+    //{
+    //    assert(sizeof(_Ty) == _stride);
+    //    return (_Ty&)_buffer[idx * sizeof(_Ty)];
+    //}
 
-    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
-    const _Ty& operator[](size_t idx) const
-    {
-        assert(sizeof(_Ty) == _stride);
-        return (const _Ty&)_buffer[idx * sizeof(_Ty)];
-    }
+    //template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    //const _Ty& operator[](size_t idx) const
+    //{
+    //    assert(sizeof(_Ty) == _stride);
+    //    return (const _Ty&)_buffer[idx * sizeof(_Ty)];
+    //}
 
     uint8_t* data() noexcept { return _buffer.data(); }
     const uint8_t* data() const noexcept { return _buffer.data(); }
