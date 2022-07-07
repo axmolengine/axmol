@@ -14,6 +14,8 @@ on:
       - CMakeLists.txt
       - .github/workflows/windows-ci.yml
       - tools/win-ci/build.ps1
+    paths-ignore:
+      - '**.md'
 
 jobs:
   build:
