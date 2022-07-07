@@ -21,7 +21,6 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
-[Bb]in
 [Dd]ebug/
 [Dd]ebug.win32/
 *.sbr
