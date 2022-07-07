@@ -3,7 +3,7 @@
     {
         "common": [
             {
-                "from" : "bin/adxe.ini",
+                "from" : "bin/axis.ini",
                 "to": ""
             },
             {
@@ -77,7 +77,7 @@
     },
     "modify_config" : [
         {
-            "file_path" : "adxe.ini",
+            "file_path" : "axis.ini",
             "pattern": "plugins=.*",
             "replace_string": "plugins=\n"
         }
