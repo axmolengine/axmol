@@ -190,7 +190,7 @@ if(MSVC)
     target_compile_options(${AXIS_LUA_LIB} PRIVATE /bigobj)
 endif()
 
-get_target_property(lua_ext_depend thirdparty CC_LUA_DEPEND)
+get_target_property(lua_ext_depend thirdparty AX_LUA_DEPEND)
 target_link_libraries(${AXIS_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${AXIS_LUA_LIB}
