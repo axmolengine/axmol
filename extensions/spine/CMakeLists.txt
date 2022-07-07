@@ -15,7 +15,7 @@ add_library(${target_name} ${COCOS_SPINE_HEADER} ${COCOS_SPINE_SRC})
 if(BUILD_SHARED_LIBS)
     target_compile_definitions(${target_name} 
         PRIVATE SPINEPLUGIN_API=DLLEXPORT
-        PUBLIC CC_HAVE_EXTENSION_SPINE=1
+        PUBLIC AX_HAVE_EXTENSION_SPINE=1
     )
 endif()
 
