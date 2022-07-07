@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://adxeproject.github.io/
 
@@ -43,8 +44,8 @@
 
 NS_CC_BEGIN
 
-using uint16_index_format  = std::integral_constant<int, 1>;
-using uint32_index_format  = std::integral_constant<int, 2>;
+using uint16_index_format = std::integral_constant<int, 1>;
+using uint32_index_format = std::integral_constant<int, 2>;
 
 class IndexArray
 {
@@ -59,10 +60,10 @@ public:
     IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
 
     IndexArray(std::initializer_list<uint16_t> rhs, uint16_index_format /*U_SHORT*/)
-        : _stride(formatToStride(backend::IndexFormat::U_SHORT)), _buffer(rhs)
+        : _stride(sizeof(uint16_t)), _buffer(rhs)
     {}
     IndexArray(std::initializer_list<uint32_t> rhs, uint32_index_format /*U_INT*/)
-        : _stride(formatToStride(backend::IndexFormat::U_INT)), _buffer(rhs)
+        : _stride(sizeof(uint32_t)), _buffer(rhs)
     {}
 
     IndexArray(const IndexArray& rhs) : _stride(rhs._stride), _buffer(rhs._buffer) {}
@@ -86,8 +87,18 @@ public:
         _buffer.swap(rhs._buffer);
     }
 
+    /** Returns the format of the index array. */
+    backend::IndexFormat format() const { return strideToFormat(_stride); }
+
     /** Clears the internal byte buffer. */
     void clear() { _buffer.clear(); }
+
+    /** Clears the internal byte buffer and sets the format specified. */
+    void clear(backend::IndexFormat format)
+    {
+        clear();
+        _stride = formatToStride(format);
+    }
 
     /** Pushes back a value. */
     void push_back(uint32_t val)
@@ -96,34 +107,81 @@ public:
         _buffer.append_n((uint8_t*)&val, _stride);
     }
 
-    /** Inserts a list containing unsigned short (uint16_t) data. */
-    void insert(size_t offset, std::initializer_list<uint16_t> ilist, uint16_index_format /*U_SHORT*/)
+    /** Inserts a list containing unsigned int (uint16_t/uint32_t) data. */
+    template <typename _Ty = uint16_t>
+    void insert(_Ty* position, std::initializer_list<_Ty> ilist)
     {
-        assert(_stride == 2);
-        binsert(offset * _stride, ilist.begin(), ilist.end());
+        insert(position, ilist.begin(), ilist.end());
     }
 
-    /** Inserts a list containing unsigned int (uint32_t) data. */
-    void insert(size_t offset, std::initializer_list<uint32_t> ilist, uint32_index_format /*U_INT*/)
+    template <typename _Ty = uint16_t>
+    void insert(_Ty* position, _Ty* first, _Ty* last)
     {
-        assert(_stride == 4);
-        binsert(offset * _stride, ilist.begin(), ilist.end());
+        assert(_stride == sizeof(_Ty));
+        binsert(position, first, last);
+    }
+
+    template <typename _Ty = uint16_t>
+    void insert(size_t offset, std::initializer_list<_Ty> ilist)
+    {
+        assert(_stride == sizeof(_Ty));
+        binsert(begin<_Ty>() + offset, ilist.begin(), ilist.end());
     }
 
     /** Inserts range data based on an offset in bytes. */
-    void binsert(size_t offset, const void* first, const void* last)
+    void binsert(uint8_t* position, const void* first, const void* last)
     {
-        _buffer.insert(offset, (const uint8_t*)first, (const uint8_t*)last);
+        _buffer.insert(position, (const uint8_t*)first, (const uint8_t*)last);
     }
 
-    template <typename _Ty>
+    template <typename _Ty = uint16_t>
+    const _Ty* begin() const
+    {
+        return (const _Ty*)_buffer.begin();
+    }
+    template <typename _Ty = uint16_t>
+    _Ty* begin()
+    {
+        return (_Ty*)_buffer.begin();
+    }
+
+    template <typename _Ty = uint16_t>
+    const _Ty* end() const
+    {
+        return (const _Ty*)_buffer.end();
+    }
+    template <typename _Ty = uint16_t>
+    _Ty* end()
+    {
+        return (_Ty*)_buffer.end();
+    }
+
+    template <typename _Ty = uint16_t>
+    _Ty* erase(_Ty* position)
+    {
+        return (_Ty*)_buffer.erase((uint8_t*)position);
+    }
+
+    template <typename _Ty = uint16_t>
+    _Ty* erase(_Ty* first, _Ty* last)
+    {
+        return (_Ty*)_buffer.erase((uint8_t*)first, (uint8_t*)last);
+    }
+
+    template <typename _Ty = uint16_t>
     _Ty& at(size_t idx)
     {
         assert(sizeof(_Ty) == _stride);
-        if (idx < this->size())
-            return (_Ty&)_buffer[idx * sizeof(_Ty)];
-        throw std::out_of_range("IndexArray: out of range!");
+        return (_Ty&)_buffer[idx * sizeof(_Ty)];
     }
+
+    //uint32_t operator[](size_t idx)
+    //{
+    //    assert(_stride == 2 || _stride == 4);
+    //    uint32_t val = 0;
+    //    memcpy(&val, &_buffer[idx * _stride], _stride);
+    //    return val;
+    //}
 
     uint8_t* data() noexcept { return _buffer.data(); }
     const uint8_t* data() const noexcept { return _buffer.data(); }
@@ -140,16 +198,6 @@ public:
 
     /** Returns true if the container is empty. Otherwise, false. */
     bool empty() const { return _buffer.empty(); }
-
-    /** Returns the format of the index array. */
-    backend::IndexFormat format() const { return strideToFormat(_stride); }
-
-    /** Clears the internal byte buffer and sets the format specified. */
-    void clear(backend::IndexFormat format)
-    {
-        clear();
-        _stride = formatToStride(format);
-    }
 
     template <typename _Fty>
     void for_each(_Fty cb) const
@@ -254,7 +302,6 @@ struct NodeDatas
         nodes.clear();
     }
 };
-
 
 /**mesh data
  * @js NA
