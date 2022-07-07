@@ -1,6 +1,6 @@
-# The adxe CMake options
+# The axis CMake options
 
-## The options for adxe engine
+## The options for axis engine
 - AX_BUILD_TESTS: whether build test porojects: cpp-tests, lua-tests, fairygui-tests, default: `TRUE`
 - AX_ENABLE_XXX for core feature: 
   - AX_ENABLE_MSEDGE_WEBVIEW2: whether enable msedge webview2, default: `TRUE`
@@ -25,6 +25,6 @@
   - AX_ENABLE_EXT_IMGUI: the imgui extension, only support PC platforms, default: `TRUE` 
 - AX_WITH_XXX: usually user don't need care it
 
-## The options for adxe apps
+## The options for axis apps
 
-- AX_PREBUILT_DIR: specific the prebuilt dir (relative to `ADXE_ROOT`), it's very useful for fast linking apps with prebuilt engine libs
+- AX_PREBUILT_DIR: specific the prebuilt dir (relative to `AXIS_ROOT`), it's very useful for fast linking apps with prebuilt engine libs
