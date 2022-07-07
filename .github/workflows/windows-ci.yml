@@ -5,9 +5,15 @@ on:
     branches:
       - dev
       - release
-
-    paths-ignore:
-      - '**.md'
+    paths:
+      - cmake/**/*
+      - core/**/*
+      - extensions/**/*
+      - tests/**/*
+      - thirdparty/**/*
+      - CMakeLists.txt
+      - .github/workflows/windows-ci.yml
+      - tools/win-ci/build.ps1
 
 jobs:
   build:
