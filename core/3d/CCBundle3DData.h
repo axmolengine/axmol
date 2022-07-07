@@ -137,18 +137,18 @@ public:
     template <typename _Ty = uint16_t>
     const _Ty* begin() const
     {
-        return (const Ty*)_buffer.begin();
+        return (const _Ty*)_buffer.begin();
     }
     template <typename _Ty = uint16_t>
     _Ty* begin()
     {
-        return (Ty*)_buffer.begin();
+        return (_Ty*)_buffer.begin();
     }
 
     template <typename _Ty = uint16_t>
     const _Ty* end() const
     {
-        return (const Ty*)_buffer.end();
+        return (const _Ty*)_buffer.end();
     }
     template <typename _Ty = uint16_t>
     _Ty* end()
