@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://adxeproject.github.io/
+https://axis-project.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,14 +31,14 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-CC_DLL const char* adxeVersion()
+CC_DLL const char* axisVersion()
 {
     return "adxe-1.0.0b8";
 }
 
 CC_DLL const char* cocos2dVersion()
 {
-    return adxeVersion();
+    return axisVersion();
 }
 
 NS_CC_END

@@ -5,7 +5,7 @@ include_directories(imgui)
 set(HEADER
     ImGuiPresenter.h
     # CCImGuiColorTextEdit.h
-    imgui_impl_adxe.h
+    imgui_impl_axis.h
     imgui/imconfig.h
     imgui/imgui.h
     imgui/imgui_internal.h
@@ -21,7 +21,7 @@ set(HEADER
 set(SOURCE
     ImGuiPresenter.cpp
     # CCImGuiColorTextEdit.cpp
-    imgui_impl_adxe.cpp
+    imgui_impl_axis.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp
@@ -36,8 +36,8 @@ set(SOURCE
 #~ if(AX_ENABLE_EXT_LUA)
 #~     include_directories(
 #~         lua-bindings
-#~         ${ADXE_ROOT_PATH}/thirdparty/lua/luajit/include
-#~         ${ADXE_ROOT_PATH}/thirdparty/lua/tolua
+#~         ${AXIS_ROOT_PATH}/thirdparty/lua/luajit/include
+#~         ${AXIS_ROOT_PATH}/thirdparty/lua/tolua
 #~     )
 #~     list(APPEND HEADER
 #~         lua-bindings/imgui_lua.hpp

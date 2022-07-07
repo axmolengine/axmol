@@ -1,4 +1,4 @@
-set(cocos_root ${ADXE_ROOT_PATH})
+set(cocos_root ${AXIS_ROOT_PATH})
 
 set(lua_bindings_manual_headers
     manual/CCComponentLua.h
@@ -180,20 +180,20 @@ set(lua_bindings_files
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
-set(ADXE_LUA_LIB adxelua CACHE INTERNAL "The ADXE lua bindings lib name" )
+set(AXIS_LUA_LIB axislua CACHE INTERNAL "The AXIS lua bindings lib name" )
 
-add_library(${ADXE_LUA_LIB} STATIC ${lua_bindings_files})
-target_link_libraries(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
-add_dependencies(${ADXE_LUA_LIB} ${ADXE_CORE_LIB})
+add_library(${AXIS_LUA_LIB} STATIC ${lua_bindings_files})
+target_link_libraries(${AXIS_LUA_LIB} ${AXIS_CORE_LIB})
+add_dependencies(${AXIS_LUA_LIB} ${AXIS_CORE_LIB})
 
 if(MSVC)
-    target_compile_options(${ADXE_LUA_LIB} PRIVATE /bigobj)
+    target_compile_options(${AXIS_LUA_LIB} PRIVATE /bigobj)
 endif()
 
 get_target_property(lua_ext_depend thirdparty CC_LUA_DEPEND)
-target_link_libraries(${ADXE_LUA_LIB} ${lua_ext_depend})
+target_link_libraries(${AXIS_LUA_LIB} ${lua_ext_depend})
 
-target_include_directories(${ADXE_LUA_LIB}
+target_include_directories(${AXIS_LUA_LIB}
     PUBLIC ${cocos_root}/thirdparty/lua
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
@@ -204,16 +204,16 @@ target_include_directories(${ADXE_LUA_LIB}
 )
 
 if(WINDOWS)
-    target_compile_definitions(${ADXE_LUA_LIB} PUBLIC _USRLUASTATIC)
+    target_compile_definitions(${AXIS_LUA_LIB} PUBLIC _USRLUASTATIC)
 endif()
 
 if(AX_ENABLE_MSEDGE_WEBVIEW2)
 endif()
 
-adxe_config_pred(${ADXE_LUA_LIB} AX_ENABLE_MFMEDIA)
-adxe_config_pred(${ADXE_LUA_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
+axis_config_pred(${AXIS_LUA_LIB} AX_ENABLE_MFMEDIA)
+axis_config_pred(${AXIS_LUA_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
-set_target_properties(${ADXE_LUA_LIB}
+set_target_properties(${AXIS_LUA_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -221,6 +221,6 @@ set_target_properties(${ADXE_LUA_LIB}
                       )
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${ADXE_LUA_LIB}")
+    cocos_mark_code_files("${AXIS_LUA_LIB}")
 endif()
 
