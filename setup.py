@@ -27,10 +27,10 @@ THE SOFTWARE.
 
 '''
 This script will install environment variables needed to by adxe. It will set these envrironment variables:
-* ADXE_CONSOLE_ROOT: used to run adxe console tools
+* AXIS_CONSOLE_ROOT: used to run adxe console tools
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK: used to generate applicatoin on Android through commands
-* ADXE_ROOT: path where adxe is installed
+* AXIS_ROOT: path where adxe is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
 
@@ -63,8 +63,10 @@ from time import time
 from time import sleep
 from os.path import dirname
 
-ADXE_ROOT = 'ADXE_ROOT'
-ADXE_CONSOLE_ROOT = 'ADXE_CONSOLE_ROOT'
+
+
+AXIS_ROOT = 'AXIS_ROOT'
+AXIS_CONSOLE_ROOT = 'AXIS_CONSOLE_ROOT'
 
 ANDROID_NDK = 'ANDROID_NDK'
 ANDROID_SDK = 'ANDROID_SDK'
@@ -454,17 +456,17 @@ class SetEnvVar(object):
             print("  ->Add directory \"%s\" into PATH failed!\n" % add_dir)
 
     def set_console_root(self):
-        print("->Check environment variable %s" % ADXE_CONSOLE_ROOT)
+        print("->Check environment variable %s" % AXIS_CONSOLE_ROOT)
         adxe_console_root = os.path.join(
             self.current_absolute_path, 'tools', 'console', 'bin')
-        old_dir = self._find_environment_variable(ADXE_CONSOLE_ROOT)
+        old_dir = self._find_environment_variable(AXIS_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
             if self._isWindows():
                 self.set_windows_path(adxe_console_root)
 
             self._set_environment_variable(
-                ADXE_CONSOLE_ROOT, adxe_console_root)
+                AXIS_CONSOLE_ROOT, adxe_console_root)
         else:
             if old_dir == adxe_console_root:
                 # is same with before, nothing to do
@@ -475,20 +477,20 @@ class SetEnvVar(object):
                 self.remove_dir_from_win_path(old_dir)
                 self.set_windows_path(adxe_console_root)
 
-            self._force_update_env(ADXE_CONSOLE_ROOT, adxe_console_root)
+            self._force_update_env(AXIS_CONSOLE_ROOT, adxe_console_root)
 
     def set_adxe_root(self):
-        print("->Check environment variable %s" % ADXE_ROOT)
+        print("->Check environment variable %s" % AXIS_ROOT)
         adxe_root = self.current_absolute_path
-        old_dir = self._find_environment_variable(ADXE_ROOT)
+        old_dir = self._find_environment_variable(AXIS_ROOT)
         if old_dir is None:
             # add environment variable
-            self._set_environment_variable(ADXE_ROOT, adxe_root)
+            self._set_environment_variable(AXIS_ROOT, adxe_root)
         else:
             if old_dir == adxe_root:
                 # is same with before, nothing to do
                 return
-            self._force_update_env(ADXE_ROOT, adxe_root)
+            self._force_update_env(AXIS_ROOT, adxe_root)
 
     def _force_update_unix_env(self, var_name, value):
         import re
