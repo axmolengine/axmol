@@ -27,7 +27,7 @@
 
 #include "platform/CCPlatformMacros.h"
 #include "base/ccMacros.h"
-#include "base/CCData.h"
+#include "yasio/detail/byte_buffer.hpp"
 
 CC_BACKEND_BEGIN
 
