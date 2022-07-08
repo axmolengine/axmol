@@ -165,11 +165,11 @@ def lint(ctx):
 
 def main():
   default_root = Path.abspath(Path.join(Path.dirname(__file__), '..', '..'))
-  parser = argparse.ArgumentParser(description='The cocos headers lint script.')
+  parser = argparse.ArgumentParser(description='The axis headers lint script.')
   parser.add_argument('-f','--fix', action='store_true', help='fixe the headers while linting')
-  parser.add_argument('root', nargs='?', default= default_root, help='path to cocos2d-x source root directory')
+  parser.add_argument('root', nargs='?', default= default_root, help='path to axis source root directory')
   args = parser.parse_args()
 
-  lint(LintContext(Path.join(args.root, 'cocos'), args.fix))
+  lint(LintContext(Path.join(args.root, 'axis'), args.fix))
 
 main()
