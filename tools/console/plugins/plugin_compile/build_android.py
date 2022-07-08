@@ -533,7 +533,7 @@ class AndroidBuilder(object):
                     if is_compiled:
                         # remove unneeded lua files
                         compile_obj._remove_file_with_ext(src_dir, '.lua')
-                        shutil.rmtree(os.path.join(src_dir, 'cocos'))
+                        shutil.rmtree(os.path.join(src_dir, 'axis'))
 
                 # only build 32bit
                 if build_arch == self.LuaBuildArch.ONLY_BUILD_32BIT:
