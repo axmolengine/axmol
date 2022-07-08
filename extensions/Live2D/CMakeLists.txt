@@ -30,7 +30,7 @@ target_include_directories(${LIB_NAME}
 
 if(NOT IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/Core)
   message(AUTHOR_WARNING "Downloading liblive2d-core-dev ...")
-  file(DOWNLOAD https://github.com/adxeproject/extensions/releases/download/v1.0.0/Live2D-4.4-Core.zip ${CMAKE_CURRENT_LIST_DIR}/Core.zip)
+  file(DOWNLOAD https://github.com/axis-project/archive/releases/download/v1.0.0/Live2D-4.4-Core.zip ${CMAKE_CURRENT_LIST_DIR}/Core.zip)
   file(ARCHIVE_EXTRACT INPUT ${CMAKE_CURRENT_LIST_DIR}/Core.zip DESTINATION ${CMAKE_CURRENT_LIST_DIR}/)
 endif()
 

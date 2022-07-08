@@ -16,7 +16,7 @@ public:
     static BitmapFont* create();
 
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
-#    if defined(ADXE_VERSION)
+#    if defined(AXIS_VERSION)
     virtual cocos2d::FontAtlas* newFontAtlas() override { return new cocos2d::FontAtlas(this); }
 #else
     virtual cocos2d::FontAtlas* createFontAtlas() override { return new cocos2d::FontAtlas(*this); }

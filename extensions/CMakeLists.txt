@@ -1,5 +1,5 @@
 
-# default value for cocos2dx extensions modules to Build
+# default value for axis extensions modules to Build
 # currently 7 extensions
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
@@ -34,12 +34,12 @@ function(setup_cocos_extension_config target_name)
                           "" ${ARGN} )
 
   if(ANDROID)
-    target_link_libraries(${target_name} INTERFACE ${ADXE_CORE_LIB})
-    target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:${ADXE_CORE_LIB},INTERFACE_INCLUDE_DIRECTORIES>)
+    target_link_libraries(${target_name} INTERFACE ${AXIS_CORE_LIB})
+    target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:${AXIS_CORE_LIB},INTERFACE_INCLUDE_DIRECTORIES>)
     # target_compile_definitions(${target_name} PRIVATE CP_USE_CGTYPES=0)
     # target_compile_definitions(${target_name} PRIVATE CP_USE_DOUBLES=0)
   else()
-    target_link_libraries(${target_name} ${ADXE_CORE_LIB})
+    target_link_libraries(${target_name} ${AXIS_CORE_LIB})
   endif()
 
   if(BUILD_SHARED_LIBS)
@@ -104,7 +104,7 @@ endif()
 if(AX_ENABLE_EXT_COCOSTUDIO)
   add_subdirectory(cocostudio)
   if(AX_ENABLE_EXT_SPINE)
-    target_compile_definitions(cocostudio PUBLIC CC_BUILD_WITH_SPINE=1)
+    target_compile_definitions(cocostudio PUBLIC AX_BUILD_WITH_SPINE=1)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio spine particle3d)
     else()
@@ -112,7 +112,7 @@ if(AX_ENABLE_EXT_COCOSTUDIO)
     endif()
   endif()
   if(AX_ENABLE_EXT_DRAGONBONES)
-    target_compile_definitions(cocostudio PRIVATE CC_BUILD_WITH_DRANGBONES=1)
+    target_compile_definitions(cocostudio PRIVATE AX_BUILD_WITH_DRANGBONES=1)
     if(BUILD_SHARED_LIBS)
       target_link_libraries(cocostudio DragonBones)
     endif()
@@ -127,4 +127,4 @@ if(AX_ENABLE_EXT_LUA)
   add_subdirectory(scripting/lua-bindings)
 endif()
 
-message(STATUS "Enabled adxe extensions:${_AX_EXTENSION_LIBS}")
+message(STATUS "Enabled axis extensions:${_AX_EXTENSION_LIBS}")

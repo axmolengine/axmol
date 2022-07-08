@@ -9,26 +9,26 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
 
-    set(ADXE_ROOT "$ENV{ADXE_ROOT}")
-    if(NOT (ADXE_ROOT STREQUAL ""))
-        set(ADXE_ROOT_PATH "${ADXE_ROOT}")
-        file(TO_CMAKE_PATH ${ADXE_ROOT_PATH} ADXE_ROOT_PATH) # string(REPLACE "\\" "/" ADXE_ROOT_PATH ${ADXE_ROOT_PATH})        
-        message(STATUS "Using system env var ADXE_ROOT=${ADXE_ROOT}")
+    set(AXIS_ROOT "$ENV{AXIS_ROOT}")
+    if(NOT (AXIS_ROOT STREQUAL ""))
+        set(AXIS_ROOT_PATH "${AXIS_ROOT}")
+        file(TO_CMAKE_PATH ${AXIS_ROOT_PATH} AXIS_ROOT_PATH) # string(REPLACE "\\" "/" AXIS_ROOT_PATH ${AXIS_ROOT_PATH})        
+        message(STATUS "Using system env var AXIS_ROOT=${AXIS_ROOT}")
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'ADXE_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.py add system env var 'AXIS_ROOT' to specific the engine root")
     endif()
-    set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 
-    include(CocosBuildSet)
+    include(AxisBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
 
     set(_AX_USE_PREBUILT FALSE)
-    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR})
+    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${AXIS_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
+        add_subdirectory(${AXIS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axis/core)
     endif()
 
 endif()
@@ -46,13 +46,13 @@ set(GAME_SOURCE
 
 set(res_res_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/../res"
-    "${ADXE_ROOT_PATH}/tests/cpp-tests/Resources"
+    "${AXIS_ROOT_PATH}/tests/cpp-tests/Resources"
     )
 set(res_src_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/../src"
     )
 set(res_script_folders
-    "${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/script"
+    "${AXIS_ROOT_PATH}/extensions/scripting/lua-bindings/script"
     )
 if(APPLE OR VS)
     cocos_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
@@ -116,10 +116,10 @@ else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
 
     # whole-archive for jni
-    add_subdirectory(${ADXE_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+    add_subdirectory(${AXIS_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 
-    add_subdirectory(${ADXE_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
+    add_subdirectory(${AXIS_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "x86")
         #add `-Wl,--no-warn-shared-textrel` to fix warning "shared library text segment is not shareable clang"
         target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive -Wl,--no-warn-shared-textrel)
@@ -131,7 +131,7 @@ else()
 endif()
 
 if (NOT _AX_USE_PREBUILT)
-    target_link_libraries(${APP_NAME} ${ADXE_LUA_LIB})
+    target_link_libraries(${APP_NAME} ${AXIS_LUA_LIB})
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE Classes)
@@ -145,7 +145,7 @@ setup_cocos_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.adxe.lua_tests")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axis.lua_tests")
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
@@ -175,7 +175,7 @@ if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
 elseif(WINDOWS)
     set(my_res_folder "${CMAKE_CURRENT_SOURCE_DIR}/..")
     cocos_copy_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/cocos")
-    cocos_copy_target_res(${APP_NAME} LINK_TO "${my_res_folder}/res" FOLDERS "${ADXE_ROOT_PATH}/tests/cpp-tests/Resources")
+    cocos_copy_target_res(${APP_NAME} LINK_TO "${my_res_folder}/res" FOLDERS "${AXIS_ROOT_PATH}/tests/cpp-tests/Resources")
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${my_res_folder}")
     if(NOT DEFINED BUILD_ENGINE_DONE)
         set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
@@ -184,11 +184,11 @@ endif()
 
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
-    target_include_directories(${APP_NAME} PRIVATE ${ADXE_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_include_directories(${APP_NAME} PRIVATE ${AXIS_ROOT_PATH}/thirdparty/yaml-cpp/include)
     target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-    include(${ADXE_ROOT_PATH}/cmake/Modules/AdxeLinkHelpers.cmake)
-    adxe_link_lua_prebuilt(${APP_NAME} ${ADXE_ROOT_PATH} ${AX_PREBUILT_DIR})
+    include(${AXIS_ROOT_PATH}/cmake/Modules/AxisLinkHelpers.cmake)
+    axis_link_lua_prebuilt(${APP_NAME} ${AXIS_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

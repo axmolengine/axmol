@@ -2,7 +2,7 @@
 # Copyright (c) 2013-2014 cocos2d-x.org
 # Copyright (c) 2021-2022 Bytedance Inc.
 #
-# https://adxeproject.github.io
+# https://axis-project.github.io
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -40,26 +40,26 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
         configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
     endif()
 
-    set(ADXE_ROOT "$ENV{ADXE_ROOT}")
+    set(AXIS_ROOT "$ENV{AXIS_ROOT}")
 
-    if(NOT (ADXE_ROOT STREQUAL ""))
-        set(ADXE_ROOT_PATH "${ADXE_ROOT}")
-        file(TO_CMAKE_PATH ${ADXE_ROOT_PATH} ADXE_ROOT_PATH) # string(REPLACE "\\" "/" ADXE_ROOT_PATH ${ADXE_ROOT_PATH})
-        message(STATUS "Using system env var ADXE_ROOT=${ADXE_ROOT}")
+    if(NOT (AXIS_ROOT STREQUAL ""))
+        set(AXIS_ROOT_PATH "${AXIS_ROOT}")
+        file(TO_CMAKE_PATH ${AXIS_ROOT_PATH} AXIS_ROOT_PATH) # string(REPLACE "\\" "/" AXIS_ROOT_PATH ${AXIS_ROOT_PATH})
+        message(STATUS "Using system env var AXIS_ROOT=${AXIS_ROOT}")
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'ADXE_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.py add system env var 'AXIS_ROOT' to specific the engine root")
     endif()
 
-    set(CMAKE_MODULE_PATH ${ADXE_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 
-    include(CocosBuildSet)
+    include(AxisBuildSet)
     set(_AX_USE_PREBUILT FALSE)
-    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${ADXE_ROOT_PATH}/${AX_PREBUILT_DIR})
+    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${AXIS_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${ADXE_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/adxe/core)
+        add_subdirectory(${AXIS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axis/core)
     endif()
 endif()
 
@@ -145,18 +145,18 @@ if(NOT ANDROID)
 else()
     add_library(${APP_NAME} SHARED ${all_code_files})
     # whole archive for jni
-    add_subdirectory(${ADXE_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
+    add_subdirectory(${AXIS_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     config_android_shared_libs("org.cocos2dx.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 if (NOT _AX_USE_PREBUILT)
-    target_link_libraries(${APP_NAME} ${ADXE_CORE_LIB})
+    target_link_libraries(${APP_NAME} ${AXIS_CORE_LIB})
 endif()
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
-        PRIVATE ${ADXE_ROOT_PATH}/core/audio
+        PRIVATE ${AXIS_ROOT_PATH}/core/audio
 )
 
 # mark app resources
@@ -164,7 +164,7 @@ setup_cocos_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.adxe.hellocpp")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axis.hellocpp")
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
@@ -193,14 +193,14 @@ endif()
 
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
-    target_include_directories(${APP_NAME} PRIVATE ${ADXE_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_include_directories(${APP_NAME} PRIVATE ${AXIS_ROOT_PATH}/thirdparty/yaml-cpp/include)
     target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-    include(${ADXE_ROOT_PATH}/cmake/Modules/CocosConfigDefine.cmake)
-    use_cocos2dx_compile_define(${APP_NAME})
+    include(${AXIS_ROOT_PATH}/cmake/Modules/AxisConfigDefine.cmake)
+    use_axis_compile_define(${APP_NAME})
 
-    include(${ADXE_ROOT_PATH}/cmake/Modules/AdxeLinkHelpers.cmake)
-    adxe_link_cxx_prebuilt(${APP_NAME} ${ADXE_ROOT_PATH} ${AX_PREBUILT_DIR})
+    include(${AXIS_ROOT_PATH}/cmake/Modules/AxisLinkHelpers.cmake)
+    axis_link_cxx_prebuilt(${APP_NAME} ${AXIS_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

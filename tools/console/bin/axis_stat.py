@@ -1,16 +1,16 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# statistics: Statistics the user behaviors of adxe-console by google analytics
+# statistics: Statistics the user behaviors of axis-console by google analytics
 #
 # Author: Bin Zhang
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-Statistics the user behaviors of adxe-console by google analytics
+Statistics the user behaviors of axis-console by google analytics
 '''
 
-import adxe
+import axis
 import uuid
 import locale
 import httplib
@@ -32,7 +32,7 @@ import multiprocessing
 GA_HOST        = 'www.google-analytics.com'
 GA_PATH        = '/collect'
 GA_APIVERSION  = '1'
-APPNAME     = 'AdxeConcole'
+APPNAME     = 'AxisConsole'
 
 TIMEOUT_VALUE = 0.5
 
@@ -70,7 +70,7 @@ class Fields(object):
 GA_CACHE_EVENTS_FILE = 'cache_events'
 GA_CACHE_EVENTS_BAK_FILE = 'cache_event_bak'
 
-local_cfg_path = os.path.expanduser('~/.adxe')
+local_cfg_path = os.path.expanduser('~/.axis')
 local_cfg_file = os.path.join(local_cfg_path, GA_CACHE_EVENTS_FILE)
 local_cfg_bak_file = os.path.join(local_cfg_path, GA_CACHE_EVENTS_BAK_FILE)
 file_in_use_lock = multiprocessing.Lock()
@@ -94,34 +94,34 @@ def get_language():
 
 def get_user_agent():
     ret_str = None
-    if adxe.os_is_win32():
+    if axis.os_is_win32():
         ver_info = sys.getwindowsversion()
         ver_str = '%d.%d' % (ver_info[0], ver_info[1])
-        if adxe.os_is_32bit_windows():
+        if axis.os_is_32bit_windows():
             arch_str = "WOW32"
         else:
             arch_str = "WOW64"
         ret_str = "Mozilla/5.0 (Windows NT %s; %s) Chrome/33.0.1750.154 Safari/537.36" % (ver_str, arch_str)
-    elif adxe.os_is_mac():
+    elif axis.os_is_mac():
         ver_str = (platform.mac_ver()[0]).replace('.', '_')
         ret_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X %s) Chrome/35.0.1916.153 Safari/537.36" % ver_str
-    elif adxe.os_is_linux():
+    elif axis.os_is_linux():
         arch_str = platform.machine()
         ret_str = "Mozilla/5.0 (X11; Linux %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1636.0 Safari/537.36" % arch_str
 
     return ret_str
 
 def get_system_info():
-    if adxe.os_is_win32():
+    if axis.os_is_win32():
         ret_str = "windows"
         ret_str += "_%s" % platform.release()
-        if adxe.os_is_32bit_windows():
+        if axis.os_is_32bit_windows():
             ret_str += "_%s" % "32bit"
         else:
             ret_str += "_%s" % "64bit"
-    elif adxe.os_is_mac():
+    elif axis.os_is_mac():
         ret_str = "mac_%s" % (platform.mac_ver()[0]).replace('.', '_')
-    elif adxe.os_is_linux():
+    elif axis.os_is_linux():
         ret_str = "linux_%s" % platform.linux_distribution()[0]
     else:
         ret_str = "unknown"
@@ -173,9 +173,9 @@ def gen_bi_event(event, event_value):
     params = {
         'cached_event' : is_cache_event
     }
-    if category == 'adxe':
+    if category == 'axis':
         if action == 'start':
-            event_name = 'adxe_invoked'
+            event_name = 'axis_invoked'
         elif action == 'running_command':
             event_name = 'running_command'
             params['command'] = label
@@ -217,19 +217,19 @@ def gen_bi_event(event, event_value):
     return ret
 
 def get_bi_params(events, event_value, multi_events=False, engine_versio=''):
-    if adxe.os_is_win32():
+    if axis.os_is_win32():
         system_str = 'windows'
         ver_info = sys.getwindowsversion()
         ver_str = '%d.%d' % (ver_info[0], ver_info[1])
-        if adxe.os_is_32bit_windows():
+        if axis.os_is_32bit_windows():
             arch_str = "_32bit"
         else:
             arch_str = "_64bit"
         system_ver = '%s%s' % (ver_str, arch_str)
-    elif adxe.os_is_mac():
+    elif axis.os_is_mac():
         system_str = 'mac'
         system_ver = (platform.mac_ver()[0])
-    elif adxe.os_is_linux():
+    elif axis.os_is_linux():
         system_str = 'linux'
         system_ver = platform.machine()
     else:
@@ -480,7 +480,7 @@ class Statistic(object):
     def __init__(self, engine_version):
         self.process_pool = []
         self.engine_version = engine_version
-        if adxe.os_is_win32():
+        if axis.os_is_win32():
             multiprocessing.freeze_support()
 
     def send_cached_events(self):

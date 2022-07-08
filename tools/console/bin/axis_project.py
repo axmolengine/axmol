@@ -1,7 +1,7 @@
 import os
 import re
 import json
-import adxe
+import axis
 from MultiLanguage import MultiLanguage
 
 class Project(object):
@@ -9,7 +9,7 @@ class Project(object):
     LUA = 'lua'
     JS = 'js'
 
-    CONFIG = '.adxeproj.json'
+    CONFIG = '.axisproj.json'
 
     KEY_PROJ_TYPE = 'project_type'
     KEY_HAS_NATIVE = 'has_native'
@@ -41,9 +41,9 @@ class Project(object):
         proj_path = self._find_project_dir(src_dir)
         # config file is not found
         if proj_path == None:
-            raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_NOT_FOUND_FMT',
+            raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_NOT_FOUND_FMT',
                                       os.path.join(src_dir, Project.CONFIG)),
-                                      adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+                                      axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         project_json = os.path.join(proj_path, Project.CONFIG)
         try:
@@ -53,27 +53,27 @@ class Project(object):
         except Exception:
             if f is not None:
                 f.close()
-            raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_BROKEN_FMT',
+            raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_BROKEN_FMT',
                                       project_json),
-                                      adxe.CCPluginError.ERROR_PARSE_FILE)
+                                      axis.CCPluginError.ERROR_PARSE_FILE)
 
         if project_info is None:
-            raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_PARSE_FAILED_FMT',
-                                      Project.CONFIG), adxe.CCPluginError.ERROR_PARSE_FILE)
+            raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_PARSE_FAILED_FMT',
+                                      Project.CONFIG), axis.CCPluginError.ERROR_PARSE_FILE)
 
-        if not adxe.dict_contains(project_info, Project.KEY_PROJ_TYPE):
-            raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_GET_VALUE_FAILED_FMT',
+        if not axis.dict_contains(project_info, Project.KEY_PROJ_TYPE):
+            raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_GET_VALUE_FAILED_FMT',
                                       (Project.KEY_PROJ_TYPE, Project.CONFIG)),
-                                      adxe.CCPluginError.ERROR_WRONG_CONFIG)
+                                      axis.CCPluginError.ERROR_WRONG_CONFIG)
 
         lang = project_info[Project.KEY_PROJ_TYPE]
         lang = lang.lower()
 
         # The config is invalid
         if not (lang in Project.language_list()):
-            raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_INVALID_LANG_FMT',
+            raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_CFG_INVALID_LANG_FMT',
                                       (Project.KEY_PROJ_TYPE, ', '.join(Project.list_for_display()))),
-                                      adxe.CCPluginError.ERROR_WRONG_CONFIG)
+                                      axis.CCPluginError.ERROR_WRONG_CONFIG)
 
         # record the dir & language of the project
         self._project_dir = proj_path
@@ -81,12 +81,12 @@ class Project(object):
 
         # if is script project, record whether it has native or not
         self._has_native = False
-        if (self._is_script_project() and adxe.dict_contains(project_info, Project.KEY_HAS_NATIVE)):
+        if (self._is_script_project() and axis.dict_contains(project_info, Project.KEY_HAS_NATIVE)):
             self._has_native = project_info[Project.KEY_HAS_NATIVE]
 
         # if has custom step script, record it
         self._custom_step = None
-        if (adxe.dict_contains(project_info, Project.KEY_CUSTOM_STEP_SCRIPT)):
+        if (axis.dict_contains(project_info, Project.KEY_CUSTOM_STEP_SCRIPT)):
             script_path = project_info[Project.KEY_CUSTOM_STEP_SCRIPT]
             if not os.path.isabs(script_path):
                 script_path = os.path.join(self._project_dir, script_path)
@@ -96,9 +96,9 @@ class Project(object):
                 script_dir, script_name = os.path.split(script_path)
                 sys.path.append(script_dir)
                 self._custom_step = __import__(os.path.splitext(script_name)[0])
-                adxe.Logging.info(MultiLanguage.get_string('PROJECT_INFO_FOUND_CUSTOM_STEP_FMT', script_path))
+                axis.Logging.info(MultiLanguage.get_string('PROJECT_INFO_FOUND_CUSTOM_STEP_FMT', script_path))
             else:
-                adxe.Logging.warning(MultiLanguage.get_string('PROJECT_WARNING_CUSTOM_SCRIPT_NOT_FOUND_FMT',
+                axis.Logging.warning(MultiLanguage.get_string('PROJECT_WARNING_CUSTOM_SCRIPT_NOT_FOUND_FMT',
                                       script_path))
                 self._custom_step = None
 
@@ -109,13 +109,13 @@ class Project(object):
             if self._custom_step is not None:
                 self._custom_step.handle_event(event, tp, args)
         except Exception as e:
-            adxe.Logging.warning(MultiLanguage.get_string('PROJECT_WARNING_CUSTOM_STEP_FAILED_FMT', e))
+            axis.Logging.warning(MultiLanguage.get_string('PROJECT_WARNING_CUSTOM_STEP_FAILED_FMT', e))
             raise e
 
     def _find_project_dir(self, start_path):
         path = start_path
         while True:
-            if adxe.os_is_win32():
+            if axis.os_is_win32():
                 # windows root path, eg. c:\
                 if re.match(".+:\\\\$", path):
                     break
@@ -138,7 +138,7 @@ class Project(object):
         f.close()
 
         ret = None
-        if adxe.dict_contains(project_info, key):
+        if axis.dict_contains(project_info, key):
             ret = project_info[key]
 
         return ret
@@ -198,12 +198,12 @@ class Platforms(object):
     LINUX = 'linux'
 
     CFG_CLASS_MAP = {
-        ANDROID : "adxe_project.AndroidConfig",
-        IOS : "adxe_project.iOSConfig",
-        MAC : "adxe_project.MacConfig",
-        WEB : "adxe_project.WebConfig",
-        WIN32 : "adxe_project.Win32Config",
-        LINUX : "adxe_project.LinuxConfig",
+        ANDROID : "axis_project.AndroidConfig",
+        IOS : "axis_project.iOSConfig",
+        MAC : "axis_project.MacConfig",
+        WEB : "axis_project.WebConfig",
+        WIN32 : "axis_project.Win32Config",
+        LINUX : "axis_project.LinuxConfig",
     }
 
     @staticmethod
@@ -226,9 +226,9 @@ class Platforms(object):
             if current_lower in self._available_platforms.keys():
                 self._current = current_lower
             else:
-                raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_INVALID_PLATFORM_FMT',
+                raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_INVALID_PLATFORM_FMT',
                                           (self._available_platforms.keys(), current)),
-                                          adxe.CCPluginError.ERROR_WRONG_ARGS)
+                                          axis.CCPluginError.ERROR_WRONG_ARGS)
 
     def _filter_platforms(self, platforms):
         ret = []
@@ -238,13 +238,13 @@ class Platforms(object):
             "win32" : [ Platforms.WEB, Platforms.WIN32, Platforms.ANDROID ]
         }
         for p in platforms:
-            if adxe.os_is_linux():
+            if axis.os_is_linux():
                 if p in platforms_for_os["linux"]:
                     ret.append(p)
-            if adxe.os_is_mac():
+            if axis.os_is_mac():
                 if p in platforms_for_os["mac"]:
                     ret.append(p)
-            if adxe.os_is_win32():
+            if axis.os_is_win32():
                 if p in platforms_for_os["win32"]:
                     ret.append(p)
 
@@ -278,12 +278,12 @@ class Platforms(object):
         self._available_platforms = {}
         root_path = self._project.get_project_dir()
         for p in platform_list:
-            cfg_class = adxe.get_class(Platforms.CFG_CLASS_MAP[p])
+            cfg_class = axis.get_class(Platforms.CFG_CLASS_MAP[p])
             if cfg_class is None:
                 continue
 
             cfg_key = "%s_cfg" % p
-            if adxe.dict_contains(proj_info, cfg_key):
+            if axis.dict_contains(proj_info, cfg_key):
                 cfg_obj = cfg_class(root_path, self._project._is_script_project(), proj_info[cfg_key])
             else:
                 cfg_obj = cfg_class(root_path, self._project._is_script_project())
@@ -296,8 +296,8 @@ class Platforms(object):
 
         # don't have available platforms
         if len(self._available_platforms) == 0:
-            raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_NO_AVAILABLE_PLATFORMS'),
-                                      adxe.CCPluginError.ERROR_WRONG_CONFIG)
+            raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_NO_AVAILABLE_PLATFORMS'),
+                                      axis.CCPluginError.ERROR_WRONG_CONFIG)
 
     def get_current_platform(self):
         return self._current
@@ -347,9 +347,9 @@ class Platforms(object):
             self._current = self._available_platforms.keys()[0]
             return
 
-        raise adxe.CCPluginError(MultiLanguage.get_string('PROJECT_SPECIFY_PLATFORM_FMT',
+        raise axis.CCPluginError(MultiLanguage.get_string('PROJECT_SPECIFY_PLATFORM_FMT',
                                   str(self._available_platforms.keys())),
-                                  adxe.CCPluginError.ERROR_WRONG_CONFIG)
+                                  axis.CCPluginError.ERROR_WRONG_CONFIG)
 
 class PlatformConfig(object):
     KEY_PROJ_PATH = "project_path"
@@ -365,7 +365,7 @@ class PlatformConfig(object):
         pass
 
     def _parse_info(self, cfg_info):
-        if adxe.dict_contains(cfg_info, PlatformConfig.KEY_PROJ_PATH):
+        if axis.dict_contains(cfg_info, PlatformConfig.KEY_PROJ_PATH):
             self.proj_path = os.path.join(self._proj_root_path, cfg_info[PlatformConfig.KEY_PROJ_PATH])
         else:
             self.proj_path = None
@@ -411,22 +411,22 @@ class LinuxConfig(PlatformConfig):
 
     def _parse_info(self, cfg_info):
         super(LinuxConfig, self)._parse_info(cfg_info)
-        if adxe.dict_contains(cfg_info, LinuxConfig.KEY_CMAKE_PATH):
+        if axis.dict_contains(cfg_info, LinuxConfig.KEY_CMAKE_PATH):
             self.cmake_path = cfg_info[LinuxConfig.KEY_CMAKE_PATH]
         else:
             self.cmake_path = None
 
-        if adxe.dict_contains(cfg_info, LinuxConfig.KEY_BUILD_DIR):
+        if axis.dict_contains(cfg_info, LinuxConfig.KEY_BUILD_DIR):
             self.build_dir = cfg_info[LinuxConfig.KEY_BUILD_DIR]
         else:
             self.build_dir = None
 
-        if adxe.dict_contains(cfg_info, LinuxConfig.KEY_PROJECT_NAME):
+        if axis.dict_contains(cfg_info, LinuxConfig.KEY_PROJECT_NAME):
             self.project_name = cfg_info[LinuxConfig.KEY_PROJECT_NAME]
         else:
             self.project_name = None
 
-        if adxe.dict_contains(cfg_info, LinuxConfig.KEY_BUILD_RESULT_DIR):
+        if axis.dict_contains(cfg_info, LinuxConfig.KEY_BUILD_RESULT_DIR):
             self.build_result_dir = cfg_info[LinuxConfig.KEY_BUILD_RESULT_DIR]
         else:
             self.build_result_dir = None
@@ -476,17 +476,17 @@ class WebConfig(PlatformConfig):
 
     def _parse_info(self, cfg_info):
         super(WebConfig, self)._parse_info(cfg_info)
-        if adxe.dict_contains(cfg_info, WebConfig.KEY_SUB_URL):
+        if axis.dict_contains(cfg_info, WebConfig.KEY_SUB_URL):
             self.sub_url = cfg_info[WebConfig.KEY_SUB_URL]
         else:
             self.sub_url = None
 
-        if adxe.dict_contains(cfg_info, WebConfig.KEY_RUN_ROOT_DIR):
+        if axis.dict_contains(cfg_info, WebConfig.KEY_RUN_ROOT_DIR):
             self.run_root_dir = os.path.join(self._proj_root_path, cfg_info[WebConfig.KEY_RUN_ROOT_DIR])
         else:
             self.run_root_dir = None
 
-        if adxe.dict_contains(cfg_info, WebConfig.KEY_COPY_RESOURCES):
+        if axis.dict_contains(cfg_info, WebConfig.KEY_COPY_RESOURCES):
             self.copy_res = cfg_info[WebConfig.KEY_COPY_RESOURCES]
         else:
             self.copy_res = None

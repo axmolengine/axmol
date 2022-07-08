@@ -9,7 +9,7 @@
                 "*linux",
                 "*CMakeLists.txt",
                 "Resources",
-                "adxe-project-template.json"
+                "axis-project-template.json"
             ]
         },
         {

@@ -1,10 +1,10 @@
-# adxe-console
+# axis-console
 
 
-## Vision of adxe-console
+## Vision of axis-console
 
 
-A command line tool that lets you create, run, publish, debug, etc… your game. It is the swiss-army knife for adxe.
+A command line tool that lets you create, run, publish, debug, etc… your game. It is the swiss-army knife for axis.
 
 This command line tool is in its early stages.
 
@@ -13,12 +13,12 @@ Examples:
 ```
 # starts a new project called "My Game" for multi-platform
 
-$ adxe new MyGame -l cpp -p org.adxe.mygame
+$ axis new MyGame -l cpp -p org.axis.mygame
 
 $ cd MyGame
 
 # Will deploy the project to device and run it
-$ adxe run -p android
+$ axis run -p android
 
 
 ```
@@ -27,25 +27,25 @@ $ adxe run -p android
 
 ## Internals
 
-`adxe.py` is an script whose only responsability is to call its plugins.
-`adxe.bat` will invoke `adxe.py` on windows
-`adxe` will invoke `adxe.py` on Mac OS X and linux
+`axis.py` is an script whose only responsability is to call its plugins.
+`axis.bat` will invoke `axis.py` on windows
+`axis` will invoke `axis.py` on Mac OS X and linux
 
 To get a list of all the registered plugins:
 
 ```
-$ adxe
+$ axis
 ```
 
 To run the "new" plugin:
 
 ```
-$ adxe new
+$ axis new
 ``` 
 
 ## Adding a new plugin to the console
 
-You have to edit `bin/adxe.ini`, and add the class name of your new plugin there. Let's say that you want to add a plugin that deploys the project:
+You have to edit `bin/axis.ini`, and add the class name of your new plugin there. Let's say that you want to add a plugin that deploys the project:
 
 
 ```
@@ -106,21 +106,21 @@ The usage of `build_console.py`:
 ```
 usage: build_console.py [-h] [-s SRC_PATH] [-d DST_PATH]
 
-Generate executable file for adxe-console by PyInstaller.
+Generate executable file for axis-console by PyInstaller.
 
 optional arguments:
   -h, --help            show this help message and exit
   -s SRC_PATH, --src-path SRC_PATH
-                        Specify the path of adxe-console.
+                        Specify the path of axis-console.
   -d DST_PATH, --dst-path DST_PATH
                         Specify the path of output.
 ```
 
 ## Using the Executable
 
-The generated executable files can replace the source code of adxe-console.
+The generated executable files can replace the source code of axis-console.
 
-To fit the limitation of the adxe-console implementation. The generated executable files should located at `ENGINE_PATH/tools/console/bin`.
+To fit the limitation of the axis-console implementation. The generated executable files should located at `ENGINE_PATH/tools/console/bin`.
 
 Then you can use the executable file as same as the source code.
 

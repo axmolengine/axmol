@@ -8,14 +8,14 @@ import json
 import utils
 from . import gen_prebuilt_mk
 
-import adxe
+import axis
 from MultiLanguage import MultiLanguage
 
-from adxe import CCPluginError
-from adxe import Logging
+from axis import CCPluginError
+from axis import Logging
 from argparse import ArgumentParser
 
-class LibsCompiler(adxe.CCPlugin):
+class LibsCompiler(axis.CCPlugin):
     CFG_FILE = 'configs/gen_libs_config.json'
 
     KEY_LIBS_OUTPUT = 'libs_output_dir'
@@ -165,11 +165,11 @@ class LibsCompiler(adxe.CCPlugin):
         if self.clean:
             self.clean_libs()
 
-        if adxe.os_is_mac():
+        if axis.os_is_mac():
             if self.build_mac or self.build_ios:
                 self.compile_mac_ios()
 
-        if adxe.os_is_win32():
+        if axis.os_is_win32():
             if self.build_win:
                 self.compile_win()
 
@@ -367,13 +367,13 @@ class LibsCompiler(adxe.CCPlugin):
                     "*.a$"
                 ]
             }
-            adxe.copy_files_with_config(copy_cfg, obj_dir, android_out_dir)
+            axis.copy_files_with_config(copy_cfg, obj_dir, android_out_dir)
 
         if not self.disable_strip:
             # strip the android libs
             ndk_root = os.environ["ANDROID_NDK"]
-            if adxe.os_is_win32():
-                if adxe.os_is_32bit_windows():
+            if axis.os_is_win32():
+                if axis.os_is_32bit_windows():
                     check_bits = [ "", "-x86_64" ]
                 else:
                     check_bits = [ "-x86_64", "" ]
@@ -385,13 +385,13 @@ class LibsCompiler(adxe.CCPlugin):
                     if os.path.isdir(check_path):
                         sys_folder_name = check_folder_name
                         break
-            elif adxe.os_is_mac():
+            elif axis.os_is_mac():
                 sys_folder_name = "darwin-x86_64"
             else:
                 sys_folder_name = "linux-x86_64"
 
             # set strip execute file name
-            if adxe.os_is_win32():
+            if axis.os_is_win32():
                 strip_execute_name = "strip.exe"
             else:
                 strip_execute_name = "strip"
@@ -418,10 +418,10 @@ class LibsCompiler(adxe.CCPlugin):
 
         engine_dir = self.repo_x
         console_dir = os.path.join(engine_dir, CONSOLE_PATH)
-        if adxe.os_is_win32():
-            cmd_path = os.path.join(console_dir, "adxe.bat")
+        if axis.os_is_win32():
+            cmd_path = os.path.join(console_dir, "axis.bat")
         else:
-            cmd_path = os.path.join(console_dir, "adxe")
+            cmd_path = os.path.join(console_dir, "axis")
 
         return cmd_path
 
@@ -429,7 +429,7 @@ class LibsCompiler(adxe.CCPlugin):
         if not os.path.isdir(folder):
             return
 
-        if adxe.os_is_win32():
+        if axis.os_is_win32():
             for name in os.listdir(folder):
                 basename, ext = os.path.splitext(name)
                 if ext == ".a":

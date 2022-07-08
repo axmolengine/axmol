@@ -17,7 +17,7 @@ function(cocos_copy_target_res cocos_target)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET SYNC_RESOURCE-${cocos_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "    copying to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${ADXE_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${AXIS_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${cc_folder} -d ${link_folder_abs}
         )
     endforeach()
@@ -49,18 +49,18 @@ function(cocos_copy_lua_scripts cocos_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${ADXE_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${AXIS_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${ADXE_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${AXIS_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${ADXE_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${AXIS_ROOT_PATH}/cmake/scripts/sync_folder.py
                     -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
             )
         endif()
@@ -154,10 +154,10 @@ endfunction()
 
 function(copy_thirdparty_dlls cocos_target destDir)
     # init dependency list with direct dependencies
-    get_property(DEPENDENCIES TARGET ${ADXE_THIRDPARTY_NAME} PROPERTY LINK_LIBRARIES)
+    get_property(DEPENDENCIES TARGET ${AXIS_THIRDPARTY_NAME} PROPERTY LINK_LIBRARIES)
     # We're not intersted in interface link libraries of the top-most target
 #     if (INCLUDE_INTERFACE_LINK_LIBRARIES)
-#        get_property(INTERFACE_LINK_LIBRARIES TARGET ${ADXE_THIRDPARTY_NAME} PROPERTY
+#        get_property(INTERFACE_LINK_LIBRARIES TARGET ${AXIS_THIRDPARTY_NAME} PROPERTY
 #   INTERFACE_LINK_LIBRARIES)
 #        list(APPEND DEPENDENCIES ${INTERFACE_LINK_LIBRARIES})
 #     endif()
@@ -175,7 +175,7 @@ function(copy_thirdparty_dlls cocos_target destDir)
     SET(EXT_LIB_FILES "")
  
     foreach(DEPENDENCY ${DEPENDENCIES})
-      # message(STATUS ${DEPENDENCY} " depends by ${ADXE_THIRDPARTY_NAME}")
+      # message(STATUS ${DEPENDENCY} " depends by ${AXIS_THIRDPARTY_NAME}")
       get_property(IMPORTLIB TARGET ${DEPENDENCY} PROPERTY IMPORTED_IMPLIB)
       get_property(IMPORTDLL TARGET ${DEPENDENCY} PROPERTY IMPORTED_LOCATION)
       if(IMPORTLIB)
@@ -223,9 +223,9 @@ function(cocos_copy_target_dll cocos_target)
     # Copy windows angle binaries
     add_custom_command(TARGET ${cocos_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
-        ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
-        ${ADXE_ROOT_PATH}/${ADXE_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
+        ${AXIS_ROOT_PATH}/${AXIS_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
+        ${AXIS_ROOT_PATH}/${AXIS_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
+        ${AXIS_ROOT_PATH}/${AXIS_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
         $<TARGET_FILE_DIR:${cocos_target}>
     )
 
@@ -487,8 +487,8 @@ function(cocos_use_pkg target pkg)
 
 endfunction()
 
-# The adxe preprocessors config helper macro
-macro(adxe_config_pred target_name pred)
+# The axis preprocessors config helper macro
+macro(axis_config_pred target_name pred)
     if(${pred})
         target_compile_definitions(${target_name} PUBLIC ${pred}=1)
     endif()

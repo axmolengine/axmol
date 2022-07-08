@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://adxeproject.github.io/
+https://axis-project.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +27,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __ADXE_H__
-#define __ADXE_H__
+#ifndef __AXIS_H__
+#define __AXIS_H__
 
 // 0x00 HI ME LO
 // 00   03 08 00
 
-#define ADXE_VERSION 0x00010000
+#define AXIS_VERSION 0x00010000
 
 //
 // all cocos2d include files
@@ -272,8 +272,8 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-CC_DLL const char* adxeVersion();
+CC_DLL const char* axisVersion();
 
 NS_CC_END
 
-#endif  // __ADXE_H__
+#endif  // __AXIS_H__

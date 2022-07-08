@@ -30,14 +30,15 @@ THE SOFTWARE.
 #ifndef __COCOS2D_H__
 #define __COCOS2D_H__
 
-#include "adxe.h"
+#include "axis.h"
 
 #define COCOS2D_VERSION 0x00040000
-#define ENGINEX_VERSION ADXE_VERSION
 
 NS_CC_BEGIN
 
 CC_DLL const char* cocos2dVersion();
+
+/** Backward compatibility with old axis projects */
 
 using Sprite3D              = MeshRenderer;
 using Sprite3DMaterial      = MeshMaterial;

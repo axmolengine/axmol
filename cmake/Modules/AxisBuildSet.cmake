@@ -15,12 +15,12 @@ if(CMAKE_TOOLCHAIN_FILE)
 endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
-find_program(COCOS_COMMAND NAME adxe
-    PATHS ${ADXE_ROOT_PATH}/tools/cocos2d-console/bin $ENV{ADXE_CONSOLE_ROOT})
+find_program(COCOS_COMMAND NAME axis
+    PATHS ${AXIS_ROOT_PATH}/tools/axis-console/bin $ENV{AXIS_CONSOLE_ROOT})
 
 message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
-message(STATUS "ADXE_ROOT_PATH:" ${ADXE_ROOT_PATH})
+message(STATUS "AXIS_ROOT_PATH:" ${AXIS_ROOT_PATH})
 message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
@@ -35,26 +35,26 @@ option(AX_ENABLE_EXT_LUA "Build lua libraries" OFF)
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
 # include helper functions
-include(CocosBuildHelpers)
+include(AxisBuildHelpers)
 
 # set common compiler options
 # add target compile define function
 # add target compile options function
-include(CocosConfigDefine)
+include(AxisConfigDefine)
 
 # config libraries dependence
-include(CocosConfigDepend)
+include(AxisConfigDepend)
 
 if(COCOS_COMMAND)
-    get_filename_component(cocos2dx_console_dir ${COCOS_COMMAND} DIRECTORY)
-    set(COCOS2DX_LUAJIT_ROOT ${cocos2dx_console_dir}/../plugins/plugin_luacompile/bin)
-    message(STATUS "COCOS2DX_LUAJIT_ROOT:" ${COCOS2DX_LUAJIT_ROOT})
+    get_filename_component(axis_console_dir ${COCOS_COMMAND} DIRECTORY)
+    set(AXIS_LUAJIT_ROOT ${axis_console_dir}/../plugins/plugin_luacompile/bin)
+    message(STATUS "AXIS_LUAJIT_ROOT:" ${AXIS_LUAJIT_ROOT})
     if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
-        find_program(LUAJIT32_COMMAND NAMES luajit-win32 PATHS ${COCOS2DX_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)
-        find_program(LUAJIT64_COMMAND NAMES luajit-win32 PATHS ${COCOS2DX_LUAJIT_ROOT}/64bit NO_SYSTEM_ENVIRONMENT_PATH)
+        find_program(LUAJIT32_COMMAND NAMES luajit-win32 PATHS ${AXIS_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)
+        find_program(LUAJIT64_COMMAND NAMES luajit-win32 PATHS ${AXIS_LUAJIT_ROOT}/64bit NO_SYSTEM_ENVIRONMENT_PATH)
     elseif("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Linux")
-        find_program(LUAJIT32_COMMAND NAMES luajit-linux PATHS ${COCOS2DX_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)
-        find_program(LUAJIT64_COMMAND NAMES luajit-linux PATHS ${COCOS2DX_LUAJIT_ROOT}/64bit NO_SYSTEM_ENVIRONMENT_PATH)
+        find_program(LUAJIT32_COMMAND NAMES luajit-linux PATHS ${AXIS_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)
+        find_program(LUAJIT64_COMMAND NAMES luajit-linux PATHS ${AXIS_LUAJIT_ROOT}/64bit NO_SYSTEM_ENVIRONMENT_PATH)
     endif()
 endif()
 
