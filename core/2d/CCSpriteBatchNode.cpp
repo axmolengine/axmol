@@ -625,7 +625,7 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
     // add children recursively
     auto& children = sprite->getChildren();
 
-    // adxe Github issue #502
+    // axis Github issue #502
     for (auto iter = children.begin(); iter != children.end();)
     {
         auto child = *iter;

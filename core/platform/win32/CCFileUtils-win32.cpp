@@ -43,7 +43,7 @@ NS_CC_BEGIN
 #define AX_MAX_PATH 512
 
 // The root path of resources, the character encoding is UTF-8.
-// UTF-8 is the only encoding supported by adxe API by default.
+// UTF-8 is the only encoding supported by axis API by default.
 static std::string s_workingDir;
 static std::string s_exeDir;
 

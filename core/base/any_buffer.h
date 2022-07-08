@@ -27,7 +27,7 @@
 #include <new>
 #include <type_traits>
 
-namespace adxe
+namespace axis
 {
 struct any_buffer
 {
@@ -81,4 +81,4 @@ private:
     void* buf  = nullptr;
     size_t cap = 0;
 };
-}  // namespace adxe
+}  // namespace axis

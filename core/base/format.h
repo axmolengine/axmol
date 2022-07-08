@@ -19,8 +19,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef ADXE_FORMAT_H
-#define ADXE_FORMAT_H
+#ifndef AXIS_FORMAT_H
+#define AXIS_FORMAT_H
 
 #ifndef FMT_HEADER_ONLY
 #  define FMT_HEADER_ONLY

@@ -454,7 +454,7 @@ static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t leng
 }  // namespace
 
 /*
- * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and adxe only support pvrtc and etc1
+ * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and axis only support pvrtc and etc1
  * see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
  */
 static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
