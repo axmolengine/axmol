@@ -42,31 +42,12 @@ The byte_buffer concepts:
 #include <type_traits>
 #include <stdexcept>
 #include <initializer_list>
-#include <type_traits>
 #include "yasio/compiler/feature_test.hpp"
 
 namespace yasio
 {
-#define _YASIO_VERIFY_RANGE(cond, mesg)                 \
-  do                                                    \
-  {                                                     \
-    if (cond)                                           \
-      ; /* contextually convertible to bool paranoia */ \
-    else                                                \
-    {                                                   \
-      throw std::out_of_range(mesg);                    \
-    }                                                   \
-                                                        \
-  } while (false)
-
-template <bool _Test, class _Ty = void>
-using enable_if_t = typename ::std::enable_if<_Test, _Ty>::type;
-
 struct default_allocator {
-  static void* reallocate(void* old_block, size_t /*old_size*/, size_t new_size)
-  {
-    return ::realloc(old_block, new_size);
-  }
+  static void* reallocate(void* old_block, size_t /*old_size*/, size_t new_size) { return ::realloc(old_block, new_size); }
 };
 template <typename _Elem, typename _Alloc = default_allocator>
 class basic_byte_buffer {
@@ -74,23 +55,17 @@ class basic_byte_buffer {
                 "The basic_byte_buffer only accept type which is char or unsigned char!");
 
 public:
-  using pointer         = _Elem*;
-  using const_pointer   = const _Elem*;
-  using reference       = _Elem&;
-  using const_reference = const _Elem&;
-  using size_type       = size_t;
-  using value_type      = _Elem;
-  using iterator        = _Elem*; // byte_buffer only needs transparent iterator
-  using const_iterator  = const _Elem*;
-  using allocator_type  = _Alloc;
+  using pointer        = _Elem*;
+  using const_pointer  = const _Elem*;
+  using size_type      = size_t;
+  using value_type     = _Elem;
+  using iterator       = _Elem*;
+  using const_iterator = const _Elem*;
   basic_byte_buffer() {}
   explicit basic_byte_buffer(size_t count) { resize(count); }
   basic_byte_buffer(size_t count, std::true_type /*fit*/) { resize_fit(count); }
-  basic_byte_buffer(size_t count, const_reference val) { resize(count, val); }
-  basic_byte_buffer(size_t count, const_reference val, std::true_type /*fit*/)
-  {
-    resize_fit(count, val);
-  }
+  basic_byte_buffer(size_t count, _Elem val) { resize(count, val); }
+  basic_byte_buffer(size_t count, _Elem val, std::true_type /*fit*/) { resize_fit(count, val); }
   template <typename _Iter>
   basic_byte_buffer(_Iter first, _Iter last)
   {
@@ -102,17 +77,14 @@ public:
     assign(first, last, std::true_type{});
   }
   basic_byte_buffer(const basic_byte_buffer& rhs) { assign(rhs); };
-  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/)
-  {
-    assign(rhs, std::true_type{});
-  }
+  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/) { assign(rhs, std::true_type{}); };
   basic_byte_buffer(basic_byte_buffer&& rhs) noexcept { assign(std::move(rhs)); }
-  template <typename _Ty, enable_if_t<std::is_integral<_Ty>::value, int> = 0>
+  template <typename _Ty>
   basic_byte_buffer(std::initializer_list<_Ty> rhs)
   {
     assign(rhs);
   }
-  template <typename _Ty, enable_if_t<std::is_integral<_Ty>::value, int> = 0>
+  template <typename _Ty>
   basic_byte_buffer(std::initializer_list<_Ty> rhs, std::true_type /*fit*/)
   {
     assign(rhs, std::true_type{});
@@ -133,7 +105,7 @@ public:
   {
     return this->append(std::begin(rhs), std::end(rhs));
   }
-  basic_byte_buffer& operator+=(const_reference rhs)
+  basic_byte_buffer& operator+=(const _Elem& rhs)
   {
     this->push_back(rhs);
     return *this;
@@ -149,20 +121,17 @@ public:
     _Assign_range(first, last, std::true_type{});
   }
   void assign(const basic_byte_buffer& rhs) { _Assign_range(rhs.begin(), rhs.end()); }
-  void assign(const basic_byte_buffer& rhs, std::true_type)
-  {
-    _Assign_range(rhs.begin(), rhs.end(), std::true_type{});
-  }
+  void assign(const basic_byte_buffer& rhs, std::true_type) { _Assign_range(rhs.begin(), rhs.end(), std::true_type{}); }
   void assign(basic_byte_buffer&& rhs) { _Assign_rv(std::move(rhs)); }
-  template <typename _Ty, enable_if_t<std::is_integral<_Ty>::value, int> = 0>
+  template <typename _Ty>
   void assign(std::initializer_list<_Ty> rhs)
   {
-    _Assign_range((iterator)rhs.begin(), (iterator)rhs.end());
+    _Assign_range((_Elem*)rhs.begin(), (_Elem*)rhs.end());
   }
-  template <typename _Ty, enable_if_t<std::is_integral<_Ty>::value, int> = 0>
+  template <typename _Ty>
   void assign(std::initializer_list<_Ty> rhs, std::true_type /*fit*/)
   {
-    _Assign_range((iterator)rhs.begin(), (iterator)rhs.end(), std::true_type{});
+    _Assign_range((_Elem*)rhs.begin(), (_Elem*)rhs.end(), std::true_type{});
   }
   void swap(basic_byte_buffer& rhs) noexcept
   {
@@ -172,26 +141,29 @@ public:
     memcpy(this, _Tmp, sizeof(_Tmp));
   }
   template <typename _Iter>
-  iterator insert(iterator _Where, _Iter first, const _Iter last)
+  void insert(size_t offset, _Iter first, const _Iter last)
   {
-    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last,
-                        "byte_buffer: out of range!");
-    auto insertion_pos = std::distance(_Myfirst, _Where);
-    if (_Where == _Mylast)
+    insert((std::min)(_Myfirst + offset, _Mylast), first, last);
+  }
+  template <typename _Iter>
+  void insert(iterator where, _Iter first, const _Iter last)
+  {
+    if (where == _Mylast)
       append(first, last);
     else
     {
-      auto count = std::distance(first, last);
+      auto count         = std::distance(first, last);
+      auto insertion_pos = where - _Myfirst;
       if (count > 0 && insertion_pos >= 0)
       {
         auto old_size = _Mylast - _Myfirst;
-        _Where        = resize(old_size + count) + insertion_pos;
-        auto move_to  = _Where + count;
-        std::copy_n(_Where, _Mylast - move_to, move_to);
-        std::copy_n(first, count, _Where);
+        resize(old_size + count);
+        where        = _Myfirst + insertion_pos;
+        auto move_to = where + count;
+        std::copy_n(where, _Mylast - move_to, move_to);
+        std::copy_n(first, count, where);
       }
     }
-    return _Myfirst + insertion_pos;
   }
   template <typename _Iter>
   basic_byte_buffer& append(_Iter first, const _Iter last)
@@ -208,36 +180,30 @@ public:
       std::copy_n(first, count, _Myfirst + old_size);
     }
     else if (count == 1)
-      push_back(static_cast<value_type>(*first));
+      push_back(static_cast<_Elem>(*first));
     return *this;
   }
-  void push_back(value_type v)
+  void push_back(_Elem v)
   {
     resize(this->size() + 1);
     *(_Mylast - 1) = v;
   }
-  iterator erase(iterator _Where)
+  void erase(iterator first, iterator last)
   {
-    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where < _Mylast, "byte_buffer: out of range!");
-    _Mylast = std::move(_Where + 1, _Mylast, _Where);
-    return _Where;
-  }
-  iterator erase(iterator first, iterator last)
-  {
-    _YASIO_VERIFY_RANGE((first <= last) && first >= _Myfirst && last <= _Mylast,
-                        "byte_buffer: out of range!");
+    _Verify_range(first, last);
     _Mylast = std::move(last, _Mylast, first);
-    return first;
   }
-  value_type& front()
+  _Elem& front()
   {
-    _YASIO_VERIFY_RANGE(_Myfirst < _Mylast, "byte_buffer: out of range!");
-    return *_Myfirst;
+    if (!this->empty())
+      return *_Myfirst;
+    throw std::out_of_range("byte_buffer: out of range!");
   }
-  value_type& back()
+  _Elem& back()
   {
-    _YASIO_VERIFY_RANGE(_Myfirst < _Mylast, "byte_buffer: out of range!");
-    return *(_Mylast - 1);
+    if (!this->empty())
+      return *(_Mylast - 1);
+    throw std::out_of_range("byte_buffer: out of range!");
   }
   static constexpr size_t max_size() noexcept { return (std::numeric_limits<ptrdiff_t>::max)(); }
   iterator begin() noexcept { return _Myfirst; }
@@ -251,14 +217,14 @@ public:
   void clear() noexcept { _Mylast = _Myfirst; }
   void shrink_to_fit() { shrink_to_fit(this->size()); }
   bool empty() const noexcept { return _Mylast == _Myfirst; }
-  void resize(size_t new_size, const_reference val)
+  void resize(size_t new_size, _Elem val)
   {
     auto old_size = this->size();
     resize(new_size);
     if (old_size < new_size)
       memset(_Myfirst + old_size, val, new_size - old_size);
   }
-  pointer resize(size_t new_size)
+  _Elem* resize(size_t new_size)
   {
     auto old_cap = this->capacity();
     if (old_cap < new_size)
@@ -266,14 +232,14 @@ public:
     _Mylast = _Myfirst + new_size;
     return _Myfirst;
   }
-  void resize_fit(size_t new_size, const_reference val)
+  void resize_fit(size_t new_size, _Elem val)
   {
     auto old_size = this->size();
     resize_fit(new_size);
     if (old_size < new_size)
       memset(_Myfirst + old_size, val, new_size - old_size);
   }
-  pointer resize_fit(size_t new_size)
+  _Elem* resize_fit(size_t new_size)
   {
     if (this->capacity() < new_size)
       _Reallocate_exactly(new_size);
@@ -295,29 +261,41 @@ public:
       _Mylast = _Myfirst + cur_size;
     }
   }
-  const_reference operator[](size_t index) const { return this->at(index); }
-  reference operator[](size_t index) { return this->at(index); }
-  const_reference at(size_t index) const
+  const _Elem& operator[](size_t index) const
   {
-    _YASIO_VERIFY_RANGE(index < this->size(), "byte_buffer: out of range!");
-    return _Myfirst[index];
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
   }
-  reference at(size_t index)
+  _Elem& operator[](size_t index)
   {
-    _YASIO_VERIFY_RANGE(index < this->size(), "byte_buffer: out of range!");
-    return _Myfirst[index];
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
+  }
+  const _Elem& at(size_t index) const
+  {
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
+  }
+  _Elem& at(size_t index)
+  {
+    if (index < this->size())
+      return _Myfirst[index];
+    throw std::out_of_range("byte_buffer: out of range!");
   }
   void attach(void* ptr, size_t len) noexcept
   {
     if (ptr)
     {
       shrink_to_fit(0);
-      _Myfirst = (pointer)ptr;
+      _Myfirst = (_Elem*)ptr;
       _Myend = _Mylast = _Myfirst + len;
     }
   }
   template <typename _TSIZE>
-  pointer detach(_TSIZE& len) noexcept
+  _Elem* detach(_TSIZE& len) noexcept
   {
     auto ptr = _Myfirst;
     len      = static_cast<_TSIZE>(this->size());
@@ -347,7 +325,7 @@ private:
   }
   void _Reallocate_exactly(size_t new_cap)
   {
-    auto new_block = (pointer)_Alloc::reallocate(_Myfirst, _Myend - _Myfirst, new_cap);
+    auto new_block = (_Elem*)_Alloc::reallocate(_Myfirst, _Myend - _Myfirst, new_cap);
     if (new_block || 0 == new_cap)
     {
       _Myfirst = new_block;
@@ -356,9 +334,15 @@ private:
     else
       throw std::bad_alloc{};
   }
-  pointer _Myfirst = nullptr;
-  pointer _Mylast  = nullptr;
-  pointer _Myend   = nullptr;
+  void _Verify_range(iterator first, iterator last)
+  {
+    auto expr = (first <= last) && first >= _Myfirst && last <= _Mylast;
+    if (!expr)
+      throw std::out_of_range("byte_buffer: out of range!");
+  }
+  _Elem* _Myfirst = nullptr;
+  _Elem* _Mylast  = nullptr;
+  _Elem* _Myend   = nullptr;
 };
 using sbyte_buffer = basic_byte_buffer<char>;
 using byte_buffer  = basic_byte_buffer<unsigned char>;
