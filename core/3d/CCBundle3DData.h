@@ -103,7 +103,7 @@ public:
     }
 
     /** Pushes back a value. */
-    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
+    template <typename _Ty, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     void push_back(const _Ty& val)
     {
         assert(_stride == sizeof(_Ty));
@@ -182,20 +182,6 @@ public:
     {
         assert(sizeof(_Ty) == _stride);
         return (const _Ty&)_buffer[idx * sizeof(_Ty)];
-    }
-
-    template <typename _Ty = uint16_t>
-    _Ty& operator[](size_t idx)
-    {
-        assert(sizeof(_Ty) == _stride);
-        return (_Ty&)_buffer[idx * _stride];
-    }
-
-    template <typename _Ty = uint16_t>
-    const _Ty& operator[](size_t idx) const
-    {
-        assert(sizeof(_Ty) == _stride);
-        return (const _Ty&)_buffer[idx * _stride];
     }
 
     uint8_t* data() noexcept { return _buffer.data(); }
