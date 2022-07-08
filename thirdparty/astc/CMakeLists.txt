@@ -9,7 +9,7 @@ include(CheckCCompilerFlag)
 include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
 
-include(../cmake/CocosExternalConfig.cmake)
+include(../cmake/AxisThirdpartyConfig.cmake)
 
 set(${target_name}_src
     astcenc_averages_and_directions.cpp

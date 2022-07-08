@@ -4,7 +4,7 @@ set(target_name dep_${lib_name})
 
 project(${lib_name})
 
-include(../cmake/CocosExternalConfig.cmake)
+include(../cmake/AxisThirdpartyConfig.cmake)
 
 add_library(${target_name} STATIC IMPORTED GLOBAL)
 

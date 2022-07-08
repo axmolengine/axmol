@@ -54,7 +54,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
 
     set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 
-    include(CocosBuildSet)
+    include(AxisBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
     
     set(_AX_USE_PREBUILT FALSE)
@@ -212,8 +212,8 @@ if (AX_WITH_YAML_CPP)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-    include(${AXIS_ROOT_PATH}/cmake/Modules/CocosConfigDefine.cmake)
-    use_cocos2dx_compile_define(${APP_NAME})
+    include(${AXIS_ROOT_PATH}/cmake/Modules/AxisConfigDefine.cmake)
+    use_axis_compile_define(${APP_NAME})
 
     include(${AXIS_ROOT_PATH}/cmake/Modules/AxisLinkHelpers.cmake)
     axis_link_lua_prebuilt(${APP_NAME} ${AXIS_ROOT_PATH} ${AX_PREBUILT_DIR})

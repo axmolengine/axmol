@@ -70,7 +70,7 @@
 
 NS_CC_BEGIN
 
-extern const char* adxeVersion(void);
+extern const char* axisVersion(void);
 
 #define PROMPT "> "
 #define DEFAULT_COMMAND_SEPARATOR '|'
@@ -1562,7 +1562,7 @@ void Console::commandUpload(socket_native_type fd)
 
 void Console::commandVersion(socket_native_type fd, std::string_view /*args*/)
 {
-    Console::Utility::mydprintf(fd, "%s\n", adxeVersion());
+    Console::Utility::mydprintf(fd, "%s\n", axisVersion());
 }
 
 // helper free functions

@@ -52,7 +52,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
 
     set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 
-    include(CocosBuildSet)
+    include(AxisBuildSet)
     set(_AX_USE_PREBUILT FALSE)
     if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${AXIS_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
