@@ -7,9 +7,9 @@ import sys
 import os, os.path
 import shutil
 from optparse import OptionParser
-import adxe
+import axis
 from MultiLanguage import MultiLanguage
-import adxe_project
+import axis_project
 import json
 import re
 from xml.dom import minidom
@@ -53,19 +53,19 @@ class AndroidBuilder(object):
         self.build_type = build_type
 
         # check environment variable
-        self.sdk_root = adxe.check_environment_variable('ANDROID_SDK')
+        self.sdk_root = axis.check_environment_variable('ANDROID_SDK')
         self.ant_root = None
         if os.path.exists(os.path.join(self.app_android_root, "gradle.properties")):
             self.sign_prop_file = os.path.join(self.app_android_root, "gradle.properties")
         elif os.path.exists(os.path.join(self.app_android_root, 'app', "gradle.properties")):
             self.sign_prop_file = os.path.join(self.app_android_root, 'app', "gradle.properties")
         else:
-            raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_GRADLE_PROPERTIES_NOT_FOUND'),
-                                  adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_GRADLE_PROPERTIES_NOT_FOUND'),
+                                  axis.CCPluginError.ERROR_PATH_NOT_FOUND)
         self._parse_cfg()
 
     def _run_cmd(self, command, cwd=None):
-        adxe.CMDRunner.run_cmd(command, self._verbose, cwd=cwd)
+        axis.CMDRunner.run_cmd(command, self._verbose, cwd=cwd)
 
     def _parse_cfg(self):
         # get the properties for sign release apk
@@ -83,10 +83,10 @@ class AndroidBuilder(object):
             cfg = json.load(f, encoding='utf8')
             f.close()
         except Exception:
-            raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_PARSE_CFG_FAILED_FMT', self.cfg_path),
-                                      adxe.CCPluginError.ERROR_PARSE_FILE)
+            raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_PARSE_CFG_FAILED_FMT', self.cfg_path),
+                                      axis.CCPluginError.ERROR_PARSE_FILE)
 
-        if adxe.dict_contains(cfg, project_compile.CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
+        if axis.dict_contains(cfg, project_compile.CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
             if self._no_res:
                 self.res_files = cfg[project_compile.CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES]
             else:
@@ -96,25 +96,25 @@ class AndroidBuilder(object):
 
         move_cfg = {}
         self.key_store = None
-        if adxe.dict_contains(cfg, AndroidBuilder.CFG_KEY_STORE):
+        if axis.dict_contains(cfg, AndroidBuilder.CFG_KEY_STORE):
             self.key_store = cfg[AndroidBuilder.CFG_KEY_STORE]
             move_cfg[self.key_store_str] = self.key_store
             del cfg[AndroidBuilder.CFG_KEY_STORE]
 
         self.key_store_pass = None
-        if adxe.dict_contains(cfg, AndroidBuilder.CFG_KEY_STORE_PASS):
+        if axis.dict_contains(cfg, AndroidBuilder.CFG_KEY_STORE_PASS):
             self.key_store_pass = cfg[AndroidBuilder.CFG_KEY_STORE_PASS]
             move_cfg[self.key_store_pass_str] = self.key_store_pass
             del cfg[AndroidBuilder.CFG_KEY_STORE_PASS]
 
         self.alias = None
-        if adxe.dict_contains(cfg, AndroidBuilder.CFG_KEY_ALIAS):
+        if axis.dict_contains(cfg, AndroidBuilder.CFG_KEY_ALIAS):
             self.alias = cfg[AndroidBuilder.CFG_KEY_ALIAS]
             move_cfg[self.key_alias_str] = self.alias
             del cfg[AndroidBuilder.CFG_KEY_ALIAS]
 
         self.alias_pass = None
-        if adxe.dict_contains(cfg, AndroidBuilder.CFG_KEY_ALIAS_PASS):
+        if axis.dict_contains(cfg, AndroidBuilder.CFG_KEY_ALIAS_PASS):
             self.alias_pass = cfg[AndroidBuilder.CFG_KEY_ALIAS_PASS]
             move_cfg[self.key_alias_pass_str] = self.alias_pass
             del cfg[AndroidBuilder.CFG_KEY_ALIAS_PASS]
@@ -180,8 +180,8 @@ class AndroidBuilder(object):
                 if match:
                     return ((int)(match.group(1)), (int)(match.group(2)))
 
-        raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_UNKNOWN_ANDROID_SDK_TOOLS_VERSION'),
-                                  adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+        raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_UNKNOWN_ANDROID_SDK_TOOLS_VERSION'),
+                                  axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
     def _update_project_properties(self, folder_path, target_str):
         props_path = os.path.join(folder_path, 'project.properties')
@@ -210,8 +210,8 @@ class AndroidBuilder(object):
     def _write_local_properties(self, folder_path):
         local_porps_path = os.path.join(folder_path, 'local.properties')
         sdk_dir = self.sdk_root
-        # ndk_dir = adxe.check_environment_variable('ANDROID_NDK')
-        if adxe.os_is_win32():
+        # ndk_dir = axis.check_environment_variable('ANDROID_NDK')
+        if axis.os_is_win32():
             # On Windows, the path should be like:
             # sdk.dir = C:\\path\\android-sdk
             sdk_dir = sdk_dir.replace('\\', '\\\\')
@@ -256,15 +256,15 @@ class AndroidBuilder(object):
 
 
     def do_ndk_build(self, ndk_build_param, mode, build_type, compile_obj):
-        adxe.Logging.info(MultiLanguage.get_string('COMPILE_INFO_NDK_BUILD_TYPE', build_type))
-        ndk_root = adxe.check_environment_variable('ANDROID_NDK')
+        axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_NDK_BUILD_TYPE', build_type))
+        ndk_root = axis.check_environment_variable('ANDROID_NDK')
 
         toolchain_version = self.get_toolchain_version(ndk_root, compile_obj)
 
         ndk_work_dir = os.path.join(self.app_android_root, 'app')
         reload(sys)
         sys.setdefaultencoding('utf8')
-        ndk_path = adxe.CMDRunner.convert_path_to_cmd(os.path.join(ndk_root, "ndk-build"))
+        ndk_path = axis.CMDRunner.convert_path_to_cmd(os.path.join(ndk_root, "ndk-build"))
 
         # delete template static and dynamic files
         obj_local_dir = os.path.join(ndk_work_dir, "obj", "local")
@@ -308,7 +308,7 @@ class AndroidBuilder(object):
                 abs_lib_path = os.path.normpath(abs_lib_path)
                 if os.path.isdir(abs_lib_path):
                     target_str = self.check_android_platform(sdk_root, android_platform, abs_lib_path)
-                    command = "%s update lib-project -p %s -t %s" % (adxe.CMDRunner.convert_path_to_cmd(sdk_tool_path), abs_lib_path, target_str)
+                    command = "%s update lib-project -p %s -t %s" % (axis.CMDRunner.convert_path_to_cmd(sdk_tool_path), abs_lib_path, target_str)
                     self._run_cmd(command)
 
                     self.update_lib_projects(sdk_root, sdk_tool_path, android_platform, abs_lib_path)
@@ -319,8 +319,8 @@ class AndroidBuilder(object):
             ret = int(match.group(1))
         else:
             if raise_error:
-                raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NOT_VALID_AP_FMT', target_str),
-                                          adxe.CCPluginError.ERROR_PARSE_FILE)
+                raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NOT_VALID_AP_FMT', target_str),
+                                          axis.CCPluginError.ERROR_PARSE_FILE)
             else:
                 ret = -1
 
@@ -329,8 +329,8 @@ class AndroidBuilder(object):
     def get_target_config(self, proj_path):
         property_file = os.path.join(proj_path, "project.properties")
         if not os.path.isfile(property_file):
-            raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_FILE_NOT_FOUND_FMT', property_file),
-                                      adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_FILE_NOT_FOUND_FMT', property_file),
+                                      axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         patten = re.compile(r'^target=(.+)')
         for line in open(property_file):
@@ -343,8 +343,8 @@ class AndroidBuilder(object):
                 if target_num > 0:
                     return target_num
 
-        raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_TARGET_NOT_FOUND_FMT', property_file),
-                                  adxe.CCPluginError.ERROR_PARSE_FILE)
+        raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_TARGET_NOT_FOUND_FMT', property_file),
+                                  axis.CCPluginError.ERROR_PARSE_FILE)
 
     # check the selected android platform
     def check_android_platform(self, sdk_root, android_platform, proj_path):
@@ -354,10 +354,10 @@ class AndroidBuilder(object):
             # not specified platform, use the one in project.properties
             ret = 'android-%d' % min_platform
 
-        ret_path = os.path.join(adxe.CMDRunner.convert_path_to_python(sdk_root), "platforms", ret)
+        ret_path = os.path.join(axis.CMDRunner.convert_path_to_python(sdk_root), "platforms", ret)
         if not os.path.isdir(ret_path):
-            raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NO_AP_IN_SDK_FMT', ret),
-                                      adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NO_AP_IN_SDK_FMT', ret),
+                                      axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         return ret
 
@@ -387,25 +387,25 @@ class AndroidBuilder(object):
             check_folder_name = 'android-%s' % compile_sdk_ver
             check_path = os.path.join(self.sdk_root, 'platforms', check_folder_name)
             if not os.path.isdir(check_path):
-                adxe.Logging.warning(MultiLanguage.get_string('COMPILE_WARNING_COMPILE_SDK_FMT',
+                axis.Logging.warning(MultiLanguage.get_string('COMPILE_WARNING_COMPILE_SDK_FMT',
                                                                (compile_sdk_ver, check_path)))
 
         if build_tools_ver is not None:
             # check the buildToolsVersion
             check_path = os.path.join(self.sdk_root, 'build-tools', build_tools_ver)
             if not os.path.isdir(check_path):
-                adxe.Logging.warning(MultiLanguage.get_string('COMPILE_WARNING_BUILD_TOOLS_FMT',
+                axis.Logging.warning(MultiLanguage.get_string('COMPILE_WARNING_BUILD_TOOLS_FMT',
                                                                (build_tools_ver, check_path)))
 
         # invoke gradlew for gradle building
-        if adxe.os_is_win32():
+        if axis.os_is_win32():
             gradle_path = os.path.join(self.app_android_root, 'gradlew.bat')
         else:
             gradle_path = os.path.join(self.app_android_root, 'gradlew')
 
         if not os.path.isfile(gradle_path):
-            raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_GRALEW_NOT_EXIST_FMT', gradle_path),
-                                      adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_GRALEW_NOT_EXIST_FMT', gradle_path),
+                                      axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         mode_str = 'Debug' if mode == 'debug' else 'Release'
         cmd = '"%s" --parallel --info assemble%s' % (gradle_path, mode_str)
@@ -575,7 +575,7 @@ class AndroidBuilder(object):
                 if not os.path.exists(output_dir):
                     os.makedirs(output_dir)
                 shutil.copy(gen_apk_path, output_dir)
-                adxe.Logging.info(MultiLanguage.get_string('COMPILE_INFO_MOVE_APK_FMT', output_dir))
+                axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_MOVE_APK_FMT', output_dir))
 
                 if mode == "release" and not no_sign:
                     signed_name = "%s-%s-signed.apk" % (project_name, mode)
@@ -588,8 +588,8 @@ class AndroidBuilder(object):
 
                 return apk_path
             else:
-                raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NOT_SPECIFY_OUTPUT'),
-                                          adxe.CCPluginError.ERROR_WRONG_ARGS)
+                raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NOT_SPECIFY_OUTPUT'),
+                                          axis.CCPluginError.ERROR_WRONG_ARGS)
 
     def _gather_sign_info(self):
         user_cfg = {}
@@ -607,7 +607,7 @@ class AndroidBuilder(object):
                 user_cfg[self.key_store_str] = inputed.replace('\\', '/')
                 break
             else:
-                adxe.Logging.warning(MultiLanguage.get_string('COMPILE_INFO_NOT_A_FILE'))
+                axis.Logging.warning(MultiLanguage.get_string('COMPILE_INFO_NOT_A_FILE'))
 
         # get the alias of keystore file
         user_cfg[self.key_alias_str] = self._get_user_input(MultiLanguage.get_string('COMPILE_TIP_INPUT_ALIAS'))
@@ -622,10 +622,10 @@ class AndroidBuilder(object):
         self._write_sign_properties(user_cfg)
 
     def _get_user_input(self, tip_msg):
-        adxe.Logging.warning(tip_msg)
+        axis.Logging.warning(tip_msg)
         ret = None
         while True:
-            ret = adxe.get_input()
+            ret = axis.get_input()
             break
 
         return ret
@@ -639,7 +639,7 @@ class AndroidBuilder(object):
             shutil.rmtree(assets_dir)
 
         # generate parameters for custom steps
-        target_platform = adxe_project.Platforms.ANDROID
+        target_platform = axis_project.Platforms.ANDROID
         cur_custom_step_args = custom_step_args.copy()
         cur_custom_step_args["assets-dir"] = assets_dir
 
@@ -647,14 +647,14 @@ class AndroidBuilder(object):
         os.mkdir(assets_dir)
  
         # invoke custom step : pre copy assets
-        self._project.invoke_custom_step_script(adxe_project.Project.CUSTOM_STEP_PRE_COPY_ASSETS, target_platform, cur_custom_step_args)
+        self._project.invoke_custom_step_script(axis_project.Project.CUSTOM_STEP_PRE_COPY_ASSETS, target_platform, cur_custom_step_args)
 
         # copy resources
         for cfg in res_files:
-            adxe.copy_files_with_config(cfg, app_android_root, assets_dir)
+            axis.copy_files_with_config(cfg, app_android_root, assets_dir)
 
         # invoke custom step : post copy assets
-        self._project.invoke_custom_step_script(adxe_project.Project.CUSTOM_STEP_POST_COPY_ASSETS, target_platform, cur_custom_step_args)
+        self._project.invoke_custom_step_script(axis_project.Project.CUSTOM_STEP_POST_COPY_ASSETS, target_platform, cur_custom_step_args)
 
     def get_apk_info(self):
         manifest_path = os.path.join(self.app_android_root, 'app')

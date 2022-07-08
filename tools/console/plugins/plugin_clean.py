@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# adxe "clean" plugin
+# axis "clean" plugin
 #
 # Author: Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"clean" plugin for adxe command line tool
+"clean" plugin for axis command line tool
 '''
 
 __docformat__ = 'restructuredtext'
@@ -15,10 +15,10 @@ __docformat__ = 'restructuredtext'
 import os
 import shutil
 
-import adxe
+import axis
 from plugin_dist import CCPluginDist
 
-class CCPluginClean(adxe.CCPlugin):
+class CCPluginClean(axis.CCPlugin):
     """
     cleans a project
     """
@@ -36,10 +36,10 @@ class CCPluginClean(adxe.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        adxe.Logging.info("cleaning native")
+        axis.Logging.info("cleaning native")
         obj_path = os.path.join(project_dir, 'obj')
         self._rmdir(obj_path)
-        adxe.Logging.info("cleaning java")
+        axis.Logging.info("cleaning java")
         self._run_cmd("cd \"%s\" && ant clean" % project_dir)
 
     def clean_ios(self):
@@ -47,7 +47,7 @@ class CCPluginClean(adxe.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        adxe.Logging.info("removing intermediate files")
+        axis.Logging.info("removing intermediate files")
         self._run_cmd("cd \"%s\" && xcodebuild clean" % project_dir)
         self._rmdir(CCPluginDist.target_path(project_dir))
 
@@ -56,7 +56,7 @@ class CCPluginClean(adxe.CCPlugin):
             try:
                 shutil.rmtree(path)
             except OSError as e:
-                raise adxe.CCPluginError("Error removing directory: " + str(e.args))
+                raise axis.CCPluginError("Error removing directory: " + str(e.args))
 
 
     def run(self, argv, dependencies):

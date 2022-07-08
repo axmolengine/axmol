@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import json
-import adxe
+import axis
 from MultiLanguage import MultiLanguage
 import sys
 import subprocess
@@ -28,8 +28,8 @@ def check_jdk_version():
     child.wait()
 
     if jdk_version is None:
-        raise adxe.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NO_VALID_JDK'),
-                                  adxe.CCPluginError.ERROR_TOOLS_NOT_FOUND)
+        raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NO_VALID_JDK'),
+                                  axis.CCPluginError.ERROR_TOOLS_NOT_FOUND)
 
     return jdk_version
 
