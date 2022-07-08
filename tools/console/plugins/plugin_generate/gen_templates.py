@@ -7,14 +7,14 @@ import json
 import utils
 from . import modify_template
 import re
-import adxe
+import axis
 
 from MultiLanguage import MultiLanguage
-from adxe import CCPluginError, Logging
+from axis import CCPluginError, Logging
 
 from argparse import ArgumentParser
 
-class TemplateGenerator(adxe.CCPlugin):
+class TemplateGenerator(axis.CCPlugin):
 
     CONFIG_FILE = "configs/gen_templates_config.json"
 
@@ -78,10 +78,10 @@ class TemplateGenerator(adxe.CCPlugin):
 
     def copy_template(self):
         for item in self.config_json[TemplateGenerator.KEY_COPY_FROM_ENGINE]:
-            adxe.copy_files_with_config(item, self.engine_path, self.engine_template_dir)
+            axis.copy_files_with_config(item, self.engine_path, self.engine_template_dir)
 
         for item in self.config_json[TemplateGenerator.KEY_COPY_FROM_BIN_TEMP]:
-            adxe.copy_files_with_config(item, os.path.join(self.cur_dir, 'bin-templates'), self.engine_template_dir)
+            axis.copy_files_with_config(item, os.path.join(self.cur_dir, 'bin-templates'), self.engine_template_dir)
 
     def getConfigJson(self):
         cfg_json_path = os.path.join(self.cur_dir, TemplateGenerator.CONFIG_FILE)
@@ -209,7 +209,7 @@ class TemplateGenerator(adxe.CCPlugin):
 
     def get_version_from_source(self):
         src_engine_path = self.engine_path
-        version_file_path = os.path.join(src_engine_path, "core/adxe.cpp")
+        version_file_path = os.path.join(src_engine_path, "core/axis.cpp")
         pattern = r".*return[ \t]+\"(.*)\";"
 
         # restore the version of engine
@@ -237,7 +237,7 @@ class TemplateGenerator(adxe.CCPlugin):
             if not re.match(".*-template-binary", name):
                 continue
 
-            cfg_path = os.path.join(fullPath, ".adxeproj.json")
+            cfg_path = os.path.join(fullPath, ".axisproj.json")
             cfg_info = {}
             if os.path.exists(cfg_path):
                 f = open(cfg_path)

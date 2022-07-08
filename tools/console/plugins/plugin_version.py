@@ -33,15 +33,15 @@ class CCPluginVersion(cocos2d.CCPlugin):
         return "prints the version of the installed components"
 
     def _show_versions(self):
-        path = os.path.join(self._src_dir, "cocos2dx", "adxe.cpp")
+        path = os.path.join(self._src_dir, "cocos2dx", "axis.cpp")
         if not os.path.exists(path):
-            path = os.path.join(self._src_dir, "cocos", "2d", "adxe.cpp")
+            path = os.path.join(self._src_dir, "cocos", "2d", "axis.cpp")
             if not os.path.exists(path):
                 raise cocos2d.CCPluginError("Couldn't find file with version information")
 
     	with open(path, 'r')  as f:
     		data = f.read()
-    		match = re.search('adxeVersion\(\)\s*{\s*return\s+"([^"]+)"\s*;', data)
+    		match = re.search('axisVersion\(\)\s*{\s*return\s+"([^"]+)"\s*;', data)
     		if match:
     			print 'cocos2d %s' % match.group(1)
     		else:

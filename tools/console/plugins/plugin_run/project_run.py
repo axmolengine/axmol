@@ -1,20 +1,20 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# adxe "install" plugin
+# axis "install" plugin
 #
 # Authr: Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"run" plugin for adxe command line tool
+"run" plugin for axis command line tool
 '''
 
 __docformat__ = 'restructuredtext'
 
 import sys
 import os
-import adxe
+import axis
 from MultiLanguage import MultiLanguage
 import webbrowser
 import threading
@@ -26,7 +26,7 @@ if(sys.version_info.major >= 3):
 else:
     import BaseHTTPServer
 
-class CCPluginRun(adxe.CCPlugin):
+class CCPluginRun(axis.CCPlugin):
     """
     Compiles a project and runs it on the target
     """
@@ -76,7 +76,7 @@ class CCPluginRun(adxe.CCPlugin):
 
     def get_ios_sim_name(self):
         # get the version of xcodebuild
-        ver = adxe.get_xcode_version()
+        ver = axis.get_xcode_version()
         match = re.match(r'(\d+).*', ver)
         ret = None
         if match:
@@ -133,7 +133,7 @@ class CCPluginRun(adxe.CCPlugin):
 
                     if ((typeNum > phoneTypeNum) or
                         (typeNum == phoneTypeNum and tmpType > phoneType) or
-                        (typeNum == phoneTypeNum and tmpType == phoneType and adxe.version_compare(tmpIOSVer, '>', iosVer))):
+                        (typeNum == phoneTypeNum and tmpType == phoneType and axis.version_compare(tmpIOSVer, '>', iosVer))):
                         # find the max phone type number first
                         ret = id
                         retName = name.strip()
@@ -142,7 +142,7 @@ class CCPluginRun(adxe.CCPlugin):
                         iosVer = tmpIOSVer
 
         if ret is None:
-            raise adxe.CCPluginError('Get simulator failed!')
+            raise axis.CCPluginError('Get simulator failed!')
 
         print('Using simulator: %s' % retName)
         return ret
@@ -158,13 +158,13 @@ class CCPluginRun(adxe.CCPlugin):
                 ret = jsonObj['CFBundleIdentifier']
 
         if ret is None:
-            raise adxe.CCPluginError('Get the bundle ID of app %s failed' % app_path)
+            raise axis.CCPluginError('Get the bundle ID of app %s failed' % app_path)
 
         return ret
 
     def _run_ios_app(self, ios_app_path):
-        if not adxe.os_is_mac():
-            raise adxe.CCPluginError('Now only support run iOS simulator on Mac OS')
+        if not axis.os_is_mac():
+            raise axis.CCPluginError('Now only support run iOS simulator on Mac OS')
 
         # get bundle id
         bundle_id = self._get_bundle_id(ios_app_path)
@@ -174,8 +174,8 @@ class CCPluginRun(adxe.CCPlugin):
 
         try:
             # run the simulator
-            xcode_version = adxe.get_xcode_version()
-            xcode9_and_upper = adxe.version_compare(xcode_version,">=",9)
+            xcode_version = axis.get_xcode_version()
+            xcode9_and_upper = axis.version_compare(xcode_version,">=",9)
             if xcode9_and_upper:
                 self._run_cmd('xcrun simctl boot "%s"' % simulator_id)
                 self._run_cmd('open `xcode-select -p`/Applications/Simulator.app')
@@ -196,7 +196,7 @@ class CCPluginRun(adxe.CCPlugin):
 
         deploy_dep = dependencies['deploy']
         if deploy_dep._use_sdk == 'iphoneos':
-            adxe.Logging.warning(MultiLanguage.get_string('RUN_WARNING_IOS_FOR_DEVICE_FMT',
+            axis.Logging.warning(MultiLanguage.get_string('RUN_WARNING_IOS_FOR_DEVICE_FMT',
                                                            os.path.dirname(deploy_dep._iosapp_path)))
         else:
             ios_sim_name = self.get_ios_sim_name()
@@ -217,7 +217,7 @@ class CCPluginRun(adxe.CCPlugin):
         if not self._platforms.is_ios_active():
             return
 
-        adxe.Logging.warning('Do not support running on iOS devices.')
+        axis.Logging.warning('Do not support running on iOS devices.')
 
     def _run_with_desktop_options(self, cmd):
         if self._no_console:
@@ -238,8 +238,8 @@ class CCPluginRun(adxe.CCPlugin):
         if not self._platforms.is_android_active():
             return
 
-        sdk_root = adxe.check_environment_variable('ANDROID_SDK')
-        adb_path = adxe.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
+        sdk_root = axis.check_environment_variable('ANDROID_SDK')
+        adb_path = axis.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
         deploy_dep = dependencies['deploy']
         startapp = "%s shell am start -n \"%s/%s\"" % (adb_path, deploy_dep.package, deploy_dep.activity)
         self._run_cmd(startapp)
@@ -250,7 +250,7 @@ class CCPluginRun(adxe.CCPlugin):
             threading.Event().wait(1)
             webbrowser.open_new(url)
         else:
-            if adxe.os_is_mac():
+            if axis.os_is_mac():
                 if self._param is None:
                     url_cmd = "open -a \"%s\" \"%s\"" % (self._browser, url)
                 else:
@@ -293,18 +293,18 @@ class CCPluginRun(adxe.CCPlugin):
             i += 1
             server_address = (host, port)
             try:
-                adxe.Logging.info(MultiLanguage.get_string('RUN_INFO_HOST_PORT_FMT', (host, port)))
+                axis.Logging.info(MultiLanguage.get_string('RUN_INFO_HOST_PORT_FMT', (host, port)))
                 httpd = ServerClass(server_address, HandlerClass)
             except Exception as e:
                 httpd = None
-                adxe.Logging.warning(MultiLanguage.get_string('RUN_WARNING_SERVER_FAILED_FMT', (host, port, e)))
+                axis.Logging.warning(MultiLanguage.get_string('RUN_WARNING_SERVER_FAILED_FMT', (host, port, e)))
 
             if httpd is not None:
                 break
 
         if httpd is None:
-            raise adxe.CCPluginError(MultiLanguage.get_string('RUN_ERROR_START_SERVER_FAILED'),
-                                      adxe.CCPluginError.ERROR_OTHERS)
+            raise axis.CCPluginError(MultiLanguage.get_string('RUN_ERROR_START_SERVER_FAILED'),
+                                      axis.CCPluginError.ERROR_OTHERS)
 
         from threading import Thread
         sub_url = deploy_dep.sub_url
@@ -313,8 +313,8 @@ class CCPluginRun(adxe.CCPlugin):
         thread.start()
 
         sa = httpd.socket.getsockname()
-        with adxe.pushd(run_root):
-            adxe.Logging.info(MultiLanguage.get_string('RUN_INFO_SERVING_FMT', (sa[0], sa[1])))
+        with axis.pushd(run_root):
+            axis.Logging.info(MultiLanguage.get_string('RUN_INFO_SERVING_FMT', (sa[0], sa[1])))
             httpd.serve_forever()
 
     def run_win32(self, dependencies):
@@ -324,7 +324,7 @@ class CCPluginRun(adxe.CCPlugin):
         deploy_dep = dependencies['deploy']
         run_root = deploy_dep.run_root
         exe = deploy_dep.project_name
-        with adxe.pushd(run_root):
+        with axis.pushd(run_root):
             self._run_with_desktop_options(os.path.join(run_root, exe))
 
     def run_linux(self, dependencies):
@@ -334,7 +334,7 @@ class CCPluginRun(adxe.CCPlugin):
         deploy_dep = dependencies['deploy']
         run_root = deploy_dep.run_root
         exe = deploy_dep.project_name
-        with adxe.pushd(run_root):
+        with axis.pushd(run_root):
             self._run_with_desktop_options(os.path.join(run_root, exe))
 
     def run_tizen(self, dependencies):
@@ -343,8 +343,8 @@ class CCPluginRun(adxe.CCPlugin):
 
         deploy_dep = dependencies['deploy']
         tizen_packageid = deploy_dep.tizen_packageid
-        tizen_studio_path = adxe.check_environment_variable("TIZEN_STUDIO_HOME")
-        tizen_cmd_path = adxe.CMDRunner.convert_path_to_cmd(os.path.join(tizen_studio_path, "tools", "ide", "bin", "tizen"))
+        tizen_studio_path = axis.check_environment_variable("TIZEN_STUDIO_HOME")
+        tizen_cmd_path = axis.CMDRunner.convert_path_to_cmd(os.path.join(tizen_studio_path, "tools", "ide", "bin", "tizen"))
 
         startapp = "%s run -p %s" % (tizen_cmd_path, tizen_packageid)
         self._run_cmd(startapp)
@@ -352,7 +352,7 @@ class CCPluginRun(adxe.CCPlugin):
 
     def run(self, argv, dependencies):
         self.parse_args(argv)
-        adxe.Logging.info(MultiLanguage.get_string('RUN_INFO_START_APP'))
+        axis.Logging.info(MultiLanguage.get_string('RUN_INFO_START_APP'))
         self.run_android_device(dependencies)
         self.run_ios_sim(dependencies)
         # self.run_ios_device()

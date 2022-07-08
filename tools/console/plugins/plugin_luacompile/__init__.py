@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# adxe "luacompile" plugin
+# axis "luacompile" plugin
 #
 # Copyright 2013 (C) Intel
 #
@@ -20,7 +20,7 @@ import json
 import inspect
 import shutil
 
-import adxe
+import axis
 from MultiLanguage import MultiLanguage
 
 ############################################################ 
@@ -94,7 +94,7 @@ def decrypt(str, key):
 
 
 #import cocos
-class CCPluginLuaCompile(adxe.CCPlugin):
+class CCPluginLuaCompile(axis.CCPlugin):
     """
     compiles (encodes) and minifies Lua files
     """
@@ -130,8 +130,8 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         self._disable_compile = options.disable_compile
 
         if self._luajit_exe_path is None:
-            raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_TOOL_NOT_FOUND'),
-                                      adxe.CCPluginError.ERROR_TOOLS_NOT_FOUND)
+            raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_TOOL_NOT_FOUND'),
+                                      axis.CCPluginError.ERROR_TOOLS_NOT_FOUND)
 
         self._luajit_dir = os.path.dirname(self._luajit_exe_path)
 
@@ -147,13 +147,13 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         try:
             pos = luafile.index(self._current_src_dir)
             if pos != 0:
-                raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_SRCDIR_NAME_NOT_FOUND'),
-                                          adxe.CCPluginError.ERROR_WRONG_ARGS)
+                raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_SRCDIR_NAME_NOT_FOUND'),
+                                          axis.CCPluginError.ERROR_WRONG_ARGS)
 
             return luafile[len(self._current_src_dir)+1:]
         except ValueError:
-            raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_SRCDIR_NAME_NOT_FOUND'),
-                                      adxe.CCPluginError.ERROR_WRONG_ARGS)
+            raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_SRCDIR_NAME_NOT_FOUND'),
+                                      axis.CCPluginError.ERROR_WRONG_ARGS)
 
     def get_output_file_path(self, luafile):
         """
@@ -172,9 +172,9 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         except OSError:
             if os.path.exists(dst_rootpath) == False:
                 # There was an error on creation, so make sure we know about it
-                raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_MKDIR_FAILED_FMT',
+                raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_MKDIR_FAILED_FMT',
                                                                    dst_rootpath),
-                                          adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+                                          axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         # print "return luac path: "+luac_filepath
         return luac_filepath
@@ -183,11 +183,11 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         ret = None
 
         bit_prefix = "64bit" if self._bytecode_64bit else "32bit"
-        if adxe.os_is_win32():
+        if axis.os_is_win32():
             ret = os.path.join(self._workingdir, "bin", bit_prefix, "luajit-win.exe")
-        elif adxe.os_is_mac():
+        elif axis.os_is_mac():
             ret = os.path.join(self._workingdir, "bin", bit_prefix, "luajit-mac")
-        elif adxe.os_is_linux():
+        elif axis.os_is_linux():
             ret = os.path.join(self._workingdir, "bin", bit_prefix, "luajit-linux")
 
         print("luajit bin path: " + ret)
@@ -197,9 +197,9 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         """
         Compiles lua file
         """
-        adxe.Logging.debug(MultiLanguage.get_string('LUACOMPILE_DEBUG_COMPILE_FILE_FMT', lua_file))
+        axis.Logging.debug(MultiLanguage.get_string('LUACOMPILE_DEBUG_COMPILE_FILE_FMT', lua_file))
 
-        with adxe.pushd(self._luajit_dir):
+        with axis.pushd(self._luajit_dir):
             cmd_str = "\"%s\" -b \"%s\" \"%s\"" % (self._luajit_exe_path, lua_file, output_file)
             self._run_cmd(cmd_str)
 
@@ -227,7 +227,7 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         - `self`:
         """
 
-        adxe.Logging.info(MultiLanguage.get_string('LUACOMPILE_INFO_PROCESS_FILE'))
+        axis.Logging.info(MultiLanguage.get_string('LUACOMPILE_INFO_PROCESS_FILE'))
         index = 0
         for src_dir in self._src_dir_arr:
             for lua_file in self._lua_files[src_dir]:
@@ -255,15 +255,15 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         self.parse_args(argv)
 
         # tips
-        adxe.Logging.warning(MultiLanguage.get_string('LUACOMPILE_WARNING_TIP_MSG'))
+        axis.Logging.warning(MultiLanguage.get_string('LUACOMPILE_WARNING_TIP_MSG'))
         # create output directory
         try:
             os.makedirs(self._dst_dir)
         except OSError:
             if os.path.exists(self._dst_dir) == False:
-                raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_MKDIR_FAILED_FMT',
+                raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_MKDIR_FAILED_FMT',
                                                                    self._dst_dir),
-                                          adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+                                          axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         # deep iterate the src directory
         for src_dir in self._src_dir_arr:
@@ -273,7 +273,7 @@ class CCPluginLuaCompile(adxe.CCPlugin):
 
         self.handle_all_lua_files()
 
-        adxe.Logging.info(MultiLanguage.get_string('LUACOMPILE_INFO_FINISHED'))
+        axis.Logging.info(MultiLanguage.get_string('LUACOMPILE_INFO_FINISHED'))
 
     def parse_args(self, argv):
         """
@@ -311,16 +311,16 @@ class CCPluginLuaCompile(adxe.CCPlugin):
         options = parser.parse_args(argv)
 
         if options.src_dir_arr == None:
-            raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_SRC_NOT_SPECIFIED'),
-                                      adxe.CCPluginError.ERROR_WRONG_ARGS)
+            raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_SRC_NOT_SPECIFIED'),
+                                      axis.CCPluginError.ERROR_WRONG_ARGS)
         elif options.dst_dir == None:
-            raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_DST_NOT_SPECIFIED'),
-                                      adxe.CCPluginError.ERROR_WRONG_ARGS)
+            raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_DST_NOT_SPECIFIED'),
+                                      axis.CCPluginError.ERROR_WRONG_ARGS)
         else:
             for src_dir in options.src_dir_arr:
                 if os.path.exists(src_dir) == False:
-                    raise adxe.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_DIR_NOT_EXISTED_FMT')
-                                              % (src_dir), adxe.CCPluginError.ERROR_PATH_NOT_FOUND)
+                    raise axis.CCPluginError(MultiLanguage.get_string('LUACOMPILE_ERROR_DIR_NOT_EXISTED_FMT')
+                                              % (src_dir), axis.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         # script directory
         if getattr(sys, 'frozen', None):
