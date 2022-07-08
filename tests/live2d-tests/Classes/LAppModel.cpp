@@ -13,7 +13,7 @@
 #include <Motion/CubismMotion.hpp>
 #include <Physics/CubismPhysics.hpp>
 #include <CubismDefaultParameterId.hpp>
-#include <Rendering/adxe/CubismRenderer_Cocos2dx.hpp>
+#include <Rendering/axis/CubismRenderer_Cocos2dx.hpp>
 #include <Utils/CubismString.hpp>
 #include <Id/CubismIdManager.hpp>
 #include "Motion/CubismMotionQueueEntry.hpp"
