@@ -4,7 +4,7 @@
  Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://adxeproject.github.io/
+ https://axis-project.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@
 #include "base/ccUTF8.h"
 
 // !FIXME: the previous version of cocos2d::log not thread safe
-// since adxe make it multi-threading safe by default
+// since axis make it multi-threading safe by default
 #if !defined(CC_LOG_MULTITHREAD)
 #    define CC_LOG_MULTITHREAD 1
 #endif
@@ -131,7 +131,7 @@ void log(const char* format, ...)
     va_end(args);
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "adxe debug info", "%s", buf.c_str());
+    __android_log_print(ANDROID_LOG_DEBUG, "axis debug info", "%s", buf.c_str());
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
     buf.push_back('\n');

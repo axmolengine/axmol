@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2021 Bytedance Inc.
 
- https://adxeproject.github.io/
+ https://axis-project.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef ADXE_FORMAT_H
-#define ADXE_FORMAT_H
+#ifndef AXIS_FORMAT_H
+#define AXIS_FORMAT_H
 
 #ifndef FMT_HEADER_ONLY
 #  define FMT_HEADER_ONLY
