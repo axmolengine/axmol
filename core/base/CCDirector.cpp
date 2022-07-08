@@ -193,14 +193,14 @@ void Director::setDefaultValues()
     Configuration* conf = Configuration::getInstance();
 
     // default FPS
-    float fps             = conf->getValue("adxe.fps", Value(kDefaultFPS)).asFloat();
+    float fps             = conf->getValue("axis.fps", Value(kDefaultFPS)).asFloat();
     _oldAnimationInterval = _animationInterval = 1.0f / fps;
 
     // Display FPS
-    _statsDisplay = conf->getValue("adxe.display_fps", Value(false)).asBool();
+    _statsDisplay = conf->getValue("axis.display_fps", Value(false)).asBool();
 
     // GL projection
-    std::string projection = conf->getValue("adxe.gl.projection", Value("3d")).asString();
+    std::string projection = conf->getValue("axis.gl.projection", Value("3d")).asString();
     if (projection == "3d")
         _projection = Projection::_3D;
     else if (projection == "2d")
@@ -211,7 +211,7 @@ void Director::setDefaultValues()
         CCASSERT(false, "Invalid projection value");
 
     // Default pixel format for PNG images with alpha
-    std::string pixel_format = conf->getValue("adxe.texture.pixel_format_for_png", Value("rgba8888")).asString();
+    std::string pixel_format = conf->getValue("axis.texture.pixel_format_for_png", Value("rgba8888")).asString();
     if (pixel_format == "rgba8888")
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     else if (pixel_format == "rgba4444")
@@ -225,16 +225,16 @@ void Director::setDefaultValues()
     */
 
     // PVR v2 has alpha premultiplied ?
-    bool pvr_alpha_premultiplied = conf->getValue("adxe.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
+    bool pvr_alpha_premultiplied = conf->getValue("axis.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
 
     // ASTC has alpha premultiplied ?
-    bool astc_alpha_premultiplied = conf->getValue("adxe.texture.astc_has_pma", Value{true}).asBool();
+    bool astc_alpha_premultiplied = conf->getValue("axis.texture.astc_has_pma", Value{true}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ASTC, astc_alpha_premultiplied);
 
     // ETC2 has alpha premultiplied ?
     // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set etc2 PMA default to `false`
-    bool etc2_alpha_premultiplied = conf->getValue("adxe.texture.etc2_has_pma", Value{false}).asBool();
+    bool etc2_alpha_premultiplied = conf->getValue("axis.texture.etc2_has_pma", Value{false}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ETC2, etc2_alpha_premultiplied);
 }
 

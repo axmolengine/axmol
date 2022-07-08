@@ -564,7 +564,7 @@ public:
     virtual const Vec2& getContentSize() const;
 
     /**
-     * The basic node hit test, since adxe-1.0
+     * The basic node hit test, since axis-1.0
      *
      * @param worldPoint   The coord in GL world space.
      *
