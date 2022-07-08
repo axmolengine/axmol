@@ -55,14 +55,9 @@ message(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 
 # custom target property for lua/js link
 define_property(TARGET
-    PROPERTY CC_JS_DEPEND
-    BRIEF_DOCS "cocos2d js depend libs"
-    FULL_DOCS "use to save depend libs of cocos2d js project"
-) 
-define_property(TARGET
     PROPERTY CC_LUA_DEPEND
-    BRIEF_DOCS "cocos2d lua depend libs"
-    FULL_DOCS "use to save depend libs of cocos2d lua project"
+    BRIEF_DOCS "axis lua depend libs"
+    FULL_DOCS "use to save depend libs of axis lua project"
 ) 
 
 # config c standard
@@ -91,7 +86,7 @@ endif()
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 
 # set hash style to both for android old device compatible
-# see also: https://github.com/adxeproject/adxe/discussions/614
+# see also: https://github.com/axis-project/axis/discussions/614
 if (ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
 endif()
@@ -103,20 +98,20 @@ if(WINDOWS)
         # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
         # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
         if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
-            message(STATUS "using Windows MSVC generate adxe project, MSVC_VERSION:${MSVC_VERSION}")
+            message(STATUS "using Windows MSVC generate axis project, MSVC_VERSION:${MSVC_VERSION}")
         else()
-            message(FATAL_ERROR "using Windows MSVC generate adxe project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
+            message(FATAL_ERROR "using Windows MSVC generate axis project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
         endif()
     else()
-        message(FATAL_ERROR "please using Windows MSVC compile adxe project, support other compile tools not yet")
+        message(FATAL_ERROR "please using Windows MSVC compile axis project, support other compile tools not yet")
     endif()
 endif()
 
 # Set macro definitions for special platforms
-function(use_cocos2dx_compile_define target)
+function(use_axis_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:COCOS2D_DEBUG=1>)
     
-    # !important adxe not use double precision
+    # !important axis not use double precision
     # target_compile_definitions(${target} PUBLIC CP_USE_CGTYPES=0)
     # target_compile_definitions(${target} PUBLIC CP_USE_DOUBLES=0)
     
@@ -162,7 +157,7 @@ function(use_cocos2dx_compile_define target)
 endfunction()
 
 # Set compiler options
-function(use_cocos2dx_compile_options target)
+function(use_axis_compile_options target)
     if(MSVC)
         target_compile_options(${target}
             PUBLIC /MP

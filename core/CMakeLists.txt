@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-# this CMakeLists is to generate Cocos2d-x Engine Library
+# this CMakeLists is to generate Axis Engine Library
 # build axis
 # build axislua if AX_ENABLE_EXT_LUA=ON
 
@@ -119,11 +119,11 @@ add_subdirectory(${AXIS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${AXIS_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
-use_cocos2dx_compile_define(${AXIS_CORE_LIB})
-use_cocos2dx_compile_options(${AXIS_CORE_LIB})
+use_axis_compile_define(${AXIS_CORE_LIB})
+use_axis_compile_options(${AXIS_CORE_LIB})
 
 # use all platform related system libs
-use_cocos2dx_libs_depend(${AXIS_CORE_LIB})
+use_axis_libs_depend(${AXIS_CORE_LIB})
 
 target_include_directories(${AXIS_CORE_LIB}
     PUBLIC ${AXIS_ROOT_PATH}

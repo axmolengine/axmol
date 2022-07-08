@@ -1,5 +1,5 @@
 
-# default value for cocos2dx extensions modules to Build
+# default value for axis extensions modules to Build
 # currently 7 extensions
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 

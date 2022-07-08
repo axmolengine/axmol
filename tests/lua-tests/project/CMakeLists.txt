@@ -19,7 +19,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
     set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 
-    include(CocosBuildSet)
+    include(AxisBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
 
     set(_AX_USE_PREBUILT FALSE)

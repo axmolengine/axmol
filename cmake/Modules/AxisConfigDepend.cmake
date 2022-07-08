@@ -1,4 +1,4 @@
-macro(cocos2dx_depend)
+macro(axis_depend)
     # confim the libs, prepare to link
     set(PLATFORM_SPECIFIC_LIBS)
 
@@ -104,8 +104,8 @@ macro(cocos2dx_depend)
     endif()
 endmacro()
 
-macro(use_cocos2dx_libs_depend target)
-    cocos2dx_depend()
+macro(use_axis_libs_depend target)
+    axis_depend()
     foreach(platform_lib ${PLATFORM_SPECIFIC_LIBS})
         target_link_libraries(${target} ${platform_lib})
     endforeach()

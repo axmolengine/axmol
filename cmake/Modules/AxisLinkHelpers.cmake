@@ -14,7 +14,7 @@ endif()
 
 message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
 
-function(adxe_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
             PRIVATE CC_STATIC=1
@@ -87,7 +87,7 @@ function(adxe_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         assets-manager.lib
         cocostudio.lib
         DragonBones.lib
-        adxe.lib
+        axis.lib
         box2d.lib
         chipmunk.lib
         freetype.lib
@@ -156,19 +156,19 @@ function(adxe_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
     endif()
-endfunction(adxe_link_cxx_prebuilt)
+endfunction(axis_link_cxx_prebuilt)
 
-function(adxe_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    adxe_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
+function(axis_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+    axis_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
 
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
 	        PRIVATE _USRLUASTATIC=1
         )
     endif()
-    target_link_libraries(${APP_NAME} adxelua lua-cjson tolua plainlua)
+    target_link_libraries(${APP_NAME} axislua lua-cjson tolua plainlua)
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
          $<TARGET_FILE_DIR:${APP_NAME}>)
-endfunction(adxe_link_lua_prebuilt)
+endfunction(axis_link_lua_prebuilt)

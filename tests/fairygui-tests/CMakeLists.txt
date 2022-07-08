@@ -42,7 +42,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
     set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 
-    include(CocosBuildSet)
+    include(AxisBuildSet)
     add_subdirectory(${AXIS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axis/core)
 endif()
 

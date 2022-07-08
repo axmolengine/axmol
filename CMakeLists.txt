@@ -42,8 +42,8 @@ set(CMAKE_MODULE_PATH ${AXIS_ROOT_PATH}/cmake/Modules/)
 # prevent in-source-build
 include(PreventInSourceBuilds)
 
-# works before build libcocos2d
-include(CocosBuildSet)
+# works before build libaxis
+include(AxisBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
 option(AX_BUILD_EXAMPLES "Build examples" ON)

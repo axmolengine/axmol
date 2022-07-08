@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(ADXE_HAVE_WEBVIEW2)
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
 
 #    include "UIWebViewImpl-win32.h"
 #    include "UIWebView.h"

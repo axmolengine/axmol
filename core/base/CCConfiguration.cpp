@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-extern const char* adxeVersion();
+extern const char* axisVersion();
 
 Configuration* Configuration::s_sharedConfiguration = nullptr;
 
@@ -66,7 +66,7 @@ Configuration::Configuration()
 
 bool Configuration::init()
 {
-    _valueDict["adxe.version"] = Value(adxeVersion());
+    _valueDict["adxe.version"] = Value(axisVersion());
 
 #if CC_ENABLE_PROFILERS
     _valueDict["adxe.compiled_with_profiler"] = Value(true);
