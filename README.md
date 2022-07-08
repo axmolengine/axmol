@@ -1,5 +1,6 @@
 # adxe
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7508ce5e97ee42a593484022d4289b0f)](https://app.codacy.com/gh/axis-project/axis?utm_source=github.com&utm_medium=referral&utm_content=axis-project/axis&utm_campaign=Badge_Grade_Settings)
 [![dev](https://img.shields.io/github/v/release/adxeproject/adxe?include_prereleases&label=release)](https://github.com/adxeproject/adxe/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/adxeproject/adxe/blob/master/LICENSE)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/adxeproject/adxe?utm_source=github.com&utm_medium=referral&utm_content=adxeproject/adxe&utm_campaign=Badge_Grade_Settings)
