@@ -5,14 +5,9 @@ on:
     branches:
       - dev
       - release
-    paths:
-      - cmake/**/*
-      - core/**/*
-      - extensions/**/*
-      - tests/**/*
-      - thirdparty/**/*
-      - CMakeLists.txt
-      - .github/workflows/osx-ci.yml
+
+    paths-ignore:
+      - '**.md'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
