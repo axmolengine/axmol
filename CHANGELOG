@@ -31,7 +31,7 @@ axis-1.0  ??
 - [HIGHLIGHT] Add extension 'Live2D' support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
 - [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `adxeproject/buildware`
+- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `axisproject/buildware`
 - [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
 - [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
@@ -66,7 +66,7 @@ axis-1.0  ??
 - [REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
 - [REFINE] Improve android astc support check
 - [REFINE] Improve the "Physics part" (#379), thanks to @aismann 
-- [REFINE] Rename command line to to `adxe`
+- [REFINE] Rename command line to to `axis`
 - [REFINE] Update imgui to 1.84 WIP
 - [REFINE] Rename thirdparty folder `external` to `thirdparty`
 - [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
