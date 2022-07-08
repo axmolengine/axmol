@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd.
 
-https://axis-project.github.io/
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -178,7 +178,7 @@ Color4F operator/(Color4F lhs, float rhs);
 
 /**
  * Hue Saturation Value color space composed of 4 floats.
- * @since axis-1.0.0b7
+ * @since adxe-1.0.0b7
  * 
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
  */
@@ -227,7 +227,7 @@ HSV operator/(HSV lhs, float rhs);
 
 /**
  * Hue Saturation Luminance color space composed of 4 floats.
- * @since axis-1.0.0b7
+ * @since adxe-1.0.0b7
  *
  * Implementation source: https://gist.github.com/ciembor/1494530
  */

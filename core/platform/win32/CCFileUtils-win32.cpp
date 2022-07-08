@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ NS_CC_BEGIN
 #define AX_MAX_PATH 512
 
 // The root path of resources, the character encoding is UTF-8.
-// UTF-8 is the only encoding supported by axis API by default.
+// UTF-8 is the only encoding supported by adxe API by default.
 static std::string s_workingDir;
 static std::string s_exeDir;
 

@@ -5,7 +5,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axis-project.github.io/
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ typedef struct _MipmapInfo
     _MipmapInfo() : address(NULL), len(0) {}
 } MipmapInfo;
 
-/** The Image class for loading all images supported by axis . */
+/** The Image class for loading all images supported by adxe . */
 class CC_DLL Image : public Ref
 {
 public:

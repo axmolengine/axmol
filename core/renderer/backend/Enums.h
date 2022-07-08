@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
 
- https://axis-project.github.io/
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -144,7 +144,7 @@ enum class PixelFormat : uint32_t
     D24S8,
     //!!!Please append depth stencil pixel format
 
-    /* the count of pixel format supported by axis */
+    /* the count of pixel format supported by adxe */
     COUNT,
 
     NONE = 0xffff

@@ -3,7 +3,7 @@
  Copyright (c) 2021 @denghe
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 #include <new>
 #include <type_traits>
 
-namespace axis
+namespace adxe
 {
 struct any_buffer
 {
@@ -81,4 +81,4 @@ private:
     void* buf  = nullptr;
     size_t cap = 0;
 };
-}  // namespace axis
+}  // namespace adxe
