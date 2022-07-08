@@ -33,7 +33,7 @@ NS_CC_BEGIN
 
 CC_DLL const char* axisVersion()
 {
-    return "adxe-1.0.0b9";
+    return "axis-1.0.0b9";
 }
 
 CC_DLL const char* cocos2dVersion()
