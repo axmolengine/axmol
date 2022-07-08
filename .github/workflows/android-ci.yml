@@ -5,16 +5,9 @@ on:
     branches:
       - dev
       - release
-    paths:
-      - cmake/**/*
-      - core/**/*
-      - extensions/**/*
-      - tests/**/*
-      - thirdparty/**/*
-      - CMakeLists.txt
-      - .github/workflows/android-ci.yml
-      - tools/unix-ci/**/*
 
+    paths-ignore:
+      - '**.md'
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   GH_OS_NAME: linux

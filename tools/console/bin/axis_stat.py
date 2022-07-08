@@ -13,7 +13,7 @@ Statistics the user behaviors of axis-console by google analytics
 import axis
 import uuid
 import locale
-import httplib
+
 import urllib
 import platform
 import sys
@@ -26,6 +26,15 @@ import datetime
 import zlib
 
 import multiprocessing
+
+urlEncode = None
+
+if sys.version_info.major >= 3:
+    import http.client as httplib
+    urlEncode = urllib.parse.urlencode
+else:
+    import httplib
+    urlEncode = urllib.urlencode
 
 # GA related Constants
 
@@ -85,7 +94,7 @@ def get_user_id():
     node = uuid.getnode()
     mac = uuid.UUID(int = node).hex[-12:]
 
-    uid = hashlib.md5(mac).hexdigest()
+    uid = hashlib.md5(mac.encode('utf-8')).hexdigest()
     return uid
 
 def get_language():
@@ -101,13 +110,13 @@ def get_user_agent():
             arch_str = "WOW32"
         else:
             arch_str = "WOW64"
-        ret_str = "Mozilla/5.0 (Windows NT %s; %s) Chrome/33.0.1750.154 Safari/537.36" % (ver_str, arch_str)
+        ret_str = "Mozilla/5.0 (Windows NT %s; %s) Chrome/103.0.5060.114 Safari/537.36" % (ver_str, arch_str)
     elif axis.os_is_mac():
         ver_str = (platform.mac_ver()[0]).replace('.', '_')
-        ret_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X %s) Chrome/35.0.1916.153 Safari/537.36" % ver_str
+        ret_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X %s) Chrome/103.0.5060.114 Safari/537.36" % ver_str
     elif axis.os_is_linux():
         arch_str = platform.machine()
-        ret_str = "Mozilla/5.0 (X11; Linux %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1636.0 Safari/537.36" % arch_str
+        ret_str = "Mozilla/5.0 (X11; Linux %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36" % arch_str
 
     return ret_str
 
@@ -216,7 +225,7 @@ def gen_bi_event(event, event_value):
 
     return ret
 
-def get_bi_params(events, event_value, multi_events=False, engine_versio=''):
+def get_bi_params(events, event_value, multi_events=False, engine_version=''):
     if axis.os_is_win32():
         system_str = 'windows'
         ver_info = sys.getwindowsversion()
@@ -419,11 +428,11 @@ def do_send_ga_cached_event(engine_version):
 def get_params_str(event, event_value, is_ga=True, multi_events=False, engine_version=''):
     if is_ga:
         params = get_static_params(engine_version)
-        params[Fields.EVENT_CATEGORY] = '2dx-' + event[0]
+        params[Fields.EVENT_CATEGORY] = 'ax-' + event[0]
         params[Fields.EVENT_ACTION]   = event[1]
         params[Fields.EVENT_LABEL]    = event[2]
         params[Fields.EVENT_VALUE]    = '%d' % event_value
-        params_str = urllib.urlencode(params)
+        params_str = urlEncode(params)
     else:
         params = get_bi_params(event, event_value, multi_events, engine_version)
         strParam = json.dumps(params)

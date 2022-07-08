@@ -1090,8 +1090,12 @@ if __name__ == "__main__":
     if match:
         STAT_VERSION = match.group(1)
 
-    DataStatistic.show_stat_agreement(skip_agree_value)
-    DataStatistic.stat_event('cocos', 'start', 'invoked')
+    force_disable_stats = True # Temp disable stats
+    if force_disable_stats:
+        DataStatistic.change_agree_stat(False)
+    else:
+        DataStatistic.show_stat_agreement(skip_agree_value)
+        DataStatistic.stat_event('axis', 'start', 'invoked')
 
     if not _check_python_version():
         DataStatistic.terminate_stat()
@@ -1117,7 +1121,7 @@ if __name__ == "__main__":
         argv = sys.argv[2:]
         # try to find plugin by name
         if command in plugins:
-            DataStatistic.stat_event('cocos', 'running_command', command)
+            DataStatistic.stat_event('axis', 'running_command', command)
             run_plugin(command, argv, plugins)
         else:
             # try to find plugin by category_name, so the len(sys.argv) at
@@ -1128,7 +1132,7 @@ if __name__ == "__main__":
                 command = sys.argv[1] + '_' + sys.argv[2]
                 argv = sys.argv[3:]
                 if command in plugins:
-                    DataStatistic.stat_event('cocos', 'running_command', command)
+                    DataStatistic.stat_event('axis', 'running_command', command)
                     run_plugin(command, argv, plugins)
                 else:
                     raise CCPluginError(MultiLanguage.get_string('COCOS_ERROR_CMD_NOT_FOUND_FMT',
