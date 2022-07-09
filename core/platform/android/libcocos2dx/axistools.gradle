@@ -91,7 +91,7 @@ class VersionComparator implements Comparator<String> {
 
 }
 
-class adxetools {
+class axistools {
     static int compareVersion(String ver1, String ver2) {
         return new VersionComparator().compare(ver1, ver2);
     }
@@ -113,7 +113,7 @@ class adxetools {
             propertiesFile.withInputStream {
                 properties.load(it)
                 def foundNdkVer = properties['Pkg.Revision']
-                def ret = adxetools.compareVersion(foundNdkVer, ndkVer)
+                def ret = axistools.compareVersion(foundNdkVer, ndkVer)
                 if(ret == 0) {
                     println("Using found ndk (revision=$foundNdkVer,path=$ndkRoot)")
                 }
@@ -216,7 +216,7 @@ class adxetools {
                     def foundVer = verInfo[2]
                     def minusIdx = foundVer.indexOf('-')
                     def canonVer = minusIdx == -1 ? foundVer : foundVer.substring(0, minusIdx)
-                    def ret = adxetools.compareVersion(canonVer, cmakeVer)
+                    def ret = axistools.compareVersion(canonVer, cmakeVer)
                     if (ret == 0) {
                         println("Using found cmake version: $canonVer")
                         foundCMakeVer = canonVer
@@ -288,4 +288,4 @@ class adxetools {
     }
 }
 
-ext.adxetools = adxetools
+ext.axistools = axistools

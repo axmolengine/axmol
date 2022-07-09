@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://adxeproject.github.io/
+https://axis-project.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ struct particle_point
  * Particle emission shapes.
  * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha
  * emission mask
- * @since adxe-1.0.0b8
+ * @since axis-1.0.0b8
  */
 struct EmissionShape
 {
@@ -75,7 +75,7 @@ struct EmissionShape
 
 /**
  * Particle emission mask descriptor.
- * @since adxe-1.0.0b8
+ * @since axis-1.0.0b8
  */
 struct ParticleEmissionMaskDescriptor
 {
@@ -237,7 +237,7 @@ public:
 
 /**
  * Particle emission mask cache.
- * @since adxe-1.0.0b8
+ * @since axis-1.0.0b8
  */
 class CC_DLL ParticleEmissionMaskCache : public cocos2d::Ref
 {

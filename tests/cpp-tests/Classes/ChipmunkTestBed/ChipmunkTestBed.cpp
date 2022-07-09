@@ -305,8 +305,8 @@ void updateMouseBody(void)
 
 ChipmunkTestBed::ChipmunkTestBed()
 {
-    // halx99: since adxe init scene default camera at 'initWithXXX' function, only change design size at scene
-    // construct is ok see also: https://github.com/adxeproject/adxe/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
+    // halx99: since axis init scene default camera at 'initWithXXX' function, only change design size at scene
+    // construct is ok see also: https://github.com/axis-project/axis/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
     auto director = Director::getInstance();
     auto glview   = director->getOpenGLView();
     Size designSize(960 * 0.85, 640 * 0.85);

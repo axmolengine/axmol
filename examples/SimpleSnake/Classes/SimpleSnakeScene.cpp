@@ -131,12 +131,12 @@ bool SimpleSnake::init()
         this->addChild(label2, 1);
     }
 
-    // add "ADXE" splash screen"
-    auto sprite = Sprite::create("ADXE_white.png"sv);
+    // add "AXIS" splash screen"
+    auto sprite = Sprite::create("AXIS_white.png"sv);
     setNodeIgnoreDesignScale(sprite);
     if (sprite == nullptr)
     {
-        problemLoading("'ADXE_white.png'");
+        problemLoading("'AXIS_white.png'");
     }
     else
     {

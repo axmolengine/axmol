@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://adxeproject.github.io/
+ https://axis-project.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -184,15 +184,15 @@ public:
         return (const _Ty&)_buffer[idx * sizeof(_Ty)];
     }
 
-    template <typename _Ty>
-    _Ty& operator[](_Ty idx)
+    template <typename _Ty = uint16_t>
+    _Ty& operator[](size_t idx)
     {
         assert(sizeof(_Ty) == _stride);
         return (_Ty&)_buffer[idx * _stride];
     }
 
-    template <typename _Ty>
-    const _Ty& operator[](_Ty idx) const
+    template <typename _Ty = uint16_t>
+    const _Ty& operator[](size_t idx) const
     {
         assert(sizeof(_Ty) == _stride);
         return (const _Ty&)_buffer[idx * _stride];
