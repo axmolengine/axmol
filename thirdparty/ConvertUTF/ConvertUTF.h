@@ -177,7 +177,7 @@ Boolean isLegalUTF8String(const UTF8 **source, const UTF8 *sourceEnd);
 
 unsigned getNumBytesForUTF8(UTF8 firstByte);
 
-// adxe-specific
+// axis-specific
 int getUTF8StringLength(const UTF8* utf8);
 
 } /* end namespace llvm */

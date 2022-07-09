@@ -1,4 +1,4 @@
-# The adxe thirdparty libraries
+# The axis thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
 - Version: git 2.1-e37380e (18155) on branch `chromium/4951` @Google Chrome 101.0.4951.41
@@ -23,7 +23,7 @@
 - Upstream: https://github.com/bulletphysics/bullet3
 - Version: 3.24
 - License: zlib
-- Update method: Compare `adxe/thirdparty/bullet` with `bullet3/src`
+- Update method: Compare `axis/thirdparty/bullet` with `bullet3/src`
 
 ## c-ares
 - Upstream: https://github.com/c-ares/c-ares
@@ -259,7 +259,7 @@
 - Version: git-8422188 (7)
 - License: Apache-2.0
 
-## Some third party libs supporting adxe too:
+## Some third party libs supporting axis too:
    - Live2D for cocos2d-x, with lua binding:  https://github.com/Xrysnow/cocos2d-x-live2d
      - Live2D is also part of the 'extensions'.
 

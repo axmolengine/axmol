@@ -1,5 +1,5 @@
 # This file is copy from https://github.com/google/angle with some modifications
-# Defines the ADXE style for automatic reformatting.
+# Defines the AXIS style for automatic reformatting.
 # https://code.google.com/p/angleproject/wiki/CodingStandard
 # See Clang docs: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
 BasedOnStyle: Chromium

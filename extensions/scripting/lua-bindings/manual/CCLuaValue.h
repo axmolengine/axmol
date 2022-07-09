@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://adxeproject.github.io/
+ https://axis-project.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -263,14 +263,14 @@ private:
     void copy(const LuaValue& rhs);
 };
 
-inline std::string adxelua_tostr(lua_State* L, int arg)
+inline std::string axislua_tostr(lua_State* L, int arg)
 {
     size_t l      = 0;
     const char* s = lua_tolstring(L, arg, &l);
     return std::string{s, l};
 }
 
-inline std::string_view adxelua_tosv(lua_State* L, int arg)
+inline std::string_view axislua_tosv(lua_State* L, int arg)
 {
     size_t l      = 0;
     const char* s = lua_tolstring(L, arg, &l);

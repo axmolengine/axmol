@@ -4,7 +4,7 @@
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ADXE_ROOT="$DIR"/../..
+AXIS_ROOT="$DIR"/../..
 HOST_NAME=""
 CURL="curl --retry 999 --retry-max-time 0"
 
@@ -26,16 +26,16 @@ function install_android_sdk()
     # full cmd: echo yes|cmdline-tools/bin/sdkmanager --verbose --sdk_root=sdk platform-tools "cmdline-tools;latest" "platforms;android-28" "build-tools;29.0.2" "ndk;19.2.5345600"
     if [ "$BUILD_TARGET" == "android" ]\
         || [ "$BUILD_TARGET" == "android_lua" ] ; then
-        python $ADXE_ROOT/tools/unix-ci/setup_android.py
+        python $AXIS_ROOT/tools/unix-ci/setup_android.py
     else
-        python $ADXE_ROOT/tools/unix-ci/setup_android.py --ndk_only
+        python $AXIS_ROOT/tools/unix-ci/setup_android.py --ndk_only
     fi
 }
 
 function install_linux_environment()
 {
     echo "Installing linux dependence packages ..."
-    echo -e "y" | bash $ADXE_ROOT/install-deps-linux.sh
+    echo -e "y" | bash $AXIS_ROOT/install-deps-linux.sh
     echo "Installing linux dependence packages finished!"
 }
 

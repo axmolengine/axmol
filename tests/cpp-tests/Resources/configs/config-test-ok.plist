@@ -14,15 +14,15 @@
 		<string>test2</string>
 		<key>test.3</key>
 		<string>test3</string>
-		<key>adxe.fps</key>
+		<key>axis.fps</key>
 		<integer>60</integer>
-		<key>adxe.display_fps</key>
+		<key>axis.display_fps</key>
 		<true/>
-		<key>adxe.gl.projection</key>
+		<key>axis.gl.projection</key>
 		<string>3d</string>
-		<key>adxe.texture.pixel_format_for_png</key>
+		<key>axis.texture.pixel_format_for_png</key>
 		<string>rgba8888</string>
-		<key>adxe.texture.pvrv2_has_alpha_premultiplied</key>
+		<key>axis.texture.pvrv2_has_alpha_premultiplied</key>
 		<false/>
 	</dict>
 	<key>metadata</key>
