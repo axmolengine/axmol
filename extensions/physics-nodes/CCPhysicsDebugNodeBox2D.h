@@ -52,12 +52,12 @@ public:
 
     void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
-    // adxe stuffs
+    // axis stuffs
     cocos2d::DrawNode* GetDrawNode();
     void SetDrawNode(cocos2d::DrawNode* drawNode);
     cocos2d::Vec2& GetDebugNodeOffset();
 
-    cocos2d::DrawNode* drawBP = NULL;  // adxe "interface"!
+    cocos2d::DrawNode* drawBP = NULL;  // axis "interface"!
     cocos2d::Vec2 debugNodeOffset;
     float mRatio;
 

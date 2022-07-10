@@ -4,25 +4,25 @@
 <dict>
 	<key>data</key>
 	<dict>
-		<key>adxe.fps</key>
+		<key>axis.fps</key>
 		<integer>60</integer>
-		<key>adxe.display_fps</key>
+		<key>axis.display_fps</key>
 		<true/>
-		<key>adxe.gl.projection</key>
+		<key>axis.gl.projection</key>
 		<string>3d</string>
-		<key>adxe.texture.pixel_format_for_png</key>
+		<key>axis.texture.pixel_format_for_png</key>
 		<string>rgba8888</string>
-		<key>adxe.texture.pvrv2_has_alpha_premultiplied</key>
+		<key>axis.texture.pvrv2_has_alpha_premultiplied</key>
 		<false/>
-		<key>adxe.testcpp.autorun</key>
+		<key>axis.testcpp.autorun</key>
 		<false/>
-		<key>adxe.3d.max_dir_light_in_shader</key>
+		<key>axis.3d.max_dir_light_in_shader</key>
 		<integer>1</integer>
-		<key>adxe.3d.max_point_light_in_shader</key>
+		<key>axis.3d.max_point_light_in_shader</key>
 		<integer>1</integer>
-		<key>adxe.3d.max_spot_light_in_shader</key>
+		<key>axis.3d.max_spot_light_in_shader</key>
 		<integer>1</integer>
-		<key>adxe.3d.animate_quality</key>
+		<key>axis.3d.animate_quality</key>
 		<integer>2</integer>
 	</dict>
 	<key>metadata</key>

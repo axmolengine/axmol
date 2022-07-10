@@ -125,7 +125,7 @@ typedef struct cpSpace cpSpace;
 
 #include "cpSpace.h"
 
-// patch me: adxe link android required
+// patch me: axis link android required
 #include "cpHastySpace.h"
 
 // Chipmunk 7.0.3
