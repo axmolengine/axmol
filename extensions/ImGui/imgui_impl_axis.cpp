@@ -101,7 +101,7 @@ using namespace backend;
 #define GLFW_HAS_GAMEPAD_API          (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwGetGamepadState() new api
 #define GLFW_HAS_GET_KEY_NAME         (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ glfwGetKeyName()
 
-// axis spec data
+// adxe spec data
 constexpr IndexFormat IMGUI_INDEX_FORMAT = sizeof(ImDrawIdx) == 2 ? IndexFormat::U_SHORT : IndexFormat::U_INT;
 
 struct ProgramInfoData
@@ -125,7 +125,7 @@ struct SavedRenderStateData
     bool scissorTest{};
     bool depthTest{};
 };
-// end of axis spec
+// end of adxe spec
 
 
 // GLFW data
@@ -160,7 +160,7 @@ struct ImGui_ImplGlfw_Data
 
     // ImGui_ImplGlfw_Data()   { memset(this, 0, sizeof(*this)); }
 
-    // axis spec data
+    // adxe spec data
     std::chrono::steady_clock::time_point LastFrameTime{};
 
     ImGuiImplCocos2dxLoadFontFun LoadCustomFont = nullptr;
@@ -1185,7 +1185,7 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface()
 #endif
 
 
-////////////////////////// axis spec /////////////////////////
+////////////////////////// adxe spec /////////////////////////
 
 #define CC_PTR_CAST(v, pointer_type) reinterpret_cast<pointer_type>(v)
 
@@ -1197,18 +1197,18 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface()
 
 enum
 {
-    GlfwClientApi_Axis = 0xadee,
+    GlfwClientApi_Adxe = 0xadee,
 };
 
-// axis spec
-bool ImGui_ImplGlfw_InitForAxis(GLFWwindow* window, bool install_callbacks)
+// adxe spec
+bool ImGui_ImplGlfw_InitForAdxe(GLFWwindow* window, bool install_callbacks)
 {
-    return ImGui_ImplGlfw_Init(window, install_callbacks, (GlfwClientApi)GlfwClientApi_Axis);
+    return ImGui_ImplGlfw_Init(window, install_callbacks, (GlfwClientApi)GlfwClientApi_Adxe);
 }
 
-struct ImGui_ImplAxis_Data
+struct ImGui_ImplAdxe_Data
 {
-    // axis spec data
+    // adxe spec data
 
     ImGuiImplCocos2dxLoadFontFun LoadCustomFont = nullptr;
     void* LoadCustomFontUserData                = nullptr;
@@ -1226,21 +1226,21 @@ struct ImGui_ImplAxis_Data
     SavedRenderStateData SavedRenderState{};
 };
 
-static bool ImGui_ImplAxis_CreateFontsTexture();
-static void ImGui_ImplAxis_DestroyFontsTexture();
-static void ImGui_ImplAxis_DestroyDeviceObjects();
-static bool ImGui_ImplAxis_CreateDeviceObjects();
-static void ImGui_ImplAxis_RenderWindow(ImGuiViewport* viewport, void*);
+static bool ImGui_ImplAdxe_CreateFontsTexture();
+static void ImGui_ImplAdxe_DestroyFontsTexture();
+static void ImGui_ImplAdxe_DestroyDeviceObjects();
+static bool ImGui_ImplAdxe_CreateDeviceObjects();
+static void ImGui_ImplAdxe_RenderWindow(ImGuiViewport* viewport, void*);
 static void AddRendererCommand(const std::function<void()>& f);
 
 
-static bool ImGui_ImplAxis_createShaderPrograms();
+static bool ImGui_ImplAdxe_createShaderPrograms();
 
 
-static void ImGui_ImplAxis_CreateWindow(ImGuiViewport* viewport);
-static void ImGui_ImplAxis_Renderer_RenderWindow(ImGuiViewport* viewport, void*);
+static void ImGui_ImplAdxe_CreateWindow(ImGuiViewport* viewport);
+static void ImGui_ImplAdxe_Renderer_RenderWindow(ImGuiViewport* viewport, void*);
 
-static void ImGui_ImplAxis_RenderWindow(ImGuiViewport* viewport, void*)
+static void ImGui_ImplAdxe_RenderWindow(ImGuiViewport* viewport, void*)
 {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
@@ -1250,7 +1250,7 @@ static void ImGui_ImplAxis_RenderWindow(ImGuiViewport* viewport, void*)
     }
 }
 
-static void ImGui_ImplAxis_SwapBuffers(ImGuiViewport* viewport, void*)
+static void ImGui_ImplAdxe_SwapBuffers(ImGuiViewport* viewport, void*)
 {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
@@ -1264,79 +1264,79 @@ static void ImGui_ImplAxis_SwapBuffers(ImGuiViewport* viewport, void*)
     }
 }
 
-static void ImGui_ImplAxis_InitPlatformInterface()
+static void ImGui_ImplAdxe_InitPlatformInterface()
 {
     // Register platform interface (will be coupled with a renderer interface)
     ImGui_ImplGlfw_Data* bd           = ImGui_ImplGlfw_GetBackendData();
     ImGuiPlatformIO& platform_io      = ImGui::GetPlatformIO();
-    platform_io.Platform_RenderWindow = ImGui_ImplAxis_RenderWindow;
-    platform_io.Platform_CreateWindow = ImGui_ImplAxis_CreateWindow;
-    platform_io.Platform_SwapBuffers  = ImGui_ImplAxis_SwapBuffers;
+    platform_io.Platform_RenderWindow = ImGui_ImplAdxe_RenderWindow;
+    platform_io.Platform_CreateWindow = ImGui_ImplAdxe_CreateWindow;
+    platform_io.Platform_SwapBuffers  = ImGui_ImplAdxe_SwapBuffers;
 
-    platform_io.Renderer_RenderWindow = ImGui_ImplAxis_Renderer_RenderWindow;
+    platform_io.Renderer_RenderWindow = ImGui_ImplAdxe_Renderer_RenderWindow;
 }
 
-void ImGui_ImplAxis_Init()
+void ImGui_ImplAdxe_Init()
 {
     auto bd                    = ImGui_ImplGlfw_GetBackendData();
     auto& io                   = ImGui::GetIO();
     io.BackendRendererUserData = (void*)bd;
-    io.BackendRendererName     = "imgui_impl_axis";
+    io.BackendRendererName     = "imgui_impl_adxe";
     io.BackendFlags |=
         ImGuiBackendFlags_RendererHasViewports;  // We can create multi-viewports on the Renderer side (optional)
-    // axis spec: disable auto load and save
+    // adxe spec: disable auto load and save
     io.IniFilename = nullptr;
 
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        ImGui_ImplAxis_InitPlatformInterface();
+        ImGui_ImplAdxe_InitPlatformInterface();
 }
 
-void ImGui_ImplAxis_Shutdown()
+void ImGui_ImplAdxe_Shutdown()
 {
-    ImGui_ImplAxis_DestroyDeviceObjects();
+    ImGui_ImplAdxe_DestroyDeviceObjects();
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxis_NewFrame() { 
+IMGUI_IMPL_API void ImGui_ImplAdxe_NewFrame() { 
     auto bd = ImGui_ImplGlfw_GetBackendData();
 	//bd->CallbackCommands.clear();
     bd->CustomCommands.clear();
     bd->ProgramStates.clear();
 
     if (!bd->FontTexture)
-        ImGui_ImplAxis_CreateDeviceObjects();
+        ImGui_ImplAdxe_CreateDeviceObjects();
     else if (bd->FontDeviceObjectsDirty)
     {  // recreate device objects, fonts also should be device objects
-        ImGui_ImplAxis_DestroyDeviceObjects();
-        ImGui_ImplAxis_CreateDeviceObjects();
+        ImGui_ImplAdxe_DestroyDeviceObjects();
+        ImGui_ImplAdxe_CreateDeviceObjects();
     }
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxis_SetCustomFontLoader(ImGuiImplCocos2dxLoadFontFun fun, void* userdata)
+IMGUI_IMPL_API void ImGui_ImplAdxe_SetCustomFontLoader(ImGuiImplCocos2dxLoadFontFun fun, void* userdata)
 {
     auto bd                    = ImGui_ImplGlfw_GetBackendData();
     bd->LoadCustomFont         = fun;
     bd->LoadCustomFontUserData = userdata;
 }
 
-IMGUI_IMPL_API void* ImGui_ImplAxis_GetFontsTexture()
+IMGUI_IMPL_API void* ImGui_ImplAdxe_GetFontsTexture()
 {
     auto bd = ImGui_ImplGlfw_GetBackendData();
     return bd->FontTexture;
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxis_SetDeviceObjectsDirty()
+IMGUI_IMPL_API void ImGui_ImplAdxe_SetDeviceObjectsDirty()
 {
     auto bd                    = ImGui_ImplGlfw_GetBackendData();
     bd->FontDeviceObjectsDirty = true;
 }
 
-static void ImGui_ImplAxis_CreateWindow(ImGuiViewport* viewport)
+static void ImGui_ImplAdxe_CreateWindow(ImGuiViewport* viewport)
 {
     ImGui_ImplGlfw_Data* bd         = ImGui_ImplGlfw_GetBackendData();
     ImGui_ImplGlfw_ViewportData* vd = IM_NEW(ImGui_ImplGlfw_ViewportData)();
     viewport->PlatformUserData      = vd;
 
-    const bool multi_viewport_enabled = !!(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable);  // axis spec
+    const bool multi_viewport_enabled = !!(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable);  // adxe spec
 
     // GLFW 3.2 unfortunately always set focus on glfwCreateWindow() if GLFW_VISIBLE is set, regardless of GLFW_FOCUSED
     // With GLFW 3.3, the hint GLFW_FOCUS_ON_SHOW fixes this problem
@@ -1380,28 +1380,28 @@ static void ImGui_ImplAxis_CreateWindow(ImGuiViewport* viewport)
     }
 }
 
-static bool ImGui_ImplAxis_CreateDeviceObjects()
+static bool ImGui_ImplAdxe_CreateDeviceObjects()
 {
     auto bd = ImGui_ImplGlfw_GetBackendData();
     if (bd->LoadCustomFont)
         bd->LoadCustomFont(bd->LoadCustomFontUserData);
 
-    ImGui_ImplAxis_createShaderPrograms();
-    ImGui_ImplAxis_CreateFontsTexture();
+    ImGui_ImplAdxe_createShaderPrograms();
+    ImGui_ImplAdxe_CreateFontsTexture();
 
     bd->FontDeviceObjectsDirty = false;
     return true;
 }
 
-static void ImGui_ImplAxis_DestroyDeviceObjects()
+static void ImGui_ImplAdxe_DestroyDeviceObjects()
 {
     auto bd = ImGui_ImplGlfw_GetBackendData();
     CC_SAFE_RELEASE_NULL(bd->ProgramInfo.program);
     CC_SAFE_RELEASE_NULL(bd->ProgramFontInfo.program);
-    ImGui_ImplAxis_DestroyFontsTexture();
+    ImGui_ImplAdxe_DestroyFontsTexture();
 }
 
-static bool ImGui_ImplAxis_createShaderPrograms()
+static bool ImGui_ImplAdxe_createShaderPrograms()
 {
     auto vertex_shader =
         "uniform mat4 u_MVPMatrix;\n"
@@ -1473,7 +1473,7 @@ static bool ImGui_ImplAxis_createShaderPrograms()
     return true;
 }
 
-bool ImGui_ImplAxis_CreateFontsTexture()
+bool ImGui_ImplAdxe_CreateFontsTexture()
 {
     auto bd = ImGui_ImplGlfw_GetBackendData();
     // Build texture atlas
@@ -1495,7 +1495,7 @@ bool ImGui_ImplAxis_CreateFontsTexture()
     return true;
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxis_DestroyFontsTexture()
+IMGUI_IMPL_API void ImGui_ImplAdxe_DestroyFontsTexture()
 {
     auto bd = ImGui_ImplGlfw_GetBackendData();
     if (bd->FontTexture)
@@ -1516,7 +1516,7 @@ static void AddRendererCommand(const std::function<void()>& f)
     //bd->CallbackCommands.push_back(cmd);
 }
 
-static void ImGui_ImplAxis_SaveRenderState(cocos2d::Renderer* renderer)
+static void ImGui_ImplAdxe_SaveRenderState(cocos2d::Renderer* renderer)
 {
     AddRendererCommand([renderer]() {
         auto bd                          = ImGui_ImplGlfw_GetBackendData();
@@ -1528,7 +1528,7 @@ static void ImGui_ImplAxis_SaveRenderState(cocos2d::Renderer* renderer)
     });
 }
 
-static void ImGui_ImplAxis_SetupRenderState(cocos2d::Renderer* renderer,
+static void ImGui_ImplAdxe_SetupRenderState(cocos2d::Renderer* renderer,
                                             ImDrawData* draw_data,
                                             int fb_width,
                                             int fb_height)
@@ -1549,7 +1549,7 @@ static void ImGui_ImplAxis_SetupRenderState(cocos2d::Renderer* renderer,
     Mat4::createOrthographicOffCenter(L, R, B, T, -1.f, 1.f, &bd->Projection);
 }
 
-static void ImGui_ImplAxis_RestoreRenderState(cocos2d::Renderer* renderer)
+static void ImGui_ImplAdxe_RestoreRenderState(cocos2d::Renderer* renderer)
 {
     AddRendererCommand([renderer]() {
         auto bd = ImGui_ImplGlfw_GetBackendData();
@@ -1567,7 +1567,7 @@ static void ImGui_ImplAxis_RestoreRenderState(cocos2d::Renderer* renderer)
     });
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data)
+IMGUI_IMPL_API void ImGui_ImplAdxe_RenderDrawData(ImDrawData* draw_data)
 {
     // Avoid rendering when minimized, scale coordinates for retina displays
     // (screen coordinates != framebuffer coordinates)
@@ -1578,9 +1578,9 @@ IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data)
 
     const auto renderer = Director::getInstance()->getRenderer();
 
-    ImGui_ImplAxis_SaveRenderState(renderer);
+    ImGui_ImplAdxe_SaveRenderState(renderer);
 
-    ImGui_ImplAxis_SetupRenderState(renderer, draw_data, fb_width, fb_height);
+    ImGui_ImplAdxe_SetupRenderState(renderer, draw_data, fb_width, fb_height);
 
     // Will project scissor/clipping rectangles into framebuffer space
     ImVec2 clip_off   = draw_data->DisplayPos;        // (0,0) unless using multi-viewports
@@ -1613,7 +1613,7 @@ IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data)
                 // (ImDrawCallback_ResetRenderState is a special callback value used by the user
                 // to request the renderer to reset render state.)
                 if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
-                    ImGui_ImplAxis_SetupRenderState(renderer, draw_data, fb_width, fb_height);
+                    ImGui_ImplAdxe_SetupRenderState(renderer, draw_data, fb_width, fb_height);
                 else
                 {
                     AddRendererCommand([=]() { pcmd->UserCallback(cmd_list, pcmd); });
@@ -1682,10 +1682,10 @@ IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data)
         }
     }
 
-    ImGui_ImplAxis_RestoreRenderState(renderer);
+    ImGui_ImplAdxe_RestoreRenderState(renderer);
 }
 
-IMGUI_IMPL_API void ImGui_ImplAxis_RenderPlatform()
+IMGUI_IMPL_API void ImGui_ImplAdxe_RenderPlatform()
 {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
@@ -1704,13 +1704,13 @@ IMGUI_IMPL_API void ImGui_ImplAxis_RenderPlatform()
 // completely ignore this section first..
 //--------------------------------------------------------------------------------------------------------
 
-static void ImGui_ImplAxis_Renderer_RenderWindow(ImGuiViewport* viewport, void*)
+static void ImGui_ImplAdxe_Renderer_RenderWindow(ImGuiViewport* viewport, void*)
 {
     if (!(viewport->Flags & ImGuiViewportFlags_NoRendererClear))
     {
         const auto renderer = Director::getInstance()->getRenderer();
         renderer->clear(ClearFlag::COLOR, {0, 0, 0, 1}, 1, 0, 0);
     }
-    ImGui_ImplAxis_RenderDrawData(viewport->DrawData);
+    ImGui_ImplAdxe_RenderDrawData(viewport->DrawData);
 }
 

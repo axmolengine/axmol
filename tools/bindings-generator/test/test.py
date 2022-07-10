@@ -111,7 +111,7 @@ def main():
     config = ConfigParser.ConfigParser()
     config.set('DEFAULT', 'androidndkdir', ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
-    config.set('DEFAULT', 'axisdir', cocos_root)
+    config.set('DEFAULT', 'adxedir', cocos_root)
     config.set('DEFAULT', 'jsbdir', jsb_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
     config.set('DEFAULT', 'extra_flags', '')

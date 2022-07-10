@@ -1,4 +1,4 @@
-# The spine-runtime for axis
+# The spine-runtime for adxe
 * version: 3.8
 * based on spine-cpp
 

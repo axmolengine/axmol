@@ -4,7 +4,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-2020 simdsoft, @HALX99
 Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

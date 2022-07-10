@@ -12,7 +12,7 @@
 #include <Model/CubismUserModel.hpp>
 #include <ICubismModelSetting.hpp>
 #include <Type/csmRectF.hpp>
-#include <Rendering/axis/CubismOffscreenSurface_Cocos2dx.hpp>
+#include <Rendering/adxe/CubismOffscreenSurface_Cocos2dx.hpp>
 #include "LAppDefine.hpp"
 #include "AppDelegate.h"
 

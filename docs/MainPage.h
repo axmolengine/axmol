@@ -1,18 +1,18 @@
 /*!
 @cond GEN_REFERENCE_BOOK
 
-@mainpage axis
+@mainpage adxe
 
 @image html cocos2dx_portrait.png
 
-@section sec1 About axis
-axis is based on cocos2d-x-4.0, cocos2d-x is a open source project is designed to be a cross-platform 2D game engine for building 2D games, demos and other graphical/interactive mobile applications.
+@section sec1 About adxe
+adxe is based on cocos2d-x-4.0, cocos2d-x is a open source project is designed to be a cross-platform 2D game engine for building 2D games, demos and other graphical/interactive mobile applications.
 It runs on top of OpenGL 2.0 and OpenGL ES 2.0 and is written in C++.\n
 This project is based on the famous <A HREF="http://www.cocos2d-iphone.org">"cocos2d-iphone"</A> project.\n
 
-- website:                          https://axis-project.github.io/
+- website:                          https://adxeproject.github.io/
 
-- <A HREF="https://github.com/axis-project/axis/issues">FAQ</A>
+- <A HREF="https://github.com/adxeproject/adxe/issues">FAQ</A>
 
 \n
 
@@ -43,7 +43,7 @@ THE SOFTWARE. \n
 @section sec3 Get the source code
 
 - Latest code: \n
-    - https://github.com/axis-project/axis
+    - https://github.com/adxeproject/adxe
 
 @section sec4 How to contribute
 - Fork our repository on github, commit your changes, and send a "pull request" to us. We will merge your contribution to master

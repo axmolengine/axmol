@@ -4,7 +4,7 @@
  Copyright (c) 2019-2020 simdsoft, @HALX99
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -937,9 +937,9 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
             CCASSERT(readerVersion >= writterVersion,
                      StringUtils::format(
                          "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                         ") and the reader build id in your axis(", loader->_csBuildID.c_str(),
+                         ") and the reader build id in your adxe(", loader->_csBuildID.c_str(),
                          ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                         "https://github.com/axis-project/axis", " and replace it in your axis")
+                         "https://github.com/adxeproject/adxe", " and replace it in your adxe")
                          .c_str());
         }
 
@@ -1054,9 +1054,9 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
         CCASSERT(readerVersion >= writterVersion,
                  StringUtils::format(
                      "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
-                     ") and the reader build id in your axis(", _csBuildID.c_str(), ") are not match.\n",
+                     ") and the reader build id in your adxe(", _csBuildID.c_str(), ") are not match.\n",
                      "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                     "https://github.com/axis-project/axis", " and replace it in your axis")
+                     "https://github.com/adxeproject/adxe", " and replace it in your adxe")
                      .c_str());
 
         if (readerVersion < writterVersion)

@@ -1,4 +1,4 @@
-# The ImGui extension for axis
+# The ImGui extension for adxe
 Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 
 ## Improvements

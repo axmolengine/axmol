@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://adxeproject.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,7 @@ using namespace cocos2d;
 extern "C" {
 int cocos2dx_lua_loader(lua_State* L)
 {
-    auto relativePath = axislua_tostr(L, 1);
+    auto relativePath = adxelua_tostr(L, 1);
 
     //  convert any '.' to '/'
     std::replace(relativePath.begin(), relativePath.end(), '.', '/');
@@ -50,7 +50,7 @@ int cocos2dx_lua_loader(lua_State* L)
 
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "path");
-    auto searchpath = axislua_tosv(L, -1);
+    auto searchpath = adxelua_tosv(L, -1);
     lua_pop(L, 1);
     size_t begin = 0;
     size_t next  = searchpath.find_first_of(';', 0);

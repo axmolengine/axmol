@@ -3,20 +3,20 @@ import java.nio.file.Paths
 import java.nio.file.Files
 
 apply plugin: 'com.android.application'
-apply from: project(':libcocos2dx').projectDir.toString() + "/axistools.gradle"
+apply from: project(':libcocos2dx').projectDir.toString() + "/adxetools.gradle"
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
 
     // setup ndk
-    def ndkInfo = axistools.findNDK()
+    def ndkInfo = adxetools.findNDK()
     ndkVersion = ndkInfo[0]
     if(ndkInfo[1]) {
         ndkPath = ndkInfo[1]
     }
 
     // setup cmake
-    def cmakeVer = axistools.findCMake("3.10.2+", project.rootProject)
+    def cmakeVer = adxetools.findCMake("3.10.2+", project.rootProject)
 
     defaultConfig {
         applicationId "org.cocos2dx.hellocpp"

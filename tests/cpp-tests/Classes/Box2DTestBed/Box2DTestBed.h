@@ -1,7 +1,7 @@
 /****************************************************************************
  * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
- https://axis-project.github.io/
+ https://adxeproject.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

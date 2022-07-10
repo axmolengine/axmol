@@ -184,15 +184,15 @@ public:
         return (const _Ty&)_buffer[idx * sizeof(_Ty)];
     }
 
-    template <typename _Ty = uint16_t>
-    _Ty& operator[](size_t idx)
+    template <typename _Ty>
+    _Ty& operator[](_Ty idx)
     {
         assert(sizeof(_Ty) == _stride);
         return (_Ty&)_buffer[idx * _stride];
     }
 
-    template <typename _Ty = uint16_t>
-    const _Ty& operator[](size_t idx) const
+    template <typename _Ty>
+    const _Ty& operator[](_Ty idx) const
     {
         assert(sizeof(_Ty) == _stride);
         return (const _Ty&)_buffer[idx * _stride];
