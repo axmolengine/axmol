@@ -128,7 +128,7 @@ public:
     void insert(size_t offset, std::initializer_list<_Ty> ilist)
     {
         assert(_stride == sizeof(_Ty));
-        _buffer.insert((yasio::byte_buffer::iterator)begin<_Ty>() + offset, ilist.begin(), ilist.end());
+        _buffer.insert((yasio::byte_buffer::iterator)(begin<_Ty>() + offset), ilist.begin(), ilist.end());
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
