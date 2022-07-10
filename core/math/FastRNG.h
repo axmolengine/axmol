@@ -45,10 +45,10 @@ struct FastRNG
     void seed_rng_64(uint64_t seed)
     {
         _seed  = seed;
-        _x     = seed | 1;
-        _y     = seed | 2;
-        _z     = seed | 4;
-        _w     = seed | 8;
+        _x     = static_cast<int32_t>(seed) | 1;
+        _y     = static_cast<int32_t>(seed) | 2;
+        _z     = static_cast<int32_t>(seed) | 4;
+        _w     = static_cast<int32_t>(seed) | 8;
         _carry = 0;
     }
 #endif
