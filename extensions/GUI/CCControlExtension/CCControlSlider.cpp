@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://adxeproject.github.io/
+ * https://axis-project.github.io/
  *
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com

@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-- adxe version:
+- axis version:
 - devices test on:
 - developing environments
    - NDK version: r19c
