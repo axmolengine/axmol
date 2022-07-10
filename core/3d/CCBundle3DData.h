@@ -114,27 +114,21 @@ public:
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     void insert(_Ty* position, std::initializer_list<_Ty> ilist)
     {
-        insert(position, ilist.begin(), ilist.end());
+        _buffer.insert((yasio::byte_buffer::iterator)position, ilist.begin(), ilist.end());
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     void insert(_Ty* position, _Ty* first, _Ty* last)
     {
         assert(_stride == sizeof(_Ty));
-        binsert(position, first, last);
+        _buffer.insert((yasio::byte_buffer::iterator)position, first, last);
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     void insert(size_t offset, std::initializer_list<_Ty> ilist)
     {
         assert(_stride == sizeof(_Ty));
-        binsert(begin<_Ty>() + offset, ilist.begin(), ilist.end());
-    }
-
-    /** Inserts range data based on an offset in bytes. */
-    void binsert(uint8_t* position, const void* first, const void* last)
-    {
-        _buffer.insert(position, (const uint8_t*)first, (const uint8_t*)last);
+        _buffer.binsert((yasio::byte_buffer::iterator)begin<_Ty>() + offset, ilist.begin(), ilist.end());
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
