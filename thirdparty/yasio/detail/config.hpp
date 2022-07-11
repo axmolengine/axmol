@@ -228,4 +228,8 @@ SOFTWARE.
 //   https://github.com/c-ares/c-ares/pull/148
 #define YASIO_FALLBACK_NAME_SERVERS "8.8.8.8,223.5.5.5,114.114.114.114"
 
+// The yasio ssl client PIN for server to recognize
+#define YASIO_SSL_PIN "yasio_ssl_client"
+#define YASIO_SSL_PIN_LEN (sizeof(YASIO_SSL_PIN) - 1)
+
 #endif

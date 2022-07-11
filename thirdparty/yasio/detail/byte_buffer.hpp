@@ -176,39 +176,41 @@ public:
   {
     _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last,
                         "byte_buffer: out of range!");
-    auto insertion_pos = std::distance(_Myfirst, _Where);
-    if (_Where == _Mylast)
-      append(first, last);
-    else
+    auto ifirst = (iterator)std::addressof(*first);
+    auto ilast  = (iterator)std::addressof(*last);
+    auto count  = std::distance(ifirst, ilast);
+    if (count > 0)
     {
-      auto count = std::distance(first, last);
-      if (count > 0 && insertion_pos >= 0)
+      auto insertion_pos = std::distance(_Myfirst, _Where);
+      if (_Where == _Mylast)
       {
-        auto old_size = _Mylast - _Myfirst;
-        _Where        = resize(old_size + count) + insertion_pos;
-        auto move_to  = _Where + count;
-        std::copy_n(_Where, _Mylast - move_to, move_to);
-        std::copy_n(first, count, _Where);
+        if (count > 1)
+        {
+          auto old_size = _Mylast - _Myfirst;
+          std::copy_n(ifirst, count, resize(old_size + count) + old_size);
+        }
+        else if (count == 1)
+          push_back(static_cast<value_type>(*ifirst));
       }
+      else
+      {
+        if (insertion_pos >= 0)
+        {
+          auto old_size = _Mylast - _Myfirst;
+          _Where        = resize(old_size + count) + insertion_pos;
+          auto move_to  = _Where + count;
+          std::copy_n(_Where, _Mylast - move_to, move_to);
+          std::copy_n(ifirst, count, _Where);
+        }
+      }
+      return _Myfirst + insertion_pos;
     }
-    return _Myfirst + insertion_pos;
+    return _Where;
   }
   template <typename _Iter>
   basic_byte_buffer& append(_Iter first, const _Iter last)
   {
-    return append_n(first, std::distance(first, last));
-  }
-  template <typename _Iter>
-  basic_byte_buffer& append_n(_Iter first, ptrdiff_t count)
-  {
-    if (count > 1)
-    {
-      auto old_size = _Mylast - _Myfirst;
-      resize(old_size + count);
-      std::copy_n(first, count, _Myfirst + old_size);
-    }
-    else if (count == 1)
-      push_back(static_cast<value_type>(*first));
+    insert(end(), first, last);
     return *this;
   }
   void push_back(value_type v)
@@ -331,7 +333,11 @@ private:
   {
     _Mylast = _Myfirst;
     if (last > first)
-      std::copy(first, last, resize(std::distance(first, last)));
+    {
+      auto ifirst = (iterator)std::addressof(*first);
+      auto ilast  = (iterator)std::addressof(*last);
+      std::copy(ifirst, ilast, resize(std::distance(ifirst, ilast)));
+    }
   }
   template <typename _Iter>
   void _Assign_range(_Iter first, _Iter last, std::true_type)
