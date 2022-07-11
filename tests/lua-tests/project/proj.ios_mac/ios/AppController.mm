@@ -41,20 +41,20 @@ static AppDelegate s_sharedApplication;
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-    cocos2d::Application* app = cocos2d::Application::getInstance();
+    axis::Application* app = axis::Application::getInstance();
     app->initGLContextAttrs();
-    cocos2d::GLViewImpl::convertAttrs();
+    axis::GLViewImpl::convertAttrs();
     // Override point for customization after application launch.
 
     // Add the view controller's view to the window and display.
     window               = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     CCEAGLView* eaglView = [CCEAGLView viewWithFrame:[window bounds]
-                                         pixelFormat:(NSString*)cocos2d::GLViewImpl::_pixelFormat
-                                         depthFormat:cocos2d::GLViewImpl::_depthFormat
+                                         pixelFormat:(NSString*)axis::GLViewImpl::_pixelFormat
+                                         depthFormat:axis::GLViewImpl::_depthFormat
                                   preserveBackbuffer:NO
                                           sharegroup:nil
-                                       multiSampling:cocos2d::GLViewImpl::_multisamplingCount > 0 ? YES : NO
-                                     numberOfSamples:cocos2d::GLViewImpl::_multisamplingCount];
+                                       multiSampling:axis::GLViewImpl::_multisamplingCount > 0 ? YES : NO
+                                     numberOfSamples:axis::GLViewImpl::_multisamplingCount];
 
 #if !defined(CC_TARGET_OS_TVOS)
     [eaglView setMultipleTouchEnabled:YES];
@@ -92,8 +92,8 @@ static AppDelegate s_sharedApplication;
     }
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    cocos2d::GLView* glview = cocos2d::GLViewImpl::createWithEAGLView(eaglView);
-    cocos2d::Director::getInstance()->setOpenGLView(glview);
+    axis::GLView* glview = axis::GLViewImpl::createWithEAGLView(eaglView);
+    axis::Director::getInstance()->setOpenGLView(glview);
 
     app->run();
     return YES;
@@ -107,7 +107,7 @@ static AppDelegate s_sharedApplication;
      it begins the transition to the background state. Use this method to pause ongoing tasks, disable timers, and
      throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
-    cocos2d::Director::getInstance()->pause();
+    axis::Director::getInstance()->pause();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
@@ -116,7 +116,7 @@ static AppDelegate s_sharedApplication;
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was
      previously in the background, optionally refresh the user interface.
      */
-    cocos2d::Director::getInstance()->resume();
+    axis::Director::getInstance()->resume();
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application
@@ -126,7 +126,7 @@ static AppDelegate s_sharedApplication;
      information to restore your application to its current state in case it is terminated later. If your application
      supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
-    cocos2d::Application::getInstance()->applicationDidEnterBackground();
+    axis::Application::getInstance()->applicationDidEnterBackground();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application
@@ -135,7 +135,7 @@ static AppDelegate s_sharedApplication;
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made
      on entering the background.
      */
-    cocos2d::Application::getInstance()->applicationWillEnterForeground();
+    axis::Application::getInstance()->applicationWillEnterForeground();
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application
@@ -155,7 +155,7 @@ static AppDelegate s_sharedApplication;
      Free up as much memory as possible by purging cached data objects that can be recreated (or reloaded from disk)
      later.
      */
-    cocos2d::Director::getInstance()->purgeCachedData();
+    axis::Director::getInstance()->purgeCachedData();
 }
 
 - (void)dealloc

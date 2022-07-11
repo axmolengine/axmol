@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "platform/apple/CCDevice-apple.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
 {
@@ -243,7 +243,7 @@ static NSFont* _createSystemFont(const char* fontName, int size)
     return font;
 }
 
-static CGFloat _calculateTextDrawStartHeight(cocos2d::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+static CGFloat _calculateTextDrawStartHeight(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     float startH = 0;
     // vertical alignment
@@ -432,4 +432,4 @@ void Device::setKeepScreenOn(bool value) {}
 
 void Device::vibrate(float duration) {}
 
-NS_CC_END
+NS_AX_END

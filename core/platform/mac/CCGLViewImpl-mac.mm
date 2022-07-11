@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 #include "renderer/backend/metal/UtilsMTL.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class GLFWEventHandler
 {
@@ -888,14 +888,14 @@ void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int act
     {
         EventMouse event(EventMouse::MouseEventType::MOUSE_DOWN);
         event.setCursorPosition(cursorX, cursorY);
-        event.setMouseButton(static_cast<cocos2d::EventMouse::MouseButton>(button));
+        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(button));
         Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     }
     else if (GLFW_RELEASE == action)
     {
         EventMouse event(EventMouse::MouseEventType::MOUSE_UP);
         event.setCursorPosition(cursorX, cursorY);
-        event.setMouseButton(static_cast<cocos2d::EventMouse::MouseButton>(button));
+        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(button));
         Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     }
 }
@@ -931,15 +931,15 @@ void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
     // Set current button
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
     {
-        event.setMouseButton(static_cast<cocos2d::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_LEFT));
+        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_LEFT));
     }
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
     {
-        event.setMouseButton(static_cast<cocos2d::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_RIGHT));
+        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_RIGHT));
     }
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
     {
-        event.setMouseButton(static_cast<cocos2d::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_MIDDLE));
+        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_MIDDLE));
     }
     event.setCursorPosition(cursorX, cursorY);
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
@@ -1063,4 +1063,4 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     }
 }
 
-NS_CC_END  // end of namespace cocos2d;
+NS_AX_END  // end of namespace axis;

@@ -65,7 +65,7 @@ static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedStr
     return [[attributedString copy] autorelease];
 }
 
-static CGFloat _calculateTextDrawStartHeight(cocos2d::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+static CGFloat _calculateTextDrawStartHeight(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     float startH = 0;
     // vertical alignment
@@ -191,7 +191,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
 
 #if !defined(CC_TARGET_OS_TVOS)
 @interface CCAccelerometerDispatcher : NSObject {
-    cocos2d::Acceleration* _acceleration;
+    axis::Acceleration* _acceleration;
     CMMotionManager* _motionManager;
 }
 
@@ -220,7 +220,7 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 {
     if ((self = [super init]))
     {
-        _acceleration                              = new cocos2d::Acceleration();
+        _acceleration                              = new axis::Acceleration();
         _motionManager                             = [[CMMotionManager alloc] init];
         _motionManager.accelerometerUpdateInterval = SENSOR_DELAY_GAME;
     }
@@ -297,8 +297,8 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
         NSAssert(false, @"unknown orientation");
     }
 
-    cocos2d::EventAcceleration event(*_acceleration);
-    auto dispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
+    axis::EventAcceleration event(*_acceleration);
+    auto dispatcher = axis::Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);
 }
 @end
@@ -306,7 +306,7 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 
 //
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 int Device::getDPI()
 {
@@ -432,7 +432,7 @@ static id _createSystemFont(const char* fontName, int size)
 }
 
 static bool _initWithString(const char* text,
-                            cocos2d::Device::TextAlign align,
+                            axis::Device::TextAlign align,
                             const char* fontName,
                             int size,
                             tImageInfo* info,
@@ -659,4 +659,4 @@ void Device::vibrate(float duration)
     }
 }
 
-NS_CC_END
+NS_AX_END

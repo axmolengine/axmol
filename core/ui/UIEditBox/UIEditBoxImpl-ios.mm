@@ -40,9 +40,9 @@
 
 #    import "ui/UIEditBox/iOS/CCUIEditBoxIOS.h"
 
-#    define getEditBoxImplIOS() ((cocos2d::ui::EditBoxImplIOS*)_editBox)
+#    define getEditBoxImplIOS() ((axis::ui::EditBoxImplIOS*)_editBox)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -62,11 +62,11 @@ EditBoxImplIOS::~EditBoxImplIOS()
 
 void EditBoxImplIOS::createNativeControl(const Rect& frame)
 {
-    auto glview = cocos2d::Director::getInstance()->getOpenGLView();
+    auto glview = axis::Director::getInstance()->getOpenGLView();
 
     Rect rect(0, 0, frame.size.width * glview->getScaleX(), frame.size.height * glview->getScaleY());
 
-    float factor = cocos2d::Director::getInstance()->getContentScaleFactor();
+    float factor = axis::Director::getInstance()->getContentScaleFactor();
 
     rect.size.width /= factor;
     rect.size.height /= factor;
@@ -153,7 +153,7 @@ void EditBoxImplIOS::setNativeReturnType(EditBox::KeyboardReturnType returnType)
     [_systemControl setReturnType:returnType];
 }
 
-void EditBoxImplIOS::setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment)
+void EditBoxImplIOS::setNativeTextHorizontalAlignment(axis::TextHAlignment alignment)
 {
     [_systemControl setTextHorizontalAlignment:alignment];
 }
@@ -179,7 +179,7 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
-    auto glview          = cocos2d::Director::getInstance()->getOpenGLView();
+    auto glview          = axis::Director::getInstance()->getOpenGLView();
     CCEAGLView* eaglview = (CCEAGLView*)glview->getEAGLView();
 
     float factor = eaglview.contentScaleFactor;
@@ -208,13 +208,13 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     CCASSERT(fontName != nullptr, "fontName can't be nullptr");
-    CCEAGLView* eaglview = static_cast<CCEAGLView*>(cocos2d::Director::getInstance()->getOpenGLView()->getEAGLView());
+    CCEAGLView* eaglview = static_cast<CCEAGLView*>(axis::Director::getInstance()->getOpenGLView()->getEAGLView());
     float retinaFactor   = eaglview.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
-    auto glview       = cocos2d::Director::getInstance()->getOpenGLView();
+    auto glview       = axis::Director::getInstance()->getOpenGLView();
     float scaleFactor = glview->getScaleX();
 
     if (fontSize == -1)
@@ -243,6 +243,6 @@ UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 }
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */

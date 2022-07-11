@@ -98,7 +98,7 @@ THE SOFTWARE.
         [self.myMarkedText release];
         self.myMarkedText = nil;
     }
-    cocos2d::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
+    axis::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
 }
 
 - (void)insertText:(nonnull NSString*)text
@@ -109,7 +109,7 @@ THE SOFTWARE.
         self.myMarkedText = nil;
     }
     const char* pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
-    cocos2d::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    axis::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
 }
 
 - (NSWritingDirection)baseWritingDirectionForPosition:(nonnull UITextPosition*)position
@@ -251,7 +251,7 @@ THE SOFTWARE.
         return;
     }
     const char* pszText = [self.myMarkedText cStringUsingEncoding:NSUTF8StringEncoding];
-    cocos2d::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    axis::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
     [self.myMarkedText release];
     self.myMarkedText = nil;
 }

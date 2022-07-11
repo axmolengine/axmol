@@ -137,7 +137,7 @@ static id s_sharedDirectorCaller;
 {
     if (isAppActive)
     {
-        cocos2d::Director* director = cocos2d::Director::getInstance();
+        axis::Director* director = axis::Director::getInstance();
 #if defined(CC_USE_GLES)
         EAGLContext* cocos2dxContext = [(CCEAGLView*)director->getOpenGLView()->getEAGLView() context];
         if (cocos2dxContext != [EAGLContext currentContext])

@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "renderer/backend/metal/DeviceMTL.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Application* Application::sm_pSharedApplication = nullptr;
 
@@ -178,4 +178,4 @@ std::string_view Application::getStartupScriptFilename()
     return _startupScriptFilename;
 }
 
-NS_CC_END
+NS_AX_END
