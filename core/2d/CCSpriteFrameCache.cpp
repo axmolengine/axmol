@@ -150,7 +150,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
     auto removed = false;
     std::vector<std::string> toRemoveFrames;
 
-    const auto frames = getSpriteFrames();
+    const auto& frames = getSpriteFrames();
     for (auto& iter : frames)
     {
         auto* spriteFrame = iter.second;
