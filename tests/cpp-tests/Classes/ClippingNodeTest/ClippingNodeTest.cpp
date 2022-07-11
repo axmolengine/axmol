@@ -648,7 +648,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 
-    renderer->addCallbackCommand([=]() { renderer->setStencilTest(true); }, _globalZOrder);
+    renderer->addCallbackCommand([=]() { renderer->setStencilTest(false); }, _globalZOrder);
 }
 
 void RawStencilBufferTest::onBeforeDrawClip(int planeIndex)
