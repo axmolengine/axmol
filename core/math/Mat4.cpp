@@ -26,7 +26,7 @@
 #include "math/MathUtil.h"
 #include "base/ccMacros.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 Mat4::Mat4()
 {
@@ -1028,4 +1028,4 @@ const Mat4 Mat4::IDENTITY =
 
 const Mat4 Mat4::ZERO = Mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-NS_CC_MATH_END
+NS_AX_MATH_END

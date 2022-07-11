@@ -36,7 +36,7 @@ THE SOFTWARE.
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**@{
  Affine transform
@@ -112,7 +112,7 @@ CC_DLL Mat4 TransformConcat(const Mat4& t1, const Mat4& t2);
 
 extern CC_DLL const AffineTransform AffineTransformIdentity;
 
-NS_CC_END
+NS_AX_END
 
 // end of base transform
 /// @}

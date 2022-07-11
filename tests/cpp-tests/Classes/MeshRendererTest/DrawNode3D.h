@@ -28,21 +28,21 @@
 
 #include "cocos2d.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * Copy DrawNode for 3D geometry drawing.
  */
-class DrawNode3D : public cocos2d::Node
+class DrawNode3D : public axis::Node
 {
 public:
     /** creates and initialize a DrawNode3D node */
-    static cocos2d::DrawNode3D* create();
+    static axis::DrawNode3D* create();
 
     /**
      * Draw 3D Line
      */
-    void drawLine(const cocos2d::Vec3& from, const cocos2d::Vec3& to, const Color4F& color);
+    void drawLine(const axis::Vec3& from, const axis::Vec3& to, const Color4F& color);
 
     /**
      * Draw 3D cube
@@ -57,7 +57,7 @@ public:
      *        vertices[7]:Left-top-back.
      * @param color
      */
-    void drawCube(cocos2d::Vec3* vertices, const Color4F& color);
+    void drawCube(axis::Vec3* vertices, const Color4F& color);
 
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -77,10 +77,10 @@ public:
      */
     void setBlendFunc(const BlendFunc& blendFunc);
 
-    void updateCommand(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags);
+    void updateCommand(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags);
 
     // Overrides
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
     DrawNode3D();
     virtual ~DrawNode3D();
@@ -92,13 +92,13 @@ protected:
 
     struct V3F_C4B
     {
-        cocos2d::Vec3 vertices;
+        axis::Vec3 vertices;
         Color4B colors;
     };
     void ensureCapacity(int count);
 
     BlendFunc _blendFunc;
-    cocos2d::CustomCommand _customCommand;
+    axis::CustomCommand _customCommand;
     backend::ProgramState* _programStateLine                 = nullptr;
     backend::DepthStencilDescriptor* _depthstencilDescriptor = nullptr;
     backend::UniformLocation _locMVPMatrix;
@@ -111,6 +111,6 @@ private:
     bool _rendererDepthTestEnabled = true;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __DRAW_NODE_3D_H__

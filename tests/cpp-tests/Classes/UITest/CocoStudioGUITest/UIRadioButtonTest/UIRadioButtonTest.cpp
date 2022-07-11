@@ -24,8 +24,8 @@
 
 #include "UIRadioButtonTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UIRadioButtonTests::UIRadioButtonTests()
 {
@@ -236,7 +236,7 @@ bool UIRadioButtonTwoGroupsTest::init()
 
 void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioButton,
                                                             int index,
-                                                            cocos2d::ui::RadioButtonGroup::EventType type)
+                                                            axis::ui::RadioButtonGroup::EventType type)
 {
     CCASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup1 : %d", index);
@@ -246,7 +246,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioBu
 
 void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* radioButton,
                                                             int index,
-                                                            cocos2d::ui::RadioButtonGroup::EventType type)
+                                                            axis::ui::RadioButtonGroup::EventType type)
 {
     CCASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup2 : %d", index);

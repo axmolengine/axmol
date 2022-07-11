@@ -27,7 +27,7 @@
 #include "CCPUVertexEmitter.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //// Constants
 // const unsigned short Particle3DVertexEmitter::DEFAULT_STEP = 1;
 // const unsigned short Particle3DVertexEmitter::DEFAULT_SEGMENTS = 1;
@@ -340,4 +340,4 @@ NS_CC_BEGIN
 //			iterator--;
 //	}
 // }
-NS_CC_END
+NS_AX_END

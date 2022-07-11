@@ -35,7 +35,7 @@
 #include "renderer/ccShaders.h"
 #include "2d/CCRenderTexture.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 // ControlSwitchSprite
 
 class ControlSwitchSprite : public Sprite, public ActionTweenDelegate
@@ -454,4 +454,4 @@ void ControlSwitch::onTouchCancelled(Touch* pTouch, Event* /*pEvent*/)
     }
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

@@ -30,7 +30,7 @@
 #include "spine/spine.h"
 #include "renderer/CCColorizer.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 using namespace std;
 using namespace spine;
 
@@ -103,7 +103,7 @@ bool SpineTestLayer::init()
         return false;
 
     EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan               = [this](Touch* touch, cocos2d::Event* event) -> bool {
+    listener->onTouchBegan               = [this](Touch* touch, axis::Event* event) -> bool {
         if (!skeletonNode)
             return true;
         _touchIndex = (_touchIndex + 1) % 3;
@@ -262,7 +262,7 @@ bool IKExample::init()
     // the current mouse location. The location is converted
     // to the skeleton's coordinate system.
     EventListenerMouse* mouseListener = EventListenerMouse::create();
-    mouseListener->onMouseMove        = [this](cocos2d::Event* event) -> void {
+    mouseListener->onMouseMove        = [this](axis::Event* event) -> void {
         // convert the mosue location to the skeleton's coordinate space
         // and store it.
         EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);

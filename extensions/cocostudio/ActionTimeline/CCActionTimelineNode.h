@@ -33,25 +33,25 @@ NS_TIMELINE_BEGIN
 
 class ActionTimeline;
 
-class CCS_DLL ActionTimelineNode : public cocos2d::Node
+class CCS_DLL ActionTimelineNode : public axis::Node
 {
 public:
-    static ActionTimelineNode* create(cocos2d::Node* root, ActionTimeline* action);
+    static ActionTimelineNode* create(axis::Node* root, ActionTimeline* action);
 
     ActionTimelineNode();
     ~ActionTimelineNode();
 
     bool init() override;
-    bool init(cocos2d::Node* root, ActionTimeline* action);
+    bool init(axis::Node* root, ActionTimeline* action);
 
-    virtual void setRoot(cocos2d::Node* root);
-    virtual cocos2d::Node* getRoot();
+    virtual void setRoot(axis::Node* root);
+    virtual axis::Node* getRoot();
 
     virtual void setActionTimeline(ActionTimeline* action);
     virtual ActionTimeline* getActionTimeline();
 
 protected:
-    cocos2d::Node* _root;
+    axis::Node* _root;
     ActionTimeline* _action;
 };
 

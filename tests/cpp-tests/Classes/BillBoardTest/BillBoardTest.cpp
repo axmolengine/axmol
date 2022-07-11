@@ -30,9 +30,9 @@
 #include <algorithm>
 #include "../testResource.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
-using namespace cocos2d::ui;
+USING_NS_AX;
+USING_NS_AX_EXT;
+using namespace axis::ui;
 
 BillBoardTests::BillBoardTests()
 {

@@ -74,23 +74,23 @@ struct LuaArmatureWrapperEventData
 
 struct LuaArmatureMovementEventData
 {
-    cocos2d::Ref* objTarget;
+    axis::Ref* objTarget;
     int movementType;
     std::string movementID;
     
-    LuaArmatureMovementEventData(cocos2d::Ref* _objTarget, int _movementType,std::string_view _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
+    LuaArmatureMovementEventData(axis::Ref* _objTarget, int _movementType,std::string_view _movementID):objTarget(_objTarget),movementType(_movementType),movementID(_movementID)
     {
     }
 };
 
 struct LuaArmatureFrameEventData
 {
-    cocos2d::Ref* objTarget;
+    axis::Ref* objTarget;
     std::string  frameEventName;
     int originFrameIndex;
     int currentFrameIndex;
     
-    LuaArmatureFrameEventData( cocos2d::Ref* _objTarget, std::string_view _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
+    LuaArmatureFrameEventData( axis::Ref* _objTarget, std::string_view _frameEventName, int _originFrameIndex, int _currentFrameIndex):objTarget(_objTarget), frameEventName(_frameEventName),originFrameIndex(_originFrameIndex), currentFrameIndex(_currentFrameIndex)
     {
     }
 };

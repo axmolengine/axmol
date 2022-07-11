@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCNodeGrid.h"
 #include "renderer/CCRenderer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 TransitionPageTurn::TransitionPageTurn()
 {
@@ -154,4 +154,4 @@ ActionInterval* TransitionPageTurn::actionWithSize(const Vec2& vector)
     }
 }
 
-NS_CC_END
+NS_AX_END

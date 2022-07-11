@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "base/ccConfig.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 class EventCustom;
@@ -247,4 +247,4 @@ protected:
 // end of textures group
 /// @}
 
-NS_CC_END
+NS_AX_END

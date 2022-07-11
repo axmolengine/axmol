@@ -32,7 +32,7 @@
 #include <string>
 #include "base/bitmask.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 enum class BufferUsage : uint32_t
 {
@@ -372,4 +372,4 @@ struct ProgramType
     };
 };
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

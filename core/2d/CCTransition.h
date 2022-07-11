@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "2d/CCScene.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _2d
@@ -1057,6 +1057,6 @@ private:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CCTRANSITION_H__

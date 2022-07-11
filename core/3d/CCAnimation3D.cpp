@@ -27,7 +27,7 @@
 #include "3d/CCBundle3D.h"
 #include "platform/CCFileUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Animation3D* Animation3D::create(std::string_view fileName, std::string_view animationName)
 {
@@ -246,4 +246,4 @@ Animation3DCache::~Animation3DCache()
     removeAllAnimations();
 }
 
-NS_CC_END
+NS_AX_END

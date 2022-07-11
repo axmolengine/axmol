@@ -37,10 +37,10 @@ public:
 
     virtual bool init() override;
 
-    void printWidgetResources(cocos2d::Ref* sender);
+    void printWidgetResources(axis::Ref* sender);
 
 protected:
-    cocos2d::ui::ImageView* _image;
+    axis::ui::ImageView* _image;
 };
 
 class UIImageViewTest_Scale9 : public UIScene

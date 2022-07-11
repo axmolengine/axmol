@@ -27,7 +27,7 @@
 #include "../DeviceInfo.h"
 #import <Metal/Metal.h>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 enum class FeatureSet : int32_t
 {
@@ -134,4 +134,4 @@ private:
 
 // end of _metal group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

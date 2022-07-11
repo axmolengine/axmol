@@ -52,23 +52,23 @@ public:
     // overrides
     virtual bool init() override;
     virtual void update(float delta) override;
-    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
     void initScene();
-    void createAgent(const cocos2d::Vec3& pos);
-    void createObstacle(const cocos2d::Vec3& pos);
-    void moveAgents(const cocos2d::Vec3& des);
-    virtual void touchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event){};
-    virtual void touchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event){};
-    virtual void touchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event){};
+    void createAgent(const axis::Vec3& pos);
+    void createObstacle(const axis::Vec3& pos);
+    void moveAgents(const axis::Vec3& des);
+    virtual void touchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event){};
+    virtual void touchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event){};
+    virtual void touchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event){};
 
 protected:
-    cocos2d::Camera* _camera;
+    axis::Camera* _camera;
     float _angle;
-    std::vector<std::pair<cocos2d::NavMeshAgent*, cocos2d::Animate3D*>> _agents;
+    std::vector<std::pair<axis::NavMeshAgent*, axis::Animate3D*>> _agents;
     bool _needMoveAgents;
 };
 
@@ -87,12 +87,12 @@ public:
     virtual void onEnter() override;
 
 protected:
-    virtual void touchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override{};
-    virtual void touchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override{};
-    virtual void touchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override;
+    virtual void touchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
+    virtual void touchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
+    virtual void touchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
 
 protected:
-    cocos2d::Label* _debugLabel;
+    axis::Label* _debugLabel;
 };
 
 class NavMeshAdvanceTestDemo : public NavMeshBaseTestDemo
@@ -110,14 +110,14 @@ public:
     virtual void onEnter() override;
 
 protected:
-    virtual void touchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override{};
-    virtual void touchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override{};
-    virtual void touchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override;
+    virtual void touchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
+    virtual void touchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
+    virtual void touchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
 
 protected:
-    cocos2d::Label* _obstacleLabel;
-    cocos2d::Label* _agentLabel;
-    cocos2d::Label* _debugLabel;
+    axis::Label* _obstacleLabel;
+    axis::Label* _agentLabel;
+    axis::Label* _debugLabel;
 };
 
 #endif

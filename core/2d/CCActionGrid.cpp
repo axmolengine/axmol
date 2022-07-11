@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCNodeGrid.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // implementation of GridAction
 
 bool GridAction::initWithDuration(float duration, const Vec2& gridSize)
@@ -446,4 +446,4 @@ ReuseGrid* ReuseGrid::reverse() const
     return this->clone();
 }
 
-NS_CC_END
+NS_AX_END

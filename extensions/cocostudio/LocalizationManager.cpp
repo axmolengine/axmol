@@ -4,7 +4,7 @@
 #include "CSLanguageDataBinary_generated.h"
 
 using namespace cocostudio;
-using namespace cocos2d;
+USING_NS_AX;
 
 static JsonLocalizationManager* _sharedJsonLocalizationManager = nullptr;
 

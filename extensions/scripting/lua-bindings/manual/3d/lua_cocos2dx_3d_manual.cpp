@@ -33,7 +33,7 @@
 int lua_cocos2dx_3d_MeshRenderer_getAABB(lua_State* L)
 {
     int argc                = 0;
-    cocos2d::MeshRenderer* cobj = nullptr;
+    axis::MeshRenderer* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -44,7 +44,7 @@ int lua_cocos2dx_3d_MeshRenderer_getAABB(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::MeshRenderer*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::MeshRenderer*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -57,8 +57,8 @@ int lua_cocos2dx_3d_MeshRenderer_getAABB(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 0)
     {
-        cocos2d::AABB* ret = const_cast<cocos2d::AABB*>(&(cobj->getAABB()));
-        object_to_luaval<cocos2d::AABB>(L, "cc.AABB", (cocos2d::AABB*)ret);
+        axis::AABB* ret = const_cast<axis::AABB*>(&(cobj->getAABB()));
+        object_to_luaval<axis::AABB>(L, "cc.AABB", (axis::AABB*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.MeshRenderer:getAABB", argc, 0);
@@ -107,9 +107,9 @@ int lua_cocos2dx_3d_MeshRenderer_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L, 4, 0);
 
-            cocos2d::MeshRenderer::createAsync(
+            axis::MeshRenderer::createAsync(
                 modelPath, texturePath,
-                [=](cocos2d::MeshRenderer* mesh, void* callbackparam) {
+                [=](axis::MeshRenderer* mesh, void* callbackparam) {
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (mesh) ? (int)mesh->_ID : -1;
                     int* luaID = (mesh) ? &mesh->_luaID : nullptr;
@@ -140,9 +140,9 @@ int lua_cocos2dx_3d_MeshRenderer_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L, 3, 0);
 
-            cocos2d::MeshRenderer::createAsync(
+            axis::MeshRenderer::createAsync(
                 modelPath,
-                [=](cocos2d::MeshRenderer* mesh, void* callbackparam) {
+                [=](axis::MeshRenderer* mesh, void* callbackparam) {
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (mesh) ? (int)mesh->_ID : -1;
                     int* luaID = (mesh) ? &mesh->_luaID : nullptr;
@@ -177,7 +177,7 @@ static void extendMeshRenderer(lua_State* L)
     lua_pop(L, 1);
 }
 
-bool luaval_to_terraindata(lua_State* L, int lo, cocos2d::Terrain::TerrainData* outValue, const char* funcName = "")
+bool luaval_to_terraindata(lua_State* L, int lo, axis::Terrain::TerrainData* outValue, const char* funcName = "")
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -202,7 +202,7 @@ bool luaval_to_terraindata(lua_State* L, int lo, cocos2d::Terrain::TerrainData* 
         }
         else
         {
-            outValue->_chunkSize = cocos2d::Size(32, 32);
+            outValue->_chunkSize = axis::Size(32, 32);
         }
         lua_pop(L, 1);
 
@@ -266,7 +266,7 @@ bool luaval_to_terraindata(lua_State* L, int lo, cocos2d::Terrain::TerrainData* 
     return ok;
 }
 
-void terraindata_to_luaval(lua_State* L, const cocos2d::Terrain::TerrainData& inValue)
+void terraindata_to_luaval(lua_State* L, const axis::Terrain::TerrainData& inValue)
 {
     if (nullptr == L)
         return;
@@ -345,21 +345,21 @@ int lua_cocos2dx_3d_Terrain_create(lua_State* L)
 
     if (argc == 1)
     {
-        cocos2d::Terrain::TerrainData arg0;
+        axis::Terrain::TerrainData arg0;
         ok &= luaval_to_terraindata(L, 2, &arg0);
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_3d_Terrain_create'", nullptr);
             return 0;
         }
-        cocos2d::Terrain* ret = cocos2d::Terrain::create(arg0);
-        object_to_luaval<cocos2d::Terrain>(L, "cc.Terrain", (cocos2d::Terrain*)ret);
+        axis::Terrain* ret = axis::Terrain::create(arg0);
+        object_to_luaval<axis::Terrain>(L, "cc.Terrain", (axis::Terrain*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        cocos2d::Terrain::TerrainData arg0;
-        cocos2d::Terrain::CrackFixedType arg1;
+        axis::Terrain::TerrainData arg0;
+        axis::Terrain::CrackFixedType arg1;
 
         ok &= luaval_to_terraindata(L, 2, &arg0);
         ok &= luaval_to_int32(L, 3, (int*)&arg1, "cc.Terrain:create");
@@ -368,8 +368,8 @@ int lua_cocos2dx_3d_Terrain_create(lua_State* L)
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_3d_Terrain_create'", nullptr);
             return 0;
         }
-        cocos2d::Terrain* ret = cocos2d::Terrain::create(arg0, arg1);
-        object_to_luaval<cocos2d::Terrain>(L, "cc.Terrain", (cocos2d::Terrain*)ret);
+        axis::Terrain* ret = axis::Terrain::create(arg0, arg1);
+        object_to_luaval<axis::Terrain>(L, "cc.Terrain", (axis::Terrain*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Terrain:create", argc, 1);
@@ -384,7 +384,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_Terrain_getHeight(lua_State* L)
 {
     int argc               = 0;
-    cocos2d::Terrain* cobj = nullptr;
+    axis::Terrain* cobj = nullptr;
     bool ok                = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -394,7 +394,7 @@ int lua_cocos2dx_3d_Terrain_getHeight(lua_State* L)
     if (!tolua_isusertype(L, 1, "cc.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Terrain*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::Terrain*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -407,7 +407,7 @@ int lua_cocos2dx_3d_Terrain_getHeight(lua_State* L)
     {
         if (argc == 1)
         {
-            cocos2d::Vec2 arg0;
+            axis::Vec2 arg0;
             ok &= luaval_to_vec2(L, 2, &arg0, "cc.Terrain:getHeight");
 
             if (!ok)
@@ -424,15 +424,15 @@ int lua_cocos2dx_3d_Terrain_getHeight(lua_State* L)
     {
         if (argc == 2)
         {
-            cocos2d::Vec2 arg0;
+            axis::Vec2 arg0;
             ok &= luaval_to_vec2(L, 2, &arg0, "cc.Terrain:getHeight");
 
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3* arg1;
-            ok &= luaval_to_object<cocos2d::Vec3>(L, 3, "cc.Vec3", &arg1, "cc.Terrain:getHeight");
+            axis::Vec3* arg1;
+            ok &= luaval_to_object<axis::Vec3>(L, 3, "cc.Vec3", &arg1, "cc.Terrain:getHeight");
 
             if (!ok)
             {
@@ -487,7 +487,7 @@ int lua_cocos2dx_3d_Terrain_getHeight(lua_State* L)
             {
                 break;
             }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(L, 4, &arg2);
 
             if (!ok)
@@ -515,7 +515,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
 {
     int argc               = 0;
-    cocos2d::Terrain* cobj = nullptr;
+    axis::Terrain* cobj = nullptr;
     bool ok                = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -525,7 +525,7 @@ int lua_cocos2dx_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Terrain*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Terrain*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -538,14 +538,14 @@ int lua_cocos2dx_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            cocos2d::Ray* arg0 = nullptr;
-            ok &= luaval_to_object<cocos2d::Ray>(tolua_S, 2, "cc.Ray", &arg0, "cc.Terrain:getIntersectionPoint");
+            axis::Ray* arg0 = nullptr;
+            ok &= luaval_to_object<axis::Ray>(tolua_S, 2, "cc.Ray", &arg0, "cc.Terrain:getIntersectionPoint");
 
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "cc.Terrain:getIntersectionPoint");
 
             if (!ok)
@@ -563,14 +563,14 @@ int lua_cocos2dx_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            cocos2d::Ray* arg0;
-            ok &= luaval_to_object<cocos2d::Ray>(tolua_S, 2, "cc.Ray", &arg0, "cc.Terrain:getIntersectionPoint");
+            axis::Ray* arg0;
+            ok &= luaval_to_object<axis::Ray>(tolua_S, 2, "cc.Ray", &arg0, "cc.Terrain:getIntersectionPoint");
 
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3 ret = cobj->getIntersectionPoint(*arg0);
+            axis::Vec3 ret = cobj->getIntersectionPoint(*arg0);
             vec3_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -627,7 +627,7 @@ int lua_cocos2dx_3d_Bundle3D_getTrianglesList(lua_State* L)
             return 0;
         }
 
-        std::vector<cocos2d::Vec3> ret = cocos2d::Bundle3D::getTrianglesList(arg0);
+        std::vector<axis::Vec3> ret = axis::Bundle3D::getTrianglesList(arg0);
         std_vector_vec3_to_luaval(L, ret);
         return 1;
     }
@@ -665,7 +665,7 @@ static int register_all_cocos2dx_3d_manual(lua_State* L)
 int lua_cocos2dx_3d_AABB_reset(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -677,7 +677,7 @@ int lua_cocos2dx_3d_AABB_reset(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -709,7 +709,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_set(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -721,7 +721,7 @@ int lua_cocos2dx_3d_AABB_set(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -734,8 +734,8 @@ int lua_cocos2dx_3d_AABB_set(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.AABB:set");
 
@@ -758,7 +758,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_transform(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -770,7 +770,7 @@ int lua_cocos2dx_3d_AABB_transform(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -783,7 +783,7 @@ int lua_cocos2dx_3d_AABB_transform(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Mat4 arg0;
+        axis::Mat4 arg0;
 
         ok &= luaval_to_mat4(L, 2, &arg0, "cc.AABB:transform");
         if (!ok)
@@ -804,7 +804,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_getCenter(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -816,7 +816,7 @@ int lua_cocos2dx_3d_AABB_getCenter(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -831,7 +831,7 @@ int lua_cocos2dx_3d_AABB_getCenter(lua_State* L)
     {
         if (!ok)
             return 0;
-        cocos2d::Vec3 ret = cobj->getCenter();
+        axis::Vec3 ret = cobj->getCenter();
         vec3_to_luaval(L, ret);
         return 1;
     }
@@ -848,7 +848,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_isEmpty(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -860,7 +860,7 @@ int lua_cocos2dx_3d_AABB_isEmpty(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -892,7 +892,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_getCorners(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -904,7 +904,7 @@ int lua_cocos2dx_3d_AABB_getCorners(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -917,9 +917,9 @@ int lua_cocos2dx_3d_AABB_getCorners(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec3* arg0;
+        axis::Vec3* arg0;
 
-        ok &= luaval_to_object<cocos2d::Vec3>(L, 2, "cc.Vec3", &arg0, "cc.AABB:getCorners");
+        ok &= luaval_to_object<axis::Vec3>(L, 2, "cc.Vec3", &arg0, "cc.AABB:getCorners");
         if (!ok)
             return 0;
         cobj->getCorners(arg0);
@@ -938,7 +938,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_updateMinMax(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -950,7 +950,7 @@ int lua_cocos2dx_3d_AABB_updateMinMax(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -963,10 +963,10 @@ int lua_cocos2dx_3d_AABB_updateMinMax(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        const cocos2d::Vec3* arg0;
+        const axis::Vec3* arg0;
         ssize_t arg1;
 
-        ok &= luaval_to_object<const cocos2d::Vec3>(L, 2, "cc.Vec3", &arg0, "cc.AABB:updateMinMax");
+        ok &= luaval_to_object<const axis::Vec3>(L, 2, "cc.Vec3", &arg0, "cc.AABB:updateMinMax");
 
         ok &= luaval_to_ssize_t(L, 3, &arg1, "cc.AABB:updateMinMax");
         if (!ok)
@@ -987,7 +987,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_containPoint(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -999,7 +999,7 @@ int lua_cocos2dx_3d_AABB_containPoint(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1012,7 +1012,7 @@ int lua_cocos2dx_3d_AABB_containPoint(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.AABB:containPoint");
         if (!ok)
@@ -1034,7 +1034,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_AABB_constructor(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* cobj = nullptr;
+    axis::AABB* cobj = nullptr;
     bool ok             = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1045,21 +1045,21 @@ int lua_cocos2dx_3d_AABB_constructor(lua_State* L)
     {
         if (argc == 2)
         {
-            cocos2d::Vec3 arg0;
+            axis::Vec3 arg0;
             ok &= luaval_to_vec3(L, 2, &arg0, "cc.AABB:AABB");
 
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(L, 3, &arg1, "cc.AABB:AABB");
 
             if (!ok)
             {
                 break;
             }
-            cobj = new cocos2d::AABB(arg0, arg1);
+            cobj = new axis::AABB(arg0, arg1);
             tolua_pushusertype(L, (void*)cobj, "cc.AABB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1070,7 +1070,7 @@ int lua_cocos2dx_3d_AABB_constructor(lua_State* L)
     {
         if (argc == 0)
         {
-            cobj = new cocos2d::AABB();
+            cobj = new axis::AABB();
             tolua_pushusertype(L, (void*)cobj, "cc.AABB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1089,7 +1089,7 @@ int lua_cocos2dx_3d_AABB_constructor(lua_State* L)
 
 int lua_cocos2dx_3d_get_AABB_min(lua_State* L)
 {
-    cocos2d::AABB* self = nullptr;
+    axis::AABB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1097,7 +1097,7 @@ int lua_cocos2dx_3d_get_AABB_min(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1118,7 +1118,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_AABB_min(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* self = nullptr;
+    axis::AABB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1126,7 +1126,7 @@ int lua_cocos2dx_3d_set_AABB_min(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1158,7 +1158,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_AABB_max(lua_State* L)
 {
-    cocos2d::AABB* self = nullptr;
+    axis::AABB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1166,7 +1166,7 @@ int lua_cocos2dx_3d_get_AABB_max(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1187,7 +1187,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_AABB_max(lua_State* L)
 {
     int argc            = 0;
-    cocos2d::AABB* self = nullptr;
+    axis::AABB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1195,7 +1195,7 @@ int lua_cocos2dx_3d_set_AABB_max(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1227,7 +1227,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_AABB_finalize(lua_State* L)
 {
-    cocos2d::AABB* self = (cocos2d::AABB*)tolua_tousertype(L, 1, 0);
+    axis::AABB* self = (axis::AABB*)tolua_tousertype(L, 1, 0);
     CC_SAFE_DELETE(self);
     return 0;
 }
@@ -1250,7 +1250,7 @@ int lua_register_cocos2dx_3d_AABB(lua_State* L)
     tolua_function(L, "updateMinMax", lua_cocos2dx_3d_AABB_updateMinMax);
     tolua_function(L, "containPoint", lua_cocos2dx_3d_AABB_containPoint);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(cocos2d::AABB).name();
+    auto typeName                                    = typeid(axis::AABB).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AABB";
     g_typeCast[typeName]                             = "cc.AABB";
     return 1;
@@ -1259,7 +1259,7 @@ int lua_register_cocos2dx_3d_AABB(lua_State* L)
 int lua_cocos2dx_3d_OBB_reset(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* cobj = nullptr;
+    axis::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1271,7 +1271,7 @@ int lua_cocos2dx_3d_OBB_reset(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1303,7 +1303,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_OBB_set(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* cobj = nullptr;
+    axis::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1315,7 +1315,7 @@ int lua_cocos2dx_3d_OBB_set(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1328,11 +1328,11 @@ int lua_cocos2dx_3d_OBB_set(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 5)
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
-        cocos2d::Vec3 arg2;
-        cocos2d::Vec3 arg3;
-        cocos2d::Vec3 arg4;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
+        axis::Vec3 arg2;
+        axis::Vec3 arg3;
+        axis::Vec3 arg4;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.OBB:set");
 
@@ -1361,7 +1361,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_OBB_transform(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* cobj = nullptr;
+    axis::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1373,7 +1373,7 @@ int lua_cocos2dx_3d_OBB_transform(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1386,7 +1386,7 @@ int lua_cocos2dx_3d_OBB_transform(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Mat4 arg0;
+        axis::Mat4 arg0;
 
         ok &= luaval_to_mat4(L, 2, &arg0, "cc.OBB:transform");
         if (!ok)
@@ -1408,7 +1408,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_OBB_containPoint(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* cobj = nullptr;
+    axis::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1420,7 +1420,7 @@ int lua_cocos2dx_3d_OBB_containPoint(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1433,7 +1433,7 @@ int lua_cocos2dx_3d_OBB_containPoint(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.OBB:containPoint");
         if (!ok)
@@ -1456,7 +1456,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* cobj = nullptr;
+    axis::OBB* cobj = nullptr;
     bool ok            = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1467,14 +1467,14 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
     {
         if (argc == 1)
         {
-            cocos2d::AABB* arg0;
-            ok &= luaval_to_object<cocos2d::AABB>(L, 2, "cc.AABB", &arg0, "cc.OBB:OBB");
+            axis::AABB* arg0;
+            ok &= luaval_to_object<axis::AABB>(L, 2, "cc.AABB", &arg0, "cc.OBB:OBB");
 
             if (!ok)
             {
                 break;
             }
-            cobj = new cocos2d::OBB(*arg0);
+            cobj = new axis::OBB(*arg0);
             tolua_pushusertype(L, (void*)cobj, "cc.OBB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1485,7 +1485,7 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
     {
         if (argc == 0)
         {
-            cobj = new cocos2d::OBB();
+            cobj = new axis::OBB();
             tolua_pushusertype(L, (void*)cobj, "cc.OBB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1496,8 +1496,8 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
     {
         if (argc == 2)
         {
-            const cocos2d::Vec3* arg0;
-            ok &= luaval_to_object<const cocos2d::Vec3>(L, 2, "cc.Vec3", &arg0, "cc.OBB:OBB");
+            const axis::Vec3* arg0;
+            ok &= luaval_to_object<const axis::Vec3>(L, 2, "cc.Vec3", &arg0, "cc.OBB:OBB");
 
             if (!ok)
             {
@@ -1510,7 +1510,7 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
             {
                 break;
             }
-            cobj = new cocos2d::OBB(arg0, arg1);
+            cobj = new axis::OBB(arg0, arg1);
             tolua_pushusertype(L, (void*)cobj, "cc.OBB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1530,7 +1530,7 @@ int lua_cocos2dx_3d_OBB_constructor(lua_State* L)
 int lua_cocos2dx_3d_OBB_intersects(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
     bool ok            = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1538,7 +1538,7 @@ int lua_cocos2dx_3d_OBB_intersects(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1549,8 +1549,8 @@ int lua_cocos2dx_3d_OBB_intersects(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (1 == argc)
     {
-        cocos2d::OBB* arg0;
-        ok &= luaval_to_object<cocos2d::OBB>(L, 2, "cc.OBB", &arg0, "cc.OBB:intersects");
+        axis::OBB* arg0;
+        ok &= luaval_to_object<axis::OBB>(L, 2, "cc.OBB", &arg0, "cc.OBB:intersects");
 
         if (!ok)
             return 0;
@@ -1570,7 +1570,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_OBB_center(lua_State* L)
 {
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1578,7 +1578,7 @@ int lua_cocos2dx_3d_get_OBB_center(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1599,7 +1599,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_OBB_center(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1607,7 +1607,7 @@ int lua_cocos2dx_3d_set_OBB_center(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1639,7 +1639,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_OBB_xAxis(lua_State* L)
 {
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1647,7 +1647,7 @@ int lua_cocos2dx_3d_get_OBB_xAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1668,7 +1668,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_OBB_xAxis(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1676,7 +1676,7 @@ int lua_cocos2dx_3d_set_OBB_xAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1708,7 +1708,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_OBB_yAxis(lua_State* L)
 {
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1716,7 +1716,7 @@ int lua_cocos2dx_3d_get_OBB_yAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1737,7 +1737,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_OBB_yAxis(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1745,7 +1745,7 @@ int lua_cocos2dx_3d_set_OBB_yAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1777,7 +1777,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_OBB_zAxis(lua_State* L)
 {
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1785,7 +1785,7 @@ int lua_cocos2dx_3d_get_OBB_zAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1806,7 +1806,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_OBB_zAxis(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1814,7 +1814,7 @@ int lua_cocos2dx_3d_set_OBB_zAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1846,7 +1846,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_OBB_extents(lua_State* L)
 {
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1854,7 +1854,7 @@ int lua_cocos2dx_3d_get_OBB_extents(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1875,7 +1875,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_OBB_extents(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* self = nullptr;
+    axis::OBB* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1883,7 +1883,7 @@ int lua_cocos2dx_3d_set_OBB_extents(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1916,7 +1916,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_OBB_getCorners(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::OBB* cobj = nullptr;
+    axis::OBB* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1927,7 +1927,7 @@ int lua_cocos2dx_3d_OBB_getCorners(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1940,7 +1940,7 @@ int lua_cocos2dx_3d_OBB_getCorners(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec3* arg0;
+        axis::Vec3* arg0;
 #if COCOS2D_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
@@ -1953,14 +1953,14 @@ int lua_cocos2dx_3d_OBB_getCorners(lua_State* L)
             return 0;
         }
 
-        arg0 = new cocos2d::Vec3[len];
+        arg0 = new axis::Vec3[len];
         for (int i = 1; i <= len; i++)
         {
             lua_pushnumber(L, i);
             lua_gettable(L, 2);
             if (lua_isnil(L, -1))
             {
-                arg0[i - 1] = cocos2d::Vec3(0, 0, 0);
+                arg0[i - 1] = axis::Vec3(0, 0, 0);
             }
             else
             {
@@ -1996,7 +1996,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_OBB_finalize(lua_State* L)
 {
-    cocos2d::OBB* self = (cocos2d::OBB*)tolua_tousertype(L, 1, 0);
+    axis::OBB* self = (axis::OBB*)tolua_tousertype(L, 1, 0);
     CC_SAFE_DELETE(self);
     return 0;
 }
@@ -2020,7 +2020,7 @@ int lua_register_cocos2dx_3d_OBB(lua_State* L)
     tolua_function(L, "intersects", lua_cocos2dx_3d_OBB_intersects);
     tolua_function(L, "getCorners", lua_cocos2dx_3d_OBB_getCorners);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(cocos2d::OBB).name();
+    auto typeName                                    = typeid(axis::OBB).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.OBB";
     g_typeCast[typeName]                             = "cc.OBB";
     return 1;
@@ -2029,7 +2029,7 @@ int lua_register_cocos2dx_3d_OBB(lua_State* L)
 int lua_cocos2dx_3d_Ray_set(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::Ray* cobj = nullptr;
+    axis::Ray* cobj = nullptr;
     bool ok            = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2041,7 +2041,7 @@ int lua_cocos2dx_3d_Ray_set(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::Ray*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -2054,8 +2054,8 @@ int lua_cocos2dx_3d_Ray_set(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.Ray:set");
 
@@ -2078,7 +2078,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_Ray_transform(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::Ray* cobj = nullptr;
+    axis::Ray* cobj = nullptr;
     bool ok            = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2090,7 +2090,7 @@ int lua_cocos2dx_3d_Ray_transform(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::Ray*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -2103,7 +2103,7 @@ int lua_cocos2dx_3d_Ray_transform(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::Mat4 arg0;
+        axis::Mat4 arg0;
 
         ok &= luaval_to_mat4(L, 2, &arg0, "cc.Ray:transform");
         if (!ok)
@@ -2125,7 +2125,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_Ray_intersects(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::Ray* self = nullptr;
+    axis::Ray* self = nullptr;
     bool ok            = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2133,7 +2133,7 @@ int lua_cocos2dx_3d_Ray_intersects(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2144,8 +2144,8 @@ int lua_cocos2dx_3d_Ray_intersects(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (1 == argc)
     {
-        cocos2d::OBB* arg0 = nullptr;
-        ok &= luaval_to_object<cocos2d::OBB>(L, 2, "cc.OBB", &arg0, "cc.Ray:intersects");
+        axis::OBB* arg0 = nullptr;
+        ok &= luaval_to_object<axis::OBB>(L, 2, "cc.OBB", &arg0, "cc.Ray:intersects");
 
         if (!ok)
             return 0;
@@ -2168,7 +2168,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_Ray_constructor(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::Ray* cobj = nullptr;
+    axis::Ray* cobj = nullptr;
     bool ok            = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2179,21 +2179,21 @@ int lua_cocos2dx_3d_Ray_constructor(lua_State* L)
     {
         if (argc == 2)
         {
-            cocos2d::Vec3 arg0;
+            axis::Vec3 arg0;
             ok &= luaval_to_vec3(L, 2, &arg0, "cc.Ray:Ray");
 
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(L, 3, &arg1, "cc.Ray:Ray");
 
             if (!ok)
             {
                 break;
             }
-            cobj = new cocos2d::Ray(arg0, arg1);
+            cobj = new axis::Ray(arg0, arg1);
             tolua_pushusertype(L, (void*)cobj, "cc.Ray");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -2204,7 +2204,7 @@ int lua_cocos2dx_3d_Ray_constructor(lua_State* L)
     {
         if (argc == 0)
         {
-            cobj = new cocos2d::Ray();
+            cobj = new axis::Ray();
             tolua_pushusertype(L, (void*)cobj, "cc.Ray");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -2223,7 +2223,7 @@ int lua_cocos2dx_3d_Ray_constructor(lua_State* L)
 
 int lua_cocos2dx_3d_get_Ray_origin(lua_State* L)
 {
-    cocos2d::Ray* self = nullptr;
+    axis::Ray* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2231,7 +2231,7 @@ int lua_cocos2dx_3d_get_Ray_origin(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2252,7 +2252,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_Ray_origin(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::Ray* self = nullptr;
+    axis::Ray* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2260,7 +2260,7 @@ int lua_cocos2dx_3d_set_Ray_origin(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2292,7 +2292,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_get_Ray_direction(lua_State* L)
 {
-    cocos2d::Ray* self = nullptr;
+    axis::Ray* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2300,7 +2300,7 @@ int lua_cocos2dx_3d_get_Ray_direction(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2321,7 +2321,7 @@ tolua_lerror:
 int lua_cocos2dx_3d_set_Ray_direction(lua_State* L)
 {
     int argc           = 0;
-    cocos2d::Ray* self = nullptr;
+    axis::Ray* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2329,7 +2329,7 @@ int lua_cocos2dx_3d_set_Ray_direction(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2361,7 +2361,7 @@ tolua_lerror:
 
 int lua_cocos2dx_3d_Ray_finalize(lua_State* L)
 {
-    cocos2d::Ray* self = (cocos2d::Ray*)tolua_tousertype(L, 1, 0);
+    axis::Ray* self = (axis::Ray*)tolua_tousertype(L, 1, 0);
     CC_SAFE_DELETE(self);
     return 0;
 }
@@ -2379,7 +2379,7 @@ int lua_register_cocos2dx_3d_Ray(lua_State* L)
     tolua_function(L, "transform", lua_cocos2dx_3d_Ray_transform);
     tolua_function(L, "intersects", lua_cocos2dx_3d_Ray_intersects);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(cocos2d::Ray).name();
+    auto typeName                                    = typeid(axis::Ray).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Ray";
     g_typeCast[typeName]                             = "cc.Ray";
     return 1;

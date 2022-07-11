@@ -25,7 +25,7 @@
 #include "renderer/CCCallbackCommand.h"
 #include "renderer/backend/Device.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static uint64_t s_nextId = 1;
 
@@ -59,4 +59,4 @@ void CallbackCommand::execute()
         func();
 }
 
-NS_CC_END
+NS_AX_END

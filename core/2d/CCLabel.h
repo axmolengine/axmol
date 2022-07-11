@@ -34,7 +34,7 @@
 #include "2d/CCFontAtlas.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _2d
@@ -775,7 +775,7 @@ protected:
     void computeAlignmentOffset();
     bool computeHorizontalKernings(const std::u32string& stringToRender);
 
-    void recordLetterInfo(const cocos2d::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex);
+    void recordLetterInfo(const axis::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex);
     void recordPlaceholderInfo(int letterIndex, char32_t utf16Char);
 
     bool updateQuads();
@@ -926,6 +926,6 @@ private:
 // end group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif /*__COCOS2D_CCLABEL_H */

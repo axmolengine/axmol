@@ -33,7 +33,7 @@
 
 #include "Bug-12847.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 Bug12847Layer::Bug12847Layer()
 {

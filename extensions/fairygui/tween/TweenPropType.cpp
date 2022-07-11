@@ -4,7 +4,7 @@
 #include "GProgressBar.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 void TweenPropTypeUtils::setProps(GObject * target, TweenPropType propType, const TweenValue & value)
 {
@@ -65,7 +65,7 @@ void TweenPropTypeUtils::setProps(GObject * target, TweenPropType propType, cons
     }
 }
 
-void TweenPropTypeUtils::setProps(cocos2d::Node * target, TweenPropType propType, const TweenValue & value)
+void TweenPropTypeUtils::setProps(axis::Node * target, TweenPropType propType, const TweenValue & value)
 {
     switch (propType)
     {

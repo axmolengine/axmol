@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "platform/CCApplicationProtocol.h"
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_DLL Application : public ApplicationProtocol
 {
@@ -106,4 +106,4 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-NS_CC_END
+NS_AX_END

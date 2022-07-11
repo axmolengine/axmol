@@ -31,7 +31,7 @@
 #include <vector>
 #include "ExtensionExport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUMaterial : public Ref
 {
@@ -73,6 +73,6 @@ protected:
     MaterialVector _materialMap;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

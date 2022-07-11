@@ -25,11 +25,11 @@ public:
     virtual const std::string& getIcon() const override { return _url; }
     virtual void setIcon(const std::string& value) override { setURL(value); }
 
-    cocos2d::TextHAlignment getAlign() const { return _align; }
-    void setAlign(cocos2d::TextHAlignment value);
+    axis::TextHAlignment getAlign() const { return _align; }
+    void setAlign(axis::TextHAlignment value);
 
-    cocos2d::TextVAlignment getVerticalAlign() const { return _verticalAlign; }
-    void setVerticalAlign(cocos2d::TextVAlignment value);
+    axis::TextVAlignment getVerticalAlign() const { return _verticalAlign; }
+    void setVerticalAlign(axis::TextVAlignment value);
 
     bool getAutoSize() const { return _autoSize; }
     void setAutoSize(bool value);
@@ -40,10 +40,10 @@ public:
     bool isShrinkOnly() const { return _shrinkOnly; }
     void setShrinkOnly(bool value);
 
-    const cocos2d::Size& getContentSize();
+    const axis::Size& getContentSize();
 
-    cocos2d::Color3B getColor() const;
-    void setColor(const cocos2d::Color3B& value);
+    axis::Color3B getColor() const;
+    void setColor(const axis::Color3B& value);
 
     bool isPlaying() const { return _playing; }
     void setPlaying(bool value);
@@ -65,19 +65,19 @@ public:
 
     GComponent* getComponent() const { return _content2; }
 
-    virtual cocos2d::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const cocos2d::Value& value) override;
+    virtual axis::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
 
 protected:
     virtual void handleInit() override;
     virtual void handleSizeChanged() override;
     virtual void handleGrayedChanged() override;
     virtual void setup_beforeAdd(ByteBuffer* buffer, int beginPos) override;
-    virtual GObject* hitTest(const cocos2d::Vec2 & worldPoint, const cocos2d::Camera * camera) override;
+    virtual GObject* hitTest(const axis::Vec2 & worldPoint, const axis::Camera * camera) override;
 
     virtual void loadExternal();
-    virtual void freeExternal(cocos2d::SpriteFrame* spriteFrame);
-    void onExternalLoadSuccess(cocos2d::SpriteFrame* spriteFrame);
+    virtual void freeExternal(axis::SpriteFrame* spriteFrame);
+    void onExternalLoadSuccess(axis::SpriteFrame* spriteFrame);
     void onExternalLoadFailed();
 
 private:
@@ -89,8 +89,8 @@ private:
     void clearErrorState();
 
     std::string _url;
-    cocos2d::TextHAlignment _align;
-    cocos2d::TextVAlignment _verticalAlign;
+    axis::TextHAlignment _align;
+    axis::TextVAlignment _verticalAlign;
     bool _autoSize;
     LoaderFillType _fill;
     bool _shrinkOnly;

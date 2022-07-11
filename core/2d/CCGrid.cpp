@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "renderer/backend/RenderTarget.h"
 #include "2d/CCCamera.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // implementation of GridBase
 
 bool GridBase::initWithSize(const Vec2& gridSize)
@@ -46,7 +46,7 @@ bool GridBase::initWithSize(const Vec2& gridSize)
     return initWithSize(gridSize, Rect::ZERO);
 }
 
-bool GridBase::initWithSize(const Vec2& gridSize, const cocos2d::Rect& rect)
+bool GridBase::initWithSize(const Vec2& gridSize, const axis::Rect& rect)
 {
     Director* director = Director::getInstance();
     Vec2 s             = director->getWinSizeInPixels();
@@ -194,7 +194,7 @@ void GridBase::set2DProjection()
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
-void GridBase::setGridRect(const cocos2d::Rect& rect)
+void GridBase::setGridRect(const axis::Rect& rect)
 {
     _gridRect = rect;
 }
@@ -227,7 +227,7 @@ void GridBase::beforeDraw()
     renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
 }
 
-void GridBase::afterDraw(cocos2d::Node* /*target*/)
+void GridBase::afterDraw(axis::Node* /*target*/)
 {
     // restore projection
     Director* director = Director::getInstance();
@@ -380,7 +380,7 @@ void Grid3D::blit()
     updateVertexBuffer();
     _drawCommand.init(0, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    cocos2d::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    axis::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState           = _drawCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
@@ -630,7 +630,7 @@ void TiledGrid3D::blit()
 {
     updateVertexBuffer();
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    cocos2d::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    axis::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState           = _drawCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
@@ -795,4 +795,4 @@ void TiledGrid3D::updateVertexAndTexCoordinate()
     _drawCommand.updateIndexBuffer(_indices, gradSize * 6 * sizeof(unsigned short));
 }
 
-NS_CC_END
+NS_AX_END

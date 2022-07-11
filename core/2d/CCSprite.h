@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "renderer/CCCustomCommand.h"
 #include "2d/CCAutoPolygon.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class SpriteBatchNode;
 class SpriteFrame;
@@ -708,4 +708,4 @@ private:
 // end of sprite_nodes group
 /// @}
 
-NS_CC_END
+NS_AX_END

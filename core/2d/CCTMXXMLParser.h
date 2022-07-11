@@ -40,7 +40,7 @@ THE SOFTWARE.
 
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class TMXLayerInfo;
 class TMXTilesetInfo;
@@ -409,7 +409,7 @@ protected:
 // end of tilemap_parallax_nodes group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif

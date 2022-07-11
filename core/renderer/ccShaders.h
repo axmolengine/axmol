@@ -35,7 +35,7 @@ THE SOFTWARE.
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 extern CC_DLL const char* positionColor_vert;
 extern CC_DLL const char* positionColor_frag;
@@ -84,7 +84,7 @@ extern CC_DLL const char* CC2D_quad_vert;
 
 extern CC_DLL const char* hsv_frag;
 extern CC_DLL const char* dualSampler_hsv_frag;
-NS_CC_END
+NS_AX_END
 /**
  end of support group
  @}

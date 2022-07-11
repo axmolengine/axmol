@@ -32,7 +32,7 @@
 #    include "physics/CCPhysicsHelper.h"
 #    include "2d/CCNode.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 template <typename T>
 class Optional
@@ -145,7 +145,7 @@ PhysicsJoint::~PhysicsJoint()
     delete _writeCache;
 }
 
-bool PhysicsJoint::init(cocos2d::PhysicsBody* a, cocos2d::PhysicsBody* b)
+bool PhysicsJoint::init(axis::PhysicsBody* a, axis::PhysicsBody* b)
 {
     do
     {
@@ -930,5 +930,5 @@ void PhysicsJointMotor::setRate(float rate)
     CC_PJOINT_CACHE_WRITE(_rate, cpSimpleMotorSetRate, rate);
 }
 
-NS_CC_END
+NS_AX_END
 #endif  // CC_USE_PHYSICS

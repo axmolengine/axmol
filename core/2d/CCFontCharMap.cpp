@@ -31,7 +31,7 @@
 #include "base/CCDirector.h"
 #include "renderer/CCTextureCache.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 FontCharMap* FontCharMap::create(std::string_view plistFile)
 {
@@ -142,4 +142,4 @@ FontAtlas* FontCharMap::newFontAtlas()
     return tempAtlas;
 }
 
-NS_CC_END
+NS_AX_END

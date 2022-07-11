@@ -36,7 +36,7 @@
  * @addtogroup renderer
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct CC_DLL PipelineDescriptor
 {
@@ -46,4 +46,4 @@ struct CC_DLL PipelineDescriptor
 
 // end of renderer group
 /// @}
-NS_CC_END
+NS_AX_END

@@ -1,7 +1,7 @@
 #include "FUISprite.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 #define kProgressTextureCoordsCount 4
 //  kProgressTextureCoords holds points {0,1} {0,0} {1,0} {1,1} we can represent it as bits
@@ -484,7 +484,7 @@ Vec2 FUISprite::boundaryTexCoord(char index)
     return Vec2::ZERO;
 }
 
-void FUISprite::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
+void FUISprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
 {
     if (_texture == _empty)
         return;

@@ -43,7 +43,7 @@ private:
     float _scrollPerc;
     bool _fixedGripSize;
 
-    cocos2d::Vec2 _dragOffset;
+    axis::Vec2 _dragOffset;
 };
 
 NS_FGUI_END

@@ -24,7 +24,7 @@
 #include "test.h"
 #include "extensions/cocos-ext.h"
 
-USING_NS_CC_EXT;
+USING_NS_AX_EXT;
 
 // This is a fun demo that shows off the wheel joint
 class Car : public Test

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation of SpriteFrame
 
@@ -265,4 +265,4 @@ bool SpriteFrame::hasPolygonInfo() const
     return _polygonInfo.triangles.vertCount != 0;
 }
 
-NS_CC_END
+NS_AX_END

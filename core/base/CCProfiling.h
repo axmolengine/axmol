@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "base/CCMap.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup global
@@ -156,7 +156,7 @@ extern bool kProfilerCategoryParticles;
 // end of global group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif  // __SUPPORT_CCPROFILING_H__

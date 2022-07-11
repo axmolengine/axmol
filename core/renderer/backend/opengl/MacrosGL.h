@@ -35,7 +35,7 @@
             GLenum __error = glGetError();                                                                    \
             if (__error)                                                                                      \
             {                                                                                                 \
-                cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
+                axis::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
             }                                                                                                 \
         } while (false)
 #    define CHECK_GL_ERROR_ABORT()                                                                            \
@@ -44,7 +44,7 @@
             GLenum __error = glGetError();                                                                    \
             if (__error)                                                                                      \
             {                                                                                                 \
-                cocos2d::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
+                axis::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
                 assert(false);                                                                                \
             }                                                                                                 \
         } while (false)

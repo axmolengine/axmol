@@ -31,7 +31,7 @@
 #include "../testResource.h"
 #include "../TerrainTest/TerrainTest.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace spine;
 
 class SkeletonAnimationCullingFix : public SkeletonAnimation
@@ -39,11 +39,11 @@ class SkeletonAnimationCullingFix : public SkeletonAnimation
 public:
     SkeletonAnimationCullingFix() : SkeletonAnimation() {}
 
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t transformFlags) override
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t transformFlags) override
     {
         glDisable(GL_CULL_FACE);
         SkeletonAnimation::draw(renderer, transform, transformFlags);
-        RenderState::StateBlock::invalidate(cocos2d::RenderState::StateBlock::RS_ALL_ONES);
+        RenderState::StateBlock::invalidate(axis::RenderState::StateBlock::RS_ALL_ONES);
     }
 
     static SkeletonAnimationCullingFix* createWithFile(std::string_view skeletonDataFile,
@@ -100,7 +100,7 @@ private:
     // init in createWorld3D()
     TextureCube* _textureCube;
     Skybox* _skyBox;
-    cocos2d::Terrain* _terrain;
+    axis::Terrain* _terrain;
     Player* _player;
     Node* _monsters[2];
 
@@ -130,7 +130,7 @@ private:
 
     std::vector<std::string> _skins[(int)SkinType::MAX_TYPE];  // all skins
     int _curSkin[(int)SkinType::MAX_TYPE];                     // current skin index
-    cocos2d::MeshRenderer* _reskinGirl;
+    axis::MeshRenderer* _reskinGirl;
 
     // for capture screen
     static const int SNAPSHOT_TAG = 119;

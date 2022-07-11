@@ -25,8 +25,8 @@
 
 #include "base/CCEventAcceleration.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventAcceleration::EventAcceleration(const Acceleration& acc) : Event(Type::ACCELERATION), _acc(acc) {}
 
-NS_CC_END
+NS_AX_END

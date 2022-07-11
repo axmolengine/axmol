@@ -53,7 +53,7 @@ public:
 
     void createSpriteTest();
     void createNewSpriteTest();
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
     NewSpriteTest();
@@ -80,16 +80,16 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
     NewClippingNodeTest();
     virtual ~NewClippingNodeTest();
 
     bool _scrolling;
-    cocos2d::Vec2 _lastPoint;
+    axis::Vec2 _lastPoint;
 };
 
 class NewDrawNodeTest : public MultiSceneTest
@@ -114,9 +114,9 @@ public:
 protected:
     NewCullingTest();
     virtual ~NewCullingTest();
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-    cocos2d::Vec2 _lastPos;
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    void onTouchMoved(axis::Touch* touch, axis::Event* event);
+    axis::Vec2 _lastPos;
 };
 
 class SpriteCreation : public MultiSceneTest
@@ -136,9 +136,9 @@ public:
 protected:
     int totalSprites                = 1000;
     int suggestDelta                = 100;
-    cocos2d::Label* _labelSpriteNum = nullptr;
-    cocos2d::Label* labelCreate     = nullptr;
-    cocos2d::Label* labelDestory    = nullptr;
+    axis::Label* _labelSpriteNum = nullptr;
+    axis::Label* labelCreate     = nullptr;
+    axis::Label* labelDestory    = nullptr;
     SpriteCreation();
     virtual ~SpriteCreation();
 };
@@ -168,7 +168,7 @@ protected:
     CaptureScreenTest();
     ~CaptureScreenTest();
 
-    void onCaptured(cocos2d::Ref*);
+    void onCaptured(axis::Ref*);
     void afterCaptured(bool succeed, std::string_view outputFile);
 
     std::string _filename;
@@ -187,7 +187,7 @@ protected:
     CaptureNodeTest();
     ~CaptureNodeTest();
 
-    void onCaptured(cocos2d::Ref*);
+    void onCaptured(axis::Ref*);
 
     std::string _filename;
 };
@@ -224,8 +224,8 @@ public:
 protected:
     RendererUniformBatch();
 
-    cocos2d::backend::ProgramState* createBlurProgramState();
-    cocos2d::backend::ProgramState* createSepiaProgramState();
+    axis::backend::ProgramState* createBlurProgramState();
+    axis::backend::ProgramState* createSepiaProgramState();
 };
 
 class RendererUniformBatch2 : public MultiSceneTest
@@ -238,8 +238,8 @@ public:
 protected:
     RendererUniformBatch2();
 
-    cocos2d::backend::ProgramState* createBlurProgramState();
-    cocos2d::backend::ProgramState* createSepiaProgramState();
+    axis::backend::ProgramState* createBlurProgramState();
+    axis::backend::ProgramState* createSepiaProgramState();
 };
 
 class NonBatchSprites : public MultiSceneTest
@@ -274,7 +274,7 @@ protected:
     float _maDt                   = 1.0f / 60.0f;
     float _rmaDt                  = 1.0f / 60.0f;
     const float DEST_DT_30FPS     = 1.0f / 30.0f;
-    cocos2d::Label* _totalSprites = nullptr;
+    axis::Label* _totalSprites = nullptr;
     Ticker _contSlow              = Ticker(20);
     Ticker _contFast              = Ticker(2);
     Ticker _around30fps           = Ticker(60 * 3);

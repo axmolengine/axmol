@@ -45,7 +45,7 @@
 #    include "physics/CCPhysicsBody.h"
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class GridBase;
 class Touch;
@@ -946,7 +946,7 @@ public:
      *
      */
     template <typename _T>
-    inline static void sortNodes(cocos2d::Vector<_T*>& nodes)
+    inline static void sortNodes(axis::Vector<_T*>& nodes)
     {
         static_assert(std::is_base_of<Node, _T>::value, "Node::sortNodes: Only accept derived of Node!");
 #if CC_64BITS
@@ -2048,6 +2048,6 @@ bool CC_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CCNODE_H__

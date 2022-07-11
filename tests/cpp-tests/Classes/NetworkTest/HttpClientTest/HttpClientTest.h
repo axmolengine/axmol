@@ -41,19 +41,19 @@ public:
     virtual ~HttpClientTest();
 
     // Menu Callbacks
-    void onMenuGetTestClicked(cocos2d::Ref* sender);
-    void onMenuPostTestClicked(cocos2d::Ref* sender);
-    void onMenuPostBinaryTestClicked(cocos2d::Ref* sender);
-    void onMenuPutTestClicked(cocos2d::Ref* sender);
-    void onMenuDeleteTestClicked(cocos2d::Ref* sender);
+    void onMenuGetTestClicked(axis::Ref* sender);
+    void onMenuPostTestClicked(axis::Ref* sender);
+    void onMenuPostBinaryTestClicked(axis::Ref* sender);
+    void onMenuPutTestClicked(axis::Ref* sender);
+    void onMenuDeleteTestClicked(axis::Ref* sender);
 
     // Http Response Callback
-    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void onHttpRequestCompleted(axis::network::HttpClient* sender, axis::network::HttpResponse* response);
 
     virtual std::string title() const override { return "Http Request Test"; }
 
 private:
-    cocos2d::Label* _labelStatusCode;
+    axis::Label* _labelStatusCode;
 };
 
 class HttpClientClearRequestsTest : public TestCase
@@ -65,19 +65,19 @@ public:
     virtual ~HttpClientClearRequestsTest();
 
     // Menu Callbacks
-    void onMenuCancelAllClicked(cocos2d::Ref* sender);
-    void onMenuCancelSomeClicked(cocos2d::Ref* sender);
+    void onMenuCancelAllClicked(axis::Ref* sender);
+    void onMenuCancelSomeClicked(axis::Ref* sender);
 
     // Http Response Callback
-    void onHttpRequestCompleted(cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response);
+    void onHttpRequestCompleted(axis::network::HttpClient* sender, axis::network::HttpResponse* response);
 
     virtual std::string title() const override { return "Http Request Test"; }
 
 private:
     int _totalExpectedRequests;
     int _totalProcessedRequests;
-    cocos2d::Label* _labelTrakingData;
-    cocos2d::Label* _labelStatusCode;
+    axis::Label* _labelTrakingData;
+    axis::Label* _labelStatusCode;
 };
 
 #endif  //__HTTPREQUESTHTTP_H

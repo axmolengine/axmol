@@ -38,13 +38,13 @@ public:
     TextureCacheTest();
 
     void addSprite();
-    void loadingCallBack(cocos2d::Texture2D* texture);
+    void loadingCallBack(axis::Texture2D* texture);
 
     virtual float getDuration() const override { return 3.5f; }
 
 private:
-    cocos2d::Label* _labelLoading;
-    cocos2d::Label* _labelPercent;
+    axis::Label* _labelLoading;
+    axis::Label* _labelPercent;
     int _numberOfSprites;
     int _numberOfLoadedSprites;
 };
@@ -57,8 +57,8 @@ public:
     TextureCacheUnbindTest();
 
 private:
-    void textureLoadedA(cocos2d::Texture2D* texture);
-    void textureLoadedB(cocos2d::Texture2D* texture);
+    void textureLoadedA(axis::Texture2D* texture);
+    void textureLoadedB(axis::Texture2D* texture);
 };
 
 #endif  // _TEXTURECACHE_TEST_H_

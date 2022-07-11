@@ -31,8 +31,8 @@
 #include "tests/test.h"
 #include "tests/settings.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 enum
 {
@@ -40,7 +40,7 @@ enum
 };
 
 Settings settings;
-cocos2d::Label* labelDebugDraw;
+axis::Label* labelDebugDraw;
 
 enum
 {

@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "renderer/CCCallbackCommand.h"
 #include "renderer/backend/Types.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace backend
 {
@@ -436,4 +436,4 @@ private:
 // end of textures group
 /// @}
 
-NS_CC_END
+NS_AX_END

@@ -33,7 +33,7 @@
 
 #include "CCControlSaturationBrightnessPicker.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 ControlSaturationBrightnessPicker::ControlSaturationBrightnessPicker()
     : _saturation(0.0f)
@@ -211,4 +211,4 @@ void ControlSaturationBrightnessPicker::onTouchMoved(Touch* touch, Event* /*even
     checkSliderPosition(touchLocation);
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

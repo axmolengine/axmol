@@ -96,11 +96,11 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
 
-    void updateSize(cocos2d::Vec2& touchLocation);
+    void updateSize(axis::Vec2& touchLocation);
 
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 };
 
 class LayerTest2 : public LayerTest
@@ -126,10 +126,10 @@ class LayerGradientTest : public LayerTest
 public:
     CREATE_FUNC(LayerGradientTest);
     LayerGradientTest();
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void toggleItem(cocos2d::Ref* sender);
+    void toggleItem(axis::Ref* sender);
 };
 
 class LayerGradientTest2 : public LayerTest
@@ -146,7 +146,7 @@ class LayerIgnoreAnchorPointPos : public LayerTest
 public:
     CREATE_FUNC(LayerIgnoreAnchorPointPos);
     virtual void onEnter() override;
-    void onToggle(cocos2d::Ref* pObject);
+    void onToggle(axis::Ref* pObject);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -156,7 +156,7 @@ class LayerIgnoreAnchorPointRot : public LayerTest
 public:
     CREATE_FUNC(LayerIgnoreAnchorPointRot);
     virtual void onEnter() override;
-    void onToggle(cocos2d::Ref* pObject);
+    void onToggle(axis::Ref* pObject);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -166,7 +166,7 @@ class LayerIgnoreAnchorPointScale : public LayerTest
 public:
     CREATE_FUNC(LayerIgnoreAnchorPointScale);
     virtual void onEnter() override;
-    void onToggle(cocos2d::Ref* pObject);
+    void onToggle(axis::Ref* pObject);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -191,7 +191,7 @@ public:
     void step(float dt);
 
 private:
-    cocos2d::LayerColor* _layer[3];
+    axis::LayerColor* _layer[3];
 };
 
 class LayerBug3162B : public LayerTest
@@ -205,7 +205,7 @@ public:
     void step(float dt);
 
 private:
-    cocos2d::LayerColor* _layer[3];
+    axis::LayerColor* _layer[3];
 };
 
 class LayerColorOccludeBug : public LayerTest
@@ -218,7 +218,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    cocos2d::LayerColor* _layer;
+    axis::LayerColor* _layer;
 };
 
 class LayerRadialGradientTest : public LayerTest
@@ -228,14 +228,14 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
 
-    void sliderCallback(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
-    void listviewCallback(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
+    void sliderCallback(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void listviewCallback(axis::Ref* sender, axis::ui::ListView::EventType type);
 
 private:
-    cocos2d::ui::Slider* createSlider();
-    cocos2d::ui::ListView* createListView();
+    axis::ui::Slider* createSlider();
+    axis::ui::ListView* createListView();
 
-    cocos2d::LayerRadialGradient* _layer;
+    axis::LayerRadialGradient* _layer;
     int _currentSeletedItemIndex;
 };
 

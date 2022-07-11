@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _2d
@@ -445,4 +445,4 @@ private:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END

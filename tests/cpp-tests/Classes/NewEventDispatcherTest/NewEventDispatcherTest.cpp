@@ -33,7 +33,7 @@
 #include "NewEventDispatcherTest.h"
 #include "testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace {
 
@@ -1707,7 +1707,7 @@ Issue8194::Issue8194()
 #define tagB 101
     // dispatch custom event in another custom event, make the custom event "Issue8194" take effect immediately
     _listener =
-        getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](cocos2d::EventCustom* event) {
+        getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](axis::EventCustom* event) {
             if (nodesAdded)
             {
                 // CCLOG("Fire Issue8194 Event");
@@ -1728,8 +1728,8 @@ Issue8194::Issue8194()
         auto nodeA = Node::create();
         addChild(nodeA, 1, tagA);
 
-        cocos2d::EventListenerCustom* listenerA =
-            cocos2d::EventListenerCustom::create("Issue8194", [&](cocos2d::EventCustom* event) {
+        axis::EventListenerCustom* listenerA =
+            axis::EventListenerCustom::create("Issue8194", [&](axis::EventCustom* event) {
                 _subtitleLabel->setString("Bug has been fixed.");
                 event->stopPropagation();
             });
@@ -1739,8 +1739,8 @@ Issue8194::Issue8194()
         auto nodeB = Node::create();
         addChild(nodeB, -1, tagB);
 
-        cocos2d::EventListenerCustom* listenerB =
-            cocos2d::EventListenerCustom::create("Issue8194", [&](cocos2d::EventCustom* event) {
+        axis::EventListenerCustom* listenerB =
+            axis::EventListenerCustom::create("Issue8194", [&](axis::EventCustom* event) {
                 _subtitleLabel->setString("Bug exist yet.");
                 event->stopPropagation();
             });
@@ -1778,7 +1778,7 @@ Issue9898::Issue9898()
     auto nodeA = Node::create();
     addChild(nodeA);
 
-    _listener = cocos2d::EventListenerCustom::create("Issue9898", [&](cocos2d::EventCustom* event) {
+    _listener = axis::EventListenerCustom::create("Issue9898", [&](axis::EventCustom* event) {
         _eventDispatcher->removeEventListener(_listener);
         _eventDispatcher->dispatchCustomEvent("Issue9898");
     });

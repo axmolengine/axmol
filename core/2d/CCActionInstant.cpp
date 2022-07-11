@@ -30,7 +30,7 @@
 #include "2d/CCNode.h"
 #include "2d/CCSprite.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //
 // InstantAction
 //
@@ -399,4 +399,4 @@ CallFuncN* CallFuncN::clone() const
     return a;
 }
 
-NS_CC_END
+NS_AX_END

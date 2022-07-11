@@ -28,8 +28,8 @@
 #include "NewAudioEngineTest.h"
 #include "ui/CocosGUI.h"
 
-using namespace cocos2d;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 AudioEngineTests::AudioEngineTests()
 {
@@ -62,7 +62,7 @@ AudioEngineTests::AudioEngineTests()
 namespace
 {
 
-class TextButton : public cocos2d::Label
+class TextButton : public axis::Label
 {
 public:
     static TextButton* create(std::string_view text, const std::function<void(TextButton*)>& onTriggered)
@@ -213,7 +213,7 @@ std::string AudioEngineTestDemo::title() const
     return "New Audio Engine Test";
 }
 
-void AudioEngineTestDemo::onBackCallback(cocos2d::Ref* sender)
+void AudioEngineTestDemo::onBackCallback(axis::Ref* sender)
 {
     AudioEngine::end();
     TestCase::onBackCallback(sender);
@@ -897,7 +897,7 @@ bool AudioPerformanceTest::init()
             unschedule("test");
             schedule(
                 [audioFiles](float dt) {
-                    int index = cocos2d::random(0, (int)(audioFiles.size() - 1));
+                    int index = axis::random(0, (int)(audioFiles.size() - 1));
                     CC_PROFILER_START("play2d");
                     AudioEngine::play2d(audioFiles[index]);
                     CC_PROFILER_STOP("play2d");

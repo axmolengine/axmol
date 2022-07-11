@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -618,4 +618,4 @@ ResourceData AbstractCheckButton::getCrossDisabledFile()
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

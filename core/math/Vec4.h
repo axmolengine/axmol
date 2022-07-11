@@ -34,7 +34,7 @@
  * @{
  */
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 class Mat4;
 
@@ -461,7 +461,7 @@ public:
  */
 inline Vec4 operator*(float x, const Vec4& v);
 
-NS_CC_MATH_END
+NS_AX_MATH_END
 /**
  end of base group
  @}

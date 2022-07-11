@@ -27,7 +27,7 @@
 #include "CCPUSphereCollider.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // Constants
 const float PUSphereCollider::DEFAULT_RADIUS = 100.0f;
 
@@ -198,4 +198,4 @@ void PUSphereCollider::copyAttributesTo(PUAffector* affector)
     sphereCollider->_innerCollision  = _innerCollision;
 }
 
-NS_CC_END
+NS_AX_END

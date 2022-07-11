@@ -27,7 +27,7 @@
 
 #include "CCPUPlane.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //-----------------------------------------------------------------------
 PUPlane::PUPlane()
 {
@@ -158,4 +158,4 @@ float PUPlane::normalize()
 
     return fLength;
 }
-NS_CC_END
+NS_AX_END

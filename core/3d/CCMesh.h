@@ -36,7 +36,7 @@
 #include "renderer/CCMeshCommand.h"
 #include "renderer/CCCustomCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _3d
@@ -296,4 +296,4 @@ protected:
 extern std::string CC_DLL s_uniformSamplerName[];  // uniform sampler names array
 /// @endcond
 
-NS_CC_END
+NS_AX_END

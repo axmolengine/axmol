@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "base/ccCArray.h"
 #include "base/CCScriptSupport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // data structures
 
@@ -1100,4 +1100,4 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
     }
 }
 
-NS_CC_END
+NS_AX_END

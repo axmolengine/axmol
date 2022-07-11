@@ -34,7 +34,7 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class TextFieldTTF;
 
@@ -296,7 +296,7 @@ private:
     LengthStack* _lens;
 };
 
-NS_CC_END
+NS_AX_END
 // end of ui group
 /// @}
 

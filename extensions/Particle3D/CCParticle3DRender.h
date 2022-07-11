@@ -36,7 +36,7 @@
 #include "math/CCMath.h"
 #include "ExtensionExport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class ParticleSystem3D;
 class Renderer;
@@ -160,4 +160,4 @@ protected:
     Vec3 _meshSize;
 };
 
-NS_CC_END
+NS_AX_END

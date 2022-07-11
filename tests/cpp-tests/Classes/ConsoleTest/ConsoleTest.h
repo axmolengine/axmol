@@ -52,7 +52,7 @@ protected:
     ConsoleCustomCommand();
     virtual ~ConsoleCustomCommand();
 
-    cocos2d::Console* _console;
+    axis::Console* _console;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ConsoleCustomCommand);

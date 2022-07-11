@@ -29,7 +29,7 @@
 
 #    if (CC_ENABLE_BULLET_INTEGRATION)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Physics3DConstraint::Physics3DConstraint()
     : _constraint(nullptr)
@@ -80,7 +80,7 @@ void Physics3DConstraint::setOverrideNumSolverIterations(int overrideNumIteratio
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Physics3DPointToPointConstraint* Physics3DPointToPointConstraint::create(Physics3DRigidBody* rbA,
-                                                                         const cocos2d::Vec3& pivotPointInA)
+                                                                         const axis::Vec3& pivotPointInA)
 {
     auto ret = new Physics3DPointToPointConstraint();
     if (ret->init(rbA, pivotPointInA))
@@ -95,8 +95,8 @@ Physics3DPointToPointConstraint* Physics3DPointToPointConstraint::create(Physics
 
 Physics3DPointToPointConstraint* Physics3DPointToPointConstraint::create(Physics3DRigidBody* rbA,
                                                                          Physics3DRigidBody* rbB,
-                                                                         const cocos2d::Vec3& pivotPointInA,
-                                                                         const cocos2d::Vec3& pivotPointInB)
+                                                                         const axis::Vec3& pivotPointInA,
+                                                                         const axis::Vec3& pivotPointInB)
 {
     auto ret = new Physics3DPointToPointConstraint();
     if (ret->init(rbA, rbB, pivotPointInA, pivotPointInB))
@@ -109,7 +109,7 @@ Physics3DPointToPointConstraint* Physics3DPointToPointConstraint::create(Physics
     return ret;
 }
 
-bool Physics3DPointToPointConstraint::init(Physics3DRigidBody* rbA, const cocos2d::Vec3& pivotPointInA)
+bool Physics3DPointToPointConstraint::init(Physics3DRigidBody* rbA, const axis::Vec3& pivotPointInA)
 {
 
     _constraint = new btPoint2PointConstraint(*rbA->getRigidBody(), convertVec3TobtVector3(pivotPointInA));
@@ -121,8 +121,8 @@ bool Physics3DPointToPointConstraint::init(Physics3DRigidBody* rbA, const cocos2
 
 bool Physics3DPointToPointConstraint::init(Physics3DRigidBody* rbA,
                                            Physics3DRigidBody* rbB,
-                                           const cocos2d::Vec3& pivotPointInA,
-                                           const cocos2d::Vec3& pivotPointInB)
+                                           const axis::Vec3& pivotPointInA,
+                                           const axis::Vec3& pivotPointInB)
 {
     _constraint =
         new btPoint2PointConstraint(*rbA->getRigidBody(), *rbB->getRigidBody(), convertVec3TobtVector3(pivotPointInA),
@@ -135,25 +135,25 @@ bool Physics3DPointToPointConstraint::init(Physics3DRigidBody* rbA,
     return true;
 }
 
-void Physics3DPointToPointConstraint::setPivotPointInA(const cocos2d::Vec3& pivotA)
+void Physics3DPointToPointConstraint::setPivotPointInA(const axis::Vec3& pivotA)
 {
     auto point = convertVec3TobtVector3(pivotA);
     static_cast<btPoint2PointConstraint*>(_constraint)->setPivotA(point);
 }
 
-void Physics3DPointToPointConstraint::setPivotPointInB(const cocos2d::Vec3& pivotB)
+void Physics3DPointToPointConstraint::setPivotPointInB(const axis::Vec3& pivotB)
 {
     auto point = convertVec3TobtVector3(pivotB);
     static_cast<btPoint2PointConstraint*>(_constraint)->setPivotB(point);
 }
 
-cocos2d::Vec3 Physics3DPointToPointConstraint::getPivotPointInA() const
+axis::Vec3 Physics3DPointToPointConstraint::getPivotPointInA() const
 {
     const auto& point = static_cast<btPoint2PointConstraint*>(_constraint)->getPivotInA();
     return convertbtVector3ToVec3(point);
 }
 
-cocos2d::Vec3 Physics3DPointToPointConstraint::getPivotPointInB() const
+axis::Vec3 Physics3DPointToPointConstraint::getPivotPointInB() const
 {
     const auto& point = static_cast<btPoint2PointConstraint*>(_constraint)->getPivotInB();
     return convertbtVector3ToVec3(point);
@@ -168,7 +168,7 @@ Physics3DPointToPointConstraint::~Physics3DPointToPointConstraint() {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* rbA,
-                                                           const cocos2d::Mat4& rbAFrame,
+                                                           const axis::Mat4& rbAFrame,
                                                            bool useReferenceFrameA)
 {
     auto ret = new Physics3DHingeConstraint();
@@ -182,8 +182,8 @@ Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* r
 }
 
 Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* rbA,
-                                                           const cocos2d::Vec3& pivotInA,
-                                                           const cocos2d::Vec3& axisInA,
+                                                           const axis::Vec3& pivotInA,
+                                                           const axis::Vec3& axisInA,
                                                            bool useReferenceFrameA)
 {
     auto ret         = new Physics3DHingeConstraint();
@@ -198,10 +198,10 @@ Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* r
 
 Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* rbA,
                                                            Physics3DRigidBody* rbB,
-                                                           const cocos2d::Vec3& pivotInA,
-                                                           const cocos2d::Vec3& pivotInB,
-                                                           cocos2d::Vec3& axisInA,
-                                                           cocos2d::Vec3& axisInB,
+                                                           const axis::Vec3& pivotInA,
+                                                           const axis::Vec3& pivotInB,
+                                                           axis::Vec3& axisInA,
+                                                           axis::Vec3& axisInB,
                                                            bool useReferenceFrameA)
 {
     auto ret         = new Physics3DHingeConstraint();
@@ -219,8 +219,8 @@ Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* r
 
 Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* rbA,
                                                            Physics3DRigidBody* rbB,
-                                                           const cocos2d::Mat4& rbAFrame,
-                                                           const cocos2d::Mat4& rbBFrame,
+                                                           const axis::Mat4& rbAFrame,
+                                                           const axis::Mat4& rbBFrame,
                                                            bool useReferenceFrameA)
 {
     auto ret = new Physics3DHingeConstraint();
@@ -236,19 +236,19 @@ Physics3DHingeConstraint* Physics3DHingeConstraint::create(Physics3DRigidBody* r
     return ret;
 }
 
-cocos2d::Mat4 Physics3DHingeConstraint::getFrameOffsetA() const
+axis::Mat4 Physics3DHingeConstraint::getFrameOffsetA() const
 {
     const auto& transform = static_cast<btHingeConstraint*>(_constraint)->getFrameOffsetA();
     return convertbtTransformToMat4(transform);
 }
 
-cocos2d::Mat4 Physics3DHingeConstraint::getFrameOffsetB() const
+axis::Mat4 Physics3DHingeConstraint::getFrameOffsetB() const
 {
     const auto& transform = static_cast<btHingeConstraint*>(_constraint)->getFrameOffsetB();
     return convertbtTransformToMat4(transform);
 }
 
-void Physics3DHingeConstraint::setFrames(const cocos2d::Mat4& frameA, const cocos2d::Mat4& frameB)
+void Physics3DHingeConstraint::setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB)
 {
     auto transformA = convertMat4TobtTransform(frameA);
     auto transformB = convertMat4TobtTransform(frameB);
@@ -273,7 +273,7 @@ void Physics3DHingeConstraint::setMaxMotorImpulse(float maxMotorImpulse)
 {
     static_cast<btHingeConstraint*>(_constraint)->setMaxMotorImpulse(maxMotorImpulse);
 }
-void Physics3DHingeConstraint::setMotorTarget(const cocos2d::Quaternion& qAinB, float dt)
+void Physics3DHingeConstraint::setMotorTarget(const axis::Quaternion& qAinB, float dt)
 {
     static_cast<btHingeConstraint*>(_constraint)->setMotorTarget(convertQuatTobtQuat(qAinB), dt);
 }
@@ -287,7 +287,7 @@ void Physics3DHingeConstraint::setLimit(float low, float high, float softness, f
     static_cast<btHingeConstraint*>(_constraint)->setLimit(low, high, softness, biasFactor, relaxationFactor);
 }
 
-void Physics3DHingeConstraint::setAxis(const cocos2d::Vec3& axisInA)
+void Physics3DHingeConstraint::setAxis(const axis::Vec3& axisInA)
 {
     auto axis = convertVec3TobtVector3(axisInA);
     static_cast<btHingeConstraint*>(_constraint)->setAxis(axis);
@@ -308,19 +308,19 @@ float Physics3DHingeConstraint::getHingeAngle() const
     return static_cast<btHingeConstraint*>(_constraint)->getHingeAngle();
 }
 
-float Physics3DHingeConstraint::getHingeAngle(const cocos2d::Mat4& transA, const cocos2d::Mat4& transB)
+float Physics3DHingeConstraint::getHingeAngle(const axis::Mat4& transA, const axis::Mat4& transB)
 {
     auto btTransA = convertMat4TobtTransform(transA);
     auto btTransB = convertMat4TobtTransform(transB);
     return static_cast<btHingeConstraint*>(_constraint)->getHingeAngle(btTransA, btTransB);
 }
 
-cocos2d::Mat4 Physics3DHingeConstraint::getAFrame() const
+axis::Mat4 Physics3DHingeConstraint::getAFrame() const
 {
     const auto& trans = static_cast<btHingeConstraint*>(_constraint)->getAFrame();
     return convertbtTransformToMat4(trans);
 }
-cocos2d::Mat4 Physics3DHingeConstraint::getBFrame() const
+axis::Mat4 Physics3DHingeConstraint::getBFrame() const
 {
     const auto& trans = static_cast<btHingeConstraint*>(_constraint)->getBFrame();
     return convertbtTransformToMat4(trans);
@@ -355,8 +355,8 @@ void Physics3DHingeConstraint::setUseFrameOffset(bool frameOffsetOnOff)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Physics3DSliderConstraint* Physics3DSliderConstraint::create(Physics3DRigidBody* rbA,
                                                              Physics3DRigidBody* rbB,
-                                                             const cocos2d::Mat4& frameInA,
-                                                             const cocos2d::Mat4& frameInB,
+                                                             const axis::Mat4& frameInA,
+                                                             const axis::Mat4& frameInB,
                                                              bool useLinearReferenceFrameA)
 {
     auto ret    = new Physics3DSliderConstraint();
@@ -373,12 +373,12 @@ Physics3DSliderConstraint* Physics3DSliderConstraint::create(Physics3DRigidBody*
     return ret;
 }
 
-cocos2d::Mat4 Physics3DSliderConstraint::getFrameOffsetA() const
+axis::Mat4 Physics3DSliderConstraint::getFrameOffsetA() const
 {
     const auto& frameOff = static_cast<btSliderConstraint*>(_constraint)->getFrameOffsetA();
     return convertbtTransformToMat4(frameOff);
 }
-cocos2d::Mat4 Physics3DSliderConstraint::getFrameOffsetB() const
+axis::Mat4 Physics3DSliderConstraint::getFrameOffsetB() const
 {
     const auto& frameOff = static_cast<btSliderConstraint*>(_constraint)->getFrameOffsetB();
     return convertbtTransformToMat4(frameOff);
@@ -631,7 +631,7 @@ void Physics3DSliderConstraint::setUseFrameOffset(bool frameOffsetOnOff)
     static_cast<btSliderConstraint*>(_constraint)->setUseFrameOffset(frameOffsetOnOff);
 }
 
-void Physics3DSliderConstraint::setFrames(const cocos2d::Mat4& frameA, const cocos2d::Mat4& frameB)
+void Physics3DSliderConstraint::setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB)
 {
     auto btFrameA = convertMat4TobtTransform(frameA);
     auto btFrameB = convertMat4TobtTransform(frameB);
@@ -640,7 +640,7 @@ void Physics3DSliderConstraint::setFrames(const cocos2d::Mat4& frameA, const coc
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Physics3DConeTwistConstraint* Physics3DConeTwistConstraint::create(Physics3DRigidBody* rbA, const cocos2d::Mat4& frameA)
+Physics3DConeTwistConstraint* Physics3DConeTwistConstraint::create(Physics3DRigidBody* rbA, const axis::Mat4& frameA)
 {
     auto ret    = new Physics3DConeTwistConstraint();
     ret->_bodyA = rbA;
@@ -654,8 +654,8 @@ Physics3DConeTwistConstraint* Physics3DConeTwistConstraint::create(Physics3DRigi
 }
 Physics3DConeTwistConstraint* Physics3DConeTwistConstraint::create(Physics3DRigidBody* rbA,
                                                                    Physics3DRigidBody* rbB,
-                                                                   const cocos2d::Mat4& frameA,
-                                                                   const cocos2d::Mat4& frameB)
+                                                                   const axis::Mat4& frameA,
+                                                                   const axis::Mat4& frameB)
 {
     auto ret    = new Physics3DConeTwistConstraint();
     ret->_bodyA = rbA;
@@ -683,12 +683,12 @@ void Physics3DConeTwistConstraint::setLimit(float swingSpan1,
         ->setLimit(swingSpan1, swingSpan2, twistSpan, softness, biasFactor, relaxationFactor);
 }
 
-cocos2d::Mat4 Physics3DConeTwistConstraint::getAFrame() const
+axis::Mat4 Physics3DConeTwistConstraint::getAFrame() const
 {
     const auto& frame = static_cast<btConeTwistConstraint*>(_constraint)->getAFrame();
     return convertbtTransformToMat4(frame);
 }
-cocos2d::Mat4 Physics3DConeTwistConstraint::getBFrame() const
+axis::Mat4 Physics3DConeTwistConstraint::getBFrame() const
 {
     const auto& frame = static_cast<btConeTwistConstraint*>(_constraint)->getBFrame();
     return convertbtTransformToMat4(frame);
@@ -749,13 +749,13 @@ void Physics3DConeTwistConstraint::setMotorTargetInConstraintSpace(const btQuate
     static_cast<btConeTwistConstraint*>(_constraint)->setMotorTargetInConstraintSpace(q);
 }
 
-cocos2d::Vec3 Physics3DConeTwistConstraint::GetPointForAngle(float fAngleInRadians, float fLength) const
+axis::Vec3 Physics3DConeTwistConstraint::GetPointForAngle(float fAngleInRadians, float fLength) const
 {
     const auto& point = static_cast<btConeTwistConstraint*>(_constraint)->GetPointForAngle(fAngleInRadians, fLength);
     return convertbtVector3ToVec3(point);
 }
 
-void Physics3DConeTwistConstraint::setFrames(const cocos2d::Mat4& frameA, const cocos2d::Mat4& frameB)
+void Physics3DConeTwistConstraint::setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB)
 {
     const auto& btFrameA = convertMat4TobtTransform(frameA);
     const auto& btFrameB = convertMat4TobtTransform(frameB);
@@ -763,13 +763,13 @@ void Physics3DConeTwistConstraint::setFrames(const cocos2d::Mat4& frameA, const 
     static_cast<btConeTwistConstraint*>(_constraint)->setFrames(btFrameA, btFrameB);
 }
 
-cocos2d::Mat4 Physics3DConeTwistConstraint::getFrameOffsetA() const
+axis::Mat4 Physics3DConeTwistConstraint::getFrameOffsetA() const
 {
     const auto& trans = static_cast<btConeTwistConstraint*>(_constraint)->getFrameOffsetA();
     return convertbtTransformToMat4(trans);
 }
 
-cocos2d::Mat4 Physics3DConeTwistConstraint::getFrameOffsetB() const
+axis::Mat4 Physics3DConeTwistConstraint::getFrameOffsetB() const
 {
     const auto& trans = static_cast<btConeTwistConstraint*>(_constraint)->getFrameOffsetB();
     return convertbtTransformToMat4(trans);
@@ -777,7 +777,7 @@ cocos2d::Mat4 Physics3DConeTwistConstraint::getFrameOffsetB() const
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Physics3D6DofConstraint* Physics3D6DofConstraint::create(Physics3DRigidBody* rbB,
-                                                         const cocos2d::Mat4& frameInB,
+                                                         const axis::Mat4& frameInB,
                                                          bool useLinearReferenceFrameB)
 {
     auto ret    = new Physics3D6DofConstraint();
@@ -793,8 +793,8 @@ Physics3D6DofConstraint* Physics3D6DofConstraint::create(Physics3DRigidBody* rbB
 
 Physics3D6DofConstraint* Physics3D6DofConstraint::create(Physics3DRigidBody* rbA,
                                                          Physics3DRigidBody* rbB,
-                                                         const cocos2d::Mat4& frameInA,
-                                                         const cocos2d::Mat4& frameInB,
+                                                         const axis::Mat4& frameInA,
+                                                         const axis::Mat4& frameInB,
                                                          bool useLinearReferenceFrameA)
 {
     auto ret    = new Physics3D6DofConstraint();
@@ -812,52 +812,52 @@ Physics3D6DofConstraint* Physics3D6DofConstraint::create(Physics3DRigidBody* rbA
     return ret;
 }
 
-void Physics3D6DofConstraint::setLinearLowerLimit(const cocos2d::Vec3& linearLower)
+void Physics3D6DofConstraint::setLinearLowerLimit(const axis::Vec3& linearLower)
 {
     auto lower = convertVec3TobtVector3(linearLower);
     static_cast<btGeneric6DofConstraint*>(_constraint)->setLinearLowerLimit(lower);
 }
 
-cocos2d::Vec3 Physics3D6DofConstraint::getLinearLowerLimit() const
+axis::Vec3 Physics3D6DofConstraint::getLinearLowerLimit() const
 {
     btVector3 lower;
     static_cast<btGeneric6DofConstraint*>(_constraint)->getLinearLowerLimit(lower);
     return convertbtVector3ToVec3(lower);
 }
 
-void Physics3D6DofConstraint::setLinearUpperLimit(const cocos2d::Vec3& linearUpper)
+void Physics3D6DofConstraint::setLinearUpperLimit(const axis::Vec3& linearUpper)
 {
     auto upper = convertVec3TobtVector3(linearUpper);
     static_cast<btGeneric6DofConstraint*>(_constraint)->setLinearUpperLimit(upper);
 }
 
-cocos2d::Vec3 Physics3D6DofConstraint::getLinearUpperLimit() const
+axis::Vec3 Physics3D6DofConstraint::getLinearUpperLimit() const
 {
     btVector3 upper;
     static_cast<btGeneric6DofConstraint*>(_constraint)->getLinearUpperLimit(upper);
     return convertbtVector3ToVec3(upper);
 }
 
-void Physics3D6DofConstraint::setAngularLowerLimit(const cocos2d::Vec3& angularLower)
+void Physics3D6DofConstraint::setAngularLowerLimit(const axis::Vec3& angularLower)
 {
     auto lower = convertVec3TobtVector3(angularLower);
     static_cast<btGeneric6DofConstraint*>(_constraint)->setAngularLowerLimit(lower);
 }
 
-cocos2d::Vec3 Physics3D6DofConstraint::getAngularLowerLimit() const
+axis::Vec3 Physics3D6DofConstraint::getAngularLowerLimit() const
 {
     btVector3 lower;
     static_cast<btGeneric6DofConstraint*>(_constraint)->getAngularLowerLimit(lower);
     return convertbtVector3ToVec3(lower);
 }
 
-void Physics3D6DofConstraint::setAngularUpperLimit(const cocos2d::Vec3& angularUpper)
+void Physics3D6DofConstraint::setAngularUpperLimit(const axis::Vec3& angularUpper)
 {
     auto upper = convertVec3TobtVector3(angularUpper);
     static_cast<btGeneric6DofConstraint*>(_constraint)->setAngularUpperLimit(upper);
 }
 
-cocos2d::Vec3 Physics3D6DofConstraint::getAngularUpperLimit() const
+axis::Vec3 Physics3D6DofConstraint::getAngularUpperLimit() const
 {
     btVector3 upper;
     static_cast<btGeneric6DofConstraint*>(_constraint)->getAngularUpperLimit(upper);
@@ -878,7 +878,7 @@ void Physics3D6DofConstraint::setUseFrameOffset(bool frameOffsetOnOff) const
     static_cast<btGeneric6DofConstraint*>(_constraint)->setUseFrameOffset(frameOffsetOnOff);
 }
 
-NS_CC_END
+NS_AX_END
 
 #    endif  // CC_ENABLE_BULLET_INTEGRATION
 

@@ -58,7 +58,7 @@ THE SOFTWARE.
  */
 #define CC_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // FIXME:: Yes, nodes might have a sort problem once every 30 days if the game runs at 60 FPS and each frame sprites are
 // reordered.
@@ -2247,4 +2247,4 @@ backend::ProgramState* Node::getProgramState() const
     return _programState;
 }
 
-NS_CC_END
+NS_AX_END

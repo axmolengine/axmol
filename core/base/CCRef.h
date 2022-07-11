@@ -36,7 +36,7 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Ref;
 
@@ -169,14 +169,14 @@ typedef void (Ref::*SEL_CallFuncO)(Ref*);
 typedef void (Ref::*SEL_MenuHandler)(Ref*);
 typedef void (Ref::*SEL_SCHEDULE)(float);
 
-#define CC_CALLFUNC_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_CallFunc>(&_SELECTOR)
-#define CC_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_CallFuncN>(&_SELECTOR)
-#define CC_CALLFUNCND_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_CallFuncND>(&_SELECTOR)
-#define CC_CALLFUNCO_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_CallFuncO>(&_SELECTOR)
-#define CC_MENU_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_MenuHandler>(&_SELECTOR)
-#define CC_SCHEDULE_SELECTOR(_SELECTOR) static_cast<cocos2d::SEL_SCHEDULE>(&_SELECTOR)
+#define CC_CALLFUNC_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFunc>(&_SELECTOR)
+#define CC_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncN>(&_SELECTOR)
+#define CC_CALLFUNCND_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncND>(&_SELECTOR)
+#define CC_CALLFUNCO_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncO>(&_SELECTOR)
+#define CC_MENU_SELECTOR(_SELECTOR) static_cast<axis::SEL_MenuHandler>(&_SELECTOR)
+#define CC_SCHEDULE_SELECTOR(_SELECTOR) static_cast<axis::SEL_SCHEDULE>(&_SELECTOR)
 
-NS_CC_END
+NS_AX_END
 // end of base group
 /** @} */
 

@@ -41,7 +41,7 @@
 struct XXH32_state_s;
 #endif
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class TextureBackend;
 class VertexLayout;
@@ -406,4 +406,4 @@ protected:
 
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

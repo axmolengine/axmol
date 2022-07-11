@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "2d/CCScene.h"
 #include "renderer/CCRenderer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace
 {
@@ -497,4 +497,4 @@ void GLView::renderScene(Scene* scene, Renderer* renderer)
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }
 
-NS_CC_END
+NS_AX_END

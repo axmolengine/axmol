@@ -26,7 +26,7 @@ public:
 
     HtmlObject* getControl(const std::string& name) const;
 
-    virtual GObject* hitTest(const cocos2d::Vec2& worldPoint, const cocos2d::Camera* camera) override;
+    virtual GObject* hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera) override;
 protected:
     virtual void handleInit() override;
     virtual void handleSizeChanged() override;

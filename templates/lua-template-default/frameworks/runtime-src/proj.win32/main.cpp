@@ -25,7 +25,7 @@
 #include "cocos2d.h"
 #include "../Classes/AppDelegate.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 // uncomment below line, open debug console
 #define USE_WIN32_CONSOLE

@@ -1,6 +1,6 @@
 #include "TransitionDemoScene.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 TransitionDemoScene::~TransitionDemoScene()
 {

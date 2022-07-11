@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -144,7 +144,7 @@ void Helper::changeLayoutSystemActiveState(bool bActive)
 {
     _activeLayout = bActive;
 }
-void Helper::doLayout(cocos2d::Node* rootNode)
+void Helper::doLayout(axis::Node* rootNode)
 {
     if (!_activeLayout)
     {
@@ -164,7 +164,7 @@ void Helper::doLayout(cocos2d::Node* rootNode)
     }
 }
 
-Rect Helper::restrictCapInsetRect(const cocos2d::Rect& capInsets, const Vec2& textureSize)
+Rect Helper::restrictCapInsetRect(const axis::Rect& capInsets, const Vec2& textureSize)
 {
     float x      = capInsets.origin.x;
     float y      = capInsets.origin.y;
@@ -205,4 +205,4 @@ Rect Helper::convertBoundingBoxToScreen(Node* node)
 }
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

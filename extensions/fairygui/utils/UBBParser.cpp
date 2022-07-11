@@ -2,7 +2,7 @@
 #include "base/format.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 using namespace std;
 
 UBBParser* UBBParser::_inst = nullptr;

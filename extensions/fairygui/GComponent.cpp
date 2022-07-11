@@ -10,7 +10,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 using namespace std;
 
@@ -535,12 +535,12 @@ void GComponent::setApexIndex(int value)
     }
 }
 
-cocos2d::Node* GComponent::getMask() const
+axis::Node* GComponent::getMask() const
 {
     return ((FUIContainer*)_displayObject)->getStencil();
 }
 
-void GComponent::setMask(cocos2d::Node* value, bool inverted)
+void GComponent::setMask(axis::Node* value, bool inverted)
 {
     if (_maskOwner)
     {
@@ -831,7 +831,7 @@ void GComponent::buildNativeDisplayList()
     }
 }
 
-cocos2d::Vec2 GComponent::getSnappingPosition(const cocos2d::Vec2& pt)
+axis::Vec2 GComponent::getSnappingPosition(const axis::Vec2& pt)
 {
     int cnt = (int)_children.size();
     if (cnt == 0)

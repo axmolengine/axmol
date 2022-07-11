@@ -30,21 +30,21 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <jni.h>
 
-using namespace cocos2d;
+USING_NS_AX;
 
 extern "C" {
 JNIEXPORT void JNICALL
 Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
-    cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &idlong, &x, &y);
+    axis::Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL
 Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
-    cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &idlong, &x, &y);
+    axis::Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(JNIEnv* env,
@@ -66,7 +66,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(
     for (int i = 0; i < size; i++)
         idlong[i] = id[i];
 
-    cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesMove(size, idlong, x, y);
+    axis::Director::getInstance()->getOpenGLView()->handleTouchesMove(size, idlong, x, y);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCancel(JNIEnv* env,
@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCance
     for (int i = 0; i < size; i++)
         idlong[i] = id[i];
 
-    cocos2d::Director::getInstance()->getOpenGLView()->handleTouchesCancel(size, idlong, x, y);
+    axis::Director::getInstance()->getOpenGLView()->handleTouchesCancel(size, idlong, x, y);
 }
 
 #define KEYCODE_BACK 0x04
@@ -101,16 +101,16 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCance
 #define KEYCODE_PLAY 0x7e
 #define KEYCODE_DPAD_CENTER 0x17
 
-static std::unordered_map<int, cocos2d::EventKeyboard::KeyCode> g_keyCodeMap = {
-    {KEYCODE_BACK, cocos2d::EventKeyboard::KeyCode::KEY_ESCAPE},
-    {KEYCODE_MENU, cocos2d::EventKeyboard::KeyCode::KEY_MENU},
-    {KEYCODE_DPAD_UP, cocos2d::EventKeyboard::KeyCode::KEY_DPAD_UP},
-    {KEYCODE_DPAD_DOWN, cocos2d::EventKeyboard::KeyCode::KEY_DPAD_DOWN},
-    {KEYCODE_DPAD_LEFT, cocos2d::EventKeyboard::KeyCode::KEY_DPAD_LEFT},
-    {KEYCODE_DPAD_RIGHT, cocos2d::EventKeyboard::KeyCode::KEY_DPAD_RIGHT},
-    {KEYCODE_ENTER, cocos2d::EventKeyboard::KeyCode::KEY_ENTER},
-    {KEYCODE_PLAY, cocos2d::EventKeyboard::KeyCode::KEY_PLAY},
-    {KEYCODE_DPAD_CENTER, cocos2d::EventKeyboard::KeyCode::KEY_DPAD_CENTER},
+static std::unordered_map<int, axis::EventKeyboard::KeyCode> g_keyCodeMap = {
+    {KEYCODE_BACK, axis::EventKeyboard::KeyCode::KEY_ESCAPE},
+    {KEYCODE_MENU, axis::EventKeyboard::KeyCode::KEY_MENU},
+    {KEYCODE_DPAD_UP, axis::EventKeyboard::KeyCode::KEY_DPAD_UP},
+    {KEYCODE_DPAD_DOWN, axis::EventKeyboard::KeyCode::KEY_DPAD_DOWN},
+    {KEYCODE_DPAD_LEFT, axis::EventKeyboard::KeyCode::KEY_DPAD_LEFT},
+    {KEYCODE_DPAD_RIGHT, axis::EventKeyboard::KeyCode::KEY_DPAD_RIGHT},
+    {KEYCODE_ENTER, axis::EventKeyboard::KeyCode::KEY_ENTER},
+    {KEYCODE_PLAY, axis::EventKeyboard::KeyCode::KEY_PLAY},
+    {KEYCODE_DPAD_CENTER, axis::EventKeyboard::KeyCode::KEY_DPAD_CENTER},
 
 };
 
@@ -125,9 +125,9 @@ JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyEvent
         return JNI_FALSE;
     }
 
-    cocos2d::EventKeyboard::KeyCode cocos2dKey = g_keyCodeMap.at(keyCode);
-    cocos2d::EventKeyboard event(cocos2dKey, isPressed);
-    cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    axis::EventKeyboard::KeyCode cocos2dKey = g_keyCodeMap.at(keyCode);
+    axis::EventKeyboard event(cocos2dKey, isPressed);
+    axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     return JNI_TRUE;
 }
 }

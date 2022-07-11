@@ -67,7 +67,7 @@ inline stdfs::path toFspath(const std::string_view& pathSV)
 }
 #    endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Implement DictMaker
 
@@ -1461,4 +1461,4 @@ void FileUtils::valueMapCompact(ValueMap& /*valueMap*/) const {}
 
 void FileUtils::valueVectorCompact(ValueVector& /*valueVector*/) const {}
 
-NS_CC_END
+NS_AX_END

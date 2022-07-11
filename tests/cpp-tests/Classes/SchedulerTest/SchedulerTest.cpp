@@ -27,9 +27,9 @@
 #include "ui/UIText.h"
 #include "controller.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
-using namespace cocos2d::ui;
+USING_NS_AX;
+USING_NS_AX_EXT;
+using namespace axis::ui;
 
 enum
 {
@@ -1004,7 +1004,7 @@ public:
 
     ~TestNode2()
     {
-        cocos2d::log("Delete TestNode (should not crash)");
+        axis::log("Delete TestNode (should not crash)");
         this->unscheduleAllCallbacks();
     }
 
@@ -1383,7 +1383,7 @@ void SchedulerRemoveEntryWhileUpdate::onExit()
     SchedulerTestLayer::onExit();
 }
 
-SchedulerRemoveEntryWhileUpdate::TestClass::TestClass(int index, TestClass* nextObj, cocos2d::Scheduler* scheduler)
+SchedulerRemoveEntryWhileUpdate::TestClass::TestClass(int index, TestClass* nextObj, axis::Scheduler* scheduler)
     : _nextObj(nextObj), _index(index), _scheduler(scheduler)
 {}
 
@@ -1446,7 +1446,7 @@ void SchedulerRemoveSelectorDuringCall::callback(float)
 {
     if (!_scheduled)
     {
-        cocos2d::log("Error: unscheduled callback must not be called.");
+        axis::log("Error: unscheduled callback must not be called.");
         return;
     }
 

@@ -11,7 +11,7 @@
 #include "LAppDefine.hpp"
 #include "LAppPal.hpp"
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace
 {

@@ -29,13 +29,10 @@
 #include <stdint.h>
 #include "network/CCIDownloaderImpl.h"
 
-namespace cocos2d
-{
-class Scheduler;
-}
+NS_AX_BEGIN
 
-namespace cocos2d
-{
+class Scheduler;
+
 namespace network
 {
 class DownloadTaskCURL;
@@ -72,4 +69,4 @@ protected:
 };
 
 }  // namespace network
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

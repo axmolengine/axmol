@@ -33,7 +33,7 @@ public:
     CREATE_FUNC(Bug458Layer);
 
     virtual bool init() override;
-    void selectAnswer(cocos2d::Ref* sender);
+    void selectAnswer(axis::Ref* sender);
 };
 
 #endif  // __BUG_458_H__

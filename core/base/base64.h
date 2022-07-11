@@ -30,8 +30,7 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 /** @file
  base64 helper functions

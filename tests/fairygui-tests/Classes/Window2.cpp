@@ -1,6 +1,6 @@
 #include "Window2.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 void Window2::onInit()
 {

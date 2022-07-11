@@ -35,21 +35,21 @@ DEFINE_TEST_SUITE(TextInputTests);
 // KeyboardNotificationLayer for test IME keyboard notification.
 //////////////////////////////////////////////////////////////////////////
 
-class KeyboardNotificationLayer : public TestCase, public cocos2d::IMEDelegate
+class KeyboardNotificationLayer : public TestCase, public axis::IMEDelegate
 {
 public:
     KeyboardNotificationLayer();
     virtual std::string title() const override;
-    virtual void onClickTrackNode(bool bClicked, const cocos2d::Vec2& touchPos) = 0;
+    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) = 0;
 
-    virtual void keyboardWillShow(cocos2d::IMEKeyboardNotificationInfo& info) override;
+    virtual void keyboardWillShow(axis::IMEKeyboardNotificationInfo& info) override;
 
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    void onTouchEnded(axis::Touch* touch, axis::Event* event);
 
 protected:
-    cocos2d::Node* _trackNode;
-    cocos2d::Vec2 _beginPos;
+    axis::Node* _trackNode;
+    axis::Vec2 _beginPos;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public:
     CREATE_FUNC(TextFieldTTFDefaultTest);
     // KeyboardNotificationLayer
     virtual std::string subtitle() const override;
-    virtual void onClickTrackNode(bool bClicked, const cocos2d::Vec2& touchPos) override;
+    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) override;
 
     // Layer
     virtual void onEnter() override;
@@ -72,10 +72,10 @@ public:
 // TextFieldTTFActionTest
 //////////////////////////////////////////////////////////////////////////
 
-class TextFieldTTFActionTest : public KeyboardNotificationLayer, public cocos2d::TextFieldDelegate
+class TextFieldTTFActionTest : public KeyboardNotificationLayer, public axis::TextFieldDelegate
 {
-    cocos2d::TextFieldTTF* _textField;
-    cocos2d::Action* _textFieldAction;
+    axis::TextFieldTTF* _textField;
+    axis::Action* _textFieldAction;
     bool _action;
     size_t _charLimit;  // the textfield max char limit
 
@@ -85,18 +85,18 @@ public:
 
     // KeyboardNotificationLayer
     virtual std::string subtitle() const override;
-    virtual void onClickTrackNode(bool bClicked, const cocos2d::Vec2& touchPos) override;
+    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) override;
 
     // Layer
     virtual void onEnter() override;
     virtual void onExit() override;
 
     // TextFieldDelegate
-    virtual bool onTextFieldAttachWithIME(cocos2d::TextFieldTTF* sender) override;
-    virtual bool onTextFieldDetachWithIME(cocos2d::TextFieldTTF* sender) override;
-    virtual bool onTextFieldInsertText(cocos2d::TextFieldTTF* sender, const char* text, size_t nLen) override;
-    virtual bool onTextFieldDeleteBackward(cocos2d::TextFieldTTF* sender, const char* delText, size_t nLen) override;
-    virtual bool onDraw(cocos2d::TextFieldTTF* sender);
+    virtual bool onTextFieldAttachWithIME(axis::TextFieldTTF* sender) override;
+    virtual bool onTextFieldDetachWithIME(axis::TextFieldTTF* sender) override;
+    virtual bool onTextFieldInsertText(axis::TextFieldTTF* sender, const char* text, size_t nLen) override;
+    virtual bool onTextFieldDeleteBackward(axis::TextFieldTTF* sender, const char* delText, size_t nLen) override;
+    virtual bool onDraw(axis::TextFieldTTF* sender);
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ public:
     CREATE_FUNC(TextFieldTTSetCursorFromPoint);
     // KeyboardNotificationLayer
     virtual std::string subtitle() const override;
-    virtual void onClickTrackNode(bool bClicked, const cocos2d::Vec2& touchPos) override;
+    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) override;
 
     // Layer
     virtual void onEnter() override;

@@ -32,7 +32,7 @@
 #include "renderer/CCCustomCommand.h"
 #include "renderer/CCCallbackCommand.h"
 #include <unordered_map>
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class StencilStateManager;
 /**
@@ -169,4 +169,4 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(ClippingNode);
 };
 /** @} */
-NS_CC_END
+NS_AX_END

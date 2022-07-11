@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "2d/CCGrid.h"
 #include "2d/CCNodeGrid.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PageTurn3D* PageTurn3D::create(float duration, const Vec2& gridSize)
 {
@@ -130,4 +130,4 @@ void PageTurn3D::update(float time)
     }
 }
 
-NS_CC_END
+NS_AX_END

@@ -33,8 +33,8 @@
 
 #include "platform/CCPlatformMacros.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace network
 {
 
@@ -151,4 +151,4 @@ private:
 };
 
 }  // namespace network
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

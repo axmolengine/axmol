@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "2d/CCParticleSystemQuad.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {

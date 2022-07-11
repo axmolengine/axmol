@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "renderer/CCQuadCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _2d
@@ -153,4 +153,4 @@ private:
 // end of base_node group
 /// @}
 
-NS_CC_END
+NS_AX_END

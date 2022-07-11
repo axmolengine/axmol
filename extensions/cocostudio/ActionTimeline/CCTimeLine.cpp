@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "ActionTimeline/CCTimeLine.h"
 #include "ActionTimeline/CCActionTimeline.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 NS_TIMELINE_BEGIN
 

@@ -37,7 +37,7 @@ public:
 
     AssetsManagerExLoaderScene(int testIndex);
 
-    void startDownloadCallback(cocos2d::Ref* sender);
+    void startDownloadCallback(axis::Ref* sender);
 
     virtual std::string title() const override;
 
@@ -46,12 +46,12 @@ public:
 
 private:
     int _testIndex;
-    cocos2d::Layer* _loadLayer;
-    cocos2d::Menu* _downloadMenu;
+    axis::Layer* _loadLayer;
+    axis::Menu* _downloadMenu;
 
-    cocos2d::extension::AssetsManagerEx* _am;
-    cocos2d::Label* _progress;
-    cocos2d::extension::EventListenerAssetsManagerEx* _amListener;
+    axis::extension::AssetsManagerEx* _am;
+    axis::Label* _progress;
+    axis::extension::EventListenerAssetsManagerEx* _amListener;
 
     void onLoadEnd();
 };

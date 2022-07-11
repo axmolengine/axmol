@@ -26,8 +26,8 @@
 #include "HttpClientTest.h"
 #include <string>
 
-USING_NS_CC;
-using namespace cocos2d::network;
+USING_NS_AX;
+using namespace axis::network;
 
 #define CHROME_UA                                                                                                   \
     "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 " \
@@ -102,7 +102,7 @@ HttpClientTest::~HttpClientTest()
     HttpClient::destroyInstance();
 }
 
-void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref* sender)
+void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
 {
     // test 1(sync request test)
     {
@@ -175,7 +175,7 @@ void HttpClientTest::onMenuGetTestClicked(cocos2d::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref* sender)
+void HttpClientTest::onMenuPostTestClicked(axis::Ref* sender)
 {
     // test 1
     {
@@ -213,7 +213,7 @@ void HttpClientTest::onMenuPostTestClicked(cocos2d::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPostBinaryTestClicked(cocos2d::Ref* sender)
+void HttpClientTest::onMenuPostBinaryTestClicked(axis::Ref* sender)
 {
     HttpRequest* request = new HttpRequest();
     request->setUrl("https://httpbin.org/post");
@@ -381,7 +381,7 @@ HttpClientClearRequestsTest::~HttpClientClearRequestsTest()
     HttpClient::destroyInstance();
 }
 
-void HttpClientClearRequestsTest::onMenuCancelAllClicked(cocos2d::Ref* sender)
+void HttpClientClearRequestsTest::onMenuCancelAllClicked(axis::Ref* sender)
 {
     for (int i = 0; i < 10; i++)
     {
@@ -409,7 +409,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(cocos2d::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientClearRequestsTest::onMenuCancelSomeClicked(cocos2d::Ref* sender)
+void HttpClientClearRequestsTest::onMenuCancelSomeClicked(axis::Ref* sender)
 {
     // test 1
     for (int i = 0; i < 10; i++)

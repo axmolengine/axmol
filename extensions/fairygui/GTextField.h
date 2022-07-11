@@ -29,25 +29,25 @@ public:
     virtual TextFormat* getTextFormat() const = 0;
     virtual void applyTextFormat() = 0;
 
-    virtual const cocos2d::Size& getTextSize() { return _displayObject->getContentSize(); }
+    virtual const axis::Size& getTextSize() { return _displayObject->getContentSize(); }
 
-    cocos2d::Color3B getColor() const { return getTextFormat()->color; }
-    void setColor(const cocos2d::Color3B& value);
+    axis::Color3B getColor() const { return getTextFormat()->color; }
+    void setColor(const axis::Color3B& value);
 
     float getFontSize() const { return getTextFormat()->fontSize; }
     void setFontSize(float value);
 
-    cocos2d::Color3B getOutlineColor() const { return getTextFormat()->outlineColor; }
-    void setOutlineColor(const cocos2d::Color3B& value);
+    axis::Color3B getOutlineColor() const { return getTextFormat()->outlineColor; }
+    void setOutlineColor(const axis::Color3B& value);
 
-    cocos2d::ValueMap* getTemplateVars() { return _templateVars; }
-    void setTemplateVars(cocos2d::ValueMap* value);
+    axis::ValueMap* getTemplateVars() { return _templateVars; }
+    void setTemplateVars(axis::ValueMap* value);
 
-    GTextField* setVar(const std::string& name, const cocos2d::Value& value);
+    GTextField* setVar(const std::string& name, const axis::Value& value);
     void flushVars();
 
-    virtual cocos2d::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const cocos2d::Value& value) override;
+    virtual axis::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
 
 protected:
     virtual void setTextFieldText() = 0;
@@ -61,7 +61,7 @@ protected:
     std::string _text;
     bool _ubbEnabled;
     AutoSizeType _autoSize;
-    cocos2d::ValueMap* _templateVars;
+    axis::ValueMap* _templateVars;
 };
 
 class GBasicTextField : public GTextField

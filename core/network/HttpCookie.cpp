@@ -37,7 +37,7 @@
 #include <iomanip>
 #include <sstream>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace network
 {
@@ -54,7 +54,7 @@ void HttpCookie::readFile()
         VALUE_INDEX,
     };
 
-    std::string inString = cocos2d::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
+    std::string inString = axis::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
     {
         xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
@@ -296,4 +296,4 @@ void HttpCookie::setCookieFileName(std::string_view filename)
 
 }  // namespace network
 
-NS_CC_END
+NS_AX_END

@@ -45,10 +45,9 @@ class Table;
 struct ResourceData;  // x-studio spec, csb batch load support, assets hook functions.
 }  // namespace flatbuffers
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 class Node;
-}
+NS_AX_END
 
 #if !defined(GL_ONE)
 #    define GL_ZERO 0
@@ -84,8 +83,8 @@ public:
     virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder)                                                     = 0;
-    virtual void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions) = 0;
-    virtual cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)          = 0;
+    virtual void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions) = 0;
+    virtual axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)          = 0;
 };
 }  // namespace cocostudio
 
@@ -101,8 +100,7 @@ class BoneNode;
 }  // namespace timeline
 };  // namespace cocostudio
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 // builtin ui predecl
 class Sprite;
@@ -140,45 +138,46 @@ CC_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
 
 CCS_DLL extern void (*onLoadSpriteFramesWithFile)(std::string& file);
 
-CCS_DLL extern cocos2d::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
-CCS_DLL extern cocos2d::ResourceData makeResourceData(std::string_view path, int type = 0);
-CCS_DLL extern cocos2d::ResourceData makeResourceData(std::string&& path, int type = 0);
+CCS_DLL extern axis::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
+CCS_DLL extern axis::ResourceData makeResourceData(std::string_view path, int type = 0);
+CCS_DLL extern axis::ResourceData makeResourceData(std::string&& path, int type = 0);
 CCS_DLL extern void resetReaderAllHooks();
 
 /// Assets Hooks
-CCS_DLL extern bool (*onBeforeLoadObjectAsset)(cocos2d::Node*, cocos2d::ResourceData& assets, int index /*= 0*/);
+CCS_DLL extern bool (*onBeforeLoadObjectAsset)(axis::Node*, axis::ResourceData& assets, int index /*= 0*/);
 
 // Object creator Hooks
-CCS_DLL extern cocos2d::Node* (*aNode)();
-CCS_DLL extern cocos2d::ui::Widget* (*aWidget)();
-CCS_DLL extern cocos2d::Sprite* (*aSprite)();
-CCS_DLL extern cocos2d::ui::ImageView* (*aImageView)();
-CCS_DLL extern cocos2d::ui::Button* (*aButton)();
-CCS_DLL extern cocos2d::ui::CheckBox* (*aCheckBox)();
-CCS_DLL extern cocos2d::ui::Slider* (*aSlider)();
-CCS_DLL extern cocos2d::ui::LoadingBar* (*aLoadingBar)();
-CCS_DLL extern cocos2d::ui::Text* (*aText)();
-CCS_DLL extern cocos2d::ui::TextField* (*aTextField)();
-CCS_DLL extern cocos2d::ui::TextAtlas* (*aTextAtlas)();
-CCS_DLL extern cocos2d::ui::TextBMFont* (*aTextBMFont)();
-CCS_DLL extern cocos2d::ui::Layout* (*aLayout)();
-CCS_DLL extern cocos2d::ui::ScrollView* (*aScrollView)();
-CCS_DLL extern cocos2d::ui::ListView* (*aListView)();
-CCS_DLL extern cocos2d::ui::PageView* (*aPageView)();
-CCS_DLL extern cocos2d::Node* (*aArmatureNode)();
+CCS_DLL extern axis::Node* (*aNode)();
+CCS_DLL extern axis::ui::Widget* (*aWidget)();
+CCS_DLL extern axis::Sprite* (*aSprite)();
+CCS_DLL extern axis::ui::ImageView* (*aImageView)();
+CCS_DLL extern axis::ui::Button* (*aButton)();
+CCS_DLL extern axis::ui::CheckBox* (*aCheckBox)();
+CCS_DLL extern axis::ui::Slider* (*aSlider)();
+CCS_DLL extern axis::ui::LoadingBar* (*aLoadingBar)();
+CCS_DLL extern axis::ui::Text* (*aText)();
+CCS_DLL extern axis::ui::TextField* (*aTextField)();
+CCS_DLL extern axis::ui::TextAtlas* (*aTextAtlas)();
+CCS_DLL extern axis::ui::TextBMFont* (*aTextBMFont)();
+CCS_DLL extern axis::ui::Layout* (*aLayout)();
+CCS_DLL extern axis::ui::ScrollView* (*aScrollView)();
+CCS_DLL extern axis::ui::ListView* (*aListView)();
+CCS_DLL extern axis::ui::PageView* (*aPageView)();
+CCS_DLL extern axis::Node* (*aArmatureNode)();
 CCS_DLL extern cocostudio::timeline::SkeletonNode* (*aSkeletonNode)();
 CCS_DLL extern cocostudio::timeline::BoneNode* (*aBoneNode)();
-CCS_DLL extern cocos2d::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
-CCS_DLL extern cocos2d::Node* (*aNestingNode)(std::string);
+CCS_DLL extern axis::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
+CCS_DLL extern axis::Node* (*aNestingNode)(std::string);
 
 ///// 3d objects /////
-CCS_DLL extern cocos2d::Node* (*aNode3D)();
-CCS_DLL extern cocos2d::Node* (*aGameNode3D)();
-CCS_DLL extern cocos2d::Node* (*aLight3D)();
-CCS_DLL extern cocos2d::Camera* (*aCamera)();
-CCS_DLL extern cocos2d::MeshRenderer* (*aSprite3D)();
-CCS_DLL extern cocos2d::Node* (*aParticleSystem3D)();
-};  // namespace wext
-};  // namespace cocos2d
+CCS_DLL extern axis::Node* (*aNode3D)();
+CCS_DLL extern axis::Node* (*aGameNode3D)();
+CCS_DLL extern axis::Node* (*aLight3D)();
+CCS_DLL extern axis::Camera* (*aCamera)();
+CCS_DLL extern axis::MeshRenderer* (*aSprite3D)();
+CCS_DLL extern axis::Node* (*aParticleSystem3D)();
+}  // namespace wext
+
+NS_AX_END  // namespace axis
 
 #endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

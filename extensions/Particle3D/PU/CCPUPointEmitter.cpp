@@ -27,7 +27,7 @@
 #include "CCPUPointEmitter.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUPointEmitter::PUPointEmitter(void) {}
 
@@ -52,4 +52,4 @@ PUPointEmitter* PUPointEmitter::clone()
     return be;
 }
 
-NS_CC_END
+NS_AX_END

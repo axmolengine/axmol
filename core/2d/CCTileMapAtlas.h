@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCAtlasNode.h"
 #include "base/CCValue.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /// @cond DO_NOT_SHOW
 
@@ -115,6 +115,6 @@ protected:
 
 /// @endcond
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CCTILE_MAP_ATLAS__

@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #include "ui/UICheckBox.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -144,4 +144,4 @@ void CheckBox::copySpecialProperties(Widget* widget)
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

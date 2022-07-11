@@ -35,7 +35,7 @@
 #    include "base/CCEvent.h"
 #    include "base/CCEventCustom.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PhysicsShape;
 class PhysicsBody;
@@ -319,7 +319,7 @@ protected:
 /** @} */
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_PHYSICS
 #endif  //__CCPHYSICS_CONTACT_H__

@@ -30,7 +30,7 @@
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUGravityAffector : public PUAffector
 {
@@ -56,6 +56,6 @@ public:
 protected:
     float _gravity;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

@@ -60,7 +60,7 @@ private:
 
 }  // namespace
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static EventListener::ListenerID __getListenerID(Event* event)
 {
@@ -1621,4 +1621,4 @@ void EventDispatcher::releaseListener(EventListener* listener)
     CC_SAFE_RELEASE(listener);
 }
 
-NS_CC_END
+NS_AX_END

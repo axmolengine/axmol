@@ -37,15 +37,15 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class ScheduleHandlerDelegate;
 
 /// @cond
 typedef std::vector<ScheduleHandlerDelegate*> VecShedule;
-typedef std::map<cocos2d::Node*, VecShedule> MapNodeSchedules;
+typedef std::map<axis::Node*, VecShedule> MapNodeSchedules;
 
-class ScheduleHandlerDelegate : public cocos2d::Ref
+class ScheduleHandlerDelegate : public axis::Ref
 {
 public:
     ScheduleHandlerDelegate() : _isUpdateSchedule(false) {}
@@ -72,7 +72,7 @@ private:
  * @lua NA
  * @js NA
  */
-class LuaCallFunc : public cocos2d::CallFuncN
+class LuaCallFunc : public axis::CallFuncN
 {
 public:
     /**
@@ -321,7 +321,7 @@ private:
     MapObjectHandlers _mapObjectHandlers;
 };
 
-NS_CC_END
+NS_AX_END
 
 // end group
 /// @}

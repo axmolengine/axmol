@@ -59,7 +59,7 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 namespace ui
 {
 
@@ -71,7 +71,7 @@ CC_GUI_DLL const char* CocosGUIVersion();
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 // end of ui group
 /// @}
 

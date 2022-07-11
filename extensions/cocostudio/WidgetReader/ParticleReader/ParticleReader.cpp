@@ -33,7 +33,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -76,7 +76,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
     std::string plistFile;
     int resourceType = 0;
 
-    cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
 
     // child elements
     auto child = objectData.first_child();
@@ -144,7 +144,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void ParticleReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* particleOptions)
+void ParticleReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* particleOptions)
 {
     auto particle = dynamic_cast<ParticleSystemQuad*>(node);
     auto options  = (ParticleSystemOptions*)particleOptions;
@@ -152,7 +152,7 @@ void ParticleReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuff
     auto f_blendFunc = options->blendFunc();
     if (particle && f_blendFunc)
     {
-        cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+        axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
         blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
         blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         particle->setBlendFunc(blendFunc);

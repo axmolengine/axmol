@@ -30,7 +30,7 @@
 
 #define TG3_GRAVITY_EARTH (9.80665f)
 
-using namespace cocos2d;
+USING_NS_AX;
 
 extern "C" {
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxAccelerometer_onSensorChanged(JNIEnv*,

@@ -34,7 +34,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -74,7 +74,7 @@ public:
     friend class EventDispatcher;
 };
 
-NS_CC_END
+NS_AX_END
 
 // end of base group
 /// @}

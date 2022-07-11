@@ -27,7 +27,7 @@
 #include "3d/CC3DProgramInfo.h"
 #include "3d/CCVertexAttribBinding.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static std::vector<VertexAttribBinding*> __vertexAttribBindingCache;
 
@@ -159,4 +159,4 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     }
 }
 
-NS_CC_END
+NS_AX_END

@@ -11,7 +11,7 @@
 #include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GObject* GObject::_draggingObject = nullptr;
 
@@ -426,7 +426,7 @@ void GObject::setDraggable(bool value)
     }
 }
 
-void GObject::setDragBounds(const cocos2d::Rect& value)
+void GObject::setDragBounds(const axis::Rect& value)
 {
     if (_dragBounds == nullptr)
         _dragBounds = new Rect();
@@ -464,7 +464,7 @@ Vec2 GObject::localToGlobal(const Vec2& pt)
     return UIRoot->worldToRoot(pt2);
 }
 
-cocos2d::Rect GObject::localToGlobal(const cocos2d::Rect& rect)
+axis::Rect GObject::localToGlobal(const axis::Rect& rect)
 {
     Rect ret;
     Vec2 v = localToGlobal(rect.origin);
@@ -489,7 +489,7 @@ Vec2 GObject::globalToLocal(const Vec2& pt)
     return pt2;
 }
 
-cocos2d::Rect GObject::globalToLocal(const cocos2d::Rect& rect)
+axis::Rect GObject::globalToLocal(const axis::Rect& rect)
 {
     Rect ret;
     Vec2 v = globalToLocal(rect.origin);
@@ -501,7 +501,7 @@ cocos2d::Rect GObject::globalToLocal(const cocos2d::Rect& rect)
     return ret;
 }
 
-cocos2d::Rect GObject::transformRect(const cocos2d::Rect& rect, GObject* targetSpace)
+axis::Rect GObject::transformRect(const axis::Rect& rect, GObject* targetSpace)
 {
     if (targetSpace == this)
         return rect;
@@ -672,7 +672,7 @@ void GObject::removeFromParent()
         _parent->removeChild(this);
 }
 
-cocos2d::Value GObject::getProp(ObjectPropID propId)
+axis::Value GObject::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -685,7 +685,7 @@ cocos2d::Value GObject::getProp(ObjectPropID propId)
     }
 }
 
-void GObject::setProp(ObjectPropID propId, const cocos2d::Value& value)
+void GObject::setProp(ObjectPropID propId, const axis::Value& value)
 {
     switch (propId)
     {

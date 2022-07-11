@@ -31,7 +31,7 @@
 
 #include "Bug-899.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool Bug899Layer::init()
 {

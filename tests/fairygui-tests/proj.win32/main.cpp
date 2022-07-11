@@ -25,7 +25,7 @@
 #include "main.h"
 #include "../Classes/AppDelegate.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 int WINAPI _tWinMain(HINSTANCE hInstance,
                        HINSTANCE hPrevInstance,

@@ -26,30 +26,29 @@ THE SOFTWARE.
 
 #include "CocoStudio.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 class EventDispatcher;
 class EventListener;
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 namespace cocostudio
 {
 
 class TriggerObj;
 
-class CCS_DLL ArmatureMovementDispatcher : public cocos2d::Ref
+class CCS_DLL ArmatureMovementDispatcher : public axis::Ref
 {
 public:
     ArmatureMovementDispatcher(void);
     ~ArmatureMovementDispatcher(void);
 
 public:
-    void addAnimationEventCallBack(cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
-    void removeAnnimationEventCallBack(cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void addAnimationEventCallBack(axis::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeAnnimationEventCallBack(axis::Ref* pTarget, SEL_MovementEventCallFunc mecf);
     void animationEvent(Armature* armature, MovementEventType movementType, std::string_view movementID);
 
 private:
-    std::unordered_map<cocos2d::Ref*, SEL_MovementEventCallFunc>* _mapEventAnimation;
+    std::unordered_map<axis::Ref*, SEL_MovementEventCallFunc>* _mapEventAnimation;
 };
 
 class CCS_DLL TriggerMng
@@ -67,19 +66,19 @@ public:
     void parse(const rapidjson::Value& root);
     void parse(cocostudio::CocoLoader* pCocoLoader, cocostudio::stExpCocoNode* pCocoNode);
     void removeAll(void);
-    cocos2d::Vector<TriggerObj*>* get(unsigned int event) const;
+    axis::Vector<TriggerObj*>* get(unsigned int event) const;
     TriggerObj* getTriggerObj(unsigned int id) const;
     bool removeTriggerObj(TriggerObj* Obj);
     bool removeTriggerObj(unsigned int id);
     bool isEmpty(void) const;
 
-    void addArmatureMovementCallBack(Armature* pAr, cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
-    void removeArmatureMovementCallBack(Armature* pAr, cocos2d::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void addArmatureMovementCallBack(Armature* pAr, axis::Ref* pTarget, SEL_MovementEventCallFunc mecf);
+    void removeArmatureMovementCallBack(Armature* pAr, axis::Ref* pTarget, SEL_MovementEventCallFunc mecf);
     void removeArmatureAllMovementCallBack(Armature* pAr);
     void removeAllArmatureMovementCallBack();
-    void dispatchEvent(cocos2d::EventCustom* tEvent);
-    void removeEventListener(cocos2d::EventListener* listener);
-    void addEventListenerWithFixedPriority(cocos2d::EventListener* listener, int fixedPriority);
+    void dispatchEvent(axis::EventCustom* tEvent);
+    void removeEventListener(axis::EventListener* listener);
+    void addEventListenerWithFixedPriority(axis::EventListener* listener, int fixedPriority);
 
 private:
     void buildJson(rapidjson::Document& document,
@@ -90,7 +89,7 @@ private:
     static TriggerMng* _sharedTriggerMng;
     std::unordered_map<unsigned int, TriggerObj*> _triggerObjs;
     std::unordered_map<Armature*, ArmatureMovementDispatcher*>* _movementDispatches;
-    cocos2d::EventDispatcher* _eventDispatcher;  ///< event dispatcher used to dispatch all kinds of events
+    axis::EventDispatcher* _eventDispatcher;  ///< event dispatcher used to dispatch all kinds of events
 };
 
 }  // namespace cocostudio

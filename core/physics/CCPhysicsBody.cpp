@@ -55,7 +55,7 @@ static void internalBodyUpdateVelocity(cpBody* body, cpVect gravity, cpFloat dam
     cpAssertSoft(body->m > 0.0f && body->i > 0.0f,
                  "Body's mass and moment must be positive to simulate. (Mass: %f Moment: f)", body->m, body->i);
 
-    cocos2d::PhysicsBody* physicsBody = static_cast<cocos2d::PhysicsBody*>(body->userData);
+    axis::PhysicsBody* physicsBody = static_cast<axis::PhysicsBody*>(body->userData);
 
     if (physicsBody->isGravityEnabled())
         body->v =
@@ -73,7 +73,7 @@ static void internalBodyUpdateVelocity(cpBody* body, cpVect gravity, cpFloat dam
     cpBodySetTorque(body, 0.0f);
 }
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 extern const float PHYSICS_INFINITY;
 
 const std::string PhysicsBody::COMPONENT_NAME = "PhysicsBody";
@@ -1009,6 +1009,6 @@ void PhysicsBody::removeFromPhysicsWorld()
     }
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_PHYSICS

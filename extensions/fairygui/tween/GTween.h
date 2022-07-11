@@ -14,20 +14,20 @@ class GTween
 {
 public:
     static GTweener* to(float startValue, float endValue, float duration);
-    static GTweener* to(const cocos2d::Vec2& startValue, const cocos2d::Vec2& endValue, float duration);
-    static GTweener* to(const cocos2d::Vec3& startValue, const cocos2d::Vec3& endValue, float duration);
-    static GTweener* to(const cocos2d::Vec4& startValue, const cocos2d::Vec4& endValue, float duration);
-    static GTweener* to(const cocos2d::Color4B& startValue, const cocos2d::Color4B& endValue, float duration);
+    static GTweener* to(const axis::Vec2& startValue, const axis::Vec2& endValue, float duration);
+    static GTweener* to(const axis::Vec3& startValue, const axis::Vec3& endValue, float duration);
+    static GTweener* to(const axis::Vec4& startValue, const axis::Vec4& endValue, float duration);
+    static GTweener* to(const axis::Color4B& startValue, const axis::Color4B& endValue, float duration);
     static GTweener* toDouble(double startValue, double endValue, float duration);
     static GTweener* delayedCall(float delay);
-    static GTweener* shake(const cocos2d::Vec2& startValue, float amplitude, float duration);
-    static bool isTweening(cocos2d::Ref* target);
-    static bool isTweening(cocos2d::Ref* target, TweenPropType propType);
-    static void kill(cocos2d::Ref* target);
-    static void kill(cocos2d::Ref* target, bool complete);
-    static void kill(cocos2d::Ref* target, TweenPropType propType, bool complete);
-    static GTweener* getTween(cocos2d::Ref* target);
-    static GTweener* getTween(cocos2d::Ref* target, TweenPropType propType);
+    static GTweener* shake(const axis::Vec2& startValue, float amplitude, float duration);
+    static bool isTweening(axis::Ref* target);
+    static bool isTweening(axis::Ref* target, TweenPropType propType);
+    static void kill(axis::Ref* target);
+    static void kill(axis::Ref* target, bool complete);
+    static void kill(axis::Ref* target, TweenPropType propType, bool complete);
+    static GTweener* getTween(axis::Ref* target);
+    static GTweener* getTween(axis::Ref* target, TweenPropType propType);
     static void clean();
 };
 

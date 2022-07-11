@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 
@@ -220,6 +220,6 @@ private:
 // end of _3d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CC_MOTION_STREAK3D_H__

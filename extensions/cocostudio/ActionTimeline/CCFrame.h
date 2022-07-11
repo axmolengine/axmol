@@ -39,7 +39,7 @@ NS_TIMELINE_BEGIN
 class Timeline;
 class ActionTimeline;
 
-class CCS_DLL Frame : public cocos2d::Ref
+class CCS_DLL Frame : public axis::Ref
 {
 public:
     virtual void setFrameIndex(unsigned int frameIndex) { _frameIndex = frameIndex; }
@@ -48,14 +48,14 @@ public:
     virtual void setTimeline(Timeline* timeline) { _timeline = timeline; }
     virtual Timeline* getTimeline() const { return _timeline; }
 
-    virtual void setNode(cocos2d::Node* node) { _node = node; }
-    virtual cocos2d::Node* getNode() const { return _node; }
+    virtual void setNode(axis::Node* node) { _node = node; }
+    virtual axis::Node* getNode() const { return _node; }
 
     virtual void setTween(bool tween) { _tween = tween; }
     virtual bool isTween() const { return _tween; }
 
-    virtual void setTweenType(const cocos2d::tweenfunc::TweenType& tweenType) { _tweenType = tweenType; }
-    virtual cocos2d::tweenfunc::TweenType getTweenType() const { return _tweenType; }
+    virtual void setTweenType(const axis::tweenfunc::TweenType& tweenType) { _tweenType = tweenType; }
+    virtual axis::tweenfunc::TweenType getTweenType() const { return _tweenType; }
 
     // !to make easing with params, need setTweenType(TweenType::CUSTOM_EASING)
     virtual void setEasingParams(const std::vector<float>& easingParams);
@@ -84,10 +84,10 @@ protected:
     bool _tween;
     bool _enterWhenPassed;
 
-    cocos2d::tweenfunc::TweenType _tweenType;
+    axis::tweenfunc::TweenType _tweenType;
     std::vector<float> _easingParam;
     Timeline* _timeline;
-    cocos2d::Node* _node;
+    axis::Node* _node;
 };
 
 class CCS_DLL VisibleFrame : public Frame
@@ -114,7 +114,7 @@ public:
 
     TextureFrame();
 
-    virtual void setNode(cocos2d::Node* node) override;
+    virtual void setNode(axis::Node* node) override;
 
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
@@ -123,7 +123,7 @@ public:
     inline std::string_view getTextureName() const { return _textureName; }
 
 protected:
-    cocos2d::Sprite* _sprite;
+    axis::Sprite* _sprite;
     std::string _textureName;
 };
 
@@ -196,8 +196,8 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setPosition(const cocos2d::Point& position) { _position = position; }
-    inline cocos2d::Point getPosition() const { return _position; }
+    inline void setPosition(const axis::Point& position) { _position = position; }
+    inline axis::Point getPosition() const { return _position; }
 
     inline void setX(float x) { _position.x = x; }
     inline void setY(float y) { _position.y = y; }
@@ -208,7 +208,7 @@ public:
 protected:
     virtual void onApply(float percent) override;
 
-    cocos2d::Point _position;
+    axis::Point _position;
     float _betweenX;
     float _betweenY;
 };
@@ -254,14 +254,14 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setAnchorPoint(const cocos2d::Point& point) { _anchorPoint = point; }
-    inline cocos2d::Point getAnchorPoint() const { return _anchorPoint; }
+    inline void setAnchorPoint(const axis::Point& point) { _anchorPoint = point; }
+    inline axis::Point getAnchorPoint() const { return _anchorPoint; }
 
 protected:
     virtual void onApply(float percent) override;
 
-    cocos2d::Vec2 _betweenAnchorPoint;
-    cocos2d::Vec2 _anchorPoint;
+    axis::Vec2 _betweenAnchorPoint;
+    axis::Vec2 _anchorPoint;
 };
 
 enum InnerActionType
@@ -320,14 +320,14 @@ public:
     CC_DEPRECATED_ATTRIBUTE inline void setAlpha(uint8_t alpha) { _alpha = alpha; }
     CC_DEPRECATED_ATTRIBUTE inline uint8_t getAlpha() const { return _alpha; }
 
-    inline void setColor(const cocos2d::Color3B& color) { _color = color; }
-    inline cocos2d::Color3B getColor() const { return _color; }
+    inline void setColor(const axis::Color3B& color) { _color = color; }
+    inline axis::Color3B getColor() const { return _color; }
 
 protected:
     virtual void onApply(float percent) override;
 
     uint8_t _alpha;
-    cocos2d::Color3B _color;
+    axis::Color3B _color;
 
     int _betweenRed;
     int _betweenGreen;
@@ -361,7 +361,7 @@ public:
 
     EventFrame();
 
-    virtual void setNode(cocos2d::Node* node) override;
+    virtual void setNode(axis::Node* node) override;
 
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
@@ -401,11 +401,11 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline cocos2d::BlendFunc getBlendFunc() const { return _blendFunc; }
-    inline void setBlendFunc(cocos2d::BlendFunc blendFunc) { _blendFunc = blendFunc; }
+    inline axis::BlendFunc getBlendFunc() const { return _blendFunc; }
+    inline void setBlendFunc(axis::BlendFunc blendFunc) { _blendFunc = blendFunc; }
 
 protected:
-    cocos2d::BlendFunc _blendFunc;
+    axis::BlendFunc _blendFunc;
 };
 
 class CCS_DLL PlayableFrame : public Frame

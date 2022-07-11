@@ -35,7 +35,7 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/ccShaders.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum
 {

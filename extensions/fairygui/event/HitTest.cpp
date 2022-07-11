@@ -2,7 +2,7 @@
 #include "GComponent.h"
 #include "utils/ByteBuffer.h"
 
-USING_NS_CC;
+USING_NS_AX;
 NS_FGUI_BEGIN
 
 PixelHitTestData::PixelHitTestData() :
@@ -38,7 +38,7 @@ PixelHitTest::PixelHitTest(PixelHitTestData * data, int offsetX, int offsetY) :
 {
 }
 
-bool PixelHitTest::hitTest(GComponent * obj, const cocos2d::Vec2 & localPoint)
+bool PixelHitTest::hitTest(GComponent * obj, const axis::Vec2 & localPoint)
 {
     int x = floor((localPoint.x / scaleX - offsetX) * _data->scale);
     int y = floor(((obj->getHeight() - localPoint.y) / scaleY - offsetY) * _data->scale);

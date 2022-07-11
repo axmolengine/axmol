@@ -32,8 +32,7 @@
 
 #define LOG_TAG "AudioDecoder"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 AudioDecoderEXT::AudioDecoderEXT() : _extRef(nullptr), _fileStream(nullptr), _streamSize(0), _audioFileId(nullptr)
 {
@@ -222,4 +221,4 @@ SInt64 AudioDecoderEXT::getSizeCallback(void* inClientData)
     auto* audioDecoder = (AudioDecoderEXT*)inClientData;
     return audioDecoder->_streamSize;
 }
-}  // namespace cocos2d {
+NS_AX_END  // namespace axis

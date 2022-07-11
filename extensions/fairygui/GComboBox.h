@@ -24,8 +24,8 @@ public:
     virtual const std::string& getText() const override { return getTitle(); }
     virtual void setText(const std::string& value) override { setTitle(value); }
 
-    const cocos2d::Color3B getTitleColor() const;
-    void setTitleColor(const cocos2d::Color3B& value);
+    const axis::Color3B getTitleColor() const;
+    void setTitleColor(const axis::Color3B& value);
 
     int getTitleFontSize() const;
     void setTitleFontSize(int value);
@@ -55,8 +55,8 @@ public:
 
     GTextField* getTextField() const;
 
-    virtual cocos2d::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const cocos2d::Value& value) override;
+    virtual axis::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
 
 protected:
     virtual void constructExtension(ByteBuffer* buffer) override;

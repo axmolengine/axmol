@@ -41,7 +41,7 @@
 #    include "base/CCEventDispatcher.h"
 #    include "base/CCEventCustom.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 const float PHYSICS_INFINITY = FLT_MAX;
 extern const char* PHYSICSCONTACT_EVENT_NAME;
 
@@ -1091,6 +1091,6 @@ void PhysicsWorld::setPreUpdateCallback(const std::function<void()>& callback)
     _preUpdateCallback = callback;
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_PHYSICS

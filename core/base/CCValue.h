@@ -38,7 +38,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Value;
 
@@ -279,13 +279,13 @@ private:
     Type _type;
 };
 
-inline const cocos2d::Value& optValue(const ValueMap& dictionary, std::string_view key)
+inline const axis::Value& optValue(const ValueMap& dictionary, std::string_view key)
 {
-    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : cocos2d::Value::Null;
+    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : axis::Value::Null;
 }
 
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif /* defined(__cocos2d_libs__CCValue__) */

@@ -32,7 +32,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /**
  Command used to render one or more Triangles, which is similar to QuadCommand.
  Every TrianglesCommand will have generate material ID by give textureID, glProgramState, Blend function
@@ -82,7 +82,7 @@ public:
      @param flags to indicate that the command is using 3D rendering or not.
      */
     void init(float globalOrder,
-              cocos2d::Texture2D* texture,
+              axis::Texture2D* texture,
               const BlendFunc& blendType,
               const Triangles& triangles,
               const Mat4& mv,
@@ -122,7 +122,7 @@ protected:
     backend::TextureBackend* _texture = nullptr;
 };
 
-NS_CC_END
+NS_AX_END
 /**
  end of support group
  @}

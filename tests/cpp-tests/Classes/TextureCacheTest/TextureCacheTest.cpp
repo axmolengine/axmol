@@ -24,7 +24,7 @@
 
 #include "TextureCacheTest.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 TextureCacheTests::TextureCacheTests()
 {
@@ -88,7 +88,7 @@ TextureCacheTest::TextureCacheTest() : _numberOfSprites(20), _numberOfLoadedSpri
                                                               CC_CALLBACK_1(TextureCacheTest::loadingCallBack, this));
 }
 
-void TextureCacheTest::loadingCallBack(cocos2d::Texture2D* texture)
+void TextureCacheTest::loadingCallBack(axis::Texture2D* texture)
 {
     ++_numberOfLoadedSprites;
     char tmp[10];

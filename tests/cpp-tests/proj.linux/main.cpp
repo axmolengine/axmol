@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include <string>
 
-USING_NS_CC;
+USING_NS_AX;
 
 int main(int argc, char** argv)
 {

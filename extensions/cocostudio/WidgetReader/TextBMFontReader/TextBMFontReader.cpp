@@ -11,7 +11,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -42,7 +42,7 @@ void TextBMFontReader::destroyInstance()
     CC_SAFE_DELETE(instanceTextBMFontReader);
 }
 
-void TextBMFontReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextBMFontReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -186,7 +186,7 @@ Offset<Table> TextBMFontReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void TextBMFontReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textBMFontOptions)
+void TextBMFontReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textBMFontOptions)
 {
     TextBMFont* labelBMFont = static_cast<TextBMFont*>(node);
     auto options            = (TextBMFontOptions*)textBMFontOptions;

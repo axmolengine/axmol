@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "CCBone.h"
 #include "CCTransformHelp.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -184,7 +184,7 @@ void ColliderDetector::addContourData(ContourData* contourData)
 #endif
 }
 
-void ColliderDetector::addContourDataList(cocos2d::Vector<ContourData*>& contourDataList)
+void ColliderDetector::addContourDataList(axis::Vector<ContourData*>& contourDataList)
 {
     for (const auto& contourData : contourDataList)
     {
@@ -279,7 +279,7 @@ bool ColliderDetector::getActive()
     return _active;
 }
 
-const cocos2d::Vector<ColliderBody*>& ColliderDetector::getColliderBodyList()
+const axis::Vector<ColliderBody*>& ColliderDetector::getColliderBodyList()
 {
     return _colliderBodyList;
 }
@@ -342,10 +342,10 @@ void ColliderDetector::updateTransform(Mat4& t)
 #endif
 
         unsigned long num              = contourData->vertexList.size();
-        std::vector<cocos2d::Vec2>& vs = contourData->vertexList;
+        std::vector<axis::Vec2>& vs = contourData->vertexList;
 
 #if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-        std::vector<cocos2d::Vec2>& cvs = colliderBody->_calculatedVertexList;
+        std::vector<axis::Vec2>& cvs = colliderBody->_calculatedVertexList;
 #endif
 
         for (unsigned long i = 0; i < num; i++)

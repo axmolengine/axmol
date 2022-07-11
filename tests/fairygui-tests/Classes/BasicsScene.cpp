@@ -2,7 +2,7 @@
 #include "Window1.h"
 #include "Window2.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 void BasicsScene::continueInit()
 {
@@ -238,10 +238,10 @@ void BasicsScene::playDragDrop()
 void BasicsScene::playProgress()
 {
     GComponent* obj = _demoObjects.at("ProgressBar");
-    cocos2d::Director::getInstance()->getScheduler()->schedule(
+    axis::Director::getInstance()->getScheduler()->schedule(
         CC_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this, 0.02f, false);
     obj->addEventListener(UIEventType::Exit, [this](EventContext*) {
-        cocos2d::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
+        axis::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
     });
 }
 

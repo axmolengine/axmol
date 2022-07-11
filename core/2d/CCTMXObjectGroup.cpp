@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "2d/CCTMXObjectGroup.h"
 #include "base/ccMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation TMXObjectGroup
 
@@ -67,4 +67,4 @@ Value TMXObjectGroup::getProperty(std::string_view propertyName) const
     return Value();
 }
 
-NS_CC_END
+NS_AX_END

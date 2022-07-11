@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "base/CCScriptSupport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Node;
 
@@ -85,7 +85,7 @@ protected:
     bool _enabled;
 };
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif  // __CC_FRAMEWORK_COMPONENT_H__

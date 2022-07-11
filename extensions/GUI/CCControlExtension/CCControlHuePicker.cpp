@@ -33,7 +33,7 @@
 
 #include "CCControlHuePicker.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 ControlHuePicker::ControlHuePicker() : _hue(0.0f), _huePercentage(0.0f), _background(nullptr), _slider(nullptr) {}
 
@@ -184,4 +184,4 @@ void ControlHuePicker::onTouchMoved(Touch* touch, Event* /*event*/)
     checkSliderPosition(touchLocation);
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

@@ -43,7 +43,7 @@ private:
     PopupMenu* _pm;
     GComponent* _popupCom;
 
-    cocos2d::Map<std::string, GComponent*> _demoObjects;
+    axis::Map<std::string, GComponent*> _demoObjects;
 
 };
 

@@ -41,7 +41,7 @@ public:
 private:
     void doTest();
     void printValue();
-    cocos2d::Label* _label;
+    axis::Label* _label;
 };
 
 #endif  // _USERDEFAULT_TEST_H_

@@ -30,7 +30,7 @@
 #include "Texture2dTest.h"
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum
 {
@@ -2129,7 +2129,7 @@ void TextureMemoryAlloc::onEnter()
     menu2->setPosition(Vec2(s.width / 2, s.height / 4));
 }
 
-void TextureMemoryAlloc::changeBackgroundVisible(cocos2d::Ref* sender)
+void TextureMemoryAlloc::changeBackgroundVisible(axis::Ref* sender)
 {
     if (_background)
     {
@@ -2137,7 +2137,7 @@ void TextureMemoryAlloc::changeBackgroundVisible(cocos2d::Ref* sender)
     }
 }
 
-void TextureMemoryAlloc::updateImage(cocos2d::Ref* sender)
+void TextureMemoryAlloc::updateImage(axis::Ref* sender)
 {
     if (_background)
     {
@@ -2223,7 +2223,7 @@ std::string TexturePVRv3Premult::subtitle() const
     return "All images should look exactly the same";
 }
 
-void TexturePVRv3Premult::transformSprite(cocos2d::Sprite* sprite)
+void TexturePVRv3Premult::transformSprite(axis::Sprite* sprite)
 {
     auto fade   = FadeOut::create(2);
     auto dl     = DelayTime::create(2);

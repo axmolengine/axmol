@@ -1,6 +1,6 @@
 #include "BagScene.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 BagScene::BagScene() :_bagWindow(nullptr)
 {

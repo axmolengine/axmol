@@ -6,7 +6,7 @@
 
 USING_NS_FGUI;
 
-class DemoScene : public cocos2d::Scene
+class DemoScene : public axis::Scene
 {
 public:
     bool init();

@@ -27,9 +27,9 @@ THE SOFTWARE.
 #include "platform/CCStdC.h"
 #include "ntcvt/ntcvt.hpp"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
-#define MAX_LEN (cocos2d::kMaxLogLen + 1)
+#define MAX_LEN (axis::kMaxLogLen + 1)
 
 void ccMessageBox(const char* pszMsg, const char* pszTitle)
 {
@@ -47,4 +47,4 @@ void LuaLog(const char* pszMsg)
     _putws(wsMsg.c_str());
 }
 
-NS_CC_END
+NS_AX_END

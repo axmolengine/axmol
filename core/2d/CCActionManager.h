@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "base/CCVector.h"
 #include "base/CCRef.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Action;
 
@@ -209,6 +209,6 @@ protected:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __ACTION_CCACTION_MANAGER_H__

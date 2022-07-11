@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace tweenfunc
 {
@@ -293,7 +293,7 @@ float CC_DLL bounceEaseInOut(float time);
 float CC_DLL customEase(float time, float* easingParam);
 }  // namespace tweenfunc
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif /*__CCTWEENFUNCTION_H__*/

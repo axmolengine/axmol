@@ -26,8 +26,8 @@ public:
     virtual ~HtmlElement() {};
 
     int getInt(const std::string& attrName, int defValue = 0);
-    std::string getString(const std::string& attrName, const std::string& defValue = cocos2d::STD_STRING_EMPTY);
-    cocos2d::ValueVector& getArray(const std::string& attrName);
+    std::string getString(const std::string& attrName, const std::string& defValue = axis::STD_STRING_EMPTY);
+    axis::ValueVector& getArray(const std::string& attrName);
 
     Type type;
     std::string text;
@@ -35,7 +35,7 @@ public:
     HtmlElement* link;
     HtmlObject *obj;
     int space;
-    cocos2d::ValueMap attrs;
+    axis::ValueMap attrs;
 };
 
 NS_FGUI_END

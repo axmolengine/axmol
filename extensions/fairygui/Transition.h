@@ -12,7 +12,7 @@ class TransitionItem;
 class GTweener;
 class ByteBuffer;
 
-class Transition : public cocos2d::Ref
+class Transition : public axis::Ref
 {
 public:
     typedef std::function<void()> PlayCompleteCallback;
@@ -35,7 +35,7 @@ public:
     void setAutoPlay(bool autoPlay, int times, float delay);
     void setPaused(bool paused);
 
-    void setValue(const std::string& label, const cocos2d::ValueVector& values);
+    void setValue(const std::string& label, const axis::ValueVector& values);
     void setHook(const std::string& label, TransitionHook callback);
     void clearHooks();
     void setTarget(const std::string& label, GObject* newTarget);

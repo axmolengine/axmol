@@ -13,10 +13,10 @@
 
 class LAppView;
 
-class SampleScene : public cocos2d::Scene
+class SampleScene : public axis::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
+    static axis::Scene* createScene();
 
     static SampleScene* getInstance();
 
@@ -27,8 +27,8 @@ public:
     virtual void onExit() override;
 
     // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
-    void menuChangeCallback(cocos2d::Ref* pSender);
+    void menuCloseCallback(axis::Ref* pSender);
+    void menuChangeCallback(axis::Ref* pSender);
 
     // implement the "static create()" method manually
     CREATE_FUNC(SampleScene);
@@ -39,8 +39,8 @@ public:
 private:
     LAppView* _pView;
 
-    cocos2d::MenuItemImage* _changeItem;
-    cocos2d::MenuItemImage* _closeItem;
+    axis::MenuItemImage* _changeItem;
+    axis::MenuItemImage* _closeItem;
 };
 
 #endif // __SAMPLE_SCENE_H__

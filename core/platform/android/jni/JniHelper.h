@@ -61,7 +61,7 @@ struct TypeSignature<std::string>
 };
 }  // namespace jni
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 typedef struct JniMethodInfo_
 {
@@ -103,9 +103,9 @@ public:
     template <typename... Ts>
     static void callStaticVoidMethod(const char* className, const char* methodName, Ts&&... xs)
     {
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<void(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             t.env->CallStaticVoidMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -126,9 +126,9 @@ public:
     static bool callStaticBooleanMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jboolean jret = JNI_FALSE;
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jboolean(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jret = t.env->CallStaticBooleanMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -150,9 +150,9 @@ public:
     static int callStaticIntMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jint ret = 0;
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jint(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticIntMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -174,9 +174,9 @@ public:
     static float callStaticFloatMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jfloat ret = 0.0;
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jfloat(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticFloatMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -198,9 +198,9 @@ public:
     static float* callStaticFloatArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         static float ret[32];
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jfloatArray array =
@@ -234,9 +234,9 @@ public:
     static int* callStaticIntArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         static int ret[32];
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jint>(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jintArray array =
@@ -270,9 +270,9 @@ public:
     static Vec3 callStaticVec3Method(const char* className, const char* methodName, Ts&&... xs)
     {
         Vec3 ret;
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jfloatArray array =
@@ -304,9 +304,9 @@ public:
     static double callStaticDoubleMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jdouble ret = 0.0;
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jdouble(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticDoubleMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -329,13 +329,13 @@ public:
     {
         std::string ret;
 
-        cocos2d::JniMethodInfo t;
+        axis::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::String(std::decay_t<Ts>...)>{}();
-        if (cocos2d::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jstring jret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
-            ret          = cocos2d::JniHelper::jstring2string(jret);
+            ret          = axis::JniHelper::jstring2string(jret);
             t.env->DeleteLocalRef(t.classID);
             t.env->DeleteLocalRef(jret);
             deleteLocalRefs(t.env, localRefs);
@@ -359,47 +359,47 @@ private:
 
     static jobject _activity;
 
-    static jstring convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, const char* x);
+    static jstring convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, const char* x);
 
-    static jstring convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, std::string_view x);
+    static jstring convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, std::string_view x);
 
-    static jstring convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo& t, const std::string& x);
+    static jstring convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, const std::string& x);
 
-    inline static jint convert(LocalRefMapType&, cocos2d::JniMethodInfo&, int32_t value)
+    inline static jint convert(LocalRefMapType&, axis::JniMethodInfo&, int32_t value)
     {
         return static_cast<jint>(value);
     }
-    inline static jlong convert(LocalRefMapType&, cocos2d::JniMethodInfo&, int64_t value)
+    inline static jlong convert(LocalRefMapType&, axis::JniMethodInfo&, int64_t value)
     {
         return static_cast<jlong>(value);
     }
-    inline static jfloat convert(LocalRefMapType&, cocos2d::JniMethodInfo&, float value)
+    inline static jfloat convert(LocalRefMapType&, axis::JniMethodInfo&, float value)
     {
         return static_cast<jfloat>(value);
     }
-    inline static jdouble convert(LocalRefMapType&, cocos2d::JniMethodInfo&, double value)
+    inline static jdouble convert(LocalRefMapType&, axis::JniMethodInfo&, double value)
     {
         return static_cast<jdouble>(value);
     }
-    inline static jboolean convert(LocalRefMapType&, cocos2d::JniMethodInfo&, bool value)
+    inline static jboolean convert(LocalRefMapType&, axis::JniMethodInfo&, bool value)
     {
         return static_cast<jboolean>(value);
     }
-    inline static jbyte convert(LocalRefMapType&, cocos2d::JniMethodInfo&, int8_t value)
+    inline static jbyte convert(LocalRefMapType&, axis::JniMethodInfo&, int8_t value)
     {
         return static_cast<jbyte>(value);
     }
-    inline static jchar convert(LocalRefMapType&, cocos2d::JniMethodInfo&, uint8_t value)
+    inline static jchar convert(LocalRefMapType&, axis::JniMethodInfo&, uint8_t value)
     {
         return static_cast<jchar>(value);
     }
-    inline static jshort convert(LocalRefMapType&, cocos2d::JniMethodInfo&, int16_t value)
+    inline static jshort convert(LocalRefMapType&, axis::JniMethodInfo&, int16_t value)
     {
         return static_cast<jshort>(value);
     }
 
     template <typename T>
-    static T convert(LocalRefMapType& localRefs, cocos2d::JniMethodInfo&, T x)
+    static T convert(LocalRefMapType& localRefs, axis::JniMethodInfo&, T x)
     {
         return x;
     }
@@ -409,6 +409,6 @@ private:
     static void reportError(const char* className, const char* methodName, const char* signature);
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __ANDROID_JNI_HELPER_H__

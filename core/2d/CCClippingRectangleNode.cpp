@@ -27,7 +27,7 @@
 #include "math/Vec2.h"
 #include "platform/CCGLView.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ClippingRectangleNode* ClippingRectangleNode::create(const Rect& clippingRegion)
 {
@@ -105,4 +105,4 @@ void ClippingRectangleNode::visit(Renderer* renderer, const Mat4& parentTransfor
     renderer->addCommand(afterVisitCmdScissor);
 }
 
-NS_CC_END
+NS_AX_END

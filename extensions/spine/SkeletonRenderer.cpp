@@ -32,7 +32,7 @@
 #include <spine/AttachmentVertices.h>
 #include <algorithm>
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace spine {
 
@@ -40,11 +40,11 @@ namespace {
 	Cocos2dTextureLoader textureLoader;
 
 	int computeTotalCoordCount(Skeleton& skeleton, int startSlotIndex, int endSlotIndex);
-	cocos2d::Rect computeBoundingRect(const float* coords, int vertexCount);
+	axis::Rect computeBoundingRect(const float* coords, int vertexCount);
 	void interleaveCoordinates(float* dst, const float* src, int vertexCount, int dstStride);
 	BlendFunc makeBlendFunc(BlendMode blendMode, bool premultipliedAlpha);
 	void transformWorldVertices(float* dstCoord, int coordCount, Skeleton& skeleton, int startSlotIndex, int endSlotIndex);
-	bool cullRectangle(Renderer* renderer, const Mat4& transform, const cocos2d::Rect& rect);
+	bool cullRectangle(Renderer* renderer, const Mat4& transform, const axis::Rect& rect);
 		Color4B ColorToColor4B(const Color& color);
 	bool slotIsOutRange(Slot& slot, int startSlotIndex, int endSlotIndex);
 	bool nothingToDraw(Slot& slot, int startSlotIndex, int endSlotIndex);
@@ -267,7 +267,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 	transformWorldVertices(worldCoords, coordCount, *_skeleton, _startSlotIndex, _endSlotIndex);
 
 #if CC_USE_CULLING
-	const cocos2d::Rect bb = computeBoundingRect(worldCoords, coordCount / 2);
+	const axis::Rect bb = computeBoundingRect(worldCoords, coordCount / 2);
 
 	if (cullRectangle(renderer, transform, bb)) {
 		VLA_FREE(worldCoords);
@@ -304,7 +304,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 			continue;
 		}
 
-		cocos2d::TrianglesCommand::Triangles triangles;
+		axis::TrianglesCommand::Triangles triangles;
 		TwoColorTriangles trianglesTwoColor;
 
 		if (slot->getAttachment()->getRTTI().isExactly(RegionAttachment::rtti)) {
@@ -319,7 +319,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 				triangles.verts = batch->allocateVertices(attachmentVertices->_triangles->vertCount);
 				triangles.vertCount = attachmentVertices->_triangles->vertCount;
 				assert(triangles.vertCount == 4);
-				memcpy(triangles.verts, attachmentVertices->_triangles->verts, sizeof(cocos2d::V3F_C4B_T2F) * attachmentVertices->_triangles->vertCount);
+				memcpy(triangles.verts, attachmentVertices->_triangles->verts, sizeof(axis::V3F_C4B_T2F) * attachmentVertices->_triangles->vertCount);
 				dstStride = sizeof(V3F_C4B_T2F) / sizeof(float);
 				dstTriangleVertices = reinterpret_cast<float*>(triangles.verts);
 			} else {
@@ -352,7 +352,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 				triangles.indexCount = attachmentVertices->_triangles->indexCount;
 				triangles.verts = batch->allocateVertices(attachmentVertices->_triangles->vertCount);
 				triangles.vertCount = attachmentVertices->_triangles->vertCount;
-				memcpy(triangles.verts, attachmentVertices->_triangles->verts, sizeof(cocos2d::V3F_C4B_T2F) * attachmentVertices->_triangles->vertCount);
+				memcpy(triangles.verts, attachmentVertices->_triangles->verts, sizeof(axis::V3F_C4B_T2F) * attachmentVertices->_triangles->vertCount);
 				dstTriangleVertices = (float*)triangles.verts;
 				dstStride = sizeof(V3F_C4B_T2F) / sizeof(float);
 				dstVertexCount = triangles.vertCount;
@@ -408,14 +408,14 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 			color.b *= color.a;
 		}
 
-		const cocos2d::Color4B color4B = ColorToColor4B(color);
-		const cocos2d::Color4B darkColor4B = ColorToColor4B(darkColor);
+		const axis::Color4B color4B = ColorToColor4B(color);
+		const axis::Color4B darkColor4B = ColorToColor4B(darkColor);
 		const BlendFunc blendFunc = makeBlendFunc(slot->getData().getBlendMode(), attachmentVertices->_texture->hasPremultipliedAlpha());
 		_blendFunc = blendFunc;
 
 		if (hasSingleTint) {
 			if (_clipper->isClipping()) {
-				_clipper->clipTriangles((float*)&triangles.verts[0].vertices, triangles.indices, triangles.indexCount, (float*)&triangles.verts[0].texCoords, sizeof(cocos2d::V3F_C4B_T2F) / 4);
+				_clipper->clipTriangles((float*)&triangles.verts[0].vertices, triangles.indices, triangles.indexCount, (float*)&triangles.verts[0].texCoords, sizeof(axis::V3F_C4B_T2F) / 4);
 				batch->deallocateVertices(triangles.vertCount);
 
 				if (_clipper->getClippedTriangles().size() == 0) {
@@ -431,9 +431,9 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 				memcpy(triangles.indices, _clipper->getClippedTriangles().buffer(), sizeof(unsigned short) * _clipper->getClippedTriangles().size());
 
 #if COCOS2D_VERSION < 0x00040000
-				cocos2d::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _glProgramState, blendFunc, triangles, transform, transformFlags);
+				axis::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _glProgramState, blendFunc, triangles, transform, transformFlags);
 #else
-				cocos2d::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _programState, blendFunc, triangles, transform, transformFlags);
+				axis::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _programState, blendFunc, triangles, transform, transformFlags);
 #endif
 
 				const float* verts = _clipper->getClippedVertices().buffer();
@@ -463,9 +463,9 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 			} else {
 				// Not clipping.
 #if COCOS2D_VERSION < 0x00040000
-				cocos2d::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _glProgramState, blendFunc, triangles, transform, transformFlags);
+				axis::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _glProgramState, blendFunc, triangles, transform, transformFlags);
 #else
-				cocos2d::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _programState, blendFunc, triangles, transform, transformFlags);
+				axis::TrianglesCommand* batchedTriangles = batch->addCommand(renderer, _globalZOrder, attachmentVertices->_texture, _programState, blendFunc, triangles, transform, transformFlags);
 #endif
 
 				if (_effect) {
@@ -574,7 +574,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 		if (!parent || parent->getChildrenCount() > 100 || getChildrenCount() != 0) {
 			lastTwoColorTrianglesCommand->setForceFlush(true);
 		} else {
-			const cocos2d::Vector<Node*>& children = parent->getChildren();
+			const axis::Vector<Node*>& children = parent->getChildren();
 			Node* sibling = nullptr;
 			for (ssize_t i = 0; i < children.size(); i++) {
 				if (children.at(i) == this) {
@@ -626,7 +626,7 @@ void SkeletonRenderer::drawDebug (Renderer* renderer, const Mat4 &transform, uin
 #else
 		drawNode->setLineWidth(2.0f);
 #endif
-		const cocos2d::Rect brect = getBoundingBox();
+		const axis::Rect brect = getBoundingBox();
 		const Vec2 points[4] =
 		{
 			brect.origin,
@@ -731,12 +731,12 @@ void SkeletonRenderer::drawDebug (Renderer* renderer, const Mat4 &transform, uin
 #endif
 }
 
-cocos2d::Rect SkeletonRenderer::getBoundingBox () const {
+axis::Rect SkeletonRenderer::getBoundingBox () const {
 	const int coordCount = computeTotalCoordCount(*_skeleton, _startSlotIndex, _endSlotIndex);
 	if (coordCount == 0) return { 0, 0, 0, 0 };
 	VLA(float, worldCoords, coordCount);
 	transformWorldVertices(worldCoords, coordCount, *_skeleton, _startSlotIndex, _endSlotIndex);
-	const cocos2d::Rect bb = computeBoundingRect(worldCoords, coordCount / 2);
+	const axis::Rect bb = computeBoundingRect(worldCoords, coordCount / 2);
 	VLA_FREE(worldCoords);
 	return bb;
 }
@@ -885,7 +885,7 @@ bool SkeletonRenderer::isOpacityModifyRGB () const {
 }
 
 namespace {
-	cocos2d::Rect computeBoundingRect(const float* coords, int vertexCount) {
+	axis::Rect computeBoundingRect(const float* coords, int vertexCount) {
 		assert(coords);
 		assert(vertexCount > 0);
 
@@ -1038,7 +1038,7 @@ namespace {
 	}
 
 
-	bool cullRectangle(Renderer* renderer, const Mat4& transform, const cocos2d::Rect& rect) {
+	bool cullRectangle(Renderer* renderer, const Mat4& transform, const axis::Rect& rect) {
 		if (Camera::getVisitingCamera() == nullptr)
 			return false;
 

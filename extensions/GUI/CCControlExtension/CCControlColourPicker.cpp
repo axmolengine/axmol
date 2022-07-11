@@ -35,7 +35,7 @@
 #include "2d/CCSpriteFrameCache.h"
 #include "2d/CCSpriteBatchNode.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 ControlColourPicker::ControlColourPicker() : _colourPicker(nullptr), _huePicker(nullptr), _background(nullptr) {}
 
@@ -197,4 +197,4 @@ bool ControlColourPicker::onTouchBegan(Touch* /*touch*/, Event* /*pEvent*/)
     return false;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

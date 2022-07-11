@@ -27,8 +27,8 @@
 #include "testResource.h"
 #include "controller.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 #define TABEL_LABEL_TAG 1024
 

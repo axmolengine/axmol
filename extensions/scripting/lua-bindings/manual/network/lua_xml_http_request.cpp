@@ -38,10 +38,10 @@
 
 #include "yasio/detail/byte_buffer.hpp"
 
-using namespace cocos2d;
-using namespace cocos2d::network;
+USING_NS_AX;
+using namespace axis::network;
 
-class LuaMinXmlHttpRequest : public cocos2d::Ref
+class LuaMinXmlHttpRequest : public axis::Ref
 {
 public:
     enum class ResponseType
@@ -75,7 +75,7 @@ public:
     inline void setReadyState(int readyState) { _readyState = readyState; }
     inline int getReadyState() const { return _readyState; }
 
-    inline cocos2d::network::HttpRequest* getHttpRequest() const { return _httpRequest; }
+    inline axis::network::HttpRequest* getHttpRequest() const { return _httpRequest; }
     inline std::string_view getStatusText() const { return _statusText; }
 
     inline void setStatus(int status) { _status = status; }
@@ -206,7 +206,7 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
 void LuaMinXmlHttpRequest::_sendRequest()
 {
     _httpRequest->setResponseCallback(
-        [this](cocos2d::network::HttpClient* sender, cocos2d::network::HttpResponse* response) {
+        [this](axis::network::HttpClient* sender, axis::network::HttpResponse* response) {
             if (_isAborted)
                 return;
 
@@ -227,15 +227,15 @@ void LuaMinXmlHttpRequest::_sendRequest()
                     _statusText.clear();
                 }
                 // TODO: call back lua function
-                int handler = cocos2d::ScriptHandlerMgr::getInstance()->getObjectHandler(
-                    (void*)this, cocos2d::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+                int handler = axis::ScriptHandlerMgr::getInstance()->getObjectHandler(
+                    (void*)this, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
                 if (0 != handler)
                 {
                     CCLOG("come in handler, handler is %d", handler);
-                    cocos2d::CommonScriptData data(handler, "");
-                    cocos2d::ScriptEvent event(cocos2d::ScriptEventType::kCommonEvent, (void*)&data);
-                    cocos2d::ScriptEngineManager::sendEventToLua(event);
+                    axis::CommonScriptData data(handler, "");
+                    axis::ScriptEvent event(axis::ScriptEventType::kCommonEvent, (void*)&data);
+                    axis::ScriptEngineManager::sendEventToLua(event);
                 }
                 return;
             }
@@ -259,14 +259,14 @@ void LuaMinXmlHttpRequest::_sendRequest()
             }
 
             // TODO: call back lua function
-            int handler = cocos2d::ScriptHandlerMgr::getInstance()->getObjectHandler(
-                (void*)this, cocos2d::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+            int handler = axis::ScriptHandlerMgr::getInstance()->getObjectHandler(
+                (void*)this, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
             if (0 != handler)
             {
-                cocos2d::CommonScriptData data(handler, "");
-                cocos2d::ScriptEvent event(cocos2d::ScriptEventType::kCommonEvent, (void*)&data);
-                cocos2d::ScriptEngineManager::sendEventToLua(event);
+                axis::CommonScriptData data(handler, "");
+                axis::ScriptEvent event(axis::ScriptEventType::kCommonEvent, (void*)&data);
+                axis::ScriptEngineManager::sendEventToLua(event);
             }
             release();
         });
@@ -1102,8 +1102,8 @@ static int lua_cocos2dx_XMLHttpRequest_registerScriptHandler(lua_State* L)
 #endif
 
         int handler = (toluafix_ref_function(L, 2, 0));
-        cocos2d::ScriptHandlerMgr::getInstance()->addObjectHandler(
-            (void*)self, handler, cocos2d::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        axis::ScriptHandlerMgr::getInstance()->addObjectHandler(
+            (void*)self, handler, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
         return 0;
     }
 
@@ -1144,8 +1144,8 @@ static int lua_cocos2dx_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
 
     if (0 == argc)
     {
-        cocos2d::ScriptHandlerMgr::getInstance()->removeObjectHandler(
-            (void*)self, cocos2d::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        axis::ScriptHandlerMgr::getInstance()->removeObjectHandler(
+            (void*)self, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
         return 0;
     }

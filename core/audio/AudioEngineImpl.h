@@ -38,11 +38,11 @@
 #    include "audio/AudioCache.h"
 #    include "audio/AudioPlayer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Scheduler;
 
-class CC_DLL AudioEngineImpl : public cocos2d::Ref
+class CC_DLL AudioEngineImpl : public axis::Ref
 {
 public:
     AudioEngineImpl();
@@ -96,5 +96,5 @@ private:
     Scheduler* _scheduler;
 };
 
-NS_CC_END
+NS_AX_END
 #endif  // __AUDIO_ENGINE_INL_H_

@@ -47,7 +47,7 @@ THE SOFTWARE.
 #    include "navmesh/CCNavMesh.h"
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Scene::Scene()
     : _event(_director->getEventDispatcher()->addCustomEventListener(
@@ -362,4 +362,4 @@ void Scene::stepPhysicsAndNavigation(float deltaTime)
 }
 #endif
 
-NS_CC_END
+NS_AX_END

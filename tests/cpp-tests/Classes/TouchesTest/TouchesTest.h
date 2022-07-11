@@ -39,12 +39,12 @@ public:
 
 class Ball;
 class Paddle;
-class PongLayer : public cocos2d::Layer
+class PongLayer : public axis::Layer
 {
 private:
     Ball* _ball;
-    cocos2d::Vector<Paddle*> _paddles;
-    cocos2d::Vec2 _ballStartingVelocity;
+    axis::Vector<Paddle*> _paddles;
+    axis::Vec2 _ballStartingVelocity;
 
 public:
     CREATE_FUNC(PongLayer);
@@ -63,15 +63,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
     ForceTouchTest();
     virtual ~ForceTouchTest();
 
-    cocos2d::Label* _infoLabel;
+    axis::Label* _infoLabel;
 };
 
 #endif

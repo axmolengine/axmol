@@ -27,7 +27,7 @@
 #include "MenuTest.h"
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum
 {
@@ -478,7 +478,7 @@ void BugsTest::issue1410MenuCallback(Ref* sender)
     log("NO CRASHES");
 }
 
-void BugsTest::issue1410v2MenuCallback(cocos2d::Ref* pSender)
+void BugsTest::issue1410v2MenuCallback(axis::Ref* pSender)
 {
     auto menu = static_cast<Menu*>(static_cast<MenuItem*>(pSender)->getParent());
     menu->setEnabled(true);
@@ -487,7 +487,7 @@ void BugsTest::issue1410v2MenuCallback(cocos2d::Ref* pSender)
     log("NO CRASHES. AND MENU SHOULD STOP WORKING");
 }
 
-void BugsTest::backMenuCallback(cocos2d::Ref* pSender)
+void BugsTest::backMenuCallback(axis::Ref* pSender)
 {
     static_cast<LayerMultiplex*>(_parent)->switchTo(0, false);
 }

@@ -33,8 +33,8 @@
 #    include <string>
 #    include "CCStdC.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 class Data;
 class Renderer;
 class Mat4;
@@ -43,23 +43,24 @@ namespace ui
 {
 class WebView;
 }
-}  // namespace cocos2d
+
+NS_AX_END  // namespace axis
 
 class Win32WebControl;
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace ui
 {
 
 class WebViewImpl
 {
 public:
-    WebViewImpl(cocos2d::ui::WebView* webView);
+    WebViewImpl(axis::ui::WebView* webView);
     virtual ~WebViewImpl();
 
     void setJavascriptInterfaceScheme(std::string_view scheme);
-    void loadData(const cocos2d::Data& data,
+    void loadData(const axis::Data& data,
                   std::string_view MIMEType,
                   std::string_view encoding,
                   std::string_view baseURL);
@@ -75,7 +76,7 @@ public:
     void evaluateJS(std::string_view js);
     void setScalesPageToFit(const bool scalesPageToFit);
 
-    virtual void draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const& transform, uint32_t flags);
+    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags);
     virtual void setVisible(bool visible);
 
     void setBounces(bool bounces);
@@ -89,7 +90,7 @@ private:
     WebView* _webView;
 };
 }  // namespace ui
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 #endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 

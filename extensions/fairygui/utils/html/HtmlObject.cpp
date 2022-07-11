@@ -5,7 +5,7 @@
 #include "UIPackage.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 using namespace std;
 
@@ -15,7 +15,7 @@ std::string HtmlObject::selectResource;
 bool HtmlObject::usePool = true;
 
 GObjectPool HtmlObject::objectPool;
-cocos2d::Vector<GObject*> HtmlObject::loaderPool;
+axis::Vector<GObject*> HtmlObject::loaderPool;
 
 HtmlObject::HtmlObject() :_ui(nullptr), _hidden(false)
 {

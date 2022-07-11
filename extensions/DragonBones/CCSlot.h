@@ -38,7 +38,7 @@ class CCSlot : public Slot
 
 private:
     float _textureScale;
-    cocos2d::Node* _renderDisplay;
+    axis::Node* _renderDisplay;
 
 protected:
     virtual void _onClear() override;
@@ -68,8 +68,8 @@ public:
      * @version DragonBones 3.0
      * @language en_US
      */
-    inline cocos2d::Node* getCCDisplay() const { return static_cast<cocos2d::Node*>(_display); }
-    inline void setCCDisplay(cocos2d::Node* value) { setDisplay(value, DisplayType::Image); }
+    inline axis::Node* getCCDisplay() const { return static_cast<axis::Node*>(_display); }
+    inline void setCCDisplay(axis::Node* value) { setDisplay(value, DisplayType::Image); }
 };
 
 DRAGONBONES_NAMESPACE_END

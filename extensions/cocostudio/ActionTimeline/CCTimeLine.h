@@ -33,7 +33,7 @@ NS_TIMELINE_BEGIN
 
 class ActionTimeline;
 
-class CCS_DLL Timeline : public cocos2d::Ref
+class CCS_DLL Timeline : public axis::Ref
 {
 public:
     static Timeline* create();
@@ -44,7 +44,7 @@ public:
     virtual void gotoFrame(int frameIndex);
     virtual void stepToFrame(int frameIndex);
 
-    virtual const cocos2d::Vector<Frame*>& getFrames() const { return _frames; }
+    virtual const axis::Vector<Frame*>& getFrames() const { return _frames; }
 
     virtual void addFrame(Frame* frame);
     virtual void insertFrame(Frame* frame, int index);
@@ -53,8 +53,8 @@ public:
     virtual void setActionTag(int tag) { _actionTag = tag; }
     virtual int getActionTag() const { return _actionTag; }
 
-    virtual void setNode(cocos2d::Node* node);
-    virtual cocos2d::Node* getNode() const;
+    virtual void setNode(axis::Node* node);
+    virtual axis::Node* getNode() const;
 
     virtual void setActionTimeline(ActionTimeline* action) { _ActionTimeline = action; }
     virtual ActionTimeline* getActionTimeline() const { return _ActionTimeline; }
@@ -67,7 +67,7 @@ protected:
     virtual void binarySearchKeyFrame(unsigned int frameIndex);
     virtual void updateCurrentKeyFrame(unsigned int frameIndex);
 
-    cocos2d::Vector<Frame*> _frames;
+    axis::Vector<Frame*> _frames;
     Frame* _currentKeyFrame;
     unsigned int _currentKeyFrameIndex;
 
@@ -77,7 +77,7 @@ protected:
     unsigned int _actionTag;
 
     ActionTimeline* _ActionTimeline;
-    cocos2d::Node* _node;
+    axis::Node* _node;
 };
 
 NS_TIMELINE_END

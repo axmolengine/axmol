@@ -36,7 +36,7 @@ THE SOFTWARE.
 #    include <vector>
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 #if CC_REF_LEAK_DETECTION
 static void trackRef(Ref* ref);
@@ -196,4 +196,4 @@ static void untrackRef(Ref* ref)
 
 #endif  // #if CC_REF_LEAK_DETECTION
 
-NS_CC_END
+NS_AX_END

@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "renderer/CCGroupCommand.h"
 #include "base/CCDirector.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 namespace cocostudio
 {
 BatchNode* BatchNode::create()
@@ -69,7 +69,7 @@ void BatchNode::addChild(Node* child, int zOrder, int tag)
     }
 }
 
-void BatchNode::addChild(cocos2d::Node* child, int zOrder, std::string_view name)
+void BatchNode::addChild(axis::Node* child, int zOrder, std::string_view name)
 {
     Node::addChild(child, zOrder, name);
     Armature* armature = dynamic_cast<Armature*>(child);

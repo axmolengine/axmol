@@ -26,7 +26,7 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/CCCustomCommand.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 using namespace std;
 

@@ -31,7 +31,7 @@ public:
     void setX(float value);
     float getY() const { return _position.y; };
     void setY(float value);
-    const cocos2d::Vec2& getPosition() const { return _position; }
+    const axis::Vec2& getPosition() const { return _position; }
     void setPosition(float xv, float yv);
     float getXMin() const;
     void setXMin(float value);
@@ -45,13 +45,13 @@ public:
     void setWidth(float value) { setSize(value, _rawSize.height); }
     float getHeight() const { return _size.height; }
     void setHeight(float value) { setSize(_rawSize.width, value); }
-    const cocos2d::Size& getSize() const { return _size; }
+    const axis::Size& getSize() const { return _size; }
     void setSize(float wv, float hv, bool ignorePivot = false);
 
     void center(bool restraint = false);
     void makeFullScreen();
 
-    const cocos2d::Vec2& getPivot() const { return _pivot; }
+    const axis::Vec2& getPivot() const { return _pivot; }
     void setPivot(float xv, float yv, bool asAnchor = false);
     bool isPivotAsAnchor() const { return _pivotAsAnchor; }
 
@@ -59,7 +59,7 @@ public:
     void setScaleX(float value) { setScale(value, _scale.y); }
     float getScaleY() const { return _scale.y; }
     void setScaleY(float value) { setScale(_scale.x, value); }
-    const cocos2d::Vec2& getScale() const { return _scale; }
+    const axis::Vec2& getScale() const { return _scale; }
     void setScale(float xv, float yv);
 
     float getSkewX() const { return _displayObject->getSkewX(); }
@@ -100,13 +100,13 @@ public:
 
     void* getData() const { return _data; };
     void setData(void* value) { _data = value; }
-    const cocos2d::Value& getCustomData() const { return _customData; }
-    void setCustomData(const cocos2d::Value& value) { _customData = value; }
+    const axis::Value& getCustomData() const { return _customData; }
+    void setCustomData(const axis::Value& value) { _customData = value; }
 
     bool isDraggable() const { return _draggable; }
     void setDraggable(bool value);
-    cocos2d::Rect* getDragBounds() const { return _dragBounds; }
-    void setDragBounds(const cocos2d::Rect& value);
+    axis::Rect* getDragBounds() const { return _dragBounds; }
+    void setDragBounds(const axis::Rect& value);
 
     void startDrag(int touchId = -1);
     void stopDrag();
@@ -115,11 +115,11 @@ public:
 
     PackageItem* getPackageItem() const { return _packageItem; }
 
-    cocos2d::Vec2 globalToLocal(const cocos2d::Vec2& pt);
-    cocos2d::Rect globalToLocal(const cocos2d::Rect& rect);
-    cocos2d::Vec2 localToGlobal(const cocos2d::Vec2& pt);
-    cocos2d::Rect localToGlobal(const cocos2d::Rect& rect);
-    cocos2d::Rect transformRect(const cocos2d::Rect& rect, GObject* targetSpace);
+    axis::Vec2 globalToLocal(const axis::Vec2& pt);
+    axis::Rect globalToLocal(const axis::Rect& rect);
+    axis::Vec2 localToGlobal(const axis::Vec2& pt);
+    axis::Rect localToGlobal(const axis::Rect& rect);
+    axis::Rect transformRect(const axis::Rect& rect, GObject* targetSpace);
 
     Relations* relations() { return _relations; }
     void addRelation(GObject* target, RelationType relationType, bool usePercent = false);
@@ -132,7 +132,7 @@ public:
 
     GComponent* getParent() const { return _parent; }
     GObject* findParent() const;
-    cocos2d::Node* displayObject() const { return _displayObject; }
+    axis::Node* displayObject() const { return _displayObject; }
     GRoot* getRoot() const;
     bool onStage() const;
     void removeFromParent();
@@ -141,11 +141,11 @@ public:
     void addClickListener(const EventCallback& callback, const EventTag& tag) { addEventListener(UIEventType::Click, callback, tag); }
     void removeClickListener(const EventTag& tag) { removeEventListener(UIEventType::Click, tag); }
 
-    virtual cocos2d::Value getProp(ObjectPropID propId);
-    virtual void setProp(ObjectPropID propId, const cocos2d::Value& value);
+    virtual axis::Value getProp(ObjectPropID propId);
+    virtual void setProp(ObjectPropID propId, const axis::Value& value);
 
     virtual void constructFromResource();
-    virtual GObject* hitTest(const cocos2d::Vec2& worldPoint, const cocos2d::Camera* camera);
+    virtual GObject* hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera);
 
     template <typename T>
     T* as();
@@ -154,10 +154,10 @@ public:
 
     std::string id;
     std::string name;
-    cocos2d::Size sourceSize;
-    cocos2d::Size initSize;
-    cocos2d::Size minSize;
-    cocos2d::Size maxSize;
+    axis::Size sourceSize;
+    axis::Size initSize;
+    axis::Size minSize;
+    axis::Size maxSize;
 
     //internal use
     bool _underConstruct;
@@ -166,7 +166,7 @@ public:
 
 protected:
     GComponent* _parent;
-    cocos2d::Node* _displayObject;
+    axis::Node* _displayObject;
     PackageItem* _packageItem;
     int _sizeImplType;
     bool _touchDisabled;
@@ -193,11 +193,11 @@ protected:
 
     void setSizeDirectly(float wv, float hv);
 
-    cocos2d::Vec2 _position;
-    cocos2d::Size _size;
-    cocos2d::Size _rawSize;
-    cocos2d::Vec2 _pivot;
-    cocos2d::Vec2 _scale;
+    axis::Vec2 _position;
+    axis::Size _size;
+    axis::Size _rawSize;
+    axis::Vec2 _pivot;
+    axis::Vec2 _scale;
     bool _pivotAsAnchor;
     float _alpha;
     float _rotation;
@@ -211,7 +211,7 @@ private:
     bool internalVisible2() const;
     bool internalVisible3() const;
     void updateGearFromRelations(int index, float dx, float dy);
-    void transformRectPoint(const cocos2d::Vec2& pt, float rect[], GObject* targetSpace);
+    void transformRectPoint(const axis::Vec2& pt, float rect[], GObject* targetSpace);
 
     void initDrag();
     void dragBegin(int touchId);
@@ -234,9 +234,9 @@ private:
     Relations* _relations;
     GearBase* _gears[10];
     void* _data;
-    cocos2d::Value _customData;
-    cocos2d::Vec2 _dragTouchStartPos;
-    cocos2d::Rect* _dragBounds;
+    axis::Value _customData;
+    axis::Vec2 _dragTouchStartPos;
+    axis::Rect* _dragBounds;
     bool _dragTesting;
     GTreeNode* _treeNode;
 

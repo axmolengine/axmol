@@ -16,7 +16,7 @@
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void PlistSpriteSheetLoader::load(std::string_view filePath, SpriteFrameCache& cache)
 {
@@ -163,7 +163,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
     Version 3 with TexturePacker 4.0 polygon mesh packing
     */
 
-    if (dictionary["frames"].getType() != cocos2d::Value::Type::MAP)
+    if (dictionary["frames"].getType() != axis::Value::Type::MAP)
         return;
 
     auto spriteSheet    = std::make_shared<SpriteSheet>();
@@ -279,7 +279,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
 
             if (frameDict.find("vertices") != frameDict.end())
             {
-                using cocos2d::utils::parseIntegerList;
+                using axis::utils::parseIntegerList;
                 auto vertices   = parseIntegerList(optValue(frameDict, "vertices"sv).asString());
                 auto verticesUV = parseIntegerList(optValue(frameDict, "verticesUV"sv).asString());
                 auto indices    = parseIntegerList(optValue(frameDict, "triangles"sv).asString());
@@ -485,4 +485,4 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     }
 }
 
-NS_CC_END
+NS_AX_END

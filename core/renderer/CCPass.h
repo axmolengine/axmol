@@ -37,7 +37,7 @@
 #include "renderer/CCGroupCommand.h"
 #include "renderer/CCCallbackCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Technique;
 class Node;
@@ -185,4 +185,4 @@ private:
     bool _rendererDepthWrite                       = false;
 };
 
-NS_CC_END
+NS_AX_END

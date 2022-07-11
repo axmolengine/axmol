@@ -12,7 +12,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -40,7 +40,7 @@ void PageViewReader::destroyInstance()
     CC_SAFE_DELETE(instancePageViewReader);
 }
 
-void PageViewReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void PageViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     LayoutReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 }
@@ -294,7 +294,7 @@ Offset<Table> PageViewReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void PageViewReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* pageViewOptions)
+void PageViewReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* pageViewOptions)
 {
     PageView* pageView = static_cast<PageView*>(node);
     auto options       = (PageViewOptions*)pageViewOptions;

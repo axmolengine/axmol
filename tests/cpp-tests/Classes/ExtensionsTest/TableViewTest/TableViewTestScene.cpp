@@ -26,8 +26,8 @@
 #include "CustomTableViewCell.h"
 #include "../ExtensionsTest.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 TableViewTests::TableViewTests()
 {

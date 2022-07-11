@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ActionTimeline/CCSkinNode.h"
-using namespace cocos2d;
+USING_NS_AX;
 
 NS_TIMELINE_BEGIN
 

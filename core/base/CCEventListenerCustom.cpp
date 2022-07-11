@@ -26,7 +26,7 @@
 #include "base/CCEventListenerCustom.h"
 #include "base/CCEventCustom.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventListenerCustom::EventListenerCustom() : _onCustomEvent(nullptr) {}
 
@@ -89,4 +89,4 @@ bool EventListenerCustom::checkAvailable()
     return ret;
 }
 
-NS_CC_END
+NS_AX_END

@@ -29,7 +29,7 @@
 #include "extensions/Particle3D/PU/CCPUObserverManager.h"
 #include "extensions/Particle3D/PU/CCPUObserver.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUObserverTranslator::PUObserverTranslator() : _observer(nullptr) {}
 //-------------------------------------------------------------------------
@@ -196,4 +196,4 @@ void PUObserverTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     }
 }
 
-NS_CC_END
+NS_AX_END

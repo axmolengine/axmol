@@ -41,10 +41,10 @@ public:
     SpriteFrameCachePixelFormatTest();
 
 private:
-    void loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
 
 private:
-    cocos2d::Label* infoLabel;
+    axis::Label* infoLabel;
 };
 
 class SpriteFrameCacheLoadMultipleTimes : public TestCase
@@ -58,7 +58,7 @@ public:
     SpriteFrameCacheLoadMultipleTimes();
 
 private:
-    void loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
 };
 
 class SpriteFrameCacheFullCheck : public TestCase
@@ -72,7 +72,7 @@ public:
     SpriteFrameCacheFullCheck();
 
 private:
-    void loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
 };
 
 class SpriteFrameCacheJsonAtlasTest : public TestCase
@@ -87,7 +87,7 @@ public:
     ~SpriteFrameCacheJsonAtlasTest() override;
 
 private:
-    void loadSpriteFrames(std::string_view file, cocos2d::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
 
-    cocos2d::Label* infoLabel;
+    axis::Label* infoLabel;
 };

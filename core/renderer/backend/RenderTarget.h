@@ -4,9 +4,9 @@
 #include "Texture.h"
 #include <assert.h>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
-class RenderTarget : public cocos2d::Ref
+class RenderTarget : public axis::Ref
 {
 public:
     struct RenderBuffer
@@ -92,4 +92,4 @@ protected:
     // uint8_t samples = 1;
 };
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

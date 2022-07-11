@@ -37,7 +37,7 @@
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
 {
@@ -822,4 +822,4 @@ void DrawNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
     }
 }
 
-NS_CC_END
+NS_AX_END

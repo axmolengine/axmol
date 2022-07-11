@@ -18,7 +18,7 @@ public:
     void returnObject(GObject* obj);
 
 private:
-    std::unordered_map<std::string, cocos2d::Vector<GObject*>> _pool;
+    std::unordered_map<std::string, axis::Vector<GObject*>> _pool;
 };
 
 NS_FGUI_END

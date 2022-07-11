@@ -34,7 +34,7 @@ namespace cocostudio
 
 class Bone;
 class ArmatureAnimation;
-using cocos2d::tweenfunc::TweenType;
+using axis::tweenfunc::TweenType;
 
 /**
  *  @js NA

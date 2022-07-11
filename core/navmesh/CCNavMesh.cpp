@@ -32,7 +32,7 @@
 #    include "recast/DetourDebugDraw.h"
 #    include <sstream>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 #    pragma pack(push, 1)
 struct TileCacheSetHeader
@@ -290,7 +290,7 @@ void NavMesh::dtDraw()
     _debugDraw.depthMask(true);
 }
 
-void cocos2d::NavMesh::drawOffMeshConnections()
+void axis::NavMesh::drawOffMeshConnections()
 {
     unsigned int conColor  = duRGBA(192, 0, 128, 192);
     unsigned int baseColor = duRGBA(0, 0, 0, 64);
@@ -317,7 +317,7 @@ void cocos2d::NavMesh::drawOffMeshConnections()
     _debugDraw.end();
 }
 
-void cocos2d::NavMesh::drawObstacles()
+void axis::NavMesh::drawObstacles()
 {
     // Draw obstacles
     for (auto iter : _obstacleList)
@@ -345,7 +345,7 @@ void cocos2d::NavMesh::drawObstacles()
     }
 }
 
-void cocos2d::NavMesh::drawAgents()
+void axis::NavMesh::drawAgents()
 {
     for (auto iter : _agentList)
     {
@@ -509,7 +509,7 @@ void NavMesh::update(float dt)
     }
 }
 
-void cocos2d::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>& pathPoints)
+void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>& pathPoints)
 {
     static const int MAX_POLYS  = 256;
     static const int MAX_SMOOTH = 2048;
@@ -660,6 +660,6 @@ void cocos2d::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<
     }
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_NAVMESH

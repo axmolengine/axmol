@@ -32,10 +32,10 @@
 #include "platform/CCFileUtils.h"
 #include "2d/CCSpriteFrameCache.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace cocostudio;
 using namespace flatbuffers;
-using namespace cocos2d::ui;
+using namespace axis::ui;
 
 IMPLEMENT_CLASS_NODE_READER_INFO(TabControlReader)
 
@@ -164,14 +164,14 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
     return *(Offset<Table>*)(&options);
 }
 
-void TabControlReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption)
+void TabControlReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption)
 {
-    auto tabControl = static_cast<cocos2d::ui::TabControl*>(node);
+    auto tabControl = static_cast<axis::ui::TabControl*>(node);
     auto options    = (flatbuffers::TabControlOption*)nodeOption;
 
     int headerPlace = options->headerPlace();
     tabControl->ignoreHeadersTextureSize(options->ignoreHeaderTextureSize() != 0);
-    tabControl->setHeaderDockPlace((cocos2d::ui::TabControl::Dock)headerPlace);
+    tabControl->setHeaderDockPlace((axis::ui::TabControl::Dock)headerPlace);
     tabControl->setHeaderWidth(options->headerWidth());
     tabControl->setHeaderHeight(options->headerHeight());
     tabControl->setHeaderSelectedZoom(options->selectedTabZoom());
@@ -187,9 +187,9 @@ void TabControlReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbu
     tabControl->setSelectTab(options->selectedTabIndex());
 }
 
-cocos2d::Node* TabControlReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+axis::Node* TabControlReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
-    auto node = cocos2d::ui::TabControl::create();
+    auto node = axis::ui::TabControl::create();
 
     auto taboptions = (flatbuffers::TabControlOption*)nodeOptions;
     setPropsWithFlatBuffers(node, nodeOptions);
@@ -229,7 +229,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
     int fontsize = 12;
     std::string text;
-    cocos2d::Color4B textColor(255, 255, 255, 255);
+    axis::Color4B textColor(255, 255, 255, 255);
     std::string fontName;
 
     int backgroundboxResourceType = 0;
@@ -525,9 +525,9 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
     return *(Offset<Table>*)(&option);
 }
 
-void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption)
+void TabHeaderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption)
 {
-    auto header  = static_cast<cocos2d::ui::TabHeader*>(node);
+    auto header  = static_cast<axis::ui::TabHeader*>(node);
     auto options = (flatbuffers::TabHeaderOption*)nodeOption;
 
     header->setTitleFontSize(options->fontSize());
@@ -672,7 +672,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     if (backGroundSelectedfileExist)
     {
         header->loadTextureBackGroundSelected(backGroundSelectedTexturePath,
-                                              (cocos2d::ui::Widget::TextureResType)backGroundSelectedType);
+                                              (axis::ui::Widget::TextureResType)backGroundSelectedType);
     }
 
     // load frontCross image
@@ -855,9 +855,9 @@ void TabHeaderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuf
     }
 }
 
-cocos2d::Node* TabHeaderReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+axis::Node* TabHeaderReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
-    auto node = cocos2d::ui::TabHeader::create();
+    auto node = axis::ui::TabHeader::create();
 
     auto taboptions = (flatbuffers::TabHeaderOption*)nodeOptions;
     setPropsWithFlatBuffers(node, nodeOptions);
@@ -943,12 +943,12 @@ flatbuffers::Offset<flatbuffers::TabItemOption> TabItemReader::createTabItemOpti
     return *(&options);
 }
 
-void TabItemReader::setPropsWithFlatBuffers(cocos2d::Node* /*node*/, const flatbuffers::Table* /*nodeOption*/)
+void TabItemReader::setPropsWithFlatBuffers(axis::Node* /*node*/, const flatbuffers::Table* /*nodeOption*/)
 {
     // do nothing
 }
 
-cocos2d::Node* TabItemReader::createNodeWithFlatBuffers(const flatbuffers::Table* /*nodeOptions*/)
+axis::Node* TabItemReader::createNodeWithFlatBuffers(const flatbuffers::Table* /*nodeOptions*/)
 {
     // do nothing
     return nullptr;

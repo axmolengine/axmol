@@ -32,7 +32,7 @@ DEFINE_TEST_SUITE(ActionManagerTests);
 class ActionManagerTest : public TestCase
 {
 protected:
-    cocos2d::TextureAtlas* _atlas;
+    axis::TextureAtlas* _atlas;
 
     std::string _title;
 

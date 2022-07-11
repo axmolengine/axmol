@@ -84,7 +84,7 @@ public:
             _dragonBonesInstance        = new DragonBones(eventManager);
             _dragonBonesInstance->yDown = false;
 
-            cocos2d::Director::getInstance()->getScheduler()->schedule(
+            axis::Director::getInstance()->getScheduler()->schedule(
                 [&](float passedTime) { _dragonBonesInstance->advanceTime(passedTime); }, this, 0.0f, false,
                 "dragonBonesClock");
         }
@@ -186,7 +186,7 @@ public:
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    virtual cocos2d::Sprite* getTextureDisplay(std::string_view textureName,
+    virtual axis::Sprite* getTextureDisplay(std::string_view textureName,
                                                std::string_view dragonBonesName = "") const;
     /**
      * - A global sound event manager.

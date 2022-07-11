@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <string>
 #include <chrono>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 class Rect;
 
 class Application : public ApplicationProtocol
@@ -111,4 +111,4 @@ protected:
     static Application* sm_pSharedApplication;
 };
 
-NS_CC_END
+NS_AX_END

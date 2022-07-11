@@ -14,7 +14,7 @@
 #include "base/ccUtils.h"
 #include "base/CCDirector.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 /**/
@@ -217,7 +217,7 @@ void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
         {
             parameter   = LinearLayoutParameter::create();
             int gravity = DICTOOL->getIntValue_json(layoutParameterDic, P_Gravity);
-            ((LinearLayoutParameter*)parameter)->setGravity((cocos2d::ui::LinearLayoutParameter::LinearGravity)gravity);
+            ((LinearLayoutParameter*)parameter)->setGravity((axis::ui::LinearLayoutParameter::LinearGravity)gravity);
             break;
         }
         case 2:
@@ -229,7 +229,7 @@ void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::V
             const char* relativeToName = DICTOOL->getStringValue_json(layoutParameterDic, P_RelativeToName);
             rParameter->setRelativeToWidgetName(relativeToName);
             int align = DICTOOL->getIntValue_json(layoutParameterDic, P_Align);
-            rParameter->setAlign((cocos2d::ui::RelativeLayoutParameter::RelativeAlign)align);
+            rParameter->setAlign((axis::ui::RelativeLayoutParameter::RelativeAlign)align);
             break;
         }
         default:
@@ -270,7 +270,7 @@ void WidgetReader::setColorPropsFromJsonDictionary(Widget* widget, const rapidjs
     widget->setFlippedY(flipY);
 }
 
-void WidgetReader::beginSetBasicProperties(cocos2d::ui::Widget* widget)
+void WidgetReader::beginSetBasicProperties(axis::ui::Widget* widget)
 {
     _position = widget->getPosition();
     // set default color
@@ -304,7 +304,7 @@ void WidgetReader::endSetBasicProperties(Widget* widget)
 
 std::string WidgetReader::getResourcePath(const rapidjson::Value& dict,
                                           std::string_view key,
-                                          cocos2d::ui::Widget::TextureResType texType)
+                                          axis::ui::Widget::TextureResType texType)
 {
     std::string_view jsonPath = GUIReader::getInstance()->getFilePath();
     const char* imageFileName = DICTOOL->getStringValue_json(dict, key.data());
@@ -329,7 +329,7 @@ std::string WidgetReader::getResourcePath(const rapidjson::Value& dict,
 
 std::string WidgetReader::getResourcePath(CocoLoader* cocoLoader,
                                           stExpCocoNode* cocoNode,
-                                          cocos2d::ui::Widget::TextureResType texType)
+                                          axis::ui::Widget::TextureResType texType)
 {
     stExpCocoNode* backGroundChildren = cocoNode->GetChildArray(cocoLoader);
     std::string backgroundValue       = backGroundChildren[0].GetValue(cocoLoader);
@@ -360,7 +360,7 @@ std::string WidgetReader::getResourcePath(CocoLoader* cocoLoader,
     return imageFileName_tp;
 }
 
-void WidgetReader::setAnchorPointForWidget(cocos2d::ui::Widget* widget, const rapidjson::Value& options)
+void WidgetReader::setAnchorPointForWidget(axis::ui::Widget* widget, const rapidjson::Value& options)
 {
     bool isAnchorPointXExists = DICTOOL->checkObjectExist_json(options, P_AnchorPointX);
     float anchorPointXInFile;
@@ -390,7 +390,7 @@ void WidgetReader::setAnchorPointForWidget(cocos2d::ui::Widget* widget, const ra
     }
 }
 
-void WidgetReader::setPropsFromBinary(cocos2d::ui::Widget* widget,
+void WidgetReader::setPropsFromBinary(axis::ui::Widget* widget,
                                       cocostudio::CocoLoader* cocoLoader,
                                       cocostudio::stExpCocoNode* cocoNode)
 {
@@ -773,7 +773,7 @@ Offset<Table> WidgetReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void WidgetReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* widgetOptions)
+void WidgetReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* widgetOptions)
 {
     Widget* widget = static_cast<Widget*>(node);
 
@@ -861,7 +861,7 @@ void WidgetReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffer
     setLayoutComponentPropsWithFlatBuffers(widget, widgetOptions);
 }
 
-void WidgetReader::setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions)
+void WidgetReader::setLayoutComponentPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
 {
     auto layoutComponentTable = ((WidgetOptions*)nodeOptions)->layoutComponent();
     if (!layoutComponentTable)
@@ -940,7 +940,7 @@ Node* WidgetReader::createNodeWithFlatBuffers(const flatbuffers::Table* widgetOp
     return widget;
 }
 
-std::string WidgetReader::getResourcePath(std::string_view path, cocos2d::ui::Widget::TextureResType texType)
+std::string WidgetReader::getResourcePath(std::string_view path, axis::ui::Widget::TextureResType texType)
 {
     std::string_view filePath = GUIReader::getInstance()->getFilePath();
     std::string imageFileName_tp;

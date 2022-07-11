@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "base/CCStencilStateManager.h"
 #include <algorithm>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -1105,7 +1105,7 @@ float Layout::calculateNearestDistance(Widget* baseWidget)
     return distance;
 }
 
-float Layout::calculateFarthestDistance(cocos2d::ui::Widget* baseWidget)
+float Layout::calculateFarthestDistance(axis::ui::Widget* baseWidget)
 {
     float distance = -FLT_MAX;
 
@@ -1205,7 +1205,7 @@ int Layout::findNearestChildWidgetIndex(FocusDirection direction, Widget* baseWi
     return 0;
 }
 
-int Layout::findFarthestChildWidgetIndex(FocusDirection direction, cocos2d::ui::Widget* baseWidget)
+int Layout::findFarthestChildWidgetIndex(FocusDirection direction, axis::ui::Widget* baseWidget)
 {
     if (baseWidget == nullptr || baseWidget == this)
     {
@@ -1358,7 +1358,7 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
     }
 }
 
-Widget* Layout::passFocusToChild(FocusDirection dir, cocos2d::ui::Widget* current)
+Widget* Layout::passFocusToChild(FocusDirection dir, axis::ui::Widget* current)
 {
     if (checkFocusEnabledChild())
     {
@@ -1897,4 +1897,4 @@ ResourceData Layout::getRenderFile()
 }
 
 }  // namespace ui
-NS_CC_END
+NS_AX_END

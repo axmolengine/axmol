@@ -17,7 +17,7 @@ IMGUI_IMPL_API void ImGui_ImplAxis_NewFrame();
 IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data);
 IMGUI_IMPL_API void ImGui_ImplAxis_RenderPlatform();
 
-// Get FontTexture object cocos2d::Texture2D*
+// Get FontTexture object axis::Texture2D*
 IMGUI_IMPL_API void ImGui_ImplAxis_SetCustomFontLoader(ImGuiImplCocos2dxLoadFontFun fun, void* userdata);
 IMGUI_IMPL_API void* ImGui_ImplAxis_GetFontsTexture();
 

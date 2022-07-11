@@ -39,10 +39,10 @@
 
 namespace spine {
 	struct V3F_C4B_C4B_T2F {
-		cocos2d::Vec3 position;
-		cocos2d::Color4B color;
-		cocos2d::Color4B color2;
-		cocos2d::Tex2F texCoords;
+		axis::Vec3 position;
+		axis::Color4B color;
+		axis::Color4B color2;
+		axis::Tex2F texCoords;
 	};
 	
 	struct TwoColorTriangles {
@@ -52,21 +52,21 @@ namespace spine {
 		int indexCount;
 	};
 	
-	class SP_API TwoColorTrianglesCommand : public cocos2d::CustomCommand {
+	class SP_API TwoColorTrianglesCommand : public axis::CustomCommand {
 	public:
 		TwoColorTrianglesCommand();
 		
 		~TwoColorTrianglesCommand();
 
-        void init(float globalOrder, cocos2d::Texture2D* texture, cocos2d::backend::ProgramState* programState, cocos2d::BlendFunc blendType, const TwoColorTriangles& triangles, const cocos2d::Mat4& mv, uint32_t flags);
+        void init(float globalOrder, axis::Texture2D* texture, axis::backend::ProgramState* programState, axis::BlendFunc blendType, const TwoColorTriangles& triangles, const axis::Mat4& mv, uint32_t flags);
 
-        void updateCommandPipelineDescriptor(cocos2d::backend::ProgramState* programState);
+        void updateCommandPipelineDescriptor(axis::backend::ProgramState* programState);
 
-        inline cocos2d::backend::TextureBackend* getTexture() const { return _texture; }
+        inline axis::backend::TextureBackend* getTexture() const { return _texture; }
 
-        void draw(cocos2d::Renderer *renderer);
+        void draw(axis::Renderer *renderer);
 
-        void updateVertexAndIndexBuffer(cocos2d::Renderer *renderer, V3F_C4B_C4B_T2F *vertices, int verticesSize, uint16_t *indices, int indicesSize);
+        void updateVertexAndIndexBuffer(axis::Renderer *renderer, V3F_C4B_C4B_T2F *vertices, int verticesSize, uint16_t *indices, int indicesSize);
 		
 		inline uint32_t getMaterialID() const { return _materialID; }
 		
@@ -80,9 +80,9 @@ namespace spine {
 		
 		inline const unsigned short* getIndices() const { return _triangles.indices; }
 		
-		inline cocos2d::BlendFunc getBlendType() const { return _blendType; }
+		inline axis::BlendFunc getBlendType() const { return _blendType; }
 		
-		inline const cocos2d::Mat4& getModelView() const { return _mv; }
+		inline const axis::Mat4& getModelView() const { return _mv; }
 		
 		void setForceFlush (bool forceFlush) { _forceFlush = forceFlush; }
 		
@@ -94,14 +94,14 @@ namespace spine {
 
 
         void *_prog = nullptr;
-        cocos2d::backend::TextureBackend    *_texture       = nullptr;
-        cocos2d::backend::ProgramState      *_programState  = nullptr;
-        cocos2d::backend::UniformLocation   _locPMatrix;
-        cocos2d::backend::UniformLocation   _locTexture;
+        axis::backend::TextureBackend    *_texture       = nullptr;
+        axis::backend::ProgramState      *_programState  = nullptr;
+        axis::backend::UniformLocation   _locPMatrix;
+        axis::backend::UniformLocation   _locTexture;
 
-		cocos2d::BlendFunc  _blendType;
+		axis::BlendFunc  _blendType;
 		TwoColorTriangles   _triangles;
-		cocos2d::Mat4       _mv;
+		axis::Mat4       _mv;
 		bool                _forceFlush;
 	};
 
@@ -119,11 +119,11 @@ namespace spine {
 		unsigned short* allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numIndices);
 
-        TwoColorTrianglesCommand* addCommand(cocos2d::Renderer* renderer, float globalOrder, cocos2d::Texture2D* texture, cocos2d::backend::ProgramState* programState, cocos2d::BlendFunc blendType, const TwoColorTriangles& triangles, const cocos2d::Mat4& mv, uint32_t flags);
+        TwoColorTrianglesCommand* addCommand(axis::Renderer* renderer, float globalOrder, axis::Texture2D* texture, axis::backend::ProgramState* programState, axis::BlendFunc blendType, const TwoColorTriangles& triangles, const axis::Mat4& mv, uint32_t flags);
 
-        void batch(cocos2d::Renderer* renderer, TwoColorTrianglesCommand* command);
+        void batch(axis::Renderer* renderer, TwoColorTrianglesCommand* command);
 
-        void flush(cocos2d::Renderer* renderer, TwoColorTrianglesCommand* materialCommand);
+        void flush(axis::Renderer* renderer, TwoColorTrianglesCommand* materialCommand);
 
 		uint32_t getNumBatches () { return _numBatches; };
 		

@@ -6,7 +6,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 // clang-format off
 GComboBox::GComboBox()
@@ -46,7 +46,7 @@ void GComboBox::setTitle(const std::string& value)
     updateGear(6);
 }
 
-const cocos2d::Color3B GComboBox::getTitleColor() const
+const axis::Color3B GComboBox::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -55,7 +55,7 @@ const cocos2d::Color3B GComboBox::getTitleColor() const
         return Color3B::BLACK;
 }
 
-void GComboBox::setTitleColor(const cocos2d::Color3B& value)
+void GComboBox::setTitleColor(const axis::Color3B& value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -251,7 +251,7 @@ GTextField* GComboBox::getTextField() const
         return nullptr;
 }
 
-cocos2d::Value GComboBox::getProp(ObjectPropID propId)
+axis::Value GComboBox::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -272,7 +272,7 @@ cocos2d::Value GComboBox::getProp(ObjectPropID propId)
     }
 }
 
-void GComboBox::setProp(ObjectPropID propId, const cocos2d::Value& value)
+void GComboBox::setProp(ObjectPropID propId, const axis::Value& value)
 {
     switch (propId)
     {

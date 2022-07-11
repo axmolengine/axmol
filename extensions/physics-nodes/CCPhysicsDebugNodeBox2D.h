@@ -26,7 +26,7 @@
 #include "box2d/box2d.h"
 #include "cocos2d.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 // This class implements debug drawing callbacks that are invoked inside b2World::Step.
 class CC_EX_DLL PhysicsDebugNodeBox2D : public b2Draw
@@ -53,17 +53,17 @@ public:
     void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
     // axis stuffs
-    cocos2d::DrawNode* GetDrawNode();
-    void SetDrawNode(cocos2d::DrawNode* drawNode);
-    cocos2d::Vec2& GetDebugNodeOffset();
+    axis::DrawNode* GetDrawNode();
+    void SetDrawNode(axis::DrawNode* drawNode);
+    axis::Vec2& GetDebugNodeOffset();
 
-    cocos2d::DrawNode* drawBP = NULL;  // axis "interface"!
-    cocos2d::Vec2 debugNodeOffset;
+    axis::DrawNode* drawBP = NULL;  // axis "interface"!
+    axis::Vec2 debugNodeOffset;
     float mRatio;
 
 private:
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif  //__PHYSICSNODES_DEBUGNODE_BOX2D_H__

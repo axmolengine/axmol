@@ -34,7 +34,7 @@
 #include "base/ccUTF8.h"
 #include "base/CCData.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */

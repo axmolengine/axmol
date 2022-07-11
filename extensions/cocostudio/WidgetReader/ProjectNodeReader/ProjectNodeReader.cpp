@@ -29,7 +29,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -117,7 +117,7 @@ Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     return *(Offset<Table>*)(&options);
 }
 
-void ProjectNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* projectNodeOptions)
+void ProjectNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* projectNodeOptions)
 {
     auto options = (ProjectNodeOptions*)projectNodeOptions;
 

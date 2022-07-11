@@ -28,7 +28,7 @@
 
 #include "box2d/box2d.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 PhysicsSpriteBox2D::PhysicsSpriteBox2D()
     : _ignoreBodyRotation(false), _pB2Body(nullptr), _PTMRatio(0.0f), _syncTransform(nullptr)
@@ -349,4 +349,4 @@ void PhysicsSpriteBox2D::afterUpdate(EventCustom* /*event*/)
     setDirtyRecursively(true);
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

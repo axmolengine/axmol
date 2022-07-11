@@ -37,7 +37,7 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /*
  * Similar to std::vector, but it will manage reference count automatically internally.
@@ -110,7 +110,7 @@ public:
     /** Constructor. */
     Vector<T>() : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for cocos2d::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
     }
 
     /**
@@ -119,7 +119,7 @@ public:
      */
     explicit Vector<T>(ssize_t capacity) : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for cocos2d::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
         CCLOGINFO("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
@@ -143,7 +143,7 @@ public:
     /** Copy constructor. */
     Vector<T>(const Vector<T>& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for cocos2d::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
         CCLOGINFO("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
@@ -152,7 +152,7 @@ public:
     /** Constructor with std::move semantic. */
     Vector<T>(Vector<T>&& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for cocos2d::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
         CCLOGINFO("In the move constructor of Vector!");
         _data = std::move(other._data);
     }
@@ -485,6 +485,6 @@ protected:
 // end of base group
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CCVECTOR_H__

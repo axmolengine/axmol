@@ -43,7 +43,7 @@
 #include "math/Mat4.h"
 #include "platform/CCPlatformMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Technique;
 class Pass;
@@ -178,4 +178,4 @@ protected:
     int _textureSlotIndex = 0;
 };
 
-NS_CC_END
+NS_AX_END

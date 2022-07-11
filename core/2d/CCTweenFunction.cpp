@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include <math.h>          // M_PI
 #undef _USE_MATH_DEFINES
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace tweenfunc
 {
@@ -533,4 +533,4 @@ float bezieratFunction(float a, float b, float c, float d, float t)
 
 }  // namespace tweenfunc
 
-NS_CC_END
+NS_AX_END

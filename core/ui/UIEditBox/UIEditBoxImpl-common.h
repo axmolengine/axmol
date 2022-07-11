@@ -33,7 +33,7 @@
 #include "ui/UIEditBox/UIEditBoxImpl-common.h"
 #include "ui/UIEditBox/UIEditBoxImpl.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -123,7 +123,7 @@ public:
     virtual void setNativeInputMode(EditBox::InputMode inputMode)                    = 0;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)                    = 0;
     virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)         = 0;
-    virtual void setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment) = 0;
+    virtual void setNativeTextHorizontalAlignment(axis::TextHAlignment alignment) = 0;
     virtual void setNativeText(const char* pText)                                    = 0;
     virtual void setNativePlaceHolder(const char* pText)                             = 0;
     virtual void setNativeVisible(bool visible)                                      = 0;
@@ -166,6 +166,6 @@ protected:
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 
 #endif /* __UIEditBoxIMPLICOMMON_H__ */

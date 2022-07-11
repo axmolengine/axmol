@@ -37,7 +37,7 @@ public:
 
     void reset();
     void check(Node* target);
-    void menuCallback(cocos2d::Ref* sender);
+    void menuCallback(axis::Ref* sender);
 };
 
 #endif  // __BUG_422_H__

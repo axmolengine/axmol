@@ -64,7 +64,7 @@
 #    define posix_fsetsize(fd, size) (::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET))
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct UnzFileStream;
 union PXFileHandle
@@ -132,4 +132,4 @@ private:
     const PXIoF* _iof{};
 };
 
-NS_CC_END
+NS_AX_END

@@ -42,7 +42,7 @@ THE SOFTWARE.
 
 void cocos_android_app_init(JNIEnv* env) __attribute__((weak));
 
-using namespace cocos2d;
+USING_NS_AX;
 
 extern "C" {
 
@@ -81,29 +81,29 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
-    auto director = cocos2d::Director::getInstance();
+    auto director = axis::Director::getInstance();
     auto glview   = director->getOpenGLView();
     if (!glview)
     {
-        glview = cocos2d::GLViewImpl::create("Android app");
+        glview = axis::GLViewImpl::create("Android app");
         glview->setFrameSize(w, h);
         director->setOpenGLView(glview);
 
-        cocos2d::Application::getInstance()->run();
+        axis::Application::getInstance()->run();
     }
     else
     {
-        cocos2d::Director::getInstance()->resetMatrixStack();
-        cocos2d::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
+        axis::Director::getInstance()->resetMatrixStack();
+        axis::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent);
         director->setGLDefaultValues();
-        cocos2d::VolatileTextureMgr::reloadAllTextures();
+        axis::VolatileTextureMgr::reloadAllTextures();
     }
 }
 
 JNIEXPORT jintArray JNICALL Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv* env, jclass)
 {
-    cocos2d::Application::getInstance()->initGLContextAttrs();
+    axis::Application::getInstance()->initGLContextAttrs();
     GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
 
     int tmp[7] = {_glContextAttrs.redBits,           _glContextAttrs.greenBits, _glContextAttrs.blueBits,
@@ -118,6 +118,6 @@ JNIEXPORT jintArray JNICALL Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextA
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
-    cocos2d::Application::getInstance()->applicationScreenSizeChanged(w, h);
+    axis::Application::getInstance()->applicationScreenSizeChanged(w, h);
 }
 }

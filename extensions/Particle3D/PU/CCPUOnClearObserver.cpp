@@ -27,7 +27,7 @@
 #include "extensions/Particle3D/PU/CCPUOnClearObserver.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 //-----------------------------------------------------------------------
 void PUOnClearObserver::notifyStart()
@@ -77,4 +77,4 @@ PUOnClearObserver* PUOnClearObserver::create()
     return pco;
 }
 
-NS_CC_END
+NS_AX_END

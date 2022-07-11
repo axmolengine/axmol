@@ -20,7 +20,7 @@
 
 #include "math/Quaternion.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 inline Quaternion Quaternion::operator*(const Quaternion& q) const
 {
@@ -48,4 +48,4 @@ inline Vec3 Quaternion::operator*(const Vec3& v) const
     return v + uv + uuv;
 }
 
-NS_CC_MATH_END
+NS_AX_MATH_END

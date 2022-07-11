@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 /*#include "ccArray.h"*/
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct _ccArray;
 
@@ -113,6 +113,6 @@ private:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CCPARALLAX_NODE_H__

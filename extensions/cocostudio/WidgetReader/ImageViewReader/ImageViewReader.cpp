@@ -12,7 +12,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -49,7 +49,7 @@ void ImageViewReader::destroyInstance()
     CC_SAFE_DELETE(instanceImageViewReader);
 }
 
-void ImageViewReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void ImageViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     WidgetReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 
@@ -154,7 +154,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
 
     bool scale9Enabled = false;
     Rect capInsets;
-    cocos2d::Size scale9Size;
+    axis::Size scale9Size;
 
     std::string path;
     std::string plistFile;
@@ -271,7 +271,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     return *(Offset<Table>*)(&options);
 }
 
-void ImageViewReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* imageViewOptions)
+void ImageViewReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* imageViewOptions)
 {
     ImageView* imageView = static_cast<ImageView*>(node);
     auto options         = (ImageViewOptions*)imageViewOptions;

@@ -27,7 +27,7 @@
 #include "CCPUVortexAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const Vec3 PUVortexAffector::DEFAULT_ROTATION_VECTOR(0, 0, 0);
@@ -133,4 +133,4 @@ void PUVortexAffector::copyAttributesTo(PUAffector* affector)
     vortexAffector->setRotationSpeed(getRotationSpeed()->clone());
 }
 
-NS_CC_END
+NS_AX_END

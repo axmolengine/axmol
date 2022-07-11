@@ -12,7 +12,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -49,7 +49,7 @@ void SliderReader::destroyInstance()
     CC_SAFE_DELETE(instanceSliderReader);
 }
 
-void SliderReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void SliderReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -437,7 +437,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void SliderReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* sliderOptions)
+void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* sliderOptions)
 {
     Slider* slider = static_cast<Slider*>(node);
 

@@ -34,7 +34,7 @@
 #include "2d/CCLabel.h"
 #include "platform/CCFileUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 hlookup::string_map<FontAtlas*> FontAtlasCache::_atlasMap;
 #define ATLAS_MAP_KEY_PREFIX_BUFFER_SIZE 255
@@ -305,4 +305,4 @@ void FontAtlasCache::unloadFontAtlasTTF(std::string_view fontFileName)
     }
 }
 
-NS_CC_END
+NS_AX_END

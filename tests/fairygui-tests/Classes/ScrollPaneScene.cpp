@@ -1,7 +1,7 @@
 #include "ScrollPaneScene.h"
 #include "GList.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 void ScrollPaneScene::continueInit()
 {
@@ -56,7 +56,7 @@ void ScrollPaneScene::onClickList(EventContext * context)
                 return;
             }
             item->getScrollPane()->setPosX(0, true);
-            //avoid scroll pane default behavior¡£
+            //avoid scroll pane default behaviorï¿½ï¿½
             item->getScrollPane()->cancelDragging();
             _list->getScrollPane()->cancelDragging();
             break;

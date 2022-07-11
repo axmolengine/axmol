@@ -27,7 +27,7 @@
 #include "extensions/Particle3D/PU/CCPUOnEventFlagObserver.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const unsigned int PUOnEventFlagObserver::DEFAULT_EVENT_FLAG = 0;
@@ -58,4 +58,4 @@ void PUOnEventFlagObserver::copyAttributesTo(PUObserver* observer)
     onEventFlagObserver->_eventFlag            = _eventFlag;
 }
 
-NS_CC_END
+NS_AX_END

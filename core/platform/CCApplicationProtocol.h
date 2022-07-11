@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/CCAutoreleasePool.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup platform
@@ -147,6 +147,6 @@ public:
 // end of platform group
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CC_APPLICATION_PROTOCOL_H__

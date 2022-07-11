@@ -17,18 +17,18 @@
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
-using namespace cocos2d::experimental;
+using namespace axis::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
 
-USING_NS_CC;
+USING_NS_AX;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(LAppDefine::RenderTargetWidth, LAppDefine::RenderTargetHeight);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+static axis::Size designResolutionSize = axis::Size(LAppDefine::RenderTargetWidth, LAppDefine::RenderTargetHeight);
+static axis::Size smallResolutionSize = axis::Size(480, 320);
+static axis::Size mediumResolutionSize = axis::Size(1024, 768);
+static axis::Size largeResolutionSize = axis::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
@@ -72,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     if(!glview)
     {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Demo", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("Demo", axis::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
         glview = GLViewImpl::create("Demo");
 #endif
@@ -111,7 +111,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     _cubismOption.LoggingLevel = LAppDefine::CubismLoggingLevel;
     Csm::CubismFramework::StartUp(&_cubismAllocator, &_cubismOption);
 
-    _recreatedEventlistener = cocos2d::EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
+    _recreatedEventlistener = axis::EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
     {
         LAppLive2DManager::GetInstance()->RecreateRenderer();
     });

@@ -28,8 +28,8 @@
 #include "VibrateTest.h"
 #include "ui/CocosGUI.h"
 
-using namespace cocos2d;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 VibrateTests::VibrateTests()
 {
@@ -38,7 +38,7 @@ VibrateTests::VibrateTests()
 
 namespace
 {
-class TextButton : public cocos2d::Label
+class TextButton : public axis::Label
 {
 public:
     static TextButton* create(std::string_view text, const std::function<void(TextButton*)>& onTriggered)

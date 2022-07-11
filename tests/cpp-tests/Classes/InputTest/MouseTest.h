@@ -42,18 +42,18 @@ public:
     MouseEventTest();
     ~MouseEventTest();
 
-    void onMouseDown(cocos2d::Event* event);
-    void onMouseUp(cocos2d::Event* event);
-    void onMouseMove(cocos2d::Event* event);
-    void onMouseScroll(cocos2d::Event* event);
+    void onMouseDown(axis::Event* event);
+    void onMouseUp(axis::Event* event);
+    void onMouseMove(axis::Event* event);
+    void onMouseScroll(axis::Event* event);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
 private:
-    cocos2d::Label* _labelAction;
-    cocos2d::Label* _labelPosition;
-    cocos2d::EventListenerMouse* _mouseListener;
+    axis::Label* _labelAction;
+    axis::Label* _labelPosition;
+    axis::EventListenerMouse* _mouseListener;
 };
 
 class HideMouseTest : public BaseMouseTest
@@ -67,7 +67,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    cocos2d::EventListenerMouse* _lis;
+    axis::EventListenerMouse* _lis;
 };
 
 #endif

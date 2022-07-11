@@ -45,7 +45,7 @@
 
 typedef struct lua_State lua_State;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class TimerScriptHandler;
 class Layer;
@@ -644,7 +644,7 @@ public:
     /**
      * Release all native refs for the given owner in script scope
      */
-    virtual void releaseAllNativeRefs(cocos2d::Ref* /*owner*/) {}
+    virtual void releaseAllNativeRefs(axis::Ref* /*owner*/) {}
 
     /**
      * Remove script object,The specific meaning should refer to the ScriptType.
@@ -864,7 +864,7 @@ private:
     ScriptEngineProtocol* _scriptEngine;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif  // #if CC_ENABLE_SCRIPT_BINDING
 

@@ -40,7 +40,7 @@ private:
 
 class InputProcessor;
 
-class UIEventDispatcher : public cocos2d::Ref
+class UIEventDispatcher : public axis::Ref
 {
 public:
     UIEventDispatcher();
@@ -54,8 +54,8 @@ public:
     bool hasEventListener(int eventType) const { return hasEventListener(eventType, EventTag::None); }
     bool hasEventListener(int eventType, const EventTag& tag) const;
 
-    bool dispatchEvent(int eventType, void* data = nullptr, const cocos2d::Value& dataValue = cocos2d::Value::Null);
-    bool bubbleEvent(int eventType, void* data = nullptr, const cocos2d::Value& dataValue = cocos2d::Value::Null);
+    bool dispatchEvent(int eventType, void* data = nullptr, const axis::Value& dataValue = axis::Value::Null);
+    bool bubbleEvent(int eventType, void* data = nullptr, const axis::Value& dataValue = axis::Value::Null);
 
     bool isDispatchingEvent(int eventType);
 

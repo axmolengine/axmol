@@ -7,7 +7,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GLoader::GLoader()
     : _autoSize(false),
@@ -58,7 +58,7 @@ void GLoader::setURL(const std::string& value)
     updateGear(7);
 }
 
-void GLoader::setAlign(cocos2d::TextHAlignment value)
+void GLoader::setAlign(axis::TextHAlignment value)
 {
     if (_align != value)
     {
@@ -67,7 +67,7 @@ void GLoader::setAlign(cocos2d::TextHAlignment value)
     }
 }
 
-void GLoader::setVerticalAlign(cocos2d::TextVAlignment value)
+void GLoader::setVerticalAlign(axis::TextVAlignment value)
 {
     if (_verticalAlign != value)
     {
@@ -103,17 +103,17 @@ void GLoader::setShrinkOnly(bool value)
     }
 }
 
-const cocos2d::Size & GLoader::getContentSize()
+const axis::Size & GLoader::getContentSize()
 {
     return _content->getContentSize();
 }
 
-cocos2d::Color3B GLoader::getColor() const
+axis::Color3B GLoader::getColor() const
 {
     return _content->getColor();
 }
 
-void GLoader::setColor(const cocos2d::Color3B& value)
+void GLoader::setColor(const axis::Color3B& value)
 {
     _content->setColor(value);
 }
@@ -288,11 +288,11 @@ void GLoader::loadExternal()
         onExternalLoadFailed();
 }
 
-void GLoader::freeExternal(cocos2d::SpriteFrame* spriteFrame)
+void GLoader::freeExternal(axis::SpriteFrame* spriteFrame)
 {
 }
 
-void GLoader::onExternalLoadSuccess(cocos2d::SpriteFrame* spriteFrame)
+void GLoader::onExternalLoadSuccess(axis::SpriteFrame* spriteFrame)
 {
     _contentStatus = 4;
     _content->setSpriteFrame(spriteFrame);
@@ -501,7 +501,7 @@ void GLoader::handleGrayedChanged()
         _content2->setGrayed(_finalGrayed);
 }
 
-cocos2d::Value GLoader::getProp(ObjectPropID propId)
+axis::Value GLoader::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -521,7 +521,7 @@ cocos2d::Value GLoader::getProp(ObjectPropID propId)
     }
 }
 
-void GLoader::setProp(ObjectPropID propId, const cocos2d::Value& value)
+void GLoader::setProp(ObjectPropID propId, const axis::Value& value)
 {
     switch (propId)
     {

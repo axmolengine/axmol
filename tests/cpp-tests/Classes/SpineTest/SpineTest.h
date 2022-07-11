@@ -103,7 +103,7 @@ public:
     virtual bool init();
 
 private:
-    cocos2d::Vec2 position;
+    axis::Vec2 position;
 };
 
 class MixAndMatchExample : public SpineTestLayer
@@ -144,7 +144,7 @@ public:
 
 private:
     spine::SkeletonRenderer* frontNode;
-    cocos2d::DrawNode* betweenNode;
+    axis::DrawNode* betweenNode;
 };
 
 class SpineboyExample : public SpineTestLayer

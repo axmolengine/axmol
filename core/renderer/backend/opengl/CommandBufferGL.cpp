@@ -37,7 +37,7 @@
 #include "RenderTargetGL.h"
 #include <algorithm>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -521,4 +521,4 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
         rtGL->unbindFrameBuffer();
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

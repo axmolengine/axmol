@@ -24,8 +24,8 @@
 
 #include "RenderTextureTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 RenderTextureTests::RenderTextureTests()
 {
@@ -85,17 +85,17 @@ std::string RenderTextureSave::subtitle() const
     return "Press 'Save Image' to create an snapshot of the render texture";
 }
 
-void RenderTextureSave::clearImage(cocos2d::Ref* sender)
+void RenderTextureSave::clearImage(axis::Ref* sender)
 {
     _target->clear(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1());
 }
 
-void RenderTextureSave::clearImageTransparent(cocos2d::Ref* sender)
+void RenderTextureSave::clearImageTransparent(axis::Ref* sender)
 {
     _target->clear(0, 0, 0, 0);
 }
 
-void RenderTextureSave::saveImageWithPremultipliedAlpha(cocos2d::Ref* sender)
+void RenderTextureSave::saveImageWithPremultipliedAlpha(axis::Ref* sender)
 {
     static int counter = 0;
 
@@ -120,7 +120,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(cocos2d::Ref* sender)
     counter++;
 }
 
-void RenderTextureSave::saveImageWithNonPremultipliedAlpha(cocos2d::Ref* sender)
+void RenderTextureSave::saveImageWithNonPremultipliedAlpha(axis::Ref* sender)
 {
     static int counter = 0;
 
@@ -146,7 +146,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(cocos2d::Ref* sender)
     counter++;
 }
 
-void RenderTextureSave::addImage(cocos2d::Ref* sender)
+void RenderTextureSave::addImage(axis::Ref* sender)
 {
     auto s = Director::getInstance()->getWinSize();
 

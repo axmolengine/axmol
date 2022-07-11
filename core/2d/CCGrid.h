@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "renderer/CCCustomCommand.h"
 #include "renderer/CCCallbackCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 // class Grabber;
@@ -310,4 +310,4 @@ protected:
 // end of effects group
 /// @}
 
-NS_CC_END
+NS_AX_END

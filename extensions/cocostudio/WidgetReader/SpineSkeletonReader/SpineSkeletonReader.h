@@ -33,7 +33,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL SpineSkeletonReader : public cocos2d::Ref, public NodeReaderProtocol
+class CCS_DLL SpineSkeletonReader : public axis::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -48,8 +48,8 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* spriteOptions);
-    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* spriteOptions);
+    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* spriteOptions);
+    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* spriteOptions);
 
     int getResourceType(std::string_view key);
 };

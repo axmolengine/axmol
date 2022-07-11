@@ -1,7 +1,7 @@
 #include "DemoScene.h"
 #include "MenuScene.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool DemoScene::init()
 {

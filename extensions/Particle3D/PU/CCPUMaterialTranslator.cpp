@@ -28,7 +28,7 @@
 #include "extensions/Particle3D/PU/CCPUMaterialManager.h"
 #include "renderer/backend/Types.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 enum MaterialToken
 {
@@ -430,4 +430,4 @@ void PUMaterialTextureUnitTranslator::translate(PUScriptCompiler* compiler, PUAb
     }
 }
 
-NS_CC_END
+NS_AX_END

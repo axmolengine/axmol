@@ -10,7 +10,7 @@
 
 // #define HAVE_IMGUI_MARKDOWN 1
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 class ImGuiEventTracker;
 class ImGuiPresenter
@@ -159,4 +159,4 @@ private:
     bool _purgeNextLoop = false;
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END

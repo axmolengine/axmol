@@ -31,7 +31,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUVortexAffector : public PUAffector
 {
@@ -76,6 +76,6 @@ protected:
     PUDynamicAttribute* _dynRotationSpeed;
     PUDynamicAttributeHelper _dynamicAttributeHelper;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

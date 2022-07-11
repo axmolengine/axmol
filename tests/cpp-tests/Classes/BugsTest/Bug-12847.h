@@ -44,12 +44,12 @@ protected:
     virtual void onExit() override;
 
 private:
-    cocos2d::Sprite* sprite1;
-    cocos2d::Sprite* sprite2;
-    cocos2d::Sprite* sprite3;
-    cocos2d::Sprite* sprite4;
+    axis::Sprite* sprite1;
+    axis::Sprite* sprite2;
+    axis::Sprite* sprite3;
+    axis::Sprite* sprite4;
 
-    cocos2d::Director::Projection _projection = cocos2d::Director::Projection::_3D;
+    axis::Director::Projection _projection = axis::Director::Projection::_3D;
 };
 
 #endif /* defined(__cocos2d_tests__Bug_12847__) */

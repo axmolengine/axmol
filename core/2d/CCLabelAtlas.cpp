@@ -36,7 +36,7 @@ THE SOFTWARE.
 #    include "renderer/CCRenderer.h"
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // CCLabelAtlas - Creation & Init
 
@@ -286,4 +286,4 @@ std::string LabelAtlas::getDescription() const
     return StringUtils::format("<LabelAtlas | Tag = %d, Label = '%s'>", _tag, _string.c_str());
 }
 
-NS_CC_END
+NS_AX_END

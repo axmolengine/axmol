@@ -854,7 +854,7 @@ int lua_cocos2dx_spine_SkeletonRenderer_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_spine_SkeletonRenderer_getBlendFunc'", nullptr);
             return 0;
         }
-        const cocos2d::BlendFunc& ret = cobj->getBlendFunc();
+        const axis::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1284,7 +1284,7 @@ int lua_cocos2dx_spine_SkeletonRenderer_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::BlendFunc arg0;
+        axis::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "sp.SkeletonRenderer:setBlendFunc");
         if(!ok)

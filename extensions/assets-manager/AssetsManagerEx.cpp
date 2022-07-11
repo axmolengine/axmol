@@ -37,7 +37,7 @@
 #include <ioapi.h>
 #include "base/CCAsyncTaskPool.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 #define TEMP_FOLDERNAME "_temp"
 #define VERSION_FILENAME "version.manifest"
@@ -1300,4 +1300,4 @@ void AssetsManagerEx::fillZipFunctionOverrides(zlib_filefunc_def_s& zipFunctionO
     zipFunctionOverrides.opaque         = nullptr;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

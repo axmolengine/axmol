@@ -25,7 +25,7 @@
 #include "ZwoptexTest.h"
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 ZwoptexTests::ZwoptexTests()
 {

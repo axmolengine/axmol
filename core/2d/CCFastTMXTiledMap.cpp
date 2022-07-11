@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "2d/CCFastTMXLayer.h"
 #include "base/ccUTF8.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation FastTMXTiledMap
 
@@ -274,4 +274,4 @@ void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
     }
 }
 
-NS_CC_END
+NS_AX_END

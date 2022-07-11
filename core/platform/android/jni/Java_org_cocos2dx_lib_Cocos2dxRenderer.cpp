@@ -34,13 +34,13 @@
 
 #include "base/ccUTF8.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 extern "C" {
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeRender(JNIEnv*, jclass)
 {
-    cocos2d::Director::getInstance()->mainLoop();
+    axis::Director::getInstance()->mainLoop();
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnPause(JNIEnv*, jclass)
@@ -48,8 +48,8 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnPause(JNIE
     if (Director::getInstance()->getOpenGLView())
     {
         Application::getInstance()->applicationDidEnterBackground();
-        cocos2d::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
-        cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
+        axis::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
+        axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
     }
 }
 
@@ -63,8 +63,8 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnResume(JNI
         if (!firstTime)
             Application::getInstance()->applicationWillEnterForeground();
 
-        cocos2d::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-        cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
+        axis::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
+        axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
 
         firstTime = false;
     }
@@ -72,19 +72,19 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnResume(JNI
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInsertText(JNIEnv* env, jclass, jstring text)
 {
-    std::string strValue = cocos2d::StringUtils::getStringUTFCharsJNI(env, text);
+    std::string strValue = axis::StringUtils::getStringUTFCharsJNI(env, text);
     const char* pszText  = strValue.c_str();
-    cocos2d::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    axis::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeDeleteBackward(JNIEnv*, jclass)
 {
-    cocos2d::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
+    axis::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
 }
 
 JNIEXPORT jstring JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeGetContentText(JNIEnv* env, jclass)
 {
-    auto pszText = cocos2d::IMEDispatcher::sharedDispatcher()->getContentText();
-    return cocos2d::StringUtils::newStringUTFJNI(env, pszText);
+    auto pszText = axis::IMEDispatcher::sharedDispatcher()->getContentText();
+    return axis::StringUtils::newStringUTFJNI(env, pszText);
 }
 }

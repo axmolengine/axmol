@@ -30,7 +30,7 @@
 #include "Bug-458.h"
 #include "QuestionContainerSprite.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool Bug458Layer::init()
 {

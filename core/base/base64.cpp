@@ -28,8 +28,7 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include "base/base64.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 unsigned char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

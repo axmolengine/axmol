@@ -2,7 +2,7 @@
 #include "DeviceGL.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 RenderTargetGL::RenderTargetGL(bool defaultRenderTarget, DeviceGL* deviceGL) : RenderTarget(defaultRenderTarget)
 {
@@ -80,4 +80,4 @@ void RenderTargetGL::update() const {
     _dirty = false;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

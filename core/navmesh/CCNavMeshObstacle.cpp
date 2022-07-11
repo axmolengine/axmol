@@ -31,7 +31,7 @@
 #    include "2d/CCScene.h"
 #    include "recast/DetourTileCache.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
 {
@@ -55,7 +55,7 @@ NavMeshObstacle::NavMeshObstacle()
     : _radius(0.0f), _height(0.0f), _syncFlag(NODE_AND_NODE), _obstacleID(-1), _tileCache(nullptr)
 {}
 
-cocos2d::NavMeshObstacle::~NavMeshObstacle() {}
+axis::NavMeshObstacle::~NavMeshObstacle() {}
 
 bool NavMeshObstacle::initWith(float radius, float height)
 {
@@ -65,21 +65,21 @@ bool NavMeshObstacle::initWith(float radius, float height)
     return true;
 }
 
-void cocos2d::NavMeshObstacle::removeFrom(dtTileCache* /*tileCache*/)
+void axis::NavMeshObstacle::removeFrom(dtTileCache* /*tileCache*/)
 {
     _tileCache->removeObstacle(_obstacleID);
     _tileCache  = nullptr;
     _obstacleID = -1;
 }
 
-void cocos2d::NavMeshObstacle::addTo(dtTileCache* tileCache)
+void axis::NavMeshObstacle::addTo(dtTileCache* tileCache)
 {
     _tileCache = tileCache;
     Mat4 mat   = _owner->getNodeToWorldTransform();
     _tileCache->addObstacle(&mat.m[12], _radius, _height, &_obstacleID);
 }
 
-void cocos2d::NavMeshObstacle::onExit()
+void axis::NavMeshObstacle::onExit()
 {
     if (_obstacleID == -1)
         return;
@@ -91,7 +91,7 @@ void cocos2d::NavMeshObstacle::onExit()
     }
 }
 
-void cocos2d::NavMeshObstacle::onEnter()
+void axis::NavMeshObstacle::onEnter()
 {
     if (_obstacleID != -1)
         return;
@@ -103,13 +103,13 @@ void cocos2d::NavMeshObstacle::onEnter()
     }
 }
 
-void cocos2d::NavMeshObstacle::postUpdate(float /*delta*/)
+void axis::NavMeshObstacle::postUpdate(float /*delta*/)
 {
     if ((_syncFlag & OBSTACLE_TO_NODE) != 0)
         syncToNode();
 }
 
-void cocos2d::NavMeshObstacle::preUpdate(float /*delta*/)
+void axis::NavMeshObstacle::preUpdate(float /*delta*/)
 {
     if ((_syncFlag & NODE_TO_OBSTACLE) != 0)
         syncToObstacle();
@@ -133,12 +133,12 @@ void NavMeshObstacle::syncToNode()
     }
 }
 
-void cocos2d::NavMeshObstacle::setRadius(float radius)
+void axis::NavMeshObstacle::setRadius(float radius)
 {
     _radius = radius;
 }
 
-void cocos2d::NavMeshObstacle::setHeight(float height)
+void axis::NavMeshObstacle::setHeight(float height)
 {
     _height = height;
 }
@@ -162,6 +162,6 @@ void NavMeshObstacle::syncToObstacle()
     }
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_NAVMESH

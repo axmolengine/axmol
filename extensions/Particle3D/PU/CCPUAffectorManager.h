@@ -57,7 +57,7 @@
 #include "extensions/Particle3D/PU/CCPUVelocityMatchingAffectorTranslator.h"
 #include "extensions/Particle3D/PU/CCPUVortexAffectorTranslator.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUAffectorManager
 {
@@ -101,6 +101,6 @@ protected:
     PUVortexAffectorTranslator _vortexAffectorTranslator;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

@@ -27,11 +27,11 @@
 #include "Texture.h"
 #include "PixelFormatUtils.h"
 #include <cassert>
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 TextureBackend::~TextureBackend() {}
 
-void TextureBackend::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int /*index*/)
+void TextureBackend::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int /*index*/)
 {
     _bitsPerPixel  = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
     _textureType   = descriptor.textureType;
@@ -41,4 +41,4 @@ void TextureBackend::updateTextureDescriptor(const cocos2d::backend::TextureDesc
     _height        = descriptor.height;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

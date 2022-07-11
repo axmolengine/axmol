@@ -29,7 +29,7 @@
 #include "math/CCMath.h"
 #include "2d/CCNode.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /**
  * @addtogroup _3d
  * @{
@@ -70,5 +70,5 @@ protected:
 // end of 3d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 #endif  // __CCATTACHNODE_H__

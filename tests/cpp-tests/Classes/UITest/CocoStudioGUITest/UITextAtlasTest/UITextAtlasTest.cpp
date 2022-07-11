@@ -24,8 +24,8 @@
 
 #include "UITextAtlasTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UITextAtlasTests::UITextAtlasTests()
 {
@@ -73,9 +73,9 @@ bool UITextAtlasTest::init()
     }
     return false;
 }
-void UITextAtlasTest::printWidgetResources(cocos2d::Ref* sender)
+void UITextAtlasTest::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData textureFile = _textAtlas->getRenderFile();
+    axis::ResourceData textureFile = _textAtlas->getRenderFile();
     CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
@@ -123,8 +123,8 @@ bool UITextAtlasETC1ShadowTest::init()
     }
     return false;
 }
-void UITextAtlasETC1ShadowTest::printWidgetResources(cocos2d::Ref* sender)
+void UITextAtlasETC1ShadowTest::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData textureFile = _textAtlas->getRenderFile();
+    axis::ResourceData textureFile = _textAtlas->getRenderFile();
     CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }

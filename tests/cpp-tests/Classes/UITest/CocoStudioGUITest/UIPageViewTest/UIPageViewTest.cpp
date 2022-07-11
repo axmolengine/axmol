@@ -25,8 +25,8 @@
 #include "UIPageViewTest.h"
 #include "cocos2d.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UIPageViewTests::UIPageViewTests()
 {
@@ -104,7 +104,7 @@ bool UIPageViewTest::init()
         pageView->removeItem(0);
         pageView->scrollToItem(pageCount - 2);
 
-        cocos2d::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
+        axis::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
 
         pageView->setIndicatorIndexNodesOpacity(255);
 

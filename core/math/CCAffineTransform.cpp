@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 AffineTransform __CCAffineTransformMake(float a, float b, float c, float d, float tx, float ty)
 {
@@ -168,4 +168,4 @@ AffineTransform AffineTransformInvert(const AffineTransform& t)
                                    determinant * (t.c * t.ty - t.d * t.tx), determinant * (t.b * t.tx - t.a * t.ty));
 }
 
-NS_CC_END
+NS_AX_END

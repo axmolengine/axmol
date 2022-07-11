@@ -48,7 +48,7 @@ using std::memset;
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 typedef int LUA_FUNCTION;
 typedef int LUA_TABLE;
@@ -277,7 +277,7 @@ inline std::string_view axislua_tosv(lua_State* L, int arg)
     return std::string_view{s, l};
 }
 
-NS_CC_END
+NS_AX_END
 
 // end group
 /// @}

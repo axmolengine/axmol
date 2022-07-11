@@ -27,13 +27,12 @@
 #include "renderer/CCCustomCommand.h"
 #include <list>
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 namespace backend
 {
 class ProgramState;
 }
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 DEFINE_TEST_SUITE(ClippingNodeTests);
 
@@ -58,15 +57,15 @@ public:
     virtual std::string subtitle() const override;
     virtual void setup() override;
 
-    virtual cocos2d::Action* actionRotate();
-    virtual cocos2d::Action* actionScale();
+    virtual axis::Action* actionRotate();
+    virtual axis::Action* actionScale();
 
-    virtual cocos2d::DrawNode* shape();
-    virtual cocos2d::Sprite* grossini();
+    virtual axis::DrawNode* shape();
+    virtual axis::Sprite* grossini();
 
-    virtual cocos2d::Node* stencil();
-    virtual cocos2d::ClippingNode* clipper();
-    virtual cocos2d::Node* content();
+    virtual axis::Node* stencil();
+    virtual axis::ClippingNode* clipper();
+    virtual axis::Node* content();
 };
 
 class ShapeTest : public BasicTest
@@ -77,8 +76,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    virtual cocos2d::Node* stencil() override;
-    virtual cocos2d::Node* content() override;
+    virtual axis::Node* stencil() override;
+    virtual axis::Node* content() override;
 };
 
 class ShapeInvertedTest : public ShapeTest
@@ -88,7 +87,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual cocos2d::ClippingNode* clipper() override;
+    virtual axis::ClippingNode* clipper() override;
 };
 
 class SpriteTest : public BasicTest
@@ -99,9 +98,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    virtual cocos2d::Node* stencil() override;
-    virtual cocos2d::ClippingNode* clipper() override;
-    virtual cocos2d::Node* content() override;
+    virtual axis::Node* stencil() override;
+    virtual axis::ClippingNode* clipper() override;
+    virtual axis::Node* content() override;
 };
 
 class SpriteNoAlphaTest : public SpriteTest
@@ -111,7 +110,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual cocos2d::ClippingNode* clipper() override;
+    virtual axis::ClippingNode* clipper() override;
 };
 
 class SpriteInvertedTest : public SpriteTest
@@ -121,7 +120,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual cocos2d::ClippingNode* clipper() override;
+    virtual axis::ClippingNode* clipper() override;
 };
 
 class NestedTest : public BaseClippingNodeTest
@@ -143,13 +142,13 @@ public:
     virtual void setup() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void pokeHoleAtPoint(cocos2d::Vec2 point);
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void pokeHoleAtPoint(axis::Vec2 point);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 private:
-    cocos2d::ClippingNode* _outerClipper;
-    cocos2d::Node* _holes;
-    cocos2d::Node* _holesStencil;
+    axis::ClippingNode* _outerClipper;
+    axis::Node* _holes;
+    axis::Node* _holesStencil;
 };
 
 class ScrollViewDemo : public BaseClippingNodeTest
@@ -160,13 +159,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void setup() override;
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 private:
     bool _scrolling;
-    cocos2d::Vec2 _lastPoint;
+    axis::Vec2 _lastPoint;
 };
 
 //#if COCOS2D_DEBUG > 1
@@ -181,7 +180,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void setup() override;
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
     virtual void setupStencilForClippingOnPlane(int plane);
     virtual void setupStencilForDrawingOnPlane(int plane);
@@ -191,13 +190,13 @@ protected:
     void onBeforeDrawSprite(int planeIndex);
     void initCommands();
 
-    std::vector<cocos2d::CustomCommand> _renderCmds;
-//    cocos2d::CallbackCommand _enableStencilCallback;
-//    cocos2d::CallbackCommand _disableStencilCallback;
-    cocos2d::Vector<cocos2d::Sprite*> _sprites;
-    cocos2d::Vector<cocos2d::Sprite*> _spritesStencil;
-    cocos2d::backend::UniformLocation _locColor;
-    cocos2d::backend::UniformLocation _locMVPMatrix;
+    std::vector<axis::CustomCommand> _renderCmds;
+//    axis::CallbackCommand _enableStencilCallback;
+//    axis::CallbackCommand _disableStencilCallback;
+    axis::Vector<axis::Sprite*> _sprites;
+    axis::Vector<axis::Sprite*> _spritesStencil;
+    axis::backend::UniformLocation _locColor;
+    axis::backend::UniformLocation _locMVPMatrix;
 };
 
 class RawStencilBufferTest2 : public RawStencilBufferTest
@@ -236,7 +235,7 @@ public:
     virtual void setupStencilForDrawingOnPlane(int plane) override;
 
 private:
-    cocos2d::backend::UniformLocation _alphaMVPMatrix;
+    axis::backend::UniformLocation _alphaMVPMatrix;
 };
 
 class RawStencilBufferTest5 : public RawStencilBufferTestAlphaTest

@@ -26,10 +26,10 @@
 
 #include "base/CCEventKeyboard.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventKeyboard::EventKeyboard(KeyCode keyCode, bool isPressed)
     : Event(Type::KEYBOARD), _keyCode(keyCode), _isPressed(isPressed)
 {}
 
-NS_CC_END
+NS_AX_END

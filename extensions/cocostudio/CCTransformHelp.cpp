@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 #include "CCTransformHelp.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {

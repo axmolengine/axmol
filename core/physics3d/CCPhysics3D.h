@@ -39,11 +39,11 @@
 #    include "physics3d/CCPhysics3DComponent.h"
 #    include "physics3d/CCPhysics3DConstraint.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 CC_DLL const char* physics3dVersion();
 
-NS_CC_END
+NS_AX_END
 
 #    if (CC_ENABLE_BULLET_INTEGRATION)
 
@@ -57,12 +57,12 @@ NS_CC_END
 #        include "bullet/BulletCollision/CollisionDispatch/btGhostObject.h"
 
 // convert between cocos and bullet
-cocos2d::Vec3 convertbtVector3ToVec3(const btVector3& btVec3);
-btVector3 convertVec3TobtVector3(const cocos2d::Vec3& vec3);
-cocos2d::Mat4 convertbtTransformToMat4(const btTransform& btTrans);
-btTransform convertMat4TobtTransform(const cocos2d::Mat4& mat4);
-cocos2d::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
-btQuaternion convertQuatTobtQuat(const cocos2d::Quaternion& quat);
+axis::Vec3 convertbtVector3ToVec3(const btVector3& btVec3);
+btVector3 convertVec3TobtVector3(const axis::Vec3& vec3);
+axis::Mat4 convertbtTransformToMat4(const btTransform& btTrans);
+btTransform convertMat4TobtTransform(const axis::Mat4& mat4);
+axis::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
+btQuaternion convertQuatTobtQuat(const axis::Quaternion& quat);
 
 #    endif  // CC_ENABLE_BULLET_INTEGRATION
 

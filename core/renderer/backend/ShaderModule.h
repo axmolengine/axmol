@@ -30,7 +30,7 @@
 
 #include <string>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _backend
  * @{
@@ -62,7 +62,7 @@ enum Attribute : uint32_t
 /**
  * Create shader.
  */
-class CC_DLL ShaderModule : public cocos2d::Ref
+class CC_DLL ShaderModule : public axis::Ref
 {
 public:
     /**
@@ -85,4 +85,4 @@ protected:
 
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

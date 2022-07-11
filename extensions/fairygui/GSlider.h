@@ -61,7 +61,7 @@ private:
     float _barMaxWidthDelta;
     float _barMaxHeightDelta;
     GObject* _gripObject;
-    cocos2d::Vec2 _clickPos;
+    axis::Vec2 _clickPos;
     float _clickPercent;
     float _barStartX;
     float _barStartY;

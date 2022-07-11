@@ -39,7 +39,7 @@
 #include "2d/CCCamera.h"
 #include <sstream>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const bool PUBeamRender::DEFAULT_USE_VERTEX_COLOURS                               = false;
@@ -373,4 +373,4 @@ void PUBeamRender::copyAttributesTo(PUBeamRender* beamRender)
     beamRender->setTexCoordDirection(_texCoordDirection);
 }
 
-NS_CC_END
+NS_AX_END

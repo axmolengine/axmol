@@ -67,7 +67,7 @@ bool LuaJavaBridge::CallInfo::execute()
     {
         m_retjs              = (jstring)m_env->CallStaticObjectMethod(m_classID, m_methodID);
         bool bValidStr       = true;
-        std::string strValue = cocos2d::StringUtils::getStringUTFCharsJNI(m_env, m_retjs, &bValidStr);
+        std::string strValue = axis::StringUtils::getStringUTFCharsJNI(m_env, m_retjs, &bValidStr);
         m_ret.stringValue    = (false == bValidStr) ? nullptr : new string(strValue);
         break;
     }
@@ -113,7 +113,7 @@ bool LuaJavaBridge::CallInfo::executeWithArgs(jvalue* args)
     {
         m_retjs              = (jstring)m_env->CallStaticObjectMethodA(m_classID, m_methodID, args);
         bool bValidStr       = true;
-        std::string strValue = cocos2d::StringUtils::getStringUTFCharsJNI(m_env, m_retjs, &bValidStr);
+        std::string strValue = axis::StringUtils::getStringUTFCharsJNI(m_env, m_retjs, &bValidStr);
         m_ret.stringValue    = (false == bValidStr) ? nullptr : new string(strValue);
         break;
     }
@@ -250,7 +250,7 @@ bool LuaJavaBridge::CallInfo::getMethodInfo()
     m_methodID = 0;
     m_env      = 0;
 
-    JavaVM* jvm = cocos2d::JniHelper::getJavaVM();
+    JavaVM* jvm = axis::JniHelper::getJavaVM();
     jint ret    = jvm->GetEnv((void**)&m_env, JNI_VERSION_1_4);
     switch (ret)
     {
@@ -273,8 +273,8 @@ bool LuaJavaBridge::CallInfo::getMethodInfo()
         return false;
     }
     jstring _jstrClassName = m_env->NewStringUTF(m_className.c_str());
-    m_classID              = (jclass)m_env->CallObjectMethod(cocos2d::JniHelper::classloader,
-                                                             cocos2d::JniHelper::loadclassMethod_methodID, _jstrClassName);
+    m_classID              = (jclass)m_env->CallObjectMethod(axis::JniHelper::classloader,
+                                                             axis::JniHelper::loadclassMethod_methodID, _jstrClassName);
 
     if (NULL == m_classID)
     {

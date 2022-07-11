@@ -222,7 +222,7 @@ public:
     void stopUpdate(float dt);
 };
 
-class TestNode : public cocos2d::Node
+class TestNode : public axis::Node
 {
 public:
     CREATE_FUNC(TestNode);
@@ -272,9 +272,9 @@ public:
     void onExit() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    cocos2d::extension::ControlSlider* sliderCtl();
-    void sliderAction(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
-    cocos2d::extension::ControlSlider* _sliderCtl;
+    axis::extension::ControlSlider* sliderCtl();
+    void sliderAction(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
+    axis::extension::ControlSlider* _sliderCtl;
 };
 
 class TwoSchedulers : public SchedulerTestLayer
@@ -286,15 +286,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onEnter() override;
-    cocos2d::extension::ControlSlider* sliderCtl();
-    void sliderAction(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
-    cocos2d::Scheduler* sched1;
-    cocos2d::Scheduler* sched2;
-    cocos2d::ActionManager* actionManager1;
-    cocos2d::ActionManager* actionManager2;
+    axis::extension::ControlSlider* sliderCtl();
+    void sliderAction(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
+    axis::Scheduler* sched1;
+    axis::Scheduler* sched2;
+    axis::ActionManager* actionManager1;
+    axis::ActionManager* actionManager2;
 
-    cocos2d::extension::ControlSlider* sliderCtl1;
-    cocos2d::extension::ControlSlider* sliderCtl2;
+    axis::extension::ControlSlider* sliderCtl1;
+    axis::extension::ControlSlider* sliderCtl2;
 };
 
 class SchedulerIssue2268 : public SchedulerTestLayer
@@ -309,7 +309,7 @@ public:
     void update(float dt) override;
 
 private:
-    cocos2d::Node* testNode;
+    axis::Node* testNode;
 };
 
 class SchedulerIssueWithReschedule : public SchedulerTestLayer
@@ -349,7 +349,7 @@ public:
 
     virtual void update(float dt) override;
 
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
 };
 
 class SchedulerIssue10232 : public SchedulerTestLayer
@@ -376,7 +376,7 @@ public:
     void update(float dt) override;
 
 private:
-    cocos2d::Sprite* _sprite;
+    axis::Sprite* _sprite;
 };
 
 class SchedulerIssue17149 : public SchedulerTestLayer
@@ -432,13 +432,13 @@ private:
     class TestClass
     {
     public:
-        TestClass(int index, TestClass* nextObj, cocos2d::Scheduler* scheduler);
+        TestClass(int index, TestClass* nextObj, axis::Scheduler* scheduler);
         void update(float dt);
 
     private:
         TestClass* _nextObj            = nullptr;
         int _index                     = 0;
-        cocos2d::Scheduler* _scheduler = nullptr;
+        axis::Scheduler* _scheduler = nullptr;
         bool _cleanedUp                = false;
     };
     std::vector<TestClass*> _testvector;

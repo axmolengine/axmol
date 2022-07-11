@@ -33,7 +33,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -151,7 +151,7 @@ Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
     return *(Offset<Table>*)(&options);
 }
 
-void Light3DReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* light3DOptions)
+void Light3DReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* light3DOptions)
 {
     auto options      = (Sprite3DOptions*)light3DOptions;
     auto node3DReader = Node3DReader::getInstance();
@@ -173,17 +173,17 @@ Node* Light3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* light3D
     bool enabled     = (options->enabled() != 0);
     switch (type)
     {
-    case cocos2d::LightType::DIRECTIONAL:
+    case axis::LightType::DIRECTIONAL:
         light = DirectionLight::create(Vec3::UNIT_Z, Color3B::WHITE);
         break;
-    case cocos2d::LightType::POINT:
+    case axis::LightType::POINT:
         light = PointLight::create(Vec3::ZERO, Color3B::WHITE, range);
         break;
-    case cocos2d::LightType::SPOT:
+    case axis::LightType::SPOT:
         light =
             SpotLight::create(Vec3::UNIT_Z, Vec3::ZERO, Color3B::WHITE, 0, CC_DEGREES_TO_RADIANS(outerAngle), range);
         break;
-    case cocos2d::LightType::AMBIENT:
+    case axis::LightType::AMBIENT:
         light = AmbientLight::create(Color3B::WHITE);
         break;
     default:

@@ -34,7 +34,7 @@
 #include "base/ccTypes.h"
 #include "base/CCVector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Properties;
 class Vec2;

@@ -26,7 +26,7 @@
 #include "ui/UILayoutParameter.h"
 #include "ui/UILayout.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -185,4 +185,4 @@ void RelativeLayoutParameter::copyProperties(LayoutParameter* model)
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

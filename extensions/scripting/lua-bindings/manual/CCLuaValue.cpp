@@ -26,7 +26,7 @@
 
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const LuaValue LuaValue::intValue(const int intValue)
 {
@@ -156,4 +156,4 @@ void LuaValue::copy(const LuaValue& rhs)
     }
 }
 
-NS_CC_END
+NS_AX_END

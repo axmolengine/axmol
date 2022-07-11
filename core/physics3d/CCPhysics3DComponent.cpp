@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #    if (CC_ENABLE_BULLET_INTEGRATION)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Physics3DComponent::~Physics3DComponent()
 {
@@ -51,8 +51,8 @@ bool Physics3DComponent::init()
 }
 
 Physics3DComponent* Physics3DComponent::create(Physics3DObject* physicsObj,
-                                               const cocos2d::Vec3& translateInPhysics,
-                                               const cocos2d::Quaternion& rotInPhsyics)
+                                               const axis::Vec3& translateInPhysics,
+                                               const axis::Quaternion& rotInPhsyics)
 {
     auto ret = new Physics3DComponent();
     if (ret->init())
@@ -162,8 +162,8 @@ void Physics3DComponent::postSimulate()
     }
 }
 
-void Physics3DComponent::setTransformInPhysics(const cocos2d::Vec3& translateInPhysics,
-                                               const cocos2d::Quaternion& rotInPhsyics)
+void Physics3DComponent::setTransformInPhysics(const axis::Vec3& translateInPhysics,
+                                               const axis::Quaternion& rotInPhsyics)
 {
     Mat4::createRotation(rotInPhsyics, &_transformInPhysics);
     _transformInPhysics.m[12] = translateInPhysics.x;
@@ -248,7 +248,7 @@ void Physics3DComponent::syncNodeToPhysics()
     }
 }
 
-NS_CC_END
+NS_AX_END
 
 #    endif  // CC_ENABLE_BULLET_INTEGRATION
 

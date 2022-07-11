@@ -33,7 +33,7 @@
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Label;
 
@@ -382,6 +382,6 @@ private:
 }  // namespace ui
 // end group
 /// @}
-NS_CC_END
+NS_AX_END
 
 #endif  // __UITABVIEW_H__

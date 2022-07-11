@@ -39,17 +39,17 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
 
-    void modeCallback(cocos2d::Ref* sender);
+    void modeCallback(axis::Ref* sender);
 
 protected:
-    cocos2d::MotionStreak* _streak;
+    axis::MotionStreak* _streak;
 };
 
 class MotionStreakTest1 : public MotionStreakTest
 {
 protected:
-    cocos2d::Node* _root;
-    cocos2d::Node* _target;
+    axis::Node* _root;
+    axis::Node* _target;
 
 public:
     CREATE_FUNC(MotionStreakTest1);
@@ -61,13 +61,13 @@ public:
 class MotionStreakTest2 : public MotionStreakTest
 {
 protected:
-    cocos2d::Node* _root;
-    cocos2d::Node* _target;
+    axis::Node* _root;
+    axis::Node* _target;
 
 public:
     CREATE_FUNC(MotionStreakTest2);
     virtual void onEnter() override;
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -83,7 +83,7 @@ public:
     virtual void update(float dt) override;
 
 private:
-    cocos2d::Vec2 _center;
+    axis::Vec2 _center;
     float _radius;
     float _angle;
 };

@@ -32,7 +32,7 @@
 
 #include "2d/CCFont.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 class FontCharMap : public Font
@@ -64,6 +64,6 @@ private:
 
 /// @endcond
 
-NS_CC_END
+NS_AX_END
 
 #endif /* defined(_CCFontCharMap_h_) */

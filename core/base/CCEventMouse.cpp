@@ -27,7 +27,7 @@
 #include "base/CCEventMouse.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventMouse::EventMouse(MouseEventType mouseEventCode)
     : Event(Type::MOUSE)
@@ -80,4 +80,4 @@ Vec2 EventMouse::getDelta() const
 {
     return getLocation() - getPreviousLocation();
 }
-NS_CC_END
+NS_AX_END

@@ -31,7 +31,7 @@
 #include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 #define ISPOW2(n) (((n) & (n - 1)) == 0)
 
@@ -149,7 +149,7 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 #endif
 }
 
-void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index)
+void Texture2DGL::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index)
 {
     TextureBackend::updateTextureDescriptor(descriptor, index);
 
@@ -327,7 +327,7 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
     CHECK_GL_ERROR_DEBUG();
 }
 
-void TextureCubeGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index)
+void TextureCubeGL::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index)
 {
     backend::TextureCubemapBackend::updateTextureDescriptor(descriptor, index);
 
@@ -379,4 +379,4 @@ void TextureCubeGL::generateMipmaps()
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

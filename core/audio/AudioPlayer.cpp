@@ -43,7 +43,7 @@
         } while (false)
 #endif
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace
 {

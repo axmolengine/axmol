@@ -27,7 +27,7 @@
 #include "Paddle.h"
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum tagPlayer
 {
@@ -172,9 +172,9 @@ std::string ForceTouchTest::subtitle() const
     return std::string("Touch with force to see info label changes\nOnly work on iPhone6s / iPhone6s Plus");
 }
 
-void ForceTouchTest::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) {}
+void ForceTouchTest::onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) {}
 
-void ForceTouchTest::onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void ForceTouchTest::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     for (auto& t : touches)
     {
@@ -185,7 +185,7 @@ void ForceTouchTest::onTouchesMoved(const std::vector<cocos2d::Touch*>& touches,
     }
 }
 
-void ForceTouchTest::onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void ForceTouchTest::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     sprintf(formatBuffer, _Info_Formatter, 0.0f, 0.0f);
     _infoLabel->setString(std::string(formatBuffer));

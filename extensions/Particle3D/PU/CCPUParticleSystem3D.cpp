@@ -39,7 +39,7 @@
 #include "extensions/Particle3D/PU/CCPUBehaviour.h"
 #include "platform/CCFileUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 float PUParticle3D::DEFAULT_TTL  = 10.0f;
 float PUParticle3D::DEFAULT_MASS = 1.0f;
@@ -841,7 +841,7 @@ bool PUParticleSystem3D::isExpired(PUParticle3D* particle, float timeElapsed)
     return expired;
 }
 
-cocos2d::Vec3 PUParticleSystem3D::getDerivedPosition()
+axis::Vec3 PUParticleSystem3D::getDerivedPosition()
 {
     // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::ZERO;
     // if (_keepLocal) return Vec3::ZERO;
@@ -856,7 +856,7 @@ cocos2d::Vec3 PUParticleSystem3D::getDerivedPosition()
     }
 }
 
-cocos2d::Quaternion PUParticleSystem3D::getDerivedOrientation()
+axis::Quaternion PUParticleSystem3D::getDerivedOrientation()
 {
     // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Quaternion();
     // if (_keepLocal) return Quaternion();
@@ -873,7 +873,7 @@ cocos2d::Quaternion PUParticleSystem3D::getDerivedOrientation()
     }
 }
 
-cocos2d::Vec3 PUParticleSystem3D::getDerivedScale()
+axis::Vec3 PUParticleSystem3D::getDerivedScale()
 {
     // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::ONE;
     // if (_keepLocal) return Vec3::ONE;
@@ -1577,4 +1577,4 @@ void PUParticleSystem3D::forceStopParticleSystem()
     unPrepared();
 }
 
-NS_CC_END
+NS_AX_END

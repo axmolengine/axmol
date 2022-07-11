@@ -35,7 +35,7 @@
 
 #include <algorithm>
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 #define SCROLL_DEACCEL_RATE 0.95f
 #define SCROLL_DEACCEL_DIST 1.0f
@@ -912,4 +912,4 @@ Rect ScrollView::getViewRect()
 
     return Rect(screenPos.x, screenPos.y, _viewSize.width * scaleX, _viewSize.height * scaleY);
 }
-NS_CC_EXT_END
+NS_AX_EXT_END

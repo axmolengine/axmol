@@ -35,7 +35,7 @@
 #include "2d/CCLayer.h"
 #include "extensions/ExtensionExport.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 class Invocation;
 
@@ -279,6 +279,6 @@ CC_EX_DLL Control::EventType operator|(Control::EventType a, Control::EventType 
 /// @}
 /// @}
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif

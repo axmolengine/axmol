@@ -28,7 +28,7 @@
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 #include "extensions/Particle3D/PU/CCPUBehaviourManager.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUSlaveBehaviourTranslator::PUSlaveBehaviourTranslator() {}
 
 bool PUSlaveBehaviourTranslator::translateChildProperty(PUScriptCompiler* /*compiler*/, PUAbstractNode* /*node*/)
@@ -41,4 +41,4 @@ bool PUSlaveBehaviourTranslator::translateChildObject(PUScriptCompiler* /*compil
     return false;
 }
 
-NS_CC_END
+NS_AX_END

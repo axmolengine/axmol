@@ -32,7 +32,7 @@
 #include <spine/Extension.h>
 #include <algorithm>
 
-USING_NS_CC;
+USING_NS_AX;
 using std::min;
 using std::max;
 using std::vector;
@@ -142,7 +142,7 @@ void SkeletonAnimation::update (float deltaTime) {
 	if (_postUpdateListener) _postUpdateListener(this);
 }
 
-void SkeletonAnimation::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags) {
+void SkeletonAnimation::draw(axis::Renderer *renderer, const axis::Mat4 &transform, uint32_t transformFlags) {
 	if (_firstDraw) {
 		_firstDraw = false;
 		update(0);

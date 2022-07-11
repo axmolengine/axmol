@@ -42,7 +42,7 @@ extern "C" {
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * The Lua engine integrated into the cocos2d-x to process the interactive operation between lua and c++.
@@ -259,7 +259,7 @@ private:
     LuaStack* _stack;
 };
 
-NS_CC_END
+NS_AX_END
 
 // end group
 /// @}

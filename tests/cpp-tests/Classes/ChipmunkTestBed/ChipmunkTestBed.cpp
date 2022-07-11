@@ -31,8 +31,8 @@
 
 #include "ChipmunkTestBed.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 enum
 {
@@ -100,7 +100,7 @@ char const* ChipmunkDemoMessageString = NULL;
 cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, (unsigned int)GRABBABLE_MASK_BIT, (unsigned int)GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-cocos2d::DrawNode* drawCP = NULL;
+axis::DrawNode* drawCP = NULL;
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
 
@@ -168,7 +168,7 @@ void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor color)
                         Color4F(0.0f, 0.0f, 1.0f, 1.0f));
 }
 
-cocos2d::Label* label;
+axis::Label* label;
 
 static int max_arbiters    = 0;
 static int max_points      = 0;

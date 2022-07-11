@@ -27,7 +27,7 @@
 #include "2d/CCFontAtlasCache.h"
 #include "2d/CCFontFreeType.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum
 {

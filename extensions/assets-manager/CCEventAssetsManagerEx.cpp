@@ -28,10 +28,10 @@
 #include <functional>
 #include "AssetsManagerEx.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 EventAssetsManagerEx::EventAssetsManagerEx(std::string_view eventName,
-                                           cocos2d::extension::AssetsManagerEx* manager,
+                                           axis::extension::AssetsManagerEx* manager,
                                            const EventCode& code,
                                            float percent /* = 0 */,
                                            float percentByFile /* = 0*/,
@@ -50,4 +50,4 @@ EventAssetsManagerEx::EventAssetsManagerEx(std::string_view eventName,
     , _percentByFile(percentByFile)
 {}
 
-NS_CC_EXT_END
+NS_AX_EXT_END

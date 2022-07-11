@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "ui/GUIExport.h"
 #include <list>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /**
  * @addtogroup ui
  * @{
@@ -683,5 +683,5 @@ protected:
 }  // namespace ui
 // end of ui group
 /// @}
-NS_CC_END
+NS_AX_END
 #endif /* defined(__CocoGUI__ScrollView__) */

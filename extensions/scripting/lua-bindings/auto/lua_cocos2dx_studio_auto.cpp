@@ -36,8 +36,8 @@ int lua_cocos2dx_studio_ActionFrame_getAction(lua_State* tolua_S)
             ok &= luaval_to_object<cocostudio::ActionFrame>(tolua_S, 3, "ccs.ActionFrame",&arg1, "ccs.ActionFrame:getAction");
 
             if (!ok) { break; }
-            cocos2d::ActionInterval* ret = cobj->getAction(arg0, arg1);
-            object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+            axis::ActionInterval* ret = cobj->getAction(arg0, arg1);
+            object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
             return 1;
         }
     }while(0);
@@ -48,8 +48,8 @@ int lua_cocos2dx_studio_ActionFrame_getAction(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionFrame:getAction");
 
             if (!ok) { break; }
-            cocos2d::ActionInterval* ret = cobj->getAction(arg0);
-            object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+            axis::ActionInterval* ret = cobj->getAction(arg0);
+            object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
             return 1;
         }
     }while(0);
@@ -597,7 +597,7 @@ int lua_cocos2dx_studio_ActionMoveFrame_setPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec2 arg0;
+        axis::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ccs.ActionMoveFrame:setPosition");
         if(!ok)
@@ -655,8 +655,8 @@ int lua_cocos2dx_studio_ActionMoveFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionMoveFrame_getAction'", nullptr);
             return 0;
         }
-        cocos2d::ActionInterval* ret = cobj->getAction(arg0);
-        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        axis::ActionInterval* ret = cobj->getAction(arg0);
+        object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionMoveFrame:getAction",argc, 1);
@@ -702,7 +702,7 @@ int lua_cocos2dx_studio_ActionMoveFrame_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionMoveFrame_getPosition'", nullptr);
             return 0;
         }
-        cocos2d::Vec2 ret = cobj->getPosition();
+        axis::Vec2 ret = cobj->getPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1006,8 +1006,8 @@ int lua_cocos2dx_studio_ActionScaleFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionScaleFrame_getAction'", nullptr);
             return 0;
         }
-        cocos2d::ActionInterval* ret = cobj->getAction(arg0);
-        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        axis::ActionInterval* ret = cobj->getAction(arg0);
+        object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:getAction",argc, 1);
@@ -1163,8 +1163,8 @@ int lua_cocos2dx_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
             ok &= luaval_to_object<cocostudio::ActionFrame>(tolua_S, 3, "ccs.ActionFrame",&arg1, "ccs.ActionRotationFrame:getAction");
 
             if (!ok) { break; }
-            cocos2d::ActionInterval* ret = cobj->getAction(arg0, arg1);
-            object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+            axis::ActionInterval* ret = cobj->getAction(arg0, arg1);
+            object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
             return 1;
         }
     }while(0);
@@ -1175,8 +1175,8 @@ int lua_cocos2dx_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
             ok &= luaval_to_number(tolua_S, 2,&arg0, "ccs.ActionRotationFrame:getAction");
 
             if (!ok) { break; }
-            cocos2d::ActionInterval* ret = cobj->getAction(arg0);
-            object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+            axis::ActionInterval* ret = cobj->getAction(arg0);
+            object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
             return 1;
         }
     }while(0);
@@ -1381,8 +1381,8 @@ int lua_cocos2dx_studio_ActionFadeFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionFadeFrame_getAction'", nullptr);
             return 0;
         }
-        cocos2d::ActionInterval* ret = cobj->getAction(arg0);
-        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        axis::ActionInterval* ret = cobj->getAction(arg0);
+        object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFadeFrame:getAction",argc, 1);
@@ -1538,7 +1538,7 @@ int lua_cocos2dx_studio_ActionTintFrame_getColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTintFrame_getColor'", nullptr);
             return 0;
         }
-        cocos2d::Color3B ret = cobj->getColor();
+        axis::Color3B ret = cobj->getColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1588,8 +1588,8 @@ int lua_cocos2dx_studio_ActionTintFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTintFrame_getAction'", nullptr);
             return 0;
         }
-        cocos2d::ActionInterval* ret = cobj->getAction(arg0);
-        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        axis::ActionInterval* ret = cobj->getAction(arg0);
+        object_to_luaval<axis::ActionInterval>(tolua_S, "cc.ActionInterval",(axis::ActionInterval*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:getAction",argc, 1);
@@ -1630,7 +1630,7 @@ int lua_cocos2dx_studio_ActionTintFrame_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Color3B arg0;
+        axis::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ccs.ActionTintFrame:setColor");
         if(!ok)
@@ -2073,8 +2073,8 @@ int lua_cocos2dx_studio_ActionObject_play(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            cocos2d::CallFunc* arg0;
-            ok &= luaval_to_object<cocos2d::CallFunc>(tolua_S, 2, "cc.CallFunc",&arg0, "ccs.ActionObject:play");
+            axis::CallFunc* arg0;
+            ok &= luaval_to_object<axis::CallFunc>(tolua_S, 2, "cc.CallFunc",&arg0, "ccs.ActionObject:play");
 
             if (!ok) { break; }
             cobj->play(arg0);
@@ -2797,8 +2797,8 @@ int lua_cocos2dx_studio_ActionManagerEx_playActionByName(lua_State* tolua_S)
             std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ccs.ActionManagerEx:playActionByName"); arg1 = arg1_tmp.c_str();
 
             if (!ok) { break; }
-            cocos2d::CallFunc* arg2;
-            ok &= luaval_to_object<cocos2d::CallFunc>(tolua_S, 4, "cc.CallFunc",&arg2, "ccs.ActionManagerEx:playActionByName");
+            axis::CallFunc* arg2;
+            ok &= luaval_to_object<axis::CallFunc>(tolua_S, 4, "cc.CallFunc",&arg2, "ccs.ActionManagerEx:playActionByName");
 
             if (!ok) { break; }
             cocostudio::ActionObject* ret = cobj->playActionByName(arg0, arg1, arg2);
@@ -3007,7 +3007,7 @@ int lua_cocos2dx_studio_BaseData_getColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BaseData_getColor'", nullptr);
             return 0;
         }
-        cocos2d::Color4B ret = cobj->getColor();
+        axis::Color4B ret = cobj->getColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3049,7 +3049,7 @@ int lua_cocos2dx_studio_BaseData_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Color4B arg0;
+        axis::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "ccs.BaseData:setColor");
         if(!ok)
@@ -5052,7 +5052,7 @@ int lua_cocos2dx_studio_ContourData_addVertex(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec2 arg0;
+        axis::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ccs.ContourData:addVertex");
         if(!ok)
@@ -5852,8 +5852,8 @@ int lua_cocos2dx_studio_DisplayManager_getDisplayRenderNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayManager_getDisplayRenderNode'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getDisplayRenderNode();
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getDisplayRenderNode();
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getDisplayRenderNode",argc, 0);
@@ -5899,7 +5899,7 @@ int lua_cocos2dx_studio_DisplayManager_getAnchorPointInPoints(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayManager_getAnchorPointInPoints'", nullptr);
             return 0;
         }
-        cocos2d::Vec2 ret = cobj->getAnchorPointInPoints();
+        axis::Vec2 ret = cobj->getAnchorPointInPoints();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6143,7 +6143,7 @@ int lua_cocos2dx_studio_DisplayManager_getContentSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayManager_getContentSize'", nullptr);
             return 0;
         }
-        cocos2d::Size ret = cobj->getContentSize();
+        axis::Size ret = cobj->getContentSize();
         size_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6190,7 +6190,7 @@ int lua_cocos2dx_studio_DisplayManager_getBoundingBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayManager_getBoundingBox'", nullptr);
             return 0;
         }
-        cocos2d::Rect ret = cobj->getBoundingBox();
+        axis::Rect ret = cobj->getBoundingBox();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6227,8 +6227,8 @@ int lua_cocos2dx_studio_DisplayManager_addDisplay(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            cocos2d::Node* arg0;
-            ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.DisplayManager:addDisplay");
+            axis::Node* arg0;
+            ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.DisplayManager:addDisplay");
 
             if (!ok) { break; }
             int arg1;
@@ -6306,7 +6306,7 @@ int lua_cocos2dx_studio_DisplayManager_containPoint(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            cocos2d::Vec2 arg0;
+            axis::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ccs.DisplayManager:containPoint");
 
             if (!ok) { break; }
@@ -6559,7 +6559,7 @@ int lua_cocos2dx_studio_DisplayManager_getAnchorPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayManager_getAnchorPoint'", nullptr);
             return 0;
         }
-        cocos2d::Vec2 ret = cobj->getAnchorPoint();
+        axis::Vec2 ret = cobj->getAnchorPoint();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6606,7 +6606,7 @@ int lua_cocos2dx_studio_DisplayManager_getDecorativeDisplayList(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_DisplayManager_getDecorativeDisplayList'", nullptr);
             return 0;
         }
-        const cocos2d::Vector<cocostudio::DecorativeDisplay *>& ret = cobj->getDecorativeDisplayList();
+        const axis::Vector<cocostudio::DecorativeDisplay *>& ret = cobj->getDecorativeDisplayList();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6904,7 +6904,7 @@ int lua_cocos2dx_studio_Bone_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::BlendFunc arg0;
+        axis::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ccs.Bone:setBlendFunc");
         if(!ok)
@@ -7053,8 +7053,8 @@ int lua_cocos2dx_studio_Bone_getDisplayRenderNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Bone_getDisplayRenderNode'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getDisplayRenderNode();
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getDisplayRenderNode();
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getDisplayRenderNode",argc, 0);
@@ -7672,8 +7672,8 @@ int lua_cocos2dx_studio_Bone_addDisplay(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            cocos2d::Node* arg0;
-            ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.Bone:addDisplay");
+            axis::Node* arg0;
+            ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.Bone:addDisplay");
 
             if (!ok) { break; }
             int arg1;
@@ -7745,7 +7745,7 @@ int lua_cocos2dx_studio_Bone_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Bone_getBlendFunc'", nullptr);
             return 0;
         }
-        cocos2d::BlendFunc ret = cobj->getBlendFunc();
+        axis::BlendFunc ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8292,7 +8292,7 @@ int lua_cocos2dx_studio_Bone_getNodeToArmatureTransform(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Bone_getNodeToArmatureTransform'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getNodeToArmatureTransform();
+        axis::Mat4 ret = cobj->getNodeToArmatureTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9799,7 +9799,7 @@ int lua_cocos2dx_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getTextureDatas'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::TextureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getTextureDatas();
+        const axis::Map<std::string, cocostudio::TextureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getTextureDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10166,7 +10166,7 @@ int lua_cocos2dx_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getArmatureDatas'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::ArmatureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getArmatureDatas();
+        const axis::Map<std::string, cocostudio::ArmatureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getArmatureDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10436,7 +10436,7 @@ int lua_cocos2dx_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ArmatureDataManager_getAnimationDatas'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::AnimationData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAnimationDatas();
+        const axis::Map<std::string, cocostudio::AnimationData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAnimationDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11367,7 +11367,7 @@ int lua_cocos2dx_studio_Armature_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_getBlendFunc'", nullptr);
             return 0;
         }
-        const cocos2d::BlendFunc& ret = cobj->getBlendFunc();
+        const axis::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11658,7 +11658,7 @@ int lua_cocos2dx_studio_Armature_getOffsetPoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_getOffsetPoints'", nullptr);
             return 0;
         }
-        const cocos2d::Vec2& ret = cobj->getOffsetPoints();
+        const axis::Vec2& ret = cobj->getOffsetPoints();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11700,7 +11700,7 @@ int lua_cocos2dx_studio_Armature_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::BlendFunc arg0;
+        axis::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ccs.Armature:setBlendFunc");
         if(!ok)
@@ -11755,7 +11755,7 @@ int lua_cocos2dx_studio_Armature_getBoneDic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Armature_getBoneDic'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::Bone *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getBoneDic();
+        const axis::Map<std::string, cocostudio::Bone *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getBoneDic();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11990,7 +11990,7 @@ int lua_cocos2dx_studio_Skin_getNodeToWorldTransformAR(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Skin_getNodeToWorldTransformAR'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getNodeToWorldTransformAR();
+        axis::Mat4 ret = cobj->getNodeToWorldTransformAR();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12879,8 +12879,8 @@ int lua_cocos2dx_studio_ComAttribute_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAttribute_createInstance'", nullptr);
             return 0;
         }
-        cocos2d::Ref* ret = cocostudio::ComAttribute::createInstance();
-        object_to_luaval<cocos2d::Ref>(tolua_S, "cc.Ref",(cocos2d::Ref*)ret);
+        axis::Ref* ret = cocostudio::ComAttribute::createInstance();
+        object_to_luaval<axis::Ref>(tolua_S, "cc.Ref",(axis::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAttribute:createInstance",argc, 0);
@@ -14367,8 +14367,8 @@ int lua_cocos2dx_studio_ComAudio_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComAudio_createInstance'", nullptr);
             return 0;
         }
-        cocos2d::Ref* ret = cocostudio::ComAudio::createInstance();
-        object_to_luaval<cocos2d::Ref>(tolua_S, "cc.Ref",(cocos2d::Ref*)ret);
+        axis::Ref* ret = cocostudio::ComAudio::createInstance();
+        object_to_luaval<axis::Ref>(tolua_S, "cc.Ref",(axis::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAudio:createInstance",argc, 0);
@@ -14484,8 +14484,8 @@ int lua_cocos2dx_studio_ComController_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComController_createInstance'", nullptr);
             return 0;
         }
-        cocos2d::Ref* ret = cocostudio::ComController::createInstance();
-        object_to_luaval<cocos2d::Ref>(tolua_S, "cc.Ref",(cocos2d::Ref*)ret);
+        axis::Ref* ret = cocostudio::ComController::createInstance();
+        object_to_luaval<axis::Ref>(tolua_S, "cc.Ref",(axis::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComController:createInstance",argc, 0);
@@ -14583,9 +14583,9 @@ int lua_cocos2dx_studio_ComRender_setNode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Node* arg0;
+        axis::Node* arg0;
 
-        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ComRender:setNode");
+        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ComRender:setNode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComRender_setNode'", nullptr);
@@ -14638,8 +14638,8 @@ int lua_cocos2dx_studio_ComRender_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComRender_getNode'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getNode();
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getNode();
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComRender:getNode",argc, 0);
@@ -14670,8 +14670,8 @@ int lua_cocos2dx_studio_ComRender_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            cocos2d::Node* arg0;
-            ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ComRender:create");
+            axis::Node* arg0;
+            ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ComRender:create");
             if (!ok) { break; }
             const char* arg1;
             std::string arg1_tmp; ok &= luaval_to_std_string(tolua_S, 3, &arg1_tmp, "ccs.ComRender:create"); arg1 = arg1_tmp.c_str();
@@ -14722,8 +14722,8 @@ int lua_cocos2dx_studio_ComRender_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComRender_createInstance'", nullptr);
             return 0;
         }
-        cocos2d::Ref* ret = cocostudio::ComRender::createInstance();
-        object_to_luaval<cocos2d::Ref>(tolua_S, "cc.Ref",(cocos2d::Ref*)ret);
+        axis::Ref* ret = cocostudio::ComRender::createInstance();
+        object_to_luaval<axis::Ref>(tolua_S, "cc.Ref",(axis::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComRender:createInstance",argc, 0);
@@ -14843,8 +14843,8 @@ int lua_cocos2dx_studio_GUIReader_widgetFromJsonFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_GUIReader_widgetFromJsonFile'", nullptr);
             return 0;
         }
-        cocos2d::ui::Widget* ret = cobj->widgetFromJsonFile(arg0);
-        object_to_luaval<cocos2d::ui::Widget>(tolua_S, "ccui.Widget",(cocos2d::ui::Widget*)ret);
+        axis::ui::Widget* ret = cobj->widgetFromJsonFile(arg0);
+        object_to_luaval<axis::ui::Widget>(tolua_S, "ccui.Widget",(axis::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:widgetFromJsonFile",argc, 1);
@@ -14940,8 +14940,8 @@ int lua_cocos2dx_studio_GUIReader_widgetFromBinaryFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_GUIReader_widgetFromBinaryFile'", nullptr);
             return 0;
         }
-        cocos2d::ui::Widget* ret = cobj->widgetFromBinaryFile(arg0);
-        object_to_luaval<cocos2d::ui::Widget>(tolua_S, "ccui.Widget",(cocos2d::ui::Widget*)ret);
+        axis::ui::Widget* ret = cobj->widgetFromBinaryFile(arg0);
+        object_to_luaval<axis::ui::Widget>(tolua_S, "ccui.Widget",(axis::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:widgetFromBinaryFile",argc, 1);
@@ -15126,7 +15126,7 @@ int lua_cocos2dx_studio_SceneReader_setTarget(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (cocos2d::Ref *, void *)> arg0;
+        std::function<void (axis::Ref *, void *)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -15188,8 +15188,8 @@ int lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->createNodeWithSceneFile(arg0);
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->createNodeWithSceneFile(arg0);
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     if (argc == 2) 
@@ -15205,8 +15205,8 @@ int lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SceneReader_createNodeWithSceneFile'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->createNodeWithSceneFile(arg0, arg1);
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->createNodeWithSceneFile(arg0, arg1);
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SceneReader:createNodeWithSceneFile",argc, 1);
@@ -15302,8 +15302,8 @@ int lua_cocos2dx_studio_SceneReader_getNodeByTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SceneReader_getNodeByTag'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getNodeByTag(arg0);
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getNodeByTag(arg0);
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SceneReader:getNodeByTag",argc, 1);
@@ -16120,7 +16120,7 @@ int lua_cocos2dx_studio_Frame_setTweenType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::tweenfunc::TweenType arg0;
+        axis::tweenfunc::TweenType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccs.Frame:setTweenType");
         if(!ok)
@@ -16170,9 +16170,9 @@ int lua_cocos2dx_studio_Frame_setNode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Node* arg0;
+        axis::Node* arg0;
 
-        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.Frame:setNode");
+        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.Frame:setNode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Frame_setNode'", nullptr);
@@ -16757,8 +16757,8 @@ int lua_cocos2dx_studio_Frame_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Frame_getNode'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getNode();
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getNode();
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getNode",argc, 0);
@@ -17882,7 +17882,7 @@ int lua_cocos2dx_studio_PositionFrame_setPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Point arg0;
+        axis::Point arg0;
 
         ok &= luaval_to_point(tolua_S, 2, &arg0, "ccs.PositionFrame:setPosition");
         if(!ok)
@@ -18037,7 +18037,7 @@ int lua_cocos2dx_studio_PositionFrame_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_PositionFrame_getPosition'", nullptr);
             return 0;
         }
-        cocos2d::Point ret = cobj->getPosition();
+        axis::Point ret = cobj->getPosition();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -18518,7 +18518,7 @@ int lua_cocos2dx_studio_AnchorPointFrame_setAnchorPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Point arg0;
+        axis::Point arg0;
 
         ok &= luaval_to_point(tolua_S, 2, &arg0, "ccs.AnchorPointFrame:setAnchorPoint");
         if(!ok)
@@ -18573,7 +18573,7 @@ int lua_cocos2dx_studio_AnchorPointFrame_getAnchorPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_AnchorPointFrame_getAnchorPoint'", nullptr);
             return 0;
         }
-        cocos2d::Point ret = cobj->getAnchorPoint();
+        axis::Point ret = cobj->getAnchorPoint();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -19304,7 +19304,7 @@ int lua_cocos2dx_studio_ColorFrame_getColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ColorFrame_getColor'", nullptr);
             return 0;
         }
-        cocos2d::Color3B ret = cobj->getColor();
+        axis::Color3B ret = cobj->getColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -19346,7 +19346,7 @@ int lua_cocos2dx_studio_ColorFrame_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Color3B arg0;
+        axis::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "ccs.ColorFrame:setColor");
         if(!ok)
@@ -20116,7 +20116,7 @@ int lua_cocos2dx_studio_BlendFuncFrame_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BlendFuncFrame_getBlendFunc'", nullptr);
             return 0;
         }
-        cocos2d::BlendFunc ret = cobj->getBlendFunc();
+        axis::BlendFunc ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20158,7 +20158,7 @@ int lua_cocos2dx_studio_BlendFuncFrame_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::BlendFunc arg0;
+        axis::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ccs.BlendFuncFrame:setBlendFunc");
         if(!ok)
@@ -20590,9 +20590,9 @@ int lua_cocos2dx_studio_Timeline_setNode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Node* arg0;
+        axis::Node* arg0;
 
-        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.Timeline:setNode");
+        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.Timeline:setNode");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Timeline_setNode'", nullptr);
@@ -20845,7 +20845,7 @@ int lua_cocos2dx_studio_Timeline_getFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Timeline_getFrames'", nullptr);
             return 0;
         }
-        const cocos2d::Vector<cocostudio::timeline::Frame *>& ret = cobj->getFrames();
+        const axis::Vector<cocostudio::timeline::Frame *>& ret = cobj->getFrames();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20939,8 +20939,8 @@ int lua_cocos2dx_studio_Timeline_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_Timeline_getNode'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getNode();
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getNode();
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:getNode",argc, 0);
@@ -22025,7 +22025,7 @@ int lua_cocos2dx_studio_ActionTimeline_getTimelines(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimeline_getTimelines'", nullptr);
             return 0;
         }
-        const cocos2d::Vector<cocostudio::timeline::Timeline *>& ret = cobj->getTimelines();
+        const axis::Vector<cocostudio::timeline::Timeline *>& ret = cobj->getTimelines();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23196,8 +23196,8 @@ int lua_cocos2dx_studio_ActionTimelineNode_getRoot(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineNode_getRoot'", nullptr);
             return 0;
         }
-        cocos2d::Node* ret = cobj->getRoot();
-        object_to_luaval<cocos2d::Node>(tolua_S, "cc.Node",(cocos2d::Node*)ret);
+        axis::Node* ret = cobj->getRoot();
+        object_to_luaval<axis::Node>(tolua_S, "cc.Node",(axis::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:getRoot",argc, 0);
@@ -23335,10 +23335,10 @@ int lua_cocos2dx_studio_ActionTimelineNode_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        cocos2d::Node* arg0;
+        axis::Node* arg0;
         cocostudio::timeline::ActionTimeline* arg1;
 
-        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ActionTimelineNode:init");
+        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ActionTimelineNode:init");
 
         ok &= luaval_to_object<cocostudio::timeline::ActionTimeline>(tolua_S, 3, "ccs.ActionTimeline",&arg1, "ccs.ActionTimelineNode:init");
         if(!ok)
@@ -23388,9 +23388,9 @@ int lua_cocos2dx_studio_ActionTimelineNode_setRoot(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Node* arg0;
+        axis::Node* arg0;
 
-        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ActionTimelineNode:setRoot");
+        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ActionTimelineNode:setRoot");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ActionTimelineNode_setRoot'", nullptr);
@@ -23427,9 +23427,9 @@ int lua_cocos2dx_studio_ActionTimelineNode_create(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        cocos2d::Node* arg0;
+        axis::Node* arg0;
         cocostudio::timeline::ActionTimeline* arg1;
-        ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ActionTimelineNode:create");
+        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.ActionTimelineNode:create");
         ok &= luaval_to_object<cocostudio::timeline::ActionTimeline>(tolua_S, 3, "ccs.ActionTimeline",&arg1, "ccs.ActionTimelineNode:create");
         if(!ok)
         {
@@ -23581,7 +23581,7 @@ int lua_cocos2dx_studio_BoneNode_getChildBones(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 0) {
-            cocos2d::Vector<cocostudio::timeline::BoneNode *>& ret = cobj->getChildBones();
+            axis::Vector<cocostudio::timeline::BoneNode *>& ret = cobj->getChildBones();
             ccvector_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -23589,7 +23589,7 @@ int lua_cocos2dx_studio_BoneNode_getChildBones(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 0) {
-            const cocos2d::Vector<cocostudio::timeline::BoneNode *>& ret = cobj->getChildBones();
+            const axis::Vector<cocostudio::timeline::BoneNode *>& ret = cobj->getChildBones();
             ccvector_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -23638,7 +23638,7 @@ int lua_cocos2dx_studio_BoneNode_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BoneNode_getBlendFunc'", nullptr);
             return 0;
         }
-        const cocos2d::BlendFunc& ret = cobj->getBlendFunc();
+        const axis::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23685,7 +23685,7 @@ int lua_cocos2dx_studio_BoneNode_getAllSubBones(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BoneNode_getAllSubBones'", nullptr);
             return 0;
         }
-        cocos2d::Vector<cocostudio::timeline::BoneNode *> ret = cobj->getAllSubBones();
+        axis::Vector<cocostudio::timeline::BoneNode *> ret = cobj->getAllSubBones();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23727,7 +23727,7 @@ int lua_cocos2dx_studio_BoneNode_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::BlendFunc arg0;
+        axis::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ccs.BoneNode:setBlendFunc");
         if(!ok)
@@ -23832,7 +23832,7 @@ int lua_cocos2dx_studio_BoneNode_getVisibleSkinsRect(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BoneNode_getVisibleSkinsRect'", nullptr);
             return 0;
         }
-        cocos2d::Rect ret = cobj->getVisibleSkinsRect();
+        axis::Rect ret = cobj->getVisibleSkinsRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23879,7 +23879,7 @@ int lua_cocos2dx_studio_BoneNode_getAllSubSkins(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BoneNode_getAllSubSkins'", nullptr);
             return 0;
         }
-        cocos2d::Vector<cocos2d::Node *> ret = cobj->getAllSubSkins();
+        axis::Vector<axis::Node *> ret = cobj->getAllSubSkins();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23932,8 +23932,8 @@ int lua_cocos2dx_studio_BoneNode_displaySkin(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 2) {
-            cocos2d::Node* arg0;
-            ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.BoneNode:displaySkin");
+            axis::Node* arg0;
+            ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.BoneNode:displaySkin");
 
             if (!ok) { break; }
             bool arg1;
@@ -24026,8 +24026,8 @@ int lua_cocos2dx_studio_BoneNode_addSkin(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 3) {
-            cocos2d::Node* arg0;
-            ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.BoneNode:addSkin");
+            axis::Node* arg0;
+            ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.BoneNode:addSkin");
 
             if (!ok) { break; }
             bool arg1;
@@ -24046,8 +24046,8 @@ int lua_cocos2dx_studio_BoneNode_addSkin(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 2) {
-            cocos2d::Node* arg0;
-            ok &= luaval_to_object<cocos2d::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.BoneNode:addSkin");
+            axis::Node* arg0;
+            ok &= luaval_to_object<axis::Node>(tolua_S, 2, "cc.Node",&arg0, "ccs.BoneNode:addSkin");
 
             if (!ok) { break; }
             bool arg1;
@@ -24190,7 +24190,7 @@ int lua_cocos2dx_studio_BoneNode_getSkins(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 0) {
-            cocos2d::Vector<cocos2d::Node *>& ret = cobj->getSkins();
+            axis::Vector<axis::Node *>& ret = cobj->getSkins();
             ccvector_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -24198,7 +24198,7 @@ int lua_cocos2dx_studio_BoneNode_getSkins(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 0) {
-            const cocos2d::Vector<cocos2d::Node *>& ret = cobj->getSkins();
+            const axis::Vector<axis::Node *>& ret = cobj->getSkins();
             ccvector_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -24247,7 +24247,7 @@ int lua_cocos2dx_studio_BoneNode_getVisibleSkins(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BoneNode_getVisibleSkins'", nullptr);
             return 0;
         }
-        cocos2d::Vector<cocos2d::Node *> ret = cobj->getVisibleSkins();
+        axis::Vector<axis::Node *> ret = cobj->getVisibleSkins();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24386,7 +24386,7 @@ int lua_cocos2dx_studio_BoneNode_setDebugDrawColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Color4F arg0;
+        axis::Color4F arg0;
 
         ok &=luaval_to_color4f(tolua_S, 2, &arg0, "ccs.BoneNode:setDebugDrawColor");
         if(!ok)
@@ -24441,7 +24441,7 @@ int lua_cocos2dx_studio_BoneNode_getDebugDrawColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_BoneNode_getDebugDrawColor'", nullptr);
             return 0;
         }
-        cocos2d::Color4F ret = cobj->getDebugDrawColor();
+        axis::Color4F ret = cobj->getDebugDrawColor();
         color4f_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24768,7 +24768,7 @@ int lua_cocos2dx_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_SkeletonNode_getAllSubBonesMap'", nullptr);
             return 0;
         }
-        const cocos2d::Map<std::string, cocostudio::timeline::BoneNode *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAllSubBonesMap();
+        const axis::Map<std::string, cocostudio::timeline::BoneNode *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAllSubBonesMap();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25128,8 +25128,8 @@ int lua_cocos2dx_studio_ComExtensionData_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_studio_ComExtensionData_createInstance'", nullptr);
             return 0;
         }
-        cocos2d::Ref* ret = cocostudio::ComExtensionData::createInstance();
-        object_to_luaval<cocos2d::Ref>(tolua_S, "cc.Ref",(cocos2d::Ref*)ret);
+        axis::Ref* ret = cocostudio::ComExtensionData::createInstance();
+        object_to_luaval<axis::Ref>(tolua_S, "cc.Ref",(axis::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComExtensionData:createInstance",argc, 0);

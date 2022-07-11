@@ -28,7 +28,7 @@
 #include "Particle3D/CCParticleSystem3D.h"
 #include "Particle3D/PU/CCPUParticleSystem3D.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 #define PARTICLE_SYSTEM_TAG 0x0001
 
@@ -90,9 +90,9 @@ bool Particle3DTestDemo::init()
     return true;
 }
 
-void Particle3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
+void Particle3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event) {}
 
-void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
 {
     if (touches.size())
     {
@@ -105,7 +105,7 @@ void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, coco
     }
 }
 
-void Particle3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
+void Particle3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event) {}
 
 Particle3DTestDemo::Particle3DTestDemo(void) : _angle(0.0f) {}
 

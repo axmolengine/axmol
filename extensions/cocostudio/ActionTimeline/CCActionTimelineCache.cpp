@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 #include <fstream>
 
-using namespace cocos2d;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -452,7 +452,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std:
     return action;
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const cocos2d::Data& data, std::string_view fileName)
+ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const axis::Data& data, std::string_view fileName)
 {
     // if already exists an action with filename, then return this action
     ActionTimeline* action = _animationActions.at(fileName);
@@ -469,7 +469,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const cocos2d::
     return action;
 }
 
-ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(const cocos2d::Data& data)
+ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(const axis::Data& data)
 {
     auto csparsebinary = GetCSParseBinary(data.getBytes());
 
@@ -904,7 +904,7 @@ Frame* ActionTimelineCache::loadInnerActionFrameWithFlatBuffers(const flatbuffer
 Frame* ActionTimelineCache::loadBlendFrameWithFlatBuffers(const flatbuffers::BlendFrame* flatbuffers)
 {
     BlendFuncFrame* frame = BlendFuncFrame::create();
-    cocos2d::BlendFunc blend;
+    axis::BlendFunc blend;
     blend.src = backend::BlendFactor::ONE;
     blend.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
     if (nullptr != flatbuffers->blendFunc())
@@ -934,7 +934,7 @@ void ActionTimelineCache::loadEasingDataWithFlatBuffers(cocostudio::timeline::Fr
                                                         const flatbuffers::EasingData* flatbuffers)
 {
     int type = flatbuffers->type();
-    frame->setTweenType((cocos2d::tweenfunc::TweenType)type);
+    frame->setTweenType((axis::tweenfunc::TweenType)type);
     auto points = flatbuffers->points();
     if (points)
     {

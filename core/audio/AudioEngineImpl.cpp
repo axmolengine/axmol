@@ -45,7 +45,7 @@
 #    import <UIKit/UIKit.h>
 #endif
 
-using namespace cocos2d;
+USING_NS_AX;
 
 static ALCdevice* s_ALDevice       = nullptr;
 static ALCcontext* s_ALContext     = nullptr;

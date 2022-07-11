@@ -41,7 +41,7 @@ THE SOFTWARE.
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct Color4B;
 struct Color4F;
@@ -664,6 +664,6 @@ using DepthStencilFlags = backend::DepthStencilFlags;
 using RenderTargetFlag  = backend::RenderTargetFlag;
 using ClearFlag         = backend::ClearFlag;
 
-NS_CC_END
+NS_AX_END
 // end group
 /// @}

@@ -27,7 +27,7 @@
 #include "base/CCData.h"
 #include "base/CCConsole.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const Data Data::Null;
 
@@ -161,4 +161,4 @@ uint8_t* Data::takeBuffer(ssize_t* size)
     return buffer;
 }
 
-NS_CC_END
+NS_AX_END

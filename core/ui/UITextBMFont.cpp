@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "ui/UITextBMFont.h"
 #include "2d/CCLabel.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -69,7 +69,7 @@ TextBMFont* TextBMFont::create(std::string_view text, std::string_view filename)
 
 void TextBMFont::initRenderer()
 {
-    _labelBMFontRenderer = cocos2d::Label::create();
+    _labelBMFontRenderer = axis::Label::create();
     addProtectedChild(_labelBMFontRenderer, LABELBMFONT_RENDERER_Z, -1);
 }
 
@@ -190,4 +190,4 @@ void TextBMFont::resetRender()
 }
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

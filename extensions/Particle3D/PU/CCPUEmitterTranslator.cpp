@@ -30,7 +30,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttributeTranslator.h"
 #include "extensions/Particle3D/PU/CCPUEmitterManager.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUEmitterTranslator::PUEmitterTranslator() : _emitter(nullptr) {}
 //-------------------------------------------------------------------------
@@ -645,4 +645,4 @@ void PUEmitterTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode* 
     }
 }
 
-NS_CC_END
+NS_AX_END
