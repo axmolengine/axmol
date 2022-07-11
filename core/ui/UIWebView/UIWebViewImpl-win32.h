@@ -26,7 +26,7 @@
 #ifndef __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
 #define __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/CCPlatformMacros.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
 

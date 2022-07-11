@@ -30,6 +30,8 @@
 #include <string>
 #include <string_view>
 
+#include "platform/CCPlatformMacros.h"
+
 @class UIWebViewWrapper;
 
 NS_AX_BEGIN
