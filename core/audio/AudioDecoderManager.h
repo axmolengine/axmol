@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
  https://axis-project.github.io/
 
@@ -26,6 +26,8 @@ THE SOFTWARE.
 
 #pragma once
 #include <string>
+
+#include "platform/CCPlatformMacros.h"
 
 NS_AX_BEGIN
 
