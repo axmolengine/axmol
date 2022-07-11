@@ -98,7 +98,7 @@ typedef SSIZE_T ssize_t;
 // Structure timeval has define in winsock.h, include windows.h for it.
 #    include <Windows.h>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct timezone
 {
@@ -108,7 +108,7 @@ struct timezone
 
 int CC_DLL gettimeofday(struct timeval*, struct timezone*);
 
-NS_CC_END
+NS_AX_END
 
 #else
 

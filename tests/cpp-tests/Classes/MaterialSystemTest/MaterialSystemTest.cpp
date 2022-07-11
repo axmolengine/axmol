@@ -33,7 +33,7 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 static void printProperties(Properties* properties, int indent);
 

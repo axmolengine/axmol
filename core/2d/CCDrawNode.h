@@ -39,7 +39,7 @@
 #include "math/CCMath.h"
 #include "base/any_buffer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static const int DEFAULT_LINE_WIDTH = 2;
 
@@ -415,6 +415,6 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(DrawNode);
 };
 /** @} */
-NS_CC_END
+NS_AX_END
 
 #endif  // __CCDRAWNODES_CCDRAW_NODE_H__

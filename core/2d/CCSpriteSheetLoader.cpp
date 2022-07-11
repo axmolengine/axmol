@@ -4,7 +4,7 @@
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void SpriteSheetLoader::initializePolygonInfo(const Vec2& textureSize,
                                               const Vec2& spriteSize,
@@ -41,4 +41,4 @@ void SpriteSheetLoader::initializePolygonInfo(const Vec2& textureSize,
     info.setRect(Rect(0, 0, spriteSize.width, spriteSize.height));
 }
 
-NS_CC_END
+NS_AX_END

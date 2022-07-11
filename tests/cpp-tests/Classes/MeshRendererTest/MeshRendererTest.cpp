@@ -35,7 +35,7 @@
 #include <algorithm>
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 MeshRendererTests::MeshRendererTests()
 {
@@ -95,7 +95,7 @@ MeshRendererTestDemo::~MeshRendererTestDemo()
 //------------------------------------------------------------------
 MeshRendererForceDepthTest::MeshRendererForceDepthTest()
 {
-    auto orc = cocos2d::MeshRenderer::create("MeshRendererTest/orc.c3b");
+    auto orc = axis::MeshRenderer::create("MeshRendererTest/orc.c3b");
     orc->setScale(5);
     orc->setPositionNormalized(Vec2(.5f, .3f));
     orc->setPositionZ(40);
@@ -180,7 +180,7 @@ void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
     mesh->setTexture("MeshRendererTest/boss.png");
 
     //
-    // mesh->setEffect(cocos2d::EFFECT_OUTLINE);
+    // mesh->setEffect(axis::EFFECT_OUTLINE);
 
     // add to scene
     addChild(mesh);
@@ -398,7 +398,7 @@ std::string MeshRendererFakeShadowTest::subtitle() const
     return "touch the screen to move around";
 }
 
-void MeshRendererFakeShadowTest::Move(cocos2d::Ref* sender, int value)
+void MeshRendererFakeShadowTest::Move(axis::Ref* sender, int value)
 {
     _orc->setPositionX(_orc->getPositionX() + value);
 }
@@ -498,11 +498,11 @@ bool MeshRendererFakeShadowTest::isState(unsigned int state, unsigned int bit) c
     return (state & bit) == bit;
 }
 
-void MeshRendererFakeShadowTest::onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
+void MeshRendererFakeShadowTest::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event) {}
 
-void MeshRendererFakeShadowTest::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event) {}
+void MeshRendererFakeShadowTest::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event) {}
 
-void MeshRendererFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void MeshRendererFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
 {
     for (auto& item : touches)
     {
@@ -634,7 +634,7 @@ std::string MeshRendererLightMapTest::subtitle() const
     return "drag the screen to move around";
 }
 
-void MeshRendererLightMapTest::onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void MeshRendererLightMapTest::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     if (touches.size() == 1)
     {
@@ -2125,7 +2125,7 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 #endif
 }
 
-void MeshRendererCubeMapTest::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void MeshRendererCubeMapTest::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
 {
     if (touches.size())
     {
@@ -2165,7 +2165,7 @@ Issue9767::Issue9767()
 
 Issue9767::~Issue9767() {}
 
-void Issue9767::menuCallback_SwitchShader(cocos2d::Ref* sender)
+void Issue9767::menuCallback_SwitchShader(axis::Ref* sender)
 {
     CC_SAFE_RELEASE_NULL(_programState);
     if (_shaderType == Issue9767::ShaderType::SHADER_TEX)
@@ -2271,7 +2271,7 @@ Animate3DCallbackTest::Animate3DCallbackTest()
                 ((PUParticleSystem3D*)node)->startParticleSystem();
             }
 
-            cocos2d::log("frame %d", info->frame);
+            axis::log("frame %d", info->frame);
         });
         Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, -1);
     }
@@ -2365,7 +2365,7 @@ CameraBackgroundClearTest::CameraBackgroundClearTest()
     _label->setPosition(s.width / 2.f, VisibleRect::top().y * 0.8f);
 }
 
-void CameraBackgroundClearTest::switch_CameraClearMode(cocos2d::Ref* sender)
+void CameraBackgroundClearTest::switch_CameraClearMode(axis::Ref* sender)
 {
     auto brush                            = _camera->getBackgroundBrush();
     CameraBackgroundBrush::BrushType type = CameraBackgroundBrush::BrushType::NONE;
@@ -2585,7 +2585,7 @@ std::string MeshRendererPropertyTest::subtitle() const
 }
 
 void MeshRendererPropertyTest::update(float delta) {}
-void MeshRendererPropertyTest::printMeshName(cocos2d::Ref* sender)
+void MeshRendererPropertyTest::printMeshName(axis::Ref* sender)
 {
     CCLOG("MeshName Begin");
     Vector<Mesh*> meshes = _mesh->getMeshes();
@@ -2595,7 +2595,7 @@ void MeshRendererPropertyTest::printMeshName(cocos2d::Ref* sender)
     }
     CCLOG("MeshName End");
 }
-void MeshRendererPropertyTest::removeUsedTexture(cocos2d::Ref* sender)
+void MeshRendererPropertyTest::removeUsedTexture(axis::Ref* sender)
 {
     if (_meshTex != nullptr)
     {
@@ -2604,7 +2604,7 @@ void MeshRendererPropertyTest::removeUsedTexture(cocos2d::Ref* sender)
     }
 }
 
-void MeshRendererPropertyTest::resetTexture(cocos2d::Ref* sender)
+void MeshRendererPropertyTest::resetTexture(axis::Ref* sender)
 {
     if (_meshTex != nullptr)
     {
@@ -2628,7 +2628,7 @@ void MeshRendererPropertyTest::refreshMeshRender()
             cacheTex = Director::getInstance()->getTextureCache()->addImage(image, "/dummyTexture");
             image->release();
         }
-        mesh->setTexture(cacheTex, cocos2d::NTextureData::Usage::Diffuse, false);
+        mesh->setTexture(cacheTex, axis::NTextureData::Usage::Diffuse, false);
     }
 }
 
@@ -2645,7 +2645,7 @@ Issue16155Test::Issue16155Test()
     addChild(mesh);
     removeChild(mesh);
 
-    cocos2d::log("Issue 16155: Ref count:%d. Run this test again. RC should be the same", rcBefore);
+    axis::log("Issue 16155: Ref count:%d. Run this test again. RC should be the same", rcBefore);
 }
 
 std::string Issue16155Test::title() const

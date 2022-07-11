@@ -46,8 +46,8 @@ customization that is not appropriate for viewDidLoad.
 {
     // Initialize the CCEAGLView
     CCEAGLView* eaglView = [CCEAGLView viewWithFrame:[UIScreen mainScreen].bounds
-                                         pixelFormat:(__bridge NSString*)cocos2d::GLViewImpl::_pixelFormat
-                                         depthFormat:cocos2d::GLViewImpl::_depthFormat
+                                         pixelFormat:(__bridge NSString*)axis::GLViewImpl::_pixelFormat
+                                         depthFormat:axis::GLViewImpl::_depthFormat
                                   preserveBackbuffer:NO
                                           sharegroup:nil
                                        multiSampling:NO
@@ -93,7 +93,7 @@ customization that is not appropriate for viewDidLoad.
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    auto glview = cocos2d::Director::getInstance()->getOpenGLView();
+    auto glview = axis::Director::getInstance()->getOpenGLView();
 
     if (glview)
     {
@@ -102,7 +102,7 @@ customization that is not appropriate for viewDidLoad.
         if (eaglview)
         {
             CGSize s = CGSizeMake([eaglview getWidth], [eaglview getHeight]);
-            cocos2d::Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
+            axis::Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
         }
     }
 }

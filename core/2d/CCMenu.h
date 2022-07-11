@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCLayer.h"
 #include "base/CCValue.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 class Touch;
 
 /**
@@ -185,6 +185,6 @@ private:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CCMENU_H_

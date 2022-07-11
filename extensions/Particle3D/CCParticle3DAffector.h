@@ -30,7 +30,7 @@
 #include <vector>
 #include "ExtensionExport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class ParticleSystem3D;
 struct Particle3D;
@@ -56,6 +56,6 @@ protected:
     bool _isEnabled;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

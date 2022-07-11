@@ -38,7 +38,7 @@
 #include "audio/AudioMacros.h"
 #include "audio/alconfig.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class AudioEngineImpl;
 class AudioPlayer;
@@ -108,4 +108,4 @@ protected:
     friend class AudioPlayer;
 };
 
-NS_CC_END
+NS_AX_END

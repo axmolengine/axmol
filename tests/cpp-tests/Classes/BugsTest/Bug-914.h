@@ -33,9 +33,9 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "Bug914"; }
 
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void restart(cocos2d::Ref* sender);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void restart(axis::Ref* sender);
 
     CREATE_FUNC(Bug914Layer);
 };

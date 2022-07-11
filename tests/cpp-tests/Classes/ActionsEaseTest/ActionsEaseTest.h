@@ -34,9 +34,9 @@ DEFINE_TEST_SUITE(ActionsEaseTests);
 class EaseSpriteDemo : public TestCase
 {
 protected:
-    cocos2d::Sprite* _grossini;
-    cocos2d::Sprite* _tamara;
-    cocos2d::Sprite* _kathia;
+    axis::Sprite* _grossini;
+    axis::Sprite* _tamara;
+    axis::Sprite* _kathia;
 
     std::string _title;
 

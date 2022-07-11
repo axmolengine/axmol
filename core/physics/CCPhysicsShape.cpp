@@ -37,7 +37,7 @@
 #    include "physics/CCPhysicsWorld.h"
 #    include "physics/CCPhysicsHelper.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 extern const float PHYSICS_INFINITY;
 static cpBody* s_sharedBody = nullptr;
 
@@ -805,7 +805,7 @@ Vec2 PhysicsShapeEdgePolygon::getCenter()
     return center;
 }
 
-void PhysicsShapeEdgePolygon::getPoints(cocos2d::Vec2* outPoints) const
+void PhysicsShapeEdgePolygon::getPoints(axis::Vec2* outPoints) const
 {
     int i = 0;
     for (auto shape : _cpShapes)
@@ -973,6 +973,6 @@ bool PhysicsShape::containsPoint(const Vec2& point) const
     return false;
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_PHYSICS

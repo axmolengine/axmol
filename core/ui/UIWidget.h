@@ -38,7 +38,7 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class EventListenerTouchOneByOne;
 class Camera;
@@ -252,7 +252,7 @@ public:
     /**
      * @js NA
      */
-    virtual void visit(cocos2d::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    virtual void visit(axis::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * Set a callback to touch vent listener.
@@ -847,7 +847,7 @@ private:
 };
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 // end of ui group
 /// @}
 

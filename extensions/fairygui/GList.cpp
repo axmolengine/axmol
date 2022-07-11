@@ -6,7 +6,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 using namespace std;
 
@@ -122,7 +122,7 @@ void GList::setColumnGap(int value)
     }
 }
 
-void GList::setAlign(cocos2d::TextHAlignment value)
+void GList::setAlign(axis::TextHAlignment value)
 {
     if (_align != value)
     {
@@ -133,7 +133,7 @@ void GList::setAlign(cocos2d::TextHAlignment value)
     }
 }
 
-void GList::setVerticalAlign(cocos2d::TextVAlignment value)
+void GList::setVerticalAlign(axis::TextVAlignment value)
 {
     if (_verticalAlign != value)
     {
@@ -1113,7 +1113,7 @@ void GList::refreshVirtualList()
     setVirtualListChangedFlag(false);
 }
 
-cocos2d::Vec2 GList::getSnappingPosition(const cocos2d::Vec2& pt)
+axis::Vec2 GList::getSnappingPosition(const axis::Vec2& pt)
 {
     if (_virtual)
     {

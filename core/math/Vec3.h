@@ -31,7 +31,7 @@
  * @{
  */
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 class Mat4;
 class Quaternion;
@@ -488,7 +488,7 @@ inline Vec3 operator*(float x, const Vec3& v);
 
 // typedef Vec3 Point3;
 
-NS_CC_MATH_END
+NS_AX_MATH_END
 /**
  end of base group
  @}

@@ -42,8 +42,7 @@ THE SOFTWARE.
 
 #include "yasio/cxx17/string_view.hpp"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 bool AudioDecoderManager::init()
 {
@@ -93,4 +92,4 @@ void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
     delete decoder;
 }
 
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

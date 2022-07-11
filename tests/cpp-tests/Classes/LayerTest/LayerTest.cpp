@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "../core/ui/UIText.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum
 {
@@ -855,7 +855,7 @@ void LayerRadialGradientTest::onEnter()
     addChild(listview);
 }
 
-cocos2d::ui::Slider* LayerRadialGradientTest::createSlider()
+axis::ui::Slider* LayerRadialGradientTest::createSlider()
 {
     auto slider = ui::Slider::create();
     slider->setTouchEnabled(true);
@@ -870,18 +870,18 @@ cocos2d::ui::Slider* LayerRadialGradientTest::createSlider()
     return slider;
 }
 
-void LayerRadialGradientTest::listviewCallback(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type)
+void LayerRadialGradientTest::listviewCallback(axis::Ref* sender, axis::ui::ListView::EventType type)
 {
     // clear all text to white
-    auto listview = static_cast<cocos2d::ui::ListView*>(sender);
+    auto listview = static_cast<axis::ui::ListView*>(sender);
     for (auto& item : listview->getItems())
-        static_cast<cocos2d::ui::Text*>(item)->setColor(cocos2d::Color3B::WHITE);
+        static_cast<axis::ui::Text*>(item)->setColor(axis::Color3B::WHITE);
 
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(cocos2d::Color3B::RED);
+    listview->getItem(_currentSeletedItemIndex)->setColor(axis::Color3B::RED);
 
     int percent = 100;
-    auto slider = static_cast<cocos2d::ui::Slider*>(getChildByTag(101));
+    auto slider = static_cast<axis::ui::Slider*>(getChildByTag(101));
     switch (_currentSeletedItemIndex)
     {
     case 0:
@@ -910,9 +910,9 @@ void LayerRadialGradientTest::listviewCallback(cocos2d::Ref* sender, cocos2d::ui
     }
 }
 
-void LayerRadialGradientTest::sliderCallback(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type)
+void LayerRadialGradientTest::sliderCallback(axis::Ref* sender, axis::ui::Slider::EventType type)
 {
-    auto slider   = static_cast<cocos2d::ui::Slider*>(sender);
+    auto slider   = static_cast<axis::ui::Slider*>(sender);
     float percent = slider->getPercent() / 100.f;
     switch (_currentSeletedItemIndex)
     {
@@ -946,32 +946,32 @@ void LayerRadialGradientTest::sliderCallback(cocos2d::Ref* sender, cocos2d::ui::
     }
 }
 
-cocos2d::ui::ListView* LayerRadialGradientTest::createListView()
+axis::ui::ListView* LayerRadialGradientTest::createListView()
 {
-    auto listview = cocos2d::ui::ListView::create();
+    auto listview = axis::ui::ListView::create();
 
-    auto scale = cocos2d::ui::Text::create();
+    auto scale = axis::ui::Text::create();
     scale->setString("scale[0-2]");
-    scale->setColor(cocos2d::Color3B::RED);  // default seleted item
+    scale->setColor(axis::Color3B::RED);  // default seleted item
     scale->setTouchEnabled(true);
     listview->pushBackCustomItem(scale);
 
-    auto skewx = cocos2d::ui::Text::create();
+    auto skewx = axis::ui::Text::create();
     skewx->setString("skewx[0-90]");
     skewx->setTouchEnabled(true);
     listview->pushBackCustomItem(skewx);
 
-    auto skewy = cocos2d::ui::Text::create();
+    auto skewy = axis::ui::Text::create();
     skewy->setString("skewy[0-90]");
     skewy->setTouchEnabled(true);
     listview->pushBackCustomItem(skewy);
 
-    auto expand = cocos2d::ui::Text::create();
+    auto expand = axis::ui::Text::create();
     expand->setString("expand[0-1]");
     expand->setTouchEnabled(true);
     listview->pushBackCustomItem(expand);
 
-    auto radius = cocos2d::ui::Text::create();
+    auto radius = axis::ui::Text::create();
     radius->setString("radius[0-300]");
     radius->setTouchEnabled(true);
     listview->pushBackCustomItem(radius);

@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #include "CCControlUtils.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 Sprite* ControlUtils::addSpriteToTargetWithPosAndAnchor(const char* spriteName, Node* target, Vec2 pos, Vec2 anchor)
 {
@@ -171,4 +171,4 @@ Rect ControlUtils::RectUnion(const Rect& src1, const Rect& src2)
     return result;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Sprite;
 
@@ -207,4 +207,4 @@ private:
 // end of misc_nodes group
 /// @}
 
-NS_CC_END
+NS_AX_END

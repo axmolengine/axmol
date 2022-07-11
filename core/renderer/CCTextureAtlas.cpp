@@ -45,7 +45,7 @@ THE SOFTWARE.
 
 // implementation TextureAtlas
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 TextureAtlas::TextureAtlas() {}
 
@@ -476,4 +476,4 @@ void TextureAtlas::fillWithEmptyQuadsFromIndex(ssize_t index, ssize_t amount)
     }
 }
 
-NS_CC_END
+NS_AX_END

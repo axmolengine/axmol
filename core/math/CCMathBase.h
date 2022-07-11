@@ -58,15 +58,15 @@
 // M_1_PI                      0.31830988618379067154
 
 #ifdef __cplusplus
-#    define NS_CC_MATH_BEGIN \
-        namespace cocos2d    \
+#    define NS_AX_MATH_BEGIN \
+        namespace axis    \
         {
-#    define NS_CC_MATH_END }
-#    define USING_NS_CC_MATH using namespace cocos2d
+#    define NS_AX_MATH_END }
+#    define USING_NS_AX_MATH using namespace axis
 #else
-#    define NS_CC_MATH_BEGIN
-#    define NS_CC_MATH_END
-#    define USING_NS_CC_MATH
+#    define NS_AX_MATH_BEGIN
+#    define NS_AX_MATH_END
+#    define USING_NS_AX_MATH
 #endif
 
 /**

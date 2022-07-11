@@ -66,7 +66,7 @@ void toLower(String& s)
 
 }  // namespace
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace network
 {
@@ -406,4 +406,4 @@ std::string Uri::toString() const
 
 }  // namespace network
 
-NS_CC_END
+NS_AX_END

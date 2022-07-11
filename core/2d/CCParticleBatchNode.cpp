@@ -45,7 +45,7 @@
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ParticleBatchNode::ParticleBatchNode()
 {
@@ -455,7 +455,7 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
     _customCommand.init(_globalZOrder, _blendFunc);
 
     // Texture is set in TextureAtlas.
-    const cocos2d::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const axis::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat                      = projectionMat * transform;
     auto programState                  = _customCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocaiton, finalMat.m, sizeof(finalMat.m));
@@ -583,4 +583,4 @@ const BlendFunc& ParticleBatchNode::getBlendFunc() const
     return _blendFunc;
 }
 
-NS_CC_END
+NS_AX_END

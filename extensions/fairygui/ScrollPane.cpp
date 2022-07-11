@@ -8,7 +8,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 ScrollPane* ScrollPane::_draggingPane = nullptr;
 int ScrollPane::_gestureFlag = 0;
@@ -363,7 +363,7 @@ void ScrollPane::scrollToView(GObject* obj, bool ani, bool setFirst)
     scrollToView(rect, ani, setFirst);
 }
 
-void ScrollPane::scrollToView(const cocos2d::Rect& rect, bool ani, bool setFirst)
+void ScrollPane::scrollToView(const axis::Rect& rect, bool ani, bool setFirst)
 {
     _owner->ensureBoundsCorrect();
     if (_needRefresh)
@@ -829,7 +829,7 @@ void ScrollPane::handleSizeChanged()
         updatePageController();
 }
 
-GObject* ScrollPane::hitTest(const cocos2d::Vec2& pt, const cocos2d::Camera* camera)
+GObject* ScrollPane::hitTest(const axis::Vec2& pt, const axis::Camera* camera)
 {
     GObject* target = nullptr;
     if (_vtScrollBar)
@@ -1052,7 +1052,7 @@ bool ScrollPane::loopCheckingCurrent()
     return changed;
 }
 
-void ScrollPane::loopCheckingTarget(cocos2d::Vec2& endPos)
+void ScrollPane::loopCheckingTarget(axis::Vec2& endPos)
 {
     if (_loop == 1)
         loopCheckingTarget(endPos, 0);
@@ -1061,7 +1061,7 @@ void ScrollPane::loopCheckingTarget(cocos2d::Vec2& endPos)
         loopCheckingTarget(endPos, 1);
 }
 
-void ScrollPane::loopCheckingTarget(cocos2d::Vec2& endPos, int axis)
+void ScrollPane::loopCheckingTarget(axis::Vec2& endPos, int axis)
 {
     if (sp_getField(endPos, axis) > 0)
     {
@@ -1200,7 +1200,7 @@ float ScrollPane::alignByPage(float pos, int axis, bool inertialScrolling)
     return pos;
 }
 
-cocos2d::Vec2 ScrollPane::updateTargetAndDuration(const cocos2d::Vec2& orignPos)
+axis::Vec2 ScrollPane::updateTargetAndDuration(const axis::Vec2& orignPos)
 {
     Vec2 ret(0, 0);
     ret.x = updateTargetAndDuration(orignPos.x, 0);
@@ -1225,7 +1225,7 @@ float ScrollPane::updateTargetAndDuration(float pos, int axis)
         if (v2 > 500)
             ratio = pow((v2 - 500) / 500, 2);
 #else
-        const cocos2d::Size& winSize = Director::getInstance()->getWinSizeInPixels();
+        const axis::Size& winSize = Director::getInstance()->getWinSizeInPixels();
         v2 *= 1136.0f / MAX(winSize.width, winSize.height);
 
         if (_pageMode)

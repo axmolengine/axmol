@@ -45,8 +45,8 @@
 @property(nonatomic, readonly, getter=isEditState) BOOL editState;
 @property(nonatomic, assign) void* editBox;
 @property(nonatomic, assign) NSRect frameRect;
-@property(nonatomic, assign) cocos2d::ui::EditBox::InputFlag dataInputMode;
-@property(nonatomic, assign) cocos2d::ui::EditBox::KeyboardReturnType keyboardReturnType;
+@property(nonatomic, assign) axis::ui::EditBox::InputFlag dataInputMode;
+@property(nonatomic, assign) axis::ui::EditBox::KeyboardReturnType keyboardReturnType;
 
 - (instancetype)initWithFrame:(NSRect)frameRect editBox:(void*)editBox;
 - (void)setMaxLength:(int)maxLength;
@@ -56,12 +56,12 @@
 - (void)closeKeyboard;
 
 - (NSString*)getDefaultFontName;
-- (cocos2d::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification;
+- (axis::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification;
 
-- (void)setInputMode:(cocos2d::ui::EditBox::InputMode)inputMode;
-- (void)setInputFlag:(cocos2d::ui::EditBox::InputFlag)inputFlag;
-- (void)setReturnType:(cocos2d::ui::EditBox::KeyboardReturnType)returnType;
-- (void)setTextHorizontalAlignment:(cocos2d::TextHAlignment)alignment;
+- (void)setInputMode:(axis::ui::EditBox::InputMode)inputMode;
+- (void)setInputFlag:(axis::ui::EditBox::InputFlag)inputFlag;
+- (void)setReturnType:(axis::ui::EditBox::KeyboardReturnType)returnType;
+- (void)setTextHorizontalAlignment:(axis::TextHAlignment)alignment;
 - (void)setPlaceHolder:(const char*)text;
 - (void)setVisible:(BOOL)visible;
 - (void)setTextColor:(NSColor*)color;

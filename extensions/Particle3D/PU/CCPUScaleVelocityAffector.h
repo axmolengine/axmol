@@ -31,7 +31,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUScaleVelocityAffector : public PUAffector
 {
@@ -70,6 +70,6 @@ protected:
     bool _sinceStartSystem;
     bool _stopAtFlip;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

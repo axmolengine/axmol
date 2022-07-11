@@ -34,7 +34,7 @@
 #include <limits.h>
 #include <string.h>
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 /*
  IMPORTANT - READ ME!
@@ -249,4 +249,4 @@ void PhysicsDebugNode::setSpace(cpSpace* space)
     _spacePtr = space;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

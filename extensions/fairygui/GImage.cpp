@@ -5,7 +5,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GImage::GImage() : _content(nullptr)
 {
@@ -49,12 +49,12 @@ void GImage::handleGrayedChanged()
     ((FUISprite*)_content)->setGrayed(_finalGrayed);
 }
 
-cocos2d::Color3B GImage::getColor() const
+axis::Color3B GImage::getColor() const
 {
     return _content->getColor();
 }
 
-void GImage::setColor(const cocos2d::Color3B& value)
+void GImage::setColor(const axis::Color3B& value)
 {
     _content->setColor(value);
 }
@@ -99,7 +99,7 @@ void GImage::setFillAmount(float value)
     _content->setFillAmount(value);
 }
 
-cocos2d::Value GImage::getProp(ObjectPropID propId)
+axis::Value GImage::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -110,7 +110,7 @@ cocos2d::Value GImage::getProp(ObjectPropID propId)
     }
 }
 
-void GImage::setProp(ObjectPropID propId, const cocos2d::Value& value)
+void GImage::setProp(ObjectPropID propId, const axis::Value& value)
 {
     switch (propId)
     {

@@ -25,10 +25,10 @@
 
 #include "base/CCEvent.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Event::Event(Type type) : _type(type), _isStopped(false), _currentTarget(nullptr) {}
 
 Event::~Event() {}
 
-NS_CC_END
+NS_AX_END

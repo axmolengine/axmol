@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "math/CCMath.h"
 #include "platform/CCGLView.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_DLL GLViewImpl : public GLView
 {
@@ -53,4 +53,4 @@ protected:
     bool initWithFullScreen(std::string_view viewName);
 };
 
-NS_CC_END
+NS_AX_END

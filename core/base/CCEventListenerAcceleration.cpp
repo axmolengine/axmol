@@ -27,7 +27,7 @@
 #include "base/CCEventAcceleration.h"
 #include "base/CCConsole.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const std::string EventListenerAcceleration::LISTENER_ID = "__cc_acceleration";
 
@@ -92,4 +92,4 @@ bool EventListenerAcceleration::checkAvailable()
     return true;
 }
 
-NS_CC_END
+NS_AX_END

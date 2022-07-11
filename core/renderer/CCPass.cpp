@@ -42,7 +42,7 @@
 #include "base/ccUtils.h"
 #include "2d/CCNode.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // uniform names
 
@@ -363,4 +363,4 @@ void Pass::setUniformAmbientLigthColor(const void* data, size_t dataLen)
     TRY_SET_UNIFORM(_locAmbientLigthColor);
 }
 
-NS_CC_END
+NS_AX_END

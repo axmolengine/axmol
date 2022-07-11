@@ -34,7 +34,7 @@
 #include "2d/CCLabel.h"
 #include "extensions/ExtensionExport.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 /**
  * @addtogroup GUI
@@ -123,6 +123,6 @@ protected:
 /// @}
 /// @}
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif /* __CCCONTROLSTEPPER_H__ */

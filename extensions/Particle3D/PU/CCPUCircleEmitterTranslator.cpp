@@ -29,7 +29,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "extensions/Particle3D/PU/CCPUDynamicAttributeTranslator.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUCircleEmitterTranslator::PUCircleEmitterTranslator() {}
 //-------------------------------------------------------------------------
@@ -177,4 +177,4 @@ bool PUCircleEmitterTranslator::translateChildObject(PUScriptCompiler* /*compile
     return false;
 }
 
-NS_CC_END
+NS_AX_END

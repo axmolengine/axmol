@@ -38,7 +38,7 @@
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 class DrawNode;
 class Texture2D;
 

@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct PUParticle3D;
 class PUObserver;
@@ -53,6 +53,6 @@ public:
     virtual ~PUDoStopSystemEventHandler(){};
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

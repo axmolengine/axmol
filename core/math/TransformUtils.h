@@ -35,8 +35,7 @@ THE SOFTWARE.
  * @{
  */
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 struct AffineTransform;
 /**@{

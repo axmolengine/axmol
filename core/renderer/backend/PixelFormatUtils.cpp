@@ -27,7 +27,7 @@
 #include "PixelFormatUtils.h"
 #include "Macros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace backend
 {
@@ -496,7 +496,7 @@ void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned cha
 // converter function end
 //////////////////////////////////////////////////////////////////////////
 
-cocos2d::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
                                                 size_t dataLen,
                                                 PixelFormat format,
                                                 unsigned char** outData,
@@ -556,7 +556,7 @@ cocos2d::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
                                                  size_t dataLen,
                                                  PixelFormat format,
                                                  unsigned char** outData,
@@ -617,7 +617,7 @@ cocos2d::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
                                                   size_t dataLen,
                                                   PixelFormat format,
                                                   unsigned char** outData,
@@ -677,7 +677,7 @@ cocos2d::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
                                                    size_t dataLen,
                                                    PixelFormat format,
                                                    unsigned char** outData,
@@ -739,7 +739,7 @@ cocos2d::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
                                                     size_t dataLen,
                                                     PixelFormat format,
                                                     unsigned char** outData,
@@ -773,7 +773,7 @@ cocos2d::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
                                                     size_t dataLen,
                                                     PixelFormat format,
                                                     unsigned char** outData,
@@ -807,7 +807,7 @@ cocos2d::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
                                                 size_t dataLen,
                                                 PixelFormat format,
                                                 unsigned char** outData,
@@ -837,7 +837,7 @@ cocos2d::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
     return format;
 }
 
-cocos2d::backend::PixelFormat convertRGBA4ToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertRGBA4ToFormat(const unsigned char* data,
                                                    size_t dataLen,
                                                    PixelFormat format,
                                                    unsigned char** outData,
@@ -908,7 +908,7 @@ PixelFormat convertBGRA8ToFormat(const unsigned char* data,
  rgba(1) -> 12345678
 
  */
-cocos2d::backend::PixelFormat convertDataToFormat(const unsigned char* data,
+axis::backend::PixelFormat convertDataToFormat(const unsigned char* data,
                                                   size_t dataLen,
                                                   PixelFormat originFormat,
                                                   PixelFormat format,
@@ -954,4 +954,4 @@ cocos2d::backend::PixelFormat convertDataToFormat(const unsigned char* data,
 }  // namespace PixelFormatUtils
 }  // namespace backend
 
-NS_CC_END
+NS_AX_END

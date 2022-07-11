@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include <functional>
 #include "base/ObjectFactory.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ObjectFactory::TInfo::TInfo() : _class(""), _fun(nullptr), _func(nullptr) {}
 
@@ -113,4 +113,4 @@ void ObjectFactory::registerType(const TInfo& t)
     _typeMap.emplace(t._class, t);
 }
 
-NS_CC_END
+NS_AX_END

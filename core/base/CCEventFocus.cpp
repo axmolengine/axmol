@@ -26,10 +26,10 @@
 
 #include "base/CCEventFocus.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventFocus::EventFocus(ui::Widget* widgetLoseFocus, ui::Widget* widgetGetFocus)
     : Event(Type::FOCUS), _widgetGetFocus(widgetGetFocus), _widgetLoseFocus(widgetLoseFocus)
 {}
 
-NS_CC_END
+NS_AX_END

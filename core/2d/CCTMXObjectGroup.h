@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "base/CCValue.h"
 #include "base/CCRef.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _2d
@@ -135,6 +135,6 @@ protected:
 // end of tilemap_parallax_nodes group
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CCTMX_OBJECT_GROUP_H__

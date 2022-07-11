@@ -34,7 +34,7 @@
 
 // #define CC_DOWNLOADER_DEBUG
 #if defined(CC_DOWNLOADER_DEBUG) || defined(_DEBUG)
-#    define DLLOG(format, ...) cocos2d::log(format, ##__VA_ARGS__)
+#    define DLLOG(format, ...) axis::log(format, ##__VA_ARGS__)
 #else
 #    define DLLOG(...) \
         do             \
@@ -42,8 +42,8 @@
         } while (0)
 #endif
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace network
 {
 class DownloadTask;
@@ -75,4 +75,4 @@ public:
 };
 
 }  // namespace network
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

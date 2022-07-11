@@ -46,7 +46,7 @@ extern bool CC_DLL cc_assert_script_compatible(const char* msg);
                     if (!(cond))                                              \
                     {                                                         \
                         if (msg && *msg && !cc_assert_script_compatible(msg)) \
-                            cocos2d::log("Assert failed: %s", msg);           \
+                            axis::log("Assert failed: %s", msg);           \
                         CC_ASSERT(cond);                                      \
                     }                                                         \
                 } while (0)
@@ -74,12 +74,12 @@ extern bool CC_DLL cc_assert_script_compatible(const char* msg);
 /** @def CCRANDOM_MINUS1_1
  returns a random float between -1 and 1
  */
-#define CCRANDOM_MINUS1_1() cocos2d::rand_minus1_1()
+#define CCRANDOM_MINUS1_1() axis::rand_minus1_1()
 
 /** @def CCRANDOM_0_1
  returns a random float between 0 and 1
  */
-#define CCRANDOM_0_1() cocos2d::rand_0_1()
+#define CCRANDOM_0_1() axis::rand_0_1()
 
 /** @def CC_DEGREES_TO_RADIANS
  converts degrees to radians
@@ -97,8 +97,8 @@ extern bool CC_DLL cc_assert_script_compatible(const char* msg);
 /** @def CC_BLEND_SRC
 default gl blend src function. Compatible with premultiplied alpha images.
 */
-#define CC_BLEND_SRC cocos2d::backend::BlendFactor::ONE
-#define CC_BLEND_DST cocos2d::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
+#define CC_BLEND_SRC axis::backend::BlendFactor::ONE
+#define CC_BLEND_DST axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
 
 /** @def CC_NODE_DRAW_SETUP [DEPRECATED]
  Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix
@@ -115,7 +115,7 @@ default gl blend src function. Compatible with premultiplied alpha images.
 #define CC_DIRECTOR_END()                                        \
     do                                                           \
     {                                                            \
-        Director* __director = cocos2d::Director::getInstance(); \
+        Director* __director = axis::Director::getInstance(); \
         __director->end();                                       \
     } while (0)
 
@@ -123,7 +123,7 @@ default gl blend src function. Compatible with premultiplied alpha images.
 On Mac it returns 1;
 On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
 */
-#define CC_CONTENT_SCALE_FACTOR() cocos2d::Director::getInstance()->getContentScaleFactor()
+#define CC_CONTENT_SCALE_FACTOR() axis::Director::getInstance()->getContentScaleFactor()
 
 /****************************/
 /** RETINA DISPLAY ENABLED **/
@@ -133,7 +133,7 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in pixels to points
  */
 #define CC_RECT_PIXELS_TO_POINTS(__rect_in_pixels__)                           \
-    cocos2d::Rect((__rect_in_pixels__).origin.x / CC_CONTENT_SCALE_FACTOR(),   \
+    axis::Rect((__rect_in_pixels__).origin.x / CC_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_pixels__).origin.y / CC_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_pixels__).size.width / CC_CONTENT_SCALE_FACTOR(), \
                   (__rect_in_pixels__).size.height / CC_CONTENT_SCALE_FACTOR())
@@ -142,7 +142,7 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in points to pixels
  */
 #define CC_RECT_POINTS_TO_PIXELS(__rect_in_points_points__)                          \
-    cocos2d::Rect((__rect_in_points_points__).origin.x* CC_CONTENT_SCALE_FACTOR(),   \
+    axis::Rect((__rect_in_points_points__).origin.x* CC_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_points_points__).origin.y* CC_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_points_points__).size.width* CC_CONTENT_SCALE_FACTOR(), \
                   (__rect_in_points_points__).size.height* CC_CONTENT_SCALE_FACTOR())
@@ -151,13 +151,13 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in pixels to points
  */
 #define CC_POINT_PIXELS_TO_POINTS(__pixels__) \
-    cocos2d::Vec2((__pixels__).x / CC_CONTENT_SCALE_FACTOR(), (__pixels__).y / CC_CONTENT_SCALE_FACTOR())
+    axis::Vec2((__pixels__).x / CC_CONTENT_SCALE_FACTOR(), (__pixels__).y / CC_CONTENT_SCALE_FACTOR())
 
 /** @def CC_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
 #define CC_POINT_POINTS_TO_PIXELS(__points__) \
-    cocos2d::Vec2((__points__).x* CC_CONTENT_SCALE_FACTOR(), (__points__).y* CC_CONTENT_SCALE_FACTOR())
+    axis::Vec2((__points__).x* CC_CONTENT_SCALE_FACTOR(), (__points__).y* CC_CONTENT_SCALE_FACTOR())
 
 /** @def CC_POINT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
@@ -201,49 +201,49 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 /**********************/
 #if CC_ENABLE_PROFILERS
 
-#    define CC_PROFILER_DISPLAY_TIMERS() NS_CC::Profiler::getInstance()->displayTimers()
-#    define CC_PROFILER_PURGE_ALL() NS_CC::Profiler::getInstance()->releaseAllTimers()
+#    define CC_PROFILER_DISPLAY_TIMERS() NS_AX::Profiler::getInstance()->displayTimers()
+#    define CC_PROFILER_PURGE_ALL() NS_AX::Profiler::getInstance()->releaseAllTimers()
 
-#    define CC_PROFILER_START(__name__) NS_CC::ProfilingBeginTimingBlock(__name__)
-#    define CC_PROFILER_STOP(__name__) NS_CC::ProfilingEndTimingBlock(__name__)
-#    define CC_PROFILER_RESET(__name__) NS_CC::ProfilingResetTimingBlock(__name__)
+#    define CC_PROFILER_START(__name__) NS_AX::ProfilingBeginTimingBlock(__name__)
+#    define CC_PROFILER_STOP(__name__) NS_AX::ProfilingEndTimingBlock(__name__)
+#    define CC_PROFILER_RESET(__name__) NS_AX::ProfilingResetTimingBlock(__name__)
 
 #    define CC_PROFILER_START_CATEGORY(__cat__, __name__)   \
         do                                                  \
         {                                                   \
             if (__cat__)                                    \
-                NS_CC::ProfilingBeginTimingBlock(__name__); \
+                NS_AX::ProfilingBeginTimingBlock(__name__); \
         } while (0)
 #    define CC_PROFILER_STOP_CATEGORY(__cat__, __name__)  \
         do                                                \
         {                                                 \
             if (__cat__)                                  \
-                NS_CC::ProfilingEndTimingBlock(__name__); \
+                NS_AX::ProfilingEndTimingBlock(__name__); \
         } while (0)
 #    define CC_PROFILER_RESET_CATEGORY(__cat__, __name__)   \
         do                                                  \
         {                                                   \
             if (__cat__)                                    \
-                NS_CC::ProfilingResetTimingBlock(__name__); \
+                NS_AX::ProfilingResetTimingBlock(__name__); \
         } while (0)
 
 #    define CC_PROFILER_START_INSTANCE(__id__, __name__)                                       \
         do                                                                                     \
         {                                                                                      \
-            NS_CC::ProfilingBeginTimingBlock(                                                  \
-                NS_CC::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+            NS_AX::ProfilingBeginTimingBlock(                                                  \
+                NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 #    define CC_PROFILER_STOP_INSTANCE(__id__, __name__)                                        \
         do                                                                                     \
         {                                                                                      \
-            NS_CC::ProfilingEndTimingBlock(                                                    \
-                NS_CC::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+            NS_AX::ProfilingEndTimingBlock(                                                    \
+                NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 #    define CC_PROFILER_RESET_INSTANCE(__id__, __name__)                                       \
         do                                                                                     \
         {                                                                                      \
-            NS_CC::ProfilingResetTimingBlock(                                                  \
-                NS_CC::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
+            NS_AX::ProfilingResetTimingBlock(                                                  \
+                NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
 
 #else
@@ -343,11 +343,11 @@ It should work same as apples CFSwapInt32LittleToHost(..)
  Increments the GL Draws counts by one.
  The number of calls per frame are displayed on the screen when the Director's stats are enabled.
  */
-#define CC_INCREMENT_GL_DRAWS(__n__) cocos2d::Director::getInstance()->getRenderer()->addDrawnBatches(__n__)
+#define CC_INCREMENT_GL_DRAWS(__n__) axis::Director::getInstance()->getRenderer()->addDrawnBatches(__n__)
 #define CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(__drawcalls__, __vertices__) \
     do                                                                          \
     {                                                                           \
-        auto __renderer__ = cocos2d::Director::getInstance()->getRenderer();    \
+        auto __renderer__ = axis::Director::getInstance()->getRenderer();    \
         __renderer__->addDrawnBatches(__drawcalls__);                           \
         __renderer__->addDrawnVertices(__vertices__);                           \
     } while (0)

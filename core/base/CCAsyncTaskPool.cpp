@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "base/CCAsyncTaskPool.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 AsyncTaskPool* AsyncTaskPool::s_asyncTaskPool = nullptr;
 
@@ -49,4 +49,4 @@ AsyncTaskPool::AsyncTaskPool() {}
 
 AsyncTaskPool::~AsyncTaskPool() {}
 
-NS_CC_END
+NS_AX_END

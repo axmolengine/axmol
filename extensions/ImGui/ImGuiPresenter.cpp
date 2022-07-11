@@ -10,7 +10,7 @@
 #    define CC_IMGUI_ENABLE_MULTI_VIEWPORT 0
 #endif
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 static uint32_t fourccValue(std::string_view str)
 {
@@ -700,4 +700,4 @@ int ImGuiPresenter::getCCRefId(Ref* p)
     return (int)hash;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

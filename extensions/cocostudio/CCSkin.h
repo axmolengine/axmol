@@ -35,7 +35,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL Skin : public cocos2d::Sprite
+class CCS_DLL Skin : public axis::Sprite
 {
 public:
     static Skin* create();
@@ -54,10 +54,10 @@ public:
     void updateArmatureTransform();
     void updateTransform() override;
 
-    cocos2d::Mat4 getNodeToWorldTransform() const override;
-    cocos2d::Mat4 getNodeToWorldTransformAR() const;
+    axis::Mat4 getNodeToWorldTransform() const override;
+    axis::Mat4 getNodeToWorldTransformAR() const;
 
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
     /**
      *  @js NA
@@ -79,9 +79,9 @@ protected:
     BaseData _skinData;
     Bone* _bone;
     Armature* _armature;
-    cocos2d::Mat4 _skinTransform;
+    axis::Mat4 _skinTransform;
     std::string _displayName;
-    cocos2d::QuadCommand _quadCommand;  // quad command
+    axis::QuadCommand _quadCommand;  // quad command
 };
 
 }  // namespace cocostudio

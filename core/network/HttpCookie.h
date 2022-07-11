@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace network
 {
@@ -106,7 +106,7 @@ private:
 };
 }  // namespace network
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif /* HTTP_COOKIE_H */

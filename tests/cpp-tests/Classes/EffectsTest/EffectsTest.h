@@ -37,14 +37,14 @@ public:
 
 protected:
     virtual bool init() override;
-    virtual cocos2d::ActionInterval* createEffect(float t) { return nullptr; }
+    virtual axis::ActionInterval* createEffect(float t) { return nullptr; }
     void checkAnim(float dt);
     virtual bool isRectEffect() { return false; }
     virtual std::string title() const override { return _title; };
     virtual std::string subtitle() const override { return _subtitle; };
     std::string _title;
     std::string _subtitle;
-    cocos2d::NodeGrid* _gridNodeTarget;
+    axis::NodeGrid* _gridNodeTarget;
 };
 
 class Shaky3DDemo : public EffectBaseTest
@@ -54,7 +54,7 @@ public:
     Shaky3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class Waves3DDemo : public EffectBaseTest
@@ -64,7 +64,7 @@ public:
     Waves3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class FlipX3DDemo : public EffectBaseTest
@@ -74,7 +74,7 @@ public:
     FlipX3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class FlipY3DDemo : public EffectBaseTest
@@ -84,7 +84,7 @@ public:
     FlipY3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class Lens3DDemo : public EffectBaseTest
@@ -94,7 +94,7 @@ public:
     Lens3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class Ripple3DDemo : public EffectBaseTest
@@ -104,7 +104,7 @@ public:
     Ripple3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class LiquidDemo : public EffectBaseTest
@@ -114,7 +114,7 @@ public:
     LiquidDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class WavesDemo : public EffectBaseTest
@@ -124,7 +124,7 @@ public:
     WavesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class TwirlDemo : public EffectBaseTest
@@ -134,7 +134,7 @@ public:
     TwirlDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class ShakyTiles3DDemo : public EffectBaseTest
@@ -144,7 +144,7 @@ public:
     ShakyTiles3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class ShatteredTiles3DDemo : public EffectBaseTest
@@ -154,7 +154,7 @@ public:
     ShatteredTiles3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class ShuffleTilesDemo : public EffectBaseTest
@@ -164,7 +164,7 @@ public:
     ShuffleTilesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class FadeOutTRTilesDemo : public EffectBaseTest
@@ -174,7 +174,7 @@ public:
     FadeOutTRTilesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class FadeOutBLTilesDemo : public EffectBaseTest
@@ -184,7 +184,7 @@ public:
     FadeOutBLTilesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class FadeOutUpTilesDemo : public EffectBaseTest
@@ -194,7 +194,7 @@ public:
     FadeOutUpTilesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class FadeOutDownTilesDemo : public EffectBaseTest
@@ -204,7 +204,7 @@ public:
     FadeOutDownTilesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class TurnOffTilesDemo : public EffectBaseTest
@@ -214,7 +214,7 @@ public:
     TurnOffTilesDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class WavesTiles3DDemo : public EffectBaseTest
@@ -224,7 +224,7 @@ public:
     WavesTiles3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class JumpTiles3DDemo : public EffectBaseTest
@@ -234,7 +234,7 @@ public:
     JumpTiles3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class SplitRowsDemo : public EffectBaseTest
@@ -244,7 +244,7 @@ public:
     SplitRowsDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class SplitColsDemo : public EffectBaseTest
@@ -254,7 +254,7 @@ public:
     SplitColsDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class PageTurn3DDemo : public EffectBaseTest
@@ -264,7 +264,7 @@ public:
     PageTurn3DDemo();
 
 protected:
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 class PageTurn3DRectDemo : public EffectBaseTest
@@ -275,7 +275,7 @@ public:
 
 protected:
     virtual bool isRectEffect() override { return true; }
-    virtual cocos2d::ActionInterval* createEffect(float t) override;
+    virtual axis::ActionInterval* createEffect(float t) override;
 };
 
 #endif

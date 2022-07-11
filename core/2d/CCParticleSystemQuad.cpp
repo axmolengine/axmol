@@ -44,7 +44,7 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 #include "2d/CCTweenFunction.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ParticleSystemQuad::ParticleSystemQuad()
 {
@@ -710,7 +710,7 @@ void ParticleSystemQuad::draw(Renderer* renderer, const Mat4& transform, uint32_
     {
         auto programState = _quadCommand.getPipelineDescriptor().programState;
 
-        cocos2d::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        axis::Mat4 projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
         programState->setUniform(_mvpMatrixLocaiton, projectionMat.m, sizeof(projectionMat.m));
 
         _quadCommand.init(_globalZOrder, _texture, _blendFunc, _quads, _particleCount, transform, flags);
@@ -878,4 +878,4 @@ std::string ParticleSystemQuad::getDescription() const
 {
     return StringUtils::format("<ParticleSystemQuad | Tag = %d, Total Particles = %d>", _tag, _totalParticles);
 }
-NS_CC_END
+NS_AX_END

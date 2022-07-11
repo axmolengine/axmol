@@ -40,39 +40,39 @@ public:
     virtual bool init() override;
 };
 
-class MenuLayerMainMenu : public cocos2d::Layer
+class MenuLayerMainMenu : public axis::Layer
 {
 protected:
-    cocos2d::MenuItem* _disabledItem;
-    cocos2d::EventListenerTouchOneByOne* _touchListener;
+    axis::MenuItem* _disabledItem;
+    axis::EventListenerTouchOneByOne* _touchListener;
 
 public:
     MenuLayerMainMenu();
     ~MenuLayerMainMenu();
 
 public:
-    bool touchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void touchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
-    void touchCancelled(cocos2d::Touch* touch, cocos2d::Event* event);
-    void touchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool touchBegan(axis::Touch* touch, axis::Event* event);
+    void touchEnded(axis::Touch* touch, axis::Event* event);
+    void touchCancelled(axis::Touch* touch, axis::Event* event);
+    void touchMoved(axis::Touch* touch, axis::Event* event);
 
     void allowTouches(float dt);
-    void menuCallback(cocos2d::Ref* sender);
-    void menuCallbackConfig(cocos2d::Ref* sender);
-    void menuCallbackDisabled(cocos2d::Ref* sender);
-    void menuCallback2(cocos2d::Ref* sender);
-    void menuCallbackPriorityTest(cocos2d::Ref* sender);
-    void menuCallbackBugsTest(cocos2d::Ref* pSender);
-    void onQuit(cocos2d::Ref* sender);
-    void menuMovingCallback(cocos2d::Ref* pSender);
+    void menuCallback(axis::Ref* sender);
+    void menuCallbackConfig(axis::Ref* sender);
+    void menuCallbackDisabled(axis::Ref* sender);
+    void menuCallback2(axis::Ref* sender);
+    void menuCallbackPriorityTest(axis::Ref* sender);
+    void menuCallbackBugsTest(axis::Ref* pSender);
+    void onQuit(axis::Ref* sender);
+    void menuMovingCallback(axis::Ref* pSender);
 
     // CREATE_NODE(MenuLayer1);
 };
 
-class MenuLayer2 : public cocos2d::Layer
+class MenuLayer2 : public axis::Layer
 {
 protected:
-    cocos2d::Vec2 _centeredMenu;
+    axis::Vec2 _centeredMenu;
     bool _alignedH;
 
     void alignMenusH();
@@ -82,56 +82,56 @@ public:
     MenuLayer2();
     ~MenuLayer2();
 
-    void menuCallback(cocos2d::Ref* sender);
-    void menuCallbackOpacity(cocos2d::Ref* sender);
-    void menuCallbackAlign(cocos2d::Ref* sender);
+    void menuCallback(axis::Ref* sender);
+    void menuCallbackOpacity(axis::Ref* sender);
+    void menuCallbackAlign(axis::Ref* sender);
 
     // CREATE_NODE(MenuLayer2);
 };
 
-class MenuLayer3 : public cocos2d::Layer
+class MenuLayer3 : public axis::Layer
 {
 protected:
-    cocos2d::MenuItem* _disabledItem;
+    axis::MenuItem* _disabledItem;
 
 public:
     MenuLayer3();
     ~MenuLayer3();
 };
 
-class MenuLayer4 : public cocos2d::Layer
+class MenuLayer4 : public axis::Layer
 {
 public:
     MenuLayer4();
     ~MenuLayer4();
 
-    void menuCallback(cocos2d::Ref* sender);
-    void backCallback(cocos2d::Ref* sender);
+    void menuCallback(axis::Ref* sender);
+    void backCallback(axis::Ref* sender);
 };
 
-class BugsTest : public cocos2d::Layer
+class BugsTest : public axis::Layer
 {
 public:
     BugsTest();
 
-    void issue1410MenuCallback(cocos2d::Ref* pSender);
-    void issue1410v2MenuCallback(cocos2d::Ref* pSender);
-    void backMenuCallback(cocos2d::Ref* pSender);
+    void issue1410MenuCallback(axis::Ref* pSender);
+    void issue1410v2MenuCallback(axis::Ref* pSender);
+    void backMenuCallback(axis::Ref* pSender);
 };
 
-class RemoveMenuItemWhenMove : public cocos2d::Layer
+class RemoveMenuItemWhenMove : public axis::Layer
 {
 public:
     RemoveMenuItemWhenMove();
     ~RemoveMenuItemWhenMove();
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    void onTouchMoved(axis::Touch* touch, axis::Event* event);
 
-    void goBack(cocos2d::Ref* pSender);
+    void goBack(axis::Ref* pSender);
 
 private:
-    cocos2d::MenuItemFont* item;
-    cocos2d::EventListenerTouchOneByOne* _touchListener;
+    axis::MenuItemFont* item;
+    axis::EventListenerTouchOneByOne* _touchListener;
 };
 
 #endif

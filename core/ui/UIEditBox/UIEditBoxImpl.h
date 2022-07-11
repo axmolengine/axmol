@@ -29,8 +29,8 @@
 
 #include "ui/UIEditBox/UIEditBox.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace ui
 {
 
@@ -98,7 +98,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const& transform, uint32_t flags) = 0;
+    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags) = 0;
     /**
      * @js NA
      * @lua NA
@@ -118,6 +118,6 @@ protected:
 extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 
 }  // namespace ui
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 #endif /* __UIEditBoxIMPL_H__ */

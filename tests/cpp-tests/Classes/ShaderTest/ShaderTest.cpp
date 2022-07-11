@@ -28,8 +28,8 @@
 #include "renderer/ccShaders.h"
 #include "renderer/backend/Device.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 #define SET_UNIFORM(ps, name, value)                          \
     do                                                        \
@@ -413,7 +413,7 @@ SpriteBlur* SpriteBlur::create(const char* pszFileName)
 {
     SpriteBlur* pRet = new SpriteBlur();
     bool result      = pRet->initWithFile("");
-    cocos2d::log("Test call Sprite::initWithFile with bad file name result is : %s", result ? "true" : "false");
+    axis::log("Test call Sprite::initWithFile with bad file name result is : %s", result ? "true" : "false");
 
     if (pRet->initWithFile(pszFileName))
     {

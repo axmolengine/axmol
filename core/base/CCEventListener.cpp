@@ -26,7 +26,7 @@
 #include "base/CCEventListener.h"
 #include "base/CCConsole.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventListener::EventListener() {}
 
@@ -52,4 +52,4 @@ bool EventListener::checkAvailable()
     return (_onEvent != nullptr);
 }
 
-NS_CC_END
+NS_AX_END

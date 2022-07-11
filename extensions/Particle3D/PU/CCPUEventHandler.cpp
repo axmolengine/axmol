@@ -27,7 +27,7 @@
 #include "Particle3D/PU/CCPUEventHandler.h"
 #include "Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUEventHandler::PUEventHandler()
     : _parentObserver(0)
@@ -44,4 +44,4 @@ void PUEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     eventHandler->_eventHandlerScale = _eventHandlerScale;
 }
 
-NS_CC_END
+NS_AX_END

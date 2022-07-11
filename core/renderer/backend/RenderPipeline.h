@@ -30,7 +30,7 @@
 #include "renderer/CCPipelineDescriptor.h"
 #include "renderer/backend/RenderPassDescriptor.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _backend
  * @{
@@ -40,7 +40,7 @@ class RenderTarget;
 /**
  * Render pipeline
  */
-class RenderPipeline : public cocos2d::Ref
+class RenderPipeline : public axis::Ref
 {
 public:
     virtual void update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor) = 0;
@@ -50,4 +50,4 @@ protected:
 };
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

@@ -28,7 +28,7 @@
 #include "CCParticle3DAffector.h"
 #include "CCParticle3DRender.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Particle3D::Particle3D() : color(Vec4::ONE), rt_uv(Vec2::ONE), width(1.0f), height(1.0f), depth(1.0f) {}
 
@@ -206,4 +206,4 @@ void ParticleSystem3D::setEnabled(bool enabled)
     _isEnabled = enabled;
 }
 
-NS_CC_END
+NS_AX_END

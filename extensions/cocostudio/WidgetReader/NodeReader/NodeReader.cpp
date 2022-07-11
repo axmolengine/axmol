@@ -31,7 +31,7 @@
 #include "flatbuffers/flatbuffers.h"
 #include "ui/UILayoutComponent.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -431,7 +431,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     return *(Offset<Table>*)(&options);
 }
 
-void NodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions)
+void NodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
 {
     auto options = (WidgetOptions*)(nodeOptions);
 
@@ -501,7 +501,7 @@ void NodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers:
     setLayoutComponentPropsWithFlatBuffers(node, nodeOptions);
 }
 
-void NodeReader::setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions)
+void NodeReader::setLayoutComponentPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
 {
     auto layoutComponentTable = ((WidgetOptions*)nodeOptions)->layoutComponent();
     if (!layoutComponentTable)

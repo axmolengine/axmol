@@ -6,7 +6,7 @@
 int lua_cocos2dx_webview_WebView_setOpacityWebView(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -18,7 +18,7 @@ int lua_cocos2dx_webview_WebView_setOpacityWebView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -56,7 +56,7 @@ int lua_cocos2dx_webview_WebView_setOpacityWebView(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_canGoBack(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -68,7 +68,7 @@ int lua_cocos2dx_webview_WebView_canGoBack(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -103,7 +103,7 @@ int lua_cocos2dx_webview_WebView_canGoBack(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_loadHTMLString(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -115,7 +115,7 @@ int lua_cocos2dx_webview_WebView_loadHTMLString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -170,7 +170,7 @@ int lua_cocos2dx_webview_WebView_loadHTMLString(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_goForward(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -182,7 +182,7 @@ int lua_cocos2dx_webview_WebView_goForward(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -217,7 +217,7 @@ int lua_cocos2dx_webview_WebView_goForward(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_goBack(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -229,7 +229,7 @@ int lua_cocos2dx_webview_WebView_goBack(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -264,7 +264,7 @@ int lua_cocos2dx_webview_WebView_goBack(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -276,7 +276,7 @@ int lua_cocos2dx_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -314,7 +314,7 @@ int lua_cocos2dx_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_loadFile(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -326,7 +326,7 @@ int lua_cocos2dx_webview_WebView_loadFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -364,7 +364,7 @@ int lua_cocos2dx_webview_WebView_loadFile(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_loadURL(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -373,7 +373,7 @@ int lua_cocos2dx_webview_WebView_loadURL(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -423,7 +423,7 @@ int lua_cocos2dx_webview_WebView_loadURL(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_setBounces(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -435,7 +435,7 @@ int lua_cocos2dx_webview_WebView_setBounces(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -473,7 +473,7 @@ int lua_cocos2dx_webview_WebView_setBounces(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_evaluateJS(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -485,7 +485,7 @@ int lua_cocos2dx_webview_WebView_evaluateJS(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -523,7 +523,7 @@ int lua_cocos2dx_webview_WebView_evaluateJS(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -535,7 +535,7 @@ int lua_cocos2dx_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -570,7 +570,7 @@ int lua_cocos2dx_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_getOnJSCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -582,7 +582,7 @@ int lua_cocos2dx_webview_WebView_getOnJSCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -600,7 +600,7 @@ int lua_cocos2dx_webview_WebView_getOnJSCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_getOnJSCallback'", nullptr);
             return 0;
         }
-        cocos2d::ui::WebView::ccWebViewCallback ret = cobj->getOnJSCallback();
+        axis::ui::WebView::ccWebViewCallback ret = cobj->getOnJSCallback();
         #pragma warning NO CONVERSION FROM NATIVE FOR std::function;
         return 1;
     }
@@ -617,7 +617,7 @@ int lua_cocos2dx_webview_WebView_getOnJSCallback(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_canGoForward(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -629,7 +629,7 @@ int lua_cocos2dx_webview_WebView_canGoForward(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -664,7 +664,7 @@ int lua_cocos2dx_webview_WebView_canGoForward(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_stopLoading(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -676,7 +676,7 @@ int lua_cocos2dx_webview_WebView_stopLoading(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -711,7 +711,7 @@ int lua_cocos2dx_webview_WebView_stopLoading(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_getOpacityWebView(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -723,7 +723,7 @@ int lua_cocos2dx_webview_WebView_getOpacityWebView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -758,7 +758,7 @@ int lua_cocos2dx_webview_WebView_getOpacityWebView(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_reload(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -770,7 +770,7 @@ int lua_cocos2dx_webview_WebView_reload(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -805,7 +805,7 @@ int lua_cocos2dx_webview_WebView_reload(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -817,7 +817,7 @@ int lua_cocos2dx_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ccui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ui::WebView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -874,8 +874,8 @@ int lua_cocos2dx_webview_WebView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_create'", nullptr);
             return 0;
         }
-        cocos2d::ui::WebView* ret = cocos2d::ui::WebView::create();
-        object_to_luaval<cocos2d::ui::WebView>(tolua_S, "ccui.WebView",(cocos2d::ui::WebView*)ret);
+        axis::ui::WebView* ret = axis::ui::WebView::create();
+        object_to_luaval<axis::ui::WebView>(tolua_S, "ccui.WebView",(axis::ui::WebView*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccui.WebView:create",argc, 0);
@@ -889,7 +889,7 @@ int lua_cocos2dx_webview_WebView_create(lua_State* tolua_S)
 int lua_cocos2dx_webview_WebView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::ui::WebView* cobj = nullptr;
+    axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -906,7 +906,7 @@ int lua_cocos2dx_webview_WebView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_webview_WebView_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::ui::WebView();
+        cobj = new axis::ui::WebView();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -955,7 +955,7 @@ int lua_register_cocos2dx_webview_WebView(lua_State* tolua_S)
         tolua_function(tolua_S,"setJavascriptInterfaceScheme",lua_cocos2dx_webview_WebView_setJavascriptInterfaceScheme);
         tolua_function(tolua_S,"create", lua_cocos2dx_webview_WebView_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::ui::WebView).name(); // rtti is literal storage
+    auto typeName = typeid(axis::ui::WebView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ccui.WebView";
     g_typeCast[typeName] = "ccui.WebView";
     return 1;

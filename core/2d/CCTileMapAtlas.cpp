@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/ccUTF8.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation TileMapAtlas
 
@@ -251,4 +251,4 @@ void TileMapAtlas::updateAtlasValues()
     }
 }
 
-NS_CC_END
+NS_AX_END

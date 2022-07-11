@@ -20,7 +20,7 @@
 
 #include "math/Vec2.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 inline Vec2::Vec2()
 : x(0.0f), y(0.0f)
@@ -227,4 +227,4 @@ inline Vec2 operator*(const Vec2& left, const Vec2& right)
     return Vec2(left.x * right.x, left.y * right.y);
 }
 
-NS_CC_MATH_END
+NS_AX_MATH_END

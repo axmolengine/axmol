@@ -36,7 +36,7 @@ protected:
     std::string _subtitle;
     bool _isDebugDraw;
     bool _isNeedDebugMenu;
-    cocos2d::Vector<cocos2d::DrawNode*> _drawNodes;
+    axis::Vector<axis::DrawNode*> _drawNodes;
     virtual std::string title() const override { return _title; };
     virtual std::string subtitle() const override { return _subtitle; };
     virtual bool init() override;
@@ -50,8 +50,8 @@ protected:
 class SpritePolygonTestDemo : public SpritePolygonTestCase
 {
 protected:
-    cocos2d::Sprite* _polygonSprite;
-    cocos2d::Sprite* _normalSprite;
+    axis::Sprite* _polygonSprite;
+    axis::Sprite* _normalSprite;
     virtual bool init() override;
     virtual void initSprites(){};
     void initTouches();
@@ -76,15 +76,15 @@ public:
 class SpritePolygonTestSlider : public SpritePolygonTestCase
 {
 protected:
-    cocos2d::Label* _epsilonLabel;
+    axis::Label* _epsilonLabel;
     int _tagIndex;
-    cocos2d::Sprite* makeSprite(std::string_view filename, const cocos2d::Vec2& pos);
+    axis::Sprite* makeSprite(std::string_view filename, const axis::Vec2& pos);
     virtual bool init() override;
     void initSliders();
     virtual void initSprites(){};
     void makeSprites(const std::string* list, const int count, const float y);
-    void changeEpsilon(Ref* pSender, cocos2d::ui::Slider::EventType type);
-    void updateLabel(const cocos2d::Sprite* sp, const cocos2d::PolygonInfo& pinfo);
+    void changeEpsilon(Ref* pSender, axis::ui::Slider::EventType type);
+    void updateLabel(const axis::Sprite* sp, const axis::PolygonInfo& pinfo);
 };
 
 class SpritePolygonTest3 : public SpritePolygonTestSlider
@@ -113,11 +113,11 @@ protected:
     virtual bool init() override;
     void initTouch();
     void loadDefaultSprites();
-    void addSpritePolygon(const cocos2d::Vec2& pos);
+    void addSpritePolygon(const axis::Vec2& pos);
     void update(float dt) override;
 
 private:
-    cocos2d::PolygonInfo _polygonInfo;
+    axis::PolygonInfo _polygonInfo;
     int _tagIndex;
 };
 
@@ -133,7 +133,7 @@ protected:
     int _triCount;
     int _pixelCount;
     float _elapsedTime;
-    cocos2d::Label* _perfLabel;
+    axis::Label* _perfLabel;
     int _continuousLowDt;
     float _continuousHighDtTime;
     float _waitingTime;
@@ -166,8 +166,8 @@ public:
     SpritePolygonPerformanceTestDynamic();
 
 protected:
-    cocos2d::Sprite* makeSprite() override;
-    cocos2d::PolygonInfo _pinfo;
+    axis::Sprite* makeSprite() override;
+    axis::PolygonInfo _pinfo;
     virtual void initIncrementStats() override;
 };
 
@@ -178,7 +178,7 @@ public:
     SpritePerformanceTestDynamic();
 
 protected:
-    virtual cocos2d::Sprite* makeSprite() override;
+    virtual axis::Sprite* makeSprite() override;
     virtual void initIncrementStats() override;
 };
 

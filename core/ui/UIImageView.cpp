@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "ui/UIHelper.h"
 #include "2d/CCSprite.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -313,4 +313,4 @@ const BlendFunc& ImageView::getBlendFunc() const
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

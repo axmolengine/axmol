@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "2d/CCParticleSystemQuad.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -206,7 +206,7 @@ void DisplayManager::removeDisplay(int index)
     _decoDisplayList.erase(index);
 }
 
-const cocos2d::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList() const
+const axis::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList() const
 {
     return _decoDisplayList;
 }

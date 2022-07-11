@@ -39,13 +39,13 @@ public:
     ~UIButtonTest();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
-    void printWidgetResources(cocos2d::Ref* sender);
+    void printWidgetResources(axis::Ref* sender);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
-    cocos2d::ui::Button* _button;
+    axis::ui::Text* _displayValueLabel;
+    axis::ui::Button* _button;
 };
 
 class UIButtonTest_Scale9 : public UIScene
@@ -57,10 +57,10 @@ public:
     ~UIButtonTest_Scale9();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTest_Scale9_State_Change : public UIScene
@@ -72,10 +72,10 @@ public:
     ~UIButtonTest_Scale9_State_Change();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTest_PressedAction : public UIScene
@@ -87,10 +87,10 @@ public:
     ~UIButtonTest_PressedAction();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTest_Title : public UIScene
@@ -102,10 +102,10 @@ public:
     ~UIButtonTest_Title();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTestRemoveSelf : public UIScene
@@ -117,10 +117,10 @@ public:
     ~UIButtonTestRemoveSelf();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTestSwitchScale9 : public UIScene
@@ -132,10 +132,10 @@ public:
     ~UIButtonTestSwitchScale9();
 
     virtual bool init() override;
-    void touchEvent(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTestZoomScale : public UIScene
@@ -147,10 +147,10 @@ public:
     ~UIButtonTestZoomScale();
 
     virtual bool init() override;
-    void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
+    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTextOnly : public UIScene
@@ -164,7 +164,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonIgnoreContentSizeTest : public UIScene
@@ -178,7 +178,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonTitleEffectTest : public UIScene
@@ -192,7 +192,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonFlipTest : public UIScene
@@ -206,7 +206,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonNormalDefaultTest : public UIScene
@@ -220,7 +220,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonDisableDefaultTest : public UIScene
@@ -234,7 +234,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIButtonCloneTest : public UIScene
@@ -248,7 +248,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class Issue12249 : public UIScene
@@ -261,7 +261,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class Issue17116 : public UIScene

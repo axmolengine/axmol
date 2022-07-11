@@ -29,7 +29,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "extensions/Particle3D/PU/CCPUDynamicAttributeTranslator.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUDoPlacementParticleEventHandlerTranslator::PUDoPlacementParticleEventHandlerTranslator() {}
 //-------------------------------------------------------------------------
@@ -207,4 +207,4 @@ bool PUDoPlacementParticleEventHandlerTranslator::translateChildObject(PUScriptC
     return false;
 }
 
-NS_CC_END
+NS_AX_END

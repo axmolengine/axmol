@@ -30,8 +30,8 @@
 #include <string>
 #include "platform/CCFileStream.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 enum class AUDIO_SOURCE_FORMAT : uint16_t
 {
     PCM_UNK,  // Unknown
@@ -148,4 +148,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

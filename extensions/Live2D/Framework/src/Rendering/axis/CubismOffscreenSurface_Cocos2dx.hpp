@@ -40,7 +40,7 @@
 
 #include "renderer/backend/RenderTarget.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 //------------ LIVE2D NAMESPACE ------------
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {
@@ -83,7 +83,7 @@ public:
      *  @param  displayBufferHeight    作成するバッファ高さ
      *  @param  colorBuffer            0以外の場合、ピクセル格納領域としてcolorBufferを使用する
      */
-    csmBool CreateOffscreenFrame(csmUint32 displayBufferWidth, csmUint32 displayBufferHeight, cocos2d::RenderTexture* renderTexture = NULL);
+    csmBool CreateOffscreenFrame(csmUint32 displayBufferWidth, csmUint32 displayBufferHeight, axis::RenderTexture* renderTexture = NULL);
 
     /**
      * @brief   CubismOffscreenFrameの削除
@@ -93,7 +93,7 @@ public:
     /**
      * @brief   カラーバッファメンバーへのアクセッサ
      */
-    cocos2d::Texture2D* GetColorBuffer() const;
+    axis::Texture2D* GetColorBuffer() const;
 
     /**
      * @brief   バッファ幅取得
@@ -113,7 +113,7 @@ public:
     csmBool IsValid() const;
 
 private:
-    cocos2d::RenderTexture*      _renderTexture;         ///< レンダリングターゲットとしてのアドレス
+    axis::RenderTexture*      _renderTexture;         ///< レンダリングターゲットとしてのアドレス
     backend::TextureBackend*          _colorBuffer;
     csmBool _isInheritedRenderTexture;
 

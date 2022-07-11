@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "renderer/CCCustomCommand.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Scene;
 class CameraBackgroundBrush;
@@ -408,4 +408,4 @@ protected:
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };
 
-NS_CC_END
+NS_AX_END

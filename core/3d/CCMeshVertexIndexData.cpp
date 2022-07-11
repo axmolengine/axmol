@@ -46,7 +46,7 @@
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 MeshIndexData* MeshIndexData::create(std::string_view id,
@@ -81,7 +81,7 @@ MeshIndexData::MeshIndexData()
 #endif
 }
 
-void MeshIndexData::setIndexData(const cocos2d::MeshData::IndexArray& indexdata)
+void MeshIndexData::setIndexData(const axis::MeshData::IndexArray& indexdata)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     if (!_indexData.empty())
@@ -200,4 +200,4 @@ MeshVertexData::~MeshVertexData()
 #endif
 }
 
-NS_CC_END
+NS_AX_END

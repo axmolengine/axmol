@@ -270,10 +270,10 @@ THE SOFTWARE.
 #include "3d/CCTerrain.h"
 #include "3d/CCVertexAttribBinding.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 CC_DLL const char* axisVersion();
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __AXIS_H__

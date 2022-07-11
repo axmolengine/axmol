@@ -10,7 +10,7 @@
 #    include "base/ccTypes.h"
 #    include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 class CC_DLL Colorizer
 {
 public:
@@ -18,6 +18,6 @@ public:
 
     static void updateNodeHsv(Node* node, const Vec3& hsv, const Vec3& filter = Vec3(1.0f, 0.45f, 0.3109f));
 };
-NS_CC_END
+NS_AX_END
 
 #endif

@@ -31,7 +31,7 @@
 
 #include "platform/CCPlatformMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 template <class T>
 class RenderCommandPool
@@ -95,7 +95,7 @@ private:
     // std::set<T*> _usedPool;
 };
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif

@@ -37,7 +37,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Used for internal
 class GroupCommandManager : public Ref
@@ -79,7 +79,7 @@ protected:
     int _renderQueueID;
 };
 
-NS_CC_END
+NS_AX_END
 
 /**
  end of support group

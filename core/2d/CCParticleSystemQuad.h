@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCParticleSystem.h"
 #include "renderer/CCQuadCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class SpriteFrame;
 class EventCustom;
@@ -182,4 +182,4 @@ private:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END

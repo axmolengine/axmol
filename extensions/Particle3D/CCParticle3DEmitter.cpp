@@ -25,7 +25,7 @@
 
 #include "CCParticle3DEmitter.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Particle3DEmitter::Particle3DEmitter() : _particleSystem(nullptr), _isEnabled(true) {}
 
@@ -38,4 +38,4 @@ void Particle3DEmitter::updateEmitter(Particle3D* /*particle*/, float /*deltaTim
 
 void Particle3DEmitter::emit(int /*count*/) {}
 
-NS_CC_END
+NS_AX_END

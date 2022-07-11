@@ -30,7 +30,7 @@
 #include "renderer/backend/Device.h"
 #include <tuple>
 
-USING_NS_CC;
+USING_NS_AX;
 
 #define SET_UNIFORM(ps, name, value)                          \
     do                                                        \

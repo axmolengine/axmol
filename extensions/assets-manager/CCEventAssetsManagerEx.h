@@ -31,11 +31,11 @@
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 class AssetsManagerEx;
 
-class CC_EX_DLL EventAssetsManagerEx : public cocos2d::EventCustom
+class CC_EX_DLL EventAssetsManagerEx : public axis::EventCustom
 {
 public:
     friend class AssetsManagerEx;
@@ -66,7 +66,7 @@ public:
 
     std::string getAssetId() const { return _assetId; }
 
-    cocos2d::extension::AssetsManagerEx* getAssetsManagerEx() const { return _manager; }
+    axis::extension::AssetsManagerEx* getAssetsManagerEx() const { return _manager; }
 
     float getPercent() const { return _percent; }
 
@@ -74,7 +74,7 @@ public:
 
     /** Constructor */
     EventAssetsManagerEx(std::string_view eventName,
-                         cocos2d::extension::AssetsManagerEx* manager,
+                         axis::extension::AssetsManagerEx* manager,
                          const EventCode& code,
                          float percent            = 0,
                          float percentByFile      = 0,
@@ -86,7 +86,7 @@ public:
 private:
     EventCode _code;
 
-    cocos2d::extension::AssetsManagerEx* _manager;
+    axis::extension::AssetsManagerEx* _manager;
 
     std::string _message;
 
@@ -101,6 +101,6 @@ private:
     float _percentByFile;
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif /* defined(__cocos2d_libs__CCEventAssetsManagerEx__) */

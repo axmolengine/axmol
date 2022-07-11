@@ -31,7 +31,7 @@
 #include <list>
 
 // Particle3DVertexEmitter NOT SUPPORT YET
-NS_CC_BEGIN
+NS_AX_BEGIN
 //
 // class  Particle3DVertexEmitter : public PUEmitter
 //{
@@ -166,6 +166,6 @@ NS_CC_BEGIN
 //	*/
 //	unsigned short _calculateRequestedParticles(float timeElapsed);
 //};
-NS_CC_END
+NS_AX_END
 
 #endif

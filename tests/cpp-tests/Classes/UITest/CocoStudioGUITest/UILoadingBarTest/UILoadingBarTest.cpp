@@ -24,8 +24,8 @@
 
 #include "UILoadingBarTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UILoadingBarTests::UILoadingBarTests()
 {
@@ -126,9 +126,9 @@ void UILoadingBarTest_Left::update(float delta)
     loadingBarCopy->setPercent(_count);
 }
 
-void UILoadingBarTest_Left::printWidgetResources(cocos2d::Ref* sender)
+void UILoadingBarTest_Left::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData textureFile = _loadingBar->getRenderFile();
+    axis::ResourceData textureFile = _loadingBar->getRenderFile();
     CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 

@@ -8,7 +8,7 @@
 #include "base/ccMacros.h"
 #include "base/SimpleTimer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -16,7 +16,7 @@ namespace ui
 /**
 @brief  A extension implementation of ui::TextField
 */
-class CC_DLL TextFieldEx : public cocos2d::Node, public IMEDelegate
+class CC_DLL TextFieldEx : public axis::Node, public IMEDelegate
 {
 public:
     /**
@@ -185,7 +185,7 @@ protected:
 
     int _fontType;
 
-    cocos2d::stimer::TIMER_ID _continuousTouchDelayTimerID;
+    axis::stimer::TIMER_ID _continuousTouchDelayTimerID;
     float _continuousTouchDelayTime;
     std::function<void(const Point& worldPoint)> _continuousTouchCallback;
 
@@ -197,7 +197,7 @@ protected:
 
 };  // namespace ui
 
-NS_CC_END
+NS_AX_END
 
 #ifdef _UITEXTFIELDEX_INLINE_
 #    include "UITextFieldEx.cpp"

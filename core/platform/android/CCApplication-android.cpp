@@ -45,7 +45,7 @@ extern "C" size_t __ctype_get_mb_cur_max(void)
 
 static const char* helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
@@ -126,4 +126,4 @@ bool Application::openURL(std::string_view url)
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
-NS_CC_END
+NS_AX_END

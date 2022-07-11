@@ -29,8 +29,8 @@
 #include "base/ccUtils.h"
 #include "yasio/detail/byte_buffer.hpp"
 
-USING_NS_CC;
-using namespace cocos2d::network;
+USING_NS_AX;
+using namespace axis::network;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #    if defined(__arm64__)
@@ -771,7 +771,7 @@ void UIHelperSubStringTest::onEnter()
 {
     UnitTestDemo::onEnter();
 
-    using cocos2d::ui::Helper;
+    using axis::ui::Helper;
     {
         // Trivial case
         std::string source = "abcdefghij";
@@ -884,7 +884,7 @@ void ParseIntegerListTest::onEnter()
     UnitTestDemo::onEnter();
 
     {
-        using cocos2d::utils::parseIntegerList;
+        using axis::utils::parseIntegerList;
 
         std::vector<int> res1{};
         EXPECT_EQ(res1, parseIntegerList(""));
@@ -1432,7 +1432,7 @@ namespace UnitTest
 }  // namespace UnitTest
 
 // I know the next line looks ugly, but it's a way to test MathUtil. :)
-using namespace UnitTest::cocos2d;
+using namespace UnitTest::axis;
 
 static void __checkMathUtilResult(const char* description, const float* a1, const float* a2, int size)
 {

@@ -31,7 +31,7 @@
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 namespace ui
 {
 WebView::WebView() : _impl(new WebViewImpl(this)) {}
@@ -58,7 +58,7 @@ void WebView::setJavascriptInterfaceScheme(std::string_view scheme)
     _impl->setJavascriptInterfaceScheme(scheme);
 }
 
-void WebView::loadData(const cocos2d::Data& data,
+void WebView::loadData(const axis::Data& data,
                        std::string_view MIMEType,
                        std::string_view encoding,
                        std::string_view baseURL)
@@ -126,9 +126,9 @@ void WebView::setScalesPageToFit(bool const scalesPageToFit)
     _impl->setScalesPageToFit(scalesPageToFit);
 }
 
-void WebView::draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const& transform, uint32_t flags)
+void WebView::draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags)
 {
-    cocos2d::ui::Widget::draw(renderer, transform, flags);
+    axis::ui::Widget::draw(renderer, transform, flags);
     _impl->draw(renderer, transform, flags);
 }
 
@@ -176,7 +176,7 @@ void WebView::setBounces(bool bounces)
     _impl->setBounces(bounces);
 }
 
-cocos2d::ui::Widget* WebView::createCloneInstance()
+axis::ui::Widget* WebView::createCloneInstance()
 {
     return WebView::create();
 }
@@ -235,6 +235,6 @@ WebView::ccWebViewCallback WebView::getOnJSCallback() const
 }
 
 }  // namespace ui
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 /// @endcond

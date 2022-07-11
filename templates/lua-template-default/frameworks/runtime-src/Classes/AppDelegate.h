@@ -32,7 +32,7 @@
 
 Private inheritance here hides part of interface from Director.
 */
-class AppDelegate : private cocos2d::Application
+class AppDelegate : private axis::Application
 {
 public:
     AppDelegate();

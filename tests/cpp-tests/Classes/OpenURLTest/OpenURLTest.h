@@ -37,10 +37,10 @@ public:
     OpenURLTest();
     ~OpenURLTest();
 
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 private:
-    cocos2d::Label* _label;
+    axis::Label* _label;
 };
 
 #endif  // _OPEN_URL_TEST_H_

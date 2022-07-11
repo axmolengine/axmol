@@ -28,7 +28,7 @@
 #include "BaseTest.h"
 #include "tests.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 #define TEST_TIME_OUT 50
 #define CREATE_TIME_OUT 25

@@ -45,7 +45,7 @@ public:
     virtual std::string title() const override;
     virtual void onEnter() override;
 
-    cocos2d::Node* _background;
+    axis::Node* _background;
 };
 
 class TextureETC1Alpha : public TextureDemo
@@ -57,10 +57,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void addNewSpriteWithCoords(axis::Vec2 p);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
-    cocos2d::Node* _background;
+    axis::Node* _background;
 };
 
 class TextureETC2 : public TextureDemo
@@ -73,9 +73,9 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords();
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
-    cocos2d::Node* _background;
+    axis::Node* _background;
 };
 
 class TextureBMP : public TextureDemo
@@ -86,8 +86,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(cocos2d::Vec2 p);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void addNewSpriteWithCoords(axis::Vec2 p);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 };
 
 class TextureTGA : public TextureDemo
@@ -460,7 +460,7 @@ public:
 
     virtual float getDuration() const override { return 5.0f; }
     void loadImages(float dt);
-    void imageLoaded(cocos2d::Texture2D* texture);
+    void imageLoaded(axis::Texture2D* texture);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
@@ -515,12 +515,12 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
 protected:
-    void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
+    void onDraw(const axis::Mat4& transform, uint32_t flags);
 
-    cocos2d::Texture2D *_tex1, *_Tex2F;
+    axis::Texture2D *_tex1, *_Tex2F;
 };
 
 class TextureDrawInRect : public TextureDemo
@@ -531,12 +531,12 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
 protected:
-    void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
+    void onDraw(const axis::Mat4& transform, uint32_t flags);
 
-    cocos2d::Texture2D *_tex1, *_Tex2F;
+    axis::Texture2D *_tex1, *_Tex2F;
 };
 
 class TextureMemoryAlloc : public TextureDemo
@@ -546,11 +546,11 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void updateImage(cocos2d::Ref* sender);
-    void changeBackgroundVisible(cocos2d::Ref* sender);
+    void updateImage(axis::Ref* sender);
+    void changeBackgroundVisible(axis::Ref* sender);
 
 private:
-    cocos2d::Sprite* _background;
+    axis::Sprite* _background;
 };
 
 class TexturePVRv3Premult : public TextureDemo
@@ -562,7 +562,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void transformSprite(cocos2d::Sprite* sprite);
+    void transformSprite(axis::Sprite* sprite);
 };
 
 // S3TC Dxt1 texture format test

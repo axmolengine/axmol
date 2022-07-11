@@ -29,13 +29,13 @@
 #include "CCPlatformMacros.h"
 #include "renderer/CCTexture2D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace backend
 {
 namespace PixelFormatUtils
 {
-typedef cocos2d::backend::PixelFormat PixelFormat;
+typedef axis::backend::PixelFormat PixelFormat;
 
 struct PixelFormatDescriptor
 {
@@ -165,4 +165,4 @@ void convertRGBA4ToRGBA8(const unsigned char* data, size_t dataLen, unsigned cha
 void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned char* outData);
 };  // namespace PixelFormatUtils
 }  // namespace backend
-NS_CC_END
+NS_AX_END

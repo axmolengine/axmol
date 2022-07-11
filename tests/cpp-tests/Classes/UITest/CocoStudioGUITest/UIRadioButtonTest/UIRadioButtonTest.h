@@ -44,8 +44,8 @@ public:
     void deleteRadioButton(Ref* sender);
 
 private:
-    cocos2d::ui::RadioButtonGroup* _radioButtonGroup;
-    cocos2d::ui::Text* _allowNoSelectionText;
+    axis::ui::RadioButtonGroup* _radioButtonGroup;
+    axis::ui::Text* _allowNoSelectionText;
 };
 
 class UIRadioButtonTwoGroupsTest : public UIScene
@@ -57,22 +57,22 @@ public:
     ~UIRadioButtonTwoGroupsTest();
 
     virtual bool init() override;
-    void onChangedRadioButtonGroup1(cocos2d::ui::RadioButton* radioButton,
+    void onChangedRadioButtonGroup1(axis::ui::RadioButton* radioButton,
                                     int index,
-                                    cocos2d::ui::RadioButtonGroup::EventType type);
-    void onChangedRadioButtonGroup2(cocos2d::ui::RadioButton* radioButton,
+                                    axis::ui::RadioButtonGroup::EventType type);
+    void onChangedRadioButtonGroup2(axis::ui::RadioButton* radioButton,
                                     int index,
-                                    cocos2d::ui::RadioButtonGroup::EventType type);
-    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton, cocos2d::ui::RadioButton::EventType type);
+                                    axis::ui::RadioButtonGroup::EventType type);
+    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
     void clearRadioButtonGroup(Ref* sender);
 
 protected:
     void addLog(std::string_view log);
 
-    cocos2d::ui::RadioButtonGroup* _radioButtonGroups[2];
-    cocos2d::ui::Text* _groupEventLabel;
-    cocos2d::ui::Text* _buttonEventLabel;
-    cocos2d::ui::Text* _logConsole;
+    axis::ui::RadioButtonGroup* _radioButtonGroups[2];
+    axis::ui::Text* _groupEventLabel;
+    axis::ui::Text* _buttonEventLabel;
+    axis::ui::Text* _logConsole;
     int _numberOfLogLines;
 };
 

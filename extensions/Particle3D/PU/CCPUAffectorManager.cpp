@@ -52,7 +52,7 @@
 #include "extensions/Particle3D/PU/CCPUVelocityMatchingAffector.h"
 #include "extensions/Particle3D/PU/CCPUVortexAffector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUAffectorManager::PUAffectorManager() {}
 
 PUAffectorManager::~PUAffectorManager() {}
@@ -281,4 +281,4 @@ PUAffector* PUAffectorManager::createAffector(std::string_view type)
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

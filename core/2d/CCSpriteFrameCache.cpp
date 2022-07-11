@@ -43,7 +43,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static SpriteFrameCache* _sharedSpriteFrameCache = nullptr;
 
@@ -207,7 +207,7 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_
 
 void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 {
-    if (dictionary["frames"].getType() != cocos2d::Value::Type::MAP)
+    if (dictionary["frames"].getType() != axis::Value::Type::MAP)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();
@@ -416,4 +416,4 @@ ISpriteSheetLoader* SpriteFrameCache::getSpriteSheetLoader(uint32_t spriteSheetF
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

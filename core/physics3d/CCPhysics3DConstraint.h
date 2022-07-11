@@ -36,7 +36,7 @@
 
 class btTypedConstraint;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _3d
@@ -144,7 +144,7 @@ public:
      * @param pivotPointInA local pivot point in A's local space
      * @return created constraint
      */
-    static Physics3DPointToPointConstraint* create(Physics3DRigidBody* rbA, const cocos2d::Vec3& pivotPointInA);
+    static Physics3DPointToPointConstraint* create(Physics3DRigidBody* rbA, const axis::Vec3& pivotPointInA);
 
     /**
      * create point to point constraint, make the local pivot points of 2 rigid bodies match in worldspace.
@@ -156,36 +156,36 @@ public:
      */
     static Physics3DPointToPointConstraint* create(Physics3DRigidBody* rbA,
                                                    Physics3DRigidBody* rbB,
-                                                   const cocos2d::Vec3& pivotPointInA,
-                                                   const cocos2d::Vec3& pivotPointInB);
+                                                   const axis::Vec3& pivotPointInA,
+                                                   const axis::Vec3& pivotPointInB);
 
     /**
      * set pivot point in A's local space
      */
-    void setPivotPointInA(const cocos2d::Vec3& pivotA);
+    void setPivotPointInA(const axis::Vec3& pivotA);
 
     /**
      * set pivot point in B's local space
      */
-    void setPivotPointInB(const cocos2d::Vec3& pivotB);
+    void setPivotPointInB(const axis::Vec3& pivotB);
 
     /**
      * get pivot point in A's local space
      */
-    cocos2d::Vec3 getPivotPointInA() const;
+    axis::Vec3 getPivotPointInA() const;
 
     /**
      * get pivot point in B's local space
      */
-    cocos2d::Vec3 getPivotPointInB() const;
+    axis::Vec3 getPivotPointInB() const;
 
     Physics3DPointToPointConstraint();
     virtual ~Physics3DPointToPointConstraint();
-    bool init(Physics3DRigidBody* rbA, const cocos2d::Vec3& pivotPointInA);
+    bool init(Physics3DRigidBody* rbA, const axis::Vec3& pivotPointInA);
     bool init(Physics3DRigidBody* rbA,
               Physics3DRigidBody* rbB,
-              const cocos2d::Vec3& pivotPointInA,
-              const cocos2d::Vec3& pivotPointInB);
+              const axis::Vec3& pivotPointInA,
+              const axis::Vec3& pivotPointInB);
 };
 
 /**
@@ -203,7 +203,7 @@ public:
      * @param useReferenceFrameA use frame A as reference
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
-                                            const cocos2d::Mat4& rbAFrame,
+                                            const axis::Mat4& rbAFrame,
                                             bool useReferenceFrameA = false);
 
     /**
@@ -214,8 +214,8 @@ public:
      * @param useReferenceFrameA use frame A as reference
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
-                                            const cocos2d::Vec3& pivotInA,
-                                            const cocos2d::Vec3& axisInA,
+                                            const axis::Vec3& pivotInA,
+                                            const axis::Vec3& axisInA,
                                             bool useReferenceFrameA = false);
 
     /**
@@ -230,10 +230,10 @@ public:
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
                                             Physics3DRigidBody* rbB,
-                                            const cocos2d::Vec3& pivotInA,
-                                            const cocos2d::Vec3& pivotInB,
-                                            cocos2d::Vec3& axisInA,
-                                            cocos2d::Vec3& axisInB,
+                                            const axis::Vec3& pivotInA,
+                                            const axis::Vec3& pivotInB,
+                                            axis::Vec3& axisInA,
+                                            axis::Vec3& axisInB,
                                             bool useReferenceFrameA = false);
 
     /**
@@ -246,24 +246,24 @@ public:
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
                                             Physics3DRigidBody* rbB,
-                                            const cocos2d::Mat4& rbAFrame,
-                                            const cocos2d::Mat4& rbBFrame,
+                                            const axis::Mat4& rbAFrame,
+                                            const axis::Mat4& rbBFrame,
                                             bool useReferenceFrameA = false);
 
     /**
      * get rigid body A's frame offset
      */
-    cocos2d::Mat4 getFrameOffsetA() const;
+    axis::Mat4 getFrameOffsetA() const;
 
     /**
      * get rigid body B's frame offset
      */
-    cocos2d::Mat4 getFrameOffsetB() const;
+    axis::Mat4 getFrameOffsetB() const;
 
     /**
      * set frames for rigid body A and B
      */
-    void setFrames(const cocos2d::Mat4& frameA, const cocos2d::Mat4& frameB);
+    void setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB);
 
     /**
      * set angular only
@@ -282,7 +282,7 @@ public:
     /**
      * set motor target
      */
-    void setMotorTarget(const cocos2d::Quaternion& qAinB, float dt);
+    void setMotorTarget(const axis::Quaternion& qAinB, float dt);
     /** set motor target */
     void setMotorTarget(float targetAngle, float dt);
 
@@ -293,7 +293,7 @@ public:
                   float _biasFactor       = 0.3f,
                   float _relaxationFactor = 1.0f);
     /**set axis*/
-    void setAxis(const cocos2d::Vec3& axisInA);
+    void setAxis(const axis::Vec3& axisInA);
     /**get lower limit*/
     float getLowerLimit() const;
     /**get upper limit*/
@@ -301,12 +301,12 @@ public:
     /**get hinge angle*/
     float getHingeAngle() const;
     /**get hinge angle*/
-    float getHingeAngle(const cocos2d::Mat4& transA, const cocos2d::Mat4& transB);
+    float getHingeAngle(const axis::Mat4& transA, const axis::Mat4& transB);
 
     /**get A's frame */
-    cocos2d::Mat4 getAFrame() const;
+    axis::Mat4 getAFrame() const;
     /**get B's frame*/
-    cocos2d::Mat4 getBFrame() const;
+    axis::Mat4 getBFrame() const;
     /**get angular only*/
     bool getAngularOnly() const;
     /**get enable angular motor*/
@@ -347,14 +347,14 @@ public:
      */
     static Physics3DSliderConstraint* create(Physics3DRigidBody* rbA,
                                              Physics3DRigidBody* rbB,
-                                             const cocos2d::Mat4& frameInA,
-                                             const cocos2d::Mat4& frameInB,
+                                             const axis::Mat4& frameInA,
+                                             const axis::Mat4& frameInB,
                                              bool useLinearReferenceFrameA);
 
     /**get A's frame offset*/
-    cocos2d::Mat4 getFrameOffsetA() const;
+    axis::Mat4 getFrameOffsetA() const;
     /**get B's frame offset*/
-    cocos2d::Mat4 getFrameOffsetB() const;
+    axis::Mat4 getFrameOffsetB() const;
     /**get lower linear limit*/
     float getLowerLinLimit() const;
     /**set lower linear limit*/
@@ -432,7 +432,7 @@ public:
     void setUseFrameOffset(bool frameOffsetOnOff);
 
     /**set frames for rigid body A and B*/
-    void setFrames(const cocos2d::Mat4& frameA, const cocos2d::Mat4& frameB);
+    void setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB);
 
     Physics3DSliderConstraint() { _type = ConstraintType::SLIDER; }
     virtual ~Physics3DSliderConstraint() {}
@@ -449,7 +449,7 @@ public:
      * rbA rigid body A
      * frameA A's local frame
      */
-    static Physics3DConeTwistConstraint* create(Physics3DRigidBody* rbA, const cocos2d::Mat4& frameA);
+    static Physics3DConeTwistConstraint* create(Physics3DRigidBody* rbA, const axis::Mat4& frameA);
     /**
      * create cone twist constraint
      * rbA rigid body A
@@ -459,8 +459,8 @@ public:
      */
     static Physics3DConeTwistConstraint* create(Physics3DRigidBody* rbA,
                                                 Physics3DRigidBody* rbB,
-                                                const cocos2d::Mat4& frameA,
-                                                const cocos2d::Mat4& frameB);
+                                                const axis::Mat4& frameA,
+                                                const axis::Mat4& frameB);
 
     /**
      * set limits
@@ -482,9 +482,9 @@ public:
                   float relaxationFactor = 1.0f);
 
     /**get A's frame*/
-    cocos2d::Mat4 getAFrame() const;
+    axis::Mat4 getAFrame() const;
     /**get B's frame*/
-    cocos2d::Mat4 getBFrame() const;
+    axis::Mat4 getBFrame() const;
 
     /**get swing span1*/
     float getSwingSpan1() const;
@@ -520,16 +520,16 @@ public:
     void setMotorTargetInConstraintSpace(const btQuaternion& q);
 
     /**get point for angle*/
-    cocos2d::Vec3 GetPointForAngle(float fAngleInRadians, float fLength) const;
+    axis::Vec3 GetPointForAngle(float fAngleInRadians, float fLength) const;
 
     /**set A and B's frame*/
-    virtual void setFrames(const cocos2d::Mat4& frameA, const cocos2d::Mat4& frameB);
+    virtual void setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB);
 
     /**get A's frame offset*/
-    cocos2d::Mat4 getFrameOffsetA() const;
+    axis::Mat4 getFrameOffsetA() const;
 
     /**get B's frame offset*/
-    cocos2d::Mat4 getFrameOffsetB() const;
+    axis::Mat4 getFrameOffsetB() const;
 
     Physics3DConeTwistConstraint() { _type = ConstraintType::CONE_TWIST; }
     virtual ~Physics3DConeTwistConstraint() {}
@@ -557,8 +557,8 @@ public:
      */
     static Physics3D6DofConstraint* create(Physics3DRigidBody* rbA,
                                            Physics3DRigidBody* rbB,
-                                           const cocos2d::Mat4& frameInA,
-                                           const cocos2d::Mat4& frameInB,
+                                           const axis::Mat4& frameInA,
+                                           const axis::Mat4& frameInB,
                                            bool useLinearReferenceFrameA);
 
     /**
@@ -568,32 +568,32 @@ public:
      * @param useLinearReferenceFrameB use fixed frame B for linear limits
      */
     static Physics3D6DofConstraint* create(Physics3DRigidBody* rbB,
-                                           const cocos2d::Mat4& frameInB,
+                                           const axis::Mat4& frameInB,
                                            bool useLinearReferenceFrameB);
 
     /**set linear lower limit*/
-    void setLinearLowerLimit(const cocos2d::Vec3& linearLower);
+    void setLinearLowerLimit(const axis::Vec3& linearLower);
 
     /**get linear lower limit*/
-    cocos2d::Vec3 getLinearLowerLimit() const;
+    axis::Vec3 getLinearLowerLimit() const;
 
     /**set linear upper limit*/
-    void setLinearUpperLimit(const cocos2d::Vec3& linearUpper);
+    void setLinearUpperLimit(const axis::Vec3& linearUpper);
 
     /**get linear upper limit*/
-    cocos2d::Vec3 getLinearUpperLimit() const;
+    axis::Vec3 getLinearUpperLimit() const;
 
     /**set angular lower limit*/
-    void setAngularLowerLimit(const cocos2d::Vec3& angularLower);
+    void setAngularLowerLimit(const axis::Vec3& angularLower);
 
     /**get angular lower limit*/
-    cocos2d::Vec3 getAngularLowerLimit() const;
+    axis::Vec3 getAngularLowerLimit() const;
 
     /**set angular upper limit*/
-    void setAngularUpperLimit(const cocos2d::Vec3& angularUpper);
+    void setAngularUpperLimit(const axis::Vec3& angularUpper);
 
     /**get angular upper limit*/
-    cocos2d::Vec3 getAngularUpperLimit() const;
+    axis::Vec3 getAngularUpperLimit() const;
 
     /**
      * is limited?
@@ -613,7 +613,7 @@ public:
 // end of 3d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #    endif  // CC_ENABLE_BULLET_INTEGRATION
 

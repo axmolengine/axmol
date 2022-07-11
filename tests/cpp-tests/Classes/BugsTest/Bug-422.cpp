@@ -29,7 +29,7 @@
 
 #include "Bug-422.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool Bug422Layer::init()
 {

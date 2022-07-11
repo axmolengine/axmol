@@ -32,7 +32,7 @@
 #include "base/CCDirector.h"
 #include "base/CCStencilStateManager.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ClippingNode::ClippingNode() : _stencil(nullptr), _stencilStateManager(new StencilStateManager()) {}
 
@@ -337,4 +337,4 @@ void ClippingNode::restoreAllProgramStates()
     }
 }
 
-NS_CC_END
+NS_AX_END

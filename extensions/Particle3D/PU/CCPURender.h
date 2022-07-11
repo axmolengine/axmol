@@ -35,7 +35,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Buffer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // particle render for quad
 struct PUParticle3D;
@@ -247,4 +247,4 @@ protected:
     std::vector<VertexInfo> _vertexTemplate;
 };
 
-NS_CC_END
+NS_AX_END

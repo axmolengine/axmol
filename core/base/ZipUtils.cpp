@@ -54,7 +54,7 @@
 #define unzGoToFirstFile64(A, B, C, D) unzGoToFirstFile2(A, B, C, D, NULL, 0, NULL, 0)
 #define unzGoToNextFile64(A, B, C, D) unzGoToNextFile2(A, B, C, D, NULL, 0, NULL, 0)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 unsigned int ZipUtils::s_uEncryptedPvrKeyParts[4] = {0, 0, 0, 0};
 unsigned int ZipUtils::s_uEncryptionKey[1024];
@@ -1048,4 +1048,4 @@ unsigned char* ZipFile::getFileDataFromZip(std::string_view zipFilePath, std::st
     return buffer;
 }
 
-NS_CC_END
+NS_AX_END

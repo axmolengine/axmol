@@ -38,7 +38,7 @@ namespace spine {
 	class AttachmentVertices;
 
 	/* Draws a skeleton. */
-	class SP_API SkeletonRenderer: public cocos2d::Node, public cocos2d::BlendProtocol {
+	class SP_API SkeletonRenderer: public axis::Node, public axis::BlendProtocol {
 	public:
 		CREATE_FUNC(SkeletonRenderer);
 		static SkeletonRenderer* createWithSkeleton(Skeleton* skeleton, bool ownsSkeleton = false, bool ownsSkeletonData = false);
@@ -47,8 +47,8 @@ namespace spine {
 		static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
 
 		void update (float deltaTime) override;
-		void draw (cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t transformFlags) override;
-		cocos2d::Rect getBoundingBox () const override;
+		void draw (axis::Renderer* renderer, const axis::Mat4& transform, uint32_t transformFlags) override;
+		axis::Rect getBoundingBox () const override;
 		void onEnter () override;
 		void onExit () override;
 
@@ -109,8 +109,8 @@ namespace spine {
 		void setSlotsRange(int startSlotIndex, int endSlotIndex);
 
 		// --- BlendProtocol
-		void setBlendFunc (const cocos2d::BlendFunc& blendFunc)override;
-		const cocos2d::BlendFunc& getBlendFunc () const override;
+		void setBlendFunc (const axis::BlendFunc& blendFunc)override;
+		const axis::BlendFunc& getBlendFunc () const override;
 		void setOpacityModifyRGB (bool value) override;
 		bool isOpacityModifyRGB () const override;
 
@@ -134,15 +134,15 @@ namespace spine {
 	protected:
 		void setSkeletonData (SkeletonData* skeletonData, bool ownsSkeletonData);
 		void setupGLProgramState(bool twoColorTintEnabled);
-		virtual void drawDebug (cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t transformFlags);
+		virtual void drawDebug (axis::Renderer* renderer, const axis::Mat4& transform, uint32_t transformFlags);
 
 		bool _ownsSkeletonData;
 		bool _ownsSkeleton;
 		bool _ownsAtlas = false;
 		Atlas* _atlas;
 		AttachmentLoader* _attachmentLoader;
-		cocos2d::CustomCommand _debugCommand;
-		cocos2d::BlendFunc _blendFunc;
+		axis::CustomCommand _debugCommand;
+		axis::BlendFunc _blendFunc;
 		bool _premultipliedAlpha;
 		Skeleton* _skeleton;
 		float _timeScale;
@@ -152,7 +152,7 @@ namespace spine {
 		bool _debugBoundingRect;
 		SkeletonClipping* _clipper;
 		VertexEffect* _effect;
-		cocos2d::Rect _boundingRect;
+		axis::Rect _boundingRect;
 
 		int _startSlotIndex;
 		int _endSlotIndex;

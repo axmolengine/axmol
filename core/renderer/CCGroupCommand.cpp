@@ -27,7 +27,7 @@
 #include "renderer/CCRenderer.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 GroupCommandManager::GroupCommandManager() {}
 
@@ -84,4 +84,4 @@ GroupCommand::~GroupCommand()
     Director::getInstance()->getRenderer()->getGroupCommandManager()->releaseGroupID(_renderQueueID);
 }
 
-NS_CC_END
+NS_AX_END

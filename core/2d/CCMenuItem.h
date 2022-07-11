@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "base/CCProtocols.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 typedef std::function<void(Ref*)> ccMenuCallback;
 
@@ -507,6 +507,6 @@ private:
 // end of 2d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CCMENU_ITEM_H__

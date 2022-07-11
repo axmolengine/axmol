@@ -94,7 +94,7 @@ enum class FrameEaseType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrame : public cocos2d::Ref
+class CCS_DLL ActionFrame : public axis::Ref
 {
 
 public:
@@ -171,7 +171,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration);
+    virtual axis::ActionInterval* getAction(float duration);
     /**
      * Gets the ActionInterval of ActionFrame.
      *
@@ -181,7 +181,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
+    virtual axis::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
 
     /**
      *Set the ActionInterval easing parameter.
@@ -199,7 +199,7 @@ protected:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getEasingAction(cocos2d::ActionInterval* action);
+    virtual axis::ActionInterval* getEasingAction(axis::ActionInterval* action);
 
 protected:
     int _frameType;
@@ -231,14 +231,14 @@ public:
      *
      * @param the move action position.
      */
-    void setPosition(cocos2d::Vec2 pos);
+    void setPosition(axis::Vec2 pos);
 
     /**
      * Gets the move action position.
      *
      * @return the move action position.
      */
-    cocos2d::Vec2 getPosition();
+    axis::Vec2 getPosition();
 
     /**
      * Gets the ActionInterval of ActionFrame.
@@ -247,10 +247,10 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration);
+    virtual axis::ActionInterval* getAction(float duration);
 
 protected:
-    cocos2d::Vec2 _position;
+    axis::Vec2 _position;
 };
 
 /**
@@ -305,7 +305,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration);
+    virtual axis::ActionInterval* getAction(float duration);
 
 protected:
     float _scaleX;
@@ -349,7 +349,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration);
+    virtual axis::ActionInterval* getAction(float duration);
     /**
      * Gets the ActionInterval of ActionFrame.
      *
@@ -359,7 +359,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
+    virtual axis::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
 
 public:
     float _rotation;
@@ -402,7 +402,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration);
+    virtual axis::ActionInterval* getAction(float duration);
 
 protected:
     float _opacity;
@@ -430,14 +430,14 @@ public:
      *
      * @param ccolor the tint action color
      */
-    void setColor(cocos2d::Color3B ccolor);
+    void setColor(axis::Color3B ccolor);
 
     /**
      * Gets the tint action color.
      *
      * @return the tint action color.
      */
-    cocos2d::Color3B getColor();
+    axis::Color3B getColor();
 
     /**
      * Gets the ActionInterval of ActionFrame.
@@ -446,10 +446,10 @@ public:
      *
      * @return ActionInterval
      */
-    virtual cocos2d::ActionInterval* getAction(float duration);
+    virtual axis::ActionInterval* getAction(float duration);
 
 protected:
-    cocos2d::Color3B _color;
+    axis::Color3B _color;
 };
 
 }  // namespace cocostudio

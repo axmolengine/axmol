@@ -41,20 +41,20 @@ public:
 //
 class EffectSprite;
 
-class Effect : public cocos2d::Ref
+class Effect : public axis::Ref
 {
 public:
-    cocos2d::backend::ProgramState* getProgramState() const { return _programState; }
+    axis::backend::ProgramState* getProgramState() const { return _programState; }
     virtual void setTarget(EffectSprite* sprite) {}
 
 protected:
     bool initProgramState(std::string_view fragmentFilename);
     Effect();
     virtual ~Effect();
-    cocos2d::backend::ProgramState* _programState = nullptr;
+    axis::backend::ProgramState* _programState = nullptr;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string _fragSource;
-    cocos2d::EventListenerCustom* _backgroundListener;
+    axis::EventListenerCustom* _backgroundListener;
 #endif
 };
 
@@ -68,7 +68,7 @@ public:
 
 protected:
     ssize_t _vectorIndex;
-    cocos2d::Vector<Effect*> _effects;
+    axis::Vector<Effect*> _effects;
     EffectSprite* _sprite;
 };
 
@@ -81,14 +81,14 @@ public:
     virtual std::string subtitle() const { return "Sprite Lamp effects"; }
     // callback
 public:
-    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* unused_event);
-    virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* unused_event);
-    virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* unused_event);
+    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* unused_event);
+    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* unused_event);
+    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* unused_event);
 
 protected:
     EffectSprite* _sprite;
     Effect* _effect;
-    cocos2d::Sprite* _lightSprite;
+    axis::Sprite* _lightSprite;
 };
 
 #endif

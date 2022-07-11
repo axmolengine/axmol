@@ -32,7 +32,7 @@
 #include "3d/CCOBB.h"
 #include "3d/CCPlane.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Camera;
 
@@ -84,6 +84,6 @@ protected:
     bool _initialized;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CC_FRUSTUM_H_

@@ -3,7 +3,7 @@
 //
 #include "ui/LayoutHelper.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 Vec2 LayoutHelper::s_designSize;
 float LayoutHelper::s_adjustedScale = 1.0f;
@@ -56,16 +56,16 @@ void LayoutHelper::setDesignSizeNoBorder(const Vec2& designSize)
         LayoutHelper::s_adjustedScale = scaleY / (frameSize.width / LayoutHelper::s_designSize.width);
     }
 
-    cocos2d::log("x: %f; y: %f; scale: %f", scaleX, scaleY, s_adjustedScale);
+    axis::log("x: %f; y: %f; scale: %f", scaleX, scaleY, s_adjustedScale);
 
     pEGLView->setDesignResolutionSize(LayoutHelper::s_designSize.width * s_adjustedScale,
                                       LayoutHelper::s_designSize.height * s_adjustedScale, ResolutionPolicy::NO_BORDER);
 }
 
-cocos2d::Vec2 LayoutHelper::getVisibleOrigin(void)
+axis::Vec2 LayoutHelper::getVisibleOrigin(void)
 {
     const auto& adjustedDesignSize = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    return cocos2d::Vec2((adjustedDesignSize.width - LayoutHelper::s_designSize.width) * .5f,
+    return axis::Vec2((adjustedDesignSize.width - LayoutHelper::s_designSize.width) * .5f,
                          (adjustedDesignSize.height - LayoutHelper::s_designSize.height) * .5f);
 }
 
@@ -131,7 +131,7 @@ void LayoutHelper::setNodeGroupSize(const std::vector<Node*>& nodes, const Vec2&
 
     for (auto iter = nodes.begin(); iter != nodes.end(); ++iter)
     {
-        auto detail = dynamic_cast<cocos2d::Sprite*>(*iter);
+        auto detail = dynamic_cast<axis::Sprite*>(*iter);
         if (detail != nullptr)
         {
             /*auto scaledWidth = (detail->getContentWidth() * detail->getScaleX());
@@ -283,14 +283,14 @@ void LayoutHelper::setNodeGroupTop(const std::vector<Node*>& nodes, float top)
     }
 }
 
-void LayoutHelper::setNodeGroupLT(const std::vector<Node*>& nodes, const cocos2d::Vec2& p)
+void LayoutHelper::setNodeGroupLT(const std::vector<Node*>& nodes, const axis::Vec2& p)
 {
     float deltaL = p.x - getNodeGroupLeft(nodes);
     float deltaT = p.y - getNodeGroupTop(nodes);
 
     for (auto iter = nodes.begin(); iter != nodes.end(); ++iter)
     {
-        setNodeLT((*iter), cocos2d::Vec2(getNodeLeft((*iter)) + deltaL, getNodeTop((*iter)) + deltaT));
+        setNodeLT((*iter), axis::Vec2(getNodeLeft((*iter)) + deltaL, getNodeTop((*iter)) + deltaT));
     }
 }
 
@@ -494,7 +494,7 @@ void LayoutHelper::centerToParent(const std::vector<Node*>& nodes)
     float distY = ((nodes[0]->getParent()->getContentSize().height - groupHeight) / 2.0f) - minY;
 
     std::for_each(nodes.begin(), nodes.end(), [distX, distY](Node* child) -> void {
-        setNodeLT(child, cocos2d::Point(getNodeLeft(child) + distX, getNodeTop(child) + distY));
+        setNodeLT(child, axis::Point(getNodeLeft(child) + distX, getNodeTop(child) + distY));
     });
 }
 
@@ -892,7 +892,7 @@ void LayoutHelper::makeVerticalSpacingEqual(const std::vector<Node*>& nodes, flo
 
 // ----------------- LayoutHelper::VisibleRect --------------------------
 
-cocos2d::Rect LayoutHelper::VisibleRect::s_ScreenVisibleRect;
+axis::Rect LayoutHelper::VisibleRect::s_ScreenVisibleRect;
 
 /// x-studio: when design resolution changed, should call this func.
 void LayoutHelper::VisibleRect::refresh(void)
@@ -922,10 +922,10 @@ void LayoutHelper::VisibleRect::lazyInit()
     }
 }
 
-cocos2d::Rect LayoutHelper::VisibleRect::getScreenVisibleRect()
+axis::Rect LayoutHelper::VisibleRect::getScreenVisibleRect()
 {
     lazyInit();
-    return cocos2d::Rect(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y, s_ScreenVisibleRect.size.width,
+    return axis::Rect(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y, s_ScreenVisibleRect.size.width,
                          s_ScreenVisibleRect.size.height);
 }
 
@@ -938,48 +938,48 @@ Vec2 LayoutHelper::VisibleRect::size()
 Point LayoutHelper::VisibleRect::left()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x,
+    return axis::Point(s_ScreenVisibleRect.origin.x,
                           s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height / 2);
 }
 
 Point LayoutHelper::VisibleRect::right()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width,
+    return axis::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width,
                           s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height / 2);
 }
 
 Point LayoutHelper::VisibleRect::top()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
+    return axis::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
                           s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
 }
 
 Point LayoutHelper::VisibleRect::bottom()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
+    return axis::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
                           s_ScreenVisibleRect.origin.y);
 }
 
 Point LayoutHelper::VisibleRect::center()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
+    return axis::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width / 2,
                           s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height / 2);
 }
 
 Point LayoutHelper::VisibleRect::leftTop()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
+    return axis::Point(s_ScreenVisibleRect.origin.x, s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
 }
 
 Point LayoutHelper::VisibleRect::rightTop()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width,
+    return axis::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width,
                           s_ScreenVisibleRect.origin.y + s_ScreenVisibleRect.size.height);
 }
 
@@ -992,26 +992,26 @@ Point LayoutHelper::VisibleRect::leftBottom()
 Point LayoutHelper::VisibleRect::rightBottom()
 {
     lazyInit();
-    return cocos2d::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width, s_ScreenVisibleRect.origin.y);
+    return axis::Point(s_ScreenVisibleRect.origin.x + s_ScreenVisibleRect.size.width, s_ScreenVisibleRect.origin.y);
 }
 
 /// visual screen
 float LayoutHelper::VisibleRect::getNodeLeft(Node* pNode)
 {
-    cocos2d::Point ptLocal(LayoutHelper::getNodeLeft(pNode), 0);
+    axis::Point ptLocal(LayoutHelper::getNodeLeft(pNode), 0);
     auto ptWorld = pNode->getParent()->convertToWorldSpace(ptLocal);
     return ptWorld.x;
 }
 float LayoutHelper::VisibleRect::getNodeBottom(Node* pNode)
 {
-    cocos2d::Point ptLocal(0, LayoutHelper::getNodeBottom(pNode));
+    axis::Point ptLocal(0, LayoutHelper::getNodeBottom(pNode));
     auto ptWorld = pNode->getParent()->convertToWorldSpace(ptLocal);
 
     return ptWorld.y;
 }
 float LayoutHelper::VisibleRect::getNodeRight(Node* pNode)
 {
-    cocos2d::Point ptLocal(LayoutHelper::getNodeLeft(pNode) + pNode->getContentSize().width /* * pNode->getScaleX()*/,
+    axis::Point ptLocal(LayoutHelper::getNodeLeft(pNode) + pNode->getContentSize().width /* * pNode->getScaleX()*/,
                            0);
     auto ptWorld = pNode->getParent()->convertToWorldSpace(ptLocal);
 
@@ -1020,7 +1020,7 @@ float LayoutHelper::VisibleRect::getNodeRight(Node* pNode)
 }
 float LayoutHelper::VisibleRect::getNodeTop(Node* pNode)
 {
-    cocos2d::Point ptLocal(
+    axis::Point ptLocal(
         0, LayoutHelper::getNodeBottom(pNode) + pNode->getContentSize().height /* * pNode->getScaleY()*/);
     auto ptWorld     = pNode->getParent()->convertToWorldSpace(ptLocal);
     auto visibleRect = LayoutHelper::VisibleRect::getScreenVisibleRect();
@@ -1032,14 +1032,14 @@ void LayoutHelper::VisibleRect::setNodeLeft(Node* pNode, float left)
 {
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
+    axis::Point delta      = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(adjust_coord(size.width, achorPoint.x, left) /* - delta.x*/, 0);
+    axis::Point ptWorld(adjust_coord(size.width, achorPoint.x, left) /* - delta.x*/, 0);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionX(ptLocal.x);
 }
@@ -1047,14 +1047,14 @@ void LayoutHelper::VisibleRect::setNodeTop(Node* pNode, float top)
 {
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
+    axis::Point delta      = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(0, adjust_coord_neg(scrSize.height, size.height, achorPoint.y, top) - delta.y);
+    axis::Point ptWorld(0, adjust_coord_neg(scrSize.height, size.height, achorPoint.y, top) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionY(ptLocal.y);
 }
@@ -1062,14 +1062,14 @@ void LayoutHelper::VisibleRect::setNodeRight(Node* pNode, float right)
 {
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
+    axis::Point delta      = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, right) /* - delta.x*/, 0);
+    axis::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, right) /* - delta.x*/, 0);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionX(ptLocal.x);
 }
@@ -1077,167 +1077,167 @@ void LayoutHelper::VisibleRect::setNodeBottom(Node* pNode, float bottom)
 {
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
+    axis::Point delta      = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(0, adjust_coord(size.height, achorPoint.y, bottom) - delta.y);
+    axis::Point ptWorld(0, adjust_coord(size.height, achorPoint.y, bottom) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionY(ptLocal.y);
 }
 
-void LayoutHelper::VisibleRect::setNodeLT(Node* pNode, const cocos2d::Point& p)
+void LayoutHelper::VisibleRect::setNodeLT(Node* pNode, const axis::Point& p)
 {
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
+    axis::Point delta      = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
 
-    cocos2d::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x),
+    axis::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x),
                            adjust_coord_neg(scrSize.height, size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
-void LayoutHelper::VisibleRect::setNodeRT(Node* pNode, const cocos2d::Point& p)
+void LayoutHelper::VisibleRect::setNodeRT(Node* pNode, const axis::Point& p)
 {  // right top
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
+    axis::Point delta      = axis::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) /* - delta.x*/,
+    axis::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) /* - delta.x*/,
                            adjust_coord_neg(scrSize.height, size.height, achorPoint.y, p.y) /* - delta.y*/);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
-void LayoutHelper::VisibleRect::setNodeLB(Node* pNode, const cocos2d::Point& p)
+void LayoutHelper::VisibleRect::setNodeLB(Node* pNode, const axis::Point& p)
 {  // left bottom
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(0, 0) - LayoutHelper::VisibleRect::leftBottom();
+    axis::Point delta      = axis::Vec2(0, 0) - LayoutHelper::VisibleRect::leftBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x) - delta.x,
+    axis::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x) - delta.x,
                            adjust_coord(size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
-void LayoutHelper::VisibleRect::setNodeRB(Node* pNode, const cocos2d::Point& p)
+void LayoutHelper::VisibleRect::setNodeRB(Node* pNode, const axis::Point& p)
 {  // right bottom
     CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta      = cocos2d::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
+    axis::Point delta      = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
 
-    cocos2d::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) /* - delta.x*/,
+    axis::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) /* - delta.x*/,
                            adjust_coord(size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
 
 /// ratio position
-void LayoutHelper::VisibleRect::setNodeNormalizedLT(Node* pNode, const cocos2d::Point& ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedLT(Node* pNode, const axis::Point& ratio)
 {
     CC_ASSERT(pNode);
 
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta = cocos2d::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
+    axis::Point delta = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
 
     Vec2 vscrSize    = LayoutHelper::VisibleRect::size();
-    cocos2d::Point p = cocos2d::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
+    axis::Point p = axis::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
 
-    cocos2d::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x) - delta.x,
+    axis::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x) - delta.x,
                            adjust_coord_neg(scrSize.height, size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
-void LayoutHelper::VisibleRect::setNodeNormalizedRT(Node* pNode, const cocos2d::Point& ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedRT(Node* pNode, const axis::Point& ratio)
 {  // right top
     CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta = cocos2d::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
+    axis::Point delta = axis::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
 
     Vec2 vscrSize    = LayoutHelper::VisibleRect::size();
-    cocos2d::Point p = cocos2d::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
+    axis::Point p = axis::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
 
-    cocos2d::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) - delta.x,
+    axis::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) - delta.x,
                            adjust_coord_neg(scrSize.height, size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
-void LayoutHelper::VisibleRect::setNodeNormalizedLB(Node* pNode, const cocos2d::Point& ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedLB(Node* pNode, const axis::Point& ratio)
 {  // left bottom
     CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta = cocos2d::Vec2(0, 0) - LayoutHelper::VisibleRect::leftBottom();
+    axis::Point delta = axis::Vec2(0, 0) - LayoutHelper::VisibleRect::leftBottom();
 
     Vec2 vscrSize    = LayoutHelper::VisibleRect::size();
-    cocos2d::Point p = cocos2d::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
+    axis::Point p = axis::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
 
-    cocos2d::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x) - delta.x,
+    axis::Point ptWorld(adjust_coord(size.width, achorPoint.x, p.x) - delta.x,
                            adjust_coord(size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
 }
-void LayoutHelper::VisibleRect::setNodeNormalizedRB(Node* pNode, const cocos2d::Point& ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedRB(Node* pNode, const axis::Point& ratio)
 {  // right bottom
     CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta = cocos2d::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
+    axis::Point delta = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
 
     Vec2 vscrSize    = LayoutHelper::VisibleRect::size();
-    cocos2d::Point p = cocos2d::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
+    axis::Point p = axis::Vec2(vscrSize.width * ratio.x, vscrSize.height * ratio.y);
 
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
 
-    cocos2d::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) - delta.x,
+    axis::Point ptWorld(adjust_coord_neg(scrSize.width, size.width, achorPoint.x, p.x) - delta.x,
                            adjust_coord(size.height, achorPoint.y, p.y) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);
@@ -1247,47 +1247,47 @@ void LayoutHelper::VisibleRect::setNodeNormalizedTop(Node* pNode, const float ra
 {  // right top
     CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
-    cocos2d::Point delta = cocos2d::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
+    axis::Point delta = axis::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
 
     Vec2 vscrSize = LayoutHelper::VisibleRect::size();
     float top     = vscrSize.width * ratioTop;
 
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
-    cocos2d::Point achorPoint = Vec2::ZERO;
+    axis::Point achorPoint = Vec2::ZERO;
     if (!pNode->isIgnoreAnchorPointForPosition())
     {
         achorPoint = pNode->getAnchorPoint();
     }
-    cocos2d::Point ptWorld(0, adjust_coord_neg(scrSize.height, size.height, achorPoint.y, top) - delta.y);
+    axis::Point ptWorld(0, adjust_coord_neg(scrSize.height, size.height, achorPoint.y, top) - delta.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionY(ptWorld.y);
 }
 
-void LayoutHelper::VisibleRect::setNodeNormalizedPositionX(cocos2d::Node* pNode, float ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedPositionX(axis::Node* pNode, float ratio)
 {
     CC_ASSERT(pNode);
-    cocos2d::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
-    cocos2d::Point ptWorld(visibleRect.size.width * ratio + visibleRect.origin.x, 0);
+    axis::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
+    axis::Point ptWorld(visibleRect.size.width * ratio + visibleRect.origin.x, 0);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionX(ptLocal.x);
 }
 
-void LayoutHelper::VisibleRect::setNodeNormalizedPositionY(cocos2d::Node* pNode, float ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedPositionY(axis::Node* pNode, float ratio)
 {
     CC_ASSERT(pNode);
-    cocos2d::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
+    axis::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
 
-    cocos2d::Point ptWorld(0, visibleRect.size.height * ratio + visibleRect.origin.y);
+    axis::Point ptWorld(0, visibleRect.size.height * ratio + visibleRect.origin.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPositionY(ptLocal.y);
 }
-void LayoutHelper::VisibleRect::setNodeNormalizedPosition(Node* pNode, const cocos2d::Point& ratio)
+void LayoutHelper::VisibleRect::setNodeNormalizedPosition(Node* pNode, const axis::Point& ratio)
 {
     CC_ASSERT(pNode);
     pNode->setIgnoreAnchorPointForPosition(false);
-    pNode->setAnchorPoint(cocos2d::Vec2(.5f, .5f));
-    cocos2d::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
-    cocos2d::Point ptWorld(visibleRect.size.width * ratio.x + visibleRect.origin.x,
+    pNode->setAnchorPoint(axis::Vec2(.5f, .5f));
+    axis::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
+    axis::Point ptWorld(visibleRect.size.width * ratio.x + visibleRect.origin.x,
                            visibleRect.size.height * ratio.y + visibleRect.origin.y);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
     pNode->setPosition(ptLocal);

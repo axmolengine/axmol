@@ -34,7 +34,7 @@
 
 #include "Bug-15594.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool Bug15594Layer::init()
 {

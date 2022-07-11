@@ -25,7 +25,7 @@
 #include "2d/CCLight.h"
 #include "2d/CCScene.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void BaseLight::setIntensity(float intensity)
 {
@@ -176,4 +176,4 @@ AmbientLight::AmbientLight() {}
 
 AmbientLight::~AmbientLight() {}
 
-NS_CC_END
+NS_AX_END

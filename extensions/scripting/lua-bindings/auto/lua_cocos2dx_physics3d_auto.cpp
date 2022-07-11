@@ -7,7 +7,7 @@
 int lua_cocos2dx_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -19,7 +19,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -54,7 +54,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -66,7 +66,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -104,7 +104,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -116,7 +116,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -129,7 +129,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DShape:initBox");
         if(!ok)
@@ -154,7 +154,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -166,7 +166,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -207,7 +207,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -219,7 +219,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -260,7 +260,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -272,7 +272,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -321,15 +321,15 @@ int lua_cocos2dx_physics3d_Physics3DShape_createBox(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DShape:createBox");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_createBox'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createBox(arg0);
-        object_to_luaval<cocos2d::Physics3DShape>(tolua_S, "cc.Physics3DShape",(cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createBox(arg0);
+        object_to_luaval<axis::Physics3DShape>(tolua_S, "cc.Physics3DShape",(axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createBox",argc, 1);
@@ -366,8 +366,8 @@ int lua_cocos2dx_physics3d_Physics3DShape_createCylinder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_createCylinder'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createCylinder(arg0, arg1);
-        object_to_luaval<cocos2d::Physics3DShape>(tolua_S, "cc.Physics3DShape",(cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createCylinder(arg0, arg1);
+        object_to_luaval<axis::Physics3DShape>(tolua_S, "cc.Physics3DShape",(axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createCylinder",argc, 2);
@@ -395,17 +395,17 @@ int lua_cocos2dx_physics3d_Physics3DShape_createConvexHull(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        const cocos2d::Vec3* arg0;
+        const axis::Vec3* arg0;
         int arg1;
-        ok &= luaval_to_object<const cocos2d::Vec3>(tolua_S, 2, "cc.Vec3",&arg0, "cc.Physics3DShape:createConvexHull");
+        ok &= luaval_to_object<const axis::Vec3>(tolua_S, 2, "cc.Vec3",&arg0, "cc.Physics3DShape:createConvexHull");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.Physics3DShape:createConvexHull");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_createConvexHull'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createConvexHull(arg0, arg1);
-        object_to_luaval<cocos2d::Physics3DShape>(tolua_S, "cc.Physics3DShape",(cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createConvexHull(arg0, arg1);
+        object_to_luaval<axis::Physics3DShape>(tolua_S, "cc.Physics3DShape",(axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createConvexHull",argc, 2);
@@ -442,8 +442,8 @@ int lua_cocos2dx_physics3d_Physics3DShape_createCapsule(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_createCapsule'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createCapsule(arg0, arg1);
-        object_to_luaval<cocos2d::Physics3DShape>(tolua_S, "cc.Physics3DShape",(cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createCapsule(arg0, arg1);
+        object_to_luaval<axis::Physics3DShape>(tolua_S, "cc.Physics3DShape",(axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createCapsule",argc, 2);
@@ -478,8 +478,8 @@ int lua_cocos2dx_physics3d_Physics3DShape_createSphere(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_createSphere'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createSphere(arg0);
-        object_to_luaval<cocos2d::Physics3DShape>(tolua_S, "cc.Physics3DShape",(cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createSphere(arg0);
+        object_to_luaval<axis::Physics3DShape>(tolua_S, "cc.Physics3DShape",(axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createSphere",argc, 1);
@@ -493,7 +493,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_createSphere(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DShape* cobj = nullptr;
+    axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -510,7 +510,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DShape();
+        cobj = new axis::Physics3DShape();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -552,7 +552,7 @@ int lua_register_cocos2dx_physics3d_Physics3DShape(lua_State* tolua_S)
         tolua_function(tolua_S,"createCapsule", lua_cocos2dx_physics3d_Physics3DShape_createCapsule);
         tolua_function(tolua_S,"createSphere", lua_cocos2dx_physics3d_Physics3DShape_createSphere);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DShape).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DShape).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DShape";
     g_typeCast[typeName] = "cc.Physics3DShape";
     return 1;
@@ -561,7 +561,7 @@ int lua_register_cocos2dx_physics3d_Physics3DShape(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -573,7 +573,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -612,7 +612,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -624,7 +624,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -659,7 +659,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -671,7 +671,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -706,7 +706,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -718,7 +718,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -731,9 +731,9 @@ int lua_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DWorld* arg0;
+        axis::Physics3DWorld* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DWorld>(tolua_S, 2, "cc.Physics3DWorld",&arg0, "cc.Physics3DObject:setPhysicsWorld");
+        ok &= luaval_to_object<axis::Physics3DWorld>(tolua_S, 2, "cc.Physics3DWorld",&arg0, "cc.Physics3DObject:setPhysicsWorld");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld'", nullptr);
@@ -756,7 +756,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -768,7 +768,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -786,7 +786,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DObject_getWorldTransform'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getWorldTransform();
+        axis::Mat4 ret = cobj->getWorldTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -803,7 +803,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -815,7 +815,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -833,8 +833,8 @@ int lua_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DWorld* ret = cobj->getPhysicsWorld();
-        object_to_luaval<cocos2d::Physics3DWorld>(tolua_S, "cc.Physics3DWorld",(cocos2d::Physics3DWorld*)ret);
+        axis::Physics3DWorld* ret = cobj->getPhysicsWorld();
+        object_to_luaval<axis::Physics3DWorld>(tolua_S, "cc.Physics3DWorld",(axis::Physics3DWorld*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Physics3DObject:getPhysicsWorld",argc, 0);
@@ -850,7 +850,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -862,7 +862,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -900,7 +900,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -912,7 +912,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -930,7 +930,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DObject_getCollisionCallback'", nullptr);
             return 0;
         }
-        const std::function<void (const cocos2d::Physics3DCollisionInfo &)>& ret = cobj->getCollisionCallback();
+        const std::function<void (const axis::Physics3DCollisionInfo &)>& ret = cobj->getCollisionCallback();
         #pragma warning NO CONVERSION FROM NATIVE FOR std::function;
         return 1;
     }
@@ -947,7 +947,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -959,7 +959,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -994,7 +994,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1006,7 +1006,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1061,7 +1061,7 @@ int lua_register_cocos2dx_physics3d_Physics3DObject(lua_State* tolua_S)
         tolua_function(tolua_S,"getMask",lua_cocos2dx_physics3d_Physics3DObject_getMask);
         tolua_function(tolua_S,"needCollisionCallback",lua_cocos2dx_physics3d_Physics3DObject_needCollisionCallback);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DObject).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DObject).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DObject";
     g_typeCast[typeName] = "cc.Physics3DObject";
     return 1;
@@ -1070,7 +1070,7 @@ int lua_register_cocos2dx_physics3d_Physics3DObject(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1082,7 +1082,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1095,7 +1095,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setGravity");
         if(!ok)
@@ -1120,7 +1120,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1132,7 +1132,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1167,7 +1167,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1176,7 +1176,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_
 #if COCOS2D_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -1199,7 +1199,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_
     ok  = true;
     do{
         if (argc == 1) {
-            cocos2d::Vec3 arg0;
+            axis::Vec3 arg0;
             ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setAngularFactor");
 
             if (!ok) { break; }
@@ -1222,7 +1222,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1234,7 +1234,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1247,9 +1247,9 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DConstraint* arg0;
+        axis::Physics3DConstraint* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DRigidBody:addConstraint");
+        ok &= luaval_to_object<axis::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DRigidBody:addConstraint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_addConstraint'", nullptr);
@@ -1272,7 +1272,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1284,7 +1284,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1319,7 +1319,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1331,7 +1331,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1349,7 +1349,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getTotalForce();
+        axis::Vec3 ret = cobj->getTotalForce();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1366,7 +1366,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1378,7 +1378,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1413,7 +1413,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1425,7 +1425,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1438,7 +1438,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:applyCentralForce");
         if(!ok)
@@ -1463,7 +1463,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1475,7 +1475,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1489,7 +1489,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
     if (argc == 2) 
     {
         double arg0;
-        cocos2d::Vec3 arg1;
+        axis::Vec3 arg1;
 
         ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.Physics3DRigidBody:setMassProps");
 
@@ -1516,7 +1516,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1528,7 +1528,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1566,7 +1566,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1578,7 +1578,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1616,7 +1616,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1628,7 +1628,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1669,7 +1669,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1681,7 +1681,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1694,8 +1694,8 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:applyImpulse");
 
@@ -1722,7 +1722,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1734,7 +1734,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1769,7 +1769,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1781,7 +1781,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1794,7 +1794,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:applyTorque");
         if(!ok)
@@ -1819,7 +1819,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1831,7 +1831,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1869,7 +1869,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1881,7 +1881,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1919,7 +1919,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1931,7 +1931,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1966,7 +1966,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1978,7 +1978,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -1996,7 +1996,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getLinearFactor();
+        axis::Vec3 ret = cobj->getLinearFactor();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2013,7 +2013,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2025,7 +2025,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2063,7 +2063,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2075,7 +2075,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2093,7 +2093,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getAngularVelocity();
+        axis::Vec3 ret = cobj->getAngularVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2110,7 +2110,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2122,7 +2122,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2135,7 +2135,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DRigidBodyDes* arg0;
+        axis::Physics3DRigidBodyDes* arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR Physics3DRigidBodyDes*
 		ok = false;
@@ -2161,7 +2161,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2173,7 +2173,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2186,7 +2186,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:applyTorqueImpulse");
         if(!ok)
@@ -2211,7 +2211,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2223,7 +2223,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2261,7 +2261,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2273,7 +2273,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2286,7 +2286,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setLinearFactor");
         if(!ok)
@@ -2311,7 +2311,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2323,7 +2323,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2336,7 +2336,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setLinearVelocity");
         if(!ok)
@@ -2361,7 +2361,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2373,7 +2373,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2391,7 +2391,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getLinearVelocity();
+        axis::Vec3 ret = cobj->getLinearVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2408,7 +2408,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2420,7 +2420,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2458,7 +2458,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State*
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2470,7 +2470,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2483,8 +2483,8 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:applyForce");
 
@@ -2511,7 +2511,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2523,7 +2523,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2536,7 +2536,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setAngularVelocity");
         if(!ok)
@@ -2561,7 +2561,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2573,7 +2573,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2586,7 +2586,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tol
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:applyCentralImpulse");
         if(!ok)
@@ -2611,7 +2611,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2623,7 +2623,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2641,7 +2641,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getGravity'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getGravity();
+        axis::Vec3 ret = cobj->getGravity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2658,7 +2658,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2670,7 +2670,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2705,7 +2705,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2717,7 +2717,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2730,7 +2730,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Mat4 arg0;
+        axis::Mat4 arg0;
 
         ok &= luaval_to_mat4(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setCenterOfMassTransform");
         if(!ok)
@@ -2755,7 +2755,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2767,7 +2767,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2780,7 +2780,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* 
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DRigidBody:setInvInertiaDiagLocal");
         if(!ok)
@@ -2805,7 +2805,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2814,7 +2814,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_
 #if COCOS2D_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -2837,8 +2837,8 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_
     ok  = true;
     do{
         if (argc == 1) {
-            cocos2d::Physics3DConstraint* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DRigidBody:removeConstraint");
+            axis::Physics3DConstraint* arg0;
+            ok &= luaval_to_object<axis::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DRigidBody:removeConstraint");
 
             if (!ok) { break; }
             cobj->removeConstraint(arg0);
@@ -2860,7 +2860,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2872,7 +2872,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2890,7 +2890,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getTotalTorque();
+        axis::Vec3 ret = cobj->getTotalTorque();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2907,7 +2907,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2919,7 +2919,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2954,7 +2954,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -2966,7 +2966,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -2987,8 +2987,8 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DConstraint* ret = cobj->getConstraint(arg0);
-        object_to_luaval<cocos2d::Physics3DConstraint>(tolua_S, "cc.Physics3DConstraint",(cocos2d::Physics3DConstraint*)ret);
+        axis::Physics3DConstraint* ret = cobj->getConstraint(arg0);
+        object_to_luaval<axis::Physics3DConstraint>(tolua_S, "cc.Physics3DConstraint",(axis::Physics3DConstraint*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Physics3DRigidBody:getConstraint",argc, 1);
@@ -3004,7 +3004,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3016,7 +3016,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3051,7 +3051,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3063,7 +3063,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3098,7 +3098,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State*
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3110,7 +3110,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3145,7 +3145,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3157,7 +3157,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3192,7 +3192,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3204,7 +3204,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3222,7 +3222,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getInvInertiaDiagLocal();
+        axis::Vec3 ret = cobj->getInvInertiaDiagLocal();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3239,7 +3239,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3251,7 +3251,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3269,7 +3269,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getCenterOfMassTransform();
+        axis::Mat4 ret = cobj->getCenterOfMassTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3286,7 +3286,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3298,7 +3298,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3316,7 +3316,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getAngularFactor();
+        axis::Vec3 ret = cobj->getAngularFactor();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3333,7 +3333,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3345,7 +3345,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3383,7 +3383,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3395,7 +3395,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3433,7 +3433,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3445,7 +3445,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3480,7 +3480,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DRigidBody* cobj = nullptr;
+    axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3497,7 +3497,7 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DRigidBody();
+        cobj = new axis::Physics3DRigidBody();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -3577,7 +3577,7 @@ int lua_register_cocos2dx_physics3d_Physics3DRigidBody(lua_State* tolua_S)
         tolua_function(tolua_S,"setHitFraction",lua_cocos2dx_physics3d_Physics3DRigidBody_setHitFraction);
         tolua_function(tolua_S,"getLinearDamping",lua_cocos2dx_physics3d_Physics3DRigidBody_getLinearDamping);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DRigidBody).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DRigidBody).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DRigidBody";
     g_typeCast[typeName] = "cc.Physics3DRigidBody";
     return 1;
@@ -3586,7 +3586,7 @@ int lua_register_cocos2dx_physics3d_Physics3DRigidBody(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3598,7 +3598,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3633,7 +3633,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3645,7 +3645,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3658,9 +3658,9 @@ int lua_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DWorld* arg0;
+        axis::Physics3DWorld* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DWorld>(tolua_S, 2, "cc.Physics3DWorld",&arg0, "cc.Physics3DComponent:addToPhysicsWorld");
+        ok &= luaval_to_object<axis::Physics3DWorld>(tolua_S, 2, "cc.Physics3DWorld",&arg0, "cc.Physics3DComponent:addToPhysicsWorld");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld'", nullptr);
@@ -3683,7 +3683,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3695,7 +3695,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3730,7 +3730,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3742,7 +3742,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3760,8 +3760,8 @@ int lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DObject* ret = cobj->getPhysics3DObject();
-        object_to_luaval<cocos2d::Physics3DObject>(tolua_S, "cc.Physics3DObject",(cocos2d::Physics3DObject*)ret);
+        axis::Physics3DObject* ret = cobj->getPhysics3DObject();
+        object_to_luaval<axis::Physics3DObject>(tolua_S, "cc.Physics3DObject",(axis::Physics3DObject*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Physics3DComponent:getPhysics3DObject",argc, 0);
@@ -3777,7 +3777,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3789,7 +3789,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3802,9 +3802,9 @@ int lua_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DObject* arg0;
+        axis::Physics3DObject* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DObject>(tolua_S, 2, "cc.Physics3DObject",&arg0, "cc.Physics3DComponent:setPhysics3DObject");
+        ok &= luaval_to_object<axis::Physics3DObject>(tolua_S, 2, "cc.Physics3DObject",&arg0, "cc.Physics3DComponent:setPhysics3DObject");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject'", nullptr);
@@ -3827,7 +3827,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3839,7 +3839,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -3852,7 +3852,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DComponent::PhysicsSyncFlag arg0;
+        axis::Physics3DComponent::PhysicsSyncFlag arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Physics3DComponent:setSyncFlag");
         if(!ok)
@@ -3896,7 +3896,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName'", nullptr);
             return 0;
         }
-        std::string& ret = cocos2d::Physics3DComponent::getPhysics3DComponentName();
+        std::string& ret = axis::Physics3DComponent::getPhysics3DComponentName();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -3911,7 +3911,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DComponent* cobj = nullptr;
+    axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3928,7 +3928,7 @@ int lua_cocos2dx_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DComponent_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DComponent();
+        cobj = new axis::Physics3DComponent();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -3966,7 +3966,7 @@ int lua_register_cocos2dx_physics3d_Physics3DComponent(lua_State* tolua_S)
         tolua_function(tolua_S,"setSyncFlag",lua_cocos2dx_physics3d_Physics3DComponent_setSyncFlag);
         tolua_function(tolua_S,"getPhysics3DComponentName", lua_cocos2dx_physics3d_Physics3DComponent_getPhysics3DComponentName);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DComponent).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DComponent).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DComponent";
     g_typeCast[typeName] = "cc.Physics3DComponent";
     return 1;
@@ -3975,7 +3975,7 @@ int lua_register_cocos2dx_physics3d_Physics3DComponent(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3987,7 +3987,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4000,7 +4000,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DWorld:setGravity");
         if(!ok)
@@ -4025,7 +4025,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4037,7 +4037,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4075,7 +4075,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4087,7 +4087,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4122,7 +4122,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4134,7 +4134,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4169,7 +4169,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4181,7 +4181,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4216,7 +4216,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4228,7 +4228,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4263,7 +4263,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4275,7 +4275,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4310,7 +4310,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4322,7 +4322,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4357,7 +4357,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4369,7 +4369,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4387,7 +4387,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_getGravity'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getGravity();
+        axis::Vec3 ret = cobj->getGravity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4404,7 +4404,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4416,7 +4416,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4429,9 +4429,9 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* t
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DConstraint* arg0;
+        axis::Physics3DConstraint* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DWorld:removePhysics3DConstraint");
+        ok &= luaval_to_object<axis::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DWorld:removePhysics3DConstraint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint'", nullptr);
@@ -4454,7 +4454,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4466,7 +4466,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4479,9 +4479,9 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DObject* arg0;
+        axis::Physics3DObject* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DObject>(tolua_S, 2, "cc.Physics3DObject",&arg0, "cc.Physics3DWorld:addPhysics3DObject");
+        ok &= luaval_to_object<axis::Physics3DObject>(tolua_S, 2, "cc.Physics3DObject",&arg0, "cc.Physics3DWorld:addPhysics3DObject");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject'", nullptr);
@@ -4504,7 +4504,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4516,7 +4516,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4554,7 +4554,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4566,7 +4566,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4579,9 +4579,9 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DObject* arg0;
+        axis::Physics3DObject* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DObject>(tolua_S, 2, "cc.Physics3DObject",&arg0, "cc.Physics3DWorld:removePhysics3DObject");
+        ok &= luaval_to_object<axis::Physics3DObject>(tolua_S, 2, "cc.Physics3DObject",&arg0, "cc.Physics3DWorld:removePhysics3DObject");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject'", nullptr);
@@ -4604,7 +4604,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4616,7 +4616,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4629,9 +4629,9 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolu
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Physics3DConstraint* arg0;
+        axis::Physics3DConstraint* arg0;
 
-        ok &= luaval_to_object<cocos2d::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DWorld:addPhysics3DConstraint");
+        ok &= luaval_to_object<axis::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DWorld:addPhysics3DConstraint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
@@ -4643,10 +4643,10 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolu
     }
     if (argc == 2) 
     {
-        cocos2d::Physics3DConstraint* arg0;
+        axis::Physics3DConstraint* arg0;
         bool arg1;
 
-        ok &= luaval_to_object<cocos2d::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DWorld:addPhysics3DConstraint");
+        ok &= luaval_to_object<axis::Physics3DConstraint>(tolua_S, 2, "cc.Physics3DConstraint",&arg0, "cc.Physics3DWorld:addPhysics3DConstraint");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.Physics3DWorld:addPhysics3DConstraint");
         if(!ok)
@@ -4671,7 +4671,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4683,7 +4683,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4696,9 +4696,9 @@ int lua_cocos2dx_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Renderer* arg0;
+        axis::Renderer* arg0;
 
-        ok &= luaval_to_object<cocos2d::Renderer>(tolua_S, 2, "cc.Renderer",&arg0, "cc.Physics3DWorld:debugDraw");
+        ok &= luaval_to_object<axis::Renderer>(tolua_S, 2, "cc.Renderer",&arg0, "cc.Physics3DWorld:debugDraw");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_debugDraw'", nullptr);
@@ -4721,7 +4721,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4738,7 +4738,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DWorld_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DWorld();
+        cobj = new axis::Physics3DWorld();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -4784,7 +4784,7 @@ int lua_register_cocos2dx_physics3d_Physics3DWorld(lua_State* tolua_S)
         tolua_function(tolua_S,"addPhysics3DConstraint",lua_cocos2dx_physics3d_Physics3DWorld_addPhysics3DConstraint);
         tolua_function(tolua_S,"debugDraw",lua_cocos2dx_physics3d_Physics3DWorld_debugDraw);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DWorld).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DWorld).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DWorld";
     g_typeCast[typeName] = "cc.Physics3DWorld";
     return 1;
@@ -4793,7 +4793,7 @@ int lua_register_cocos2dx_physics3d_Physics3DWorld(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4805,7 +4805,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4843,7 +4843,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4855,7 +4855,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4893,7 +4893,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4905,7 +4905,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4940,7 +4940,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4952,7 +4952,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -4987,7 +4987,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4999,7 +4999,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5017,8 +5017,8 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConstraint_getBodyA'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DRigidBody* ret = cobj->getBodyA();
-        object_to_luaval<cocos2d::Physics3DRigidBody>(tolua_S, "cc.Physics3DRigidBody",(cocos2d::Physics3DRigidBody*)ret);
+        axis::Physics3DRigidBody* ret = cobj->getBodyA();
+        object_to_luaval<axis::Physics3DRigidBody>(tolua_S, "cc.Physics3DRigidBody",(axis::Physics3DRigidBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Physics3DConstraint:getBodyA",argc, 0);
@@ -5034,7 +5034,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5046,7 +5046,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5081,7 +5081,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5093,7 +5093,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5128,7 +5128,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lu
 int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5140,7 +5140,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5158,8 +5158,8 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConstraint_getBodyB'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DRigidBody* ret = cobj->getBodyB();
-        object_to_luaval<cocos2d::Physics3DRigidBody>(tolua_S, "cc.Physics3DRigidBody",(cocos2d::Physics3DRigidBody*)ret);
+        axis::Physics3DRigidBody* ret = cobj->getBodyB();
+        object_to_luaval<axis::Physics3DRigidBody>(tolua_S, "cc.Physics3DRigidBody",(axis::Physics3DRigidBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Physics3DConstraint:getBodyB",argc, 0);
@@ -5175,7 +5175,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5187,7 +5187,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5225,7 +5225,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lu
 int lua_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5237,7 +5237,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5272,7 +5272,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5284,7 +5284,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5323,7 +5323,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConstraint* cobj = nullptr;
+    axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5335,7 +5335,7 @@ int lua_cocos2dx_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5392,7 +5392,7 @@ int lua_register_cocos2dx_physics3d_Physics3DConstraint(lua_State* tolua_S)
         tolua_function(tolua_S,"setUserData",lua_cocos2dx_physics3d_Physics3DConstraint_setUserData);
         tolua_function(tolua_S,"getbtContraint",lua_cocos2dx_physics3d_Physics3DConstraint_getbtContraint);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DConstraint).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DConstraint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DConstraint";
     g_typeCast[typeName] = "cc.Physics3DConstraint";
     return 1;
@@ -5401,7 +5401,7 @@ int lua_register_cocos2dx_physics3d_Physics3DConstraint(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DPointToPointConstraint* cobj = nullptr;
+    axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5413,7 +5413,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5431,7 +5431,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getPivotPointInA();
+        axis::Vec3 ret = cobj->getPivotPointInA();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5448,7 +5448,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_
 int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DPointToPointConstraint* cobj = nullptr;
+    axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5460,7 +5460,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5478,7 +5478,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getPivotPointInB();
+        axis::Vec3 ret = cobj->getPivotPointInB();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5495,7 +5495,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_
 int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DPointToPointConstraint* cobj = nullptr;
+    axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5504,7 +5504,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua
 #if COCOS2D_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -5515,19 +5515,19 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 4) {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:init");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DPointToPointConstraint:init");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "cc.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
-            cocos2d::Vec3 arg3;
+            axis::Vec3 arg3;
             ok &= luaval_to_vec3(tolua_S, 5, &arg3, "cc.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
@@ -5539,11 +5539,11 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua
     ok  = true;
     do{
         if (argc == 2) {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:init");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "cc.Physics3DPointToPointConstraint:init");
 
             if (!ok) { break; }
@@ -5566,7 +5566,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DPointToPointConstraint* cobj = nullptr;
+    axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5578,7 +5578,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5591,7 +5591,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DPointToPointConstraint:setPivotPointInA");
         if(!ok)
@@ -5616,7 +5616,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_
 int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DPointToPointConstraint* cobj = nullptr;
+    axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5628,7 +5628,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5641,7 +5641,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DPointToPointConstraint:setPivotPointInB");
         if(!ok)
@@ -5681,20 +5681,20 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_create(lua_State* tol
     {
         if (argc == 4)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DPointToPointConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DPointToPointConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "cc.Physics3DPointToPointConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg3;
+            axis::Vec3 arg3;
             ok &= luaval_to_vec3(tolua_S, 5, &arg3, "cc.Physics3DPointToPointConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DPointToPointConstraint* ret = cocos2d::Physics3DPointToPointConstraint::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<cocos2d::Physics3DPointToPointConstraint>(tolua_S, "cc.Physics3DPointToPointConstraint",(cocos2d::Physics3DPointToPointConstraint*)ret);
+            axis::Physics3DPointToPointConstraint* ret = axis::Physics3DPointToPointConstraint::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<axis::Physics3DPointToPointConstraint>(tolua_S, "cc.Physics3DPointToPointConstraint",(axis::Physics3DPointToPointConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -5703,14 +5703,14 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_create(lua_State* tol
     {
         if (argc == 2)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DPointToPointConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "cc.Physics3DPointToPointConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DPointToPointConstraint* ret = cocos2d::Physics3DPointToPointConstraint::create(arg0, arg1);
-            object_to_luaval<cocos2d::Physics3DPointToPointConstraint>(tolua_S, "cc.Physics3DPointToPointConstraint",(cocos2d::Physics3DPointToPointConstraint*)ret);
+            axis::Physics3DPointToPointConstraint* ret = axis::Physics3DPointToPointConstraint::create(arg0, arg1);
+            object_to_luaval<axis::Physics3DPointToPointConstraint>(tolua_S, "cc.Physics3DPointToPointConstraint",(axis::Physics3DPointToPointConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -5726,7 +5726,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_create(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DPointToPointConstraint* cobj = nullptr;
+    axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5743,7 +5743,7 @@ int lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_constructor(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DPointToPointConstraint();
+        cobj = new axis::Physics3DPointToPointConstraint();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -5780,7 +5780,7 @@ int lua_register_cocos2dx_physics3d_Physics3DPointToPointConstraint(lua_State* t
         tolua_function(tolua_S,"setPivotPointInB",lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_setPivotPointInB);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DPointToPointConstraint_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DPointToPointConstraint).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DPointToPointConstraint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DPointToPointConstraint";
     g_typeCast[typeName] = "cc.Physics3DPointToPointConstraint";
     return 1;
@@ -5789,7 +5789,7 @@ int lua_register_cocos2dx_physics3d_Physics3DPointToPointConstraint(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5798,7 +5798,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tol
 #if COCOS2D_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -5809,11 +5809,11 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tol
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            cocos2d::Mat4 arg0;
+            axis::Mat4 arg0;
             ok &= luaval_to_mat4(tolua_S, 2, &arg0, "cc.Physics3DHingeConstraint:getHingeAngle");
 
             if (!ok) { break; }
-            cocos2d::Mat4 arg1;
+            axis::Mat4 arg1;
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "cc.Physics3DHingeConstraint:getHingeAngle");
 
             if (!ok) { break; }
@@ -5844,7 +5844,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5856,7 +5856,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5891,7 +5891,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_S
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5903,7 +5903,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5921,7 +5921,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getFrameOffsetA();
+        axis::Mat4 ret = cobj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5938,7 +5938,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5950,7 +5950,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -5968,7 +5968,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getFrameOffsetB();
+        axis::Mat4 ret = cobj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5985,7 +5985,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* t
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -5997,7 +5997,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6035,7 +6035,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6047,7 +6047,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6091,7 +6091,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6103,7 +6103,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6138,7 +6138,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6150,7 +6150,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6185,7 +6185,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6197,7 +6197,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6232,7 +6232,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6244,7 +6244,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6282,7 +6282,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State*
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6294,7 +6294,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6329,7 +6329,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_St
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6341,7 +6341,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6379,7 +6379,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6391,7 +6391,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6409,7 +6409,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getBFrame();
+        axis::Mat4 ret = cobj->getBFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6426,7 +6426,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6438,7 +6438,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6451,8 +6451,8 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        cocos2d::Mat4 arg0;
-        cocos2d::Mat4 arg1;
+        axis::Mat4 arg0;
+        axis::Mat4 arg1;
 
         ok &= luaval_to_mat4(tolua_S, 2, &arg0, "cc.Physics3DHingeConstraint:setFrames");
 
@@ -6479,7 +6479,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6491,7 +6491,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6526,7 +6526,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State*
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6538,7 +6538,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6576,7 +6576,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* to
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6588,7 +6588,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6698,7 +6698,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6710,7 +6710,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6745,7 +6745,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* to
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6757,7 +6757,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6770,7 +6770,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3DHingeConstraint:setAxis");
         if(!ok)
@@ -6795,7 +6795,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6807,7 +6807,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -6825,7 +6825,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getAFrame();
+        axis::Mat4 ret = cobj->getAFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6857,17 +6857,17 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -6876,20 +6876,20 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg3;
             ok &= luaval_to_boolean(tolua_S, 5,&arg3, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -6898,14 +6898,14 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg1;
+            axis::Mat4 arg1;
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -6914,17 +6914,17 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg1;
+            axis::Mat4 arg1;
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg2;
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -6933,26 +6933,26 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 6)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg3;
+            axis::Vec3 arg3;
             ok &= luaval_to_vec3(tolua_S, 5, &arg3, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg4;
+            axis::Vec3 arg4;
             ok &= luaval_to_vec3(tolua_S, 6, &arg4, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg5;
+            axis::Vec3 arg5;
             ok &= luaval_to_vec3(tolua_S, 7, &arg5, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4, arg5);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4, arg5);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -6961,29 +6961,29 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 7)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg2;
+            axis::Vec3 arg2;
             ok &= luaval_to_vec3(tolua_S, 4, &arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg3;
+            axis::Vec3 arg3;
             ok &= luaval_to_vec3(tolua_S, 5, &arg3, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg4;
+            axis::Vec3 arg4;
             ok &= luaval_to_vec3(tolua_S, 6, &arg4, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Vec3 arg5;
+            axis::Vec3 arg5;
             ok &= luaval_to_vec3(tolua_S, 7, &arg5, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg6;
             ok &= luaval_to_boolean(tolua_S, 8,&arg6, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -6992,20 +6992,20 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg2;
+            axis::Mat4 arg2;
             ok &= luaval_to_mat4(tolua_S, 4, &arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg3;
+            axis::Mat4 arg3;
             ok &= luaval_to_mat4(tolua_S, 5, &arg3, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -7014,23 +7014,23 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     {
         if (argc == 5)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg2;
+            axis::Mat4 arg2;
             ok &= luaval_to_mat4(tolua_S, 4, &arg2, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg3;
+            axis::Mat4 arg3;
             ok &= luaval_to_mat4(tolua_S, 5, &arg3, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
             bool arg4;
             ok &= luaval_to_boolean(tolua_S, 6,&arg4, "cc.Physics3DHingeConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DHingeConstraint* ret = cocos2d::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4);
-            object_to_luaval<cocos2d::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(cocos2d::Physics3DHingeConstraint*)ret);
+            axis::Physics3DHingeConstraint* ret = axis::Physics3DHingeConstraint::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<axis::Physics3DHingeConstraint>(tolua_S, "cc.Physics3DHingeConstraint",(axis::Physics3DHingeConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -7046,7 +7046,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DHingeConstraint* cobj = nullptr;
+    axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7063,7 +7063,7 @@ int lua_cocos2dx_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DHingeConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DHingeConstraint();
+        cobj = new axis::Physics3DHingeConstraint();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -7115,7 +7115,7 @@ int lua_register_cocos2dx_physics3d_Physics3DHingeConstraint(lua_State* tolua_S)
         tolua_function(tolua_S,"getAFrame",lua_cocos2dx_physics3d_Physics3DHingeConstraint_getAFrame);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DHingeConstraint_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DHingeConstraint).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DHingeConstraint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DHingeConstraint";
     g_typeCast[typeName] = "cc.Physics3DHingeConstraint";
     return 1;
@@ -7124,7 +7124,7 @@ int lua_register_cocos2dx_physics3d_Physics3DHingeConstraint(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7136,7 +7136,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7174,7 +7174,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7186,7 +7186,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7221,7 +7221,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7233,7 +7233,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7271,7 +7271,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7283,7 +7283,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7321,7 +7321,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7333,7 +7333,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7368,7 +7368,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7380,7 +7380,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7398,7 +7398,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getFrameOffsetA();
+        axis::Mat4 ret = cobj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7415,7 +7415,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7427,7 +7427,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7445,7 +7445,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getFrameOffsetB();
+        axis::Mat4 ret = cobj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7462,7 +7462,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7474,7 +7474,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7512,7 +7512,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7524,7 +7524,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7559,7 +7559,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7571,7 +7571,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7606,7 +7606,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7618,7 +7618,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7653,7 +7653,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7665,7 +7665,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7703,7 +7703,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7715,7 +7715,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7753,7 +7753,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7765,7 +7765,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7800,7 +7800,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* to
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7812,7 +7812,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7850,7 +7850,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7862,7 +7862,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7900,7 +7900,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7912,7 +7912,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7950,7 +7950,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -7962,7 +7962,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -7997,7 +7997,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8009,7 +8009,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8044,7 +8044,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8056,7 +8056,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8091,7 +8091,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8103,7 +8103,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8138,7 +8138,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8150,7 +8150,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8188,7 +8188,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8200,7 +8200,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8238,7 +8238,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8250,7 +8250,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(l
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8288,7 +8288,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(l
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8300,7 +8300,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8338,7 +8338,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8350,7 +8350,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8385,7 +8385,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8397,7 +8397,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8432,7 +8432,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8444,7 +8444,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8479,7 +8479,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8491,7 +8491,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8526,7 +8526,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8538,7 +8538,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8576,7 +8576,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8588,7 +8588,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8626,7 +8626,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8638,7 +8638,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8673,7 +8673,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8685,7 +8685,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(l
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8720,7 +8720,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(l
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8732,7 +8732,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8767,7 +8767,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8779,7 +8779,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8814,7 +8814,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8826,7 +8826,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8864,7 +8864,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8876,7 +8876,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8914,7 +8914,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8926,7 +8926,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -8961,7 +8961,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -8973,7 +8973,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9011,7 +9011,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9023,7 +9023,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9061,7 +9061,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9073,7 +9073,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9086,8 +9086,8 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        cocos2d::Mat4 arg0;
-        cocos2d::Mat4 arg1;
+        axis::Mat4 arg0;
+        axis::Mat4 arg1;
 
         ok &= luaval_to_mat4(tolua_S, 2, &arg0, "cc.Physics3DSliderConstraint:setFrames");
 
@@ -9114,7 +9114,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9126,7 +9126,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9161,7 +9161,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9173,7 +9173,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9208,7 +9208,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9220,7 +9220,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9255,7 +9255,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9267,7 +9267,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9302,7 +9302,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9314,7 +9314,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9352,7 +9352,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9364,7 +9364,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9399,7 +9399,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9411,7 +9411,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(l
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9449,7 +9449,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(l
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9461,7 +9461,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9496,7 +9496,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9508,7 +9508,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9546,7 +9546,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9558,7 +9558,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9593,7 +9593,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9605,7 +9605,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9640,7 +9640,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9652,7 +9652,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9687,7 +9687,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9699,7 +9699,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(l
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9734,7 +9734,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(l
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9746,7 +9746,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_St
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9784,7 +9784,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_St
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9796,7 +9796,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9831,7 +9831,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9843,7 +9843,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9881,7 +9881,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9893,7 +9893,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9931,7 +9931,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9943,7 +9943,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -9981,7 +9981,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State*
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -9993,7 +9993,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10031,7 +10031,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10043,7 +10043,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10081,7 +10081,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10093,7 +10093,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10128,7 +10128,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10140,7 +10140,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10178,7 +10178,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10190,7 +10190,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10239,13 +10239,13 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
 
     if (argc == 5)
     {
-        cocos2d::Physics3DRigidBody* arg0;
-        cocos2d::Physics3DRigidBody* arg1;
-        cocos2d::Mat4 arg2;
-        cocos2d::Mat4 arg3;
+        axis::Physics3DRigidBody* arg0;
+        axis::Physics3DRigidBody* arg1;
+        axis::Mat4 arg2;
+        axis::Mat4 arg3;
         bool arg4;
-        ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DSliderConstraint:create");
-        ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DSliderConstraint:create");
+        ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DSliderConstraint:create");
+        ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DSliderConstraint:create");
         ok &= luaval_to_mat4(tolua_S, 4, &arg2, "cc.Physics3DSliderConstraint:create");
         ok &= luaval_to_mat4(tolua_S, 5, &arg3, "cc.Physics3DSliderConstraint:create");
         ok &= luaval_to_boolean(tolua_S, 6,&arg4, "cc.Physics3DSliderConstraint:create");
@@ -10254,8 +10254,8 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DSliderConstraint_create'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DSliderConstraint* ret = cocos2d::Physics3DSliderConstraint::create(arg0, arg1, arg2, arg3, arg4);
-        object_to_luaval<cocos2d::Physics3DSliderConstraint>(tolua_S, "cc.Physics3DSliderConstraint",(cocos2d::Physics3DSliderConstraint*)ret);
+        axis::Physics3DSliderConstraint* ret = axis::Physics3DSliderConstraint::create(arg0, arg1, arg2, arg3, arg4);
+        object_to_luaval<axis::Physics3DSliderConstraint>(tolua_S, "cc.Physics3DSliderConstraint",(axis::Physics3DSliderConstraint*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DSliderConstraint:create",argc, 5);
@@ -10269,7 +10269,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DSliderConstraint* cobj = nullptr;
+    axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10286,7 +10286,7 @@ int lua_cocos2dx_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DSliderConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DSliderConstraint();
+        cobj = new axis::Physics3DSliderConstraint();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -10382,7 +10382,7 @@ int lua_register_cocos2dx_physics3d_Physics3DSliderConstraint(lua_State* tolua_S
         tolua_function(tolua_S,"getUseLinearReferenceFrameA",lua_cocos2dx_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DSliderConstraint_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DSliderConstraint).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DSliderConstraint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DSliderConstraint";
     g_typeCast[typeName] = "cc.Physics3DSliderConstraint";
     return 1;
@@ -10391,7 +10391,7 @@ int lua_register_cocos2dx_physics3d_Physics3DSliderConstraint(lua_State* tolua_S
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10403,7 +10403,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10421,7 +10421,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getBFrame();
+        axis::Mat4 ret = cobj->getBFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10438,7 +10438,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10450,7 +10450,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10488,7 +10488,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10500,7 +10500,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10518,7 +10518,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getFrameOffsetB();
+        axis::Mat4 ret = cobj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10535,7 +10535,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10547,7 +10547,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10565,7 +10565,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getFrameOffsetA();
+        axis::Mat4 ret = cobj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10582,7 +10582,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_Stat
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10594,7 +10594,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10629,7 +10629,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10641,7 +10641,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10676,7 +10676,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State*
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10688,7 +10688,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10723,7 +10723,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State*
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10735,7 +10735,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_S
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10773,7 +10773,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_S
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10785,7 +10785,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10798,8 +10798,8 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tol
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        cocos2d::Mat4 arg0;
-        cocos2d::Mat4 arg1;
+        axis::Mat4 arg0;
+        axis::Mat4 arg1;
 
         ok &= luaval_to_mat4(tolua_S, 2, &arg0, "cc.Physics3DConeTwistConstraint:setFrames");
 
@@ -10826,7 +10826,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10838,7 +10838,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State*
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10873,7 +10873,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State*
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10885,7 +10885,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10909,7 +10909,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->GetPointForAngle(arg0, arg1);
+        axis::Vec3 ret = cobj->GetPointForAngle(arg0, arg1);
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10926,7 +10926,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_Sta
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10938,7 +10938,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormal
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -10976,7 +10976,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormal
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -10988,7 +10988,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11023,7 +11023,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* 
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11035,7 +11035,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11073,7 +11073,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* to
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11085,7 +11085,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11207,7 +11207,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11219,7 +11219,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11237,7 +11237,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame'", nullptr);
             return 0;
         }
-        cocos2d::Mat4 ret = cobj->getAFrame();
+        axis::Mat4 ret = cobj->getAFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11254,7 +11254,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tol
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11266,7 +11266,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* t
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11319,20 +11319,20 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_
     {
         if (argc == 4)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DConeTwistConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DConeTwistConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DConeTwistConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3DConeTwistConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg2;
+            axis::Mat4 arg2;
             ok &= luaval_to_mat4(tolua_S, 4, &arg2, "cc.Physics3DConeTwistConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg3;
+            axis::Mat4 arg3;
             ok &= luaval_to_mat4(tolua_S, 5, &arg3, "cc.Physics3DConeTwistConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DConeTwistConstraint* ret = cocos2d::Physics3DConeTwistConstraint::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<cocos2d::Physics3DConeTwistConstraint>(tolua_S, "cc.Physics3DConeTwistConstraint",(cocos2d::Physics3DConeTwistConstraint*)ret);
+            axis::Physics3DConeTwistConstraint* ret = axis::Physics3DConeTwistConstraint::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<axis::Physics3DConeTwistConstraint>(tolua_S, "cc.Physics3DConeTwistConstraint",(axis::Physics3DConeTwistConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -11341,14 +11341,14 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_
     {
         if (argc == 2)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DConeTwistConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3DConeTwistConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg1;
+            axis::Mat4 arg1;
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "cc.Physics3DConeTwistConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DConeTwistConstraint* ret = cocos2d::Physics3DConeTwistConstraint::create(arg0, arg1);
-            object_to_luaval<cocos2d::Physics3DConeTwistConstraint>(tolua_S, "cc.Physics3DConeTwistConstraint",(cocos2d::Physics3DConeTwistConstraint*)ret);
+            axis::Physics3DConeTwistConstraint* ret = axis::Physics3DConeTwistConstraint::create(arg0, arg1);
+            object_to_luaval<axis::Physics3DConeTwistConstraint>(tolua_S, "cc.Physics3DConeTwistConstraint",(axis::Physics3DConeTwistConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -11364,7 +11364,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_
 int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3DConeTwistConstraint* cobj = nullptr;
+    axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11381,7 +11381,7 @@ int lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3DConeTwistConstraint();
+        cobj = new axis::Physics3DConeTwistConstraint();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -11430,7 +11430,7 @@ int lua_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(lua_State* tolu
         tolua_function(tolua_S,"enableMotor",lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_enableMotor);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3DConeTwistConstraint_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3DConeTwistConstraint).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3DConeTwistConstraint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3DConeTwistConstraint";
     g_typeCast[typeName] = "cc.Physics3DConeTwistConstraint";
     return 1;
@@ -11439,7 +11439,7 @@ int lua_register_cocos2dx_physics3d_Physics3DConeTwistConstraint(lua_State* tolu
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11451,7 +11451,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11464,7 +11464,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3D6DofConstraint:setLinearLowerLimit");
         if(!ok)
@@ -11489,7 +11489,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11501,7 +11501,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11519,7 +11519,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getLinearLowerLimit();
+        axis::Vec3 ret = cobj->getLinearLowerLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11536,7 +11536,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11548,7 +11548,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11566,7 +11566,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getAngularUpperLimit();
+        axis::Vec3 ret = cobj->getAngularUpperLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11583,7 +11583,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_Stat
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11595,7 +11595,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11630,7 +11630,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* 
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11642,7 +11642,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11660,7 +11660,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getLinearUpperLimit();
+        axis::Vec3 ret = cobj->getLinearUpperLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11677,7 +11677,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11689,7 +11689,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11702,7 +11702,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_Stat
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3D6DofConstraint:setAngularLowerLimit");
         if(!ok)
@@ -11727,7 +11727,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_Stat
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11739,7 +11739,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11777,7 +11777,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11789,7 +11789,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11827,7 +11827,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* 
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11839,7 +11839,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11852,7 +11852,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3D6DofConstraint:setLinearUpperLimit");
         if(!ok)
@@ -11877,7 +11877,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11889,7 +11889,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11907,7 +11907,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'", nullptr);
             return 0;
         }
-        cocos2d::Vec3 ret = cobj->getAngularLowerLimit();
+        axis::Vec3 ret = cobj->getAngularLowerLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11924,7 +11924,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_Stat
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -11936,7 +11936,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_Stat
     if (!tolua_isusertype(tolua_S,1,"cc.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj) 
@@ -11949,7 +11949,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_Stat
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Physics3D6DofConstraint:setAngularUpperLimit");
         if(!ok)
@@ -11989,17 +11989,17 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3D6DofConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg1;
+            axis::Mat4 arg1;
             ok &= luaval_to_mat4(tolua_S, 3, &arg1, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
             bool arg2;
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3D6DofConstraint* ret = cocos2d::Physics3D6DofConstraint::create(arg0, arg1, arg2);
-            object_to_luaval<cocos2d::Physics3D6DofConstraint>(tolua_S, "cc.Physics3D6DofConstraint",(cocos2d::Physics3D6DofConstraint*)ret);
+            axis::Physics3D6DofConstraint* ret = axis::Physics3D6DofConstraint::create(arg0, arg1, arg2);
+            object_to_luaval<axis::Physics3D6DofConstraint>(tolua_S, "cc.Physics3D6DofConstraint",(axis::Physics3D6DofConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -12008,23 +12008,23 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
     {
         if (argc == 5)
         {
-            cocos2d::Physics3DRigidBody* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3D6DofConstraint:create");
+            axis::Physics3DRigidBody* arg0;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 2, "cc.Physics3DRigidBody",&arg0, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3DRigidBody* arg1;
-            ok &= luaval_to_object<cocos2d::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3D6DofConstraint:create");
+            axis::Physics3DRigidBody* arg1;
+            ok &= luaval_to_object<axis::Physics3DRigidBody>(tolua_S, 3, "cc.Physics3DRigidBody",&arg1, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg2;
+            axis::Mat4 arg2;
             ok &= luaval_to_mat4(tolua_S, 4, &arg2, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
-            cocos2d::Mat4 arg3;
+            axis::Mat4 arg3;
             ok &= luaval_to_mat4(tolua_S, 5, &arg3, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
             bool arg4;
             ok &= luaval_to_boolean(tolua_S, 6,&arg4, "cc.Physics3D6DofConstraint:create");
             if (!ok) { break; }
-            cocos2d::Physics3D6DofConstraint* ret = cocos2d::Physics3D6DofConstraint::create(arg0, arg1, arg2, arg3, arg4);
-            object_to_luaval<cocos2d::Physics3D6DofConstraint>(tolua_S, "cc.Physics3D6DofConstraint",(cocos2d::Physics3D6DofConstraint*)ret);
+            axis::Physics3D6DofConstraint* ret = axis::Physics3D6DofConstraint::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<axis::Physics3D6DofConstraint>(tolua_S, "cc.Physics3D6DofConstraint",(axis::Physics3D6DofConstraint*)ret);
             return 1;
         }
     } while (0);
@@ -12040,7 +12040,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
 int lua_cocos2dx_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::Physics3D6DofConstraint* cobj = nullptr;
+    axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -12057,7 +12057,7 @@ int lua_cocos2dx_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_physics3d_Physics3D6DofConstraint_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::Physics3D6DofConstraint();
+        cobj = new axis::Physics3D6DofConstraint();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -12100,7 +12100,7 @@ int lua_register_cocos2dx_physics3d_Physics3D6DofConstraint(lua_State* tolua_S)
         tolua_function(tolua_S,"setAngularUpperLimit",lua_cocos2dx_physics3d_Physics3D6DofConstraint_setAngularUpperLimit);
         tolua_function(tolua_S,"create", lua_cocos2dx_physics3d_Physics3D6DofConstraint_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::Physics3D6DofConstraint).name(); // rtti is literal storage
+    auto typeName = typeid(axis::Physics3D6DofConstraint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.Physics3D6DofConstraint";
     g_typeCast[typeName] = "cc.Physics3D6DofConstraint";
     return 1;

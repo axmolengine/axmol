@@ -29,7 +29,7 @@
 
 #include "extensions/Particle3D/PU/CCPUEmitter.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUSphereSurfaceEmitter : public PUEmitter
 {
@@ -61,6 +61,6 @@ protected:
     float _radius;
     Vec3 _randomVector;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

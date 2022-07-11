@@ -48,7 +48,7 @@ using namespace std;
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 AAssetManager* FileUtilsAndroid::assetmanager = nullptr;
 ZipFile* FileUtilsAndroid::obbfile            = nullptr;
@@ -61,7 +61,7 @@ void FileUtilsAndroid::setassetmanager(AAssetManager* a)
         return;
     }
 
-    cocos2d::FileUtilsAndroid::assetmanager = a;
+    axis::FileUtilsAndroid::assetmanager = a;
 }
 
 FileUtils* FileUtils::getInstance()
@@ -377,4 +377,4 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
     return path;
 }
 
-NS_CC_END
+NS_AX_END

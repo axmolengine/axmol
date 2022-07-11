@@ -24,7 +24,7 @@
 
 #include "ActionTimeline/CCActionTimelineNode.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 NS_TIMELINE_BEGIN
 
@@ -63,11 +63,11 @@ bool ActionTimelineNode::init(Node* root, ActionTimeline* action)
     return true;
 }
 
-void ActionTimelineNode::setRoot(cocos2d::Node* root)
+void ActionTimelineNode::setRoot(axis::Node* root)
 {
     _root = root;
 }
-cocos2d::Node* ActionTimelineNode::getRoot()
+axis::Node* ActionTimelineNode::getRoot()
 {
     return _root;
 }

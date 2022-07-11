@@ -31,7 +31,7 @@
 #import "platform/ios/CCDirectorCaller-ios.h"
 #import "base/ccUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Application* Application::sm_pSharedApplication = nullptr;
 
@@ -133,4 +133,4 @@ bool Application::openURL(std::string_view url)
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {}
 
-NS_CC_END
+NS_AX_END

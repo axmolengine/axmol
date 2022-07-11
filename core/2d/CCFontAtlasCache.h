@@ -32,7 +32,7 @@
 #include <unordered_map>
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class FontAtlas;
 class Texture2D;
@@ -81,7 +81,7 @@ private:
     static hlookup::string_map<FontAtlas*> _atlasMap;
 };
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif

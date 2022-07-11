@@ -33,7 +33,7 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -288,7 +288,7 @@ protected:
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 // end of ui group
 /// @}
 

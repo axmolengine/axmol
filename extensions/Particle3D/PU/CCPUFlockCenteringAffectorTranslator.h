@@ -31,7 +31,7 @@
 #include "Particle3D/PU/CCPUScriptCompiler.h"
 #include "Particle3D/PU/CCPUFlockCenteringAffector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PUFlockCenteringAffectorTranslator : public PUScriptTranslator
 {
@@ -43,6 +43,6 @@ public:
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

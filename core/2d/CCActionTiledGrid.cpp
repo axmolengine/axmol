@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/ccMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct Tile
 {
@@ -876,4 +876,4 @@ void SplitCols::update(float time)
     }
 }
 
-NS_CC_END
+NS_AX_END

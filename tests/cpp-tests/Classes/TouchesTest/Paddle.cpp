@@ -24,7 +24,7 @@
 
 #include "Paddle.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 Paddle::Paddle() {}
 

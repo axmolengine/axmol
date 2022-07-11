@@ -30,44 +30,44 @@
 
 DEFINE_TEST_SUITE(UIEditBoxTests);
 
-class UIEditBoxTest : public UIScene, public cocos2d::ui::EditBoxDelegate
+class UIEditBoxTest : public UIScene, public axis::ui::EditBoxDelegate
 {
 public:
     CREATE_FUNC(UIEditBoxTest);
 
     virtual bool init() override;
 
-    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox) override;
-    virtual void editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox,
-                                                cocos2d::ui::EditBoxDelegate::EditBoxEndAction action) override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text) override;
-    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidBegin(axis::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidEndWithAction(axis::ui::EditBox* editBox,
+                                                axis::ui::EditBoxDelegate::EditBoxEndAction action) override;
+    virtual void editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(axis::ui::EditBox* editBox) override;
 
 protected:
-    cocos2d::Label* _TTFShowEditReturn;
-    cocos2d::ui::EditBox* _editName;
-    cocos2d::ui::EditBox* _editPassword;
-    cocos2d::ui::EditBox* _editEmail;
-    cocos2d::Node* _editEmailParent;
+    axis::Label* _TTFShowEditReturn;
+    axis::ui::EditBox* _editName;
+    axis::ui::EditBox* _editPassword;
+    axis::ui::EditBox* _editEmail;
+    axis::Node* _editEmailParent;
 };
 
-class UIEditBoxTestToggleVisibility : public UIScene, public cocos2d::ui::EditBoxDelegate
+class UIEditBoxTestToggleVisibility : public UIScene, public axis::ui::EditBoxDelegate
 {
 public:
     CREATE_FUNC(UIEditBoxTestToggleVisibility);
 
     virtual bool init() override;
 
-    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox) override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text) override;
-    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidBegin(axis::ui::EditBox* editBox) override;
+    virtual void editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(axis::ui::EditBox* editBox) override;
 
 protected:
-    cocos2d::Label* _TTFShowEditReturn;
-    cocos2d::ui::EditBox* _editName;
-    cocos2d::ui::EditBox* _editPassword;
-    cocos2d::ui::EditBox* _editEmail;
-    cocos2d::Node* _editEmailParent;
+    axis::Label* _TTFShowEditReturn;
+    axis::ui::EditBox* _editName;
+    axis::ui::EditBox* _editPassword;
+    axis::ui::EditBox* _editEmail;
+    axis::Node* _editEmailParent;
 };
 
 class UIEditBoxTestTextHorizontalAlignment : public UIScene

@@ -24,8 +24,8 @@
 
 #include "UIImageViewTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UIImageViewTests::UIImageViewTests()
 {
@@ -74,9 +74,9 @@ bool UIImageViewTest::init()
     return false;
 }
 
-void UIImageViewTest::printWidgetResources(cocos2d::Ref* sender)
+void UIImageViewTest::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData textureFile = _image->getRenderFile();
+    axis::ResourceData textureFile = _image->getRenderFile();
     CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 

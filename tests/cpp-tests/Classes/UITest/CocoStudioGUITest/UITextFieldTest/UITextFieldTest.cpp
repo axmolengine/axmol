@@ -24,8 +24,8 @@
 
 #include "UITextFieldTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UITextFieldTests::UITextFieldTests()
 {

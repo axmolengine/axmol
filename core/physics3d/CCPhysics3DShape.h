@@ -36,7 +36,7 @@
 
 class btCollisionShape;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /**
  * @addtogroup _3d
  * @{
@@ -70,7 +70,7 @@ public:
      * create box shape
      * @param extent The extent of sphere.
      */
-    static Physics3DShape* createBox(const cocos2d::Vec3& extent);
+    static Physics3DShape* createBox(const axis::Vec3& extent);
 
     /**
      * create sphere shape
@@ -97,14 +97,14 @@ public:
      * @param points The vertices of convex hull
      * @param numPoints The number of vertices.
      */
-    static Physics3DShape* createConvexHull(const cocos2d::Vec3* points, int numPoints);
+    static Physics3DShape* createConvexHull(const axis::Vec3* points, int numPoints);
 
     /**
      * create mesh
      * @param triangles The pointer of triangle list
      * @param numTriangles The number of triangles.
      */
-    static Physics3DShape* createMesh(const cocos2d::Vec3* triangles, int numTriangles);
+    static Physics3DShape* createMesh(const axis::Vec3* triangles, int numTriangles);
 
     /**
      * create heightfield
@@ -138,12 +138,12 @@ public:
     Physics3DShape();
     ~Physics3DShape();
 
-    bool initBox(const cocos2d::Vec3& ext);
+    bool initBox(const axis::Vec3& ext);
     bool initSphere(float radius);
     bool initCylinder(float radius, float height);
     bool initCapsule(float radius, float height);
-    bool initConvexHull(const cocos2d::Vec3* points, int numPoints);
-    bool initMesh(const cocos2d::Vec3* triangles, int numTriangles);
+    bool initConvexHull(const axis::Vec3* points, int numPoints);
+    bool initMesh(const axis::Vec3* triangles, int numTriangles);
     bool initHeightfield(int heightStickWidth,
                          int heightStickLength,
                          const void* heightfieldData,
@@ -168,7 +168,7 @@ protected:
 // end of 3d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #    endif  // CC_ENABLE_BULLET_INTEGRATION
 

@@ -25,7 +25,7 @@ void CCArmatureDisplay::dbInit(Armature* armature)
 
 void CCArmatureDisplay::dbClear()
 {
-    setEventDispatcher(cocos2d::Director::getInstance()->getEventDispatcher());
+    setEventDispatcher(axis::Director::getInstance()->getEventDispatcher());
 
     _armature = nullptr;
     CC_SAFE_RELEASE(_dispatcher);
@@ -58,7 +58,7 @@ void CCArmatureDisplay::dbUpdate()
 
 void CCArmatureDisplay::addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& callback)
 {
-    auto lambda = [callback](cocos2d::EventCustom* event) -> void {
+    auto lambda = [callback](axis::EventCustom* event) -> void {
         callback(static_cast<EventObject*>(event->getUserData()));
     };
     _dispatcher->addCustomEventListener(type, lambda);
@@ -75,7 +75,7 @@ void CCArmatureDisplay::removeDBEventListener(std::string_view type, const std::
     _dispatcher->removeCustomEventListeners(type);
 }
 
-cocos2d::Rect CCArmatureDisplay::getBoundingBox() const
+axis::Rect CCArmatureDisplay::getBoundingBox() const
 {
     auto isFirst = true;
     float minX   = 0.0f;
@@ -109,9 +109,9 @@ cocos2d::Rect CCArmatureDisplay::getBoundingBox() const
         }
     }
 
-    cocos2d::Rect rect(minX, minY, maxX - minX, maxY - minY);
+    axis::Rect rect(minX, minY, maxX - minX, maxY - minY);
 
-    return cocos2d::RectApplyTransform(rect, getNodeToParentTransform());
+    return axis::RectApplyTransform(rect, getNodeToParentTransform());
 }
 
 DBCCSprite* DBCCSprite::create()
@@ -130,26 +130,26 @@ DBCCSprite* DBCCSprite::create()
     return sprite;
 }
 
-bool DBCCSprite::_checkVisibility(const cocos2d::Mat4& transform, const cocos2d::Size& size, const cocos2d::Rect& rect)
+bool DBCCSprite::_checkVisibility(const axis::Mat4& transform, const axis::Size& size, const axis::Rect& rect)
 {
-    auto scene = cocos2d::Director::getInstance()->getRunningScene();
+    auto scene = axis::Director::getInstance()->getRunningScene();
 
     // If draw to Rendertexture, return true directly.
     //  only cull the default camera. The culling algorithm is valid for default camera.
-    if (!scene || (scene && scene->getDefaultCamera() != cocos2d::Camera::getVisitingCamera()))
+    if (!scene || (scene && scene->getDefaultCamera() != axis::Camera::getVisitingCamera()))
         return true;
 
-    auto director = cocos2d::Director::getInstance();
-    cocos2d::Rect visiableRect(director->getVisibleOrigin(), director->getVisibleSize());
+    auto director = axis::Director::getInstance();
+    axis::Rect visiableRect(director->getVisibleOrigin(), director->getVisibleSize());
 
     // transform center point to screen space
     float hSizeX = size.width / 2;
     float hSizeY = size.height / 2;
 
-    cocos2d::Vec3 v3p(hSizeX, hSizeY, 0);
+    axis::Vec3 v3p(hSizeX, hSizeY, 0);
 
     transform.transformPoint(&v3p);
-    cocos2d::Vec2 v2p = cocos2d::Camera::getVisitingCamera()->projectGL(v3p);
+    axis::Vec2 v2p = axis::Camera::getVisitingCamera()->projectGL(v3p);
 
     // convert content size to world coordinates
     float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),
@@ -166,7 +166,7 @@ bool DBCCSprite::_checkVisibility(const cocos2d::Mat4& transform, const cocos2d:
     return ret;
 }
 
-void DBCCSprite::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
+void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
 {
 #if CC_USE_CULLING
 #    if COCOS2D_VERSION >= 0x00031400
@@ -176,8 +176,8 @@ void DBCCSprite::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transfor
 #    endif
 
     // Don't do calculate the culling if the transform was not updated
-    auto visitingCamera = cocos2d::Camera::getVisitingCamera();
-    auto defaultCamera  = cocos2d::Camera::getDefaultCamera();
+    auto visitingCamera = axis::Camera::getVisitingCamera();
+    auto defaultCamera  = axis::Camera::getDefaultCamera();
     if (visitingCamera == defaultCamera)
     {
         _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated())
@@ -210,21 +210,21 @@ void DBCCSprite::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transfor
             // draw 3 lines
             auto from = verts[indices[i * 3]].vertices;
             auto to   = verts[indices[i * 3 + 1]].vertices;
-            _debugDrawNode->drawLine(cocos2d::Vec2(from.x, from.y), cocos2d::Vec2(to.x, to.y), cocos2d::Color4F::WHITE);
+            _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
 
             from = verts[indices[i * 3 + 1]].vertices;
             to   = verts[indices[i * 3 + 2]].vertices;
-            _debugDrawNode->drawLine(cocos2d::Vec2(from.x, from.y), cocos2d::Vec2(to.x, to.y), cocos2d::Color4F::WHITE);
+            _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
 
             from = verts[indices[i * 3 + 2]].vertices;
             to   = verts[indices[i * 3]].vertices;
-            _debugDrawNode->drawLine(cocos2d::Vec2(from.x, from.y), cocos2d::Vec2(to.x, to.y), cocos2d::Color4F::WHITE);
+            _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
         }
 #endif  // CC_SPRITE_DEBUG_DRAW
     }
 }
 
-cocos2d::PolygonInfo& DBCCSprite::getPolygonInfoModify()
+axis::PolygonInfo& DBCCSprite::getPolygonInfoModify()
 {
     return _polyInfo;
 }

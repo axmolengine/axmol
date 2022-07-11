@@ -40,7 +40,7 @@ struct stExpCocoNode;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionObject : public cocos2d::Ref
+class CCS_DLL ActionObject : public axis::Ref
 {
 public:
     /**
@@ -133,7 +133,7 @@ public:
      *
      * @param func Action Call Back
      */
-    void play(cocos2d::CallFunc* func);
+    void play(axis::CallFunc* func);
 
     /**
      * Pause the action.
@@ -163,9 +163,9 @@ public:
     void updateToFrameByTime(float fTime);
 
     /*init properties with a json dictionary*/
-    void initWithDictionary(const rapidjson::Value& dic, cocos2d::Ref* root);
+    void initWithDictionary(const rapidjson::Value& dic, axis::Ref* root);
 
-    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, cocos2d::Ref* root);
+    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, axis::Ref* root);
 
     /*scheduler update function*/
     void simulationActionUpdate(float dt);
@@ -175,15 +175,15 @@ protected:
     bool valueToBool(std::string_view value);
     float valueToFloat(std::string_view value);
 
-    cocos2d::Vector<ActionNode*> _actionNodeList;
+    axis::Vector<ActionNode*> _actionNodeList;
     std::string _name;
     bool _loop;
     bool _bPause;
     bool _bPlaying;
     float _fUnitTime;
     float _currentTime;
-    cocos2d::Scheduler* _pScheduler;
-    cocos2d::CallFunc* _CallBack;
+    axis::Scheduler* _pScheduler;
+    axis::CallFunc* _CallBack;
     float _fTotalTime;
 };
 

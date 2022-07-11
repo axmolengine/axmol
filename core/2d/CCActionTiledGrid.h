@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "2d/CCActionGrid.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup actions
@@ -592,6 +592,6 @@ private:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __ACTION_CCTILEDGRID_ACTION_H__

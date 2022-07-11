@@ -28,7 +28,7 @@
 
 #include "chipmunk/chipmunk.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 PhysicsSpriteChipmunk2D::PhysicsSpriteChipmunk2D()
     : _ignoreBodyRotation(false), _CPBody(nullptr), _syncTransform(nullptr)
@@ -326,4 +326,4 @@ void PhysicsSpriteChipmunk2D::afterUpdate(EventCustom* /*event*/)
     setDirtyRecursively(true);
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

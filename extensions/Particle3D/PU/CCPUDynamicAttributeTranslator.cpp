@@ -27,7 +27,7 @@
 #include "CCPUDynamicAttributeTranslator.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUDynamicAttributeTranslator::PUDynamicAttributeTranslator() {}
 
 PUDynamicAttributeTranslator::~PUDynamicAttributeTranslator() {}
@@ -215,4 +215,4 @@ void PUDynamicAttributeTranslator::translate(PUScriptCompiler* compiler, PUAbstr
     obj->context = _dynamicAttribute;
 }
 
-NS_CC_END
+NS_AX_END

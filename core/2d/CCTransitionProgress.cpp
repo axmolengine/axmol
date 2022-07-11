@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "2d/CCActionInstant.h"
 #include "2d/CCActionProgressTimer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 enum
 {
@@ -330,4 +330,4 @@ ProgressTimer* TransitionProgressOutIn::progressTimerNodeWithRenderTexture(Rende
     return node;
 }
 
-NS_CC_END
+NS_AX_END

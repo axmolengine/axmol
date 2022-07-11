@@ -24,7 +24,7 @@
 
 #include "ReleasePoolTest.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 ReleasePoolTests::ReleasePoolTests()
 {

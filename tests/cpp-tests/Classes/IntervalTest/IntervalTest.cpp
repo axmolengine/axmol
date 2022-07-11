@@ -25,7 +25,7 @@
 #include "IntervalTest.h"
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 #define SID_STEP1 100
 #define SID_STEP2 101

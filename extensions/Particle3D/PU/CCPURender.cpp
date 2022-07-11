@@ -40,7 +40,7 @@
 #include "3d/CCMesh.h"
 #include "2d/CCCamera.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void PURender::updateRender(PUParticle3D* /*particle*/, float /*deltaTime*/, bool /*firstParticle*/) {}
 
@@ -1062,4 +1062,4 @@ PUSphereRender* PUSphereRender::clone()
     return render;
 }
 
-NS_CC_END
+NS_AX_END

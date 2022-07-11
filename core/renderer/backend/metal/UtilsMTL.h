@@ -30,7 +30,7 @@
 #import <Metal/Metal.h>
 #include <functional>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class TextureBackend;
 
@@ -95,4 +95,4 @@ private:
 
 // end of _metal group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

@@ -32,22 +32,22 @@
 DEFINE_TEST_SUITE(TableViewTests);
 
 class TableViewTest : public TestCase,
-                      public cocos2d::extension::TableViewDataSource,
-                      public cocos2d::extension::TableViewDelegate
+                      public axis::extension::TableViewDataSource,
+                      public axis::extension::TableViewDelegate
 {
 public:
     CREATE_FUNC(TableViewTest);
 
     virtual bool init() override;
 
-    virtual void scrollViewDidScroll(cocos2d::extension::ScrollView* view) override{};
-    virtual void scrollViewDidZoom(cocos2d::extension::ScrollView* view) override {}
-    virtual void tableCellTouched(cocos2d::extension::TableView* table,
-                                  cocos2d::extension::TableViewCell* cell) override;
-    virtual cocos2d::Size tableCellSizeForIndex(cocos2d::extension::TableView* table, ssize_t idx) override;
-    virtual cocos2d::extension::TableViewCell* tableCellAtIndex(cocos2d::extension::TableView* table,
+    virtual void scrollViewDidScroll(axis::extension::ScrollView* view) override{};
+    virtual void scrollViewDidZoom(axis::extension::ScrollView* view) override {}
+    virtual void tableCellTouched(axis::extension::TableView* table,
+                                  axis::extension::TableViewCell* cell) override;
+    virtual axis::Size tableCellSizeForIndex(axis::extension::TableView* table, ssize_t idx) override;
+    virtual axis::extension::TableViewCell* tableCellAtIndex(axis::extension::TableView* table,
                                                                 ssize_t idx) override;
-    virtual ssize_t numberOfCellsInTableView(cocos2d::extension::TableView* table) override;
+    virtual ssize_t numberOfCellsInTableView(axis::extension::TableView* table) override;
 };
 
 #endif  // __TABLEVIEWTESTSCENE_H__

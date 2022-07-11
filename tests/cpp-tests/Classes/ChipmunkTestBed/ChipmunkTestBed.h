@@ -43,27 +43,27 @@ public:
 
     void onEnter() override;
     void createResetButton();
-    void reset(cocos2d::Ref* sender);
+    void reset(axis::Ref* sender);
 
     void update(float dt) override;
     virtual void initPhysics();
 
-    void onMouseDown(cocos2d::Event* event);
-    void onMouseUp(cocos2d::Event* event);
-    void onMouseMove(cocos2d::Event* event);
+    void onMouseDown(axis::Event* event);
+    void onMouseUp(axis::Event* event);
+    void onMouseMove(axis::Event* event);
     void DrawInfo();
     void updateInit(ChipmunkDemo tt);
 
     cpSpace* _space;                                              // strong ref
-    cocos2d::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
+    axis::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
     int keyPresses;
     bool mousePresses = false;
 
 private:
-    cocos2d::EventListenerMouse* _mouseListener;
-    cocos2d::Node* _trackNode;
-    cocos2d::DrawNode* draw;
-    cocos2d::Label* drawInfo;
+    axis::EventListenerMouse* _mouseListener;
+    axis::Node* _trackNode;
+    axis::DrawNode* draw;
+    axis::Label* drawInfo;
 };
 
 class LogoSmashDemo : public ChipmunkTestBed

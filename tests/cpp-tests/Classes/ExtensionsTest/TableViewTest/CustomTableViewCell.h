@@ -31,10 +31,10 @@
 #include "GUI/CCScrollView/CCScrollView.h"
 #include "GUI/CCScrollView/CCTableView.h"
 
-class CustomTableViewCell : public cocos2d::extension::TableViewCell
+class CustomTableViewCell : public axis::extension::TableViewCell
 {
 public:
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 };
 
 #endif /* __CUSTOMTABELVIEWCELL_H__ */

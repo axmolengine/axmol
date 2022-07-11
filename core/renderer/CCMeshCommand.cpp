@@ -41,7 +41,7 @@
 #include "renderer/CCPass.h"
 #include "xxhash.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 MeshCommand::MeshCommand()
 #if CC_ENABLE_CACHE_TEXTURE_DATA
@@ -84,4 +84,4 @@ MeshCommand::~MeshCommand()
 void MeshCommand::listenRendererRecreated(EventCustom* event) {}
 #endif
 
-NS_CC_END
+NS_AX_END

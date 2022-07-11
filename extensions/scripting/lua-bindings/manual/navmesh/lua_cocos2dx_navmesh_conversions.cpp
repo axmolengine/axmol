@@ -34,7 +34,7 @@
 extern void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName);
 #    endif
 
-bool luaval_to_navmeshagentparam(lua_State* L, int lo, cocos2d::NavMeshAgentParam* outValue, const char* funcName)
+bool luaval_to_navmeshagentparam(lua_State* L, int lo, axis::NavMeshAgentParam* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -110,7 +110,7 @@ bool luaval_to_navmeshagentparam(lua_State* L, int lo, cocos2d::NavMeshAgentPara
     return false;
 }
 
-bool luaval_to_offmeshlinkdata(lua_State* L, int lo, cocos2d::OffMeshLinkData* outValue, const char* funcName)
+bool luaval_to_offmeshlinkdata(lua_State* L, int lo, axis::OffMeshLinkData* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -152,7 +152,7 @@ bool luaval_to_offmeshlinkdata(lua_State* L, int lo, cocos2d::OffMeshLinkData* o
     return false;
 }
 
-void navmeshagentparam_to_luaval(lua_State* L, const cocos2d::NavMeshAgentParam& inValue)
+void navmeshagentparam_to_luaval(lua_State* L, const axis::NavMeshAgentParam& inValue)
 {
     if (nullptr == L)
         return;
@@ -200,7 +200,7 @@ void navmeshagentparam_to_luaval(lua_State* L, const cocos2d::NavMeshAgentParam&
     lua_rawset(L, -3);
 }
 
-void offmeshlinkdata_to_luaval(lua_State* L, const cocos2d::OffMeshLinkData& inValue)
+void offmeshlinkdata_to_luaval(lua_State* L, const axis::OffMeshLinkData& inValue)
 {
     if (nullptr == L)
         return;

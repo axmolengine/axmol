@@ -39,7 +39,7 @@ class Bone;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DisplayManager : public cocos2d::Ref
+class CCS_DLL DisplayManager : public axis::Ref
 {
 public:
     static DisplayManager* create(Bone* bone);
@@ -70,11 +70,11 @@ public:
      */
     void addDisplay(DisplayData* displayData, int index);
 
-    void addDisplay(cocos2d::Node* display, int index);
+    void addDisplay(axis::Node* display, int index);
 
     void removeDisplay(int index);
 
-    const cocos2d::Vector<DecorativeDisplay*>& getDecorativeDisplayList() const;
+    const axis::Vector<DecorativeDisplay*>& getDecorativeDisplayList() const;
 
     /*
      * @deprecated, please use changeDisplayWithIndex and changeDisplayWithName
@@ -95,7 +95,7 @@ public:
     void changeDisplayWithIndex(int index, bool force);
     void changeDisplayWithName(std::string_view name, bool force);
 
-    cocos2d::Node* getDisplayRenderNode() const;
+    axis::Node* getDisplayRenderNode() const;
     DisplayType getDisplayRenderNodeType() const;
 
     int getCurrentDisplayIndex() const;
@@ -119,16 +119,16 @@ public:
      */
     virtual bool isVisible() const;
 
-    cocos2d::Size getContentSize() const;
-    cocos2d::Rect getBoundingBox() const;
+    axis::Size getContentSize() const;
+    axis::Rect getBoundingBox() const;
 
-    cocos2d::Vec2 getAnchorPoint() const;
-    cocos2d::Vec2 getAnchorPointInPoints() const;
+    axis::Vec2 getAnchorPoint() const;
+    axis::Vec2 getAnchorPointInPoints() const;
 
     /**
      * Check if the position is inside the bone.
      */
-    virtual bool containPoint(cocos2d::Vec2& _point);
+    virtual bool containPoint(axis::Vec2& _point);
 
     /**
      * Check if the position is inside the bone.
@@ -139,9 +139,9 @@ public:
     virtual bool isForceChangeDisplay() const { return _forceChangeDisplay; }
 
 protected:
-    cocos2d::Vector<DecorativeDisplay*> _decoDisplayList;
+    axis::Vector<DecorativeDisplay*> _decoDisplayList;
     //! Display render node.
-    cocos2d::Node* _displayRenderNode;
+    axis::Node* _displayRenderNode;
     //! Display render node type
     DisplayType _displayType;
     //! Include current display information, like contour sprite, etc.

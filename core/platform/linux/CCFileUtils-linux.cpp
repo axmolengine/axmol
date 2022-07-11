@@ -38,7 +38,7 @@ using namespace std;
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 FileUtils* FileUtils::getInstance()
 {
@@ -117,4 +117,4 @@ bool FileUtilsLinux::isFileExistInternal(std::string_view path) const
     return (stat(path.data(), &sts) == 0) && S_ISREG(sts.st_mode);
 }
 
-NS_CC_END
+NS_AX_END

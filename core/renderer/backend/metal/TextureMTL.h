@@ -29,7 +29,7 @@
 #import <Metal/Metal.h>
 #include <array>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _metal
  * @{
@@ -168,7 +168,7 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index = 0) override;
+    virtual void updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index = 0) override;
 
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 
@@ -226,7 +226,7 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index = 0) override;
+    virtual void updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index = 0) override;
 
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 
@@ -250,4 +250,4 @@ private:
 
 // end of _metal group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

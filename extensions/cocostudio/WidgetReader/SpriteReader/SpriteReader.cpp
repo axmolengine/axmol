@@ -38,7 +38,7 @@
 #include "flatbuffers/flatbuffers.h"
 #include "renderer/CCColorizer.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -81,10 +81,10 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     std::string plistFile;
     int resourceType           = 0;
     bool intelliShadingEnabled = false;
-    cocos2d::Vec3 hsv;
-    cocos2d::Vec3 filter;
+    axis::Vec3 hsv;
+    axis::Vec3 filter;
 
-    cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
 
     // attributes
     auto attribute = objectData.first_attribute();
@@ -225,7 +225,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void SpriteReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* spriteOptions)
+void SpriteReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* spriteOptions)
 {
     Sprite* sprite = static_cast<Sprite*>(node);
     auto options   = (SpriteOptions*)spriteOptions;
@@ -290,7 +290,7 @@ void SpriteReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffer
     auto f_blendFunc = options->blendFunc();
     if (f_blendFunc)
     {
-        cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+        axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
         blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
         blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         sprite->setBlendFunc(blendFunc);

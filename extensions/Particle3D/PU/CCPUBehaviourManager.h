@@ -32,7 +32,7 @@
 #include "extensions/Particle3D/PU/CCPUBehaviour.h"
 #include "extensions/Particle3D/PU/CCPUSlaveBehaviourTranslator.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PUBehaviourManager
 {
@@ -51,6 +51,6 @@ protected:
     PUSlaveBehaviourTranslator _slaveBehaviourTranslator;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

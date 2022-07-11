@@ -34,7 +34,7 @@
 #include "2d/CCCamera.h"
 #include "3d/CCMeshRenderer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PURibbonTrail::PURibbonTrail(std::string_view name,
                              std::string_view texFile,
@@ -419,4 +419,4 @@ void PURibbonTrail::update(float deltaTime)
     }
 }
 
-NS_CC_END
+NS_AX_END

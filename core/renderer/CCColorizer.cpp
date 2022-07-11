@@ -5,7 +5,7 @@
 #include "renderer/backend/ProgramCache.h"
 #include "renderer/backend/Device.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 #define FLT_SQRT_2 1.4142135623730950488016887242097
 #define FLT_SQRT_3 1.7320508075688772935274463415059
@@ -863,4 +863,4 @@ void Colorizer::updateNodeHsv(Node* node, const Vec3& hsv, const Vec3& filter)
     programState->updateUniformID();
 }
 
-NS_CC_END
+NS_AX_END

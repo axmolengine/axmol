@@ -31,7 +31,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUJetAffector : public PUAffector
 {
@@ -60,6 +60,6 @@ protected:
      */
     PUDynamicAttribute* _dynAcceleration;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

@@ -38,7 +38,7 @@ enum CustomProgramType : uint32_t
 };
 }
 
-USING_NS_CC;
+USING_NS_AX;
 
 class DurationRecorder
 {
@@ -552,13 +552,13 @@ void SpriteCreation::doTest()
     spriteCache.clear();
 }
 
-void SpriteCreation::addSpritesCallback(cocos2d::Ref*)
+void SpriteCreation::addSpritesCallback(axis::Ref*)
 {
     updateSpriteCountLabel(totalSprites + suggestDelta);
     doTest();
 }
 
-void SpriteCreation::delSpritesCallback(cocos2d::Ref*)
+void SpriteCreation::delSpritesCallback(axis::Ref*)
 {
     updateSpriteCountLabel(totalSprites - suggestDelta);
     doTest();
@@ -752,7 +752,7 @@ void CaptureNodeTest::onCaptured(Ref*)
 BugAutoCulling::BugAutoCulling()
 {
     Size s       = Director::getInstance()->getWinSize();
-    auto fastmap = cocos2d::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
+    auto fastmap = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
     this->addChild(fastmap);
     for (int i = 0; i < 30; i++)
     {
@@ -854,7 +854,7 @@ RendererUniformBatch::RendererUniformBatch()
     }
 }
 
-cocos2d::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
+axis::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
     auto programState =
         new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::BLUR));
@@ -875,7 +875,7 @@ cocos2d::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
     return programState;
 }
 
-cocos2d::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
+axis::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
 {
     auto programState =
         new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::SEPIA));

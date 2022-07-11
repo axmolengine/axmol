@@ -28,8 +28,8 @@
 #include "cocostudio/CCSGUIReader.h"
 #include "CocosGUIScene.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UIScene::UIScene() : _uiLayer(nullptr), _sceneTitle(nullptr) {}
 

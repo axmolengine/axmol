@@ -31,7 +31,7 @@
 #include "extensions/Particle3D/PU/CCPUScriptTranslator.h"
 #include "extensions/Particle3D/PU/CCPUScriptCompiler.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PUDynamicAttributeTranslator : public PUScriptTranslator
 {
@@ -44,5 +44,5 @@ public:
     virtual void translate(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-NS_CC_END
+NS_AX_END
 #endif /* defined(__cocos2d_libs__CCParticle3DRendererTranslator__) */

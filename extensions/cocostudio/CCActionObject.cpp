@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "2d/CCActionInstant.h"
 #include "base/ccUtils.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -132,7 +132,7 @@ void ActionObject::initWithDictionary(const rapidjson::Value& dic, Ref* root)
     _fTotalTime = maxLength * _fUnitTime;
 }
 
-void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Ref* root)
+void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, axis::Ref* root)
 {
     stExpCocoNode* stChildNode    = cocoNode->GetChildArray(cocoLoader);
     stExpCocoNode* actionNodeList = nullptr;

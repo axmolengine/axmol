@@ -33,7 +33,7 @@ static int lua_cocos2dx_WebView_setOnShouldStartLoading(lua_State* L)
 {
 
     int argc                   = 0;
-    cocos2d::ui::WebView* self = nullptr;
+    axis::ui::WebView* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -41,7 +41,7 @@ static int lua_cocos2dx_WebView_setOnShouldStartLoading(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::ui::WebView*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::ui::WebView*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -89,7 +89,7 @@ static int lua_cocos2dx_WebView_setOnDidFinishLoading(lua_State* L)
 {
 
     int argc                   = 0;
-    cocos2d::ui::WebView* self = nullptr;
+    axis::ui::WebView* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -97,7 +97,7 @@ static int lua_cocos2dx_WebView_setOnDidFinishLoading(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::ui::WebView*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::ui::WebView*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -144,7 +144,7 @@ static int lua_cocos2dx_WebView_setOnDidFailLoading(lua_State* L)
 {
 
     int argc                   = 0;
-    cocos2d::ui::WebView* self = nullptr;
+    axis::ui::WebView* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -152,7 +152,7 @@ static int lua_cocos2dx_WebView_setOnDidFailLoading(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::ui::WebView*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::ui::WebView*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)

@@ -26,7 +26,7 @@
 #include "cocos2d.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * Copy DrawNode for 3D geometry drawing.
@@ -329,12 +329,12 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
 
     return ret;
 }
-NS_CC_END
+NS_AX_END
 
 int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
 {
     int argc                  = 0;
-    cocos2d::DrawNode3D* cobj = nullptr;
+    axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -346,7 +346,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -361,7 +361,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
     {
         if (!ok)
             return 0;
-        const cocos2d::BlendFunc& ret = cobj->getBlendFunc();
+        const axis::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(L, ret);
         return 1;
     }
@@ -379,7 +379,7 @@ tolua_lerror:
 int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
 {
     int argc                  = 0;
-    cocos2d::DrawNode3D* cobj = nullptr;
+    axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -391,7 +391,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -404,7 +404,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        cocos2d::BlendFunc arg0;
+        axis::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(L, 2, &arg0, "cc.Sprite3D:setBlendFunc");
         if (!ok)
@@ -430,7 +430,7 @@ tolua_lerror:
 int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
 {
     int argc                  = 0;
-    cocos2d::DrawNode3D* cobj = nullptr;
+    axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -442,7 +442,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -455,9 +455,9 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 3)
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
-        cocos2d::Color4F arg2;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
+        axis::Color4F arg2;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.DrawNode3D:drawLine");
 
@@ -483,7 +483,7 @@ tolua_lerror:
 int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
 {
     int argc                  = 0;
-    cocos2d::DrawNode3D* cobj = nullptr;
+    axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -495,7 +495,7 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -527,7 +527,7 @@ tolua_lerror:
 int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
 {
     int argc                  = 0;
-    cocos2d::DrawNode3D* cobj = nullptr;
+    axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -539,7 +539,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::DrawNode3D*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -552,8 +552,8 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        std::vector<cocos2d::Vec3> arg0;
-        cocos2d::Color4F arg1;
+        std::vector<axis::Vec3> arg0;
+        axis::Color4F arg1;
         Vec3 vec3;
 #if COCOS2D_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
@@ -622,8 +622,8 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
     {
         if (!ok)
             return 0;
-        cocos2d::DrawNode3D* ret = cocos2d::DrawNode3D::create();
-        object_to_luaval<cocos2d::DrawNode3D>(L, "cc.DrawNode3D", (cocos2d::DrawNode3D*)ret);
+        axis::DrawNode3D* ret = axis::DrawNode3D::create();
+        object_to_luaval<axis::DrawNode3D>(L, "cc.DrawNode3D", (axis::DrawNode3D*)ret);
         return 1;
     }
     CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.DrawNode3D:create", argc, 0);
@@ -647,7 +647,7 @@ int lua_register_cocos2dx_DrawNode3D(lua_State* L)
     tolua_function(L, "drawCube", lua_cocos2dx_DrawNode3D_drawCube);
     tolua_function(L, "create", lua_cocos2dx_DrawNode3D_create);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(cocos2d::DrawNode3D).name();
+    auto typeName                                    = typeid(axis::DrawNode3D).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.DrawNode3D";
     g_typeCast[typeName]                             = "cc.DrawNode3D";
     return 1;
@@ -671,13 +671,13 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
 
     if (argc == 1)
     {
-        cocos2d::ValueMap arg0;
+        axis::ValueMap arg0;
         ok &= luaval_to_ccvaluemap(L, 2, &arg0, "cc.ValueTypeJudgeInTable:create");
         if (!ok)
             return 0;
-        cocos2d::ValueTypeJudgeInTable* ret = cocos2d::ValueTypeJudgeInTable::create(arg0);
-        object_to_luaval<cocos2d::ValueTypeJudgeInTable>(L, "cc.ValueTypeJudgeInTable",
-                                                         (cocos2d::ValueTypeJudgeInTable*)ret);
+        axis::ValueTypeJudgeInTable* ret = axis::ValueTypeJudgeInTable::create(arg0);
+        object_to_luaval<axis::ValueTypeJudgeInTable>(L, "cc.ValueTypeJudgeInTable",
+                                                         (axis::ValueTypeJudgeInTable*)ret);
         return 1;
     }
     CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ValueTypeJudgeInTable:create", argc, 1);
@@ -697,7 +697,7 @@ int lua_register_cocos2dx_ValueTypeJudgeInTable(lua_State* L)
     tolua_beginmodule(L, "ValueTypeJudgeInTable");
     tolua_function(L, "create", lua_cocos2dx_ValueTypeJudgeInTable_create);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(cocos2d::ValueTypeJudgeInTable).name();
+    auto typeName                                    = typeid(axis::ValueTypeJudgeInTable).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ValueTypeJudgeInTable";
     g_typeCast[typeName]                             = "cc.ValueTypeJudgeInTable";
     return 1;

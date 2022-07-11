@@ -34,7 +34,7 @@
 #        include "box2d/box2d.h"
 #    endif
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 PhysicsSprite::PhysicsSprite()
     : _ignoreBodyRotation(false), _CPBody(nullptr), _pB2Body(nullptr), _PTMRatio(0.0f), _syncTransform(nullptr)
@@ -465,6 +465,6 @@ void PhysicsSprite::afterUpdate(EventCustom* /*event*/)
     setDirtyRecursively(true);
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif  // CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION

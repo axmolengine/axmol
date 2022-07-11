@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 #define COCOS2D_VERSION 0x00040000
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 CC_DLL const char* cocos2dVersion();
 
@@ -47,6 +47,10 @@ using Sprite3DMaterialCache = MeshMaterialCache;
 
 #define setDisplayStats setStatsDisplay
 
-NS_CC_END
+NS_AX_END
+
+namespace cocos2d = axis;
+
+#define USING_NS_CC USING_NS_AX
 
 #endif  // __COCOS2D_H__

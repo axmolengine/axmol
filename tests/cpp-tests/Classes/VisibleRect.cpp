@@ -25,7 +25,7 @@
 
 #include "VisibleRect.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 Rect VisibleRect::s_visibleRect;
 

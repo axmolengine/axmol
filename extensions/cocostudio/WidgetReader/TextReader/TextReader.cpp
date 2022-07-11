@@ -12,7 +12,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -49,7 +49,7 @@ void TextReader::destroyInstance()
     CC_SAFE_DELETE(instanceTextReader);
 }
 
-void TextReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -428,7 +428,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     return *(Offset<Table>*)(&options);
 }
 
-void TextReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textOptions)
+void TextReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textOptions)
 {
     Text* label  = static_cast<Text*>(node);
     auto options = (TextOptions*)textOptions;
@@ -533,7 +533,7 @@ void TextReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers:
         label->setContentSize(contentSize);
     }
 
-    auto labelRenderer = dynamic_cast<cocos2d::Label*>(label->getVirtualRenderer());
+    auto labelRenderer = dynamic_cast<axis::Label*>(label->getVirtualRenderer());
     if (options->boldEnabled())
         labelRenderer->enableBold();
     if (options->underlineEnabled())

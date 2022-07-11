@@ -27,7 +27,7 @@
 #include "CCPUBoxEmitter.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const float CCPUBoxEmitter::DEFAULT_WIDTH  = 100.0f;
@@ -130,4 +130,4 @@ CCPUBoxEmitter* CCPUBoxEmitter::clone()
     return be;
 }
 
-NS_CC_END
+NS_AX_END

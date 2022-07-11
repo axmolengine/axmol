@@ -24,7 +24,7 @@
 #include <cmath>
 #include "base/ccMacros.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -438,4 +438,4 @@ void Quaternion::slerpForSquad(const Quaternion& q1, const Quaternion& q2, float
     dst->w   = (q1.w * r1 + q2.w * r2);
 }
 
-NS_CC_MATH_END
+NS_AX_MATH_END

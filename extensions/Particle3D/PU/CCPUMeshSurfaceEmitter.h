@@ -29,7 +29,7 @@
 
 #include "extensions/Particle3D/PU/CCPUEmitter.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /** Definition of a Triangle
  */
@@ -248,6 +248,6 @@ protected:
     bool _directionSet;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

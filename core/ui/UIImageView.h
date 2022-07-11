@@ -33,7 +33,7 @@ THE SOFTWARE.
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct CC_DLL ResourceData;
 
@@ -43,7 +43,7 @@ class Scale9Sprite;
 /**
  * @brief A widget to display images.
  */
-class CC_GUI_DLL ImageView : public Widget, public cocos2d::BlendProtocol
+class CC_GUI_DLL ImageView : public Widget, public axis::BlendProtocol
 {
 
     DECLARE_CLASS_GUI_INFO
@@ -175,7 +175,7 @@ protected:
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 // end of ui group
 /// @}
 

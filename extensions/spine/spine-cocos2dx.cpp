@@ -31,7 +31,7 @@
 #include <spine/Extension.h>
 #include <spine/AttachmentVertices.h>
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace spine;
 
 static void deleteAttachmentVertices (void* vertices) {

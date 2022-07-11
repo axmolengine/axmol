@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "CCComExtensionData.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 NS_TIMELINE_BEGIN
 

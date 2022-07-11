@@ -31,9 +31,9 @@
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ScheduleHandlerDelegate* ScheduleHandlerDelegate::create()
 {
@@ -94,7 +94,7 @@ LuaCallFunc* LuaCallFunc::clone() const
     ret->autorelease();
 
     int newscriptHandler =
-        cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+        axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
     ScriptHandlerMgr::getInstance()->addObjectHandler((void*)ret, newscriptHandler,
                                                       ScriptHandlerMgr::HandlerType::CALLFUNC);
@@ -227,7 +227,7 @@ ScriptHandlerMgr::HandlerType ScriptHandlerMgr::addCustomHandler(void* object, i
     return handlerType;
 }
 
-NS_CC_END
+NS_AX_END
 
 static void tolua_reg_script_handler_mgr_type(lua_State* tolua_S)
 {
@@ -271,8 +271,8 @@ static int tolua_Cocos2d_ScriptHandlerMgr_registerScriptHandler00(lua_State* tol
     else
 #endif
     {
-        cocos2d::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<cocos2d::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        axis::ScriptHandlerMgr* scriptHanlderMgr =
+            static_cast<axis::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
@@ -307,8 +307,8 @@ static int tolua_Cocos2d_ScriptHandlerMgr_unregisterScriptHandler00(lua_State* t
     else
 #endif
     {
-        cocos2d::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<cocos2d::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        axis::ScriptHandlerMgr* scriptHanlderMgr =
+            static_cast<axis::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
@@ -341,8 +341,8 @@ static int tolua_Cocos2d_ScriptHandlerMgr_removeObjectAllHandlers00(lua_State* t
     else
 #endif
     {
-        cocos2d::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<cocos2d::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        axis::ScriptHandlerMgr* scriptHanlderMgr =
+            static_cast<axis::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {

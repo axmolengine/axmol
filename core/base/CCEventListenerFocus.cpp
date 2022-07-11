@@ -28,7 +28,7 @@
 #include "base/CCEventFocus.h"
 #include "base/ccMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const std::string EventListenerFocus::LISTENER_ID = "__cc_focus_event";
 
@@ -91,4 +91,4 @@ bool EventListenerFocus::checkAvailable()
     return true;
 }
 
-NS_CC_END
+NS_AX_END

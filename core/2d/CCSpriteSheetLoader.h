@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "base/CCMap.h"
 #include "base/CCData.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Sprite;
 class Texture2D;
@@ -103,4 +103,4 @@ public:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END

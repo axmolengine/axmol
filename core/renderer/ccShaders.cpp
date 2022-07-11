@@ -27,7 +27,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "renderer/ccShaders.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //
 
 // backend shader file
@@ -76,4 +76,4 @@ NS_CC_BEGIN
 #include "renderer/shaders/quad.vert"
 #include "renderer/shaders/quad.frag"
 
-NS_CC_END
+NS_AX_END

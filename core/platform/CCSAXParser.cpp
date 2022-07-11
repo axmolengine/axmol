@@ -31,7 +31,7 @@
 #include "platform/CCFileUtils.h"
 #include "xsbase/xsxml/xsxml.hpp"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /// xsxml SAX2 handler
 class SAX2Hander
@@ -157,4 +157,4 @@ void SAXParser::setDelegator(SAXDelegator* delegator)
     _delegator = delegator;
 }
 
-NS_CC_END
+NS_AX_END

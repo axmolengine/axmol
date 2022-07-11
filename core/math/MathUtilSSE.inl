@@ -1,4 +1,4 @@
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 #ifdef __SSE__
 
@@ -154,4 +154,4 @@ void MathUtil::transformVec4(const __m128 m[4], const __m128& v, __m128& dst)
 #endif
 
 
-NS_CC_MATH_END
+NS_AX_MATH_END

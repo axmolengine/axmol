@@ -11,7 +11,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -44,7 +44,7 @@ void ScrollViewReader::destroyInstance()
     CC_SAFE_DELETE(instanceScrollViewReader);
 }
 
-void ScrollViewReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void ScrollViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     // TODO: need to refactor...
     LayoutReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
@@ -393,7 +393,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void ScrollViewReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* scrollViewOptions)
+void ScrollViewReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* scrollViewOptions)
 {
     ScrollView* scrollView = static_cast<ScrollView*>(node);
     auto options           = (ScrollViewOptions*)scrollViewOptions;

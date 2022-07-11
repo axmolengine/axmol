@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "2d/CCSpriteFrame.h"
 #include "2d/CCSpriteFrameCache.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {

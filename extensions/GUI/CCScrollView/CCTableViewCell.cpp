@@ -26,7 +26,7 @@
 
 #include "CCTableViewCell.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 void TableViewCell::reset()
 {
@@ -43,4 +43,4 @@ void TableViewCell::setIdx(ssize_t idx)
     _idx = idx;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

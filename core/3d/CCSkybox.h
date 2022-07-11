@@ -32,7 +32,7 @@
 #include "2d/CCNode.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _3d
@@ -126,6 +126,6 @@ private:
 // end of 3d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __SKYBOX_H__

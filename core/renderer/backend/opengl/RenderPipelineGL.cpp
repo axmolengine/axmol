@@ -31,7 +31,7 @@ Copyright (c) 2020 C4games Ltd.
 
 #include <assert.h>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 void RenderPipelineGL::update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor)
 {
@@ -77,4 +77,4 @@ RenderPipelineGL::~RenderPipelineGL()
     CC_SAFE_RELEASE(_programGL);
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

@@ -48,7 +48,7 @@ void initExtensions()
     glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
 }
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, float frameZoomFactor)
 {
@@ -237,4 +237,4 @@ Rect GLViewImpl::getSafeAreaRect() const
     return safeAreaRect;
 }
 
-NS_CC_END
+NS_AX_END

@@ -18,7 +18,7 @@ public:
     GRoot();
     virtual ~GRoot();
 
-    static GRoot* create(cocos2d::Scene* scene, int zOrder = 1000);
+    static GRoot* create(axis::Scene* scene, int zOrder = 1000);
     static GRoot* getInstance() { return _inst; }
 
     void showWindow(Window* win);
@@ -37,11 +37,11 @@ public:
     bool isModalWaiting();
 
     InputProcessor* getInputProcessor() const { return _inputProcessor; }
-    cocos2d::Vec2 getTouchPosition(int touchId);
+    axis::Vec2 getTouchPosition(int touchId);
     GObject* getTouchTarget();
     
-    cocos2d::Vec2 worldToRoot(const cocos2d::Vec2 &pt);
-    cocos2d::Vec2 rootToWorld(const cocos2d::Vec2 &pt);
+    axis::Vec2 worldToRoot(const axis::Vec2 &pt);
+    axis::Vec2 rootToWorld(const axis::Vec2 &pt);
 
     void showPopup(GObject* popup);
     void showPopup(GObject* popup, GObject* target, PopupDirection dir);
@@ -50,7 +50,7 @@ public:
     void hidePopup();
     void hidePopup(GObject* popup);
     bool hasAnyPopup();
-    cocos2d::Vec2 getPoupPosition(GObject* popup, GObject* target, PopupDirection dir);
+    axis::Vec2 getPoupPosition(GObject* popup, GObject* target, PopupDirection dir);
 
     void showTooltips(const std::string& msg);
     void showTooltipsWin(GObject* tooltipWin);
@@ -70,7 +70,7 @@ protected:
     virtual void onExit() override;
 
 private:
-    bool initWithScene(cocos2d::Scene* scene, int zOrder);
+    bool initWithScene(axis::Scene* scene, int zOrder);
     void onWindowSizeChanged();
     void createModalLayer();
     void adjustModalLayer();
@@ -81,7 +81,7 @@ private:
 
     CALL_LATER_FUNC(GRoot, doShowTooltipsWin);
 
-    cocos2d::EventListener* _windowSizeListener;
+    axis::EventListener* _windowSizeListener;
     InputProcessor* _inputProcessor;
 
     GGraph* _modalLayer;

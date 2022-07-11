@@ -24,7 +24,7 @@
 
 #include "LightTest.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 LightTests::LightTests()
 {

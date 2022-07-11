@@ -29,7 +29,7 @@
 #include "ui/UILayout.h"
 #include "ui/UITabControl.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -186,7 +186,7 @@ void TabControl::setHeaderDockPlace(TabControl::Dock dockPlace)
     }
 }
 
-cocos2d::Vec2 TabControl::getHeaderAnchorWithDock() const
+axis::Vec2 TabControl::getHeaderAnchorWithDock() const
 {
     Vec2 anpoint(.5f, .0f);
     switch (_headerDockPlace)
@@ -721,4 +721,4 @@ void TabHeader::copySpecialProperties(Widget* model)
 }
 
 }  // namespace ui
-NS_CC_END
+NS_AX_END

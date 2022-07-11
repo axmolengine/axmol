@@ -46,11 +46,11 @@ public:
     TerrainSimple();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    cocos2d::Terrain* _terrain;
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    axis::Terrain* _terrain;
 
 protected:
-    cocos2d::Camera* _camera;
+    axis::Camera* _camera;
 };
 
 #    define PLAYER_STATE_LEFT 0
@@ -59,10 +59,10 @@ protected:
 #    define PLAYER_STATE_FORWARD 3
 #    define PLAYER_STATE_BACKWARD 4
 
-class Player : public cocos2d::MeshRenderer
+class Player : public axis::MeshRenderer
 {
 public:
-    static Player* create(const char* file, cocos2d::Camera* cam, cocos2d::Terrain* terrain);
+    static Player* create(const char* file, axis::Camera* cam, axis::Terrain* terrain);
     virtual bool isDone() const;
     virtual void update(float dt);
 
@@ -71,14 +71,14 @@ public:
     void forward();
     void backward();
     void idle();
-    cocos2d::Vec3 _targetPos;
+    axis::Vec3 _targetPos;
     void updateState();
     float _headingAngle;
-    cocos2d::Vec3 _headingAxis;
+    axis::Vec3 _headingAxis;
 
 private:
-    cocos2d::Terrain* _terrain;
-    cocos2d::Camera* _cam;
+    axis::Terrain* _terrain;
+    axis::Camera* _cam;
     int _playerState;
 };
 
@@ -89,12 +89,12 @@ public:
     TerrainWalkThru();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnd(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnd(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
-    cocos2d::Camera* _camera;
-    cocos2d::Terrain* _terrain;
+    axis::Camera* _camera;
+    axis::Terrain* _terrain;
     Player* _player;
 };
 
@@ -105,11 +105,11 @@ public:
     TerrainWithLightMap();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
-    cocos2d::Terrain* _terrain;
-    cocos2d::Camera* _camera;
+    axis::Terrain* _terrain;
+    axis::Camera* _camera;
 };
 
 #endif  // !TERRAIN_TESH_H

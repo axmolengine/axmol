@@ -28,7 +28,7 @@
 #include "stdlib.h"
 #include "curl/curl.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 CurlTests::CurlTests()
 {

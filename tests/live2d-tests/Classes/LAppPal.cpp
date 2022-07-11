@@ -10,7 +10,7 @@
 #include "cocos2d.h"
 
 using namespace Csm;
-USING_NS_CC;
+USING_NS_AX;
 
 csmByte* LAppPal::LoadFileAsBytes(const csmChar* filePath, csmSizeInt* outSize)
 {
@@ -40,7 +40,7 @@ void LAppPal::PrintLog(const csmChar* format, ...)
     csmChar buf[256];
     va_start(args, format);
     vsnprintf(buf, sizeof(buf), format, args); // 標準出力でレンダリング
-    cocos2d::log("%s", buf); // cocos2dのログ関数で出力
+    axis::log("%s", buf); // cocos2dのログ関数で出力
     va_end(args);
 }
 

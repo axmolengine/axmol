@@ -32,7 +32,7 @@
 #include "CCPUSimpleSpline.h"
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 enum PUInterpolationType
 {
@@ -327,6 +327,6 @@ public:
      */
     float calculate(PUDynamicAttribute* dyn, float x, float defaultValue = 0.0f);
 };
-NS_CC_END
+NS_AX_END
 
 #endif

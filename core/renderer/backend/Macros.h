@@ -25,12 +25,12 @@
 
 #pragma once
 
-#define CC_BACKEND_BEGIN \
-    namespace cocos2d    \
+#define NS_AX_BACKEND_BEGIN \
+    namespace axis    \
     {                    \
     namespace backend    \
     {
-#define CC_BACKEND_END \
+#define NS_AX_BACKEND_END \
     }                  \
     }
 

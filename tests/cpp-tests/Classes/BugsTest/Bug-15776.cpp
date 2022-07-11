@@ -32,7 +32,7 @@
 
 #include "Bug-15776.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 //
 // IMPORTANT:
@@ -44,7 +44,7 @@ bool Bug15776Layer::init()
 {
     if (BugsTestBase::init())
     {
-        cocos2d::Image* cocos2dxImage = new cocos2d::Image();
+        axis::Image* cocos2dxImage = new axis::Image();
         cocos2dxImage->initWithImageData(nullptr, 0, false);
         // should not crash. invalid cocos2dImage
         auto texture2d = Director::getInstance()->getTextureCache()->addImage(cocos2dxImage, "unused");

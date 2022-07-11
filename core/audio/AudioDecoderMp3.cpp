@@ -54,8 +54,8 @@ struct mp3dec_impl
 };
 #endif
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 #if !CC_USE_MPG123
 static size_t minimp3_read_r(void* buf, size_t size, void* user_data)
 {
@@ -298,4 +298,4 @@ bool AudioDecoderMp3::seek(uint32_t frameOffset)
     return (offset >= 0 && offset == frameOffset);
 #endif
 }
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

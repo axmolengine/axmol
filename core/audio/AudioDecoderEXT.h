@@ -31,8 +31,7 @@
 #include "audio/AudioDecoder.h"
 #include "platform/CCFileStream.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
@@ -99,11 +98,11 @@ private:
     static SInt64 getSizeCallback(void* inClientData);
 
     ExtAudioFileRef _extRef;
-    std::unique_ptr<cocos2d::FileStream> _fileStream;
+    std::unique_ptr<axis::FileStream> _fileStream;
     SInt64 _streamSize;
     AudioFileID _audioFileId;
 
     AudioStreamBasicDescription _outputFormat;
 };
 
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

@@ -32,7 +32,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL BaseTriggerCondition : public cocos2d::Ref
+class CCS_DLL BaseTriggerCondition : public axis::Ref
 {
 protected:
     BaseTriggerCondition(void);
@@ -46,7 +46,7 @@ public:
     virtual void removeAll();
 };
 
-class CCS_DLL BaseTriggerAction : public cocos2d::Ref
+class CCS_DLL BaseTriggerAction : public axis::Ref
 {
 protected:
     BaseTriggerAction(void);
@@ -60,7 +60,7 @@ public:
     virtual void removeAll();
 };
 
-class CCS_DLL TriggerObj : public cocos2d::Ref
+class CCS_DLL TriggerObj : public axis::Ref
 {
 public:
     TriggerObj(void);
@@ -77,11 +77,11 @@ public:
     void setEnabled(bool enabled);
 
 private:
-    cocos2d::Vector<BaseTriggerCondition*> _cons;
-    cocos2d::Vector<BaseTriggerAction*> _acts;
+    axis::Vector<BaseTriggerCondition*> _cons;
+    axis::Vector<BaseTriggerAction*> _acts;
     unsigned int _id;
     bool _enabled;
-    cocos2d::Vector<cocos2d::EventListenerCustom*> _listeners;
+    axis::Vector<axis::EventListenerCustom*> _listeners;
 };
 
 }  // namespace cocostudio

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "yasio/cxx17/string_view.hpp"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 extern "C" {
 int cocos2dx_lua_loader(lua_State* L)

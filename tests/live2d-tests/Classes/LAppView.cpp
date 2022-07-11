@@ -14,7 +14,7 @@
 using namespace Csm;
 using namespace LAppDefine;
 
-USING_NS_CC;
+USING_NS_AX;
 
 LAppView::LAppView(): DrawNode()
                     , _debugRects(NULL)
@@ -94,13 +94,13 @@ void LAppView::onExit()
     delete viewMatrix;
 }
 
-void LAppView::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
+void LAppView::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
 {
     DrawNode::draw(renderer, transform, flags);
     onDraw(transform, flags);
 }
 
-void LAppView::onDraw(const cocos2d::Mat4& transform, uint32_t flags)
+void LAppView::onDraw(const axis::Mat4& transform, uint32_t flags)
 {
     _commandBuffer.PushCommandGroup();
 
@@ -160,7 +160,7 @@ void LAppView::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
     live2DMgr->OnDrag(viewX, viewY);
 }
 
-void LAppView::onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void LAppView::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     // タッチ終了
     LAppLive2DManager* live2DMgr = LAppLive2DManager::GetInstance();

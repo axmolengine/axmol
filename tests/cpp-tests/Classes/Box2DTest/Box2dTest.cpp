@@ -29,8 +29,8 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/CCCustomCommand.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 #define PTM_RATIO 32
 
@@ -290,7 +290,7 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     parent->addChild(sprite);
     sprite->setB2Body(body);
     sprite->setPTMRatio(PTM_RATIO);
-    sprite->setPosition(cocos2d::Vec2(p.x, p.y));
+    sprite->setPosition(axis::Vec2(p.x, p.y));
 }
 
 void Box2DTest::update(float dt)

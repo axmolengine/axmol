@@ -53,11 +53,11 @@ public:
 
     static void addArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
     static void createArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
-    static void updateArmatureDisplay(Bone* bone, cocos2d::Node* display, float dt);
+    static void updateArmatureDisplay(Bone* bone, axis::Node* display, float dt);
 
     static void addParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
     static void createParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
-    static void updateParticleDisplay(Bone* bone, cocos2d::Node* display, float dt);
+    static void updateParticleDisplay(Bone* bone, axis::Node* display, float dt);
 };
 
 }  // namespace cocostudio

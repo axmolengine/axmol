@@ -29,7 +29,7 @@
 
 #    if (CC_ENABLE_BULLET_INTEGRATION)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 CC_DLL const char* physics3dVersion()
 {
@@ -38,21 +38,21 @@ CC_DLL const char* physics3dVersion()
 #        endif
 }
 
-NS_CC_END
+NS_AX_END
 
-cocos2d::Vec3 convertbtVector3ToVec3(const btVector3& btVec3)
+axis::Vec3 convertbtVector3ToVec3(const btVector3& btVec3)
 {
-    return cocos2d::Vec3(btVec3.x(), btVec3.y(), btVec3.z());
+    return axis::Vec3(btVec3.x(), btVec3.y(), btVec3.z());
 }
 
-btVector3 convertVec3TobtVector3(const cocos2d::Vec3& vec3)
+btVector3 convertVec3TobtVector3(const axis::Vec3& vec3)
 {
     return btVector3(vec3.x, vec3.y, vec3.z);
 }
 
-cocos2d::Mat4 convertbtTransformToMat4(const btTransform& btTrans)
+axis::Mat4 convertbtTransformToMat4(const btTransform& btTrans)
 {
-    cocos2d::Mat4 mat;
+    axis::Mat4 mat;
     auto rot  = btTrans.getBasis();
     auto row  = rot.getRow(0);
     mat.m[0]  = row.getX();
@@ -74,19 +74,19 @@ cocos2d::Mat4 convertbtTransformToMat4(const btTransform& btTrans)
     return mat;
 }
 
-btTransform convertMat4TobtTransform(const cocos2d::Mat4& mat4)
+btTransform convertMat4TobtTransform(const axis::Mat4& mat4)
 {
     btTransform btTrans;
     btTrans.setFromOpenGLMatrix(mat4.m);
     return btTrans;
 }
 
-cocos2d::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat)
+axis::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat)
 {
-    return cocos2d::Quaternion(btQuat.x(), btQuat.y(), btQuat.z(), btQuat.w());
+    return axis::Quaternion(btQuat.x(), btQuat.y(), btQuat.z(), btQuat.w());
 }
 
-btQuaternion convertQuatTobtQuat(const cocos2d::Quaternion& quat)
+btQuaternion convertQuatTobtQuat(const axis::Quaternion& quat)
 {
     return btQuaternion(quat.x, quat.y, quat.z, quat.w);
 }

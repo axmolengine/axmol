@@ -33,7 +33,7 @@
 #include "renderer/CCCustomCommand.h"
 #include "math/CCMath.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class GLProgramState;
 class EventListenerCustom;
@@ -83,4 +83,4 @@ protected:
 #endif
 };
 
-NS_CC_END
+NS_AX_END

@@ -29,9 +29,9 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <jni.h>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
-#define MAX_LEN (cocos2d::kMaxLogLen + 1)
+#define MAX_LEN (axis::kMaxLogLen + 1)
 
 void ccMessageBox(const char* pszMsg, const char* pszTitle)
 {
@@ -43,4 +43,4 @@ void LuaLog(const char* pszFormat)
     __android_log_write(ANDROID_LOG_DEBUG, "cocos2d-x debug info", pszFormat);
 }
 
-NS_CC_END
+NS_AX_END

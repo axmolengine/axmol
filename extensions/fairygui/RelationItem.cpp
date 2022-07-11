@@ -5,7 +5,7 @@
 #include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 RelationItem::RelationItem(GObject* owner) : _target(nullptr)
 {

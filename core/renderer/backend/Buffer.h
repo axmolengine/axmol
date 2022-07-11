@@ -28,13 +28,13 @@
 #include "Types.h"
 #include "base/CCRef.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 class MeshVertexData;
 class MeshIndexData;
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 /**
  * @addtogroup _backend
@@ -44,7 +44,7 @@ CC_BACKEND_BEGIN
 /**
  * @brief Used to store vertex and index data data.
  */
-class Buffer : public cocos2d::Ref
+class Buffer : public axis::Ref
 {
 public:
     /**
@@ -98,4 +98,4 @@ protected:
 
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

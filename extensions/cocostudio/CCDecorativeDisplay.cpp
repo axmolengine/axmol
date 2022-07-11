@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "CCDecorativeDisplay.h"
 #include "2d/CCNode.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -65,7 +65,7 @@ bool DecorativeDisplay::init()
     return true;
 }
 
-void DecorativeDisplay::setDisplay(cocos2d::Node* display)
+void DecorativeDisplay::setDisplay(axis::Node* display)
 {
     if (_display != display)
     {

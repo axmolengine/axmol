@@ -7,7 +7,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GTextInput::GTextInput()
 {
@@ -115,14 +115,14 @@ void GTextInput::setTextFieldText()
         _input->setText(_text);
 }
 
-void GTextInput::editBoxReturn(cocos2d::ui::EditBox * editBox)
+void GTextInput::editBoxReturn(axis::ui::EditBox * editBox)
 {
     //found that this will trigger even when focus is lost
     //if (isSingleLine())
     // dispatchEvent(UIEventType::Submit);
 }
 
-void GTextInput::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view /*text*/)
+void GTextInput::editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view /*text*/)
 {
     _text.clear();
     _text.append(_input->getText());

@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "CCActionManagerEx.h"
 #include "CocoLoader.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -63,7 +63,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::
     this->_studioVersionNumber = version;
     ssize_t pos                = path.find_last_of("/");
     std::string fileName       = path.substr(pos + 1, path.length());
-    cocos2d::Vector<ActionObject*> actionList;
+    axis::Vector<ActionObject*> actionList;
     int actionCount = DICTOOL->getArrayCount_json(dic, "actionlist");
     for (int i = 0; i < actionCount; i++)
     {
@@ -77,14 +77,14 @@ void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::
 }
 
 void ActionManagerEx::initWithBinary(const char* file,
-                                     cocos2d::Ref* root,
+                                     axis::Ref* root,
                                      CocoLoader* cocoLoader,
                                      stExpCocoNode* pCocoNode)
 {
     std::string path     = file;
     ssize_t pos          = path.find_last_of("/");
     std::string fileName = path.substr(pos + 1, path.length());
-    cocos2d::Vector<ActionObject*> actionList;
+    axis::Vector<ActionObject*> actionList;
 
     stExpCocoNode* stChildArray = pCocoNode->GetChildArray(cocoLoader);
     stExpCocoNode* actionNode   = nullptr;
@@ -169,7 +169,7 @@ void ActionManagerEx::releaseActions()
 {
     for (auto& iter : _actionDic)
     {
-        cocos2d::Vector<ActionObject*> objList = iter.second;
+        axis::Vector<ActionObject*> objList = iter.second;
         ssize_t listCount                      = objList.size();
         for (ssize_t i = 0; i < listCount; i++)
         {

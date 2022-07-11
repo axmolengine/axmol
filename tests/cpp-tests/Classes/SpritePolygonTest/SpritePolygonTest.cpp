@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 SpritePolygonTest::SpritePolygonTest()
 {
@@ -294,7 +294,7 @@ bool SpritePolygonTestSlider::init()
 void SpritePolygonTestSlider::initSliders()
 {
     auto vsize                  = Director::getInstance()->getVisibleSize();
-    cocos2d::ui::Slider* slider = cocos2d::ui::Slider::create();
+    axis::ui::Slider* slider = axis::ui::Slider::create();
     slider->loadBarTexture("cocosui/sliderTrack.png");
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
@@ -321,11 +321,11 @@ void SpritePolygonTestSlider::makeSprites(const std::string* list, const int cou
     }
 }
 
-void SpritePolygonTestSlider::changeEpsilon(cocos2d::Ref* pSender, cocos2d::ui::Slider::EventType type)
+void SpritePolygonTestSlider::changeEpsilon(axis::Ref* pSender, axis::ui::Slider::EventType type)
 {
-    if (type == cocos2d::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (type == axis::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
-        cocos2d::ui::Slider* slider = dynamic_cast<cocos2d::ui::Slider*>(pSender);
+        axis::ui::Slider* slider = dynamic_cast<axis::ui::Slider*>(pSender);
         float epsilon               = powf(slider->getPercent() / 100.0, 2) * 19.0f + 1.0f;
         for (auto child : _children)
         {
@@ -343,7 +343,7 @@ void SpritePolygonTestSlider::changeEpsilon(cocos2d::Ref* pSender, cocos2d::ui::
     }
 }
 
-void SpritePolygonTestSlider::updateLabel(const cocos2d::Sprite* sp, const PolygonInfo& pinfo)
+void SpritePolygonTestSlider::updateLabel(const axis::Sprite* sp, const PolygonInfo& pinfo)
 {
     Label* label  = (Label*)(sp->getChildByName(sp->getName()));
     auto filename = sp->getName();

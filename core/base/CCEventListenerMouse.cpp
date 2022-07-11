@@ -26,7 +26,7 @@
 
 #include "base/CCEventListenerMouse.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const std::string EventListenerMouse::LISTENER_ID = "__cc_mouse";
 
@@ -106,4 +106,4 @@ bool EventListenerMouse::init()
     return false;
 }
 
-NS_CC_END
+NS_AX_END

@@ -37,7 +37,7 @@ class CCTextureAtlasData : public TextureAtlasData
     BIND_CLASS_TYPE_B(CCTextureAtlasData);
 
 private:
-    cocos2d::Texture2D* _renderTexture;
+    axis::Texture2D* _renderTexture;
 
 public:
     CCTextureAtlasData() : _renderTexture(nullptr) { _onClear(); }
@@ -56,8 +56,8 @@ public:
      * @version DragonBones 3.0
      * @language en_US
      */
-    inline cocos2d::Texture2D* getRenderTexture() const { return _renderTexture; }
-    void setRenderTexture(cocos2d::Texture2D* value);
+    inline axis::Texture2D* getRenderTexture() const { return _renderTexture; }
+    void setRenderTexture(axis::Texture2D* value);
 };
 /**
  * @internal
@@ -67,7 +67,7 @@ class CCTextureData : public TextureData
     BIND_CLASS_TYPE_B(CCTextureData);
 
 public:
-    cocos2d::SpriteFrame* spriteFrame;
+    axis::SpriteFrame* spriteFrame;
 
     CCTextureData() : spriteFrame(nullptr) { _onClear(); }
     virtual ~CCTextureData() { _onClear(); }

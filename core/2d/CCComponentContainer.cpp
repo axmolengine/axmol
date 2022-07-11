@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "2d/CCComponent.h"
 #include "2d/CCNode.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ComponentContainer::ComponentContainer(Node* node) : _owner(node) {}
 
@@ -141,4 +141,4 @@ void ComponentContainer::onExit()
     }
 }
 
-NS_CC_END
+NS_AX_END

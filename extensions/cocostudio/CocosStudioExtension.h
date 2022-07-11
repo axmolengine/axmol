@@ -5,7 +5,7 @@
 #include "math/CCAffineTransform.h"
 #include "CocosStudioExport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CCS_DLL NodeExtension
 {
@@ -16,6 +16,6 @@ public:
 private:
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

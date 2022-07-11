@@ -32,7 +32,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL GameNode3DReader : public cocos2d::Ref, public NodeReaderProtocol
+class CCS_DLL GameNode3DReader : public axis::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -41,15 +41,15 @@ public:
     ~GameNode3DReader();
 
     static GameNode3DReader* getInstance();
-    static cocos2d::CameraBackgroundBrush* getSceneBrushInstance();
+    static axis::CameraBackgroundBrush* getSceneBrushInstance();
     /** @deprecated Use method destroyInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* node3DOptions);
-    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* node3DOptions);
+    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* node3DOptions);
+    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* node3DOptions);
 
 protected:
     int getResourceType(std::string_view key);

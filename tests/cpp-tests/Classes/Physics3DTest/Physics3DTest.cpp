@@ -30,8 +30,8 @@
 #include "3d/CCBundle3D.h"
 #include "physics3d/CCPhysics3D.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
-USING_NS_CC_EXT;
-USING_NS_CC;
+USING_NS_AX_EXT;
+USING_NS_AX;
 
 enum
 {
@@ -48,7 +48,7 @@ enum
 #define ARRAY_SIZE_Y 3
 #define ARRAY_SIZE_Z 4
 
-static cocos2d::Scene* physicsScene = nullptr;
+static axis::Scene* physicsScene = nullptr;
 
 Physics3DTests::Physics3DTests()
 {
@@ -139,13 +139,13 @@ bool Physics3DTestDemo::init()
     return false;
 }
 
-void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event)
 {
     _needShootBox = true;
     event->stopPropagation();
 }
 
-void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
 {
     if (touches.size() && _camera)
     {
@@ -164,7 +164,7 @@ void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, cocos
     }
 }
 
-void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, cocos2d::Event* event)
+void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
 {
     if (!_needShootBox)
         return;
@@ -187,7 +187,7 @@ void Physics3DTestDemo::update(float /*delta*/) {}
 
 Physics3DTestDemo::~Physics3DTestDemo() {}
 
-void Physics3DTestDemo::shootBox(const cocos2d::Vec3& des)
+void Physics3DTestDemo::shootBox(const axis::Vec3& des)
 {
     Physics3DRigidBodyDes rbDes;
     Vec3 linearVel = des - _camera->getPosition3D();
@@ -502,7 +502,7 @@ bool Physics3DConstraintDemo::init()
     return true;
 }
 
-void Physics3DConstraintDemo::onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void Physics3DConstraintDemo::onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     // ray trace
     if (_camera)
@@ -534,7 +534,7 @@ void Physics3DConstraintDemo::onTouchesBegan(const std::vector<cocos2d::Touch*>&
     Physics3DTestDemo::onTouchesBegan(touches, event);
     _needShootBox = false;
 }
-void Physics3DConstraintDemo::onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void Physics3DConstraintDemo::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     if (_constraint)
     {
@@ -554,7 +554,7 @@ void Physics3DConstraintDemo::onTouchesMoved(const std::vector<cocos2d::Touch*>&
     }
     Physics3DTestDemo::onTouchesMoved(touches, event);
 }
-void Physics3DConstraintDemo::onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event)
+void Physics3DConstraintDemo::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
     if (_constraint)
     {

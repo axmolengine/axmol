@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "2d/CCActionInterval.h"
 #include "2d/CCTweenFunction.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup actions
@@ -516,7 +516,7 @@ EASEELASTIC_TEMPLATE_DECL_CLASS(EaseElasticInOut);
  @brief Ease Bezier
  @ingroup Actions
  */
-class CC_DLL EaseBezierAction : public cocos2d::ActionEase
+class CC_DLL EaseBezierAction : public axis::ActionEase
 {
 public:
     /**
@@ -524,7 +524,7 @@ public:
      @param action The pointer of the inner action.
      @return A pointer of EaseBezierAction action. If creation failed, return nil.
     */
-    static EaseBezierAction* create(cocos2d::ActionInterval* action);
+    static EaseBezierAction* create(axis::ActionInterval* action);
 
     virtual void update(float time) override;
     virtual EaseBezierAction* clone() const override;
@@ -551,6 +551,6 @@ private:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __ACTION_CCEASE_ACTION_H__

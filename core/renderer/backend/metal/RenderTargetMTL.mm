@@ -1,7 +1,7 @@
 #include "RenderTargetMTL.h"
 #include "UtilsMTL.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 static MTLLoadAction getLoadAction(const RenderPassDescriptor& params, TargetBufferFlags buffer)
 {
@@ -183,4 +183,4 @@ PixelFormat RenderTargetMTL::getStencilAttachmentPixelFormat() const
     return PixelFormat::NONE;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

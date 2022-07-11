@@ -32,7 +32,7 @@
 // #include "extensions/cocostudio/CocoStudio.h"
 #include "extensions/cocos-ext.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 // Enable log on Debug version
 #ifndef NDEBUG

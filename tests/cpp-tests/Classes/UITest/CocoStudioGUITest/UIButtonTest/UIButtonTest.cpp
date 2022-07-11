@@ -24,8 +24,8 @@
 
 #include "UIButtonTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UIButtonTests::UIButtonTests()
 {
@@ -147,13 +147,13 @@ void UIButtonTest::touchEvent(Ref* pSender, Widget::TouchEventType type)
     }
 }
 
-void UIButtonTest::printWidgetResources(cocos2d::Ref* sender)
+void UIButtonTest::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData normalFileName = _button->getNormalFile();
+    axis::ResourceData normalFileName = _button->getNormalFile();
     CCLOG("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
-    cocos2d::ResourceData clickedFileName = _button->getPressedFile();
+    axis::ResourceData clickedFileName = _button->getPressedFile();
     CCLOG("clickedFileName  Name : %s, Type: %d", clickedFileName.file.c_str(), clickedFileName.type);
-    cocos2d::ResourceData disabledFileName = _button->getDisabledFile();
+    axis::ResourceData disabledFileName = _button->getDisabledFile();
     CCLOG("disabledFileName  Name : %s, Type: %d", disabledFileName.file.c_str(), disabledFileName.type);
 }
 

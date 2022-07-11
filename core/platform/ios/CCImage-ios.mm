@@ -33,9 +33,9 @@ THE SOFTWARE.
 
 #include <math.h>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
-bool cocos2d::Image::saveToFile(std::string_view filename, bool isToRGB)
+bool axis::Image::saveToFile(std::string_view filename, bool isToRGB)
 {
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
@@ -129,4 +129,4 @@ bool cocos2d::Image::saveToFile(std::string_view filename, bool isToRGB)
     return true;
 }
 
-NS_CC_END
+NS_AX_END

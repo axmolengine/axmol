@@ -32,7 +32,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL MeshReader : public cocos2d::Ref, public NodeReaderProtocol
+class CCS_DLL MeshReader : public axis::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -47,11 +47,11 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* sprite3DOptions);
-    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* sprite3DOptions);
+    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* sprite3DOptions);
+    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* sprite3DOptions);
 
 protected:
-    cocos2d::Vec2 getVec2Attribute(pugi::xml_attribute attribute) const;
+    axis::Vec2 getVec2Attribute(pugi::xml_attribute attribute) const;
 };
 }  // namespace cocostudio
 

@@ -42,7 +42,7 @@
 
 #include "yasio/detail/byte_buffer.hpp"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 using ilist_u16_t = std::initializer_list<uint16_t>;
 using ilist_u32_t = std::initializer_list<uint32_t>;
@@ -318,7 +318,7 @@ struct NodeDatas
  */
 struct MeshData
 {
-    using IndexArray = ::cocos2d::IndexArray;
+    using IndexArray = ::axis::IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
@@ -581,6 +581,6 @@ struct Reference
     unsigned int offset;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CC_BUNDLE_3D_DATA_H__

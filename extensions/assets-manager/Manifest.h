@@ -37,7 +37,7 @@
 
 #include "rapidjson/document-wrapper.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 struct DownloadUnit
 {
@@ -246,5 +246,5 @@ private:
     rapidjson::Document _json;
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 #endif /* defined(__Manifest__) */

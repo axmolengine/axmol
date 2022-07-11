@@ -30,7 +30,7 @@
 #include "platform/CCCommon.h"
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup platform
@@ -122,7 +122,7 @@ public:
 // end of platform group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif  //__CCSAXPARSER_H__

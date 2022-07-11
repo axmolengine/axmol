@@ -2,7 +2,7 @@
 #include "../RenderTarget.h"
 #include "CommandBufferMTL.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class RenderTargetMTL : public RenderTarget
 {
@@ -37,4 +37,4 @@ public:
     // MetalContext*, DeviceMTL*
 };
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

@@ -26,7 +26,7 @@
 #include "../Macros.h"
 #include "BufferManager.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 BufferMTL::BufferMTL(id<MTLDevice> mtlDevice, std::size_t size, BufferType type, BufferUsage usage)
     : Buffer(size, type, usage)
@@ -102,4 +102,4 @@ void BufferMTL::updateIndex()
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

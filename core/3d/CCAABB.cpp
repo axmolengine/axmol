@@ -25,7 +25,7 @@
 
 #include "3d/CCAABB.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 AABB::AABB()
 {
@@ -188,4 +188,4 @@ void AABB::transform(const Mat4& mat)
     updateMinMax(corners, 8);
 }
 
-NS_CC_END
+NS_AX_END

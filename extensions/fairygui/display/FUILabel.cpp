@@ -4,7 +4,7 @@
 #include "UIPackage.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 static Color3B toGrayed(const Color3B& source)
 {
@@ -182,7 +182,7 @@ void FUILabel::updateBMFontScale()
     }
 }
 
-void FUILabel::setUnderlineColor(const cocos2d::Color3B& value)
+void FUILabel::setUnderlineColor(const axis::Color3B& value)
 {
     //NOT IMPLEMENTED
 }

@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "2d/CCSprite.h"
 #include "base/ccUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -310,4 +310,4 @@ Vec2 ScrollViewBar::calculatePosition(float innerContainerMeasure,
 }
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

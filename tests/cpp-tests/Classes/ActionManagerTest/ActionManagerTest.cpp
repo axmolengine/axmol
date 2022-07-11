@@ -26,7 +26,7 @@
 #include "../testResource.h"
 #include "cocos2d.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 enum
 {

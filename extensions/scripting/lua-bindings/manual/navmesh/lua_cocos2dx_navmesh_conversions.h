@@ -29,23 +29,22 @@
 
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 struct NavMeshAgentParam;
 struct OffMeshLinkData;
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 extern bool luaval_to_navmeshagentparam(lua_State* L,
                                         int lo,
-                                        cocos2d::NavMeshAgentParam* outValue,
+                                        axis::NavMeshAgentParam* outValue,
                                         const char* funcName = "");
 extern bool luaval_to_offmeshlinkdata(lua_State* L,
                                       int lo,
-                                      cocos2d::OffMeshLinkData* outValue,
+                                      axis::OffMeshLinkData* outValue,
                                       const char* funcName = "");
 
-extern void navmeshagentparam_to_luaval(lua_State* L, const cocos2d::NavMeshAgentParam& inValue);
-extern void offmeshlinkdata_to_luaval(lua_State* L, const cocos2d::OffMeshLinkData& inValue);
+extern void navmeshagentparam_to_luaval(lua_State* L, const axis::NavMeshAgentParam& inValue);
+extern void offmeshlinkdata_to_luaval(lua_State* L, const axis::OffMeshLinkData& inValue);
 
 #endif  // #if CC_USE_NAVMESH
 #endif  // __COCOS_SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_NAVMESH_CONVERSIONS_H__

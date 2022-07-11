@@ -27,7 +27,7 @@
 #include "CCPUInterParticleCollider.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const float PUParticle3DInterParticleCollider::DEFAULT_ADJUSTMENT = 1.0f;
@@ -186,4 +186,4 @@ void PUParticle3DInterParticleCollider::copyAttributesTo(PUAffector* affector)
     interParticleCollider->_interParticleCollisionResponse = _interParticleCollisionResponse;
 }
 
-NS_CC_END
+NS_AX_END

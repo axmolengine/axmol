@@ -2,7 +2,7 @@
 #include "GTweener.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GTweener** TweenManager::_activeTweens = nullptr;
 std::vector<GTweener*> TweenManager::_tweenerPool;
@@ -50,7 +50,7 @@ GTweener* TweenManager::createTween()
     return tweener;
 }
 
-bool TweenManager::isTweening(cocos2d::Ref* target, TweenPropType propType)
+bool TweenManager::isTweening(axis::Ref* target, TweenPropType propType)
 {
     if (target == nullptr)
         return false;
@@ -66,7 +66,7 @@ bool TweenManager::isTweening(cocos2d::Ref* target, TweenPropType propType)
     return false;
 }
 
-bool TweenManager::killTweens(cocos2d::Ref* target, TweenPropType propType, bool completed)
+bool TweenManager::killTweens(axis::Ref* target, TweenPropType propType, bool completed)
 {
     if (target == nullptr)
         return false;
@@ -87,7 +87,7 @@ bool TweenManager::killTweens(cocos2d::Ref* target, TweenPropType propType, bool
     return flag;
 }
 
-GTweener* TweenManager::getTween(cocos2d::Ref* target, TweenPropType propType)
+GTweener* TweenManager::getTween(axis::Ref* target, TweenPropType propType)
 {
     if (target == nullptr)
         return nullptr;
@@ -173,11 +173,11 @@ void TweenManager::init()
         _activeTweens = new GTweener*[_arrayLength];
     }
 
-    cocos2d::Director::getInstance()->getScheduler()->scheduleUpdate(&tweenEngine, INT_MIN + 10, false);
-    cocos2d::Director::getInstance()->getEventDispatcher()->addCustomEventListener(cocos2d::Director::EVENT_RESET, &reset);
+    axis::Director::getInstance()->getScheduler()->scheduleUpdate(&tweenEngine, INT_MIN + 10, false);
+    axis::Director::getInstance()->getEventDispatcher()->addCustomEventListener(axis::Director::EVENT_RESET, &reset);
 }
 
-void TweenManager::reset(cocos2d::EventCustom*)
+void TweenManager::reset(axis::EventCustom*)
 {
     int cnt = _totalActiveTweens;
     for (int i = 0; i < cnt; i++)

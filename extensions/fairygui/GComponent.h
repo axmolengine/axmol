@@ -33,7 +33,7 @@ public:
     GObject* getChildByPath(const std::string& path) const;
     GObject* getChildInGroup(const GGroup* group, const std::string& name) const;
     GObject* getChildById(const std::string& id) const;
-    const cocos2d::Vector<GObject*>& getChildren() const { return _children; }
+    const axis::Vector<GObject*>& getChildren() const { return _children; }
 
     int getChildIndex(const GObject* child) const;
     void setChildIndex(GObject* child, int index);
@@ -50,14 +50,14 @@ public:
     void addController(GController* c);
     GController* getControllerAt(int index) const;
     GController* getController(const std::string& name) const;
-    const cocos2d::Vector<GController*>& getControllers() const { return _controllers; }
+    const axis::Vector<GController*>& getControllers() const { return _controllers; }
     void removeController(GController* c);
     void applyController(GController* c);
     void applyAllControllers();
 
     Transition* getTransition(const std::string& name) const;
     Transition* getTransitionAt(int index) const;
-    const cocos2d::Vector<Transition*>& getTransitions() const { return _transitions; }
+    const axis::Vector<Transition*>& getTransitions() const { return _transitions; }
 
     bool getOpaque() const { return _opaque; }
     void setOpaque(bool value);
@@ -70,8 +70,8 @@ public:
     int getApexIndex() const { return _apexIndex; }
     void setApexIndex(int value);
 
-    cocos2d::Node* getMask() const;
-    void setMask(cocos2d::Node* value, bool inverted = false);
+    axis::Node* getMask() const;
+    void setMask(axis::Node* value, bool inverted = false);
 
     IHitTest* getHitArea() const { return _hitArea; }
     void setHitArea(IHitTest* value);
@@ -86,8 +86,8 @@ public:
     void setBoundsChangedFlag();
     void ensureBoundsCorrect();
 
-    virtual GObject* hitTest(const cocos2d::Vec2& worldPoint, const cocos2d::Camera* camera) override;
-    virtual cocos2d::Vec2 getSnappingPosition(const cocos2d::Vec2& pt);
+    virtual GObject* hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera) override;
+    virtual axis::Vec2 getSnappingPosition(const axis::Vec2& pt);
 
     //internal use
     void childSortingOrderChanged(GObject* child, int oldValue, int newValue);
@@ -117,13 +117,13 @@ protected:
     void setupOverflow(OverflowType overflow);
     void setupScroll(ByteBuffer* buffer);
 
-    cocos2d::Vector<GObject*> _children;
-    cocos2d::Vector<GController*> _controllers;
-    cocos2d::Vector<Transition*> _transitions;
+    axis::Vector<GObject*> _children;
+    axis::Vector<GController*> _controllers;
+    axis::Vector<Transition*> _transitions;
     FUIInnerContainer* _container;
     ScrollPane* _scrollPane;
     Margin _margin;
-    cocos2d::Vec2 _alignOffset;
+    axis::Vec2 _alignOffset;
     ChildrenRenderOrder _childrenRenderOrder;
     int _apexIndex;
     bool _boundsChanged;

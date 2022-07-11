@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "CCActionFrame.h"
 #include "2d/CCActionEase.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {

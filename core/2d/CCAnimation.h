@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 class SpriteFrame;
@@ -320,6 +320,6 @@ private:
 // end of sprite_nodes group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CC_ANIMATION_H__

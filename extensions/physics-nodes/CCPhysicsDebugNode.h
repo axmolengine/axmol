@@ -31,7 +31,7 @@
 
 struct cpSpace;
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 /**
  * A BaseData that draws the components of a physics engine.
@@ -68,6 +68,6 @@ protected:
     cpSpace* _spacePtr;
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif  // __PHYSICSNODES_DEBUGNODE_H__

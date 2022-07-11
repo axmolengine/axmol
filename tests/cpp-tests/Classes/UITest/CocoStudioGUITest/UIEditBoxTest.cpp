@@ -26,9 +26,9 @@
 #include "UIEditBoxTest.h"
 #include "testResource.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
-using namespace cocos2d::ui;
+USING_NS_AX;
+USING_NS_AX_EXT;
+using namespace axis::ui;
 
 UIEditBoxTests::UIEditBoxTests()
 {
@@ -137,18 +137,18 @@ bool UIEditBoxTest::init()
     return false;
 }
 
-void UIEditBoxTest::editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox)
+void UIEditBoxTest::editBoxEditingDidBegin(axis::ui::EditBox* editBox)
 {
     log("editBox %p DidBegin !", editBox);
 }
 
-void UIEditBoxTest::editBoxEditingDidEndWithAction(cocos2d::ui::EditBox* editBox,
-                                                   cocos2d::ui::EditBoxDelegate::EditBoxEndAction action)
+void UIEditBoxTest::editBoxEditingDidEndWithAction(axis::ui::EditBox* editBox,
+                                                   axis::ui::EditBoxDelegate::EditBoxEndAction action)
 {
     log("editBox %p DidEnd with action %d!", editBox, action);
 }
 
-void UIEditBoxTest::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)
+void UIEditBoxTest::editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text)
 {
     log("editBox %p TextChanged, text: %s ", editBox, text.data());
     editBox->setText(text.data());
@@ -270,12 +270,12 @@ bool UIEditBoxTestToggleVisibility::init()
     return false;
 }
 
-void UIEditBoxTestToggleVisibility::editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox)
+void UIEditBoxTestToggleVisibility::editBoxEditingDidBegin(axis::ui::EditBox* editBox)
 {
     log("editBox %p DidBegin !", editBox);
 }
 
-void UIEditBoxTestToggleVisibility::editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text)
+void UIEditBoxTestToggleVisibility::editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text)
 {
     log("editBox %p TextChanged, text: %s ", editBox, text.data());
 }

@@ -41,7 +41,7 @@ static const int CC_EDIT_BOX_PADDING = 5;
 #    define PASSWORD_CHAR "\u25CF"
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static Vec2 applyPadding(const Vec2& sizeToCorrect)
 {
@@ -213,7 +213,7 @@ void EditBoxImplCommon::setMaxLength(int maxLength)
     this->setNativeMaxLength(maxLength);
 }
 
-void EditBoxImplCommon::setTextHorizontalAlignment(cocos2d::TextHAlignment alignment)
+void EditBoxImplCommon::setTextHorizontalAlignment(axis::TextHAlignment alignment)
 {
     _alignment = alignment;
     this->setNativeTextHorizontalAlignment(alignment);
@@ -357,7 +357,7 @@ void EditBoxImplCommon::onEndEditing(std::string_view /*text*/)
 void EditBoxImplCommon::editBoxEditingDidBegin()
 {
     // LOGD("textFieldShouldBeginEditing...");
-    cocos2d::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
+    axis::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
 
     if (pDelegate != nullptr)
     {
@@ -367,9 +367,9 @@ void EditBoxImplCommon::editBoxEditingDidBegin()
 #if CC_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
-        cocos2d::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
-        cocos2d::ScriptEvent event(cocos2d::kCommonEvent, (void*)&data);
-        cocos2d::ScriptEngineManager::sendEventToLua(event);
+        axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
+        axis::ScriptEvent event(axis::kCommonEvent, (void*)&data);
+        axis::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 }
@@ -379,7 +379,7 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
     // LOGD("textFieldShouldEndEditing...");
     _text = text;
 
-    cocos2d::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
+    axis::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
     if (pDelegate != nullptr)
     {
         pDelegate->editBoxEditingDidEndWithAction(_editBox, action);
@@ -389,13 +389,13 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
 #if CC_ENABLE_SCRIPT_BINDING
     if (_editBox != nullptr && 0 != _editBox->getScriptEditBoxHandler())
     {
-        cocos2d::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
-        cocos2d::ScriptEvent event(cocos2d::kCommonEvent, (void*)&data);
-        cocos2d::ScriptEngineManager::sendEventToLua(event);
+        axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
+        axis::ScriptEvent event(axis::kCommonEvent, (void*)&data);
+        axis::ScriptEngineManager::sendEventToLua(event);
         memset(data.eventName, 0, sizeof(data.eventName));
         strncpy(data.eventName, "return", sizeof(data.eventName));
         event.data = (void*)&data;
-        cocos2d::ScriptEngineManager::sendEventToLua(event);
+        axis::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 
@@ -408,7 +408,7 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
 void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 {
     // LOGD("editBoxTextChanged...");
-    cocos2d::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
+    axis::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
     _text                                   = text;
     if (pDelegate != nullptr)
     {
@@ -418,13 +418,13 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 #if CC_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
-        cocos2d::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);
-        cocos2d::ScriptEvent event(cocos2d::kCommonEvent, (void*)&data);
-        cocos2d::ScriptEngineManager::sendEventToLua(event);
+        axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);
+        axis::ScriptEvent event(axis::kCommonEvent, (void*)&data);
+        axis::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 }
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

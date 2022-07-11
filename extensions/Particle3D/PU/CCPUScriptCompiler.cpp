@@ -27,7 +27,7 @@
 #include "CCPUScriptCompiler.h"
 #include "extensions/Particle3D/PU/CCPUTranslateManager.h"
 #include "platform/CCFileUtils.h"
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // ObjectAbstractNode
 PUObjectAbstractNode::PUObjectAbstractNode(PUAbstractNode* ptr) : PUAbstractNode(ptr), id(0), abstract(false)
@@ -407,4 +407,4 @@ PUScriptCompiler* PUScriptCompiler::Instance()
     return &psc;
 }
 
-NS_CC_END
+NS_AX_END

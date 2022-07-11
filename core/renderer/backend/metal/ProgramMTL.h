@@ -27,7 +27,7 @@
 #include "../Program.h"
 #import <Metal/Metal.h>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class ShaderModuleMTL;
 
@@ -136,4 +136,4 @@ private:
 
 // end of _metal group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

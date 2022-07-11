@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "renderer/CCTexture2D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * RGBA protocol that affects Node's color and opacity
@@ -281,7 +281,7 @@ public:
 
     virtual void stop() = 0;
 };
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif  // __BASE_CCPROTOCOLS_H__

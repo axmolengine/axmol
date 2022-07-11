@@ -20,7 +20,7 @@
 #include <time.h>
 #include <string>
 
-USING_NS_CC;
+USING_NS_AX;
 
 struct Snake
 {
@@ -42,7 +42,7 @@ static void problemLoading(const char* filename)
         "HelloWorldScene.cpp\n");
 }
 
-inline void setNodeIgnoreDesignScale(cocos2d::Node* node)
+inline void setNodeIgnoreDesignScale(axis::Node* node)
 {
     CCASSERT(node, "node pointer cannot be null.");
 

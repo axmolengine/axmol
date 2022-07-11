@@ -37,22 +37,22 @@ public:
 
     virtual bool init() override;
 
-    void menuCloseCallback(cocos2d::Ref* sender);
+    void menuCloseCallback(axis::Ref* sender);
 
-    void menuRatioCallback(cocos2d::Ref* sender);
-    void menuResourceVideoCallback(cocos2d::Ref* sender);
-    void menuOnlineVideoCallback(cocos2d::Ref* sender);
+    void menuRatioCallback(axis::Ref* sender);
+    void menuResourceVideoCallback(axis::Ref* sender);
+    void menuOnlineVideoCallback(axis::Ref* sender);
 
-    void menuFullScreenCallback(cocos2d::Ref* sender);
-    void menuPauseCallback(cocos2d::Ref* sender);
-    void menuResumeCallback(cocos2d::Ref* sender);
-    void menuStopCallback(cocos2d::Ref* sender);
-    void menuHintCallback(cocos2d::Ref* sender);
-    void menuLoopCallback(cocos2d::Ref* sender);
+    void menuFullScreenCallback(axis::Ref* sender);
+    void menuPauseCallback(axis::Ref* sender);
+    void menuResumeCallback(axis::Ref* sender);
+    void menuStopCallback(axis::Ref* sender);
+    void menuHintCallback(axis::Ref* sender);
+    void menuLoopCallback(axis::Ref* sender);
 
-    void sliderCallback(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType eventType);
+    void sliderCallback(axis::Ref* sender, axis::ui::Slider::EventType eventType);
 
-    void videoEventCallback(cocos2d::Ref* sender, cocos2d::ui::VideoPlayer::EventType eventType);
+    void videoEventCallback(axis::Ref* sender, axis::ui::VideoPlayer::EventType eventType);
 
     void onEnter() override;
     void onExit() override;
@@ -61,10 +61,10 @@ private:
     void createVideo();
     void createSlider();
 
-    cocos2d::ui::VideoPlayer* _videoPlayer = nullptr;
-    cocos2d::Label* _videoStateLabel;
-    cocos2d::Label* _loopStatusLabel;
-    cocos2d::Rect _visibleRect;
+    axis::ui::VideoPlayer* _videoPlayer = nullptr;
+    axis::Label* _videoStateLabel;
+    axis::Label* _loopStatusLabel;
+    axis::Rect _visibleRect;
 };
 
 class SimpleVideoPlayerTest : public UIScene
@@ -76,9 +76,9 @@ public:
 
     virtual bool init() override;
 
-    void menuCloseCallback(cocos2d::Ref* sender);
-    void switchStyleCallback(cocos2d::Ref* sender);
-    void switchUserInputCallback(cocos2d::Ref* sender);
+    void menuCloseCallback(axis::Ref* sender);
+    void switchStyleCallback(axis::Ref* sender);
+    void switchUserInputCallback(axis::Ref* sender);
 
     void onEnter() override;
     void onExit() override;
@@ -86,14 +86,14 @@ public:
 private:
     void createVideo();
 
-    cocos2d::Rect _visibleRect;
-    cocos2d::ui::VideoPlayer* _videoPlayer = nullptr;
+    axis::Rect _visibleRect;
+    axis::ui::VideoPlayer* _videoPlayer = nullptr;
 
-    cocos2d::MenuItemFont* _switchUserInputEnabled;
-    cocos2d::MenuItemFont* _switchStyle;
+    axis::MenuItemFont* _switchUserInputEnabled;
+    axis::MenuItemFont* _switchStyle;
 
     bool _userInputEnabled;
-    cocos2d::ui::VideoPlayer::StyleType _style;
+    axis::ui::VideoPlayer::StyleType _style;
 
     void updateButtonsTexts();
 };

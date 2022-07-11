@@ -27,7 +27,7 @@
 #include "CCPULinearForceAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 //-----------------------------------------------------------------------
 void PULinearForceAffector::preUpdateAffector(float deltaTime)
@@ -66,4 +66,4 @@ void PULinearForceAffector::copyAttributesTo(PUAffector* affector)
     PUBaseForceAffector::copyAttributesTo(affector);
 }
 
-NS_CC_END
+NS_AX_END

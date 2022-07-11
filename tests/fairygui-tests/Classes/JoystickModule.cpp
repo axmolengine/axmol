@@ -1,6 +1,6 @@
 #include "JoystickModule.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 JoystickModule * JoystickModule::create(GComponent * mainView)
 {

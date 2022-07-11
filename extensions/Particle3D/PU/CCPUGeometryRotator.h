@@ -30,7 +30,7 @@
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 struct PUParticle3D;
 class CC_EX_DLL PUGeometryRotator : public PUAffector
 {
@@ -98,6 +98,6 @@ protected:
      */
     PUDynamicAttributeHelper _dynamicAttributeHelper;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

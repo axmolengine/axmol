@@ -37,7 +37,7 @@
 #include "3d/CCMeshRenderer.h"
 #include "2d/CCCamera.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Particle3DQuadRender::Particle3DQuadRender()
     : _texture(nullptr), _programState(nullptr), _indexBuffer(nullptr), _vertexBuffer(nullptr), _texFile("")
@@ -412,4 +412,4 @@ void Particle3DRender::setBlendFunc(const BlendFunc& blendFunc)
     _stateBlock.setBlendFunc(blendFunc);
 }
 
-NS_CC_END
+NS_AX_END

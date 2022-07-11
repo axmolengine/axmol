@@ -25,7 +25,7 @@
 
 #include "DrawNode3D.h"
 #include "renderer/backend/Buffer.h"
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 DrawNode3D::DrawNode3D()
 {
@@ -140,7 +140,7 @@ void DrawNode3D::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
 }
 
-void DrawNode3D::updateCommand(cocos2d::Renderer* renderer, const Mat4& transform, uint32_t flags)
+void DrawNode3D::updateCommand(axis::Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     auto& matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto mvp      = matrixP * transform;
@@ -223,4 +223,4 @@ void DrawNode3D::onAfterDraw()
     renderer->setDepthTest(_rendererDepthTestEnabled);
 }
 
-NS_CC_END
+NS_AX_END

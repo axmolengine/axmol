@@ -29,26 +29,26 @@
 
 class Paddle;
 
-class Ball : public cocos2d::Sprite
+class Ball : public axis::Sprite
 {
-    cocos2d::Vec2 _velocity;
+    axis::Vec2 _velocity;
 
 public:
     Ball();
     virtual ~Ball();
 
     float radius();
-    // BOOL initWithTexture(cocos2d::Texture2D* aTexture);
-    // virtual void setTexture(cocos2d::Texture2D* newTexture);
+    // BOOL initWithTexture(axis::Texture2D* aTexture);
+    // virtual void setTexture(axis::Texture2D* newTexture);
     void move(float delta);
     void collideWithPaddle(Paddle* paddle);
 
 public:
-    void setVelocity(cocos2d::Vec2 velocity) { _velocity = velocity; }
-    cocos2d::Vec2 getVelocity() { return _velocity; }
+    void setVelocity(axis::Vec2 velocity) { _velocity = velocity; }
+    axis::Vec2 getVelocity() { return _velocity; }
 
 public:
-    static Ball* ballWithTexture(cocos2d::Texture2D* aTexture);
+    static Ball* ballWithTexture(axis::Texture2D* aTexture);
 };
 
 #endif

@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 #define kProgressTextureCoordsCount 4
 //  kProgressTextureCoords holds points {0,1} {0,0} {1,0} {1,1} we can represent it as bits
@@ -45,7 +45,7 @@ const char kProgressTextureCoords = 0x4b;
 
 namespace
 {
-backend::ProgramState* initPipelineDescriptor(cocos2d::CustomCommand& command,
+backend::ProgramState* initPipelineDescriptor(axis::CustomCommand& command,
                                               bool ridal,
                                               backend::UniformLocation& locMVP,
                                               backend::UniformLocation& locTexture)
@@ -615,7 +615,7 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     if (_vertexData.empty() || !_sprite)
         return;
 
-    const cocos2d::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const axis::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat                      = projectionMat * transform;
     _programState->setUniform(_locMVP1, finalMat.m, sizeof(finalMat.m));
     _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getBackendTexture());
@@ -645,4 +645,4 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     }
 }
 
-NS_CC_END
+NS_AX_END

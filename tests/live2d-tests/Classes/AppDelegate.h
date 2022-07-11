@@ -20,7 +20,7 @@
 
 Private inheritance here hides part of interface from Director.
 */
-class AppDelegate : private cocos2d::Application
+class AppDelegate : private axis::Application
 {
 public:
     AppDelegate();
@@ -48,7 +48,7 @@ public:
     virtual void applicationWillEnterForeground();
 
 private:
-    cocos2d::EventListenerCustom* _recreatedEventlistener;
+    axis::EventListenerCustom* _recreatedEventlistener;
 
     LAppAllocator _cubismAllocator;
     Csm::CubismFramework::Option _cubismOption;

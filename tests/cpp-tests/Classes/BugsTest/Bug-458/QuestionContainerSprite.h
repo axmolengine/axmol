@@ -27,7 +27,7 @@
 
 #include "cocos2d.h"
 
-class QuestionContainerSprite : public cocos2d::Sprite
+class QuestionContainerSprite : public axis::Sprite
 {
 public:
     virtual bool init() override;

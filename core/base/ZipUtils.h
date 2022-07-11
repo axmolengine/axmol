@@ -48,8 +48,7 @@ struct unz_file_info_s;
  * @addtogroup base
  * @{
  */
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 /** XXX: pragma pack ???
  * @struct CCZHeader
@@ -337,7 +336,8 @@ private:
     /** Internal data like zip file pointer / file list array and so on */
     ZipFilePrivate* _data;
 };
-}  // end of namespace cocos2d
+
+NS_AX_END // end of namespace axis
 
 // end group
 /// @}

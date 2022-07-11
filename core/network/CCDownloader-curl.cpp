@@ -58,8 +58,8 @@ enum
     kCheckSumStateFailed  = 1 << 1,
 };
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace network
 {
 
@@ -956,7 +956,7 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
     else
     {
-        cocos2d::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
+        axis::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
                      coTask->_errDescription.c_str());
         task.reset();
     }
@@ -1137,4 +1137,4 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 }
 
 }  // namespace network
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

@@ -21,7 +21,7 @@
 #include "math/Vec3.h"
 #include "math/Mat4.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 
 inline bool Vec3::isZero() const
@@ -187,4 +187,4 @@ inline Vec3 operator*(float x, const Vec3& v)
     return result;
 }
 
-NS_CC_MATH_END
+NS_AX_MATH_END

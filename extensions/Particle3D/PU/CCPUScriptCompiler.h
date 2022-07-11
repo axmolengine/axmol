@@ -32,7 +32,7 @@
 #include <list>
 #include <unordered_map>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /** This enum holds the types of the possible abstract nodes */
 enum PUAbstractNodeType
@@ -161,6 +161,6 @@ private:
     PUParticleSystem3D* _PUParticleSystem3D;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif /* defined(__ssaafsdf__CCScriptCompile__) */

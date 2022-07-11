@@ -30,7 +30,7 @@
 #include "renderer/CCPass.h"
 #include "3d/CC3DProgramInfo.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class MeshIndexData;
 class VertexAttribValue;
@@ -122,4 +122,4 @@ private:
     uint32_t _vertexAttribsFlags;
 };
 
-NS_CC_END
+NS_AX_END

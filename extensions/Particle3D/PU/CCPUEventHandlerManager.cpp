@@ -33,7 +33,7 @@
 #include "Particle3D/PU/CCPUDoScaleEventHandler.h"
 #include "Particle3D/PU/CCPUDoStopSystemEventHandler.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUEventHandlerManager::PUEventHandlerManager() {}
 
 PUEventHandlerManager::~PUEventHandlerManager() {}
@@ -110,4 +110,4 @@ PUEventHandler* PUEventHandlerManager::createEventHandler(std::string_view type)
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

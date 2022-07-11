@@ -4,7 +4,7 @@
 #include "GComponent.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 #if COCOS2D_VERSION < 0x00040000
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
@@ -99,7 +99,7 @@ void FUIContainer::setClippingRegion(const Rect & clippingRegion)
     _rectClippingSupport->_clippingRegion = clippingRegion;
 }
 
-cocos2d::Node * FUIContainer::getStencil() const
+axis::Node * FUIContainer::getStencil() const
 {
     if (_stencilClippingSupport != nullptr)
         return _stencilClippingSupport->_stencil;
@@ -107,7 +107,7 @@ cocos2d::Node * FUIContainer::getStencil() const
         return nullptr;
 }
 
-void FUIContainer::setStencil(cocos2d::Node * stencil)
+void FUIContainer::setStencil(axis::Node * stencil)
 {
     if (_stencilClippingSupport == nullptr)
     {
@@ -368,7 +368,7 @@ const Rect& FUIContainer::getClippingRect()
     return _rectClippingSupport->_clippingRect;
 }
 
-void FUIContainer::visit(cocos2d::Renderer * renderer, const cocos2d::Mat4 & parentTransform, uint32_t parentFlags)
+void FUIContainer::visit(axis::Renderer * renderer, const axis::Mat4 & parentTransform, uint32_t parentFlags)
 {
     if (_stencilClippingSupport != nullptr)
     {

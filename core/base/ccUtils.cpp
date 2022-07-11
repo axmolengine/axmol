@@ -59,7 +59,7 @@ THE SOFTWARE.
 
 using namespace std::string_view_literals;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 int ccNextPOT(int x)
 {
@@ -633,7 +633,7 @@ backend::SamplerAddressMode toBackendAddressMode(int mode)
 
 const Mat4& getAdjustMatrix()
 {
-    static cocos2d::Mat4 adjustMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 1};
+    static axis::Mat4 adjustMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 1};
 
     return adjustMatrix;
 }
@@ -791,4 +791,4 @@ CC_DLL uint32_t fourccValue(std::string_view str)
 
 }  // namespace utils
 
-NS_CC_END
+NS_AX_END

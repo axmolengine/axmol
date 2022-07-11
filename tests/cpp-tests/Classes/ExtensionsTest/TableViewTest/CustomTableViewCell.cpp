@@ -24,7 +24,7 @@
 
 #include "CustomTableViewCell.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 void CustomTableViewCell::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {

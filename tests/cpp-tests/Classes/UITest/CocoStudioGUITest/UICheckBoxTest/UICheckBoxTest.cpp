@@ -24,8 +24,8 @@
 
 #include "UICheckBoxTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UICheckBoxTests::UICheckBoxTests()
 {
@@ -98,19 +98,19 @@ void UICheckBoxTest::selectedEvent(Ref* pSender, CheckBox::EventType type)
     }
 }
 
-void UICheckBoxTest::printWidgetResources(cocos2d::Ref* sender)
+void UICheckBoxTest::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData backGroundFileName = _checkBox->getBackNormalFile();
+    axis::ResourceData backGroundFileName = _checkBox->getBackNormalFile();
     CCLOG("backGroundFile  Name : %s, Type: %d", backGroundFileName.file.c_str(), backGroundFileName.type);
-    cocos2d::ResourceData backGroundSelectedFileName = _checkBox->getBackPressedFile();
+    axis::ResourceData backGroundSelectedFileName = _checkBox->getBackPressedFile();
     CCLOG("backGroundSelectedFile  Name : %s, Type: %d", backGroundSelectedFileName.file.c_str(),
           backGroundSelectedFileName.type);
-    cocos2d::ResourceData backGroundDisabledFileName = _checkBox->getBackDisabledFile();
+    axis::ResourceData backGroundDisabledFileName = _checkBox->getBackDisabledFile();
     CCLOG("backGroundDisabledFile  Name : %s, Type: %d", backGroundDisabledFileName.file.c_str(),
           backGroundDisabledFileName.type);
-    cocos2d::ResourceData frontCrossFileName = _checkBox->getCrossNormalFile();
+    axis::ResourceData frontCrossFileName = _checkBox->getCrossNormalFile();
     CCLOG("frontCrossFile  Name : %s, Type: %d", frontCrossFileName.file.c_str(), frontCrossFileName.type);
-    cocos2d::ResourceData frontCrossDisabledFileName = _checkBox->getCrossDisabledFile();
+    axis::ResourceData frontCrossDisabledFileName = _checkBox->getCrossDisabledFile();
     CCLOG("frontCrossDisabledFile  Name : %s, Type: %d", frontCrossDisabledFileName.file.c_str(),
           frontCrossDisabledFileName.type);
 }

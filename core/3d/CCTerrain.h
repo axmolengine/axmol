@@ -40,7 +40,7 @@ THE SOFTWARE.
 #include "base/CCEventListenerCustom.h"
 #include "base/CCEventDispatcher.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _3d
@@ -215,9 +215,9 @@ private:
             _texcoord = v2;
         }
         /*the vertex's attributes*/
-        cocos2d::Vec3 _position;
-        cocos2d::Tex2F _texcoord;
-        cocos2d::Vec3 _normal;
+        axis::Vec3 _position;
+        axis::Tex2F _texcoord;
+        axis::Vec3 _normal;
     };
 
     struct CC_DLL QuadTree;
@@ -396,12 +396,12 @@ public:
     void setIsEnableFrustumCull(bool boolValue);
 
     /** set the alpha map*/
-    void setAlphaMap(cocos2d::Texture2D* newAlphaMapTexture);
+    void setAlphaMap(axis::Texture2D* newAlphaMapTexture);
     /**set the Detail Map */
     void setDetailMap(unsigned int index, DetailMap detailMap);
 
     // Overrides, internal use only
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
     /**
      * Ray-Terrain intersection.
      * @return the intersection point
@@ -536,7 +536,7 @@ protected:
     Vec2 _chunkSize;
     bool _isEnableFrustumCull;
     int _maxDetailMapValue;
-    cocos2d::Image* _heightMapImage;
+    axis::Image* _heightMapImage;
     Mat4 _oldCameraModelMatrix;
     Mat4 _terrainModelMatrix;
     float _maxHeight;
@@ -577,4 +577,4 @@ private:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END

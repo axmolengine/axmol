@@ -40,7 +40,7 @@ THE SOFTWARE.
                ((unsigned)((uint8_t)(vg) * ((uint8_t)(va) + 1) >> 8) << 8) | \
                ((unsigned)((uint8_t)(vb) * ((uint8_t)(va) + 1) >> 8) << 16) | ((unsigned)(uint8_t)(va) << 24))
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup platform
@@ -267,6 +267,6 @@ protected:
 // end of platform group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CC_IMAGE_H__

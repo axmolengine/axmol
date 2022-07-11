@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "renderer/CCTexture2D.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
 {
@@ -195,4 +195,4 @@ Animation* Animation::clone() const
     return a;
 }
 
-NS_CC_END
+NS_AX_END

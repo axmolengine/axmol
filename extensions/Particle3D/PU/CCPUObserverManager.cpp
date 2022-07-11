@@ -37,7 +37,7 @@
 #include "extensions/Particle3D/PU/CCPUOnTimeObserver.h"
 #include "extensions/Particle3D/PU/CCPUOnVelocityObserver.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUObserverManager::PUObserverManager() {}
 
 PUObserverManager::~PUObserverManager() {}
@@ -146,4 +146,4 @@ PUObserver* PUObserverManager::createObserver(std::string_view type)
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

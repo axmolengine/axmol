@@ -34,7 +34,7 @@
 
 bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
                                      int lo,
-                                     cocos2d::Physics3DRigidBodyDes* outValue,
+                                     axis::Physics3DRigidBodyDes* outValue,
                                      const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
@@ -62,7 +62,7 @@ bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
         lua_gettable(L, lo);
         if (!lua_istable(L, -1))
         {
-            outValue->localInertia = cocos2d::Vec3(0.0, 0.0, 0.0);
+            outValue->localInertia = axis::Vec3(0.0, 0.0, 0.0);
         }
         else
         {
@@ -78,7 +78,7 @@ bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
         }
         else
         {
-            outValue->shape = static_cast<cocos2d::Physics3DShape*>(tolua_tousertype(L, lua_gettop(L), nullptr));
+            outValue->shape = static_cast<axis::Physics3DShape*>(tolua_tousertype(L, lua_gettop(L), nullptr));
         }
         lua_pop(L, 1);
 
@@ -86,7 +86,7 @@ bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
         lua_gettable(L, lo);
         if (!lua_istable(L, -1))
         {
-            outValue->originalTransform = cocos2d::Mat4();
+            outValue->originalTransform = axis::Mat4();
         }
         else
         {
@@ -104,7 +104,7 @@ bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
 
 bool luaval_to_Physics3DWorld_HitResult(lua_State* L,
                                         int lo,
-                                        cocos2d::Physics3DWorld::HitResult* outValue,
+                                        axis::Physics3DWorld::HitResult* outValue,
                                         const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
@@ -127,7 +127,7 @@ bool luaval_to_Physics3DWorld_HitResult(lua_State* L,
         lua_gettable(L, lo);
         if (!lua_istable(L, -1))
         {
-            outValue->hitPosition = cocos2d::Vec3();
+            outValue->hitPosition = axis::Vec3();
         }
         else
         {
@@ -139,7 +139,7 @@ bool luaval_to_Physics3DWorld_HitResult(lua_State* L,
         lua_gettable(L, lo);
         if (!lua_istable(L, -1))
         {
-            outValue->hitNormal = cocos2d::Vec3();
+            outValue->hitNormal = axis::Vec3();
         }
         else
         {
@@ -155,14 +155,14 @@ bool luaval_to_Physics3DWorld_HitResult(lua_State* L,
         }
         else
         {
-            outValue->hitObj = static_cast<cocos2d::Physics3DObject*>(tolua_tousertype(L, lua_gettop(L), nullptr));
+            outValue->hitObj = static_cast<axis::Physics3DObject*>(tolua_tousertype(L, lua_gettop(L), nullptr));
         }
         lua_pop(L, 1);
     }
     return true;
 }
 
-void Physics3DWorld_HitResult_to_luaval(lua_State* L, const cocos2d::Physics3DWorld::HitResult& hitResult)
+void Physics3DWorld_HitResult_to_luaval(lua_State* L, const axis::Physics3DWorld::HitResult& hitResult)
 {
     if (nullptr == L)
         return;
@@ -181,7 +181,7 @@ void Physics3DWorld_HitResult_to_luaval(lua_State* L, const cocos2d::Physics3DWo
     }
     else
     {
-        object_to_luaval<cocos2d::Physics3DObject>(L, "cc.Physics3DObject", hitResult.hitObj);
+        object_to_luaval<axis::Physics3DObject>(L, "cc.Physics3DObject", hitResult.hitObj);
     }
     lua_rawset(L, -3);
 }
@@ -205,7 +205,7 @@ int lua_cocos2dx_physics3d_PhysicsMeshRenderer_create(lua_State* L)
     if (argc == 2)
     {
         std::string arg0;
-        cocos2d::Physics3DRigidBodyDes arg1;
+        axis::Physics3DRigidBodyDes arg1;
         ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsMeshRenderer:create");
         ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsMeshRenderer:create");
         if (!ok)
@@ -213,15 +213,15 @@ int lua_cocos2dx_physics3d_PhysicsMeshRenderer_create(lua_State* L)
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'", nullptr);
             return 0;
         }
-        cocos2d::PhysicsMeshRenderer* ret = cocos2d::PhysicsMeshRenderer::create(arg0, &arg1);
-        object_to_luaval<cocos2d::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (cocos2d::PhysicsMeshRenderer*)ret);
+        axis::PhysicsMeshRenderer* ret = axis::PhysicsMeshRenderer::create(arg0, &arg1);
+        object_to_luaval<axis::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (axis::PhysicsMeshRenderer*)ret);
         return 1;
     }
     if (argc == 3)
     {
         std::string arg0;
-        cocos2d::Physics3DRigidBodyDes arg1;
-        cocos2d::Vec3 arg2;
+        axis::Physics3DRigidBodyDes arg1;
+        axis::Vec3 arg2;
         ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsMeshRenderer:create");
         ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsMeshRenderer:create");
         ok &= luaval_to_vec3(L, 4, &arg2, "cc.PhysicsMeshRenderer:create");
@@ -230,16 +230,16 @@ int lua_cocos2dx_physics3d_PhysicsMeshRenderer_create(lua_State* L)
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'", nullptr);
             return 0;
         }
-        cocos2d::PhysicsMeshRenderer* ret = cocos2d::PhysicsMeshRenderer::create(arg0, &arg1, arg2);
-        object_to_luaval<cocos2d::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (cocos2d::PhysicsMeshRenderer*)ret);
+        axis::PhysicsMeshRenderer* ret = axis::PhysicsMeshRenderer::create(arg0, &arg1, arg2);
+        object_to_luaval<axis::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (axis::PhysicsMeshRenderer*)ret);
         return 1;
     }
     if (argc == 4)
     {
         std::string arg0;
-        cocos2d::Physics3DRigidBodyDes arg1;
-        cocos2d::Vec3 arg2;
-        cocos2d::Quaternion arg3;
+        axis::Physics3DRigidBodyDes arg1;
+        axis::Vec3 arg2;
+        axis::Quaternion arg3;
         ok &= luaval_to_std_string(L, 2, &arg0, "cc.PhysicsMeshRenderer:create");
         ok &= luaval_to_Physics3DRigidBodyDes(L, 3, &arg1, "cc.PhysicsMeshRenderer:create");
         ok &= luaval_to_vec3(L, 4, &arg2, "cc.PhysicsMeshRenderer:create");
@@ -249,8 +249,8 @@ int lua_cocos2dx_physics3d_PhysicsMeshRenderer_create(lua_State* L)
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_PhysicsMeshRenderer_create'", nullptr);
             return 0;
         }
-        cocos2d::PhysicsMeshRenderer* ret = cocos2d::PhysicsMeshRenderer::create(arg0, &arg1, arg2, arg3);
-        object_to_luaval<cocos2d::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (cocos2d::PhysicsMeshRenderer*)ret);
+        axis::PhysicsMeshRenderer* ret = axis::PhysicsMeshRenderer::create(arg0, &arg1, arg2, arg3);
+        object_to_luaval<axis::PhysicsMeshRenderer>(L, "cc.PhysicsMeshRenderer", (axis::PhysicsMeshRenderer*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.PhysicsMeshRenderer:create", argc, 2);
@@ -291,15 +291,15 @@ int lua_cocos2dx_physics3d_Physics3DRigidBody_create(lua_State* L)
 
     if (argc == 1)
     {
-        cocos2d::Physics3DRigidBodyDes arg0;
+        axis::Physics3DRigidBodyDes arg0;
         ok &= luaval_to_Physics3DRigidBodyDes(L, 2, &arg0, "cc.Physics3DRigidBody:create");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DRigidBody_create'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DRigidBody* ret = cocos2d::Physics3DRigidBody::create(&arg0);
-        object_to_luaval<cocos2d::Physics3DRigidBody>(L, "cc.Physics3DRigidBody", (cocos2d::Physics3DRigidBody*)ret);
+        axis::Physics3DRigidBody* ret = axis::Physics3DRigidBody::create(&arg0);
+        object_to_luaval<axis::Physics3DRigidBody>(L, "cc.Physics3DRigidBody", (axis::Physics3DRigidBody*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DRigidBody:create", argc, 1);
@@ -341,15 +341,15 @@ int lua_cocos2dx_physics3d_Physics3DComponent_create(lua_State* L)
     {
         if (argc == 1)
         {
-            cocos2d::Physics3DObject* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DObject>(L, 2, "cc.Physics3DObject", &arg0);
+            axis::Physics3DObject* arg0;
+            ok &= luaval_to_object<axis::Physics3DObject>(L, 2, "cc.Physics3DObject", &arg0);
             if (!ok)
             {
                 break;
             }
-            cocos2d::Physics3DComponent* ret = cocos2d::Physics3DComponent::create(arg0);
-            object_to_luaval<cocos2d::Physics3DComponent>(L, "cc.Physics3DComponent",
-                                                          (cocos2d::Physics3DComponent*)ret);
+            axis::Physics3DComponent* ret = axis::Physics3DComponent::create(arg0);
+            object_to_luaval<axis::Physics3DComponent>(L, "cc.Physics3DComponent",
+                                                          (axis::Physics3DComponent*)ret);
             return 1;
         }
     } while (0);
@@ -358,21 +358,21 @@ int lua_cocos2dx_physics3d_Physics3DComponent_create(lua_State* L)
     {
         if (argc == 2)
         {
-            cocos2d::Physics3DObject* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DObject>(L, 2, "cc.Physics3DObject", &arg0);
+            axis::Physics3DObject* arg0;
+            ok &= luaval_to_object<axis::Physics3DObject>(L, 2, "cc.Physics3DObject", &arg0);
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(L, 3, &arg1, "cc.Physics3DComponent:create");
             if (!ok)
             {
                 break;
             }
-            cocos2d::Physics3DComponent* ret = cocos2d::Physics3DComponent::create(arg0, arg1);
-            object_to_luaval<cocos2d::Physics3DComponent>(L, "cc.Physics3DComponent",
-                                                          (cocos2d::Physics3DComponent*)ret);
+            axis::Physics3DComponent* ret = axis::Physics3DComponent::create(arg0, arg1);
+            object_to_luaval<axis::Physics3DComponent>(L, "cc.Physics3DComponent",
+                                                          (axis::Physics3DComponent*)ret);
             return 1;
         }
     } while (0);
@@ -381,27 +381,27 @@ int lua_cocos2dx_physics3d_Physics3DComponent_create(lua_State* L)
     {
         if (argc == 3)
         {
-            cocos2d::Physics3DObject* arg0;
-            ok &= luaval_to_object<cocos2d::Physics3DObject>(L, 2, "cc.Physics3DObject", &arg0);
+            axis::Physics3DObject* arg0;
+            ok &= luaval_to_object<axis::Physics3DObject>(L, 2, "cc.Physics3DObject", &arg0);
             if (!ok)
             {
                 break;
             }
-            cocos2d::Vec3 arg1;
+            axis::Vec3 arg1;
             ok &= luaval_to_vec3(L, 3, &arg1, "cc.Physics3DComponent:create");
             if (!ok)
             {
                 break;
             }
-            cocos2d::Quaternion arg2;
+            axis::Quaternion arg2;
             ok &= luaval_to_quaternion(L, 4, &arg2);
             if (!ok)
             {
                 break;
             }
-            cocos2d::Physics3DComponent* ret = cocos2d::Physics3DComponent::create(arg0, arg1, arg2);
-            object_to_luaval<cocos2d::Physics3DComponent>(L, "cc.Physics3DComponent",
-                                                          (cocos2d::Physics3DComponent*)ret);
+            axis::Physics3DComponent* ret = axis::Physics3DComponent::create(arg0, arg1, arg2);
+            object_to_luaval<axis::Physics3DComponent>(L, "cc.Physics3DComponent",
+                                                          (axis::Physics3DComponent*)ret);
             return 1;
         }
     } while (0);
@@ -410,9 +410,9 @@ int lua_cocos2dx_physics3d_Physics3DComponent_create(lua_State* L)
     {
         if (argc == 0)
         {
-            cocos2d::Physics3DComponent* ret = cocos2d::Physics3DComponent::create();
-            object_to_luaval<cocos2d::Physics3DComponent>(L, "cc.Physics3DComponent",
-                                                          (cocos2d::Physics3DComponent*)ret);
+            axis::Physics3DComponent* ret = axis::Physics3DComponent::create();
+            object_to_luaval<axis::Physics3DComponent>(L, "cc.Physics3DComponent",
+                                                          (axis::Physics3DComponent*)ret);
             return 1;
         }
     } while (0);
@@ -440,7 +440,7 @@ void extendPhysics3DComponent(lua_State* L)
 int lua_cocos2dx_physics3d_Physics3DWorld_rayCast(lua_State* L)
 {
     int argc                      = 0;
-    cocos2d::Physics3DWorld* cobj = nullptr;
+    axis::Physics3DWorld* cobj = nullptr;
     bool ok                       = true;
 
 #    if COCOS2D_DEBUG >= 1
@@ -452,7 +452,7 @@ int lua_cocos2dx_physics3d_Physics3DWorld_rayCast(lua_State* L)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Physics3DWorld*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::Physics3DWorld*)tolua_tousertype(L, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -465,9 +465,9 @@ int lua_cocos2dx_physics3d_Physics3DWorld_rayCast(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 3)
     {
-        cocos2d::Vec3 arg0;
-        cocos2d::Vec3 arg1;
-        cocos2d::Physics3DWorld::HitResult arg2;
+        axis::Vec3 arg0;
+        axis::Vec3 arg1;
+        axis::Physics3DWorld::HitResult arg2;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "cc.Physics3DWorld:rayCast");
 
@@ -534,8 +534,8 @@ int lua_cocos2dx_physics3d_Physics3DShape_createMesh(lua_State* L)
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_physics3d_Physics3DShape_createMesh'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createMesh(&arg0[0], arg1);
-        object_to_luaval<cocos2d::Physics3DShape>(L, "cc.Physics3DShape", (cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createMesh(&arg0[0], arg1);
+        object_to_luaval<axis::Physics3DShape>(L, "cc.Physics3DShape", (axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createMesh", argc, 2);
@@ -587,9 +587,9 @@ int lua_cocos2dx_physics3d_Physics3DShape_createHeightfield(lua_State* L)
                         nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createHeightfield(arg0, arg1, &arg2[0], (float)arg3,
+        axis::Physics3DShape* ret = axis::Physics3DShape::createHeightfield(arg0, arg1, &arg2[0], (float)arg3,
                                                                                   (float)arg4, (float)arg5, arg6, arg7);
-        object_to_luaval<cocos2d::Physics3DShape>(L, "cc.Physics3DShape", (cocos2d::Physics3DShape*)ret);
+        object_to_luaval<axis::Physics3DShape>(L, "cc.Physics3DShape", (axis::Physics3DShape*)ret);
         return 1;
     }
     if (argc == 9)
@@ -618,9 +618,9 @@ int lua_cocos2dx_physics3d_Physics3DShape_createHeightfield(lua_State* L)
                         nullptr);
             return 0;
         }
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createHeightfield(
+        axis::Physics3DShape* ret = axis::Physics3DShape::createHeightfield(
             arg0, arg1, &arg2[0], (float)arg3, (float)arg4, (float)arg5, arg6, arg7, arg8);
-        object_to_luaval<cocos2d::Physics3DShape>(L, "cc.Physics3DShape", (cocos2d::Physics3DShape*)ret);
+        object_to_luaval<axis::Physics3DShape>(L, "cc.Physics3DShape", (axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createHeightfield",
@@ -650,7 +650,7 @@ int lua_cocos2dx_physics3d_Physics3DShape_createCompoundShape(lua_State* L)
     if (argc == 1)
     {
 
-        std::vector<std::pair<cocos2d::Physics3DShape*, cocos2d::Mat4>> shapes;
+        std::vector<std::pair<axis::Physics3DShape*, axis::Mat4>> shapes;
         if (!tolua_istable(L, 2, 0, &tolua_err))
         {
 #    if COCOS2D_DEBUG >= 1
@@ -662,8 +662,8 @@ int lua_cocos2dx_physics3d_Physics3DShape_createCompoundShape(lua_State* L)
         if (ok)
         {
             size_t len                     = lua_objlen(L, 2);
-            cocos2d::Physics3DShape* shape = nullptr;
-            cocos2d::Mat4 mat;
+            axis::Physics3DShape* shape = nullptr;
+            axis::Mat4 mat;
             for (size_t i = 0; i < len; i++)
             {
                 lua_pushnumber(L, i + 1);
@@ -686,8 +686,8 @@ int lua_cocos2dx_physics3d_Physics3DShape_createCompoundShape(lua_State* L)
             }
         }
 
-        cocos2d::Physics3DShape* ret = cocos2d::Physics3DShape::createCompoundShape(shapes);
-        object_to_luaval<cocos2d::Physics3DShape>(L, "cc.Physics3DShape", (cocos2d::Physics3DShape*)ret);
+        axis::Physics3DShape* ret = axis::Physics3DShape::createCompoundShape(shapes);
+        object_to_luaval<axis::Physics3DShape>(L, "cc.Physics3DShape", (axis::Physics3DShape*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.Physics3DShape:createCompoundShape",
@@ -713,7 +713,7 @@ void extendPhysics3DShape(lua_State* L)
     lua_pop(L, 1);
 }
 
-void CollisionPoint_to_luaval(lua_State* L, const cocos2d::Physics3DCollisionInfo::CollisionPoint& collisionPoint)
+void CollisionPoint_to_luaval(lua_State* L, const axis::Physics3DCollisionInfo::CollisionPoint& collisionPoint)
 {
     if (nullptr == L)
         return;
@@ -739,7 +739,7 @@ void CollisionPoint_to_luaval(lua_State* L, const cocos2d::Physics3DCollisionInf
 int lua_cocos2dx_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
 {
     int argc                       = 0;
-    cocos2d::Physics3DObject* cobj = nullptr;
+    axis::Physics3DObject* cobj = nullptr;
 
 #    if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -750,7 +750,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Physics3DObject*)tolua_tousertype(L, 1, 0);
+    cobj = (axis::Physics3DObject*)tolua_tousertype(L, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -771,7 +771,7 @@ int lua_cocos2dx_physics3d_Physics3DObject_setCollisionCallback(lua_State* L)
         }
 #    endif
         LUA_FUNCTION handler = toluafix_ref_function(L, 2, 0);
-        cobj->setCollisionCallback([=](const cocos2d::Physics3DCollisionInfo& ci) {
+        cobj->setCollisionCallback([=](const axis::Physics3DCollisionInfo& ci) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
             auto Ls    = stack->getLuaState();
             lua_newtable(Ls);

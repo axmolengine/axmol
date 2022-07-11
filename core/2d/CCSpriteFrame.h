@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "math/CCMath.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 
@@ -318,6 +318,6 @@ protected:
 // end of _2d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__SPRITE_CCSPRITE_FRAME_H__

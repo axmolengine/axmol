@@ -34,7 +34,7 @@
 
 #include <vector>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class BufferGL;
 class RenderPipelineGL;
@@ -225,4 +225,4 @@ private:
 
 // end of _opengl group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

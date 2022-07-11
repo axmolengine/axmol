@@ -33,7 +33,7 @@
 #    include "platform/android/jni/JniHelper.h"
 #    include "base/CCEventController.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class ControllerImpl
 {
@@ -60,7 +60,7 @@ public:
             return;
 
         // It's a new controller being connected.
-        auto controller         = new cocos2d::Controller();
+        auto controller         = new axis::Controller();
         controller->_deviceId   = deviceId;
         controller->_deviceName = deviceName;
         Controller::s_allController.push_back(controller);
@@ -163,7 +163,7 @@ void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive)
                                     externalKeyCode, receive);
 }
 
-NS_CC_END
+NS_AX_END
 
 extern "C" {
 
@@ -173,7 +173,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                                                                              jint controllerID)
 {
     CCLOG("controller id: %d connected!", controllerID);
-    cocos2d::ControllerImpl::onConnected(cocos2d::JniHelper::jstring2string(deviceName), controllerID);
+    axis::ControllerImpl::onConnected(axis::JniHelper::jstring2string(deviceName), controllerID);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControllerDisconnected(JNIEnv*,
@@ -182,7 +182,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                                                                                 jint controllerID)
 {
     CCLOG("controller id: %d disconnected!", controllerID);
-    cocos2d::ControllerImpl::onDisconnected(cocos2d::JniHelper::jstring2string(deviceName), controllerID);
+    axis::ControllerImpl::onDisconnected(axis::JniHelper::jstring2string(deviceName), controllerID);
 }
 
 JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControllerButtonEvent(JNIEnv*,
@@ -194,7 +194,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                                                                                jfloat value,
                                                                                                jboolean isAnalog)
 {
-    cocos2d::ControllerImpl::onButtonEvent(cocos2d::JniHelper::jstring2string(deviceName), controllerID, button,
+    axis::ControllerImpl::onButtonEvent(axis::JniHelper::jstring2string(deviceName), controllerID, button,
                                            isPressed, value, isAnalog);
 }
 
@@ -206,7 +206,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                                                                              jfloat value,
                                                                                              jboolean isAnalog)
 {
-    cocos2d::ControllerImpl::onAxisEvent(cocos2d::JniHelper::jstring2string(deviceName), controllerID, axis, value,
+    axis::ControllerImpl::onAxisEvent(axis::JniHelper::jstring2string(deviceName), controllerID, axis, value,
                                          isAnalog);
 }
 

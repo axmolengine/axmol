@@ -33,7 +33,7 @@
 #include "math/CCMath.h"
 #include "extensions/Particle3D/PU/CCPUScriptCompiler.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Define static tokens
 enum eDefineStaticToken
@@ -745,6 +745,6 @@ public:
 
     virtual bool isParticleSystemTranslator() const { return false; }
 };
-NS_CC_END
+NS_AX_END
 
 #endif /* defined(__ssaafsdf__CCScriptTranslator__) */

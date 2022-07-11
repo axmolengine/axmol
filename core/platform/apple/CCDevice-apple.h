@@ -32,8 +32,8 @@
 namespace FontUtils
 {
 NSMutableParagraphStyle* _calculateParagraphStyle(bool enableWrap, int overflow);
-NSTextAlignment _calculateTextAlignment(cocos2d::Device::TextAlign align);
-CGFloat _calculateTextDrawStartWidth(cocos2d::Device::TextAlign align, CGSize realDimensions, CGSize dimensions);
+NSTextAlignment _calculateTextAlignment(axis::Device::TextAlign align);
+CGFloat _calculateTextDrawStartWidth(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions);
 }
 
 #endif /* CCDevice_apple_hpp */

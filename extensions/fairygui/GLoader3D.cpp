@@ -9,7 +9,7 @@
 #include "spine/spine-cocos2dx.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GLoader3D::GLoader3D()
     : _autoSize(false),
@@ -57,7 +57,7 @@ void GLoader3D::setURL(const std::string& value)
     updateGear(7);
 }
 
-void GLoader3D::setAlign(cocos2d::TextHAlignment value)
+void GLoader3D::setAlign(axis::TextHAlignment value)
 {
     if (_align != value)
     {
@@ -66,7 +66,7 @@ void GLoader3D::setAlign(cocos2d::TextHAlignment value)
     }
 }
 
-void GLoader3D::setVerticalAlign(cocos2d::TextVAlignment value)
+void GLoader3D::setVerticalAlign(axis::TextVAlignment value)
 {
     if (_verticalAlign != value)
     {
@@ -102,12 +102,12 @@ void GLoader3D::setShrinkOnly(bool value)
     }
 }
 
-cocos2d::Color3B GLoader3D::getColor() const
+axis::Color3B GLoader3D::getColor() const
 {
     return _color;
 }
 
-void GLoader3D::setColor(const cocos2d::Color3B& value)
+void GLoader3D::setColor(const axis::Color3B& value)
 {
     _color = value;
     if (_content != nullptr)
@@ -155,7 +155,7 @@ void GLoader3D::setLoop(bool value)
     onChange();
 }
 
-void GLoader3D::setContent(cocos2d::Node* value)
+void GLoader3D::setContent(axis::Node* value)
 {
     setURL(STD_STRING_EMPTY);
 
@@ -292,11 +292,11 @@ void GLoader3D::loadExternal()
 {
 }
 
-void GLoader3D::freeExternal(cocos2d::SpriteFrame* spriteFrame)
+void GLoader3D::freeExternal(axis::SpriteFrame* spriteFrame)
 {
 }
 
-void GLoader3D::onExternalLoadSuccess(cocos2d::SpriteFrame* spriteFrame)
+void GLoader3D::onExternalLoadSuccess(axis::SpriteFrame* spriteFrame)
 {
 }
 
@@ -422,7 +422,7 @@ void GLoader3D::handleGrayedChanged()
     GObject::handleGrayedChanged();
 }
 
-cocos2d::Value GLoader3D::getProp(ObjectPropID propId)
+axis::Value GLoader3D::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -439,7 +439,7 @@ cocos2d::Value GLoader3D::getProp(ObjectPropID propId)
     }
 }
 
-void GLoader3D::setProp(ObjectPropID propId, const cocos2d::Value& value)
+void GLoader3D::setProp(ObjectPropID propId, const axis::Value& value)
 {
     switch (propId)
     {

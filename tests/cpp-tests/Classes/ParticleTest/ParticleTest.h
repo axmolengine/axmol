@@ -32,9 +32,9 @@ DEFINE_TEST_SUITE(ParticleTests);
 class ParticleDemo : public TestCase
 {
 protected:
-    cocos2d::ParticleSystemQuad* _emitter;
-    cocos2d::Sprite* _background;
-    cocos2d::LayerColor* _color;
+    axis::ParticleSystemQuad* _emitter;
+    axis::Sprite* _background;
+    axis::LayerColor* _color;
 
 public:
     ~ParticleDemo();
@@ -44,11 +44,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void toggleCallback(cocos2d::Ref* sender);
+    void toggleCallback(axis::Ref* sender);
 
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
     virtual void update(float dt) override;
     void setEmitterPosition();
@@ -484,8 +484,8 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    cocos2d::Node* _parent1;
-    cocos2d::Node* _parent2;
+    axis::Node* _parent1;
+    axis::Node* _parent2;
 };
 
 class ParticleBatchMultipleEmitters : public ParticleDemo
@@ -542,7 +542,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    cocos2d::ParticleBatchNode* _batchNode;
+    axis::ParticleBatchNode* _batchNode;
 };
 
 class ReorderParticleSystems : public ParticleDemo
@@ -556,7 +556,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    cocos2d::ParticleBatchNode* _batchNode;
+    axis::ParticleBatchNode* _batchNode;
 };
 
 class PremultipliedAlphaTest : public ParticleDemo

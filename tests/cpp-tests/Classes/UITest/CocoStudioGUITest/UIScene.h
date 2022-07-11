@@ -41,9 +41,9 @@ public:
     virtual void onEnter() override;
 
 protected:
-    cocos2d::Layer* _uiLayer;
-    cocos2d::ui::Layout* _widget;
-    cocos2d::ui::Text* _sceneTitle;
+    axis::Layer* _uiLayer;
+    axis::ui::Layout* _widget;
+    axis::ui::Text* _sceneTitle;
 };
 
 #endif /* defined(__TestCpp__UIScene__) */

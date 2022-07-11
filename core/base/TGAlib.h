@@ -29,9 +29,9 @@ THE SOFTWARE.
 /// @cond DO_NOT_SHOW
 
 #include "stdint.h"
+#include "platform/CCPlatformMacros.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 enum
 {
@@ -78,7 +78,7 @@ void tgaRGBtogreyscale(tImageTGA* info);
 /// releases the memory used for the image
 void tgaDestroy(tImageTGA* info);
 
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 /// @endcond
 #endif  // __SUPPORT_DATA_SUPPORT_TGALIB_H__

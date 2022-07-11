@@ -5,7 +5,7 @@
 
 NS_FGUI_BEGIN
 
-//copy from cocos2d::ui::Margin
+//copy from axis::ui::Margin
 class Margin
 {
 public:

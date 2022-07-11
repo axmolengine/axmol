@@ -33,7 +33,7 @@
 
 using namespace llvm;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace StringUtils
 {
@@ -378,7 +378,7 @@ std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret)
 jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret)
 {
     std::u16string utf16Str;
-    bool flag = cocos2d::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
+    bool flag = axis::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
 
     if (ret)
     {
@@ -559,4 +559,4 @@ bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
 
 }  // namespace StringUtils
 
-NS_CC_END
+NS_AX_END

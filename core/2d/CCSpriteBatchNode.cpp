@@ -41,7 +41,7 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Device.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /*
  * creation with Texture2D
@@ -802,4 +802,4 @@ std::string SpriteBatchNode::getDescription() const
     return StringUtils::format("<SpriteBatchNode | tag = %d>", _tag);
 }
 
-NS_CC_END
+NS_AX_END

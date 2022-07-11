@@ -39,7 +39,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/CCMeshCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Texture2D;
 class Pass;
@@ -258,4 +258,4 @@ protected:
     std::string _name;
 };
 
-NS_CC_END
+NS_AX_END

@@ -33,7 +33,7 @@
 #include "base/CCEventListenerCustom.h"
 #include "2d/CCNode.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 class LuaEventListenerCustom
 {
 public:
@@ -45,9 +45,9 @@ class LuaEventListenerAcceleration
 public:
     static EventListenerAcceleration* create();
 };
-NS_CC_END
+NS_AX_END
 
-USING_NS_CC;
+USING_NS_AX;
 
 TOLUA_API int register_all_cocos2dx_manual(lua_State* tolua_S);
 
@@ -115,12 +115,12 @@ struct LuaEventMouseData
     }
 };
 
-class LuaNode :public cocos2d::Node
+class LuaNode :public axis::Node
 {
 public:
     virtual ~LuaNode() {}
 
-    virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer *renderer, const axis::Mat4& transform, uint32_t flags) override;
 };
 
 TOLUA_API int tolua_luanode_open(lua_State* tolua_S);

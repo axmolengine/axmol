@@ -698,7 +698,7 @@ std::string MaterialFileReader::operator()(std::string_view matId,
 
     std::string err = "";
 
-    std::istringstream matIStream(cocos2d::FileUtils::getInstance()->getStringFromFile(filepath));
+    std::istringstream matIStream(axis::FileUtils::getInstance()->getStringFromFile(filepath));
     if (!matIStream)
     {
         std::stringstream ss;
@@ -720,7 +720,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
 
     std::stringstream err;
 
-    std::istringstream ifs(cocos2d::FileUtils::getInstance()->getStringFromFile(filename));
+    std::istringstream ifs(axis::FileUtils::getInstance()->getStringFromFile(filename));
     if (!ifs)
     {
         err << "Cannot open file [" << filename << "]" << std::endl;

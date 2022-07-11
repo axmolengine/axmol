@@ -33,7 +33,7 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
 @brief    Input Method Edit Message Dispatcher.
@@ -136,7 +136,7 @@ private:
     Impl* _impl;
 };
 
-NS_CC_END
+NS_AX_END
 // end of base group
 /// @}
 

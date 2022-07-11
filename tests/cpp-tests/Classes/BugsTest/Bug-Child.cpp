@@ -32,7 +32,7 @@
 
 #include "Bug-Child.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool BugChild::init()
 {

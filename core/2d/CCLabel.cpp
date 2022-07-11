@@ -50,7 +50,7 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace
 {
@@ -728,7 +728,7 @@ void Label::updateShaderProgram()
     {
         switch (_currLabelEffect)
         {
-        case cocos2d::LabelEffect::NORMAL:
+        case axis::LabelEffect::NORMAL:
             if (_useDistanceField)
             {
                 programType = backend::ProgramType::LABEL_DISTANCE_NORMAL;
@@ -747,12 +747,12 @@ void Label::updateShaderProgram()
                 }
             }
             break;
-        case cocos2d::LabelEffect::OUTLINE:
+        case axis::LabelEffect::OUTLINE:
         {
             programType = backend::ProgramType::LABLE_OUTLINE;
         }
         break;
-        case cocos2d::LabelEffect::GLOW:
+        case axis::LabelEffect::GLOW:
             if (_useDistanceField)
             {
                 programType = backend::ProgramType::LABLE_DISTANCEFIELD_GLOW;
@@ -1525,9 +1525,9 @@ void Label::disableEffect(LabelEffect effect)
 {
     switch (effect)
     {
-    case cocos2d::LabelEffect::NORMAL:
+    case axis::LabelEffect::NORMAL:
         break;
-    case cocos2d::LabelEffect::OUTLINE:
+    case axis::LabelEffect::OUTLINE:
         if (_currLabelEffect == LabelEffect::OUTLINE)
         {
             if (_currentLabelType == LabelType::TTF)
@@ -1539,7 +1539,7 @@ void Label::disableEffect(LabelEffect effect)
             _contentDirty    = true;
         }
         break;
-    case cocos2d::LabelEffect::SHADOW:
+    case axis::LabelEffect::SHADOW:
         if (_shadowEnabled)
         {
             _shadowEnabled = false;
@@ -1547,17 +1547,17 @@ void Label::disableEffect(LabelEffect effect)
             updateShaderProgram();
         }
         break;
-    case cocos2d::LabelEffect::GLOW:
+    case axis::LabelEffect::GLOW:
         if (_currLabelEffect == LabelEffect::GLOW)
         {
             _currLabelEffect = LabelEffect::NORMAL;
             updateShaderProgram();
         }
         break;
-    case cocos2d::LabelEffect::ITALICS:
+    case axis::LabelEffect::ITALICS:
         setRotationSkewX(0);
         break;
-    case cocos2d::LabelEffect::BOLD:
+    case axis::LabelEffect::BOLD:
         if (_boldEnabled)
         {
             _boldEnabled = false;
@@ -1565,14 +1565,14 @@ void Label::disableEffect(LabelEffect effect)
             disableEffect(LabelEffect::SHADOW);
         }
         break;
-    case cocos2d::LabelEffect::UNDERLINE:
+    case axis::LabelEffect::UNDERLINE:
         if (_underlineNode)
         {
             removeChild(_underlineNode);
             _underlineNode = nullptr;
         }
         break;
-    case cocos2d::LabelEffect::STRIKETHROUGH:
+    case axis::LabelEffect::STRIKETHROUGH:
         _strikethroughEnabled = false;
         // since it is based on underline, disable it as well
         disableEffect(LabelEffect::UNDERLINE);
@@ -1937,7 +1937,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     if (_insideBounds)
 #endif
     {
-        cocos2d::Mat4 matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        axis::Mat4 matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
         if (!_shadowEnabled && (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP))
         {
             updateBlendState();
@@ -1960,7 +1960,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         }
         else
         {
-            cocos2d::Mat4 matrixMVP = matrixProjection * transform;
+            axis::Mat4 matrixMVP = matrixProjection * transform;
 
             for (auto&& it : _letters)
             {
@@ -2388,7 +2388,7 @@ void Label::updateColor()
         color4.b *= _displayedOpacity / 255.0f;
     }
 
-    cocos2d::TextureAtlas* textureAtlas;
+    axis::TextureAtlas* textureAtlas;
     V3F_C4B_T2F_Quad* quads;
     for (auto&& batchNode : _batchNodes)
     {
@@ -2636,4 +2636,4 @@ void Label::updateLetterSpriteScale(Sprite* sprite)
     }
 }
 
-NS_CC_END
+NS_AX_END

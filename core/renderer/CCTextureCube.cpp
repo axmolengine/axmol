@@ -32,7 +32,7 @@
 #include "renderer/backend/Device.h"
 #include "renderer/backend/PixelFormatUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 unsigned char* getImageData(Image* img, backend::PixelFormat& ePixFmt)
 {
@@ -272,4 +272,4 @@ bool TextureCube::reloadTexture()
     return init(_imgPath[0], _imgPath[1], _imgPath[2], _imgPath[3], _imgPath[4], _imgPath[5]);
 }
 
-NS_CC_END
+NS_AX_END

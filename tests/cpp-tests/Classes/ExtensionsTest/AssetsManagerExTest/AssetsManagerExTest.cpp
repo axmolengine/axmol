@@ -26,8 +26,8 @@
 #include "../../testResource.h"
 #include "cocos2d.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 const char* sceneManifests[]  = {"Manifests/AMTestScene1/project.manifest", "Manifests/AMTestScene2/project.manifest",
                                 "Manifests/AMTestScene3/project.manifest"};
@@ -127,7 +127,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
     else
     {
         _amListener =
-            cocos2d::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
+            axis::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
                 static int failCount = 0;
                 switch (event->getEventCode())
                 {

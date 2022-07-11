@@ -29,7 +29,7 @@
 #include "base/ccUtils.h"
 #include <stddef.h>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 CustomCommand::CustomCommand()
 {
@@ -114,7 +114,7 @@ void CustomCommand::assign(CustomCommand&& rhs)
 #    pragma GCC diagnostic pop
 #endif
 
-void CustomCommand::init(float depth, const cocos2d::Mat4& modelViewTransform, unsigned int flags)
+void CustomCommand::init(float depth, const axis::Mat4& modelViewTransform, unsigned int flags)
 {
     RenderCommand::init(depth, modelViewTransform, flags);
 }
@@ -213,4 +213,4 @@ std::size_t CustomCommand::computeIndexSize() const
         return sizeof(unsigned int);
 }
 
-NS_CC_END
+NS_AX_END

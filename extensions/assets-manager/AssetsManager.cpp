@@ -39,11 +39,11 @@
 #endif
 #include <ioapi.h>
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 using namespace std;
-using namespace cocos2d;
-using namespace cocos2d::network;
+USING_NS_AX;
+using namespace axis::network;
 
 #define KEY_OF_VERSION "current-version-code"
 #define KEY_OF_DOWNLOADED_VERSION "downloaded-version-code"
@@ -637,4 +637,4 @@ void AssetsManager::fillZipFunctionOverrides(zlib_filefunc_def_s& zipFunctionOve
     zipFunctionOverrides.opaque         = nullptr;
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

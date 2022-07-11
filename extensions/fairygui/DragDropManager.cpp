@@ -3,7 +3,7 @@
 #include "GRoot.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 DragDropManager* DragDropManager::_inst = nullptr;
 

@@ -41,11 +41,11 @@ public:
     // CREATE_NODE(IntervalLayer);
 
 protected:
-    cocos2d::Label* _label0;
-    cocos2d::Label* _label1;
-    cocos2d::Label* _label2;
-    cocos2d::Label* _label3;
-    cocos2d::Label* _label4;
+    axis::Label* _label0;
+    axis::Label* _label1;
+    axis::Label* _label2;
+    axis::Label* _label3;
+    axis::Label* _label4;
 
     float _time0, _time1, _time2, _time3, _time4;
 };

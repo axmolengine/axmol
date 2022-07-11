@@ -34,7 +34,7 @@
  * @addtogroup ui
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -150,7 +150,7 @@ private:
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 // end of ui group
 /// @}
 #endif /* defined(__cocos2d_libs__CCLayoutManager__) */

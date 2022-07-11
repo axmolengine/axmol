@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "math/CCMath.h"
 #include "platform/CCGLView.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup base
@@ -654,4 +654,4 @@ protected:
 // end of base group
 /** @} */
 
-NS_CC_END
+NS_AX_END

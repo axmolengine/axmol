@@ -47,7 +47,7 @@
 
 #include "yasio/cxx17/string_view.hpp"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 extern std::unordered_map<uintptr_t, const char*> g_luaType;
 extern std::unordered_map<cxx17::string_view, const char*> g_typeCast;
@@ -59,8 +59,8 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
 #define LUA_PRECONDITION(condition, ...)                                                               \
     if (!(condition))                                                                                  \
     {                                                                                                  \
-        cocos2d::log("lua: ERROR: File %s: Line: %d, Function: %s", __FILE__, __LINE__, __FUNCTION__); \
-        cocos2d::log(__VA_ARGS__);                                                                     \
+        axis::log("lua: ERROR: File %s: Line: %d, Function: %s", __FILE__, __LINE__, __FUNCTION__); \
+        axis::log(__VA_ARGS__);                                                                     \
     }
 
 /**
@@ -317,13 +317,13 @@ extern bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const cha
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a cocos2d::PhysicsMaterial object which stores the values from the Lua table.
+ * @param outValue the pointer to a axis::PhysicsMaterial object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_physics_material(lua_State* L,
                                        int lo,
-                                       cocos2d::PhysicsMaterial* outValue,
+                                       axis::PhysicsMaterial* outValue,
                                        const char* funcName = "");
 #endif  //#if CC_USE_PHYSICS
 
@@ -368,7 +368,7 @@ extern bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outVa
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_mat4(lua_State* L, int lo, cocos2d::Mat4* outValue, const char* funcName = "");
+extern bool luaval_to_mat4(lua_State* L, int lo, axis::Mat4* outValue, const char* funcName = "");
 
 /**
  * Get a array of Vec2 object from the given acceptable index of stack.
@@ -383,19 +383,19 @@ extern bool luaval_to_mat4(lua_State* L, int lo, cocos2d::Mat4* outValue, const 
  */
 extern bool luaval_to_array_of_vec2(lua_State* L,
                                     int lo,
-                                    cocos2d::Vec2** points,
+                                    axis::Vec2** points,
                                     int* numPoints,
                                     const char* funcName = "");
 
 /**
- * Get a cocos2d::ValueVector object value by the argc numbers of Lua values in the stack.
+ * Get a axis::ValueVector object value by the argc numbers of Lua values in the stack.
  *
  * @param L the current lua_State.
  * @param argc the numbers of Lua values in the stack.
  * @param ret the pointer to a ValueVector object which stores the values from the Lua table.
  * @return Return false if argc equal to 0 or L equal to nullptr, otherwise return true.
  */
-extern bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, cocos2d::ValueVector* ret);
+extern bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, axis::ValueVector* ret);
 
 /**
  * Get a Vec2 object value from the given acceptable index of stack.
@@ -409,7 +409,7 @@ extern bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, cocos2d::V
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* funcName = "");
+extern bool luaval_to_vec2(lua_State* L, int lo, axis::Vec2* outValue, const char* funcName = "");
 
 /**
  * Get a Vec3 object value from the given acceptable index of stack.
@@ -423,7 +423,7 @@ extern bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const 
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_vec3(lua_State* L, int lo, cocos2d::Vec3* outValue, const char* funcName = "");
+extern bool luaval_to_vec3(lua_State* L, int lo, axis::Vec3* outValue, const char* funcName = "");
 
 /**
  * Get a Vec4 object value from the given acceptable index of stack.
@@ -437,7 +437,7 @@ extern bool luaval_to_vec3(lua_State* L, int lo, cocos2d::Vec3* outValue, const 
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_vec4(lua_State* L, int lo, cocos2d::Vec4* outValue, const char* funcName = "");
+extern bool luaval_to_vec4(lua_State* L, int lo, axis::Vec4* outValue, const char* funcName = "");
 
 /**
  * Get a BlendFunc object value from the given acceptable index of stack.
@@ -451,7 +451,7 @@ extern bool luaval_to_vec4(lua_State* L, int lo, cocos2d::Vec4* outValue, const 
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_blendfunc(lua_State* L, int lo, cocos2d::BlendFunc* outValue, const char* funcName = "");
+extern bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const char* funcName = "");
 
 /**
  * Get a TTFConfig object value from the given acceptable index of stack.
@@ -466,28 +466,28 @@ extern bool luaval_to_blendfunc(lua_State* L, int lo, cocos2d::BlendFunc* outVal
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_ttfconfig(lua_State* L, int lo, cocos2d::TTFConfig* outValue, const char* funcName = "");
+extern bool luaval_to_ttfconfig(lua_State* L, int lo, axis::TTFConfig* outValue, const char* funcName = "");
 
 /**
  * Get a Vec2 object value from the given acceptable index of stack.
  * At current, the Point is typedef of Vec2.
  * @see luaval_to_vec2
  */
-static inline bool luaval_to_point(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* funcName = "")
+static inline bool luaval_to_point(lua_State* L, int lo, axis::Vec2* outValue, const char* funcName = "")
 {
     return luaval_to_vec2(L, lo, outValue);
 }
 
 CC_DEPRECATED_ATTRIBUTE static inline bool luaval_to_kmMat4(lua_State* L,
                                                             int lo,
-                                                            cocos2d::Mat4* outValue,
+                                                            axis::Mat4* outValue,
                                                             const char* funcName = "")
 {
     return luaval_to_mat4(L, lo, outValue);
 }
 CC_DEPRECATED_ATTRIBUTE static inline bool luaval_to_array_of_Point(lua_State* L,
                                                                     int lo,
-                                                                    cocos2d::Vec2** points,
+                                                                    axis::Vec2** points,
                                                                     int* numPoints,
                                                                     const char* funcName = "")
 {
@@ -495,16 +495,16 @@ CC_DEPRECATED_ATTRIBUTE static inline bool luaval_to_array_of_Point(lua_State* L
 }
 
 /**
- * Get a cocos2d::Vector of type T objects by the argc numbers of Lua values in the stack.
+ * Get a axis::Vector of type T objects by the argc numbers of Lua values in the stack.
  *
  * @param L the current lua_State.
  * @param argc the numbers of Lua values in the stack.
- * @param ret a cocos2d::Vector of type T objects.
+ * @param ret a axis::Vector of type T objects.
  * @return Return false if argc equal to 0 , L equal to nullptr or the Lua userdata at the index isn't `cc.Ref` type,
  * otherwise return true.
  */
 template <class T>
-bool luavals_variadic_to_ccvector(lua_State* L, int argc, cocos2d::Vector<T>* ret)
+bool luavals_variadic_to_ccvector(lua_State* L, int argc, axis::Vector<T>* ret)
 {
     if (nullptr == L || argc == 0)
         return false;
@@ -531,16 +531,16 @@ bool luavals_variadic_to_ccvector(lua_State* L, int argc, cocos2d::Vector<T>* re
 }
 
 /**
- * Get a cocos2d::Vector of type T objects from a Lua table in the stack.
+ * Get a axis::Vector of type T objects from a Lua table in the stack.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a cocos2d::Vector of type T objects.
+ * @param ret a axis::Vector of type T objects.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 template <class T>
-bool luaval_to_ccvector(lua_State* L, int lo, cocos2d::Vector<T>* ret, const char* funcName = "")
+bool luaval_to_ccvector(lua_State* L, int lo, axis::Vector<T>* ret, const char* funcName = "")
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -607,17 +607,17 @@ CC_LUA_DLL bool luaval_to_std_vector_string_view(lua_State* L,
 bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const char* funcName = "");
 
 /**
- * Get a pointer points to a cocos2d::Map whose key/value pair is string value and T object from a Lua hash-map table in
+ * Get a pointer points to a axis::Map whose key/value pair is string value and T object from a Lua hash-map table in
  * the stack.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a cocos2d::Map whose key/value pair is string value and T object.
+ * @param ret a pointer points to a axis::Map whose key/value pair is string value and T object.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 template <class T>
-bool luaval_to_ccmap_string_key(lua_State* L, int lo, cocos2d::Map<std::string, T>* ret, const char* funcName = "")
+bool luaval_to_ccmap_string_key(lua_State* L, int lo, axis::Map<std::string, T>* ret, const char* funcName = "")
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -663,52 +663,52 @@ bool luaval_to_ccmap_string_key(lua_State* L, int lo, cocos2d::Map<std::string, 
 }
 
 /**
- * Get a cocos2d::Value object from the given acceptable index of stack.
+ * Get a axis::Value object from the given acceptable index of stack.
  * The type of Lua value at the index could be a Lua table, LUA_TSTRING, LUA_TBOOLEAN and LUA_TNUMBER.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a cocos2d::Value object.
+ * @param ret a pointer points to a axis::Value object.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the L and ret is not nullptr,otherwise return false.
  */
-extern bool luaval_to_ccvalue(lua_State* L, int lo, cocos2d::Value* ret, const char* funcName = "");
+extern bool luaval_to_ccvalue(lua_State* L, int lo, axis::Value* ret, const char* funcName = "");
 
 /**
- * Get a cocos2d::ValueMap object from the given acceptable index of stack.
+ * Get a axis::ValueMap object from the given acceptable index of stack.
  * The type of Lua value at the index should be a Lua table.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a cocos2d::ValueMap object.
+ * @param ret a pointer points to a axis::ValueMap object.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the type of Lua value at the index is a Lua table, otherwise return false.
  */
-extern bool luaval_to_ccvaluemap(lua_State* L, int lo, cocos2d::ValueMap* ret, const char* funcName = "");
+extern bool luaval_to_ccvaluemap(lua_State* L, int lo, axis::ValueMap* ret, const char* funcName = "");
 
 /**
- * Get a cocos2d::ValueMapIntKey object from the given acceptable index of stack.
+ * Get a axis::ValueMapIntKey object from the given acceptable index of stack.
  * The type of Lua value at the index should be a Lua table.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a cocos2d::ValueMapIntKey object.
+ * @param ret a pointer points to a axis::ValueMapIntKey object.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the type of Lua value at the index is a Lua table, otherwise return false.
  */
-extern bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, cocos2d::ValueMapIntKey* ret, const char* funcName = "");
+extern bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, axis::ValueMapIntKey* ret, const char* funcName = "");
 
 /**
- * Get a cocos2d::ValueVector object from the given acceptable index of stack.
+ * Get a axis::ValueVector object from the given acceptable index of stack.
  * The type of Lua value at the index should be a Lua array table.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a cocos2d::ValueVector object.
+ * @param ret a pointer points to a axis::ValueVector object.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the type of Lua value at the index is a Lua table, otherwise return false.
  */
-extern bool luaval_to_ccvaluevector(lua_State* L, int lo, cocos2d::ValueVector* ret, const char* funcName = "");
+extern bool luaval_to_ccvaluevector(lua_State* L, int lo, axis::ValueVector* ret, const char* funcName = "");
 
 /**
  * Get a Type T object from the given acceptable index of stack.
@@ -737,19 +737,19 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret, const cha
 }
 
 /**
- * Get a cocos2d::MeshVertexAttrib object value from the given acceptable index of stack.
+ * Get a axis::MeshVertexAttrib object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `size`, `type`, `vertexAttrib`, `vertexAttrib` and `attribSizeBytes` keys and the corresponding
  * values are not nil, this function would assign the values to the corresponding members of outValue.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret the pointer to a cocos2d::MeshVertexAttrib object which stores the values from the Lua table.
+ * @param ret the pointer to a axis::MeshVertexAttrib object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_mesh_vertex_attrib(lua_State* L,
                                          int lo,
-                                         cocos2d::MeshVertexAttrib* ret,
+                                         axis::MeshVertexAttrib* ret,
                                          const char* funcName = "");
 
 /**
@@ -778,96 +778,96 @@ extern bool luaval_to_std_vector_ushort(lua_State* L,
                                         const char* funcName = "");
 
 /**
- * Get a cocos2d::Quaternion object value from the given acceptable index of stack.
+ * Get a axis::Quaternion object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `x`, `y`, `z` and `w` keys and the corresponding values are not nil, this function would assign
  * the values to the corresponding members of outValue.Otherwise, the value of members of outValue would be 0.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a cocos2d::Quaternion object which stores the values from the Lua table.
+ * @param outValue the pointer to a axis::Quaternion object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_quaternion(lua_State* L, int lo, cocos2d::Quaternion* outValue, const char* funcName = "");
+extern bool luaval_to_quaternion(lua_State* L, int lo, axis::Quaternion* outValue, const char* funcName = "");
 
 /**
- * Get a cocos2d::Texture2D::TexParams object value from the given acceptable index of stack.
+ * Get a axis::Texture2D::TexParams object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `minFilter`, `magFilter`, `wrapS` and `wrapT` keys and the corresponding values are not nil,
  * this function would assign the values to the corresponding members of outValue.Otherwise, the value of members of
  * outValue would be 0.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a cocos2d::Quaternion object which stores the values from the Lua table.
+ * @param outValue the pointer to a axis::Quaternion object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_texparams(lua_State* L,
                                 int lo,
-                                cocos2d::Texture2D::TexParams* outValue,
+                                axis::Texture2D::TexParams* outValue,
                                 const char* funcName = "");
 
 /**
- * Get a cocos2d::V3F_C4B_T2F object value from the given acceptable index of stack.
+ * Get a axis::V3F_C4B_T2F object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `vertices`, `colors`, and `texCoords` keys and the corresponding values are not nil, this
  * function would assign the values to the corresponding members of outValue.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a cocos2d::V3F_C4B_T2F object which stores the values from the Lua table.
+ * @param outValue the pointer to a axis::V3F_C4B_T2F object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, cocos2d::V3F_C4B_T2F* outValue, const char* funcName = "");
+extern bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, axis::V3F_C4B_T2F* outValue, const char* funcName = "");
 
 /**
- * Get a cocos2d::Tex2F object value from the given acceptable index of stack.
+ * Get a axis::Tex2F object value from the given acceptable index of stack.
  * If the value at the given acceptable index of stack is a table it returns true, otherwise returns false.
  * If the table has the `u`, and `v` keys and the corresponding values are not nil, this function would assign the
  * values to the corresponding members of outValue.Otherwise, the value of members of outValue would be 0.
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param outValue the pointer to a cocos2d::Tex2F object which stores the values from the Lua table.
+ * @param outValue the pointer to a axis::Tex2F object which stores the values from the Lua table.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_tex2f(lua_State* L, int lo, cocos2d::Tex2F* outValue, const char* funcName = "");
+extern bool luaval_to_tex2f(lua_State* L, int lo, axis::Tex2F* outValue, const char* funcName = "");
 
 /**
- * Get a pointer points to a std::vector<cocos2d::V3F_C4B_T2F> from a Lua array table in the stack.
+ * Get a pointer points to a std::vector<axis::V3F_C4B_T2F> from a Lua array table in the stack.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a std::vector<cocos2d::V3F_C4B_T2F>.
+ * @param ret a pointer points to a std::vector<axis::V3F_C4B_T2F>.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
 extern bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
                                              int lo,
-                                             std::vector<cocos2d::V3F_C4B_T2F>* ret,
+                                             std::vector<axis::V3F_C4B_T2F>* ret,
                                              const char* funcName = "");
 
 /**
- * Get a pointer points to a std::vector<cocos2d::Vec2> from a Lua array table in the stack.
+ * Get a pointer points to a std::vector<axis::Vec2> from a Lua array table in the stack.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a std::vector<cocos2d::Vec2>.
+ * @param ret a pointer points to a std::vector<axis::Vec2>.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<cocos2d::Vec2>* ret, const char* funcName = "");
+extern bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* ret, const char* funcName = "");
 
 /**
- * Get a pointer points to a std::vector<cocos2d::Vec3> from a Lua array table in the stack.
+ * Get a pointer points to a std::vector<axis::Vec3> from a Lua array table in the stack.
  *
  * @param L the current lua_State.
  * @param lo the given acceptable index of stack.
- * @param ret a pointer points to a std::vector<cocos2d::Vec3>.
+ * @param ret a pointer points to a std::vector<axis::Vec3>.
  * @param funcName the name of calling function, it is used for error output in the debug model.
  * @return Return true if the value at the given acceptable index of stack is a table, otherwise return false.
  */
-extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<cocos2d::Vec3>* ret, const char* funcName = "");
+extern bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* ret, const char* funcName = "");
 
 extern bool luaval_to_std_map_string_string(lua_State* L,
                                             int lo,
@@ -887,174 +887,174 @@ extern bool luaval_to_std_map_string_string(lua_State* L,
  **/
 
 /**
- * Push a table converted from a cocos2d::Vec2 object into the Lua stack.
+ * Push a table converted from a axis::Vec2 object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2}
  *
  * @param L the current lua_State.
- * @param vec2  a cocos2d::Vec2 object.
+ * @param vec2  a axis::Vec2 object.
  */
-extern int vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2);
+extern int vec2_to_luaval(lua_State* L, const axis::Vec2& vec2);
 
 /**
- * Push a table converted from a cocos2d::Vec3 object into the Lua stack.
+ * Push a table converted from a axis::Vec3 object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2, z=numberValue3}
  *
  * @param L the current lua_State.
- * @param vec3  a cocos2d::Vec3 object.
+ * @param vec3  a axis::Vec3 object.
  */
-extern int vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3);
+extern int vec3_to_luaval(lua_State* L, const axis::Vec3& vec3);
 
 /**
- * Push a table converted from a cocos2d::Vec4 object into the Lua stack.
+ * Push a table converted from a axis::Vec4 object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2, z=numberValue3, w=numberValue4}
  *
  * @param L the current lua_State.
- * @param vec4  a cocos2d::Vec4 object.
+ * @param vec4  a axis::Vec4 object.
  */
-extern int vec4_to_luaval(lua_State* L, const cocos2d::Vec4& vec4);
+extern int vec4_to_luaval(lua_State* L, const axis::Vec4& vec4);
 
 /**
- * Push a table converted from a cocos2d::Vec2 array into the Lua stack.
+ * Push a table converted from a axis::Vec2 array into the Lua stack.
  * The table size is count.
  * The format of table as follows: {vec2_table1,vec2_table2,...,vec2_tableCount}.
  *
  * @param L the current lua_State.
- * @param points a pointer points to a cocos2d::Vec2 array.
- * @param count the number of cocos2d::Vec2 object should be converted to a Lua table and push into the Lua stack.
+ * @param points a pointer points to a axis::Vec2 array.
+ * @param count the number of axis::Vec2 object should be converted to a Lua table and push into the Lua stack.
  */
-extern void vec2_array_to_luaval(lua_State* L, const cocos2d::Vec2* points, int count);
+extern void vec2_array_to_luaval(lua_State* L, const axis::Vec2* points, int count);
 
 /**
- * Push a table converted from a cocos2d::Size object into the Lua stack.
+ * Push a table converted from a axis::Size object into the Lua stack.
  * The format of table as follows: {width=numberValue1, height=numberValue2}
  *
  * @param L the current lua_State.
- * @param sz  a cocos2d::Size object.
+ * @param sz  a axis::Size object.
  */
 extern void size_to_luaval(lua_State* L, const Size& sz);
 
 /**
- * Push a table converted from a cocos2d::Rect object into the Lua stack.
+ * Push a table converted from a axis::Rect object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2, width=numberValue3, height=numberValue4}
  *
  * @param L the current lua_State.
- * @param rt  a cocos2d::Rect object.
+ * @param rt  a axis::Rect object.
  */
 extern void rect_to_luaval(lua_State* L, const Rect& rt);
 
 /**
- * Push a table converted from a cocos2d::Color3B object into the Lua stack.
+ * Push a table converted from a axis::Color3B object into the Lua stack.
  * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3}
  *
  * @param L the current lua_State.
- * @param cc  a cocos2d::Color3B object.
+ * @param cc  a axis::Color3B object.
  */
 extern CC_LUA_DLL void color3b_to_luaval(lua_State* L, const Color3B& cc);
 
 /**
- * Push a table converted from a cocos2d::Color4B object into the Lua stack.
+ * Push a table converted from a axis::Color4B object into the Lua stack.
  * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3, a=numberValue4}
  *
  * @param L the current lua_State.
- * @param cc a cocos2d::Color4B object.
+ * @param cc a axis::Color4B object.
  */
 extern void color4b_to_luaval(lua_State* L, const Color4B& cc);
 
 /**
- * Push a table converted from a cocos2d::Color4F object into the Lua stack.
+ * Push a table converted from a axis::Color4F object into the Lua stack.
  * The format of table as follows: {r=numberValue1, g=numberValue2, b=numberValue3, a=numberValue4}
  *
  * @param L the current lua_State.
- * @param cc a cocos2d::Color4F object.
+ * @param cc a axis::Color4F object.
  */
 extern void color4f_to_luaval(lua_State* L, const Color4F& cc);
 #if CC_USE_PHYSICS
 
 /**
- * Push a table converted from a cocos2d::PhysicsMaterial object into the Lua stack.
+ * Push a table converted from a axis::PhysicsMaterial object into the Lua stack.
  * The format of table as follows: {density=numberValue1, restitution=numberValue2, friction=numberValue3}
  *
  * @param L the current lua_State.
- * @param pm a cocos2d::PhysicsMaterial object.
+ * @param pm a axis::PhysicsMaterial object.
  */
 extern void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm);
 
 /**
- * Push a table converted from a cocos2d::PhysicsRayCastInfo object into the Lua stack.
+ * Push a table converted from a axis::PhysicsRayCastInfo object into the Lua stack.
  * The format of table as follows: {shape=userdata, start=vec2_table1, ended=vec2_table2, contact=vec2_table3,
  * normal=vec2_table4, fraction=numberValue}
  *
  * @param L the current lua_State.
- * @param info a cocos2d::PhysicsRayCastInfo object.
+ * @param info a axis::PhysicsRayCastInfo object.
  */
 extern void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info);
 
 /**
- * Push a table converted from a cocos2d::PhysicsContactData object into the Lua stack.
+ * Push a table converted from a axis::PhysicsContactData object into the Lua stack.
  * The format of table as follows: {points=vec2_array_table, normal=vec2_table, POINT_MAX=numberValue}
  *
  * @param L the current lua_State.
- * @param data a cocos2d::PhysicsContactData object.
+ * @param data a axis::PhysicsContactData object.
  */
 extern void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data);
 #endif  //#if CC_USE_PHYSICS
 
 /**
- * Push a table converted from a cocos2d::AffineTransform object into the Lua stack.
+ * Push a table converted from a axis::AffineTransform object into the Lua stack.
  * The format of table as follows: {a=numberValue1, b=numberValue2, c=numberValue3, d=numberValue4,tx=numberValue5,
  * ty=numberValue6}
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::AffineTransform object.
+ * @param inValue a axis::AffineTransform object.
  */
 extern void affinetransform_to_luaval(lua_State* L, const AffineTransform& inValue);
 
 /**
- * Push a table converted from a cocos2d::FontDefinition object into the Lua stack.
+ * Push a table converted from a axis::FontDefinition object into the Lua stack.
  * The format of table as follows: {fontName=stringValue1, fontSize=numberValue1, fontAlignmentH=numberValue2,
  * fontAlignmentV=numberValue3,fontFillColor=color3b_table1, fontDimensions=size_table1, shadowEnabled=booleanValue1,
  * shadowOffset=size_table2, shadowBlur=numberValue4, shadowOpacity=numberValue5, shadowEnabled=booleanValue2,
  * strokeColor=color3b_table2, strokeSize=size_table3}
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::FontDefinition object.
+ * @param inValue a axis::FontDefinition object.
  */
 extern void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue);
 
 /**
- * Push a table converted from a cocos2d::Mat4 object into the Lua stack.
+ * Push a table converted from a axis::Mat4 object into the Lua stack.
  * The format of table as follows: {numberValue1, numberValue2, ..., numberValue16}
  *
  * @param L the current lua_State.
- * @param mat a cocos2d::Mat4 object.
+ * @param mat a axis::Mat4 object.
  */
-extern void mat4_to_luaval(lua_State* L, const cocos2d::Mat4& mat);
+extern void mat4_to_luaval(lua_State* L, const axis::Mat4& mat);
 
 /**
- * Push a table converted from a cocos2d::BlendFunc object into the Lua stack.
+ * Push a table converted from a axis::BlendFunc object into the Lua stack.
  * The format of table as follows: {src=numberValue1, dst=numberValue2}
  *
  * @param L the current lua_State.
- * @param func a cocos2d::BlendFunc object.
+ * @param func a axis::BlendFunc object.
  */
-extern void blendfunc_to_luaval(lua_State* L, const cocos2d::BlendFunc& func);
+extern void blendfunc_to_luaval(lua_State* L, const axis::BlendFunc& func);
 
 /**
- * Push a table converted from a cocos2d::TTFConfig object into the Lua stack.
+ * Push a table converted from a axis::TTFConfig object into the Lua stack.
  * The format of table as follows: {fontFilePath=stringValue1, fontSize=numberValue1, glyphs=numberValue2,
  * customGlyphs=stringValue2,distanceFieldEnabled=booleanValue1, outlineSize=numberValue3}
  *
  * @param L the current lua_State.
- * @param config a cocos2d::TTFConfig object.
+ * @param config a axis::TTFConfig object.
  */
-extern void ttfconfig_to_luaval(lua_State* L, const cocos2d::TTFConfig& config);
+extern void ttfconfig_to_luaval(lua_State* L, const axis::TTFConfig& config);
 
-static inline void point_to_luaval(lua_State* L, const cocos2d::Vec2& pt)
+static inline void point_to_luaval(lua_State* L, const axis::Vec2& pt)
 {
     vec2_to_luaval(L, pt);
 }
 
-CC_DEPRECATED_ATTRIBUTE static inline void points_to_luaval(lua_State* L, const cocos2d::Vec2* points, int count)
+CC_DEPRECATED_ATTRIBUTE static inline void points_to_luaval(lua_State* L, const axis::Vec2* points, int count)
 {
     vec2_array_to_luaval(L, points, count);
 }
@@ -1095,15 +1095,15 @@ const char* getLuaTypeName(T* ret, const char* defaultTypeName)
 }
 
 /**
- * Push a table converted from a cocos2d::Vector object into the Lua stack.
+ * Push a table converted from a axis::Vector object into the Lua stack.
  * The format of table as follows: {userdata1, userdata2, ..., userdataVectorSize}
- * The object in the cocos2d::Vector which would be pushed into the table should be Ref type.
+ * The object in the axis::Vector which would be pushed into the table should be Ref type.
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::Vector object.
+ * @param inValue a axis::Vector object.
  */
 template <class T>
-void ccvector_to_luaval(lua_State* L, const cocos2d::Vector<T>& inValue)
+void ccvector_to_luaval(lua_State* L, const axis::Vector<T>& inValue)
 {
     lua_newtable(L);
 
@@ -1116,7 +1116,7 @@ void ccvector_to_luaval(lua_State* L, const cocos2d::Vector<T>& inValue)
         if (nullptr == obj)
             continue;
 
-        if (nullptr != dynamic_cast<cocos2d::Ref*>(obj))
+        if (nullptr != dynamic_cast<axis::Ref*>(obj))
         {
             auto luaTypeName = getLuaTypeName(obj, nullptr);
             if (luaTypeName)
@@ -1133,15 +1133,15 @@ void ccvector_to_luaval(lua_State* L, const cocos2d::Vector<T>& inValue)
 }
 
 /**
- * Push a table converted from a cocos2d::Map object into the Lua stack.
+ * Push a table converted from a axis::Map object into the Lua stack.
  * The format of table as follows: {name1=userdata1, name2=userdata2, ..., nameMapSize=userdataMapSize}
- * The object in the cocos2d::Map which would be pushed into the table should be Ref type.
+ * The object in the axis::Map which would be pushed into the table should be Ref type.
  *
  * @param L the current lua_State.
- * @param v a cocos2d::Map object.
+ * @param v a axis::Map object.
  */
 template <class T>
-void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::StringMap<T>& v)
+void ccmap_string_key_to_luaval(lua_State* L, const axis::StringMap<T>& v)
 {
     lua_newtable(L);
 
@@ -1152,7 +1152,7 @@ void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::StringMap<T>& v)
     {
         auto& key = iter->first;
         T obj     = iter->second;
-        if (nullptr != dynamic_cast<cocos2d::Ref*>(obj))
+        if (nullptr != dynamic_cast<axis::Ref*>(obj))
         {
             auto name     = reinterpret_cast<uintptr_t>(typeid(*obj).name());
             auto typeIter = g_luaType.find(name);
@@ -1171,8 +1171,8 @@ void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::StringMap<T>& v)
 }
 
 /**
- * Push a Lua value converted from a cocos2d::Value object into the Lua stack.
- * Different cocos2d::Value type, different Lua value pushed into the Lua stack.
+ * Push a Lua value converted from a axis::Value object into the Lua stack.
+ * Different axis::Value type, different Lua value pushed into the Lua stack.
  * Value::Type::BOOLEAN -> push a boolean value into the Lua stack.
  * Value::Type::FLOAT,Value::Type::DOUBLE -> push a number value into the Lua stack.
  * Value::Type::INTEGER -> push a integer value into the Lua stack.
@@ -1182,36 +1182,36 @@ void ccmap_string_key_to_luaval(lua_State* L, const cocos2d::StringMap<T>& v)
  * Value::Type::INT_KEY_MAP -> push a hash table into the Lua stack.
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::Value object.
+ * @param inValue a axis::Value object.
  */
-void ccvalue_to_luaval(lua_State* L, const cocos2d::Value& inValue);
+void ccvalue_to_luaval(lua_State* L, const axis::Value& inValue);
 
 /**
- * Push a Lua hash table converted from a cocos2d::ValueMap object into the Lua stack.
+ * Push a Lua hash table converted from a axis::ValueMap object into the Lua stack.
  * The type of value of the key/value pair would be boolean,number, integer, string, array table, hash table.
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::ValueMap object.
+ * @param inValue a axis::ValueMap object.
  */
-void ccvaluemap_to_luaval(lua_State* L, const cocos2d::ValueMap& inValue);
+void ccvaluemap_to_luaval(lua_State* L, const axis::ValueMap& inValue);
 
 /**
- * Push a Lua hash table converted from a cocos2d::ValueMapIntKey object into the Lua stack.
+ * Push a Lua hash table converted from a axis::ValueMapIntKey object into the Lua stack.
  * The type of value of the key/value pair would be boolean,number, integer, string, array table, hash table.
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::ValueMapIntKey object.
+ * @param inValue a axis::ValueMapIntKey object.
  */
-void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inValue);
+void ccvaluemapintkey_to_luaval(lua_State* L, const axis::ValueMapIntKey& inValue);
 
 /**
- * Push a Lua array table converted from a cocos2d::ValueVector object into the Lua stack.
+ * Push a Lua array table converted from a axis::ValueVector object into the Lua stack.
  * The type of value of the key/value pair would be boolean,number, integer, string, array table, hash table.
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::ValueVector object.
+ * @param inValue a axis::ValueVector object.
  */
-void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue);
+void ccvaluevector_to_luaval(lua_State* L, const axis::ValueVector& inValue);
 
 /**@}**/
 
@@ -1227,10 +1227,10 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
 {
     if (nullptr != ret)
     {
-        if (std::is_base_of<cocos2d::Ref, T>::value)
+        if (std::is_base_of<axis::Ref, T>::value)
         {
             // use c style cast, T may not polymorphic
-            cocos2d::Ref* dynObject = (cocos2d::Ref*)(ret);
+            axis::Ref* dynObject = (axis::Ref*)(ret);
             int ID                  = (int)(dynObject->_ID);
             int* luaID              = &(dynObject->_luaID);
             toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, type);
@@ -1247,14 +1247,14 @@ void object_to_luaval(lua_State* L, const char* type, T* ret)
 }
 
 /**
- * Push a table converted from a cocos2d::MeshVertexAttrib object into the Lua stack.
+ * Push a table converted from a axis::MeshVertexAttrib object into the Lua stack.
  * The format of table as follows: {size=numberValue1, type=numberValue2, vertexAttrib=numberValue3,
  * attribSizeBytes=numberValue4}
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::MeshVertexAttrib object.
+ * @param inValue a axis::MeshVertexAttrib object.
  */
-void mesh_vertex_attrib_to_luaval(lua_State* L, const cocos2d::MeshVertexAttrib& inValue);
+void mesh_vertex_attrib_to_luaval(lua_State* L, const axis::MeshVertexAttrib& inValue);
 
 /**
  * Push a Lua array table converted from a std::vector<std::string> into the Lua stack.
@@ -1293,32 +1293,32 @@ void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue);
 void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& inValue);
 
 /**
- * Push a table converted from a cocos2d::Quaternion object into the Lua stack.
+ * Push a table converted from a axis::Quaternion object into the Lua stack.
  * The format of table as follows: {x=numberValue1, y=numberValue2, z=numberValue3, w=numberValue4}
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::Quaternion object.
+ * @param inValue a axis::Quaternion object.
  */
-void quaternion_to_luaval(lua_State* L, const cocos2d::Quaternion& inValue);
+void quaternion_to_luaval(lua_State* L, const axis::Quaternion& inValue);
 
 /**
- * Push a table converted from a cocos2d::Texture2D::TexParams object into the Lua stack.
+ * Push a table converted from a axis::Texture2D::TexParams object into the Lua stack.
  * The format of table as follows: {minFilter=numberValue1, magFilter=numberValue2, wrapS=numberValue3,
  * wrapT=numberValue4}
  *
  * @param L the current lua_State.
- * @param inValue a cocos2d::Texture2D::TexParams object.
+ * @param inValue a axis::Texture2D::TexParams object.
  */
-void texParams_to_luaval(lua_State* L, const cocos2d::Texture2D::TexParams& inValue);
+void texParams_to_luaval(lua_State* L, const axis::Texture2D::TexParams& inValue);
 
 /**
- * Push a Lua array table converted from a std::vector<cocos2d::Vec3> into the Lua stack.
+ * Push a Lua array table converted from a std::vector<axis::Vec3> into the Lua stack.
  * The format of table as follows: {vec3Value1, vec3Value2, ..., vec3ValueSize}
  *
  * @param L the current lua_State.
- * @param inValue a std::vector<cocos2d::Vec3> value.
+ * @param inValue a std::vector<axis::Vec3> value.
  */
-void std_vector_vec3_to_luaval(lua_State* L, const std::vector<cocos2d::Vec3>& inValue);
+void std_vector_vec3_to_luaval(lua_State* L, const std::vector<axis::Vec3>& inValue);
 
 /**
  * Push a Lua dict table converted from a std::map<std::string, std::string> into the Lua stack.
@@ -1329,15 +1329,15 @@ void std_vector_vec3_to_luaval(lua_State* L, const std::vector<cocos2d::Vec3>& i
 void std_map_string_string_to_luaval(lua_State* L, const std::map<std::string, std::string>& inValue);
 
 // Follow 2 function is added for Cocos Studio to make lua lib can be compile as dynamic library
-CC_LUA_DLL extern bool luaval_to_node(lua_State* L, int lo, const char* type, cocos2d::Node** node);
-CC_LUA_DLL extern void node_to_luaval(lua_State* L, const char* type, cocos2d::Node* node);
+CC_LUA_DLL extern bool luaval_to_node(lua_State* L, int lo, const char* type, axis::Node** node);
+CC_LUA_DLL extern void node_to_luaval(lua_State* L, const char* type, axis::Node* node);
 
 /**
  * convert lua object VertexLayout to native object
  */
 CC_LUA_DLL bool luaval_to_vertexLayout(lua_State* L,
                                        int pos,
-                                       cocos2d::backend::VertexLayout& outLayout,
+                                       axis::backend::VertexLayout& outLayout,
                                        const char* message);
 
 /**
@@ -1345,24 +1345,24 @@ CC_LUA_DLL bool luaval_to_vertexLayout(lua_State* L,
  */
 CC_LUA_DLL bool luaval_to_samplerDescriptor(lua_State* L,
                                             int pos,
-                                            cocos2d::backend::SamplerDescriptor& desc,
+                                            axis::backend::SamplerDescriptor& desc,
                                             const char* message);
 
 /**
- * convert lua object to cocos2d::backend::UniformLocation
+ * convert lua object to axis::backend::UniformLocation
  */
 CC_LUA_DLL bool luaval_to_uniformLocation(lua_State* L,
                                           int pos,
-                                          cocos2d::backend::UniformLocation& desc,
+                                          axis::backend::UniformLocation& desc,
                                           const char* message);
 
 /**
- * convert cocos2d::backend::UniformLocation to lua object
+ * convert axis::backend::UniformLocation to lua object
  */
-CC_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const cocos2d::backend::UniformLocation& desc);
+CC_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const axis::backend::UniformLocation& desc);
 
 CC_LUA_DLL void program_activeattrs_to_luaval(lua_State* L,
-                                              const hlookup::string_map<cocos2d::backend::AttributeBindInfo>& map);
+                                              const hlookup::string_map<axis::backend::AttributeBindInfo>& map);
 
 // end group
 /// @}

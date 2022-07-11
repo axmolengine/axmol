@@ -84,7 +84,7 @@ CGFloat const UI_PLACEHOLDER_TEXT_CHANGED_ANIMATION_DURATION = 0.25;
 {
     if (_placeHolderLabel == nil)
     {
-        auto glview   = cocos2d::Director::getInstance()->getOpenGLView();
+        auto glview   = axis::Director::getInstance()->getOpenGLView();
         float padding = CC_EDIT_BOX_PADDING * glview->getScaleX() / glview->getContentScaleFactor();
 
         _placeHolderLabel =
@@ -106,7 +106,7 @@ CGFloat const UI_PLACEHOLDER_TEXT_CHANGED_ANIMATION_DURATION = 0.25;
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    auto glview = cocos2d::Director::getInstance()->getOpenGLView();
+    auto glview = axis::Director::getInstance()->getOpenGLView();
 
     float padding = CC_EDIT_BOX_PADDING * glview->getScaleX() / glview->getContentScaleFactor();
     return CGRectInset(bounds, padding, padding);

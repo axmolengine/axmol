@@ -3,7 +3,7 @@
 #include "GTextInput.h"
 #include "UIConfig.h"
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 FUIInput * FUIInput::create()
 {
@@ -81,7 +81,7 @@ void FUIInput::openKeyboard()
 #if COCOS2D_VERSION >= 0x00031700
     EditBox::openKeyboard();
 #else
-    touchDownAction(this, cocos2d::ui::Widget::TouchEventType::ENDED);
+    touchDownAction(this, axis::ui::Widget::TouchEventType::ENDED);
 #endif
 }
 
@@ -94,7 +94,7 @@ void FUIInput::continueInit()
     this->addTouchEventListener(CC_CALLBACK_2(FUIInput::_touchDownAction, this));
 }
 
-void FUIInput::_touchDownAction(cocos2d::Ref *sender, cocos2d::ui::Widget::TouchEventType controlEvent)
+void FUIInput::_touchDownAction(axis::Ref *sender, axis::ui::Widget::TouchEventType controlEvent)
 {
     //do nothing
 }

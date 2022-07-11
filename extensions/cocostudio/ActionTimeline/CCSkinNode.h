@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 NS_TIMELINE_BEGIN
 
-typedef cocos2d::Node SkinNode;
+typedef axis::Node SkinNode;
 
 NS_TIMELINE_END
 

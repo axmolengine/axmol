@@ -32,7 +32,7 @@
  * TestScene is retained for compatibility with older versions.
  * @warning It should soon be removed.
  */
-class TestScene : public cocos2d::Scene
+class TestScene : public axis::Scene
 {
 public:
     TestScene(bool bPortrait = false, bool physics = false) {}

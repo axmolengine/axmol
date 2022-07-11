@@ -27,7 +27,7 @@
 #include "CCPUTextureAnimator.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // Constants
 const float PUTextureAnimator::DEFAULT_TIME_STEP                                        = 0.0f;
 const unsigned short PUTextureAnimator::DEFAULT_TEXCOORDS_START                         = 0;
@@ -111,7 +111,7 @@ void PUTextureAnimator::initParticleForEmission(PUParticle3D* particle)
     if (_startRandom)
     {
         particle->textureCoordsCurrent =
-            (unsigned short)cocos2d::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
+            (unsigned short)axis::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
     }
     else
     {
@@ -213,7 +213,7 @@ void PUTextureAnimator::determineNextTextureCoords(PUParticle3D* visualParticle)
     {
         // Generate a random texcoord index
         visualParticle->textureCoordsCurrent =
-            (unsigned short)cocos2d::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
+            (unsigned short)axis::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
     }
     break;
     }
@@ -268,4 +268,4 @@ void PUTextureAnimator::copyAttributesTo(PUAffector* affector)
     textureAnimator->_startRandom          = _startRandom;
 }
 
-NS_CC_END
+NS_AX_END

@@ -7,7 +7,7 @@
 #include "utils/ToolSet.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GLabel::GLabel() :
     _titleObject(nullptr),
@@ -48,7 +48,7 @@ void GLabel::setIcon(const std::string & value)
     updateGear(7);
 }
 
-cocos2d::Color3B GLabel::getTitleColor() const
+axis::Color3B GLabel::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -57,7 +57,7 @@ cocos2d::Color3B GLabel::getTitleColor() const
         return Color3B::BLACK;
 }
 
-void GLabel::setTitleColor(const cocos2d::Color3B & value)
+void GLabel::setTitleColor(const axis::Color3B & value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -92,7 +92,7 @@ GTextField * GLabel::getTextField() const
         return nullptr;
 }
 
-cocos2d::Value GLabel::getProp(ObjectPropID propId)
+axis::Value GLabel::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -113,7 +113,7 @@ cocos2d::Value GLabel::getProp(ObjectPropID propId)
     }
 }
 
-void GLabel::setProp(ObjectPropID propId, const cocos2d::Value& value)
+void GLabel::setProp(ObjectPropID propId, const axis::Value& value)
 {
     switch (propId)
     {

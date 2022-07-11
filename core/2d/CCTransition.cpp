@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const unsigned int kSceneFade = 0xFADEFADE;
 
@@ -1465,4 +1465,4 @@ ActionInterval* TransitionFadeDown::actionWithSize(const Vec2& size)
     return FadeOutDownTiles::create(_duration, size);
 }
 
-NS_CC_END
+NS_AX_END

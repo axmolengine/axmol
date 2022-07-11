@@ -25,7 +25,7 @@
 #include "DepthStencilState.h"
 #include "RenderTarget.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 bool StencilDescriptor::operator==(const StencilDescriptor& rhs) const
 {
@@ -43,4 +43,4 @@ void DepthStencilState::update(const DepthStencilDescriptor& dsDesc)
     _isBackFrontStencilEqual = dsDesc.backFaceStencil == dsDesc.frontFaceStencil;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

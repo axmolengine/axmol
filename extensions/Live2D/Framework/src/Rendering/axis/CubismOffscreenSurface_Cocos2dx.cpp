@@ -65,7 +65,7 @@ void CubismOffscreenFrame_Cocos2dx::Clear(CubismCommandBuffer_Cocos2dx* commandB
     commandBuffer->Clear(r, g, b, a);
 }
 
-csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBufferWidth, csmUint32 displayBufferHeight, cocos2d::RenderTexture* renderTexture)
+csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBufferWidth, csmUint32 displayBufferHeight, axis::RenderTexture* renderTexture)
 {
     // 一旦削除
     DestroyOffscreenFrame();
@@ -82,7 +82,7 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
             csmBool initResult = false;
 
 
-            _renderTexture = cocos2d::RenderTexture::create(displayBufferWidth, displayBufferHeight);
+            _renderTexture = axis::RenderTexture::create(displayBufferWidth, displayBufferHeight);
 
             if (!_renderTexture)
             {
@@ -93,11 +93,11 @@ csmBool CubismOffscreenFrame_Cocos2dx::CreateOffscreenFrame(csmUint32 displayBuf
 
 
             _renderTexture->getSprite()->getTexture()->setTexParameters(
-                cocos2d::Texture2D::TexParams(
-                    cocos2d::backend::SamplerFilter::LINEAR,                    // MagFilter
-                    cocos2d::backend::SamplerFilter::LINEAR,                    // MinFilter
-                    cocos2d::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-                    cocos2d::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
+                axis::Texture2D::TexParams(
+                    axis::backend::SamplerFilter::LINEAR,                    // MagFilter
+                    axis::backend::SamplerFilter::LINEAR,                    // MinFilter
+                    axis::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
+                    axis::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
                 )
             );
 
@@ -151,7 +151,7 @@ void CubismOffscreenFrame_Cocos2dx::DestroyOffscreenFrame()
     }
 }
 
-cocos2d::Texture2D* CubismOffscreenFrame_Cocos2dx::GetColorBuffer() const
+axis::Texture2D* CubismOffscreenFrame_Cocos2dx::GetColorBuffer() const
 {
     return _renderTexture->getSprite()->getTexture();
 }

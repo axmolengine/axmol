@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "base/CCEventCustom.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -477,17 +477,17 @@ void TriggerMng::removeAllArmatureMovementCallBack()
     _movementDispatches->clear();
 }
 
-void TriggerMng::dispatchEvent(cocos2d::EventCustom* tEvent)
+void TriggerMng::dispatchEvent(axis::EventCustom* tEvent)
 {
     _eventDispatcher->dispatchEvent(tEvent);
 }
 
-void TriggerMng::removeEventListener(cocos2d::EventListener* listener)
+void TriggerMng::removeEventListener(axis::EventListener* listener)
 {
     _eventDispatcher->removeEventListener(listener);
 }
 
-void TriggerMng::addEventListenerWithFixedPriority(cocos2d::EventListener* listener, int fixedPriority)
+void TriggerMng::addEventListenerWithFixedPriority(axis::EventListener* listener, int fixedPriority)
 {
     _eventDispatcher->addEventListenerWithFixedPriority(listener, fixedPriority);
 }

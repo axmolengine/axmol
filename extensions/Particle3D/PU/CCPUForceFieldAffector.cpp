@@ -27,7 +27,7 @@
 #include "CCPUForceFieldAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //-----------------------------------------------------------------------
 // Constants
 const PUForceField::ForceFieldType PUForceFieldAffector::DEFAULT_FORCEFIELD_TYPE = PUForceField::FF_REALTIME_CALC;
@@ -333,4 +333,4 @@ void PUForceFieldAffector::copyAttributesTo(PUAffector* affector)
     forceFieldAffector->_movement            = _movement;
 }
 
-NS_CC_END
+NS_AX_END

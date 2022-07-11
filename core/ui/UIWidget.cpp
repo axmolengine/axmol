@@ -38,7 +38,7 @@ THE SOFTWARE.
 #include "2d/CCSprite.h"
 #include "ui/UIScale9Sprite.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -770,9 +770,9 @@ bool Widget::onTouchBegan(Touch* touch, Event* /*unusedEvent*/)
     return true;
 }
 
-void Widget::propagateTouchEvent(cocos2d::ui::Widget::TouchEventType event,
-                                 cocos2d::ui::Widget* sender,
-                                 cocos2d::Touch* touch)
+void Widget::propagateTouchEvent(axis::ui::Widget::TouchEventType event,
+                                 axis::ui::Widget* sender,
+                                 axis::Touch* touch)
 {
     Widget* widgetParent = getWidgetParent();
     if (widgetParent)
@@ -958,7 +958,7 @@ bool Widget::isClippingParentContainsPoint(const Vec2& pt)
     return true;
 }
 
-void Widget::interceptTouchEvent(cocos2d::ui::Widget::TouchEventType event, cocos2d::ui::Widget* sender, Touch* touch)
+void Widget::interceptTouchEvent(axis::ui::Widget::TouchEventType event, axis::ui::Widget* sender, Touch* touch)
 {
     Widget* widgetParent = getWidgetParent();
     if (widgetParent)
@@ -1344,7 +1344,7 @@ Widget* Widget::findNextFocusedWidget(FocusDirection direction, Widget* current)
     }
 }
 
-void Widget::dispatchFocusEvent(cocos2d::ui::Widget* widgetLoseFocus, cocos2d::ui::Widget* widgetGetFocus)
+void Widget::dispatchFocusEvent(axis::ui::Widget* widgetLoseFocus, axis::ui::Widget* widgetGetFocus)
 {
     // if the widgetLoseFocus doesn't get focus, it will use the previous focused widget instead
     if (widgetLoseFocus && !widgetLoseFocus->isFocused())
@@ -1445,4 +1445,4 @@ bool Widget::isLayoutComponentEnabled() const
 }
 
 }  // namespace ui
-NS_CC_END
+NS_AX_END

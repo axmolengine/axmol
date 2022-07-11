@@ -66,7 +66,7 @@ namespace cocostudio
  * @js NA
  * @lua NA
  */
-class CCS_DLL BaseData : public cocos2d::Ref
+class CCS_DLL BaseData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM_NO_INIT(BaseData)
@@ -95,8 +95,8 @@ public:
      */
     virtual void subtract(BaseData* from, BaseData* to, bool limit);
 
-    virtual void setColor(const cocos2d::Color4B& color);
-    virtual cocos2d::Color4B getColor();
+    virtual void setColor(const axis::Color4B& color);
+    virtual axis::Color4B getColor();
 
 public:
     float x;     //! position x attribute
@@ -135,7 +135,7 @@ enum DisplayType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DisplayData : public cocos2d::Ref
+class CCS_DLL DisplayData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM_NO_INIT(DisplayData)
@@ -254,8 +254,8 @@ public:
 public:
     std::string name;                               //! the bone's name
     std::string parentName;                         //! the bone parent's name
-    cocos2d::Vector<DisplayData*> displayDataList;  //! save DisplayData informations for the Bone
-    cocos2d::AffineTransform boneDataTransform;
+    axis::Vector<DisplayData*> displayDataList;  //! save DisplayData informations for the Bone
+    axis::AffineTransform boneDataTransform;
 };
 
 /**
@@ -265,7 +265,7 @@ public:
  * @js NA
  * @lua NA
  */
-class CCS_DLL ArmatureData : public cocos2d::Ref
+class CCS_DLL ArmatureData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM(ArmatureData)
@@ -286,7 +286,7 @@ public:
 
 public:
     std::string name;
-    cocos2d::StringMap<BoneData*> boneDataDic;
+    axis::StringMap<BoneData*> boneDataDic;
     float dataVersion;
 };
 
@@ -333,7 +333,7 @@ public:
     int frameID;
     int duration;  //! The frame will last duration frames
 
-    cocos2d::tweenfunc::TweenType tweenEasing;  //! Every frame's tween easing effect
+    axis::tweenfunc::TweenType tweenEasing;  //! Every frame's tween easing effect
     int easingParamNumber;
     float* easingParams;
 
@@ -345,7 +345,7 @@ public:
      */
     int displayIndex;
 
-    cocos2d::BlendFunc blendFunc;
+    axis::BlendFunc blendFunc;
 
     std::string strEvent;
     /**
@@ -360,7 +360,7 @@ public:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL MovementBoneData : public cocos2d::Ref
+class CCS_DLL MovementBoneData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM(MovementBoneData)
@@ -386,14 +386,14 @@ public:
     float duration;    //! this Bone in this movement will last m_iDuration frames
     std::string name;  //! bone name
 
-    cocos2d::Vector<FrameData*> frameList;
+    axis::Vector<FrameData*> frameList;
 };
 
 /**
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL MovementData : public cocos2d::Ref
+class CCS_DLL MovementData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM_NO_INIT(MovementData)
@@ -439,14 +439,14 @@ public:
      * Which tween easing effect the movement use
      * TWEEN_EASING_MAX : use the value from MovementData get from flash design panel
      */
-    cocos2d::tweenfunc::TweenType tweenEasing;
+    axis::tweenfunc::TweenType tweenEasing;
 
     /**
      * @brief    save movement bone data
      * @key    std::string_view
      * @value    MovementBoneData *
      */
-    cocos2d::StringMap<MovementBoneData*> movBoneDataDic;
+    axis::StringMap<MovementBoneData*> movBoneDataDic;
 };
 
 /**
@@ -456,7 +456,7 @@ public:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL AnimationData : public cocos2d::Ref
+class CCS_DLL AnimationData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM_NO_INIT(AnimationData)
@@ -477,7 +477,7 @@ public:
 
 public:
     std::string name;
-    cocos2d::StringMap<MovementData*> movementDataDic;
+    axis::StringMap<MovementData*> movementDataDic;
     std::vector<std::string> movementNames;
 };
 
@@ -486,7 +486,7 @@ public:
  * @js NA
  * @lua NA
  */
-class CCS_DLL ContourData : public cocos2d::Ref
+class CCS_DLL ContourData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM(ContourData)
@@ -502,10 +502,10 @@ public:
     ~ContourData(void);
 
     virtual bool init();
-    virtual void addVertex(cocos2d::Vec2& vertex);
+    virtual void addVertex(axis::Vec2& vertex);
 
 public:
-    std::vector<cocos2d::Vec2> vertexList;  //! Save contour vertex info, vertex saved in a Vec2
+    std::vector<axis::Vec2> vertexList;  //! Save contour vertex info, vertex saved in a Vec2
 };
 
 /*
@@ -513,7 +513,7 @@ public:
  * @js NA
  * @lua NA
  */
-class CCS_DLL TextureData : public cocos2d::Ref
+class CCS_DLL TextureData : public axis::Ref
 {
 public:
     CC_CREATE_NO_PARAM(TextureData)
@@ -542,7 +542,7 @@ public:
 
     std::string name;  //! The texture's name
 
-    cocos2d::Vector<ContourData*> contourDataList;
+    axis::Vector<ContourData*> contourDataList;
 };
 
 }  // namespace cocostudio

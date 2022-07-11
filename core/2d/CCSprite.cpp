@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Device.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // MARK: create, init, dealloc
 Sprite* Sprite::createWithTexture(Texture2D* texture)
@@ -245,7 +245,7 @@ bool Sprite::initWithSpriteFrame(SpriteFrame* spriteFrame)
     return ret;
 }
 
-bool Sprite::initWithPolygon(const cocos2d::PolygonInfo& info)
+bool Sprite::initWithPolygon(const axis::PolygonInfo& info)
 {
     bool ret = false;
 
@@ -705,7 +705,7 @@ void Sprite::updatePoly()
     }
 }
 
-void Sprite::setCenterRectNormalized(const cocos2d::Rect& rectTopLeft)
+void Sprite::setCenterRectNormalized(const axis::Rect& rectTopLeft)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
@@ -761,7 +761,7 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect& rectTopLeft)
     }
 }
 
-void Sprite::setCenterRect(const cocos2d::Rect& rectInPoints)
+void Sprite::setCenterRect(const axis::Rect& rectInPoints)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
@@ -1727,4 +1727,4 @@ void Sprite::setMVPMatrixUniform()
         programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
 }
 
-NS_CC_END
+NS_AX_END

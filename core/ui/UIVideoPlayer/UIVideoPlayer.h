@@ -42,7 +42,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 namespace ui
 {
 
@@ -54,7 +54,7 @@ namespace ui
  * It's mean VideoPlayer displays a video file above all graphical elements of cocos2d-x.
  * @js NA
  */
-class VideoPlayer : public cocos2d::ui::Widget
+class VideoPlayer : public axis::ui::Widget
 {
 public:
     /**
@@ -244,7 +244,7 @@ public:
     virtual ~VideoPlayer();
 
 protected:
-    virtual cocos2d::ui::Widget* createCloneInstance() override;
+    virtual axis::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
 #    if CC_VIDEOPLAYER_DEBUG_DRAW
@@ -276,7 +276,7 @@ protected:
 };
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 // end group
 /// @}
 #endif

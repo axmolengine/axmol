@@ -32,7 +32,7 @@
 
 class b2Body;
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 /** A Sprite subclass that is bound to a physics body.
  It works with:
@@ -129,9 +129,9 @@ protected:
     float _PTMRatio;
 
     // Event for update synchronise physic transform
-    cocos2d::EventListenerCustom* _syncTransform;
+    axis::EventListenerCustom* _syncTransform;
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif  // __PHYSICSNODES_CCPHYSICSSPRITEBOX2D_H__

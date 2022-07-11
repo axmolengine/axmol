@@ -47,7 +47,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 std::string TextureCache::s_etc1AlphaFileSuffix = "@alpha";
 
@@ -457,7 +457,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
     return texture;
 }
 
-void TextureCache::parseNinePatchImage(cocos2d::Image* image, cocos2d::Texture2D* texture, std::string_view path)
+void TextureCache::parseNinePatchImage(axis::Image* image, axis::Texture2D* texture, std::string_view path)
 {
     if (NinePatchImageParser::isNinePatchImage(path))
     {
@@ -629,7 +629,7 @@ Texture2D* TextureCache::getTextureForKey(std::string_view textureKeyName) const
     return nullptr;
 }
 
-std::string TextureCache::getTextureFilePath(cocos2d::Texture2D* texture) const
+std::string TextureCache::getTextureFilePath(axis::Texture2D* texture) const
 {
     for (auto& item : _textures)
     {
@@ -891,4 +891,4 @@ void VolatileTextureMgr::reloadTexture(Texture2D* texture, std::string_view file
 
 #endif  // CC_ENABLE_CACHE_TEXTURE_DATA
 
-NS_CC_END
+NS_AX_END

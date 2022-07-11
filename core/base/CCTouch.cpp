@@ -27,7 +27,7 @@
 #include "base/CCTouch.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // returns the current touch location in screen coordinates
 Vec2 Touch::getLocationInView() const
@@ -83,4 +83,4 @@ float Touch::getMaxForce() const
     return _maxForce;
 }
 
-NS_CC_END
+NS_AX_END
