@@ -51,4 +51,6 @@ NS_AX_END
 
 namespace cocos2d = axis;
 
+#define USING_NS_CC USING_NS_AX
+
 #endif  // __COCOS2D_H__
