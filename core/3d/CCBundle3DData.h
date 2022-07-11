@@ -107,7 +107,7 @@ public:
     void push_back(const _Ty& val)
     {
         assert(_stride == sizeof(_Ty));
-        _buffer.append_n((uint8_t*)&val, _stride);
+        _buffer.insert(_buffer.end(), &val, &val + 1);
     }
 
     /** Inserts a list containing unsigned int (uint16_t/uint32_t) data. */
