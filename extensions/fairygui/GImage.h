@@ -21,8 +21,8 @@ public:
     FlipType getFlip() const;
     void setFlip(FlipType value);
 
-    cocos2d::Color3B getColor() const;
-    void setColor(const cocos2d::Color3B& value);
+    axis::Color3B getColor() const;
+    void setColor(const axis::Color3B& value);
 
     FillMethod getFillMethod() const;
     void setFillMethod(FillMethod value);
@@ -38,8 +38,8 @@ public:
 
     virtual void constructFromResource() override;
 
-    virtual cocos2d::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const cocos2d::Value& value) override;
+    virtual axis::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
 
 protected:
     virtual void handleInit() override;

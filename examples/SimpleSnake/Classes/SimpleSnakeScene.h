@@ -24,7 +24,7 @@
 const int snakeBodies = 9;
 const int StartBodies = 4;
 
-class SimpleSnake : public cocos2d::Scene
+class SimpleSnake : public axis::Scene
 {
 public:
     virtual bool init() override;
@@ -33,10 +33,10 @@ public:
     void menuCloseCallback(Ref* sender);
     virtual void update(float delta) override;
     void drawAll(bool finish);
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+    void onKeyPressed(axis::EventKeyboard::KeyCode keyCode, axis::Event* event);
 
-    cocos2d::Vec2 offset;
-    cocos2d::DrawNode* mydraw;
+    axis::Vec2 offset;
+    axis::DrawNode* mydraw;
 
     // game stuff
     int N = 36, M = 36;
@@ -50,8 +50,8 @@ public:
     float endLevelTime   = 0.0;
 
     int dir, num = StartBodies;
-    cocos2d::Label* myScoreLabel[snakeBodies + 1];
-    cocos2d::Sprite* background;
+    axis::Label* myScoreLabel[snakeBodies + 1];
+    axis::Sprite* background;
 };
 
 #endif  // __SIMPLE_SNAKE_SCENE_H__

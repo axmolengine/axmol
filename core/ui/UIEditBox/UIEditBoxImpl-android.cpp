@@ -41,7 +41,7 @@
 #    include "platform/CCFileUtils.h"
 #    include "yasio/cxx17/string_view.hpp"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static const char* editBoxClassName = "org.cocos2dx.lib.Cocos2dxEditBoxHelper";
 
@@ -95,7 +95,7 @@ EditBoxImplAndroid::~EditBoxImplAndroid()
 
 void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
-    auto director  = cocos2d::Director::getInstance();
+    auto director  = axis::Director::getInstance();
     auto glView    = director->getOpenGLView();
     auto frameSize = glView->getFrameSize();
 
@@ -117,13 +117,13 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 
 void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
 {
-    auto director            = cocos2d::Director::getInstance();
+    auto director            = axis::Director::getInstance();
     auto glView              = director->getOpenGLView();
-    auto isFontFileExists    = cocos2d::FileUtils::getInstance()->isFileExist(pFontName);
+    auto isFontFileExists    = axis::FileUtils::getInstance()->isFileExist(pFontName);
     std::string realFontPath = pFontName;
     if (isFontFileExists)
     {
-        realFontPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(pFontName);
+        realFontPath = axis::FileUtils::getInstance()->fullPathForFilename(pFontName);
         using namespace cxx17;  // for cxx17::string_view literal
         if (cxx20::starts_with(cxx17::string_view{realFontPath}, "assets/"_sv))
         {
@@ -171,7 +171,7 @@ void EditBoxImplAndroid::setNativeReturnType(EditBox::KeyboardReturnType returnT
     JniHelper::callStaticVoidMethod(editBoxClassName, "setReturnType", _editBoxIndex, static_cast<int>(returnType));
 }
 
-void EditBoxImplAndroid::setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment)
+void EditBoxImplAndroid::setNativeTextHorizontalAlignment(axis::TextHAlignment alignment)
 {
     JniHelper::callStaticVoidMethod(editBoxClassName, "setTextHorizontalAlignment", _editBoxIndex,
                                     static_cast<int>(alignment));
@@ -236,7 +236,7 @@ void editBoxEditingDidEnd(int index, std::string_view text, int action)
     if (it != s_allEditBoxes.end())
     {
         s_allEditBoxes[index]->editBoxEditingDidEnd(
-            text, static_cast<cocos2d::ui::EditBoxDelegate::EditBoxEndAction>(action));
+            text, static_cast<axis::ui::EditBoxDelegate::EditBoxEndAction>(action));
     }
 }
 
@@ -247,6 +247,6 @@ const char* EditBoxImplAndroid::getNativeDefaultFontName()
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 
 #endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) */

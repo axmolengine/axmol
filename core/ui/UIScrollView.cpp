@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "ui/UIScrollViewBar.h"
 #include "2d/CCTweenFunction.h"
 #include "2d/CCCamera.h"
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static const int NUMBER_OF_GATHERED_TOUCHES_FOR_MOVE_SPEED = 5;
 static const float OUT_OF_BOUNDARY_BREAKING_FACTOR         = 0.05f;
@@ -1576,7 +1576,7 @@ void ScrollView::removeScrollBar()
     }
 }
 
-Widget* ScrollView::findNextFocusedWidget(cocos2d::ui::Widget::FocusDirection direction, cocos2d::ui::Widget* current)
+Widget* ScrollView::findNextFocusedWidget(axis::ui::Widget::FocusDirection direction, axis::ui::Widget* current)
 {
     if (this->getLayoutType() == Layout::Type::VERTICAL || this->getLayoutType() == Layout::Type::HORIZONTAL)
     {
@@ -1589,4 +1589,4 @@ Widget* ScrollView::findNextFocusedWidget(cocos2d::ui::Widget::FocusDirection di
 }
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

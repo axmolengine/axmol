@@ -27,7 +27,7 @@
 #include "CCPUAlignAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const bool PUAlignAffector::DEFAULT_RESIZE = false;
@@ -90,4 +90,4 @@ void PUAlignAffector::copyAttributesTo(PUAffector* affector)
     alignAffector->_resize         = _resize;
 }
 
-NS_CC_END
+NS_AX_END

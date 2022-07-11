@@ -22,7 +22,7 @@ private:
 // 0xffffffff, 0xfffffffe, so it's always works well.
 #define STIMER_TARGET(bNative) reinterpret_cast<void*>(bNative ? STIMER_TARGET_NATIVE : STIMER_TARGET_SCRIPT)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 namespace stimer
 {
 static const uintptr_t STIMER_TARGET_NATIVE = ~static_cast<uintptr_t>(0);
@@ -92,4 +92,4 @@ void killAll(bool bNative)
     Director::getInstance()->getScheduler()->unscheduleAllForTarget(STIMER_TARGET(bNative));
 }
 }  // namespace stimer
-NS_CC_END
+NS_AX_END

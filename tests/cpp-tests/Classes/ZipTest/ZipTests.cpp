@@ -29,7 +29,7 @@
 #include "unzip/unzip.h"
 #include "unzip/crypt.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 ZipTests::ZipTests()
 {
@@ -50,7 +50,7 @@ static void unzipTest(Label* label,
 {
 
     auto fu = FileUtils::getInstance();
-    cocos2d::Data origContent;
+    axis::Data origContent;
     const int BUFF_SIZE = 1024;
     char* buff          = nullptr;
     std::vector<char> fileData;

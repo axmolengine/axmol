@@ -4,7 +4,7 @@
 #include "utils/ByteBuffer.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 PlayTransitionAction::PlayTransitionAction() :
     playTimes(1), delay(0), stopOnExit(false), _currentTransition(nullptr)

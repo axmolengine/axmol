@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "ActionTimeline/CCBoneNode.h"
 #include "base/ccUtils.h"
 
-USING_NS_CC;
+USING_NS_AX;
 USING_NS_TIMELINE;
 using namespace cocostudio;
 using namespace flatbuffers;
@@ -66,7 +66,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
     float length                 = 0;
-    cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
 
     auto attribute = objectData.first_attribute();
     while (attribute)
@@ -116,7 +116,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions)
+void BoneNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
 {
 
     auto* bone   = static_cast<BoneNode*>(node);
@@ -128,14 +128,14 @@ void BoneNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuff
     auto f_blendFunc = options->blendFunc();
     if (f_blendFunc)
     {
-        cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+        axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
         blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
         blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         bone->setBlendFunc(blendFunc);
     }
 }
 
-cocos2d::Node* BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+axis::Node* BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     auto bone = BoneNode::create();
 

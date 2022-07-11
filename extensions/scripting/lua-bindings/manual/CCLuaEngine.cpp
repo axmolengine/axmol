@@ -36,7 +36,7 @@
 #include "base/CCDirector.h"
 #include "base/CCEventCustom.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 LuaEngine* LuaEngine::_defaultEngine = nullptr;
 
@@ -454,7 +454,7 @@ int LuaEngine::handleTouchEvent(void* data)
     Touch* touch = touchScriptData->touch;
     if (NULL != touch)
     {
-        const cocos2d::Vec2 pt = Director::getInstance()->convertToGL(touch->getLocationInView());
+        const axis::Vec2 pt = Director::getInstance()->convertToGL(touch->getLocationInView());
         _stack->pushFloat(pt.x);
         _stack->pushFloat(pt.y);
         ret = _stack->executeFunctionByHandler(handler, 3);
@@ -508,7 +508,7 @@ int LuaEngine::handleTouchesEvent(void* data)
     int i = 1;
     for (auto& touch : touchesScriptData->touches)
     {
-        cocos2d::Vec2 pt = pDirector->convertToGL(touch->getLocationInView());
+        axis::Vec2 pt = pDirector->convertToGL(touch->getLocationInView());
         lua_pushnumber(L, pt.x);
         lua_rawseti(L, -2, i++);
         lua_pushnumber(L, pt.y);
@@ -1025,4 +1025,4 @@ int LuaEngine::reload(const char* moduleFileName)
     return _stack->reload(moduleFileName);
 }
 
-NS_CC_END
+NS_AX_END

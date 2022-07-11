@@ -40,15 +40,15 @@ public:
     ~UIListViewTest_Vertical();
 
     virtual bool init() override;
-    void selectedItemEvent(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
-    void selectedItemEventScrollView(cocos2d::Ref* sender, cocos2d::ui::ScrollView::EventType type);
+    void selectedItemEvent(axis::Ref* sender, axis::ui::ListView::EventType type);
+    void selectedItemEventScrollView(axis::Ref* sender, axis::ui::ScrollView::EventType type);
     virtual void update(float dt) override;
 
 protected:
-    float getItemPositionYInView(cocos2d::ui::Widget* item) const;
+    float getItemPositionYInView(axis::ui::Widget* item) const;
     void updateItem(int itemID, int templateID);
 
-    cocos2d::ui::Text* _displayValueLabel = nullptr;
+    axis::ui::Text* _displayValueLabel = nullptr;
     // How many items we actually spawn, these items will be reused.
     // Should > listview.width / templateWidth + 2.
     int _spawnCount = 5;
@@ -64,9 +64,9 @@ protected:
     // Use this value to detect if we are scrolling left or right
     float _lastContentPosY           = 0.f;
     float _reuseItemOffset           = 0.f;
-    cocos2d::ui::ListView* _listView = nullptr;
+    axis::ui::ListView* _listView = nullptr;
     std::vector<std::string> _array;
-    cocos2d::ui::Text* _indexLabels[3] = {nullptr};
+    axis::ui::Text* _indexLabels[3] = {nullptr};
 };
 
 class UIListViewTest_Horizontal : public UIScene
@@ -78,14 +78,14 @@ public:
     ~UIListViewTest_Horizontal();
 
     virtual bool init() override;
-    void selectedItemEvent(cocos2d::Ref* sender, cocos2d::ui::ListView::EventType type);
+    void selectedItemEvent(axis::Ref* sender, axis::ui::ListView::EventType type);
     virtual void update(float dt) override;
 
 protected:
-    float getItemPositionXInView(cocos2d::ui::Widget* item) const;
+    float getItemPositionXInView(axis::ui::Widget* item) const;
     void updateItem(int itemID, int templateID);
 
-    cocos2d::ui::Text* _displayValueLabel = nullptr;
+    axis::ui::Text* _displayValueLabel = nullptr;
     // How many items we actually spawn, these items will be reused.
     // Should > listview.width / templateWidth + 2.
     int _spawnCount = 4;
@@ -99,7 +99,7 @@ protected:
     float _updateTimer               = 0.f;
     float _lastContentPosX           = 0.f;
     float _reuseItemOffset           = 0.f;
-    cocos2d::ui::ListView* _listView = nullptr;
+    axis::ui::ListView* _listView = nullptr;
 
     std::vector<std::string> _array;
 };
@@ -125,10 +125,10 @@ class UIListViewTest_ScrollToItem : public UIScene
 {
 protected:
     virtual bool init() override;
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const = 0;
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    cocos2d::ui::ListView* _listView;
-    cocos2d::ui::Text* _titleLabel;
+    axis::ui::ListView* _listView;
+    axis::ui::Text* _titleLabel;
     int _nextIndex;
 };
 
@@ -136,9 +136,9 @@ class UIListViewTest_ScrollToItemVertical : public UIListViewTest_ScrollToItem
 {
 public:
     CREATE_FUNC(UIListViewTest_ScrollToItemVertical);
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const
     {
-        return cocos2d::ui::ScrollView::Direction::VERTICAL;
+        return axis::ui::ScrollView::Direction::VERTICAL;
     }
 };
 
@@ -146,9 +146,9 @@ class UIListViewTest_ScrollToItemHorizontal : public UIListViewTest_ScrollToItem
 {
 public:
     CREATE_FUNC(UIListViewTest_ScrollToItemHorizontal);
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const
     {
-        return cocos2d::ui::ScrollView::Direction::HORIZONTAL;
+        return axis::ui::ScrollView::Direction::HORIZONTAL;
     }
 };
 
@@ -157,20 +157,20 @@ class UIListViewTest_Magnetic : public UIScene
 {
 protected:
     virtual bool init() override;
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const = 0;
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    cocos2d::ui::ListView* _listView;
-    cocos2d::ui::Text* _titleLabel;
-    cocos2d::ui::Text* _indexLabels[5];
+    axis::ui::ListView* _listView;
+    axis::ui::Text* _titleLabel;
+    axis::ui::Text* _indexLabels[5];
 };
 
 class UIListViewTest_MagneticVertical : public UIListViewTest_Magnetic
 {
 public:
     CREATE_FUNC(UIListViewTest_MagneticVertical);
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const
     {
-        return cocos2d::ui::ScrollView::Direction::VERTICAL;
+        return axis::ui::ScrollView::Direction::VERTICAL;
     }
 };
 
@@ -178,9 +178,9 @@ class UIListViewTest_MagneticHorizontal : public UIListViewTest_Magnetic
 {
 public:
     CREATE_FUNC(UIListViewTest_MagneticHorizontal);
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const
     {
-        return cocos2d::ui::ScrollView::Direction::HORIZONTAL;
+        return axis::ui::ScrollView::Direction::HORIZONTAL;
     }
 };
 
@@ -189,23 +189,23 @@ class UIListViewTest_Padding : public UIScene
 {
 protected:
     virtual bool init() override;
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const = 0;
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    void sliderEvent(cocos2d::Ref* pSender, cocos2d::ui::Slider::EventType type);
+    void sliderEvent(axis::Ref* pSender, axis::ui::Slider::EventType type);
 
-    cocos2d::ui::ListView* _listView;
-    cocos2d::ui::Text* _titleLabel;
-    cocos2d::ui::Text* _indexLabels[5];
-    cocos2d::ui::Text* _paddingLabels[4];
+    axis::ui::ListView* _listView;
+    axis::ui::Text* _titleLabel;
+    axis::ui::Text* _indexLabels[5];
+    axis::ui::Text* _paddingLabels[4];
 };
 
 class UIListViewTest_PaddingVertical : public UIListViewTest_Padding
 {
 public:
     CREATE_FUNC(UIListViewTest_PaddingVertical);
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const
     {
-        return cocos2d::ui::ScrollView::Direction::VERTICAL;
+        return axis::ui::ScrollView::Direction::VERTICAL;
     }
 };
 
@@ -213,9 +213,9 @@ class UIListViewTest_PaddingHorizontal : public UIListViewTest_Padding
 {
 public:
     CREATE_FUNC(UIListViewTest_PaddingHorizontal);
-    virtual cocos2d::ui::ScrollView::Direction getListViewDirection() const
+    virtual axis::ui::ScrollView::Direction getListViewDirection() const
     {
-        return cocos2d::ui::ScrollView::Direction::HORIZONTAL;
+        return axis::ui::ScrollView::Direction::HORIZONTAL;
     }
 };
 

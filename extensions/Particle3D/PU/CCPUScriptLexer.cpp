@@ -26,7 +26,7 @@
 
 #include "CCPUScriptLexer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUScriptLexer::PUScriptLexer() {}
 
 PUScriptLexer::~PUScriptLexer() {}
@@ -291,4 +291,4 @@ bool PUScriptLexer::isNewline(char c) const
     return c == '\n' || c == '\r';
 }
 
-NS_CC_END
+NS_AX_END

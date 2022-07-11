@@ -7,7 +7,7 @@
 
 NS_FGUI_BEGIN
 
-class FUILabel : public cocos2d::Label
+class FUILabel : public axis::Label
 {
 public:
     FUILabel();
@@ -21,16 +21,16 @@ public:
     TextFormat* getTextFormat() const { return _textFormat; }
     void applyTextFormat();
 
-    void setUnderlineColor(const cocos2d::Color3B& value);
+    void setUnderlineColor(const axis::Color3B& value);
 
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, const cocos2d::Vec2& imageOffset = cocos2d::Vec2::ZERO, float fontSize = 0) override;
+    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, const axis::Vec2& imageOffset = axis::Vec2::ZERO, float fontSize = 0) override;
 
     void setGrayed(bool value);
 protected:
     /*
-    ×¢Òâ£¡£¡£¡Èç¹ûÕâÀï³öÏÖÁË±àÒë´íÎó£¬ĞèÒªĞŞ¸Äcocos2dµÄÔ´Âë£¬ÎÄ¼ş2d/CCLabel.h£¬´óÔ¼ÔÚ672ĞĞ£¬ÎªupdateBMFontScaleº¯Êı´òÉÏvirtualĞŞÊÎ·û¡£
-    ÒòÎªÕâ¸ö·½·¨ÀïÓĞÇ¿ÖÆ×ÖÌå¶ÔÏóÖ¸ÕëÎªFontFntÀàĞÍµÄ´úÂë£¬µ«ÎÒÃÇ²»Ê¹ÓÃFontFnt£¨FontFntÖ»Ö§³Ö´ÓÍâ²¿ÎÄ¼şÖĞÔØÈëÅäÖÃ£¬¸üÔã¸âµÄÊÇBMFontConfigurationÊÇ¶¨ÒåÔÚcppÀïµÄ¡££©
-    ËùÒÔĞèÒªÖØĞ´Õâ¸ö·½·¨¡£
+    ×¢ï¿½â£¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ş¸ï¿½cocos2dï¿½ï¿½Ô´ï¿½ë£¬ï¿½Ä¼ï¿½2d/CCLabel.hï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½672ï¿½Ğ£ï¿½ÎªupdateBMFontScaleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½virtualï¿½ï¿½ï¿½Î·ï¿½ï¿½ï¿½
+    ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ÎªFontFntï¿½ï¿½ï¿½ÍµÄ´ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ç²ï¿½Ê¹ï¿½ï¿½FontFntï¿½ï¿½FontFntÖ»Ö§ï¿½Ö´ï¿½ï¿½â²¿ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BMFontConfigurationï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ï¿½cppï¿½ï¿½Ä¡ï¿½ï¿½ï¿½
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ğ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     */
     virtual void updateBMFontScale() override;
 

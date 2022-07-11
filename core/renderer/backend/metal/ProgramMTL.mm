@@ -26,7 +26,7 @@
 #include "ShaderModuleMTL.h"
 #include "base/ccMacros.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 namespace
 {
 constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
@@ -179,4 +179,4 @@ const hlookup::string_map<UniformInfo>& ProgramMTL::getAllActiveUniformInfo(Shad
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

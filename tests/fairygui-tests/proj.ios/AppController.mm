@@ -39,9 +39,9 @@ static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
-    cocos2d::Application *app = cocos2d::Application::getInstance();
+    axis::Application *app = axis::Application::getInstance();
     app->initGLContextAttrs();
-    cocos2d::GLViewImpl::convertAttrs();
+    axis::GLViewImpl::convertAttrs();
     
     // Override point for customization after application launch.
 
@@ -49,12 +49,12 @@ static AppDelegate s_sharedApplication;
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
     
     CCEAGLView *eaglView = [CCEAGLView viewWithFrame: [window bounds]
-                                         pixelFormat: (NSString*)cocos2d::GLViewImpl::_pixelFormat
-                                         depthFormat: cocos2d::GLViewImpl::_depthFormat
+                                         pixelFormat: (NSString*)axis::GLViewImpl::_pixelFormat
+                                         depthFormat: axis::GLViewImpl::_depthFormat
                                  preserveBackbuffer: NO
                                          sharegroup: nil
-                                      multiSampling: cocos2d::GLViewImpl::_multisamplingCount > 0 ? YES : NO
-                                    numberOfSamples: cocos2d::GLViewImpl::_multisamplingCount];
+                                      multiSampling: axis::GLViewImpl::_multisamplingCount > 0 ? YES : NO
+                                    numberOfSamples: axis::GLViewImpl::_multisamplingCount];
     
     
     // Use RootViewController manage CCEAGLView
@@ -85,8 +85,8 @@ static AppDelegate s_sharedApplication;
     }
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    cocos2d::GLViewImpl *glview = cocos2d::GLViewImpl::createWithEAGLView(eaglView);
-    cocos2d::Director::getInstance()->setOpenGLView(glview);
+    axis::GLViewImpl *glview = axis::GLViewImpl::createWithEAGLView(eaglView);
+    axis::Director::getInstance()->setOpenGLView(glview);
     
     app->run();
     return YES;
@@ -98,14 +98,14 @@ static AppDelegate s_sharedApplication;
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
-    cocos2d::Director::getInstance()->pause();
+    axis::Director::getInstance()->pause();
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    cocos2d::Director::getInstance()->resume();
+    axis::Director::getInstance()->resume();
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -113,14 +113,14 @@ static AppDelegate s_sharedApplication;
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
-    cocos2d::Application::getInstance()->applicationDidEnterBackground();
+    axis::Application::getInstance()->applicationDidEnterBackground();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     /*
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made on entering the background.
      */
-    cocos2d::Application::getInstance()->applicationWillEnterForeground();
+    axis::Application::getInstance()->applicationWillEnterForeground();
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

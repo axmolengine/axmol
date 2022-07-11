@@ -89,7 +89,7 @@ static const char* SCALE         = "scale";
 static const char* KEYTIME       = "keytime";
 static const char* AABBS         = "aabb";
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void getChildMap(std::map<int, std::vector<int>>& map, SkinData* skinData, const rapidjson::Value& val)
 {
@@ -2320,7 +2320,7 @@ Bundle3D::~Bundle3D()
     clear();
 }
 
-cocos2d::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
+axis::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
                                       int stride,
                                       const IndexArray& indices)
 {
@@ -2335,4 +2335,4 @@ cocos2d::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
     return aabb;
 }
 
-NS_CC_END
+NS_AX_END

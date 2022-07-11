@@ -43,7 +43,7 @@
 #    include <sys/stat.h>
 #    include <dirent.h>
 #endif
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUMaterial::PUMaterial()
     : isEnabledLight(true)
@@ -207,4 +207,4 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     return state;
 }
 
-NS_CC_END
+NS_AX_END

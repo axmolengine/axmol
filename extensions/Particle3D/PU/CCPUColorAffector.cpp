@@ -27,7 +27,7 @@
 #include "CCPUColorAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const PUColorAffector::ColorOperation PUColorAffector::DEFAULT_COLOR_OPERATION = PUColorAffector::CAO_SET;
@@ -138,4 +138,4 @@ void PUColorAffector::copyAttributesTo(PUAffector* affector)
     colourAffector->_colorOperation = _colorOperation;
 }
 
-NS_CC_END
+NS_AX_END

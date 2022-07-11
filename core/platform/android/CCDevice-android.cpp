@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 static const char* helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 int Device::getDPI()
 {
@@ -184,7 +184,7 @@ void Device::vibrate(float duration)
     JniHelper::callStaticVoidMethod(helperClassName, "vibrate", duration);
 }
 
-NS_CC_END
+NS_AX_END
 
 // this method is called by Cocos2dxBitmap
 extern "C" {
@@ -195,7 +195,7 @@ JNIEXPORT void JNICALL
 Java_org_cocos2dx_lib_Cocos2dxBitmap_nativeInitBitmapDC(JNIEnv* env, jclass, jint width, jint height, jbyteArray pixels)
 {
     int size                    = width * height * 4;
-    cocos2d::BitmapDC& bitmapDC = cocos2d::sharedBitmapDC();
+    axis::BitmapDC& bitmapDC = axis::sharedBitmapDC();
     bitmapDC._width             = width;
     bitmapDC._height            = height;
     bitmapDC._data              = (unsigned char*)malloc(sizeof(unsigned char) * size);

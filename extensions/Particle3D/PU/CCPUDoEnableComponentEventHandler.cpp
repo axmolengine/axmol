@@ -29,7 +29,7 @@
 #include "extensions/Particle3D/PU/CCPUEmitter.h"
 #include "extensions/Particle3D/PU/CCPUObserver.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //-----------------------------------------------------------------------
 PUDoEnableComponentEventHandler::PUDoEnableComponentEventHandler()
     : PUEventHandler(), _componentType(CT_EMITTER), _componentEnabled(true)
@@ -178,4 +178,4 @@ void PUDoEnableComponentEventHandler::copyAttributesTo(PUEventHandler* eventHand
     doEnableComponentEventHandler->setComponentEnabled(_componentEnabled);
 }
 
-NS_CC_END
+NS_AX_END

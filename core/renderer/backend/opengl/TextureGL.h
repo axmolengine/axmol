@@ -29,7 +29,7 @@
 #include "platform/CCGL.h"
 #include "base/CCEventListenerCustom.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 /**
  * Store texture information.
@@ -262,4 +262,4 @@ private:
 
 // end of _opengl group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

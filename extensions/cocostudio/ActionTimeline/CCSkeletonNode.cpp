@@ -52,8 +52,8 @@ bool SkeletonNode::init()
     // init _customCommand
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program =
-        cocos2d::backend::Program::getBuiltinProgram(cocos2d::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
-    setProgramState(new cocos2d::backend::ProgramState(program), false);
+        axis::backend::Program::getBuiltinProgram(axis::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
+    setProgramState(new axis::backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");
@@ -63,20 +63,20 @@ bool SkeletonNode::init()
     auto iter                 = attributeInfo.find("a_position");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_position", iter->second.location, cocos2d::backend::VertexFormat::FLOAT3, 0,
+        vertexLayout->setAttribute("a_position", iter->second.location, axis::backend::VertexFormat::FLOAT3, 0,
                                    false);
     }
     iter = attributeInfo.find("a_color");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_color", iter->second.location, cocos2d::backend::VertexFormat::FLOAT4,
+        vertexLayout->setAttribute("a_color", iter->second.location, axis::backend::VertexFormat::FLOAT4,
                                    3 * sizeof(float), false);
     }
     vertexLayout->setLayout(7 * sizeof(float));
 
-    _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 8, cocos2d::CustomCommand::BufferUsage::DYNAMIC);
-    _customCommand.createIndexBuffer(cocos2d::CustomCommand::IndexFormat::U_SHORT, 12,
-                                     cocos2d::CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 8, axis::CustomCommand::BufferUsage::DYNAMIC);
+    _customCommand.createIndexBuffer(axis::CustomCommand::IndexFormat::U_SHORT, 12,
+                                     axis::CustomCommand::BufferUsage::STATIC);
     unsigned short indices[12] = {0, 1, 2, 1, 3, 2, 4, 5, 6, 5, 7, 6};
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
 
@@ -87,13 +87,13 @@ bool SkeletonNode::init()
     return true;
 }
 
-cocos2d::Rect SkeletonNode::getBoundingBox() const
+axis::Rect SkeletonNode::getBoundingBox() const
 {
     float minx, miny, maxx, maxy = 0;
     minx = miny = maxx        = maxy;
-    cocos2d::Rect boundingBox = getVisibleSkinsRect();
+    axis::Rect boundingBox = getVisibleSkinsRect();
     bool first                = true;
-    if (!boundingBox.equals(cocos2d::Rect::ZERO))
+    if (!boundingBox.equals(axis::Rect::ZERO))
     {
         minx  = boundingBox.getMinX();
         miny  = boundingBox.getMinY();
@@ -104,9 +104,9 @@ cocos2d::Rect SkeletonNode::getBoundingBox() const
     auto allbones = getAllSubBones();
     for (const auto& bone : allbones)
     {
-        cocos2d::Rect r = RectApplyAffineTransform(bone->getVisibleSkinsRect(),
+        axis::Rect r = RectApplyAffineTransform(bone->getVisibleSkinsRect(),
                                                    bone->getNodeToParentAffineTransform(bone->getRootSkeletonNode()));
-        if (r.equals(cocos2d::Rect::ZERO))
+        if (r.equals(axis::Rect::ZERO))
             continue;
 
         if (first)
@@ -178,7 +178,7 @@ void SkeletonNode::updateColor()
     _transformUpdated = _transformDirty = _inverseDirty = _contentSizeDirty = true;
 }
 
-void SkeletonNode::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void SkeletonNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -191,8 +191,8 @@ void SkeletonNode::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(cocos2d::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(cocos2d::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
     int i = 0;
     if (!_children.empty())
@@ -227,26 +227,26 @@ void SkeletonNode::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& paren
         renderer->addCommand(&_batchBoneCommand);
         batchDrawAllSubBones();
     }
-    _director->popMatrix(cocos2d::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // reset for next frame
     // _orderOfArrival = 0;
 }
 
-void SkeletonNode::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
+void SkeletonNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
     for (int i = 0; i < 8; ++i)
     {
-        cocos2d::Vec4 pos;
+        axis::Vec4 pos;
         pos.x = _squareVertices[i].x;
         pos.y = _squareVertices[i].y;
         pos.z = _positionZ;
         pos.w = 1;
         _modelViewTransform.transformVector(&pos);
-        _vertexData[i].vertex = cocos2d::Vec3(pos.x, pos.y, pos.z) / pos.w;
+        _vertexData[i].vertex = axis::Vec3(pos.x, pos.y, pos.z) / pos.w;
     }
     _customCommand.updateVertexBuffer(_vertexData, sizeof(_vertexData));
 
@@ -265,7 +265,7 @@ void SkeletonNode::batchDrawAllSubBones()
     }
 
     _batchBoneCommand.createVertexBuffer(sizeof(VertexData), _batchedVeticesCount,
-                                         cocos2d::CustomCommand::BufferUsage::DYNAMIC);
+                                         axis::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateVertexBuffer(_batchedBoneVertexData.data(), sizeof(VertexData) * _batchedVeticesCount);
 
 #ifdef CC_STUDIO_ENABLED_VIEW
@@ -291,8 +291,8 @@ void SkeletonNode::batchDrawAllSubBones()
         *indices++ = i + 2;
         *indices++ = i + 3;
     }
-    _batchBoneCommand.createIndexBuffer(cocos2d::CustomCommand::IndexFormat::U_SHORT, _batchedVeticesCount,
-                                        cocos2d::CustomCommand::BufferUsage::DYNAMIC);
+    _batchBoneCommand.createIndexBuffer(axis::CustomCommand::IndexFormat::U_SHORT, _batchedVeticesCount,
+                                        axis::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateIndexBuffer(indices, sizeof(unsigned short) * _batchedVeticesCount);
     free(indices);
 #endif  // CC_STUDIO_ENABLED_VIEW
@@ -327,7 +327,7 @@ BoneNode* SkeletonNode::getBoneNode(std::string_view boneName)
     return nullptr;
 }
 
-const cocos2d::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
+const axis::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
 {
     return _subBonesMap;
 }

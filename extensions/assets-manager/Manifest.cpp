@@ -48,7 +48,7 @@
 #define KEY_COMPRESSED_FILE "compressedFile"
 #define KEY_DOWNLOAD_STATE "downloadState"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 static int cmpVersion(std::string_view v1, std::string_view v2)
 {
@@ -562,4 +562,4 @@ void Manifest::saveToFile(std::string_view filepath)
     FileUtils::getInstance()->writeStringToFile(buffer.GetString(), filepath);
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

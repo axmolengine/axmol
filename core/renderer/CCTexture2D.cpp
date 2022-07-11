@@ -54,7 +54,7 @@ THE SOFTWARE.
 #    include "renderer/CCTextureCache.h"
 #endif
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // CLASS IMPLEMENTATIONS:
 
@@ -678,7 +678,7 @@ bool Texture2D::isContain9PatchInfo() const
     return nullptr != _ninePatchInfo;
 }
 
-const Rect& Texture2D::getSpriteFrameCapInset(cocos2d::SpriteFrame* spriteFrame) const
+const Rect& Texture2D::getSpriteFrameCapInset(axis::SpriteFrame* spriteFrame) const
 {
     CCASSERT(_ninePatchInfo != nullptr,
              "Can't get the sprite frame capInset when the texture contains no 9-patch info.");
@@ -733,7 +733,7 @@ void Texture2D::initProgram()
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     // create program state
     auto* program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
-    _programState      = new cocos2d::backend::ProgramState(program);
+    _programState      = new axis::backend::ProgramState(program);
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
     _textureLocation   = _programState->getUniformLocation("u_tex0");
 
@@ -817,4 +817,4 @@ void Texture2D::drawInRect(const Rect& rect, float globalZOrder)
     Director::getInstance()->getRenderer()->addCommand(&_customCommand);
 }
 
-NS_CC_END
+NS_AX_END

@@ -65,7 +65,7 @@ THE SOFTWARE.
 
 typedef int32_t udflen_t;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * implements of UserDefault
@@ -521,4 +521,4 @@ void UserDefault::deleteValueForKey(const char* key)
         flush();
 }
 
-NS_CC_END
+NS_AX_END

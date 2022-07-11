@@ -27,7 +27,7 @@
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include <stdlib.h>
 
-using namespace cocos2d;
+USING_NS_AX;
 
 static int s_function_ref_id = 0;
 

@@ -31,7 +31,7 @@
 #include "ProgramMTL.h"
 #include "xxhash.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -338,4 +338,4 @@ void RenderPipelineMTL::setBlendStateAndFormat(const BlendDescriptor& blendDescr
     _mtlRenderPipelineDescriptor.stencilAttachmentPixelFormat = UtilsMTL::toMTLPixelFormat(_stencilAttachmentFormat);
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

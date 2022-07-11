@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation AtlasNode
 
@@ -290,4 +290,4 @@ void AtlasNode::setQuadsToDraw(ssize_t quadsToDraw)
     _quadsToDraw = quadsToDraw;
 }
 
-NS_CC_END
+NS_AX_END

@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation TMXLayerInfo
 TMXLayerInfo::TMXLayerInfo() : _name(""), _tiles(nullptr), _ownTiles(true) {}
@@ -828,4 +828,4 @@ TMXTileAnimInfo* TMXTileAnimInfo::create(uint32_t tileID)
     return ret;
 }
 
-NS_CC_END
+NS_AX_END

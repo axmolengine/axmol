@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup platform
@@ -77,7 +77,7 @@ enum class LanguageType
 // END of platform group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif  // __CC_COMMON_H__

@@ -31,23 +31,23 @@
 #include "2d/CCFontAtlas.h"
 #include "2d/CCFontFNT.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void Label::computeAlignmentOffset()
 {
     _linesOffsetX.clear();
     switch (_hAlignment)
     {
-    case cocos2d::TextHAlignment::LEFT:
+    case axis::TextHAlignment::LEFT:
         _linesOffsetX.assign(_numberOfLines, 0);
         break;
-    case cocos2d::TextHAlignment::CENTER:
+    case axis::TextHAlignment::CENTER:
         for (auto lineWidth : _linesWidth)
         {
             _linesOffsetX.push_back((_contentSize.width - lineWidth) / 2.f);
         }
         break;
-    case cocos2d::TextHAlignment::RIGHT:
+    case axis::TextHAlignment::RIGHT:
         for (auto lineWidth : _linesWidth)
         {
             _linesOffsetX.push_back(_contentSize.width - lineWidth);
@@ -59,13 +59,13 @@ void Label::computeAlignmentOffset()
 
     switch (_vAlignment)
     {
-    case cocos2d::TextVAlignment::TOP:
+    case axis::TextVAlignment::TOP:
         _letterOffsetY = _contentSize.height;
         break;
-    case cocos2d::TextVAlignment::CENTER:
+    case axis::TextVAlignment::CENTER:
         _letterOffsetY = (_contentSize.height + _textDesiredHeight) / 2.f;
         break;
-    case cocos2d::TextVAlignment::BOTTOM:
+    case axis::TextVAlignment::BOTTOM:
         _letterOffsetY = _textDesiredHeight;
         break;
     default:
@@ -421,7 +421,7 @@ void Label::shrinkLabelToContentSize(const std::function<bool(void)>& lambda)
     }
 }
 
-void Label::recordLetterInfo(const cocos2d::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
+void Label::recordLetterInfo(const axis::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
 {
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
@@ -447,4 +447,4 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     _lettersInfo[letterIndex].valid     = false;
 }
 
-NS_CC_END
+NS_AX_END

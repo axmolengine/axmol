@@ -32,7 +32,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL UserCameraReader : public cocos2d::Ref, public NodeReaderProtocol
+class CCS_DLL UserCameraReader : public axis::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -47,12 +47,12 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* userCameraOptions);
-    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* userCameraOptions);
+    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* userCameraOptions);
+    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* userCameraOptions);
 
 protected:
     int getResourceType(std::string_view key);
-    cocos2d::Vec2 getVec2Attribute(pugi::xml_attribute attribute) const;
+    axis::Vec2 getVec2Attribute(pugi::xml_attribute attribute) const;
 };
 }  // namespace cocostudio
 

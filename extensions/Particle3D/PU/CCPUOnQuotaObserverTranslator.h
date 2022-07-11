@@ -30,7 +30,7 @@
 #include "extensions/Particle3D/PU/CCPUScriptCompiler.h"
 #include "extensions/Particle3D/PU/CCPUOnQuotaObserver.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PUOnQuotaObserverTranslator : public PUScriptTranslator
 {
@@ -42,6 +42,6 @@ public:
     virtual bool translateChildObject(PUScriptCompiler* compiler, PUAbstractNode* node);
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

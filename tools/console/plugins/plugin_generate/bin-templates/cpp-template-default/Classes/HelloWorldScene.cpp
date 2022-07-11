@@ -2,7 +2,7 @@
 #include "extensions/cocostudio/CocoStudio.h"
 #include "ui/CocosGUI.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 using namespace cocostudio::timeline;
 

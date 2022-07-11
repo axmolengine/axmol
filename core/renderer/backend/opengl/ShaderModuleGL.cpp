@@ -29,7 +29,7 @@
 #include "base/ccMacros.h"
 #include "yasio/detail/byte_buffer.hpp"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 ShaderModuleGL::ShaderModuleGL(ShaderStage stage, std::string_view source) : ShaderModule(stage)
 {
@@ -63,12 +63,12 @@ void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
         {
             yasio::sbyte_buffer errorLog{static_cast<size_t>(logLength), std::true_type{}};
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.data());
-            cocos2d::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.data(),
+            axis::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.data(),
                          source.data());
         }
         else
         {
-            cocos2d::log("cocos2d: ERROR: Failed to compile shader without errors.");
+            axis::log("cocos2d: ERROR: Failed to compile shader without errors.");
         }
 
         deleteShader();
@@ -85,4 +85,4 @@ void ShaderModuleGL::deleteShader()
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

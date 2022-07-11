@@ -31,7 +31,7 @@
 #include "extensions/Particle3D/PU/CCPUSimpleSpline.h"
 #include "base/ccTypes.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUPathFollower : public PUAffector
 {
@@ -63,6 +63,6 @@ public:
 protected:
     PUSimpleSpline _spline;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

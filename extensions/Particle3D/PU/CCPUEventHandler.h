@@ -33,7 +33,7 @@
 #include <string>
 #include "ExtensionExport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct PUParticle3D;
 class PUObserver;
@@ -85,6 +85,6 @@ protected:
     Vec3 _eventHandlerScale;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

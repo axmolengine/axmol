@@ -24,7 +24,7 @@ public:
     static int touchScrollSensitivity;
     static int defaultComboBoxVisibleItemCount;
     static std::string globalModalWaiting;
-    static cocos2d::Color4F modalLayerColor;
+    static axis::Color4F modalLayerColor;
     static std::string tooltipsWin;
     static bool bringWindowToFrontOnClick;
     static std::string windowModalWaiting;

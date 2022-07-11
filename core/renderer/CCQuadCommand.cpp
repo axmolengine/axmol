@@ -32,7 +32,7 @@
 #include "renderer/CCTexture2D.h"
 #include "base/ccUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 int QuadCommand::__indexCapacity = -1;
 uint16_t* QuadCommand::__indices = nullptr;
@@ -100,4 +100,4 @@ void QuadCommand::init(float globalOrder,
     TrianglesCommand::init(globalOrder, texture, blendType, triangles, mv, flags);
 }
 
-NS_CC_END
+NS_AX_END

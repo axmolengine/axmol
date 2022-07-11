@@ -29,11 +29,10 @@
 #include "../BaseTest.h"
 #include <string>
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 class BillBoard;
 class Camera;
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 class BillBoardRotationTest : public TestCase
 {
@@ -56,19 +55,19 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void update(float dt) override;
-    void addNewBillBoardWithCoords(cocos2d::Vec3 p);
-    void addNewAniBillBoardWithCoords(cocos2d::Vec3 p);
-    void rotateCameraCallback(cocos2d::Ref* sender, float value);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void addNewBillBoardWithCoords(axis::Vec3 p);
+    void addNewAniBillBoardWithCoords(axis::Vec3 p);
+    void rotateCameraCallback(axis::Ref* sender, float value);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
-    void menuCallback_orientedPoint(cocos2d::Ref* sender);
-    void menuCallback_orientedPlane(cocos2d::Ref* sender);
+    void menuCallback_orientedPoint(axis::Ref* sender);
+    void menuCallback_orientedPlane(axis::Ref* sender);
 
 protected:
-    cocos2d::Camera* _camera;
-    cocos2d::Layer* _layerBillBoard;
+    axis::Camera* _camera;
+    axis::Layer* _layerBillBoard;
 
-    std::vector<cocos2d::BillBoard*> _billboards;
+    std::vector<axis::BillBoard*> _billboards;
 };
 
 DEFINE_TEST_SUITE(BillBoardTests);

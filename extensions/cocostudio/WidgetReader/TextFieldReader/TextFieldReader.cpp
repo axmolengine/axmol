@@ -10,7 +10,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -49,7 +49,7 @@ void TextFieldReader::destroyInstance()
     CC_SAFE_DELETE(instanceTextFieldReader);
 }
 
-void TextFieldReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextFieldReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -260,7 +260,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     return *(Offset<Table>*)(&options);
 }
 
-void TextFieldReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textFieldOptions)
+void TextFieldReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textFieldOptions)
 {
     TextField* textField = static_cast<TextField*>(node);
     auto options         = (TextFieldOptions*)textFieldOptions;

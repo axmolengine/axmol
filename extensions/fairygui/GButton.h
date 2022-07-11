@@ -39,8 +39,8 @@ public:
     const std::string& getSelectedIcon() const { return _selectedIcon; }
     void setSelectedIcon(const std::string& value);
 
-    cocos2d::Color3B getTitleColor() const;
-    void setTitleColor(const cocos2d::Color3B& value);
+    axis::Color3B getTitleColor() const;
+    void setTitleColor(const axis::Color3B& value);
 
     int getTitleFontSize() const;
     void setTitleFontSize(int value);
@@ -56,8 +56,8 @@ public:
 
     GTextField* getTextField() const;
 
-    virtual cocos2d::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const cocos2d::Value& value) override;
+    virtual axis::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
 
 protected:
     virtual void constructExtension(ByteBuffer* buffer) override;

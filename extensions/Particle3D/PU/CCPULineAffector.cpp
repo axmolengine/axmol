@@ -27,7 +27,7 @@
 #include "CCPULineAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const float PULineAffector::DEFAULT_MAX_DEVIATION = 1.0f;
@@ -175,4 +175,4 @@ void PULineAffector::copyAttributesTo(PUAffector* affector)
     lineAffector->_oneMinusDrift = _oneMinusDrift;
 }
 
-NS_CC_END
+NS_AX_END

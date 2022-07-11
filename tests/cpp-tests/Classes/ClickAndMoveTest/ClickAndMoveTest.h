@@ -35,8 +35,8 @@ public:
     CREATE_FUNC(ClickAndMoveTestCase);
 
     ClickAndMoveTestCase();
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    void onTouchEnded(axis::Touch* touch, axis::Event* event);
 };
 
 #endif

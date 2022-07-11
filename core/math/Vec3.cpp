@@ -23,7 +23,7 @@
 #include "math/MathUtil.h"
 #include "base/ccMacros.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 Vec3::Vec3() : x(0.0f), y(0.0f), z(0.0f) {}
 
@@ -213,4 +213,4 @@ const Vec3 Vec3::UNIT_X(1.0f, 0.0f, 0.0f);
 const Vec3 Vec3::UNIT_Y(0.0f, 1.0f, 0.0f);
 const Vec3 Vec3::UNIT_Z(0.0f, 0.0f, 1.0f);
 
-NS_CC_MATH_END
+NS_AX_MATH_END

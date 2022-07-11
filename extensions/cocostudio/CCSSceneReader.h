@@ -61,10 +61,10 @@ public:
      */
     static void destroyInstance();
     static const char* sceneReaderVersion();
-    cocos2d::Node* createNodeWithSceneFile(std::string_view fileName,
+    axis::Node* createNodeWithSceneFile(std::string_view fileName,
                                            AttachComponentType attachComponent = AttachComponentType::EMPTY_NODE);
-    void setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)>& selector);
-    cocos2d::Node* getNodeByTag(int nTag);
+    void setTarget(const std::function<void(axis::Ref* obj, void* doc)>& selector);
+    axis::Node* getNodeByTag(int nTag);
     inline AttachComponentType getAttachComponentType() { return _attachComponent; }
     SceneReader();
     virtual ~SceneReader();
@@ -72,26 +72,26 @@ public:
 private:
     std::string getComponentClassName(std::string_view name);
 
-    cocos2d::Component* createComponent(std::string_view classname);
+    axis::Component* createComponent(std::string_view classname);
 
-    cocos2d::Node* createObject(const rapidjson::Value& dict,
-                                cocos2d::Node* parent,
+    axis::Node* createObject(const rapidjson::Value& dict,
+                                axis::Node* parent,
                                 AttachComponentType attachComponent);
-    void setPropertyFromJsonDict(const rapidjson::Value& dict, cocos2d::Node* node);
+    void setPropertyFromJsonDict(const rapidjson::Value& dict, axis::Node* node);
     bool readJson(std::string_view fileName, rapidjson::Document& doc);
 
-    cocos2d::Node* createObject(CocoLoader* cocoLoader,
+    axis::Node* createObject(CocoLoader* cocoLoader,
                                 stExpCocoNode* cocoNode,
-                                cocos2d::Node* parent,
+                                axis::Node* parent,
                                 AttachComponentType attachComponent);
-    void setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Node* node);
+    void setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, axis::Node* node);
 
-    cocos2d::Node* nodeByTag(cocos2d::Node* parent, int tag);
+    axis::Node* nodeByTag(axis::Node* parent, int tag);
 
 private:
     static SceneReader* s_sharedReader;
-    std::function<void(cocos2d::Ref* obj, void* doc)> _fnSelector;
-    cocos2d::Node* _node;
+    std::function<void(axis::Ref* obj, void* doc)> _fnSelector;
+    axis::Node* _node;
     AttachComponentType _attachComponent;
 };
 

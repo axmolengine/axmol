@@ -35,7 +35,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /// @cond EventController
 class Controller;
@@ -106,7 +106,7 @@ protected:
     friend class EventListenerController;
 };
 /// @endcond EventController
-NS_CC_END
+NS_AX_END
 
 // end of base group
 /// @}

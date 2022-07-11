@@ -29,17 +29,17 @@ using namespace Csm;
 using namespace Csm::Constant;
 using namespace Csm::DefaultParameterId;
 using namespace LAppDefine;
-using namespace cocos2d::backend;
+using namespace axis::backend;
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
-using namespace cocos2d::experimental;
+using namespace axis::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace {
 csmByte* CreateBuffer(const csmChar* path, csmSizeInt* size)
@@ -774,7 +774,7 @@ void LAppModel::MakeRenderingTarget()
         Size visibleSize = Director::getInstance()->getVisibleSize();
         Point origin = Director::getInstance()->getVisibleOrigin();
 
-        _renderSprite = RenderTexture::create(frameW, frameH, cocos2d::backend::PixelFormat::RGBA8);
+        _renderSprite = RenderTexture::create(frameW, frameH, axis::backend::PixelFormat::RGBA8);
         _renderSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
         _renderSprite->getSprite()->getTexture()->setAntiAliasTexParameters();
         _renderSprite->getSprite()->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
@@ -785,11 +785,11 @@ void LAppModel::MakeRenderingTarget()
 
         // _renderSpriteのテクスチャを作成する
         _renderSprite->getSprite()->getTexture()->setTexParameters(
-          cocos2d::Texture2D::TexParams(
-            cocos2d::backend::SamplerFilter::LINEAR,                    // MagFilter
-            cocos2d::backend::SamplerFilter::LINEAR,                    // MinFilter
-            cocos2d::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-            cocos2d::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
+          axis::Texture2D::TexParams(
+            axis::backend::SamplerFilter::LINEAR,                    // MagFilter
+            axis::backend::SamplerFilter::LINEAR,                    // MinFilter
+            axis::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
+            axis::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
           )
         );
 

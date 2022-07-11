@@ -23,7 +23,7 @@ DEALINGS IN THE SOFTWARE.
 #    include "math/Vec3.h"
 #    include "math/Vec4.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 class Mat3
 {
@@ -151,7 +151,7 @@ public:
 
     /**
      * getColumn returns one of three columns specified by the
-     * parameter. This column is returned as a cocos2d::Vec3 object.
+     * parameter. This column is returned as a axis::Vec3 object.
      *
      * @param i
      *            the column to retrieve. Must be between 0 and 2.
@@ -160,11 +160,11 @@ public:
      *            is created.
      * @return the column specified by the index.
      */
-    cocos2d::Vec3 getColumn(int i);
+    axis::Vec3 getColumn(int i);
 
     /**
      * getRow returns one of three rows as specified by the
-     * parameter. This row is returned as a cocos2d::Vec3 object.
+     * parameter. This row is returned as a axis::Vec3 object.
      *
      * @param i
      *            the row to retrieve. Must be between 0 and 2.
@@ -173,7 +173,7 @@ public:
      *            is created.
      * @return the row specified by the index.
      */
-    cocos2d::Vec3 getRow(int i);
+    axis::Vec3 getRow(int i);
 
     std::string toString();
 
@@ -187,7 +187,7 @@ public:
      * @param column
      *            the data to set.
      */
-    void setColumn(int i, const cocos2d::Vec3& column);
+    void setColumn(int i, const axis::Vec3& column);
 
     /**
      *
@@ -199,7 +199,7 @@ public:
      * @param row
      *            the data to set.
      */
-    void setRow(int i, const cocos2d::Vec3& row);
+    void setRow(int i, const axis::Vec3& row);
 
     /**
      * set places a given value into the matrix at the given
@@ -231,13 +231,13 @@ public:
      * Recreate Matrix using the provided axis.
      *
      * @param uAxis
-     *            cocos2d::Vec3
+     *            axis::Vec3
      * @param vAxis
-     *            cocos2d::Vec3
+     *            axis::Vec3
      * @param wAxis
-     *            cocos2d::Vec3
+     *            axis::Vec3
      */
-    void set(const cocos2d::Vec3& uAxis, const cocos2d::Vec3& vAxis, const cocos2d::Vec3& wAxis);
+    void set(const axis::Vec3& uAxis, const axis::Vec3& vAxis, const axis::Vec3& wAxis);
 
     /**
      * set sets the values of this matrix from an array of values
@@ -267,7 +267,7 @@ public:
      * @param quaternion
      *            the quaternion to create a rotational matrix from.
      */
-    void set(const cocos2d::Quaternion& quaternion)
+    void set(const axis::Quaternion& quaternion)
     {
         // quaternion.toRotationMatrix(this);
     }
@@ -344,7 +344,7 @@ public:
      * @param axis
      *            the axis of rotation.
      */
-    void createRotation(const cocos2d::Vec3& axis, float angle)
+    void createRotation(const axis::Vec3& axis, float angle)
     {
         createRotation(axis, std::sin(angle), std::cos(angle));
     }
@@ -358,7 +358,7 @@ public:
      * @param axis
      *            the axis of rotation (already normalized).
      */
-    void createRotation(const cocos2d::Vec3& axis, float fSin, float fCos);
+    void createRotation(const axis::Vec3& axis, float fSin, float fCos);
 
     /**
      * Creates a matrix describing a rotation around the x-axis.
@@ -390,7 +390,7 @@ public:
      * @param scale The amount to scale.
      * @param dst A matrix to store the result in.
      */
-    void createScale(const cocos2d::Vec3& scale);
+    void createScale(const axis::Vec3& scale);
 
     /**
      * Creates a scale matrix.
@@ -408,7 +408,7 @@ public:
      * @param translation The translation.
      * @param dst A matrix to store the result in.
      */
-    void createTranslation(const cocos2d::Vec3& translation);
+    void createTranslation(const axis::Vec3& translation);
 
     /**
      * Creates a translation matrix.
@@ -440,10 +440,10 @@ public:
      * product.
      *
      * @param vec
-     *            The cocos2d::Vec3 to multiply.
+     *            The axis::Vec3 to multiply.
      * @return The given product vector.
      */
-    cocos2d::Vec3 mult(const cocos2d::Vec3& vec) const;
+    axis::Vec3 mult(const axis::Vec3& vec) const;
 
     Mat3& premultAlpha(float alpha) { return multLocal(alpha); }
 
@@ -553,7 +553,7 @@ public:
      * @see "Tomas M?ller, John Hughes /"Efficiently Building a Matrix to Rotate
      *      / One Vector to Another/" Journal of Graphics Tools, 4(4):1-4, 1999"
      */
-    void fromStartEndVectors(cocos2d::Vec3 start, cocos2d::Vec3 end);
+    void fromStartEndVectors(axis::Vec3 start, axis::Vec3 end);
 
     /**
      * scale scales the operation performed by this matrix on a
@@ -562,11 +562,11 @@ public:
      * @param scale
      *            The scale applied to each of the X, Y and Z output values.
      */
-    void scale(const cocos2d::Vec3& scale);
+    void scale(const axis::Vec3& scale);
 
     static bool equalIdentity(const Mat3& mat);
 };
 
-NS_CC_MATH_END
+NS_AX_MATH_END
 
 #endif

@@ -343,7 +343,7 @@ bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValu
     return ok;
 }
 
-bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* funcName)
+bool luaval_to_vec2(lua_State* L, int lo, axis::Vec2* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -392,7 +392,7 @@ bool luaval_to_vec2(lua_State* L, int lo, cocos2d::Vec2* outValue, const char* f
     return ok;
 }
 
-bool luaval_to_vec3(lua_State* L, int lo, cocos2d::Vec3* outValue, const char* funcName)
+bool luaval_to_vec3(lua_State* L, int lo, axis::Vec3* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -428,7 +428,7 @@ bool luaval_to_vec3(lua_State* L, int lo, cocos2d::Vec3* outValue, const char* f
     return ok;
 }
 
-bool luaval_to_vec4(lua_State* L, int lo, cocos2d::Vec4* outValue, const char* funcName)
+bool luaval_to_vec4(lua_State* L, int lo, axis::Vec4* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -469,7 +469,7 @@ bool luaval_to_vec4(lua_State* L, int lo, cocos2d::Vec4* outValue, const char* f
     return ok;
 }
 
-bool luaval_to_blendfunc(lua_State* L, int lo, cocos2d::BlendFunc* outValue, const char* funcName)
+bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -491,7 +491,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, cocos2d::BlendFunc* outValue, con
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            outValue->src = static_cast<cocos2d::backend::BlendFactor>(lua_tointeger(L, -1));
+            outValue->src = static_cast<axis::backend::BlendFactor>(lua_tointeger(L, -1));
         }
         lua_pop(L, 1);
 
@@ -499,7 +499,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, cocos2d::BlendFunc* outValue, con
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            outValue->dst = static_cast<cocos2d::backend::BlendFactor>(lua_tointeger(L, -1));
+            outValue->dst = static_cast<axis::backend::BlendFactor>(lua_tointeger(L, -1));
         }
         lua_pop(L, 1);
     }
@@ -1013,7 +1013,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
     return ok;
 }
 
-bool luaval_to_ttfconfig(lua_State* L, int lo, cocos2d::TTFConfig* outValue, const char* funcName)
+bool luaval_to_ttfconfig(lua_State* L, int lo, axis::TTFConfig* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1068,7 +1068,7 @@ bool luaval_to_ttfconfig(lua_State* L, int lo, cocos2d::TTFConfig* outValue, con
     return false;
 }
 
-bool luaval_to_mat4(lua_State* L, int lo, cocos2d::Mat4* outValue, const char* funcName)
+bool luaval_to_mat4(lua_State* L, int lo, axis::Mat4* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1114,7 +1114,7 @@ bool luaval_to_mat4(lua_State* L, int lo, cocos2d::Mat4* outValue, const char* f
     return ok;
 }
 
-bool luaval_to_array_of_vec2(lua_State* L, int lo, cocos2d::Vec2** points, int* numPoints, const char* funcName)
+bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* numPoints, const char* funcName)
 {
     if (NULL == L)
         return false;
@@ -1136,7 +1136,7 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, cocos2d::Vec2** points, int* 
         size_t len = lua_objlen(L, lo);
         if (len > 0)
         {
-            cocos2d::Vec2* array = (cocos2d::Vec2*)new Vec2[len];
+            axis::Vec2* array = (axis::Vec2*)new Vec2[len];
             if (NULL == array)
                 return false;
             for (size_t i = 0; i < len; ++i)
@@ -1169,7 +1169,7 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, cocos2d::Vec2** points, int* 
     return ok;
 }
 
-bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, cocos2d::ValueVector* ret)
+bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, axis::ValueVector* ret)
 {
     if (nullptr == L || argc == 0)
         return false;
@@ -1228,7 +1228,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, cocos2d::ValueVec
     return true;
 }
 
-bool luaval_to_ccvalue(lua_State* L, int lo, cocos2d::Value* ret, const char* funcName)
+bool luaval_to_ccvalue(lua_State* L, int lo, axis::Value* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1284,7 +1284,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, cocos2d::Value* ret, const char* fu
 
     return ok;
 }
-bool luaval_to_ccvaluemap(lua_State* L, int lo, cocos2d::ValueMap* ret, const char* funcName)
+bool luaval_to_ccvaluemap(lua_State* L, int lo, axis::ValueMap* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1371,7 +1371,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, cocos2d::ValueMap* ret, const ch
 
     return ok;
 }
-bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, cocos2d::ValueMapIntKey* ret, const char* funcName)
+bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, axis::ValueMapIntKey* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1459,7 +1459,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, cocos2d::ValueMapIntKey* r
 
     return ok;
 }
-bool luaval_to_ccvaluevector(lua_State* L, int lo, cocos2d::ValueVector* ret, const char* funcName)
+bool luaval_to_ccvaluevector(lua_State* L, int lo, axis::ValueVector* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1661,7 +1661,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
     return ok;
 }
 
-bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, cocos2d::MeshVertexAttrib* ret, const char* funcName)
+bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, axis::MeshVertexAttrib* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1772,7 +1772,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
     return ok;
 }
 
-bool luaval_to_quaternion(lua_State* L, int lo, cocos2d::Quaternion* outValue, const char* funcName)
+bool luaval_to_quaternion(lua_State* L, int lo, axis::Quaternion* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1813,7 +1813,7 @@ bool luaval_to_quaternion(lua_State* L, int lo, cocos2d::Quaternion* outValue, c
     return ok;
 }
 
-bool luaval_to_texparams(lua_State* L, int lo, cocos2d::Texture2D::TexParams* outValue, const char* funcName)
+bool luaval_to_texparams(lua_State* L, int lo, axis::Texture2D::TexParams* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1854,7 +1854,7 @@ bool luaval_to_texparams(lua_State* L, int lo, cocos2d::Texture2D::TexParams* ou
     return ok;
 }
 
-bool luaval_to_tex2f(lua_State* L, int lo, cocos2d::Tex2F* outValue, const char* funcName)
+bool luaval_to_tex2f(lua_State* L, int lo, axis::Tex2F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1885,7 +1885,7 @@ bool luaval_to_tex2f(lua_State* L, int lo, cocos2d::Tex2F* outValue, const char*
     return ok;
 }
 
-bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, cocos2d::V3F_C4B_T2F* outValue, const char* funcName)
+bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, axis::V3F_C4B_T2F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1952,7 +1952,7 @@ bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, cocos2d::V3F_C4B_T2F* outValue,
     return ok;
 }
 
-bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<cocos2d::Vec2>* ret, const char* funcName)
+bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1971,7 +1971,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<cocos2d::Vec2>*
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        cocos2d::Vec2 value;
+        axis::Vec2 value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -1995,7 +1995,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<cocos2d::Vec2>*
     return ok;
 }
 
-bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<cocos2d::Vec3>* ret, const char* funcName)
+bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2014,7 +2014,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<cocos2d::Vec3>*
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        cocos2d::Vec3 value;
+        axis::Vec3 value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -2040,7 +2040,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<cocos2d::Vec3>*
 
 bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
                                       int lo,
-                                      std::vector<cocos2d::V3F_C4B_T2F>* ret,
+                                      std::vector<axis::V3F_C4B_T2F>* ret,
                                       const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -2060,7 +2060,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        cocos2d::V3F_C4B_T2F value;
+        axis::V3F_C4B_T2F value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -2083,7 +2083,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
     return ok;
 }
 
-void vec2_array_to_luaval(lua_State* L, const cocos2d::Vec2* points, int count)
+void vec2_array_to_luaval(lua_State* L, const axis::Vec2* points, int count)
 {
     if (NULL == L)
         return;
@@ -2137,7 +2137,7 @@ static int vec2_newindex(lua_State* L)
     return 0;
 }
 
-int vec2_to_luaval(lua_State* L, const cocos2d::Vec2& vec2)
+int vec2_to_luaval(lua_State* L, const axis::Vec2& vec2)
 {
     lua_createtable(L, 2, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec2.x); /* L: table key value*/
@@ -2181,7 +2181,7 @@ static int vec3_newindex(lua_State* L)
     return 0;
 }
 
-int vec3_to_luaval(lua_State* L, const cocos2d::Vec3& vec3)
+int vec3_to_luaval(lua_State* L, const axis::Vec3& vec3)
 {
     lua_createtable(L, 3, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec3.x); /* L: table key value*/
@@ -2227,7 +2227,7 @@ static int vec4_newindex(lua_State* L)
     return 0;
 }
 
-int vec4_to_luaval(lua_State* L, const cocos2d::Vec4& vec4)
+int vec4_to_luaval(lua_State* L, const axis::Vec4& vec4)
 {
     lua_createtable(L, 4, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec4.x); /* L: table key value*/
@@ -2503,7 +2503,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_rawset(L, -3);                                          /* table[key] = value, L: table */
 }
 
-void ccvalue_to_luaval(lua_State* L, const cocos2d::Value& inValue)
+void ccvalue_to_luaval(lua_State* L, const axis::Value& inValue)
 {
     const Value& obj = inValue;
     switch (obj.getTypeFamily())
@@ -2534,7 +2534,7 @@ void ccvalue_to_luaval(lua_State* L, const cocos2d::Value& inValue)
         break;
     }
 }
-void ccvaluemap_to_luaval(lua_State* L, const cocos2d::ValueMap& inValue)
+void ccvaluemap_to_luaval(lua_State* L, const axis::ValueMap& inValue)
 {
     lua_newtable(L);
 
@@ -2602,7 +2602,7 @@ void ccvaluemap_to_luaval(lua_State* L, const cocos2d::ValueMap& inValue)
         }
     }
 }
-void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inValue)
+void ccvaluemapintkey_to_luaval(lua_State* L, const axis::ValueMapIntKey& inValue)
 {
     lua_newtable(L);
 
@@ -2674,7 +2674,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const cocos2d::ValueMapIntKey& inV
         }
     }
 }
-void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
+void ccvaluevector_to_luaval(lua_State* L, const axis::ValueVector& inValue)
 {
     lua_newtable(L);
 
@@ -2749,7 +2749,7 @@ void ccvaluevector_to_luaval(lua_State* L, const cocos2d::ValueVector& inValue)
     }
 }
 
-void mat4_to_luaval(lua_State* L, const cocos2d::Mat4& mat)
+void mat4_to_luaval(lua_State* L, const axis::Mat4& mat)
 {
     if (nullptr == L)
         return;
@@ -2766,7 +2766,7 @@ void mat4_to_luaval(lua_State* L, const cocos2d::Mat4& mat)
     }
 }
 
-void blendfunc_to_luaval(lua_State* L, const cocos2d::BlendFunc& func)
+void blendfunc_to_luaval(lua_State* L, const axis::BlendFunc& func)
 {
     if (nullptr == L)
         return;
@@ -2781,7 +2781,7 @@ void blendfunc_to_luaval(lua_State* L, const cocos2d::BlendFunc& func)
     lua_rawset(L, -3);
 }
 
-void ttfconfig_to_luaval(lua_State* L, const cocos2d::TTFConfig& config)
+void ttfconfig_to_luaval(lua_State* L, const axis::TTFConfig& config)
 {
     if (nullptr == L)
         return;
@@ -2813,7 +2813,7 @@ void ttfconfig_to_luaval(lua_State* L, const cocos2d::TTFConfig& config)
     lua_rawset(L, -3);
 }
 
-void mesh_vertex_attrib_to_luaval(lua_State* L, const cocos2d::MeshVertexAttrib& inValue)
+void mesh_vertex_attrib_to_luaval(lua_State* L, const axis::MeshVertexAttrib& inValue)
 {
     if (nullptr == L)
         return;
@@ -2902,7 +2902,7 @@ void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& 
     }
 }
 
-void quaternion_to_luaval(lua_State* L, const cocos2d::Quaternion& inValue)
+void quaternion_to_luaval(lua_State* L, const axis::Quaternion& inValue)
 {
     if (NULL == L)
         return;
@@ -2922,7 +2922,7 @@ void quaternion_to_luaval(lua_State* L, const cocos2d::Quaternion& inValue)
     lua_rawset(L, -3);
 }
 
-void texParams_to_luaval(lua_State* L, const cocos2d::Texture2D::TexParams& inValue)
+void texParams_to_luaval(lua_State* L, const axis::Texture2D::TexParams& inValue)
 {
     if (nullptr == L)
         return;
@@ -2943,7 +2943,7 @@ void texParams_to_luaval(lua_State* L, const cocos2d::Texture2D::TexParams& inVa
     lua_rawset(L, -3);
 }
 
-void std_vector_vec3_to_luaval(lua_State* L, const std::vector<cocos2d::Vec3>& inValue)
+void std_vector_vec3_to_luaval(lua_State* L, const std::vector<axis::Vec3>& inValue)
 {
     if (nullptr == L)
         return;
@@ -2951,7 +2951,7 @@ void std_vector_vec3_to_luaval(lua_State* L, const std::vector<cocos2d::Vec3>& i
     lua_newtable(L);
 
     int index = 1;
-    for (const cocos2d::Vec3& value : inValue)
+    for (const axis::Vec3& value : inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
         vec3_to_luaval(L, value);
@@ -3016,23 +3016,23 @@ bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<s
     return ok;
 }
 
-bool luaval_to_node(lua_State* L, int lo, const char* type, cocos2d::Node** node)
+bool luaval_to_node(lua_State* L, int lo, const char* type, axis::Node** node)
 {
-    return luaval_to_object<cocos2d::Node>(L, lo, type, node);
+    return luaval_to_object<axis::Node>(L, lo, type, node);
 }
 
-void node_to_luaval(lua_State* L, const char* type, cocos2d::Node* node)
+void node_to_luaval(lua_State* L, const char* type, axis::Node* node)
 {
-    object_to_luaval<cocos2d::Node>(L, type, node);
+    object_to_luaval<axis::Node>(L, type, node);
 }
 
-bool luaval_to_vertexLayout(lua_State* L, int pos, cocos2d::backend::VertexLayout& outLayout, const char* message)
+bool luaval_to_vertexLayout(lua_State* L, int pos, axis::backend::VertexLayout& outLayout, const char* message)
 {
     if (L == nullptr)
         return false;
 
-    cocos2d::backend::VertexLayout* tmp = nullptr;
-    auto ret = luaval_to_object<cocos2d::backend::VertexLayout>(L, pos, "cc.VertexLayout", &tmp, message);
+    axis::backend::VertexLayout* tmp = nullptr;
+    auto ret = luaval_to_object<axis::backend::VertexLayout>(L, pos, "cc.VertexLayout", &tmp, message);
     if (!tmp)
     {
         return false;
@@ -3043,7 +3043,7 @@ bool luaval_to_vertexLayout(lua_State* L, int pos, cocos2d::backend::VertexLayou
 
 bool luaval_to_samplerDescriptor(lua_State* L,
                                  int pos,
-                                 cocos2d::backend::SamplerDescriptor& output,
+                                 axis::backend::SamplerDescriptor& output,
                                  const char* message)
 {
     if (L == nullptr)
@@ -3053,7 +3053,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.magFilter = static_cast<cocos2d::backend::SamplerFilter>(lua_tointeger(L, -1));
+        output.magFilter = static_cast<axis::backend::SamplerFilter>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3061,7 +3061,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.minFilter = static_cast<cocos2d::backend::SamplerFilter>(lua_tointeger(L, -1));
+        output.minFilter = static_cast<axis::backend::SamplerFilter>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3069,7 +3069,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.sAddressMode = static_cast<cocos2d::backend::SamplerAddressMode>(lua_tointeger(L, -1));
+        output.sAddressMode = static_cast<axis::backend::SamplerAddressMode>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3077,14 +3077,14 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.tAddressMode = static_cast<cocos2d::backend::SamplerAddressMode>(lua_tointeger(L, -1));
+        output.tAddressMode = static_cast<axis::backend::SamplerAddressMode>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
     return true;
 }
 
-bool luaval_to_uniformLocation(lua_State* L, int pos, cocos2d::backend::UniformLocation& loc, const char* message)
+bool luaval_to_uniformLocation(lua_State* L, int pos, axis::backend::UniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -3110,12 +3110,12 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, cocos2d::backend::UniformL
     {
         CCASSERT(false, "invalidate UniformLocation value");
     }
-    loc.shaderStage = static_cast<cocos2d::backend::ShaderStage>(lua_tointeger(L, -1));
+    loc.shaderStage = static_cast<axis::backend::ShaderStage>(lua_tointeger(L, -1));
     lua_pop(L, 1);
     return true;
 }
 
-void uniformLocation_to_luaval(lua_State* L, const cocos2d::backend::UniformLocation& loc)
+void uniformLocation_to_luaval(lua_State* L, const axis::backend::UniformLocation& loc)
 {
     if (L == nullptr)
         return;
@@ -3136,7 +3136,7 @@ void uniformLocation_to_luaval(lua_State* L, const cocos2d::backend::UniformLoca
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<cocos2d::backend::AttributeBindInfo>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<axis::backend::AttributeBindInfo>& attrs)
 {
     if (L == nullptr)
         return;

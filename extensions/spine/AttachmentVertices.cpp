@@ -29,7 +29,7 @@
 
 #include <spine/AttachmentVertices.h>
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace spine {
 

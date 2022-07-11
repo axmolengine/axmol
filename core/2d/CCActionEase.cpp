@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "2d/CCActionEase.h"
 #include "2d/CCTweenFunction.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 #ifndef M_PI_X_2
 #    define M_PI_X_2 (float)M_PI * 2.0f
@@ -78,7 +78,7 @@ void ActionEase::startWithTarget(Node* target)
     }
     else
     {
-        cocos2d::log("ActionEase::startWithTarget error: target or _inner is nullptr!");
+        axis::log("ActionEase::startWithTarget error: target or _inner is nullptr!");
     }
 }
 
@@ -135,7 +135,7 @@ bool EaseRateAction::initWithAction(ActionInterval* action, float rate)
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)         \
-    CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval* action)            \
+    CLASSNAME* CLASSNAME::create(axis::ActionInterval* action)            \
     {                                                                        \
         CLASSNAME* ease = new CLASSNAME();                                   \
         if (ease->initWithAction(action))                                    \
@@ -186,7 +186,7 @@ EASE_TEMPLATE_IMPL(EaseCubicActionInOut, tweenfunc::cubicEaseInOut, EaseCubicAct
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC)                               \
-    CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval* action, float rate)       \
+    CLASSNAME* CLASSNAME::create(axis::ActionInterval* action, float rate)       \
     {                                                                               \
         CLASSNAME* ease = new CLASSNAME();                                          \
         if (ease->initWithAction(action, rate))                                     \
@@ -229,7 +229,7 @@ bool EaseElastic::initWithAction(ActionInterval* action, float period /* = 0.3f*
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)                 \
-    CLASSNAME* CLASSNAME::create(cocos2d::ActionInterval* action, float period /* = 0.3f*/) \
+    CLASSNAME* CLASSNAME::create(axis::ActionInterval* action, float period /* = 0.3f*/) \
     {                                                                                       \
         CLASSNAME* ease = new CLASSNAME();                                                  \
         if (ease->initWithAction(action, period))                                           \
@@ -255,7 +255,7 @@ EASEELASTIC_TEMPLATE_IMPL(EaseElasticInOut, tweenfunc::elasticEaseInOut, EaseEla
 // EaseBezierAction
 //
 
-EaseBezierAction* EaseBezierAction::create(cocos2d::ActionInterval* action)
+EaseBezierAction* EaseBezierAction::create(axis::ActionInterval* action)
 {
     EaseBezierAction* ret = new EaseBezierAction();
     if (ret->initWithAction(action))
@@ -304,4 +304,4 @@ EaseBezierAction* EaseBezierAction::reverse() const
     return reverseAction;
 }
 
-NS_CC_END
+NS_AX_END

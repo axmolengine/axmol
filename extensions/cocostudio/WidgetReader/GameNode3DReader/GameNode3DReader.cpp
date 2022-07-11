@@ -35,7 +35,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -364,7 +364,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void GameNode3DReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* node3DOptions)
+void GameNode3DReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* node3DOptions)
 {
     auto options = (GameNode3DOption*)node3DOptions;
 

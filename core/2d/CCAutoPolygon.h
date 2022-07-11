@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "platform/CCImage.h"
 #include "renderer/CCTrianglesCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup _2d
@@ -166,7 +166,7 @@ public:
      * std::vector<Vec2> points = ap.trace(rect);//default threshold is 0.0
      * @endcode
      */
-    std::vector<Vec2> trace(const cocos2d::Rect& rect, float threshold = 0.0f);
+    std::vector<Vec2> trace(const axis::Rect& rect, float threshold = 0.0f);
 
     /**
      * reduce the amount of points so its faster for GPU to process and draw
@@ -261,20 +261,20 @@ public:
 
 protected:
     Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
-    std::vector<cocos2d::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
+    std::vector<axis::Vec2> marchSquare(const Rect& rect, const Vec2& first, float threshold);
     unsigned int getSquareValue(unsigned int x, unsigned int y, const Rect& rect, float threshold);
 
     unsigned char getAlphaByIndex(unsigned int i);
     unsigned char getAlphaByPos(const Vec2& pos);
 
     int getIndexFromPos(unsigned int x, unsigned int y) { return y * _width + x; }
-    cocos2d::Vec2 getPosFromIndex(unsigned int i)
+    axis::Vec2 getPosFromIndex(unsigned int i)
     {
-        return cocos2d::Vec2(static_cast<float>(i % _width), static_cast<float>(i / _width));
+        return axis::Vec2(static_cast<float>(i % _width), static_cast<float>(i / _width));
     }
 
-    std::vector<cocos2d::Vec2> rdp(const std::vector<cocos2d::Vec2>& v, float optimization);
-    float perpendicularDistance(const cocos2d::Vec2& i, const cocos2d::Vec2& start, const cocos2d::Vec2& end);
+    std::vector<axis::Vec2> rdp(const std::vector<axis::Vec2>& v, float optimization);
+    float perpendicularDistance(const axis::Vec2& i, const axis::Vec2& start, const axis::Vec2& end);
 
     // real rect is the size that is in scale with the texture file
     Rect getRealRect(const Rect& rect);
@@ -288,6 +288,6 @@ protected:
     unsigned int _threshold;
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif  // #ifndef COCOS_2D_CCAUTOPOLYGON_H__

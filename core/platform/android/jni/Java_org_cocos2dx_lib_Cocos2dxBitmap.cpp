@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 static const char* className = "org.cocos2dx.lib.Cocos2dxBitmap";
 
-using namespace cocos2d;
+USING_NS_AX;
 
 int getFontSizeAccordingHeightJni(int height)
 {

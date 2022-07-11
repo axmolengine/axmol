@@ -30,7 +30,7 @@
 #include <iomanip>
 #include "base/ccUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const ValueVector ValueVectorNull;
 const ValueMap ValueMapNull;
@@ -971,4 +971,4 @@ void Value::reset(Type type)
     _type = type;
 }
 
-NS_CC_END
+NS_AX_END

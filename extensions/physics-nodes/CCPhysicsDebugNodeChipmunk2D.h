@@ -31,7 +31,7 @@
 
 struct cpSpace;
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 extern Vec2 physicsDebugNodeOffset;
 
@@ -70,6 +70,6 @@ protected:
     cpSpace* _spacePtr;
 };
 
-NS_CC_EXT_END
+NS_AX_EXT_END
 
 #endif  // __PHYSICSNODES_DEBUGNODE_CHIPMUNK2D_H__

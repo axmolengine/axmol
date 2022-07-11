@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 #define DECLARE_GUARD (void)0  // std::lock_guard<std::recursive_mutex> mutexGuard(_mutex)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct FileUtilsApple::IMPL
 {
@@ -251,4 +251,4 @@ bool FileUtilsApple::createDirectory(std::string_view path) const
     return result;
 }
 
-NS_CC_END
+NS_AX_END

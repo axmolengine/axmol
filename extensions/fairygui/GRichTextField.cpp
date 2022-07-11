@@ -4,7 +4,7 @@
 #include "utils/html/HtmlObject.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 GRichTextField::GRichTextField() :
     _richText(nullptr),
@@ -117,7 +117,7 @@ void GRichTextField::handleSizeChanged()
     }
 }
 
-GObject* GRichTextField::hitTest(const cocos2d::Vec2& worldPoint, const cocos2d::Camera* camera)
+GObject* GRichTextField::hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera)
 {
     const std::vector<HtmlObject*>& objs = _richText->getControls();
     for (auto &obj : objs)

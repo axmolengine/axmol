@@ -25,8 +25,8 @@
 
 #include "UIVideoPlayerTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 VideoPlayerTests::VideoPlayerTests()
 {
@@ -285,7 +285,7 @@ void VideoPlayerTest::videoEventCallback(Ref* sender, VideoPlayer::EventType eve
 SimpleVideoPlayerTest::SimpleVideoPlayerTest()
 {
     _videoPlayer      = nullptr;
-    _style            = cocos2d::ui::VideoPlayer::StyleType::NONE;
+    _style            = axis::ui::VideoPlayer::StyleType::NONE;
     _userInputEnabled = true;
 
     _switchUserInputEnabled = nullptr;
@@ -305,12 +305,12 @@ void SimpleVideoPlayerTest::updateButtonsTexts()
         std::string str = " - ";
         switch (_style)
         {
-        case cocos2d::ui::VideoPlayer::StyleType::NONE:
+        case axis::ui::VideoPlayer::StyleType::NONE:
             _switchUserInputEnabled->setVisible(false);
             str = "< NO Sytle >";
             break;
 
-        case cocos2d::ui::VideoPlayer::StyleType::DEFAULT:
+        case axis::ui::VideoPlayer::StyleType::DEFAULT:
             str = "< Default Style >";
             _switchUserInputEnabled->setVisible(true);
             break;
@@ -381,12 +381,12 @@ void SimpleVideoPlayerTest::switchStyleCallback(Ref* sender)
 {
     switch (_style)
     {
-    case cocos2d::ui::VideoPlayer::StyleType::NONE:
-        _style = cocos2d::ui::VideoPlayer::StyleType::DEFAULT;
+    case axis::ui::VideoPlayer::StyleType::NONE:
+        _style = axis::ui::VideoPlayer::StyleType::DEFAULT;
         break;
 
-    case cocos2d::ui::VideoPlayer::StyleType::DEFAULT:
-        _style = cocos2d::ui::VideoPlayer::StyleType::NONE;
+    case axis::ui::VideoPlayer::StyleType::DEFAULT:
+        _style = axis::ui::VideoPlayer::StyleType::NONE;
         break;
 
     default:

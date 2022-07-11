@@ -34,7 +34,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /** @class EventAcceleration
  * @brief Accelerometer event.
@@ -53,7 +53,7 @@ private:
     friend class EventListenerAcceleration;
 };
 
-NS_CC_END
+NS_AX_END
 
 // end of base group
 /// @}

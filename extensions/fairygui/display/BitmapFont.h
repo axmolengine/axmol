@@ -7,7 +7,7 @@
 
 NS_FGUI_BEGIN
 
-class BitmapFont : public cocos2d::Font
+class BitmapFont : public axis::Font
 {
 public:
     BitmapFont();
@@ -17,11 +17,11 @@ public:
 
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
 #    if defined(AXIS_VERSION)
-    virtual cocos2d::FontAtlas* newFontAtlas() override { return new cocos2d::FontAtlas(this); }
+    virtual axis::FontAtlas* newFontAtlas() override { return new axis::FontAtlas(this); }
 #else
-    virtual cocos2d::FontAtlas* createFontAtlas() override { return new cocos2d::FontAtlas(*this); }
+    virtual axis::FontAtlas* createFontAtlas() override { return new axis::FontAtlas(*this); }
 #endif
-    cocos2d::FontAtlas* resetFontAtlas(cocos2d::FontAtlas* fontAtlas)
+    axis::FontAtlas* resetFontAtlas(axis::FontAtlas* fontAtlas)
     {
         if (_fontAtlas != fontAtlas)
         {
@@ -30,7 +30,7 @@ public:
         }
         return _fontAtlas;
     }
-    cocos2d::FontAtlas* getFontAtlas() const { return _fontAtlas; }
+    axis::FontAtlas* getFontAtlas() const { return _fontAtlas; }
     void releaseAtlas() { resetFontAtlas(nullptr); }
     void setFontSize(float fontSize) {}
     int getOriginalFontSize()const { return _originalFontSize; }
@@ -41,7 +41,7 @@ private:
     float _originalFontSize;
     bool _resizable;
     bool _canTint;
-    cocos2d::FontAtlas* _fontAtlas;
+    axis::FontAtlas* _fontAtlas;
 
     friend class UIPackage;
 };

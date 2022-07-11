@@ -26,7 +26,7 @@
 #include "platform/CCImage.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 NinePatchImageParser::~NinePatchImageParser() {}
 
@@ -170,7 +170,7 @@ Rect NinePatchImageParser::parseCapInset() const
     return capInsets;
 }
 
-void NinePatchImageParser::setSpriteFrameInfo(Image* image, const cocos2d::Rect& frameRect, bool rotated)
+void NinePatchImageParser::setSpriteFrameInfo(Image* image, const axis::Rect& frameRect, bool rotated)
 {
     this->_image = image;
     CCASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
@@ -196,4 +196,4 @@ bool NinePatchImageParser::isNinePatchImage(std::string_view filepath)
     }
 }
 
-NS_CC_END
+NS_AX_END

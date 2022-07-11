@@ -29,15 +29,16 @@ THE SOFTWARE.
 #include "CCArmatureDefine.h"
 #include "CocosStudioExport.h"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 class GroupCommand;
-}
+
+NS_AX_END
 
 namespace cocostudio
 {
 
-class CCS_DLL BatchNode : public cocos2d::Node
+class CCS_DLL BatchNode : public axis::Node
 {
 public:
     static BatchNode* create();
@@ -57,18 +58,18 @@ public:
      */
     virtual bool init() override;
     using Node::addChild;
-    virtual void addChild(cocos2d::Node* pChild, int zOrder, int tag) override;
-    virtual void addChild(cocos2d::Node* pChild, int zOrder, std::string_view name) override;
-    virtual void removeChild(cocos2d::Node* child, bool cleanup) override;
-    virtual void visit(cocos2d::Renderer* renderer,
-                       const cocos2d::Mat4& parentTransform,
+    virtual void addChild(axis::Node* pChild, int zOrder, int tag) override;
+    virtual void addChild(axis::Node* pChild, int zOrder, std::string_view name) override;
+    virtual void removeChild(axis::Node* child, bool cleanup) override;
+    virtual void visit(axis::Renderer* renderer,
+                       const axis::Mat4& parentTransform,
                        uint32_t parentFlags) override;
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
 protected:
     void generateGroupCommand();
 
-    cocos2d::GroupCommand* _groupCommand;
+    axis::GroupCommand* _groupCommand;
 };
 
 }  // namespace cocostudio

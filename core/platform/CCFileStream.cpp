@@ -2,6 +2,6 @@
 // Copyright (c) 2020 C4games Ltd
 #include "platform/CCFileStream.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
-NS_CC_END
+NS_AX_END

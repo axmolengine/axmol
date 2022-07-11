@@ -40,7 +40,7 @@ class ActionTimelineData;
 
 namespace cocostudio
 {
-class CCS_DLL ComExtensionData : public cocos2d::Component
+class CCS_DLL ComExtensionData : public axis::Component
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:

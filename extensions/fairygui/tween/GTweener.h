@@ -11,7 +11,7 @@ NS_FGUI_BEGIN
 
 class GPath;
 
-class GTweener : public cocos2d::Ref
+class GTweener : public axis::Ref
 {
 public:
     typedef std::function<void(GTweener* tweener)> GTweenCallback;
@@ -32,12 +32,12 @@ public:
     GTweener* setTimeScale(float value);
     GTweener* setSnapping(bool value);
     GTweener* setTargetAny(void* value);
-    GTweener* setTarget(cocos2d::Ref* target);
-    GTweener* setTarget(cocos2d::Ref* target, TweenPropType propType);
+    GTweener* setTarget(axis::Ref* target);
+    GTweener* setTarget(axis::Ref* target, TweenPropType propType);
     void* getTarget() const { return _target; }
-    GTweener* setUserData(const cocos2d::Value& value);
+    GTweener* setUserData(const axis::Value& value);
     GTweener* setPath(GPath* path);
-    const cocos2d::Value& getUserData() const { return _userData; }
+    const axis::Value& getUserData() const { return _userData; }
     GTweener* onUpdate(GTweenCallback callback);
     GTweener* onStart(GTweenCallback callback);
     GTweener* onComplete(GTweenCallback0 callback);
@@ -57,12 +57,12 @@ public:
 
 private:
     GTweener* _to(float start, float end, float duration);
-    GTweener* _to(const cocos2d::Vec2& start, const cocos2d::Vec2& end, float duration);
-    GTweener* _to(const cocos2d::Vec3& start, const cocos2d::Vec3& end, float duration);
-    GTweener* _to(const cocos2d::Vec4& start, const cocos2d::Vec4& end, float duration);
-    GTweener* _to(const cocos2d::Color4B& start, const cocos2d::Color4B& end, float duration);
+    GTweener* _to(const axis::Vec2& start, const axis::Vec2& end, float duration);
+    GTweener* _to(const axis::Vec3& start, const axis::Vec3& end, float duration);
+    GTweener* _to(const axis::Vec4& start, const axis::Vec4& end, float duration);
+    GTweener* _to(const axis::Color4B& start, const axis::Color4B& end, float duration);
     GTweener* _to(double start, double end, float duration);
-    GTweener* _shake(const cocos2d::Vec2& start, float amplitude, float duration);
+    GTweener* _shake(const axis::Vec2& start, float amplitude, float duration);
     void _init();
     void _reset();
     void _update(float dt);
@@ -73,7 +73,7 @@ private:
 
 private:
     void* _target;
-    cocos2d::Ref* _refTarget;
+    axis::Ref* _refTarget;
     TweenPropType _propType;
     bool _killed;
     bool _paused;
@@ -88,7 +88,7 @@ private:
     bool _yoyo;
     float _timeScale;
     bool _snapping;
-    cocos2d::Value _userData;
+    axis::Value _userData;
     int _valueSize;
     GPath* _path;
 

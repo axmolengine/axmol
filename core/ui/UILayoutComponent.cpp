@@ -29,7 +29,7 @@
 #include "ui/GUIDefine.h"
 #include "ui/UIHelper.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -671,4 +671,4 @@ void LayoutComponent::setPercentOnlyEnabled(bool enable)
 }
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

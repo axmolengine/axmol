@@ -42,31 +42,31 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
 
-    void toggleDebugCallback(cocos2d::Ref* sender);
+    void toggleDebugCallback(axis::Ref* sender);
 
-    cocos2d::Sprite* addGrossiniAtPosition(cocos2d::Vec2 p, float scale = 1.0);
-    cocos2d::Sprite* makeBall(cocos2d::Vec2 point,
+    axis::Sprite* addGrossiniAtPosition(axis::Vec2 p, float scale = 1.0);
+    axis::Sprite* makeBall(axis::Vec2 point,
                               float radius,
-                              cocos2d::PhysicsMaterial material = cocos2d::PHYSICSBODY_MATERIAL_DEFAULT);
-    cocos2d::Sprite* makeBox(cocos2d::Vec2 point,
-                             cocos2d::Size size,
+                              axis::PhysicsMaterial material = axis::PHYSICSBODY_MATERIAL_DEFAULT);
+    axis::Sprite* makeBox(axis::Vec2 point,
+                             axis::Size size,
                              int color                         = 0,
-                             cocos2d::PhysicsMaterial material = cocos2d::PHYSICSBODY_MATERIAL_DEFAULT);
-    cocos2d::Sprite* makeTriangle(cocos2d::Vec2 point,
-                                  cocos2d::Size size,
+                             axis::PhysicsMaterial material = axis::PHYSICSBODY_MATERIAL_DEFAULT);
+    axis::Sprite* makeTriangle(axis::Vec2 point,
+                                  axis::Size size,
                                   int color                         = 0,
-                                  cocos2d::PhysicsMaterial material = cocos2d::PHYSICSBODY_MATERIAL_DEFAULT);
+                                  axis::PhysicsMaterial material = axis::PHYSICSBODY_MATERIAL_DEFAULT);
 
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    void onTouchMoved(axis::Touch* touch, axis::Event* event);
+    void onTouchEnded(axis::Touch* touch, axis::Event* event);
 
     void toggleDebug();
 
 protected:
-    cocos2d::Texture2D* _spriteTexture;
-    cocos2d::SpriteBatchNode* _ball;
-    std::unordered_map<int, cocos2d::Node*> _mouses;
+    axis::Texture2D* _spriteTexture;
+    axis::SpriteBatchNode* _ball;
+    std::unordered_map<int, axis::Node*> _mouses;
     bool _debugDraw;
 };
 
@@ -88,8 +88,8 @@ public:
     void onEnter() override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onAcceleration(cocos2d::Acceleration* acc, cocos2d::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onAcceleration(axis::Acceleration* acc, axis::Event* event);
 };
 
 class PhysicsDemoPyramidStack : public PhysicsDemo
@@ -112,15 +112,15 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
     void update(float delta) override;
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
-    void changeModeCallback(cocos2d::Ref* sender);
+    void changeModeCallback(axis::Ref* sender);
 
-    bool anyRay(cocos2d::PhysicsWorld& world, const cocos2d::PhysicsRayCastInfo& info, void* data);
+    bool anyRay(axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info, void* data);
 
 private:
     float _angle;
-    cocos2d::DrawNode* _node;
+    axis::DrawNode* _node;
     int _mode;
 };
 
@@ -152,9 +152,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    void onTouchMoved(axis::Touch* touch, axis::Event* event);
+    void onTouchEnded(axis::Touch* touch, axis::Event* event);
 
 private:
     float _distance;
@@ -169,7 +169,7 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onContactBegin(cocos2d::PhysicsContact& contact);
+    bool onContactBegin(axis::PhysicsContact& contact);
 };
 
 class PhysicsDemoSlice : public PhysicsDemo
@@ -181,10 +181,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool slice(cocos2d::PhysicsWorld& world, const cocos2d::PhysicsRayCastInfo& info, void* data);
-    void clipPoly(cocos2d::PhysicsShapePolygon* shape, cocos2d::Vec2 normal, float distance);
+    bool slice(axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info, void* data);
+    void clipPoly(axis::PhysicsShapePolygon* shape, axis::Vec2 normal, float distance);
 
-    void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+    void onTouchEnded(axis::Touch* touch, axis::Event* event);
 
 private:
     int _sliceTag;
@@ -207,12 +207,12 @@ public:
 
     void onEnter() override;
     void resetTest();
-    bool onContactBegin(cocos2d::PhysicsContact& contact);
+    bool onContactBegin(axis::PhysicsContact& contact);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onDecrease(cocos2d::Ref* sender);
-    void onIncrease(cocos2d::Ref* sender);
+    void onDecrease(axis::Ref* sender);
+    void onIncrease(axis::Ref* sender);
 
 private:
     int _yellowBoxNum;
@@ -251,13 +251,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void changeBodyCallback(cocos2d::Ref* sender);
+    void changeBodyCallback(axis::Ref* sender);
 
 private:
-    cocos2d::Sprite* _nodeA;
-    cocos2d::Sprite* _nodeB;
-    cocos2d::PhysicsBody* _body;
-    cocos2d::MenuItemFont* _button;
+    axis::Sprite* _nodeA;
+    axis::Sprite* _nodeB;
+    axis::PhysicsBody* _body;
+    axis::MenuItemFont* _button;
     bool _bodyInA;
 };
 
@@ -281,11 +281,11 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
 
 private:
-    cocos2d::Sprite* _parentSprite;
-    cocos2d::Layer* _rootLayer;
+    axis::Sprite* _parentSprite;
+    axis::Layer* _rootLayer;
 };
 
 class PhysicsIssue9959 : public PhysicsDemo

@@ -26,13 +26,13 @@
 #include "2d/CCCamera.h"
 #include "2d/CCNode.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 RenderCommand::RenderCommand() {}
 
 RenderCommand::~RenderCommand() {}
 
-void RenderCommand::init(float globalZOrder, const cocos2d::Mat4& transform, unsigned int flags)
+void RenderCommand::init(float globalZOrder, const axis::Mat4& transform, unsigned int flags)
 {
     _globalOrder = globalZOrder;
     if (flags & Node::FLAGS_RENDER_AS_3D)
@@ -54,4 +54,4 @@ void RenderCommand::printID()
     printf("Command Depth: %f\n", _globalOrder);
 }
 
-NS_CC_END
+NS_AX_END

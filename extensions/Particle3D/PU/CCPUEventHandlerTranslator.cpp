@@ -29,7 +29,7 @@
 #include "Particle3D/PU/CCPUEventHandlerManager.h"
 #include "Particle3D/PU/CCPUObserver.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUEventHandlerTranslator::PUEventHandlerTranslator() : _handler(nullptr) {}
 //-------------------------------------------------------------------------
@@ -121,4 +121,4 @@ void PUEventHandlerTranslator::translate(PUScriptCompiler* compiler, PUAbstractN
     }
 }
 
-NS_CC_END
+NS_AX_END

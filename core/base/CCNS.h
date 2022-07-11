@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "math/CCMath.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup base
@@ -75,6 +75,6 @@ Vec2 CC_DLL SizeFromString(std::string_view str);
 // end of data_structure group
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __PLATFORM_CCNS_H__

@@ -1,6 +1,6 @@
 #include "JoystickScene.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 JoystickScene::~JoystickScene()
 {

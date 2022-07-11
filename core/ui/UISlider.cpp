@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "2d/CCSprite.h"
 #include "2d/CCCamera.h"
 #include "renderer/ccShaders.h"
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /* FIXME:
  Code could be simplified by using Sprite's setContentSize feature.
@@ -487,7 +487,7 @@ void Slider::updateVisualSlider()
     }
 }
 
-bool Slider::hitTest(const cocos2d::Vec2& pt, const Camera* camera, Vec3* /*p*/) const
+bool Slider::hitTest(const axis::Vec2& pt, const Camera* camera, Vec3* /*p*/) const
 {
     Rect rect;
     rect.size = _slidBallNormalRenderer->getContentSize();
@@ -824,4 +824,4 @@ ResourceData Slider::getBallDisabledFile()
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

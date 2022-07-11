@@ -29,7 +29,7 @@
 #include "2d/CCCamera.h"
 #include "renderer/CCRenderer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 BillBoard::BillBoard() : _mode(Mode::VIEW_POINT_ORIENTED), _modeDirty(false)
 {
@@ -253,4 +253,4 @@ BillBoard::Mode BillBoard::getMode() const
     return _mode;
 }
 
-NS_CC_END
+NS_AX_END

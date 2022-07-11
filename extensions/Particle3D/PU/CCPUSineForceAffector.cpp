@@ -27,7 +27,7 @@
 #include "CCPUSineForceAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // Constants
 const float PUSineForceAffector::DEFAULT_FREQ_MIN = 1.0f;
 const float PUSineForceAffector::DEFAULT_FREQ_MAX = 1.0f;
@@ -55,7 +55,7 @@ void PUSineForceAffector::preUpdateAffector(float deltaTime)
 
         if (_frequencyMin != _frequencyMax)
         {
-            _frequency = cocos2d::random(_frequencyMin, _frequencyMax);
+            _frequency = axis::random(_frequencyMin, _frequencyMax);
         }
     }
 }
@@ -121,4 +121,4 @@ void PUSineForceAffector::copyAttributesTo(PUAffector* affector)
     sineForceAffector->_angle              = _angle;
 }
 
-NS_CC_END
+NS_AX_END

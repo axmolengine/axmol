@@ -27,7 +27,7 @@
 #include "CCPUFlockCenteringAffector.h"
 #include "Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //-----------------------------------------------------------------------
 PUFlockCenteringAffector::PUFlockCenteringAffector() : PUAffector(), _count(0.0f) {}
 
@@ -75,4 +75,4 @@ void PUFlockCenteringAffector::copyAttributesTo(PUAffector* affector)
     flockCenteringAffector->_count                   = _count;
 }
 
-NS_CC_END
+NS_AX_END

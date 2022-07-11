@@ -31,7 +31,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL NodeReader : public cocos2d::Ref, public NodeReaderProtocol
+class CCS_DLL NodeReader : public axis::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -46,9 +46,9 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions);
-    void setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions);
-    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
+    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions);
+    void setLayoutComponentPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions);
+    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
 };
 }  // namespace cocostudio
 

@@ -117,7 +117,7 @@ bool ComAudio::serialize(void* r)
             {
                 continue;
             }
-            filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
+            filePath.assign(axis::FileUtils::getInstance()->fullPathForFilename(file));
         }
         if (strcmp(className, "CCBackgroundAudio") == 0)
         {

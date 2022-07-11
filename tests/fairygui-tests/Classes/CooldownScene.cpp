@@ -1,6 +1,6 @@
 #include "CooldownScene.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 void CooldownScene::continueInit()
 {

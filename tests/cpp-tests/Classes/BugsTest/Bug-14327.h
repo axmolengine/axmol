@@ -31,7 +31,7 @@
 
 #    include "ui/UIEditBox/UIEditBox.h"
 
-class Bug14327Layer : public BugsTestBase, public cocos2d::ui::EditBoxDelegate
+class Bug14327Layer : public BugsTestBase, public axis::ui::EditBoxDelegate
 {
 public:
     CREATE_FUNC(Bug14327Layer);
@@ -39,20 +39,20 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "Bug14327"; }
 
-    virtual void editBoxEditingDidBegin(cocos2d::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidBegin(axis::ui::EditBox* editBox) override;
     virtual void editBoxEditingDidEndWithAction(
-        cocos2d::ui::EditBox* editBox,
-        cocos2d::ui::EditBoxDelegate::EditBoxEndAction EditBoxEndAction) override;
-    virtual void editBoxTextChanged(cocos2d::ui::EditBox* editBox, std::string_view text) override;
-    virtual void editBoxReturn(cocos2d::ui::EditBox* editBox) override;
+        axis::ui::EditBox* editBox,
+        axis::ui::EditBoxDelegate::EditBoxEndAction EditBoxEndAction) override;
+    virtual void editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(axis::ui::EditBox* editBox) override;
 
 protected:
     virtual void update(float dt) override;
 
 private:
     time_t _removeTime;
-    cocos2d::Label* _TTFShowTime;
-    cocos2d::ui::EditBox* _edit;
+    axis::Label* _TTFShowTime;
+    axis::ui::EditBox* _edit;
 };
 
 #endif

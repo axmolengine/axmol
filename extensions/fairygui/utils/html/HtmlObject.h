@@ -20,7 +20,7 @@ public:
     static bool usePool;
 
     static GObjectPool objectPool;
-    static cocos2d::Vector<GObject*> loaderPool;
+    static axis::Vector<GObject*> loaderPool;
 
     HtmlObject();
     virtual ~HtmlObject();

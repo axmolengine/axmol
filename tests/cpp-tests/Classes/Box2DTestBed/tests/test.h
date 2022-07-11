@@ -115,8 +115,8 @@ public:
     void DrawAABB(b2AABB* aabb, const b2Color& color);
     void Flush();
 
-    cocos2d::extension::PhysicsDebugNodeBox2D g_debugDraw;
-    cocos2d::DrawNode* debugDrawNode;
+    axis::extension::PhysicsDebugNodeBox2D g_debugDraw;
+    axis::DrawNode* debugDrawNode;
     std::string debugString = "";
 
     b2World* m_world;

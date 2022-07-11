@@ -26,11 +26,11 @@
 #include "base/CCEventTouch.h"
 #include "base/CCTouch.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventTouch::EventTouch() : Event(Type::TOUCH)
 {
     _touches.reserve(MAX_TOUCHES);
 }
 
-NS_CC_END
+NS_AX_END

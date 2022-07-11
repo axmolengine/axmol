@@ -33,7 +33,7 @@
 #include <vector>
 #include <unordered_map>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _backend
  * @{
@@ -118,4 +118,4 @@ private:
 
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

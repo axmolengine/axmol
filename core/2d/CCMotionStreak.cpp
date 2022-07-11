@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 MotionStreak::MotionStreak()
 {
@@ -438,4 +438,4 @@ void MotionStreak::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     }
 }
 
-NS_CC_END
+NS_AX_END

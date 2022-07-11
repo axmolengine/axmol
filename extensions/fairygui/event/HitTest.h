@@ -12,7 +12,7 @@ class ByteBuffer;
 class IHitTest
 {
 public:
-    virtual bool hitTest(GComponent* obj, const cocos2d::Vec2& localPoint)
+    virtual bool hitTest(GComponent* obj, const axis::Vec2& localPoint)
     {
         return true;
     }
@@ -37,7 +37,7 @@ class PixelHitTest : public IHitTest
 public:
     PixelHitTest(PixelHitTestData* data, int offsetX, int offsetY);
 
-    virtual bool hitTest(GComponent* obj, const cocos2d::Vec2& localPoint) override;
+    virtual bool hitTest(GComponent* obj, const axis::Vec2& localPoint) override;
 
     int offsetX;
     int offsetY;

@@ -7,7 +7,7 @@
 
 NS_TIMELINE_BEGIN
 
-class CCS_DLL ActionTimelineData : public cocos2d::Ref
+class CCS_DLL ActionTimelineData : public axis::Ref
 {
 public:
     static ActionTimelineData* create(int actionTag);

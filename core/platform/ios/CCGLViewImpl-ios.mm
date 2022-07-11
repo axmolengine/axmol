@@ -31,7 +31,7 @@
 #include "base/CCTouch.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void* GLViewImpl::_pixelFormat      = kEAGLColorFormatRGB565;
 int GLViewImpl::_depthFormat        = GL_DEPTH_COMPONENT16;
@@ -282,4 +282,4 @@ Rect GLViewImpl::getSafeAreaRect() const
     return GLView::getSafeAreaRect();
 }
 
-NS_CC_END
+NS_AX_END

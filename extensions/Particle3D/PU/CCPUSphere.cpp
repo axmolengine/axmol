@@ -26,7 +26,7 @@
 
 #include "CCPUSphere.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUSphere::PUSphere() : _radius(1.0) {}
 
@@ -69,4 +69,4 @@ void PUSphere::merge(const PUSphere& oth)
     _radius = newRadius;
 }
 
-NS_CC_END
+NS_AX_END

@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "CCTransformHelp.h"
 #include "CCArmature.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {

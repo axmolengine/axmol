@@ -32,7 +32,7 @@
 #include "3d/CCAABB.h"
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /** Defines a plane in 3D space.
     @remarks
         A plane is defined in 3D space by the equation
@@ -133,6 +133,6 @@ public:
 };
 
 typedef std::vector<PUPlane> PlaneList;
-NS_CC_END
+NS_AX_END
 
 #endif

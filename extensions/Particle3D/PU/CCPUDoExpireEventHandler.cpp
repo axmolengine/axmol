@@ -28,7 +28,7 @@
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 //-----------------------------------------------------------------------
 void PUDoExpireEventHandler::handle(PUParticleSystem3D* /*particleSystem*/,
@@ -48,4 +48,4 @@ PUDoExpireEventHandler* PUDoExpireEventHandler::create()
     return peh;
 }
 
-NS_CC_END
+NS_AX_END

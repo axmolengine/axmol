@@ -29,7 +29,7 @@
 #include "base/ccMacros.h"
 #include "base/CCController.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const std::string EventListenerController::LISTENER_ID = "__cc_controller";
 
@@ -115,4 +115,4 @@ EventListenerController* EventListenerController::clone()
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

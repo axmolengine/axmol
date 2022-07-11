@@ -28,7 +28,7 @@
 #include "DeviceMTL.h"
 #include <unordered_map>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class RenderPipelineMTL;
 class DepthStencilStateMTL;
@@ -250,4 +250,4 @@ private:
 
 // end of _metal group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

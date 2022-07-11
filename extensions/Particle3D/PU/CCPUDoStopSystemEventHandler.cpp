@@ -27,7 +27,7 @@
 #include "extensions/Particle3D/PU/CCPUDoStopSystemEventHandler.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //-----------------------------------------------------------------------
 void PUDoStopSystemEventHandler::handle(PUParticleSystem3D* particleSystem,
                                         PUParticle3D* /*particle*/,
@@ -45,4 +45,4 @@ PUDoStopSystemEventHandler* PUDoStopSystemEventHandler::create()
     return peh;
 }
 
-NS_CC_END
+NS_AX_END

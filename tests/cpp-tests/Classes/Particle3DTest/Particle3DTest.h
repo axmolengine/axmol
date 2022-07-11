@@ -44,14 +44,14 @@ public:
     virtual std::string title() const override;
     virtual void update(float delta) override;
 
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
     std::string _title;
-    cocos2d::Camera* _camera;
-    cocos2d::Label* _particleLab;
+    axis::Camera* _camera;
+    axis::Label* _particleLab;
     float _angle;
 };
 

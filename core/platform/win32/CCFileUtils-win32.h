@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <string>
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup platform
@@ -140,4 +140,4 @@ protected:
 // end of platform group
 /// @}
 
-NS_CC_END
+NS_AX_END

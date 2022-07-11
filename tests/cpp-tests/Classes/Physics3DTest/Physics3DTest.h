@@ -29,10 +29,11 @@
 #include "../BaseTest.h"
 #include <string>
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 class Physics3DConstraint;
-}
+
+NS_AX_END
 
 DEFINE_TEST_SUITE(Physics3DTests);
 
@@ -59,16 +60,16 @@ public:
     virtual std::string subtitle() const override;
     virtual void update(float delta) override;
 
-    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
 protected:
-    void shootBox(const cocos2d::Vec3& des);
+    void shootBox(const axis::Vec3& des);
 
 protected:
     std::string _title;
-    cocos2d::Camera* _camera = nullptr;
+    axis::Camera* _camera = nullptr;
     float _angle             = 0.f;
     bool _needShootBox       = false;
 };
@@ -96,12 +97,12 @@ public:
 
     virtual bool init() override;
 
-    virtual void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override;
-    virtual void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override;
-    virtual void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event) override;
+    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
+    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
+    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
 
 protected:
-    cocos2d::Physics3DConstraint* _constraint;  // for picking
+    axis::Physics3DConstraint* _constraint;  // for picking
     float _pickingDistance;                     // picking distance
 };
 

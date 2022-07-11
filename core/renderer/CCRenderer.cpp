@@ -50,7 +50,7 @@
 #include "renderer/backend/Backend.h"
 #include "renderer/backend/RenderTarget.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // helper
 static bool compareRenderCommand(RenderCommand* a, RenderCommand* b)
@@ -1038,4 +1038,4 @@ void Renderer::popStateBlock()
     _stateBlockStack.pop_back();
 }
 
-NS_CC_END
+NS_AX_END

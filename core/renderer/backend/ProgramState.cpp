@@ -39,7 +39,7 @@
 #    include "glsl_optimizer.h"
 #endif
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -552,4 +552,4 @@ void ProgramState::getFragmentUniformBuffer(char** buffer, std::size_t& size) co
     size    = _fragmentUniformBufferSize;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

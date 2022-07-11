@@ -24,8 +24,8 @@
 
 #include "UITextBMFontTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UITextBMFontTests::UITextBMFontTests()
 {
@@ -66,8 +66,8 @@ bool UITextBMFontTest::init()
     }
     return false;
 }
-void UITextBMFontTest::printWidgetResources(cocos2d::Ref* sender)
+void UITextBMFontTest::printWidgetResources(axis::Ref* sender)
 {
-    cocos2d::ResourceData textureFile = _textBMFont->getRenderFile();
+    axis::ResourceData textureFile = _textBMFont->getRenderFile();
     CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }

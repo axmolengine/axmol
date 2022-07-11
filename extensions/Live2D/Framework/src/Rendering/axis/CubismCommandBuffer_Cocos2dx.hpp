@@ -36,13 +36,13 @@
 
 #include "renderer/backend/Texture.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {
 
-static inline cocos2d::Renderer* GetCocos2dRenderer()
+static inline axis::Renderer* GetCocos2dRenderer()
 {
-    return cocos2d::Director::getInstance()->getRenderer();
+    return axis::Director::getInstance()->getRenderer();
 }
 
 class CubismCommandBuffer_Cocos2dx
@@ -57,13 +57,13 @@ public:
             DrawCommand();
             virtual ~DrawCommand();
 
-            cocos2d::backend::BlendDescriptor* GetBlendDescriptor();
-            cocos2d::PipelineDescriptor* GetPipelineDescriptor();
-            cocos2d::CustomCommand* GetCommand();
+            axis::backend::BlendDescriptor* GetBlendDescriptor();
+            axis::PipelineDescriptor* GetPipelineDescriptor();
+            axis::CustomCommand* GetCommand();
 
         private:
             DrawCommand& operator=(const DrawCommand&);
-            cocos2d::CustomCommand _command;
+            axis::CustomCommand _command;
         };
 
         DrawCommandBuffer();
@@ -160,7 +160,7 @@ private:
 
     backend::TextureBackend* _currentColorBuffer;
     OperationStateData _operationStateArray[OperationType_TypeMax];
-    cocos2d::GroupCommand _groupCommand;
+    axis::GroupCommand _groupCommand;
 };
 
 }}}}

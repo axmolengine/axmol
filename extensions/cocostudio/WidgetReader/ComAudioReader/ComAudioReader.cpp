@@ -30,7 +30,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace flatbuffers;
 
 namespace cocostudio
@@ -140,7 +140,7 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void ComAudioReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* comAudioOptions)
+void ComAudioReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* comAudioOptions)
 {
     auto options = (ComAudioOptions*)comAudioOptions;
 

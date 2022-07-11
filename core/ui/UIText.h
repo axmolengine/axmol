@@ -35,7 +35,7 @@ THE SOFTWARE.
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Label;
 class Sprite;
@@ -46,7 +46,7 @@ namespace ui
 /**
  *  For creating a system font or a TTF font Text
  */
-class CC_GUI_DLL Text : public Widget, public cocos2d::BlendProtocol
+class CC_GUI_DLL Text : public Widget, public axis::BlendProtocol
 {
 
     DECLARE_CLASS_GUI_INFO
@@ -370,7 +370,7 @@ protected:
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 
 // end of ui group
 /// @}

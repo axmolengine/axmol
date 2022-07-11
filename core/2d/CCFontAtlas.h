@@ -38,7 +38,7 @@
 #include "platform/CCStdC.h"  // ssize_t on windows
 #include "renderer/CCTexture2D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Font;
 class EventCustom;
@@ -167,7 +167,7 @@ protected:
     friend class Label;
 };
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif /* defined(__cocos2d_libs__CCFontAtlas__) */

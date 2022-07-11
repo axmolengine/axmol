@@ -96,14 +96,14 @@
 
 #include <fstream>
 
-using namespace cocos2d::ui;
+using namespace axis::ui;
 using namespace cocostudio;
 using namespace cocostudio::timeline;
 /* peterson */
 using namespace flatbuffers;
 /**/
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static const char* ClassName_Node        = "Node";
 static const char* ClassName_SubGraph    = "SubGraph";
@@ -866,7 +866,7 @@ Component* CSLoader::loadComAudio(const rapidjson::Value& json)
     return audio;
 }
 
-cocos2d::Node* CSLoader::createNode(const Data& data)
+axis::Node* CSLoader::createNode(const Data& data)
 {
     return createNode(data, nullptr);
 }
@@ -975,7 +975,7 @@ Node* CSLoader::createNodeWithFlatBuffersFile(std::string_view filename, const c
     return node;
 }
 
-inline void CSLoader::reconstructNestNode(cocos2d::Node* node)
+inline void CSLoader::reconstructNestNode(axis::Node* node)
 {
     /* To reconstruct nest node as WidgetCallBackHandlerProtocol. */
     auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol*>(node);
@@ -1250,8 +1250,8 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
 
 bool CSLoader::bindCallback(std::string_view callbackName,
                             std::string_view callbackType,
-                            cocos2d::ui::Widget* sender,
-                            cocos2d::Node* handler)
+                            axis::ui::Widget* sender,
+                            axis::Node* handler)
 {
     if (callbackName.empty())
         return false;
@@ -1569,4 +1569,4 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
     return node;
 }
 
-NS_CC_END
+NS_AX_END

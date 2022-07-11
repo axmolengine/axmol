@@ -24,7 +24,7 @@
 
 #include "RenderPassDescriptor.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 bool RenderPassDescriptor::operator==(const RenderPassDescriptor& descriptor) const
 {
@@ -37,4 +37,4 @@ bool RenderPassDescriptor::operator==(const RenderPassDescriptor& descriptor) co
             flags.discardEnd == descriptor.flags.discardEnd);
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

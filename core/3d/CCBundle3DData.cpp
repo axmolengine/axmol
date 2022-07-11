@@ -1,6 +1,6 @@
 #include "3d/CCBundle3DData.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 int MeshVertexAttrib::getAttribSizeBytes() const
 {
@@ -28,4 +28,4 @@ int MeshVertexAttrib::getAttribSizeBytes() const
     return ret;
 }
 
-NS_CC_END
+NS_AX_END

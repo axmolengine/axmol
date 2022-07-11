@@ -33,7 +33,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /** Base class of the `RenderCommand` hierarchy.
 *
@@ -131,7 +131,7 @@ protected:
     PipelineDescriptor _pipelineDescriptor;
 };
 
-NS_CC_END
+NS_AX_END
 /**
  end of support group
  @}

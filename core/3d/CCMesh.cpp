@@ -44,7 +44,7 @@
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Helpers
 
@@ -749,4 +749,4 @@ backend::Buffer* Mesh::getIndexBuffer() const
 {
     return _meshIndexData->getIndexBuffer();
 }
-NS_CC_END
+NS_AX_END

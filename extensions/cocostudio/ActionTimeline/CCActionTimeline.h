@@ -51,7 +51,7 @@ typedef struct AnimationInfo
 } AnimationClip;
 
 #if 0
-class CCS_DLL ActionTimelineData : public cocos2d::Ref
+class CCS_DLL ActionTimelineData : public axis::Ref
 {
 public:
     static ActionTimelineData* create(int actionTag);
@@ -66,7 +66,7 @@ protected:
 };
 #endif
 
-class CCS_DLL ActionTimeline : public cocos2d::Action, public cocos2d::PlayableProtocol
+class CCS_DLL ActionTimeline : public axis::Action, public axis::PlayableProtocol
 {
 public:
     friend class Frame;
@@ -145,7 +145,7 @@ public:
     virtual void addTimeline(Timeline* timeline);
     virtual void removeTimeline(Timeline* timeline);
 
-    virtual const cocos2d::Vector<Timeline*>& getTimelines() const { return _timelineList; }
+    virtual const axis::Vector<Timeline*>& getTimelines() const { return _timelineList; }
 
     /** AnimationInfo*/
     virtual void addAnimationInfo(const AnimationInfo& animationInfo);
@@ -190,7 +190,7 @@ public:
     virtual ActionTimeline* reverse() const override { return nullptr; }
 
     virtual void step(float delta) override;
-    virtual void startWithTarget(cocos2d::Node* target) override;
+    virtual void startWithTarget(axis::Node* target) override;
     virtual bool isDone() const override { return false; }
 
     /// @{
@@ -209,8 +209,8 @@ protected:
     /** emit frame event, call it when enter a frame*/
     virtual void emitFrameEvent(Frame* frame);
 
-    std::map<int, cocos2d::Vector<Timeline*>> _timelineMap;
-    cocos2d::Vector<Timeline*> _timelineList;
+    std::map<int, axis::Vector<Timeline*>> _timelineMap;
+    axis::Vector<Timeline*> _timelineList;
 
     int _duration;
     double _time;

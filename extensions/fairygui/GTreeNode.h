@@ -9,10 +9,10 @@ NS_FGUI_BEGIN
 class GTree;
 class GComponent;
 
-class GTreeNode : public cocos2d::Ref
+class GTreeNode : public axis::Ref
 {
 public:
-    static GTreeNode* create(bool isFolder = false, const std::string& resURL = cocos2d::STD_STRING_EMPTY);
+    static GTreeNode* create(bool isFolder = false, const std::string& resURL = axis::STD_STRING_EMPTY);
 
     GTreeNode();
     virtual ~GTreeNode();
@@ -20,8 +20,8 @@ public:
     GTreeNode* getParent() const { return _parent; }
     GTree* getTree() const { return _tree; }
     GComponent* getCell() const { return _cell; }
-    const cocos2d::Value& getData() const { return _data; }
-    void setData(const cocos2d::Value& value) { _data = value; }
+    const axis::Value& getData() const { return _data; }
+    void setData(const axis::Value& value) { _data = value; }
     bool isExpanded() const { return _expanded; }
     void setExpaned(bool value);
     bool isFolder() const { return _isFolder; }
@@ -61,8 +61,8 @@ private:
     int _level;
     bool _expanded;
     bool _isFolder;
-    cocos2d::Value _data;
-    cocos2d::Vector<GTreeNode*> _children;
+    axis::Value _data;
+    axis::Vector<GTreeNode*> _children;
     std::string _resURL;
 
     friend class GTree;

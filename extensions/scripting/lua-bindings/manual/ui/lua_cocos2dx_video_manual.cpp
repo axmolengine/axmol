@@ -34,7 +34,7 @@ static int lua_cocos2dx_video_VideoPlayer_addEventListener(lua_State* L)
 {
 
     int argc                       = 0;
-    cocos2d::ui::VideoPlayer* self = nullptr;
+    axis::ui::VideoPlayer* self = nullptr;
 
 #    if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -42,7 +42,7 @@ static int lua_cocos2dx_video_VideoPlayer_addEventListener(lua_State* L)
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<cocos2d::ui::VideoPlayer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::ui::VideoPlayer*>(tolua_tousertype(L, 1, 0));
 
 #    if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -65,7 +65,7 @@ static int lua_cocos2dx_video_VideoPlayer_addEventListener(lua_State* L)
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        self->addEventListener([=](cocos2d::Ref* ref, cocos2d::ui::VideoPlayer::EventType eventType) {
+        self->addEventListener([=](axis::Ref* ref, axis::ui::VideoPlayer::EventType eventType) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
             stack->pushObject(ref, "cc.Ref");

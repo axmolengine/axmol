@@ -41,7 +41,7 @@ THE SOFTWARE.
 Misc free functions
 */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /*
 ccNextPOT function is licensed under the same license that is used in Texture2D.m.
 */
@@ -76,7 +76,7 @@ namespace utils
 CC_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
 
 /** Capture a specific Node.
- * @param startNode specify the snapshot Node. It should be cocos2d::Scene
+ * @param startNode specify the snapshot Node. It should be axis::Scene
  * @param scale
  * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
  * @since v4.0 with axis
@@ -258,7 +258,7 @@ CC_DLL void killCurrentProcess();
 * Create a Game Object, like CREATE_FUNC, but more powerful
 
 * @return  Returns a RefPtr<T> game object
-* @remark  Auto manage cocos2d::Ref reference count, use std::unique_ptr
+* @remark  Auto manage axis::Ref reference count, use std::unique_ptr
 * @limition  The init function finit must be public
 */
 template <typename T, typename F, typename... Ts>
@@ -276,7 +276,7 @@ static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
 * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage cocos2d::Ref reference count, use std::unique_ptr
+* @remark  Auto manage axis::Ref reference count, use std::unique_ptr
 * @limition  The init function finit must be public
 */
 template <typename T>
@@ -289,7 +289,7 @@ inline static RefPtr<T> makeInstance()
 * Create a Game Object, like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage cocos2d::Ref reference count, use AutoReleasePool
+* @remark  Auto manage axis::Ref reference count, use AutoReleasePool
 * @limition The init function finit must be public
 */
 template <typename T, typename F, typename... Ts>
@@ -310,13 +310,13 @@ inline T* createInstance(F&& finit, Ts&&... args)
 * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage cocos2d::Ref reference count, use AutoReleasePool
+* @remark  Auto manage axis::Ref reference count, use AutoReleasePool
 * @limition  The init function finit must be public
 */
 template <typename T>
 inline T* createInstance()
 {
-    return ::cocos2d::utils::createInstance<T>(&T::init);
+    return ::axis::utils::createInstance<T>(&T::init);
 }
 
 /**
@@ -408,6 +408,6 @@ CC_DLL std::string urlDecode(std::string_view st);
 CC_DLL uint32_t fourccValue(std::string_view str);
 }  // namespace utils
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __SUPPORT_CC_UTILS_H__

@@ -39,7 +39,7 @@ THE SOFTWARE.
 #include FT_BBOX_H
 #include FT_FONT_FORMATS_H
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
 bool FontFreeType::_FTInitialized           = false;
@@ -295,7 +295,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 
     FT_Done_Face(face);
 
-    cocos2d::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
+    axis::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
     return false;
 }
 
@@ -394,11 +394,11 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
             char32_t ntcs[2] = {charCode, (char32_t)0};
             std::u32string_view charUTF32(ntcs, 1);
             std::string charUTF8;
-            cocos2d::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
+            axis::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
 
             if (charUTF8 == "\n")
                 charUTF8 = "\\n";
-            cocos2d::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
+            axis::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
                          charUTF8.c_str());
 
             if (_mssingGlyphCharacter != 0)
@@ -609,15 +609,15 @@ std::string_view FontFreeType::getGlyphCollection() const
     std::string_view glyphCollection;
     switch (_usedGlyphs)
     {
-    case cocos2d::GlyphCollection::DYNAMIC:
+    case axis::GlyphCollection::DYNAMIC:
         break;
-    case cocos2d::GlyphCollection::NEHE:
+    case axis::GlyphCollection::NEHE:
         glyphCollection = _glyphNEHE;
         break;
-    case cocos2d::GlyphCollection::ASCII:
+    case axis::GlyphCollection::ASCII:
         glyphCollection = _glyphASCII;
         break;
-    case cocos2d::GlyphCollection::CUSTOM:
+    case axis::GlyphCollection::CUSTOM:
         glyphCollection = _customGlyphs;
         break;
     default:
@@ -639,4 +639,4 @@ void FontFreeType::releaseFont(std::string_view fontName)
     }
 }
 
-NS_CC_END
+NS_AX_END

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "math/CCMath.h"
 #include "base/CCScriptSupport.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Node;
 
@@ -445,6 +445,6 @@ private:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __ACTIONS_CCACTION_H__

@@ -29,8 +29,8 @@
 #include "network/CCDownloader-curl.h"
 #define DownloaderImpl DownloaderCURL
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace network
 {
 
@@ -181,4 +181,4 @@ std::shared_ptr<DownloadTask> Downloader::createDownloadFileTask(std::string_vie
 //}
 
 }  // namespace network
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

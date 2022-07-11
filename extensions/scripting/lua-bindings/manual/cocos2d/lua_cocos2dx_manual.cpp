@@ -65,7 +65,7 @@
 #include "renderer/CCTextureCache.h"
 #include "renderer/ccShaders.h"
 
-void LuaNode::draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags)
+void LuaNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
 {
     int handler =
         ScriptHandlerMgr::getInstance()->getObjectHandler((void*)this, ScriptHandlerMgr::HandlerType::LUANODE_DRAW);
@@ -452,14 +452,14 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
                 goto tolua_lerror;
 #endif
 
-            cocos2d::MenuItem* item = static_cast<cocos2d::MenuItem*>(tolua_tousertype(tolua_S, 1 + i, NULL));
+            axis::MenuItem* item = static_cast<axis::MenuItem*>(tolua_tousertype(tolua_S, 1 + i, NULL));
             if (NULL != item)
             {
                 items.pushBack(item);
                 ++i;
             }
         }
-        cocos2d::Menu* tolua_ret = cocos2d::Menu::createWithArray(items);
+        axis::Menu* tolua_ret = axis::Menu::createWithArray(items);
         // UnCheck
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
@@ -468,7 +468,7 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
     }
     else if (argc == 0)
     {
-        cocos2d::Menu* tolua_ret = cocos2d::Menu::create();
+        axis::Menu* tolua_ret = axis::Menu::create();
         int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
         toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "cc.Menu");
@@ -644,7 +644,7 @@ static int tolua_cocos2d_MenuItem_registerScriptTapHandler(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.MenuItem", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = static_cast<cocos2d::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
+    cobj = static_cast<axis::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -692,7 +692,7 @@ static int tolua_cocos2d_MenuItem_unregisterScriptTapHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = static_cast<cocos2d::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
+    cobj = static_cast<axis::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == cobj)
@@ -766,7 +766,7 @@ static int lua_cocos2dx_Layer_setTouchEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -814,7 +814,7 @@ static int lua_cocos2dx_Layer_isTouchEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -855,7 +855,7 @@ static int lua_cocos2dx_Layer_setTouchMode(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -904,7 +904,7 @@ static int lua_cocos2dx_Layer_getTouchMode(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -947,7 +947,7 @@ static int lua_cocos2dx_Layer_setSwallowsTouches(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -995,7 +995,7 @@ static int lua_cocos2dx_Layer_isSwallowsTouches(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1036,7 +1036,7 @@ static int lua_cocos2dx_Layer_setKeyboardEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1082,7 +1082,7 @@ static int lua_cocos2dx_Layer_isKeyboardEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1123,7 +1123,7 @@ static int lua_cocos2dx_Layer_setAccelerometerEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1170,7 +1170,7 @@ static int lua_cocos2dx_Layer_isAccelerometerEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1212,7 +1212,7 @@ static int lua_cocos2dx_Layer_setAccelerometerInterval(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1259,7 +1259,7 @@ static int tolua_cocos2d_Layer_registerScriptTouchHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1352,7 +1352,7 @@ static int tolua_cocos2d_Layer_unregisterScriptTouchHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1396,7 +1396,7 @@ static int tolua_cocos2d_Layer_registerScriptKeypadHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1446,7 +1446,7 @@ static int tolua_cocos2d_Layer_unregisterScriptKeypadHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1490,7 +1490,7 @@ static int tolua_cocos2d_Layer_registerScriptAccelerateHandler(lua_State* tolua_
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1541,7 +1541,7 @@ static int tolua_cocos2d_Layer_unregisterScriptAccelerateHandler(lua_State* tolu
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1587,7 +1587,7 @@ static int tolua_cocos2d_Scheduler_scheduleScriptFunc(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1640,7 +1640,7 @@ static int tolua_cocos2d_Scheduler_unscheduleScriptEntry(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
@@ -1679,7 +1679,7 @@ tolua_lerror:
 static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
 {
     int argc                     = 0;
-    cocos2d::RenderTexture* cobj = nullptr;
+    axis::RenderTexture* cobj = nullptr;
     bool ok                      = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -1691,7 +1691,7 @@ static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::RenderTexture*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::RenderTexture*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -1713,7 +1713,7 @@ static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
         }
 #endif
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        auto callback        = [=](RefPtr<cocos2d::Image> image) {
+        auto callback        = [=](RefPtr<axis::Image> image) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
             stack->pushObject(image, "cc.Image");
             stack->executeFunctionByHandler(handler, 1);
@@ -1777,8 +1777,8 @@ int tolua_cocos2d_Sequence_create(lua_State* tolua_S)
                     goto tolua_lerror;
 #endif
 
-                cocos2d::FiniteTimeAction* item =
-                    static_cast<cocos2d::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, nullptr));
+                axis::FiniteTimeAction* item =
+                    static_cast<axis::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, nullptr));
                 if (nullptr != item)
                 {
                     array.pushBack(item);
@@ -1787,7 +1787,7 @@ int tolua_cocos2d_Sequence_create(lua_State* tolua_S)
             }
         }
 
-        cocos2d::Sequence* tolua_ret = cocos2d::Sequence::create(array);
+        axis::Sequence* tolua_ret = axis::Sequence::create(array);
         // issue 2433 uncheck
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : nullptr;
@@ -1912,7 +1912,7 @@ static int tolua_cocos2d_Node_registerScriptHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1961,7 +1961,7 @@ static int tolua_cocos2d_Node_unregisterScriptHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2003,7 +2003,7 @@ static int tolua_Cocos2d_Node_scheduleUpdateWithPriorityLua(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2055,7 +2055,7 @@ static int tolua_cocos2d_Node_unscheduleUpdate(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2086,7 +2086,7 @@ tolua_lerror:
 int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
 {
     int argc            = 0;
-    cocos2d::Node* cobj = NULL;
+    axis::Node* cobj = NULL;
     bool ok             = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2095,7 +2095,7 @@ int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -2107,7 +2107,7 @@ int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        cocos2d::Size size;
+        axis::Size size;
         ok &= luaval_to_size(tolua_S, 2, &size, "cc.Node:setContentSize");
         if (!ok)
             return 0;
@@ -2147,7 +2147,7 @@ tolua_lerror:
 int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
 {
     int argc            = 0;
-    cocos2d::Node* cobj = NULL;
+    axis::Node* cobj = NULL;
     bool ok             = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2156,7 +2156,7 @@ int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -2168,7 +2168,7 @@ int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        cocos2d::Vec2 pt;
+        axis::Vec2 pt;
         ok &= luaval_to_vec2(tolua_S, 2, &pt, "cc.Node:setAnchorPoint");
         if (!ok)
             return 0;
@@ -2191,7 +2191,7 @@ int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        cobj->setAnchorPoint(cocos2d::Vec2((float)x, (float)y));
+        cobj->setAnchorPoint(axis::Vec2((float)x, (float)y));
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2219,7 +2219,7 @@ static int tolua_cocos2d_Node_getPosition(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2261,7 +2261,7 @@ tolua_lerror:
 static int lua_cocos2dx_Node_enumerateChildren(lua_State* tolua_S)
 {
     int argc            = 0;
-    cocos2d::Node* cobj = nullptr;
+    axis::Node* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2272,7 +2272,7 @@ static int lua_cocos2dx_Node_enumerateChildren(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -2323,7 +2323,7 @@ tolua_lerror:
 int lua_cocos2dx_Node_setAdditionalTransform(lua_State* tolua_S)
 {
     int argc            = 0;
-    cocos2d::Node* cobj = nullptr;
+    axis::Node* cobj = nullptr;
     bool ok             = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2333,7 +2333,7 @@ int lua_cocos2dx_Node_setAdditionalTransform(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -2346,7 +2346,7 @@ int lua_cocos2dx_Node_setAdditionalTransform(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            cocos2d::AffineTransform arg0;
+            axis::AffineTransform arg0;
             ok &= luaval_to_affinetransform(tolua_S, 2, &arg0, "cc.Node:setAdditionalTransform");
 
             if (!ok)
@@ -2363,7 +2363,7 @@ int lua_cocos2dx_Node_setAdditionalTransform(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            cocos2d::Mat4 arg0;
+            axis::Mat4 arg0;
             ok &= luaval_to_mat4(tolua_S, 2, &arg0, "cc.Node:setAdditionalTransform");
 
             if (!ok)
@@ -2391,7 +2391,7 @@ tolua_lerror:
 int lua_cocos2dx_Node_setRotationQuat(lua_State* tolua_S)
 {
     int argc            = 0;
-    cocos2d::Node* cobj = nullptr;
+    axis::Node* cobj = nullptr;
     bool ok             = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2401,7 +2401,7 @@ int lua_cocos2dx_Node_setRotationQuat(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -2414,7 +2414,7 @@ int lua_cocos2dx_Node_setRotationQuat(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            cocos2d::Quaternion arg0;
+            axis::Quaternion arg0;
             ok &= luaval_to_quaternion(tolua_S, 2, &arg0, "cc.Node:setRotationQuat");
 
             if (!ok)
@@ -2444,7 +2444,7 @@ tolua_lerror:
 int lua_cocos2dx_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
     int argc             = 0;
-    cocos2d::Scene* cobj = nullptr;
+    axis::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if COCOS2D_DEBUG >= 1
@@ -2456,7 +2456,7 @@ int lua_cocos2dx_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -2469,9 +2469,9 @@ int lua_cocos2dx_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::Camera* arg0;
+        axis::Camera* arg0;
 
-        ok &= luaval_to_object<cocos2d::Camera>(tolua_S, 2, "cc.Camera", &arg0, "cc.Scene:setNavMeshDebugCamera");
+        ok &= luaval_to_object<axis::Camera>(tolua_S, 2, "cc.Camera", &arg0, "cc.Scene:setNavMeshDebugCamera");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_Scene_setNavMeshDebugCamera'", nullptr);
@@ -2495,7 +2495,7 @@ tolua_lerror:
 int lua_cocos2dx_Scene_setNavMesh(lua_State* tolua_S)
 {
     int argc             = 0;
-    cocos2d::Scene* cobj = nullptr;
+    axis::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if COCOS2D_DEBUG >= 1
@@ -2507,7 +2507,7 @@ int lua_cocos2dx_Scene_setNavMesh(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -2520,9 +2520,9 @@ int lua_cocos2dx_Scene_setNavMesh(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::NavMesh* arg0;
+        axis::NavMesh* arg0;
 
-        ok &= luaval_to_object<cocos2d::NavMesh>(tolua_S, 2, "cc.NavMesh", &arg0, "cc.Scene:setNavMesh");
+        ok &= luaval_to_object<axis::NavMesh>(tolua_S, 2, "cc.NavMesh", &arg0, "cc.Scene:setNavMesh");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_Scene_setNavMesh'", nullptr);
@@ -2546,7 +2546,7 @@ tolua_lerror:
 int lua_cocos2dx_Scene_getNavMesh(lua_State* tolua_S)
 {
     int argc             = 0;
-    cocos2d::Scene* cobj = nullptr;
+    axis::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if COCOS2D_DEBUG >= 1
@@ -2558,7 +2558,7 @@ int lua_cocos2dx_Scene_getNavMesh(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -2576,8 +2576,8 @@ int lua_cocos2dx_Scene_getNavMesh(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_Scene_getNavMesh'", nullptr);
             return 0;
         }
-        cocos2d::NavMesh* ret = cobj->getNavMesh();
-        object_to_luaval<cocos2d::NavMesh>(tolua_S, "cc.NavMesh", (cocos2d::NavMesh*)ret);
+        axis::NavMesh* ret = cobj->getNavMesh();
+        object_to_luaval<axis::NavMesh>(tolua_S, "cc.NavMesh", (axis::NavMesh*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Scene:getNavMesh", argc, 0);
@@ -2626,8 +2626,8 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
                     goto tolua_lerror;
 #endif
 
-                cocos2d::FiniteTimeAction* item =
-                    static_cast<cocos2d::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, NULL));
+                axis::FiniteTimeAction* item =
+                    static_cast<axis::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, NULL));
                 if (NULL != item)
                 {
                     array.pushBack(item);
@@ -2636,7 +2636,7 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
             }
         }
 
-        cocos2d::Spawn* tolua_ret = cocos2d::Spawn::create(array);
+        axis::Spawn* tolua_ret = axis::Spawn::create(array);
         int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID               = (tolua_ret) ? &tolua_ret->_luaID : NULL;
         toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "cc.Spawn");
@@ -2677,7 +2677,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "cc.CardinalSplineBy:create");
         if (!ok)
             return 0;
@@ -2752,7 +2752,7 @@ int tolua_cocos2d_CatmullRomBy_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "cc.CatmullRomBy:create");
         if (!ok)
             return 0;
@@ -2818,7 +2818,7 @@ int tolua_cocos2d_CatmullRomTo_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "cc.CatmullRomTo:create");
         if (!ok)
             return 0;
@@ -2884,7 +2884,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "cc.BezierBy:create");
         if (!ok)
             return 0;
@@ -2945,7 +2945,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "cc.BezierTo:create");
         if (!ok)
             return 0;
@@ -2996,7 +2996,7 @@ static int tolua_cocos2dx_DrawNode_drawPolygon(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -3019,7 +3019,7 @@ static int tolua_cocos2dx_DrawNode_drawPolygon(lua_State* tolua_S)
         int size = lua_tointeger(tolua_S, 3);
         if (size > 0)
         {
-            cocos2d::Vec2* points = new cocos2d::Vec2[size];
+            axis::Vec2* points = new axis::Vec2[size];
             for (int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3076,7 +3076,7 @@ tolua_lerror:
 int tolua_cocos2dx_DrawNode_drawSolidPoly(lua_State* tolua_S)
 {
     int argc                = 0;
-    cocos2d::DrawNode* self = nullptr;
+    axis::DrawNode* self = nullptr;
     bool ok                 = true;
 
     tolua_Error tolua_err;
@@ -3086,7 +3086,7 @@ int tolua_cocos2dx_DrawNode_drawSolidPoly(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!self)
@@ -3103,7 +3103,7 @@ int tolua_cocos2dx_DrawNode_drawSolidPoly(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawSolidPoly");
         if (size > 0)
         {
-            cocos2d::Vec2* points = new cocos2d::Vec2[size];
+            axis::Vec2* points = new axis::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3125,7 +3125,7 @@ int tolua_cocos2dx_DrawNode_drawSolidPoly(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            cocos2d::Color4F arg2;
+            axis::Color4F arg2;
 
             ok &= luaval_to_color4f(tolua_S, 4, &arg2, "cc.DrawNode:drawSolidPoly");
             if (!ok)
@@ -3164,7 +3164,7 @@ int tolua_cocos2dx_DrawNode_drawPoly(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<cocos2d::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if COCOS2D_DEBUG >= 1
     if (!self)
@@ -3181,7 +3181,7 @@ int tolua_cocos2dx_DrawNode_drawPoly(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawPoly");
         if (size > 0)
         {
-            cocos2d::Vec2* points = new cocos2d::Vec2[size];
+            axis::Vec2* points = new axis::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3204,7 +3204,7 @@ int tolua_cocos2dx_DrawNode_drawPoly(lua_State* tolua_S)
             }
 
             bool arg2;
-            cocos2d::Color4F arg3;
+            axis::Color4F arg3;
 
             ok &= luaval_to_boolean(tolua_S, 4, &arg2, "cc.DrawNode:drawPoly");
 
@@ -3232,7 +3232,7 @@ tolua_lerror:
 int tolua_cocos2dx_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 {
     int argc                = 0;
-    cocos2d::DrawNode* self = nullptr;
+    axis::DrawNode* self = nullptr;
     bool ok                 = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3241,7 +3241,7 @@ int tolua_cocos2dx_DrawNode_drawCardinalSpline(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!self)
@@ -3255,7 +3255,7 @@ int tolua_cocos2dx_DrawNode_drawCardinalSpline(lua_State* tolua_S)
     if (argc == 4)
     {
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         if (!luaval_to_array_of_vec2(tolua_S, 2, &arr, &num, "cc.DrawNode:drawCardinalSpline"))
             return 0;
         PointArray* config = PointArray::create(num);
@@ -3273,7 +3273,7 @@ int tolua_cocos2dx_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 
         double arg1;
         unsigned int arg2;
-        cocos2d::Color4F arg3;
+        axis::Color4F arg3;
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "cc.DrawNode:drawCardinalSpline");
 
@@ -3300,7 +3300,7 @@ tolua_lerror:
 int tolua_cocos2dx_DrawNode_drawCatmullRom(lua_State* tolua_S)
 {
     int argc                = 0;
-    cocos2d::DrawNode* self = nullptr;
+    axis::DrawNode* self = nullptr;
     bool ok                 = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3309,7 +3309,7 @@ int tolua_cocos2dx_DrawNode_drawCatmullRom(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!self)
@@ -3323,7 +3323,7 @@ int tolua_cocos2dx_DrawNode_drawCatmullRom(lua_State* tolua_S)
     if (argc == 3)
     {
         int num            = 0;
-        cocos2d::Vec2* arr = NULL;
+        axis::Vec2* arr = NULL;
         if (!luaval_to_array_of_vec2(tolua_S, 2, &arr, &num, "cc.DrawNode:drawCatmullRom"))
             return 0;
         PointArray* config = PointArray::create(num);
@@ -3340,7 +3340,7 @@ int tolua_cocos2dx_DrawNode_drawCatmullRom(lua_State* tolua_S)
         CC_SAFE_DELETE_ARRAY(arr);
 
         unsigned int arg1;
-        cocos2d::Color4F arg2;
+        axis::Color4F arg2;
 
         ok &= luaval_to_uint32(tolua_S, 3, &arg1, "cc.DrawNode:drawCatmullRom");
 
@@ -3366,7 +3366,7 @@ tolua_lerror:
 int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
 {
     int argc                = 0;
-    cocos2d::DrawNode* self = nullptr;
+    axis::DrawNode* self = nullptr;
     bool ok                 = true;
 
     tolua_Error tolua_err;
@@ -3376,7 +3376,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!self)
@@ -3393,7 +3393,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawPoints");
         if (size > 0)
         {
-            cocos2d::Vec2* points = new cocos2d::Vec2[size];
+            axis::Vec2* points = new axis::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3415,7 +3415,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            cocos2d::Color4F arg2;
+            axis::Color4F arg2;
 
             ok &= luaval_to_color4f(tolua_S, 4, &arg2, "cc.DrawNode:drawPoints");
             if (!ok)
@@ -3430,7 +3430,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "cc.DrawNode:drawPoints");
         if (size > 0)
         {
-            cocos2d::Vec2* points = new cocos2d::Vec2[size];
+            axis::Vec2* points = new axis::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3453,7 +3453,7 @@ int tolua_cocos2dx_DrawNode_drawPoints(lua_State* tolua_S)
             }
 
             float pointSize = (float)tolua_tonumber(tolua_S, 4, 0);
-            cocos2d::Color4F color;
+            axis::Color4F color;
             ok &= luaval_to_color4f(tolua_S, 5, &color, "cc.DrawNode:drawPoints");
             if (!ok)
                 return 0;
@@ -3726,7 +3726,7 @@ static int tolua_cocos2dx_SpriteBatchNode_getDescendants(lua_State* tolua_S)
         return 0;
 
     int argc                       = 0;
-    cocos2d::SpriteBatchNode* cobj = nullptr;
+    axis::SpriteBatchNode* cobj = nullptr;
     bool ok                        = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -3738,7 +3738,7 @@ static int tolua_cocos2dx_SpriteBatchNode_getDescendants(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::SpriteBatchNode*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::SpriteBatchNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -3791,7 +3791,7 @@ tolua_lerror:
 int lua_cocos2dx_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc             = 0;
-    cocos2d::Scene* cobj = nullptr;
+    axis::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if COCOS2D_DEBUG >= 1
@@ -3803,7 +3803,7 @@ int lua_cocos2dx_Scene_getPhysics3DWorld(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -3821,8 +3821,8 @@ int lua_cocos2dx_Scene_getPhysics3DWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_Scene_getPhysics3DWorld'", nullptr);
             return 0;
         }
-        cocos2d::Physics3DWorld* ret = cobj->getPhysics3DWorld();
-        object_to_luaval<cocos2d::Physics3DWorld>(tolua_S, "cc.Physics3DWorld", (cocos2d::Physics3DWorld*)ret);
+        axis::Physics3DWorld* ret = cobj->getPhysics3DWorld();
+        object_to_luaval<axis::Physics3DWorld>(tolua_S, "cc.Physics3DWorld", (axis::Physics3DWorld*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Scene:getPhysics3DWorld", argc,
@@ -3840,7 +3840,7 @@ tolua_lerror:
 int lua_cocos2dx_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
 {
     int argc             = 0;
-    cocos2d::Scene* cobj = nullptr;
+    axis::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if COCOS2D_DEBUG >= 1
@@ -3852,7 +3852,7 @@ int lua_cocos2dx_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (cocos2d::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -3872,7 +3872,7 @@ int lua_cocos2dx_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
         }
 #    endif
 
-        cocos2d::Camera* camera = (cocos2d::Camera*)tolua_tousertype(tolua_S, 2, 0);
+        axis::Camera* camera = (axis::Camera*)tolua_tousertype(tolua_S, 2, 0);
         cobj->setPhysics3DDebugCamera(camera);
         return 0;
     }
@@ -4271,7 +4271,7 @@ static void extendDrawNode(lua_State* tolua_S)
 int lua_cocos2dx_Sprite_initWithPolygon(lua_State* tolua_S)
 {
     int argc              = 0;
-    cocos2d::Sprite* cobj = nullptr;
+    axis::Sprite* cobj = nullptr;
     bool ok               = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4283,7 +4283,7 @@ int lua_cocos2dx_Sprite_initWithPolygon(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Sprite*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Sprite*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -4296,9 +4296,9 @@ int lua_cocos2dx_Sprite_initWithPolygon(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::PolygonInfo* arg0;
+        axis::PolygonInfo* arg0;
 
-        ok &= luaval_to_object<cocos2d::PolygonInfo>(tolua_S, 2, "cc.PolygonInfo", &arg0, "cc.Sprite:initWithPolygon");
+        ok &= luaval_to_object<axis::PolygonInfo>(tolua_S, 2, "cc.PolygonInfo", &arg0, "cc.Sprite:initWithPolygon");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_Sprite_initWithPolygon'", nullptr);
@@ -4322,7 +4322,7 @@ tolua_lerror:
 int lua_cocos2dx_Sprite_setPolygonInfo(lua_State* tolua_S)
 {
     int argc              = 0;
-    cocos2d::Sprite* cobj = nullptr;
+    axis::Sprite* cobj = nullptr;
     bool ok               = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -4334,7 +4334,7 @@ int lua_cocos2dx_Sprite_setPolygonInfo(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Sprite*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Sprite*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -4347,9 +4347,9 @@ int lua_cocos2dx_Sprite_setPolygonInfo(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::PolygonInfo* arg0;
+        axis::PolygonInfo* arg0;
 
-        ok &= luaval_to_object<cocos2d::PolygonInfo>(tolua_S, 2, "cc.PolygonInfo", &arg0, "cc.Sprite:setPolygonInfo");
+        ok &= luaval_to_object<axis::PolygonInfo>(tolua_S, 2, "cc.PolygonInfo", &arg0, "cc.Sprite:setPolygonInfo");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_Sprite_setPolygonInfo'", nullptr);
@@ -4395,8 +4395,8 @@ int lua_cocos2dx_Sprite_create(lua_State* tolua_S)
             {
                 break;
             }
-            cocos2d::Sprite* ret = cocos2d::Sprite::create(arg0);
-            object_to_luaval<cocos2d::Sprite>(tolua_S, "cc.Sprite", (cocos2d::Sprite*)ret);
+            axis::Sprite* ret = axis::Sprite::create(arg0);
+            object_to_luaval<axis::Sprite>(tolua_S, "cc.Sprite", (axis::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4405,8 +4405,8 @@ int lua_cocos2dx_Sprite_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            cocos2d::Sprite* ret = cocos2d::Sprite::create();
-            object_to_luaval<cocos2d::Sprite>(tolua_S, "cc.Sprite", (cocos2d::Sprite*)ret);
+            axis::Sprite* ret = axis::Sprite::create();
+            object_to_luaval<axis::Sprite>(tolua_S, "cc.Sprite", (axis::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4415,14 +4415,14 @@ int lua_cocos2dx_Sprite_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            cocos2d::PolygonInfo* arg0;
-            ok &= luaval_to_object<cocos2d::PolygonInfo>(tolua_S, 2, "cc.PolygonInfo", &arg0, "cc.Sprite:create");
+            axis::PolygonInfo* arg0;
+            ok &= luaval_to_object<axis::PolygonInfo>(tolua_S, 2, "cc.PolygonInfo", &arg0, "cc.Sprite:create");
             if (!ok)
             {
                 break;
             }
-            cocos2d::Sprite* ret = cocos2d::Sprite::create(*arg0);
-            object_to_luaval<cocos2d::Sprite>(tolua_S, "cc.Sprite", (cocos2d::Sprite*)ret);
+            axis::Sprite* ret = axis::Sprite::create(*arg0);
+            object_to_luaval<axis::Sprite>(tolua_S, "cc.Sprite", (axis::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4437,14 +4437,14 @@ int lua_cocos2dx_Sprite_create(lua_State* tolua_S)
             {
                 break;
             }
-            cocos2d::Rect arg1;
+            axis::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.Sprite:create");
             if (!ok)
             {
                 break;
             }
-            cocos2d::Sprite* ret = cocos2d::Sprite::create(arg0, arg1);
-            object_to_luaval<cocos2d::Sprite>(tolua_S, "cc.Sprite", (cocos2d::Sprite*)ret);
+            axis::Sprite* ret = axis::Sprite::create(arg0, arg1);
+            object_to_luaval<axis::Sprite>(tolua_S, "cc.Sprite", (axis::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4527,7 +4527,7 @@ static void extendSpriteBatchNode(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 EventListenerAcceleration* LuaEventListenerAcceleration::create()
 {
     EventListenerAcceleration* eventAcceleration = new EventListenerAcceleration();
@@ -4562,7 +4562,7 @@ EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
     }
     return eventCustom;
 }
-NS_CC_END
+NS_AX_END
 
 static int tolua_cocos2dx_LuaEventListenerAcceleration_create(lua_State* tolua_S)
 {
@@ -4587,7 +4587,7 @@ static int tolua_cocos2dx_LuaEventListenerAcceleration_create(lua_State* tolua_S
         }
 #endif
         LUA_FUNCTION handler                          = toluafix_ref_function(tolua_S, 2, 0);
-        cocos2d::EventListenerAcceleration* tolua_ret = cocos2d::LuaEventListenerAcceleration::create();
+        axis::EventListenerAcceleration* tolua_ret = axis::LuaEventListenerAcceleration::create();
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_ACC);
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
@@ -4633,7 +4633,7 @@ static int tolua_cocos2d_LuaEventListenerCustom_create(lua_State* tolua_S)
 #endif
         auto eventName                          = axislua_tosv(tolua_S, 2);
         LUA_FUNCTION handler                    = toluafix_ref_function(tolua_S, 3, 0);
-        cocos2d::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
+        axis::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM);
 
@@ -4693,7 +4693,7 @@ static int tolua_cocos2dx_EventListenerKeyboard_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerKeyboard* tolua_ret = cocos2d::EventListenerKeyboard::create();
+        axis::EventListenerKeyboard* tolua_ret = axis::EventListenerKeyboard::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -4726,7 +4726,7 @@ static void cloneKeyboardHandler(const EventListenerKeyboard* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -4781,7 +4781,7 @@ static int tolua_cocos2dx_EventListenerKeyboard_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerKeyboard* tolua_ret = cocos2d::EventListenerKeyboard::create();
+        axis::EventListenerKeyboard* tolua_ret = axis::EventListenerKeyboard::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -4914,7 +4914,7 @@ static int tolua_cocos2dx_EventListenerTouchOneByOne_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerTouchOneByOne* tolua_ret = cocos2d::EventListenerTouchOneByOne::create();
+        axis::EventListenerTouchOneByOne* tolua_ret = axis::EventListenerTouchOneByOne::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -4947,7 +4947,7 @@ static void cloneTouchOneByOneHandler(const EventListenerTouchOneByOne* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -5020,7 +5020,7 @@ static int tolua_cocos2dx_EventListenerTouchOneByOne_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerTouchOneByOne* tolua_ret = cocos2d::EventListenerTouchOneByOne::create();
+        axis::EventListenerTouchOneByOne* tolua_ret = axis::EventListenerTouchOneByOne::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5179,7 +5179,7 @@ static int tolua_cocos2dx_EventListenerTouchAllAtOnce_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerTouchAllAtOnce* tolua_ret = cocos2d::EventListenerTouchAllAtOnce::create();
+        axis::EventListenerTouchAllAtOnce* tolua_ret = axis::EventListenerTouchAllAtOnce::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5212,7 +5212,7 @@ static void cloneTouchAllAtOnceHandler(const EventListenerTouchAllAtOnce* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -5286,7 +5286,7 @@ static int tolua_cocos2dx_EventListenerTouchAllAtOnce_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerTouchAllAtOnce* tolua_ret = cocos2d::EventListenerTouchAllAtOnce::create();
+        axis::EventListenerTouchAllAtOnce* tolua_ret = axis::EventListenerTouchAllAtOnce::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5444,7 +5444,7 @@ static int tolua_cocos2dx_EventListenerMouse_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerMouse* tolua_ret = cocos2d::EventListenerMouse::create();
+        axis::EventListenerMouse* tolua_ret = axis::EventListenerMouse::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5477,7 +5477,7 @@ static void cloneMouseHandler(const EventListenerMouse* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            cocos2d::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -5550,7 +5550,7 @@ static int tolua_cocos2dx_EventListenerMouse_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerMouse* tolua_ret = cocos2d::EventListenerMouse::create();
+        axis::EventListenerMouse* tolua_ret = axis::EventListenerMouse::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5696,7 +5696,7 @@ static int tolua_cocos2dx_ActionCamera_reverse(lua_State* tolua_S)
         return 0;
 
     int argc                    = 0;
-    cocos2d::ActionCamera* cobj = nullptr;
+    axis::ActionCamera* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5707,7 +5707,7 @@ static int tolua_cocos2dx_ActionCamera_reverse(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ActionCamera*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::ActionCamera*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -5720,7 +5720,7 @@ static int tolua_cocos2dx_ActionCamera_reverse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        cocos2d::ActionCamera* reverse = cobj->reverse();
+        axis::ActionCamera* reverse = cobj->reverse();
         toluafix_pushusertype_ccobject(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "cc.ActionCamera");
         return 1;
     }
@@ -5751,7 +5751,7 @@ static int tolua_cocos2dx_GridAction_reverse(lua_State* tolua_S)
         return 0;
 
     int argc                  = 0;
-    cocos2d::GridAction* cobj = nullptr;
+    axis::GridAction* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5762,7 +5762,7 @@ static int tolua_cocos2dx_GridAction_reverse(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::GridAction*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::GridAction*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -5775,7 +5775,7 @@ static int tolua_cocos2dx_GridAction_reverse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        cocos2d::GridAction* reverse = cobj->reverse();
+        axis::GridAction* reverse = cobj->reverse();
         toluafix_pushusertype_ccobject(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "cc.GridAction");
         return 1;
     }
@@ -5838,8 +5838,8 @@ static int lua_cocos2dx_Label_createWithTTF00(lua_State* L)
 
         int alignment = (int)tolua_tonumber(L, 4, 1);
         int lineSize  = (int)tolua_tonumber(L, 5, 0);
-        cocos2d::Label* ret =
-            cocos2d::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
+        axis::Label* ret =
+            axis::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
         int ID     = ret ? (int)(ret->_ID) : -1;
         int* luaID = ret ? &(ret->_luaID) : nullptr;
         toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, "cc.Label");
@@ -5880,7 +5880,7 @@ static int lua_cocos2dx_Label_createWithTTF01(lua_State* L)
             std::string text         = tolua_tostring(L, 2, "");
             std::string fontFile     = tolua_tostring(L, 3, "");
             float fontSize           = (float)tolua_tonumber(L, 4, 0);
-            cocos2d::Size dimensions = cocos2d::Size::ZERO;
+            axis::Size dimensions = axis::Size::ZERO;
             if (lua_istable(L, 5))
             {
                 luaval_to_size(L, 5, &dimensions, "cc.Label:createWithTTF");
@@ -5888,8 +5888,8 @@ static int lua_cocos2dx_Label_createWithTTF01(lua_State* L)
             TextHAlignment hAlignment = static_cast<TextHAlignment>((int)tolua_tonumber(L, 6, 0));
             TextVAlignment vAlignment = static_cast<TextVAlignment>((int)tolua_tonumber(L, 7, 0));
 
-            cocos2d::Label* ret =
-                cocos2d::Label::createWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment);
+            axis::Label* ret =
+                axis::Label::createWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment);
 
             int ID     = ret ? (int)(ret->_ID) : -1;
             int* luaID = ret ? &(ret->_luaID) : nullptr;
@@ -5917,7 +5917,7 @@ static void extendLabel(lua_State* tolua_S)
 static int lua_cocos2dx_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 {
     int argc                   = 0;
-    cocos2d::TMXTiledMap* cobj = NULL;
+    axis::TMXTiledMap* cobj = NULL;
     bool ok                    = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5927,7 +5927,7 @@ static int lua_cocos2dx_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.TMXTiledMap", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::TMXTiledMap*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::TMXTiledMap*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -5944,7 +5944,7 @@ static int lua_cocos2dx_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 
         if (!ok)
             return 0;
-        cocos2d::Value ret = cobj->getPropertiesForGID(arg0);
+        axis::Value ret = cobj->getPropertiesForGID(arg0);
         ccvalue_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5973,7 +5973,7 @@ static void extendTMXTiledMap(lua_State* tolua_S)
 
 static int lua_cocos2dx_Console_send(lua_State* tolua_S)
 {
-    cocos2d::Console* cobj = nullptr;
+    axis::Console* cobj = nullptr;
     int argc               = 0;
     bool ok                = true;
 #if COCOS2D_DEBUG >= 1
@@ -5984,7 +5984,7 @@ static int lua_cocos2dx_Console_send(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Console", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Console*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Console*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -6020,7 +6020,7 @@ tolua_lerror:
 
 static int lua_cocos2dx_Console_wait(lua_State* tolua_S)
 {
-    cocos2d::Console* cobj = nullptr;
+    axis::Console* cobj = nullptr;
     int argc               = 0;
     bool ok                = true;
 #if COCOS2D_DEBUG >= 1
@@ -6031,7 +6031,7 @@ static int lua_cocos2dx_Console_wait(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "cc.Console", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::Console*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Console*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -6066,7 +6066,7 @@ tolua_lerror:
 
 static int lua_cocos2dx_Console_addCommand(lua_State* tolua_S)
 {
-    cocos2d::Console* cobj = nullptr;
+    axis::Console* cobj = nullptr;
     int argc               = 0;
     bool ok                = true;
 #if COCOS2D_DEBUG >= 1
@@ -6078,7 +6078,7 @@ static int lua_cocos2dx_Console_addCommand(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Console*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Console*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6149,7 +6149,7 @@ static void extendConsole(lua_State* tolua_S)
 static int lua_cocos2dx_OrbitCamera_sphericalRadius(lua_State* tolua_S)
 {
     int argc                   = 0;
-    cocos2d::OrbitCamera* self = nullptr;
+    axis::OrbitCamera* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6160,7 +6160,7 @@ static int lua_cocos2dx_OrbitCamera_sphericalRadius(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::OrbitCamera*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::OrbitCamera*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!self)
@@ -6219,7 +6219,7 @@ static void extendOrbitCamera(lua_State* tolua_S)
 int lua_cocos2dx_TMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
     int argc                = 0;
-    cocos2d::TMXLayer* cobj = nullptr;
+    axis::TMXLayer* cobj = nullptr;
     bool ok                 = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6231,7 +6231,7 @@ int lua_cocos2dx_TMXLayer_getTileGIDAt(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6244,7 +6244,7 @@ int lua_cocos2dx_TMXLayer_getTileGIDAt(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec2 arg0;
+        axis::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.TMXLayer:getTileGIDAt");
         if (!ok)
@@ -6256,7 +6256,7 @@ int lua_cocos2dx_TMXLayer_getTileGIDAt(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        cocos2d::Vec2 arg0;
+        axis::Vec2 arg0;
         int arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.TMXLayer:getTileGIDAt");
@@ -6265,7 +6265,7 @@ int lua_cocos2dx_TMXLayer_getTileGIDAt(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        unsigned int ret = cobj->getTileGIDAt(arg0, (cocos2d::TMXTileFlags*)&arg1);
+        unsigned int ret = cobj->getTileGIDAt(arg0, (axis::TMXTileFlags*)&arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         tolua_pushnumber(tolua_S, (lua_Number)arg1);
         return 2;
@@ -6285,7 +6285,7 @@ tolua_lerror:
 int lua_cocos2dx_TMXLayer_setTiles(lua_State* tolua_S)
 {
     int argc                = 0;
-    cocos2d::TMXLayer* cobj = nullptr;
+    axis::TMXLayer* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6296,7 +6296,7 @@ int lua_cocos2dx_TMXLayer_setTiles(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6359,7 +6359,7 @@ static void extendTMXLayer(lua_State* tolua_S)
 static int lua_cocos2dx_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
     int argc                    = 0;
-    cocos2d::FastTMXLayer* cobj = nullptr;
+    axis::FastTMXLayer* cobj = nullptr;
     bool ok                     = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6371,7 +6371,7 @@ static int lua_cocos2dx_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::FastTMXLayer*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::FastTMXLayer*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6384,7 +6384,7 @@ static int lua_cocos2dx_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec2 arg0;
+        axis::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.FastTMXLayer:getTileGIDAt");
         if (!ok)
@@ -6396,7 +6396,7 @@ static int lua_cocos2dx_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        cocos2d::Vec2 arg0;
+        axis::Vec2 arg0;
         int arg1 = 0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.FastTMXLayer:getTileGIDAt");
@@ -6405,7 +6405,7 @@ static int lua_cocos2dx_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        unsigned int ret = cobj->getTileGIDAt(arg0, (cocos2d::TMXTileFlags*)&arg1);
+        unsigned int ret = cobj->getTileGIDAt(arg0, (axis::TMXTileFlags*)&arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         tolua_pushnumber(tolua_S, (lua_Number)arg1);
         return 2;
@@ -6436,7 +6436,7 @@ static void extendFastTMXLayer(lua_State* tolua_S)
 int lua_cocos2dx_Application_isIOS64bit(lua_State* tolua_S)
 {
     int argc                   = 0;
-    cocos2d::Application* cobj = nullptr;
+    axis::Application* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6447,7 +6447,7 @@ int lua_cocos2dx_Application_isIOS64bit(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Application*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Application*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6461,7 +6461,7 @@ int lua_cocos2dx_Application_isIOS64bit(lua_State* tolua_S)
     if (argc == 0)
     {
         bool isIOS64bit                = false;
-        Application::Platform platform = cocos2d::Application::getInstance()->getTargetPlatform();
+        Application::Platform platform = axis::Application::getInstance()->getTargetPlatform();
         if (Application::Platform::iOS == platform)
         {
 #if defined(__LP64__)
@@ -6487,7 +6487,7 @@ tolua_lerror:
 int lua_cocos2dx_Application_is64BitMobileDevice(lua_State* tolua_S)
 {
     int argc                   = 0;
-    cocos2d::Application* cobj = nullptr;
+    axis::Application* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6498,7 +6498,7 @@ int lua_cocos2dx_Application_is64BitMobileDevice(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Application*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Application*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6512,7 +6512,7 @@ int lua_cocos2dx_Application_is64BitMobileDevice(lua_State* tolua_S)
     if (argc == 0)
     {
         bool is64BitMobileDevice          = false;
-        Application::Platform platform = cocos2d::Application::getInstance()->getTargetPlatform();
+        Application::Platform platform = axis::Application::getInstance()->getTargetPlatform();
         if (Application::Platform::iOS == platform ||
             Application::Platform::Android == platform)
         {
@@ -6621,7 +6621,7 @@ static void extendTextureCache(lua_State* tolua_S)
 int lua_cocos2dx_GLView_getAllTouches(lua_State* tolua_S)
 {
     int argc              = 0;
-    cocos2d::GLView* cobj = nullptr;
+    axis::GLView* cobj = nullptr;
     bool ok               = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6633,7 +6633,7 @@ int lua_cocos2dx_GLView_getAllTouches(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::GLView*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::GLView*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6649,7 +6649,7 @@ int lua_cocos2dx_GLView_getAllTouches(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        std::vector<cocos2d::Touch*> ret = cobj->getAllTouches();
+        std::vector<axis::Touch*> ret = cobj->getAllTouches();
         lua_newtable(tolua_S);
         if (ret.empty())
             return 1;
@@ -6696,7 +6696,7 @@ static void extendGLView(lua_State* tolua_S)
 int lua_cocos2dx_Camera_unproject(lua_State* tolua_S)
 {
     int argc              = 0;
-    cocos2d::Camera* cobj = nullptr;
+    axis::Camera* cobj = nullptr;
     bool ok               = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -6708,7 +6708,7 @@ int lua_cocos2dx_Camera_unproject(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::Camera*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::Camera*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -6721,7 +6721,7 @@ int lua_cocos2dx_Camera_unproject(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        cocos2d::Vec3 arg0;
+        axis::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "cc.Camera:project");
         if (!ok)
@@ -6735,9 +6735,9 @@ int lua_cocos2dx_Camera_unproject(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        cocos2d::Size arg0;
-        cocos2d::Vec3 arg1;
-        cocos2d::Vec3 arg2;
+        axis::Size arg0;
+        axis::Vec3 arg1;
+        axis::Vec3 arg2;
 
         ok &= luaval_to_size(tolua_S, 2, &arg0, "cc.Camera:unproject");
 
@@ -6799,8 +6799,8 @@ int lua_cocos2dx_Properties_createNonRefCounted(lua_State* tolua_S)
                         nullptr);
             return 0;
         }
-        cocos2d::Properties* ret = cocos2d::Properties::createNonRefCounted(arg0);
-        object_to_luaval<cocos2d::Properties>(tolua_S, "cc.Properties", (cocos2d::Properties*)ret);
+        axis::Properties* ret = axis::Properties::createNonRefCounted(arg0);
+        object_to_luaval<axis::Properties>(tolua_S, "cc.Properties", (axis::Properties*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
@@ -6816,7 +6816,7 @@ tolua_lerror:
 
 static int lua_collect_Properties(lua_State* tolua_S)
 {
-    cocos2d::Properties* self = (cocos2d::Properties*)tolua_tousertype(tolua_S, 1, 0);
+    axis::Properties* self = (axis::Properties*)tolua_tousertype(tolua_S, 1, 0);
     CC_SAFE_DELETE(self);
     return 0;
 }
@@ -6841,7 +6841,7 @@ static void extendProperties(lua_State* tolua_S)
 
 int lua_cocos2dx_get_PolygonInfo_rect(lua_State* tolua_S)
 {
-    cocos2d::PolygonInfo* cobj = nullptr;
+    axis::PolygonInfo* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6849,7 +6849,7 @@ int lua_cocos2dx_get_PolygonInfo_rect(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -6870,7 +6870,7 @@ tolua_lerror:
 int lua_cocos2dx_set_PolygonInfo_rect(lua_State* tolua_S)
 {
     int argc                   = 0;
-    cocos2d::PolygonInfo* self = nullptr;
+    axis::PolygonInfo* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6878,7 +6878,7 @@ int lua_cocos2dx_set_PolygonInfo_rect(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -6912,7 +6912,7 @@ tolua_lerror:
 
 int lua_cocos2dx_get_PolygonInfo_filename(lua_State* tolua_S)
 {
-    cocos2d::PolygonInfo* cobj = nullptr;
+    axis::PolygonInfo* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6920,7 +6920,7 @@ int lua_cocos2dx_get_PolygonInfo_filename(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -6941,7 +6941,7 @@ tolua_lerror:
 int lua_cocos2dx_set_PolygonInfo_filename(lua_State* tolua_S)
 {
     int argc                   = 0;
-    cocos2d::PolygonInfo* self = nullptr;
+    axis::PolygonInfo* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6949,7 +6949,7 @@ int lua_cocos2dx_set_PolygonInfo_filename(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -6979,14 +6979,14 @@ tolua_lerror:
 
 static int lua_collect_PolygonInfo(lua_State* tolua_S)
 {
-    cocos2d::PolygonInfo* self = (cocos2d::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    axis::PolygonInfo* self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
     CC_SAFE_DELETE(self);
     return 0;
 }
 
 int lua_cocos2dx_get_PipelineDescriptor_programState(lua_State* tolua_S)
 {
-    cocos2d::PipelineDescriptor* cobj = nullptr;
+    axis::PipelineDescriptor* cobj = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6994,7 +6994,7 @@ int lua_cocos2dx_get_PipelineDescriptor_programState(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -7016,7 +7016,7 @@ tolua_lerror:
 int lua_cocos2dx_set_PipelineDescriptor_programState(lua_State* tolua_S)
 {
     int argc                          = 0;
-    cocos2d::PipelineDescriptor* self = nullptr;
+    axis::PipelineDescriptor* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7024,7 +7024,7 @@ int lua_cocos2dx_set_PipelineDescriptor_programState(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -7038,8 +7038,8 @@ int lua_cocos2dx_set_PipelineDescriptor_programState(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        cocos2d::backend::ProgramState* programState = nullptr;
-        luaval_to_object<cocos2d::backend::ProgramState>(tolua_S, 2, "ccb.ProgramState", &programState,
+        axis::backend::ProgramState* programState = nullptr;
+        luaval_to_object<axis::backend::ProgramState>(tolua_S, 2, "ccb.ProgramState", &programState,
                                                          "lua_cocos2dx_set_PipelineDescriptor_programState");
         self->programState = programState;
         return 0;
@@ -7089,7 +7089,7 @@ static void extendPipelineDescriptor(lua_State* tolua_S)
 static int lua_cocos2dx_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 {
     int argc                             = 0;
-    cocos2d::backend::ProgramState* cobj = nullptr;
+    axis::backend::ProgramState* cobj = nullptr;
     bool ok                              = true;
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7099,7 +7099,7 @@ static int lua_cocos2dx_backend_ProgramState_getUniformLocation(lua_State* tolua
     if (!tolua_isusertype(tolua_S, 1, "ccb.ProgramState", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (cocos2d::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
     {
@@ -7122,20 +7122,20 @@ static int lua_cocos2dx_backend_ProgramState_getUniformLocation(lua_State* tolua
                 {
                     break;
                 }
-                cocos2d::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+                axis::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
                 uniformLocation_to_luaval(tolua_S, ret);
                 return 1;
             }
             else if (lua_isnumber(tolua_S, -1))
             {
-                cocos2d::backend::Uniform arg0;
+                axis::backend::Uniform arg0;
                 ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "ccb.ProgramState:getUniformLocation");
 
                 if (!ok)
                 {
                     break;
                 }
-                cocos2d::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+                axis::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
                 uniformLocation_to_luaval(tolua_S, ret);
                 return 1;
             }
@@ -7158,7 +7158,7 @@ static int lua_cocos2dx_ProgramState_setUniform(lua_State* tolua_S)
 {
     bool ok                              = true;
     int argc                             = 0;
-    cocos2d::backend::ProgramState* self = nullptr;
+    axis::backend::ProgramState* self = nullptr;
 
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7166,7 +7166,7 @@ static int lua_cocos2dx_ProgramState_setUniform(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (cocos2d::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
+    self = (axis::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
 #if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -7179,7 +7179,7 @@ static int lua_cocos2dx_ProgramState_setUniform(lua_State* tolua_S)
 
     if (2 == argc)
     {
-        cocos2d::backend::UniformLocation location;
+        axis::backend::UniformLocation location;
 
         if (lua_isstring(tolua_S, 2))
         {
@@ -7262,15 +7262,15 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret = new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0));
-        object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo", (cocos2d::PolygonInfo*)ret);
+        axis::PolygonInfo* ret = new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0));
+        object_to_luaval<axis::PolygonInfo>(tolua_S, "cc.PolygonInfo", (axis::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 2)
     {
         std::string arg0;
-        cocos2d::Rect arg1;
+        axis::Rect arg1;
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "cc.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.AutoPolygon:generatePolygon");
         if (!ok)
@@ -7278,15 +7278,15 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret = new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1));
-        object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo", (cocos2d::PolygonInfo*)ret);
+        axis::PolygonInfo* ret = new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0, arg1));
+        object_to_luaval<axis::PolygonInfo>(tolua_S, "cc.PolygonInfo", (axis::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 3)
     {
         std::string arg0;
-        cocos2d::Rect arg1;
+        axis::Rect arg1;
         double arg2;
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "cc.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "cc.AutoPolygon:generatePolygon");
@@ -7296,16 +7296,16 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret =
-            new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
-        object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo", (cocos2d::PolygonInfo*)ret);
+        axis::PolygonInfo* ret =
+            new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
+        object_to_luaval<axis::PolygonInfo>(tolua_S, "cc.PolygonInfo", (axis::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 4)
     {
         std::string arg0;
-        cocos2d::Rect arg1;
+        axis::Rect arg1;
         double arg2;
         double arg3;
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "cc.AutoPolygon:generatePolygon");
@@ -7317,9 +7317,9 @@ int lua_cocos2dx_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_cocos2dx_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        cocos2d::PolygonInfo* ret =
-            new cocos2d::PolygonInfo(cocos2d::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2, (float)arg3));
-        object_to_luaval<cocos2d::PolygonInfo>(tolua_S, "cc.PolygonInfo", (cocos2d::PolygonInfo*)ret);
+        axis::PolygonInfo* ret =
+            new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2, (float)arg3));
+        object_to_luaval<axis::PolygonInfo>(tolua_S, "cc.PolygonInfo", (axis::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
@@ -7335,7 +7335,7 @@ tolua_lerror:
 
 static int lua_collect_AutoPolygon(lua_State* tolua_S)
 {
-    cocos2d::AutoPolygon* self = (cocos2d::AutoPolygon*)tolua_tousertype(tolua_S, 1, 0);
+    axis::AutoPolygon* self = (axis::AutoPolygon*)tolua_tousertype(tolua_S, 1, 0);
     CC_SAFE_DELETE(self);
     return 0;
 }
@@ -7358,11 +7358,26 @@ static void extendAutoPolygon(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
+extern int lua_cocos2dx_Director_setStatsDisplay(lua_State* tolua_S);
+static void extendDirector(lua_State* tolua_S)
+{
+    lua_pushstring(tolua_S, "cc.Director");
+    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
+    if (lua_istable(tolua_S, -1))
+    {
+        lua_pushstring(tolua_S, "setDisplayStats");
+        lua_pushcfunction(tolua_S, lua_cocos2dx_Director_setStatsDisplay);
+        lua_rawset(tolua_S, -3);
+    }
+    lua_pop(tolua_S, 1);
+}
+
 int register_all_cocos2dx_manual(lua_State* tolua_S)
 {
     if (NULL == tolua_S)
         return 0;
 
+    extendDirector(tolua_S);
     extendNode(tolua_S);
     extendScene(tolua_S);
     extendLayer(tolua_S);
@@ -7429,7 +7444,7 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
     {
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         auto fileName        = axislua_tosv(tolua_S, 3);
-        cocos2d::utils::captureScreen(
+        axis::utils::captureScreen(
             [=](bool succeed, std::string_view name) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 auto Ls    = stack->getLuaState();
@@ -7459,9 +7474,9 @@ static int tolua_cocos2d_utils_findChildren(lua_State* tolua_S)
     else
 #endif
     {
-        cocos2d::Node* node         = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
+        axis::Node* node         = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
         auto name                   = axislua_tosv(tolua_S, 3);
-        std::vector<Node*> children = cocos2d::utils::findChildren(*node, name);
+        std::vector<Node*> children = axis::utils::findChildren(*node, name);
         lua_newtable(tolua_S);
         int index = 1;
         for (const auto& obj : children)
@@ -7494,9 +7509,9 @@ static int tolua_cocos2d_utils_findChild(lua_State* tolua_S)
     else
 #endif
     {
-        cocos2d::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 1, nullptr));
+        axis::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 1, nullptr));
         auto name           = axislua_tosv(tolua_S, 2);
-        auto obj            = cocos2d::utils::findChild(node, name);
+        auto obj            = axis::utils::findChild(node, name);
         int ID              = (obj) ? (int)obj->_ID : -1;
         int* luaID          = (obj) ? &obj->_luaID : NULL;
         toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)obj, "cc.Node");
@@ -7537,7 +7552,7 @@ static int tolua_cocos2d_Mat4_getInversed(lua_State* tolua_S)
     else
 #endif
     {
-        cocos2d::Mat4 mat;
+        axis::Mat4 mat;
         bool ok = luaval_to_mat4(tolua_S, 1, &mat);
         if (ok)
         {
@@ -7570,9 +7585,9 @@ static int tolua_cocos2d_Mat4_transformVector(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Mat4 mat;
-            cocos2d::Vec4 vector;
-            cocos2d::Vec4 dst;
+            axis::Mat4 mat;
+            axis::Vec4 vector;
+            axis::Vec4 dst;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -7599,9 +7614,9 @@ static int tolua_cocos2d_Mat4_transformVector(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Mat4 mat;
+            axis::Mat4 mat;
             float x, y, z, w;
-            cocos2d::Vec3 dst;
+            axis::Vec3 dst;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -7638,10 +7653,10 @@ static int tolua_cocos2d_Mat4_decompose(lua_State* tolua_S)
     else
 #endif
     {
-        cocos2d::Mat4 mat;
-        cocos2d::Vec3 scale;
-        cocos2d::Quaternion rotation;
-        cocos2d::Vec3 translation;
+        axis::Mat4 mat;
+        axis::Vec3 scale;
+        axis::Quaternion rotation;
+        axis::Vec3 translation;
         bool ok = true;
 
         ok &= luaval_to_mat4(tolua_S, 1, &mat);
@@ -7867,8 +7882,8 @@ static int tolua_cocos2d_Vec3_cross(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Vec3 cobj;
-            cocos2d::Vec3 v;
+            axis::Vec3 cobj;
+            axis::Vec3 v;
 
             bool ok = true;
 
@@ -7895,9 +7910,9 @@ static int tolua_cocos2d_Vec3_cross(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Vec3 v1;
-            cocos2d::Vec3 v2;
-            cocos2d::Vec3 dst;
+            axis::Vec3 v1;
+            axis::Vec3 v2;
+            axis::Vec3 dst;
             bool ok = true;
 
             ok &= luaval_to_vec3(tolua_S, 1, &v1);
@@ -7912,7 +7927,7 @@ static int tolua_cocos2d_Vec3_cross(lua_State* tolua_S)
             if (!ok)
                 return 0;
 
-            cocos2d::Vec3::cross(v1, v2, &dst);
+            axis::Vec3::cross(v1, v2, &dst);
 
             vec3_to_luaval(tolua_S, dst);
             return 1;
@@ -7935,17 +7950,17 @@ static int tolua_cocos2d_Mat4_multiply(lua_State* tolua_S)
     else
 #endif
     {
-        cocos2d::Mat4 mat1;
+        axis::Mat4 mat1;
         bool ok = luaval_to_mat4(tolua_S, 1, &mat1);
         if (!ok)
             return 0;
 
-        cocos2d::Mat4 mat2;
+        axis::Mat4 mat2;
         ok = luaval_to_mat4(tolua_S, 2, &mat2);
         if (!ok)
             return 0;
 
-        cocos2d::Mat4 ret = mat1 * mat2;
+        axis::Mat4 ret = mat1 * mat2;
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7974,8 +7989,8 @@ int tolua_cocos2d_Mat4_translate(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Mat4 mat;
-            cocos2d::Vec3 vec3;
+            axis::Mat4 mat;
+            axis::Vec3 vec3;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -8015,13 +8030,13 @@ int tolua_cocos2d_Mat4_createRotationZ(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Mat4 mat;
+            axis::Mat4 mat;
             float angle;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
             angle = (float)lua_tonumber(tolua_S, 2);
-            cocos2d::Mat4::createRotationZ(angle, &mat);
+            axis::Mat4::createRotationZ(angle, &mat);
             mat4_to_luaval(tolua_S, mat);
             return 1;
         }
@@ -8052,7 +8067,7 @@ int tolua_cocos2d_Mat4_setIdentity(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Mat4 mat;
+            axis::Mat4 mat;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -8088,12 +8103,12 @@ int tolua_cocos2d_Mat4_createTranslation(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Mat4 dst;
+            axis::Mat4 dst;
             float xTranslation = (float)lua_tonumber(tolua_S, 1);
             float yTranslation = (float)lua_tonumber(tolua_S, 2);
             float zTranslation = (float)lua_tonumber(tolua_S, 3);
 
-            cocos2d::Mat4::createTranslation(xTranslation, yTranslation, zTranslation, &dst);
+            axis::Mat4::createTranslation(xTranslation, yTranslation, zTranslation, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8106,14 +8121,14 @@ int tolua_cocos2d_Mat4_createTranslation(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Vec3 translation;
-            cocos2d::Mat4 dst;
+            axis::Vec3 translation;
+            axis::Mat4 dst;
 
             ok &= luaval_to_vec3(tolua_S, 1, &translation, "cc.Mat4.createTranslation");
             if (!ok)
                 return 0;
 
-            cocos2d::Mat4::createTranslation(translation, &dst);
+            axis::Mat4::createTranslation(translation, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8144,14 +8159,14 @@ int tolua_cocos2d_Mat4_createRotation(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Quaternion quat;
-            cocos2d::Mat4 dst;
+            axis::Quaternion quat;
+            axis::Mat4 dst;
 
             ok &= luaval_to_quaternion(tolua_S, 1, &quat, "cc.Mat4.createRotation");
             if (!ok)
                 return 0;
 
-            cocos2d::Mat4::createRotation(quat, &dst);
+            axis::Mat4::createRotation(quat, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8165,8 +8180,8 @@ int tolua_cocos2d_Mat4_createRotation(lua_State* tolua_S)
         else
 #endif
         {
-            cocos2d::Vec3 axis;
-            cocos2d::Mat4 dst;
+            axis::Vec3 axis;
+            axis::Mat4 dst;
 
             ok &= luaval_to_vec3(tolua_S, 1, &axis, "cc.Mat4.createRotation");
             if (!ok)
@@ -8174,7 +8189,7 @@ int tolua_cocos2d_Mat4_createRotation(lua_State* tolua_S)
 
             float angle = (float)tolua_tonumber(tolua_S, 2, 0);
 
-            cocos2d::Mat4::createRotation(axis, angle, &dst);
+            axis::Mat4::createRotation(axis, angle, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8304,7 +8319,7 @@ static int tolua_cocos2d_bytearray_vec2(lua_State* L)
         else
 #endif
         {
-            cocos2d::Vec2 arg;
+            axis::Vec2 arg;
             ok &= luaval_to_vec2(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
@@ -8345,7 +8360,7 @@ static int tolua_cocos2d_bytearray_vec3(lua_State* L)
         else
 #endif
         {
-            cocos2d::Vec3 arg;
+            axis::Vec3 arg;
             ok &= luaval_to_vec3(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
@@ -8386,7 +8401,7 @@ static int tolua_cocos2d_bytearray_vec4(lua_State* L)
         else
 #endif
         {
-            cocos2d::Vec4 arg;
+            axis::Vec4 arg;
             ok &= luaval_to_vec4(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
@@ -8427,7 +8442,7 @@ static int tolua_cocos2d_bytearray_mat4(lua_State* L)
         else
 #endif
         {
-            cocos2d::Mat4 arg;
+            axis::Mat4 arg;
             ok &= luaval_to_mat4(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;

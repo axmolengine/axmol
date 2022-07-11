@@ -28,7 +28,7 @@
 #include "renderer/CCTexture2D.h"
 #include "base//ccUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 TrianglesCommand::TrianglesCommand()
 {
@@ -110,4 +110,4 @@ void TrianglesCommand::generateMaterialID()
     _materialID        = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
 }
 
-NS_CC_END
+NS_AX_END

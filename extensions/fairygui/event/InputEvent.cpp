@@ -10,8 +10,8 @@ InputEvent::InputEvent() :
     _touchId(-1),
     _clickCount(0),
     _mouseWheelDelta(0),
-    _button(cocos2d::EventMouse::MouseButton::BUTTON_UNSET),
-    _keyCode(cocos2d::EventKeyboard::KeyCode::KEY_0),
+    _button(axis::EventMouse::MouseButton::BUTTON_UNSET),
+    _keyCode(axis::EventKeyboard::KeyCode::KEY_0),
     _keyModifiers(0)
 {
 }

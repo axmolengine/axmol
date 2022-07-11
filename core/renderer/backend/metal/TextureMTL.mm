@@ -29,7 +29,7 @@
 #include "base/ccMacros.h"
 #include "../PixelFormatUtils.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -200,7 +200,7 @@ void TextureMTL::updateSamplerDescriptor(const SamplerDescriptor& sampler)
     _textureInfo.recreateSampler(sampler);
 }
 
-void TextureMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index)
+void TextureMTL::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index)
 {
     TextureBackend::updateTextureDescriptor(descriptor, index);
 
@@ -283,7 +283,7 @@ TextureCubeMTL::TextureCubeMTL(id<MTLDevice> mtlDevice, const TextureDescriptor&
 
 TextureCubeMTL::~TextureCubeMTL() {}
 
-void TextureCubeMTL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor& descriptor, int index)
+void TextureCubeMTL::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index)
 {
     TextureBackend::updateTextureDescriptor(descriptor, index);
 
@@ -328,4 +328,4 @@ void TextureCubeMTL::generateMipmaps()
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

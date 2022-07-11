@@ -105,21 +105,24 @@ Copyright (c) 2021 Bytedance Inc.
 
 // Generic macros
 
-/// @name namespace cocos2d
+/// @name namespace axis
 /// @{
 #ifdef __cplusplus
-#    define NS_CC_BEGIN   \
-        namespace cocos2d \
+#    define NS_AX_BEGIN   \
+        namespace axis \
         {
-#    define NS_CC_END }
-#    define USING_NS_CC using namespace cocos2d
-#    define NS_CC ::cocos2d
+#    define NS_AX_END }
+#    define USING_NS_AX using namespace axis
+#    define NS_AX ::axis
 #else
-#    define NS_CC_BEGIN
-#    define NS_CC_END
-#    define USING_NS_CC
-#    define NS_CC
+#    define NS_AX_BEGIN
+#    define NS_AX_END
+#    define USING_NS_AX
+#    define NS_AX
 #endif
+
+namespace axis {}
+namespace ax = axis;
 //  end of namespace group
 /// @}
 
@@ -297,7 +300,7 @@ public:                                                             \
     break
 
 #define __CCLOGWITHFUNCTION(s, ...) \
-    cocos2d::log("%s : %s", __FUNCTION__, cocos2d::StringUtils::format(s, ##__VA_ARGS__).c_str())
+    axis::log("%s : %s", __FUNCTION__, axis::StringUtils::format(s, ##__VA_ARGS__).c_str())
 
 /// @name Cocos2d debug
 /// @{
@@ -320,8 +323,8 @@ public:                                                             \
         } while (0)
 
 #elif COCOS2D_DEBUG == 1
-#    define CCLOG(format, ...) cocos2d::log(format, ##__VA_ARGS__)
-#    define CCLOGERROR(format, ...) cocos2d::log(format, ##__VA_ARGS__)
+#    define CCLOG(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define CCLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define CCLOGINFO(format, ...) \
         do                         \
         {                          \
@@ -329,9 +332,9 @@ public:                                                             \
 #    define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
 
 #elif COCOS2D_DEBUG > 1
-#    define CCLOG(format, ...) cocos2d::log(format, ##__VA_ARGS__)
-#    define CCLOGERROR(format, ...) cocos2d::log(format, ##__VA_ARGS__)
-#    define CCLOGINFO(format, ...) cocos2d::log(format, ##__VA_ARGS__)
+#    define CCLOG(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define CCLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define CCLOGINFO(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
 #endif  // COCOS2D_DEBUG
 
@@ -339,7 +342,7 @@ public:                                                             \
 #if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0 || CC_LUA_ENGINE_DEBUG == 0
 #    define LUALOG(...)
 #else
-#    define LUALOG(format, ...) cocos2d::log(format, ##__VA_ARGS__)
+#    define LUALOG(format, ...) axis::log(format, ##__VA_ARGS__)
 #endif  // Lua engine debug
 
 //  end of debug group

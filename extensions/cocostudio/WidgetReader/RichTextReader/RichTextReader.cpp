@@ -11,7 +11,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -76,7 +76,7 @@ Offset<Table> RichTextReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void RichTextReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* richTextOptions)
+void RichTextReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* richTextOptions)
 {
     auto ppnode  = (Node**)(node);
     auto options = (RichTextOptions*)richTextOptions;

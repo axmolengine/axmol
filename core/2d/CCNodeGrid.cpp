@@ -26,7 +26,7 @@
 #include "2d/CCGrid.h"
 #include "renderer/CCRenderer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 NodeGrid* NodeGrid::create()
 {
@@ -42,7 +42,7 @@ NodeGrid* NodeGrid::create()
     return ret;
 }
 
-NodeGrid* NodeGrid::create(const cocos2d::Rect& rect)
+NodeGrid* NodeGrid::create(const axis::Rect& rect)
 {
     NodeGrid* ret = NodeGrid::create();
     if (ret)
@@ -178,4 +178,4 @@ void NodeGrid::setGrid(GridBase* grid)
     _nodeGrid = grid;
 }
 
-NS_CC_END
+NS_AX_END

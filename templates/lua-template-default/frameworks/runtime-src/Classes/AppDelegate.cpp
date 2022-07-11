@@ -34,7 +34,7 @@
 #    include "audio/AudioEngine.h"
 #endif
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace std;
 
 AppDelegate::AppDelegate() {}

@@ -30,7 +30,7 @@
 #include "extensions/Particle3D/PU/CCPUEmitter.h"
 #include "extensions/Particle3D/PU/CCPUListener.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // FIXME
 class CC_EX_DLL PUSlaveEmitter : public PUEmitter, public PUListener
 {
@@ -95,6 +95,6 @@ protected:
     Vec3 _masterDirection;
     bool _masterEmitterNameSet;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

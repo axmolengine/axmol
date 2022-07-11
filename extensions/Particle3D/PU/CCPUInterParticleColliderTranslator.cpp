@@ -29,7 +29,7 @@
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "extensions/Particle3D/PU/CCPUDynamicAttributeTranslator.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 PUInterParticleColliderTranslator::PUInterParticleColliderTranslator() {}
 //-------------------------------------------------------------------------
@@ -121,4 +121,4 @@ bool PUInterParticleColliderTranslator::translateChildObject(PUScriptCompiler* /
     return false;
 }
 
-NS_CC_END
+NS_AX_END

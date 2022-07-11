@@ -25,7 +25,7 @@
 
 #include "HelloWorldScene.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)

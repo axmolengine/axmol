@@ -112,13 +112,13 @@ public:
     virtual std::string subtitle() const override;
     virtual bool init() override;
     void createSliderCtls();
-    void onRadiusChanged(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
-    void onSampleNumChanged(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
+    void onRadiusChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
+    void onSampleNumChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
 
 protected:
     SpriteBlur* _blurSprite;
-    cocos2d::extension::ControlSlider* _sliderRadiusCtl;
-    cocos2d::extension::ControlSlider* _sliderNumCtrl;
+    axis::extension::ControlSlider* _sliderRadiusCtl;
+    axis::extension::ControlSlider* _sliderNumCtrl;
 };
 
 class ShaderRetroEffect : public ShaderTestDemo
@@ -132,19 +132,19 @@ public:
     virtual void update(float dt) override;
 
 protected:
-    cocos2d::Label* _label;
+    axis::Label* _label;
     float _accum;
 };
 
-class ShaderNode : public cocos2d::Node
+class ShaderNode : public axis::Node
 {
 public:
     CREATE_FUNC(ShaderNode);
     static ShaderNode* shaderNodeWithVertex(std::string_view vert, std::string_view frag);
 
     virtual void update(float dt) override;
-    virtual void setPosition(const cocos2d::Vec2& newPosition) override;
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void setPosition(const axis::Vec2& newPosition) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
 protected:
     ShaderNode();
@@ -153,7 +153,7 @@ protected:
     bool initWithVertex(std::string_view vert, std::string_view frag);
     void loadShaderVertex(std::string_view vert, std::string_view frag);
 
-    virtual bool setProgramState(cocos2d::backend::ProgramState* programState, bool needsRetain = true) override
+    virtual bool setProgramState(axis::backend::ProgramState* programState, bool needsRetain = true) override
     {
         if (Node::setProgramState(programState, needsRetain))
         {
@@ -166,20 +166,20 @@ protected:
 
     void updateUniforms();
 
-    cocos2d::Vec2 _center;
-    cocos2d::Vec2 _resolution;
+    axis::Vec2 _center;
+    axis::Vec2 _resolution;
     float _time;
     std::string _vertFileName;
     std::string _fragFileName;
-    cocos2d::CustomCommand _customCommand;
+    axis::CustomCommand _customCommand;
 
-    cocos2d::backend::UniformLocation _locResolution;
-    cocos2d::backend::UniformLocation _locCenter;
-    cocos2d::backend::UniformLocation _locMVP;
-    cocos2d::backend::UniformLocation _locTime;
-    cocos2d::backend::UniformLocation _locSinTime;
-    cocos2d::backend::UniformLocation _locCosTime;
-    cocos2d::backend::UniformLocation _locScreenSize;
+    axis::backend::UniformLocation _locResolution;
+    axis::backend::UniformLocation _locCenter;
+    axis::backend::UniformLocation _locMVP;
+    axis::backend::UniformLocation _locTime;
+    axis::backend::UniformLocation _locSinTime;
+    axis::backend::UniformLocation _locCosTime;
+    axis::backend::UniformLocation _locScreenSize;
 };
 
 class ShaderLensFlare : public ShaderTestDemo
@@ -211,10 +211,10 @@ class ShaderMultiTexture : public ShaderTestDemo
 public:
     CREATE_FUNC(ShaderMultiTexture);
     ShaderMultiTexture();
-    cocos2d::ui::Slider* createSliderCtl();
-    void changeTexture(cocos2d::Ref*);
+    axis::ui::Slider* createSliderCtl();
+    void changeTexture(axis::Ref*);
     int _changedTextureId;
-    cocos2d::Sprite* _sprite;
+    axis::Sprite* _sprite;
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;

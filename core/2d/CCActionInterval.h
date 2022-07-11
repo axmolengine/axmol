@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "base/CCProtocols.h"
 #include "base/CCVector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Node;
 class SpriteFrame;
@@ -737,7 +737,7 @@ public:
     // Overrides
     //
     virtual ResizeTo* clone() const override;
-    void startWithTarget(cocos2d::Node* target) override;
+    void startWithTarget(axis::Node* target) override;
     void update(float time) override;
 
     ResizeTo() {}
@@ -1615,6 +1615,6 @@ private:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__ACTION_CCINTERVAL_ACTION_H__

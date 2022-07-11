@@ -25,7 +25,7 @@ THE SOFTWARE.
 #include "CCComAttribute.h"
 #include "platform/CCFileUtils.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -51,29 +51,29 @@ bool ComAttribute::init()
 
 void ComAttribute::setInt(std::string_view key, int value)
 {
-    _dict[key] = cocos2d::Value(value);
+    _dict[key] = axis::Value(value);
 }
 
 void ComAttribute::setFloat(std::string_view key, float value)
 {
-    _dict[key] = cocos2d::Value(value);
+    _dict[key] = axis::Value(value);
 }
 
 void ComAttribute::setBool(std::string_view key, bool value)
 {
-    _dict[key] = cocos2d::Value(value);
+    _dict[key] = axis::Value(value);
 }
 
 void ComAttribute::setString(std::string_view key, std::string_view value)
 {
-    _dict[key] = cocos2d::Value(value);
+    _dict[key] = axis::Value(value);
 }
 
 int ComAttribute::getInt(std::string_view key, int def) const
 {
     if (_dict.find(key) != _dict.end())
     {
-        const cocos2d::Value& v = _dict.at(key);
+        const axis::Value& v = _dict.at(key);
         return v.asInt();
     }
 
@@ -89,7 +89,7 @@ float ComAttribute::getFloat(std::string_view key, float def) const
 {
     if (_dict.find(key) != _dict.end())
     {
-        const cocos2d::Value& v = _dict.at(key);
+        const axis::Value& v = _dict.at(key);
         return v.asFloat();
     }
 
@@ -104,7 +104,7 @@ bool ComAttribute::getBool(std::string_view key, bool def) const
 {
     if (_dict.find(key) != _dict.end())
     {
-        const cocos2d::Value& v = _dict.at(key);
+        const axis::Value& v = _dict.at(key);
         return v.asBool();
     }
 
@@ -120,7 +120,7 @@ std::string ComAttribute::getString(std::string_view key, std::string_view def) 
 {
     if (_dict.find(key) != _dict.end())
     {
-        const cocos2d::Value& v = _dict.at(key);
+        const axis::Value& v = _dict.at(key);
         return v.asString();
     }
 
@@ -195,7 +195,7 @@ bool ComAttribute::serialize(void* r)
         }
         if (file != nullptr)
         {
-            filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
+            filePath.assign(axis::FileUtils::getInstance()->fullPathForFilename(file));
         }
         if (parse(filePath))
         {

@@ -61,7 +61,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // ideas taken from:
 //     . The ocean spray in your face [Jeff Lander]
@@ -1451,12 +1451,12 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, std::string_view fr
     return false;
 }
 
-bool ParticleSystem::addAnimationIndex(cocos2d::SpriteFrame* frame)
+bool ParticleSystem::addAnimationIndex(axis::SpriteFrame* frame)
 {
     return addAnimationIndex(_animIndexCount, frame);
 }
 
-bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::SpriteFrame* frame)
+bool ParticleSystem::addAnimationIndex(unsigned short index, axis::SpriteFrame* frame)
 {
     if (frame)
     {
@@ -1468,7 +1468,7 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::SpriteFram
     return false;
 }
 
-bool ParticleSystem::addAnimationIndex(unsigned short index, cocos2d::Rect rect, bool rotated)
+bool ParticleSystem::addAnimationIndex(unsigned short index, axis::Rect rect, bool rotated)
 {
     auto iter = _animationIndices.find(index);
     if (iter == _animationIndices.end())
@@ -2383,4 +2383,4 @@ void ParticleEmissionMaskCache::removeAllMasks()
     this->masks.clear();
 }
 
-NS_CC_END
+NS_AX_END

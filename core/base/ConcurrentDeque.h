@@ -28,8 +28,8 @@
 #include <deque>
 #include <mutex>
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 template <typename _Ty>
 class ConcurrentDeque
 {
@@ -113,4 +113,4 @@ private:
     std::deque<_Ty> queue_;
     mutable std::recursive_mutex mtx_;
 };
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

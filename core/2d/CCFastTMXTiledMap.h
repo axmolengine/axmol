@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "2d/CCTMXObjectGroup.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class TMXLayerInfo;
 class TMXTilesetInfo;
@@ -258,4 +258,4 @@ private:
 // @API compatible
 typedef FastTMXTiledMap TMXTiledMap;
 
-NS_CC_END
+NS_AX_END

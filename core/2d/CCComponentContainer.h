@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/CCMap.h"
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Component;
 class Node;
@@ -74,7 +74,7 @@ private:
     friend class Node;
 };
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif  // __CC_FRAMEWORK_COMCONTAINER_H__

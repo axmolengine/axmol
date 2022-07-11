@@ -31,7 +31,7 @@
 #include "base/ccTypes.h"
 #include <map>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_EX_DLL PUColorAffector : public PUAffector
 {
@@ -85,6 +85,6 @@ protected:
     ColorMap _colorMap;
     ColorOperation _colorOperation;
 };
-NS_CC_END
+NS_AX_END
 
 #endif

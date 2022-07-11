@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "ui/UIPageView.h"
 #include "2d/CCSprite.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 /**
  * @addtogroup ui
  * @{
@@ -99,6 +99,6 @@ protected:
 }  // namespace ui
 // end of ui group
 /// @}
-NS_CC_END
+NS_AX_END
 
 #endif /* defined(__UIPAGEVIEWINDICATOR_H__) */

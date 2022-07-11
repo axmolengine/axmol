@@ -38,7 +38,7 @@
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const int FontAtlas::CacheTextureWidth     = 512;
 const int FontAtlas::CacheTextureHeight    = 512;
@@ -428,4 +428,4 @@ void FontAtlas::setAntiAliasTexParameters()
     }
 }
 
-NS_CC_END
+NS_AX_END

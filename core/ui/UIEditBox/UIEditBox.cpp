@@ -28,7 +28,7 @@
 #include "ui/UIEditBox/UIEditBoxImpl.h"
 #include "ui/UIHelper.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -81,7 +81,7 @@ EditBox* EditBox::create(const Vec2& size,
 }
 
 EditBox* EditBox::create(const Vec2& size,
-                         cocos2d::ui::Scale9Sprite* normalSprite,
+                         axis::ui::Scale9Sprite* normalSprite,
                          ui::Scale9Sprite* pressedSprite,
                          Scale9Sprite* disabledSprite)
 {
@@ -892,4 +892,4 @@ void EditBox::unregisterScriptEditBoxHandler()
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

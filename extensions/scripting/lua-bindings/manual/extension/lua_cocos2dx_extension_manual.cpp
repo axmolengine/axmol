@@ -32,8 +32,8 @@
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "scripting/lua-bindings/manual/cocos2d/LuaScriptHandlerMgr.h"
 
-USING_NS_CC;
-USING_NS_CC_EXT;
+USING_NS_AX;
+USING_NS_AX_EXT;
 
 class LuaAssetsManagerDelegateProtocol : public Ref, public AssetsManagerDelegateProtocol
 {
@@ -180,13 +180,13 @@ static int lua_cocos2dx_Extension_EventListenerAssetsManagerEx_create(lua_State*
             !toluafix_isfunction(L, 3, "LUA_FUNCTION", 0, &tolua_err))
             goto tolua_lerror;
 #endif
-        cocos2d::extension::AssetsManagerEx* assetManager =
-            static_cast<cocos2d::extension::AssetsManagerEx*>(tolua_tousertype(L, 2, nullptr));
+        axis::extension::AssetsManagerEx* assetManager =
+            static_cast<axis::extension::AssetsManagerEx*>(tolua_tousertype(L, 2, nullptr));
 
         LUA_FUNCTION handler = toluafix_ref_function(L, 3, 0);
 
-        cocos2d::extension::EventListenerAssetsManagerEx* ret =
-            cocos2d::extension::EventListenerAssetsManagerEx::create(assetManager, [=](EventAssetsManagerEx* event) {
+        axis::extension::EventListenerAssetsManagerEx* ret =
+            axis::extension::EventListenerAssetsManagerEx::create(assetManager, [=](EventAssetsManagerEx* event) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 int id     = event ? (int)event->_ID : -1;
                 int* luaID = event ? &event->_luaID : nullptr;
@@ -225,7 +225,7 @@ static void extendEventListenerAssetsManagerEx(lua_State* L)
 int lua_cocos2dx_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
 {
     int argc                        = 0;
-    cocos2d::ParticleSystem3D* cobj = nullptr;
+    axis::ParticleSystem3D* cobj = nullptr;
     bool ok                         = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -237,7 +237,7 @@ int lua_cocos2dx_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)
@@ -258,7 +258,7 @@ int lua_cocos2dx_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
                         nullptr);
             return 0;
         }
-        const cocos2d::ParticlePool& ret = cobj->getParticlePool();
+        const axis::ParticlePool& ret = cobj->getParticlePool();
         tolua_pushusertype(tolua_S, (void*)&ret, "cc.ParticlePool");
         return 1;
     }
@@ -288,7 +288,7 @@ static void extendParticleSystem3D(lua_State* tolua_S)
 int lua_cocos2dx_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
 {
     int argc                    = 0;
-    cocos2d::ParticlePool* cobj = nullptr;
+    axis::ParticlePool* cobj = nullptr;
     bool ok                     = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -300,7 +300,7 @@ int lua_cocos2dx_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (cocos2d::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (axis::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
 
 #if COCOS2D_DEBUG >= 1
     if (!cobj)

@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "base/CCEventDispatcher.h"
 #include "renderer/backend/Device.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 extern const char* axisVersion();
 
@@ -416,4 +416,4 @@ int Configuration::getMaxAttributes() const
     return _deviceInfo->getMaxAttributes();
 }
 
-NS_CC_END
+NS_AX_END

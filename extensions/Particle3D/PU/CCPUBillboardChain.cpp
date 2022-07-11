@@ -38,7 +38,7 @@
 #include "2d/CCCamera.h"
 #include "3d/CCMeshRenderer.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const size_t PUBillboardChain::SEGMENT_EMPTY = std::numeric_limits<size_t>::max();
 //-----------------------------------------------------------------------
@@ -805,4 +805,4 @@ void PUBillboardChain::onAfterDraw()
 //}
 //---------------------------------------------------------------------
 
-NS_CC_END
+NS_AX_END

@@ -34,7 +34,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /** @class EventListenerAcceleration
  * @brief Acceleration event listener.
@@ -70,7 +70,7 @@ private:
     friend class LuaEventListenerAcceleration;
 };
 
-NS_CC_END
+NS_AX_END
 
 // end of base group
 /// @}

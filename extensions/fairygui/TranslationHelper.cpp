@@ -10,7 +10,7 @@
 
 #include "base/format.h"
 
-USING_NS_CC;
+USING_NS_AX;
 NS_FGUI_BEGIN
 
 using namespace std;

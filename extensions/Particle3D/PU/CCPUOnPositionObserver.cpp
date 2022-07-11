@@ -27,7 +27,7 @@
 #include "extensions/Particle3D/PU/CCPUOnPositionObserver.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const Vec3 PUOnPositionObserver::DEFAULT_POSITION_THRESHOLD(0, 0, 0);
@@ -108,4 +108,4 @@ void PUOnPositionObserver::copyAttributesTo(PUObserver* observer)
     onPositionObserver->_positionZThresholdSet = _positionZThresholdSet;
 }
 
-NS_CC_END
+NS_AX_END

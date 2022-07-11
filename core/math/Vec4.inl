@@ -21,7 +21,7 @@
 #include "math/Mat4.h"
 #include "math/Vec4.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 inline Vec4 Vec4::operator+(const Vec4& v) const
 {
@@ -111,4 +111,4 @@ inline Vec4 operator*(float x, const Vec4& v)
     return result;
 }
 
-NS_CC_MATH_END
+NS_AX_MATH_END

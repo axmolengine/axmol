@@ -33,17 +33,17 @@ THE SOFTWARE.
 
 #define DECLARE_CLASS_INFO                     \
 public:                                        \
-    static cocos2d::ObjectFactory::TInfo Type; \
-    static cocos2d::Ref* createInstance(void);
+    static axis::ObjectFactory::TInfo Type; \
+    static axis::Ref* createInstance(void);
 
 #define IMPLEMENT_CLASS_INFO(className)           \
-    cocos2d::Ref* className::createInstance(void) \
+    axis::Ref* className::createInstance(void) \
     {                                             \
         auto ret = new className;                 \
         ret->autorelease();                       \
         return ret;                               \
     }                                             \
-    cocos2d::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
+    axis::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
 void CCS_DLL sendEvent(unsigned int event);
 

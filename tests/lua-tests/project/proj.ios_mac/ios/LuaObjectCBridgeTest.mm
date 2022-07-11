@@ -28,7 +28,7 @@
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #include "scripting/lua-bindings/manual/CCLuaBridge.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 @implementation LuaObjectCBridgeTest
 

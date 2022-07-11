@@ -27,7 +27,7 @@
 #include "TransitionsTest.h"
 #include "../testResource.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 #define TRANSITION_DURATION (1.2f)
 

@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "renderer/CCRenderState.h"
 #include "renderer/ccShaders.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 MotionStreak3D::MotionStreak3D()
     : _startingPositionInitialized(false)
@@ -462,4 +462,4 @@ void MotionStreak3D::onAfterDraw()
     renderer->setCullMode(_rendererCullface);
 }
 
-NS_CC_END
+NS_AX_END

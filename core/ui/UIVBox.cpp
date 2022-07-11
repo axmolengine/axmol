@@ -25,7 +25,7 @@
 
 #include "ui/UIVBox.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -80,4 +80,4 @@ bool VBox::initWithSize(const Vec2& size)
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

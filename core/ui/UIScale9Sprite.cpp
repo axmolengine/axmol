@@ -38,8 +38,8 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-using namespace cocos2d;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 Scale9Sprite* Scale9Sprite::create()
 {
@@ -531,7 +531,7 @@ void Scale9Sprite::setupSlice9(Texture2D* texture, const Rect& capInsets)
     }
 }
 
-void Scale9Sprite::setCapInsets(const cocos2d::Rect& insetsCopy)
+void Scale9Sprite::setCapInsets(const axis::Rect& insetsCopy)
 {
     Rect insets = insetsCopy;
 

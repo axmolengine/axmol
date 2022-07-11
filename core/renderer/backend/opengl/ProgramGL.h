@@ -35,7 +35,7 @@
 #include <vector>
 #include <unordered_map>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class ShaderModuleGL;
 
@@ -188,4 +188,4 @@ private:
 };
 // end of _opengl group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

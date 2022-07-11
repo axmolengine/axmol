@@ -10,24 +10,24 @@
 #define CALL_LATER_FUNC(__TYPE__,__FUNC__) \
 void __selector_##__FUNC__(float dt) \
 {\
-    cocos2d::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this);\
+    axis::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this);\
     __FUNC__(); \
 }\
 void __FUNC__()
 
 #define CALL_LATER(__TYPE__,__FUNC__,...) \
-if (!cocos2d::Director::getInstance()->getScheduler()->isScheduled(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this))\
-    cocos2d::Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this, (__VA_ARGS__+0), false)
+if (!axis::Director::getInstance()->getScheduler()->isScheduled(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this))\
+    axis::Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this, (__VA_ARGS__+0), false)
 
 #define CALL_LATER_CANCEL(__TYPE__,__FUNC__) \
-cocos2d::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this)
+axis::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(__TYPE__::__selector_##__FUNC__), this)
 
 #define CALL_PER_FRAME(__TYPE__,__FUNC__) \
-if (!cocos2d::Director::getInstance()->getScheduler()->isScheduled(CC_SCHEDULE_SELECTOR(__TYPE__::__FUNC__), this))\
-    cocos2d::Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(__TYPE__::__FUNC__), this, 0, false)
+if (!axis::Director::getInstance()->getScheduler()->isScheduled(CC_SCHEDULE_SELECTOR(__TYPE__::__FUNC__), this))\
+    axis::Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(__TYPE__::__FUNC__), this, 0, false)
 
 #define CALL_PER_FRAME_CANCEL(__TYPE__,__FUNC__) \
-cocos2d::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(__TYPE__::__FUNC__), this)
+axis::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(__TYPE__::__FUNC__), this)
 
 #define UIRoot GRoot::getInstance()
 

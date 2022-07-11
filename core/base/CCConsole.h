@@ -49,7 +49,7 @@ typedef SSIZE_T ssize_t;
 #include "base/ccMacros.h"
 #include "platform/CCPlatformMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /// The max length of CCLog message.
 static const int MAX_LOG_LENGTH = 16 * 1024;
@@ -302,7 +302,7 @@ private:
     static void sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg);
 };
 
-NS_CC_END
+NS_AX_END
 
 /// @endcond
 #endif /* defined(__CCCONSOLE_H__) */

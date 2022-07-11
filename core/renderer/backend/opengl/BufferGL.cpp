@@ -29,7 +29,7 @@
 #include "base/CCEventDispatcher.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -154,4 +154,4 @@ void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/CCData.h"
 #include "platform/CCFileUtils.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static bool tgaLoadRLEImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA* info);
 void tgaFlipImage(tImageTGA* info);
@@ -337,4 +337,4 @@ void tgaDestroy(tImageTGA* info)
         free(info);
     }
 }
-NS_CC_END
+NS_AX_END

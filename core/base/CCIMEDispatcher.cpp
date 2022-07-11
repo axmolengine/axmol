@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <list>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 //////////////////////////////////////////////////////////////////////////
 // add/remove delegate in IMEDelegate Cons/Destructor
@@ -342,4 +342,4 @@ IMEDispatcher* IMEDispatcher::sharedDispatcher()
     return &s_instance;
 }
 
-NS_CC_END
+NS_AX_END

@@ -24,8 +24,8 @@
 
 #include "UISliderTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 UISliderTests::UISliderTests()
 {
@@ -100,20 +100,20 @@ void UISliderTest::sliderEvent(Ref* pSender, Slider::EventType type)
         _displayValueLabel->setString(StringUtils::format("Percent %f", 10000.0 * percent / maxPercent));
     }
 }
-void UISliderTest::printWidgetResources(cocos2d::Ref* /*sender*/)
+void UISliderTest::printWidgetResources(axis::Ref* /*sender*/)
 {
-    cocos2d::ResourceData textureFile = _slider->getBackFile();
+    axis::ResourceData textureFile = _slider->getBackFile();
     CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
-    cocos2d::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
+    axis::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
     CCLOG("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
           progressBarTextureFile.type);
-    cocos2d::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
+    axis::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
     CCLOG("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
           slidBallNormalTextureFile.type);
-    cocos2d::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
+    axis::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
     CCLOG("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
           slidBallPressedTextureFile.type);
-    cocos2d::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
+    axis::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
     CCLOG("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
           slidBallDisabledTextureFile.type);
 }

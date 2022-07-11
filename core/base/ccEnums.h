@@ -28,7 +28,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #pragma once
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @brief Effects used by `Label`
@@ -137,4 +137,4 @@ enum class EmissionShapeType
     TEXTURE_ALPHA_MASK
 };
 
-NS_CC_END
+NS_AX_END

@@ -25,7 +25,7 @@
 #include "Program.h"
 #include "ProgramCache.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs) {}
 
@@ -39,4 +39,4 @@ Program* Program::getBuiltinProgram(uint32_t type)
     return ProgramCache::getInstance()->getBuiltinProgram(type);
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

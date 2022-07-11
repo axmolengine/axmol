@@ -11,7 +11,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -45,7 +45,7 @@ void TextAtlasReader::destroyInstance()
     CC_SAFE_DELETE(instanceTextAtlasReader);
 }
 
-void TextAtlasReader::setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextAtlasReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -220,7 +220,7 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     return *(Offset<Table>*)(&options);
 }
 
-void TextAtlasReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textAtlasOptions)
+void TextAtlasReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textAtlasOptions)
 {
     TextAtlas* labelAtlas = static_cast<TextAtlas*>(node);
     auto options          = (TextAtlasOptions*)textAtlasOptions;

@@ -34,7 +34,7 @@
 #include "base/CCRef.h"
 #include "2d/CCActionInterval.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Bone3D;
 class MeshRenderer;
@@ -183,6 +183,6 @@ protected:
 // end of 3d group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  // __CCANIMATE3D_H__

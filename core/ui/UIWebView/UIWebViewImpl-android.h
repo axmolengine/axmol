@@ -31,8 +31,10 @@
 #include <string>
 #include <string_view>
 
-namespace cocos2d
-{
+#include "platform/CCPlatformMacros.h"
+
+NS_AX_BEGIN
+
 class Data;
 class Renderer;
 class Mat4;
@@ -41,23 +43,23 @@ namespace ui
 {
 class WebView;
 }
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
-namespace cocos2d
-{
+NS_AX_BEGIN
+
 namespace ui
 {
 
 class WebViewImpl
 {
 public:
-    WebViewImpl(cocos2d::ui::WebView* webView);
+    WebViewImpl(axis::ui::WebView* webView);
 
     virtual ~WebViewImpl();
 
     void setJavascriptInterfaceScheme(std::string_view scheme);
 
-    void loadData(const cocos2d::Data& data,
+    void loadData(const axis::Data& data,
                   std::string_view MIMEType,
                   std::string_view encoding,
                   std::string_view baseURL);
@@ -85,7 +87,7 @@ public:
 
     void setScalesPageToFit(const bool scalesPageToFit);
 
-    virtual void draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const& transform, uint32_t flags);
+    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags);
 
     virtual void setVisible(bool visible);
 
@@ -108,6 +110,6 @@ private:
 };
 
 }  // namespace ui
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 /// @endcond

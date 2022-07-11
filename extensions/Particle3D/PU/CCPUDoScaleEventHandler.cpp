@@ -27,7 +27,7 @@
 #include "extensions/Particle3D/PU/CCPUDoScaleEventHandler.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const PUDoScaleEventHandler::ScaleType PUDoScaleEventHandler::DEFAULT_SCALE_TYPE =
@@ -91,4 +91,4 @@ void PUDoScaleEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     doScaleEventHandler->setScaleType(_scaleType);
 }
 
-NS_CC_END
+NS_AX_END

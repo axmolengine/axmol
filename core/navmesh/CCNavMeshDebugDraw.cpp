@@ -34,7 +34,7 @@
 #    include "base/CCDirector.h"
 #    include "base/ccMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 NavMeshDebugDraw::NavMeshDebugDraw()
 {
@@ -262,6 +262,6 @@ void NavMeshDebugDraw::clear()
     _primitiveList.clear();
 }
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_NAVMESH

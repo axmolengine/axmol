@@ -36,14 +36,14 @@
 
 #define DECLARE_CLASS_GUI_INFO                   \
 public:                                          \
-    static cocos2d::ObjectFactory::TInfo __Type; \
-    static cocos2d::Ref* createInstance();
+    static axis::ObjectFactory::TInfo __Type; \
+    static axis::Ref* createInstance();
 
 #define IMPLEMENT_CLASS_GUI_INFO(className)                                   \
-    cocos2d::Ref* className::createInstance() { return className::create(); } \
-    cocos2d::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
+    axis::Ref* className::createInstance() { return className::create(); } \
+    axis::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
-#define CREATE_CLASS_GUI_INFO(className) cocos2d::ObjectFactory::TInfo(#className, &className::createInstance)
+#define CREATE_CLASS_GUI_INFO(className) axis::ObjectFactory::TInfo(#className, &className::createInstance)
 
 //
 //// Reader macro
@@ -51,21 +51,21 @@ public:                                          \
 
 #define DECLARE_CLASS_WIDGET_READER_INFO         \
 public:                                          \
-    static cocos2d::ObjectFactory::TInfo __Type; \
-    static cocos2d::Ref* createInstance();
+    static axis::ObjectFactory::TInfo __Type; \
+    static axis::Ref* createInstance();
 
 #define IMPLEMENT_CLASS_WIDGET_READER_INFO(className)                              \
-    cocos2d::Ref* className::createInstance() { return className::getInstance(); } \
-    cocos2d::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
+    axis::Ref* className::createInstance() { return className::getInstance(); } \
+    axis::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
-#define CREATE_CLASS_WIDGET_READER_INFO(className) cocos2d::ObjectFactory::TInfo(#className, &className::createInstance)
+#define CREATE_CLASS_WIDGET_READER_INFO(className) axis::ObjectFactory::TInfo(#className, &className::createInstance)
 
 #define CC_VIDEOPLAYER_DEBUG_DRAW 0
 
 #define __LAYOUT_COMPONENT_NAME "__ui_layout"
 ///@endcond
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 struct CC_DLL ResourceData
 {
     int type;
@@ -112,6 +112,6 @@ struct CC_DLL ResourceData
         return *this;
     }
 };
-NS_CC_END
+NS_AX_END
 
 #endif /* defined(__TestCpp__GUIDefine__) */

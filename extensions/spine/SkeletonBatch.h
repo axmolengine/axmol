@@ -39,9 +39,9 @@
 
 namespace spine {
     
-	struct SkeletonCommand : public cocos2d::TrianglesCommand {
-		cocos2d::backend::UniformLocation _locMVP;
-		cocos2d::backend::UniformLocation _locTexture;
+	struct SkeletonCommand : public axis::TrianglesCommand {
+		axis::backend::UniformLocation _locMVP;
+		axis::backend::UniformLocation _locTexture;
 	};
 	
     class SP_API SkeletonBatch {
@@ -52,13 +52,13 @@ namespace spine {
         
         void update (float delta);
 		
-		cocos2d::V3F_C4B_T2F* allocateVertices(uint32_t numVertices);
+		axis::V3F_C4B_T2F* allocateVertices(uint32_t numVertices);
 		void deallocateVertices(uint32_t numVertices);
 		unsigned short* allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numVertices);
-		cocos2d::TrianglesCommand* addCommand(cocos2d::Renderer* renderer, float globalOrder, cocos2d::Texture2D* texture, cocos2d::backend::ProgramState* programState, cocos2d::BlendFunc blendType, const cocos2d::TrianglesCommand::Triangles& triangles, const cocos2d::Mat4& mv, uint32_t flags);
+		axis::TrianglesCommand* addCommand(axis::Renderer* renderer, float globalOrder, axis::Texture2D* texture, axis::backend::ProgramState* programState, axis::BlendFunc blendType, const axis::TrianglesCommand::Triangles& triangles, const axis::Mat4& mv, uint32_t flags);
         
-		cocos2d::backend::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, cocos2d::backend::ProgramState* programState);
+		axis::backend::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, axis::backend::ProgramState* programState);
 
     protected:
 		SkeletonBatch ();
@@ -70,14 +70,14 @@ namespace spine {
 
 		SkeletonCommand* newCommand();
 	
-		cocos2d::backend::ProgramState*                     _programState; // The default program state
+		axis::backend::ProgramState*                     _programState; // The default program state
 
 		// pool of commands
 		std::vector<SkeletonCommand*>                       _commandsPool;
 		uint32_t                                            _nextFreeCommand;
 		
 		// pool of vertices
-		std::vector<cocos2d::V3F_C4B_T2F>                   _vertices;
+		std::vector<axis::V3F_C4B_T2F>                   _vertices;
 		uint32_t                                            _numVertices;
 		
 		// pool of indices

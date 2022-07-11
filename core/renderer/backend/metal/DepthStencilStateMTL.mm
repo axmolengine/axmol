@@ -26,7 +26,7 @@
 #include "../RenderTarget.h"
 #include "xxhash.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -164,4 +164,4 @@ DepthStencilStateMTL::~DepthStencilStateMTL()
     _mtlStateCache.clear();
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

@@ -30,7 +30,7 @@
 
 #    if (CC_ENABLE_BULLET_INTEGRATION)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Physics3DWorld::Physics3DWorld()
     : _needCollisionChecking(false)
@@ -285,8 +285,8 @@ void Physics3DWorld::debugDraw(Renderer* renderer)
     }
 }
 
-bool Physics3DWorld::rayCast(const cocos2d::Vec3& startPos,
-                             const cocos2d::Vec3& endPos,
+bool Physics3DWorld::rayCast(const axis::Vec3& startPos,
+                             const axis::Vec3& endPos,
                              Physics3DWorld::HitResult* result)
 {
     auto btStart = convertVec3TobtVector3(startPos);
@@ -305,8 +305,8 @@ bool Physics3DWorld::rayCast(const cocos2d::Vec3& startPos,
 }
 
 bool Physics3DWorld::sweepShape(Physics3DShape* shape,
-                                const cocos2d::Mat4& startTransform,
-                                const cocos2d::Mat4& endTransform,
+                                const axis::Mat4& startTransform,
+                                const axis::Mat4& endTransform,
                                 Physics3DWorld::HitResult* result)
 {
     CC_ASSERT(shape->getShapeType() != Physics3DShape::ShapeType::HEIGHT_FIELD &&
@@ -421,7 +421,7 @@ void Physics3DWorld::setGhostPairCallback()
     }
 }
 
-NS_CC_END
+NS_AX_END
 
 #    endif  // CC_ENABLE_BULLET_INTEGRATION
 

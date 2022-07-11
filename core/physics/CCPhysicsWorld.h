@@ -36,7 +36,7 @@
 
 struct cpSpace;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PhysicsBody;
 class PhysicsJoint;
@@ -65,7 +65,7 @@ typedef struct PhysicsRayCastInfo
     // but in order to do so, we should include "chipmunk_types.h"
     // in Chipmunk v7.0, chipmunk_types includes all the mac types that
     // conflicts with cocos2d Vec2, Point,... etc types. And all the CocosStudio
-    // lib will need to use the `cocos2d::` namespace prefix. And it is easier to do this
+    // lib will need to use the `axis::` namespace prefix. And it is easier to do this
     // than change all the cocosstudio library (and also users code)
     float fraction;
     void* data;
@@ -454,7 +454,7 @@ extern const float CC_DLL PHYSICS_INFINITY;
 /** @} */
 /** @} */
 
-NS_CC_END
+NS_AX_END
 
 #endif  // CC_USE_PHYSICS
 #endif  // __CCPHYSICS_WORLD_H__

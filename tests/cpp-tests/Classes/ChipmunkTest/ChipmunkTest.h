@@ -44,17 +44,17 @@ public:
     void onEnter() override;
     void initPhysics();
     void createResetButton();
-    void reset(cocos2d::Ref* sender);
+    void reset(axis::Ref* sender);
 
-    void addNewSpriteAtPosition(cocos2d::Vec2 p);
+    void addNewSpriteAtPosition(axis::Vec2 p);
     void update(float dt) override;
-    void toggleDebugCallback(cocos2d::Ref* sender);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    virtual void onAcceleration(cocos2d::Acceleration* acc, cocos2d::Event* event);
+    void toggleDebugCallback(axis::Ref* sender);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onAcceleration(axis::Acceleration* acc, axis::Event* event);
 
 private:
-    cocos2d::Texture2D* _spriteTexture;                           // weak ref
-    cocos2d::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
+    axis::Texture2D* _spriteTexture;                           // weak ref
+    axis::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
 
     cpSpace* _space;  // strong ref
     cpShape* _walls[4];

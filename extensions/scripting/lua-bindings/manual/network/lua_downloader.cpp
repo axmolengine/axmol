@@ -30,8 +30,8 @@ THE SOFTWARE.
 #include <string>
 #include <sstream>
 
-using namespace cocos2d;
-using namespace cocos2d::network;
+USING_NS_AX;
+using namespace axis::network;
 
 static int get_field_int(lua_State* L, const char* field, int def)
 {
@@ -315,7 +315,7 @@ static int lua_downloader_tostring(lua_State* L)
 
 static const struct luaL_Reg downloaderStaticFns[] = {{"new", lua_downloader_new},
                                                       /*
-                                                       * cocos2d::Downloader is not a subclass of cocos2d::Ref,
+                                                       * axis::Downloader is not a subclass of axis::Ref,
                                                        * `create()` is not provided.
                                                        */
                                                       //{ "create", lua_downloader_new },

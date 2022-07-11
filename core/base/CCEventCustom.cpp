@@ -26,8 +26,8 @@
 #include "base/CCEventCustom.h"
 #include "base/CCEvent.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 EventCustom::EventCustom(std::string_view eventName) : Event(Type::CUSTOM), _userData(nullptr), _eventName(eventName) {}
 
-NS_CC_END
+NS_AX_END

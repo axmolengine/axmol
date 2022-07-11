@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "ui/UITextAtlas.h"
 #include "2d/CCLabel.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -202,4 +202,4 @@ ResourceData TextAtlas::getRenderFile()
 }
 
 }  // namespace ui
-NS_CC_END
+NS_AX_END

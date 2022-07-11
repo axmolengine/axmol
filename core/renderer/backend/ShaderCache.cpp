@@ -25,7 +25,7 @@
 #include "ShaderCache.h"
 #include "renderer/backend/Device.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 std::unordered_map<std::size_t, backend::ShaderModule*> ShaderCache::_cachedShaders;
 ShaderCache* ShaderCache::_sharedShaderCache = nullptr;
@@ -106,4 +106,4 @@ void ShaderCache::removeUnusedShader()
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

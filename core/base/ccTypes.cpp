@@ -29,7 +29,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 #include "base/ccTypes.h"
 #include "renderer/backend/Types.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const std::string STD_STRING_EMPTY("");
 const ssize_t CC_INVALID_INDEX = -1;
@@ -731,5 +731,5 @@ const BlendFunc BlendFunc::ALPHA_NON_PREMULTIPLIED = {backend::BlendFactor::SRC_
                                                       backend::BlendFactor::ONE_MINUS_SRC_ALPHA};
 const BlendFunc BlendFunc::ADDITIVE                = {backend::BlendFactor::SRC_ALPHA, backend::BlendFactor::ONE};
 
-NS_CC_END
+NS_AX_END
 

@@ -40,7 +40,7 @@ THE SOFTWARE.
 */
 static void PVRFrameEnableControlWindow(bool bEnable);
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // sharedApplication pointer
 Application* Application::sm_pSharedApplication = nullptr;
@@ -319,7 +319,7 @@ void Application::setStartupScriptFilename(std::string_view startupScriptFile)
     std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
 }
 
-NS_CC_END
+NS_AX_END
 
 //////////////////////////////////////////////////////////////////////////
 // Local function

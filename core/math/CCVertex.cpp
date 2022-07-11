@@ -28,7 +28,7 @@
 #include "math/CCVertex.h"
 #include "base/ccMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints)
 {
@@ -143,4 +143,4 @@ bool ccVertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, flo
     return true;
 }
 
-NS_CC_END
+NS_AX_END

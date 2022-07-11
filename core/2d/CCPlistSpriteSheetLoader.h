@@ -6,7 +6,7 @@
 #include "base/CCValue.h"
 #include "base/CCData.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class PlistSpriteSheetLoader : public SpriteSheetLoader
 {
@@ -41,4 +41,4 @@ protected:
                                           SpriteFrameCache& cache);
 };
 
-NS_CC_END
+NS_AX_END

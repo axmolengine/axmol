@@ -14,7 +14,7 @@
 #include "ActionTimeline/CCSkeletonNode.h"
 
 // x-studio spec, csb batch load support, assets hook functions.
-static bool onLoadObjectAssetDummy(cocos2d::Node*, cocos2d::ResourceData& assets, int index)
+static bool onLoadObjectAssetDummy(axis::Node*, axis::ResourceData& assets, int index)
 {
     return false;
 }
@@ -25,19 +25,19 @@ static _T* object_create_func()
     return _T::create();
 }
 
-static cocos2d::Node* createArmatureNode()
+static axis::Node* createArmatureNode()
 {
     return cocostudio::Armature::create();
 }
 
-static cocos2d::ParticleSystemQuad* createParticleSystemQuad(std::string_view path)
+static axis::ParticleSystemQuad* createParticleSystemQuad(std::string_view path)
 {
-    return cocos2d::ParticleSystemQuad::create(path);
+    return axis::ParticleSystemQuad::create(path);
 }
 
-static cocos2d::Node* createNestingNode(std::string)
+static axis::Node* createNestingNode(std::string)
 {
-    return cocos2d::Node::create();
+    return axis::Node::create();
 }
 
 static void onLoadSpriteFramesWithFileDummy(std::string&) {}
@@ -50,48 +50,47 @@ NodeReaderProtocol::~NodeReaderProtocol(){};
 void NodeReaderProtocol::setCurrentCustomClassName(const char* className){};
 }  // namespace cocostudio
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 namespace wext
 {
-bool (*onBeforeLoadObjectAsset)(cocos2d::Node*,
-                                cocos2d::ResourceData& assets,
+bool (*onBeforeLoadObjectAsset)(axis::Node*,
+                                axis::ResourceData& assets,
                                 int index /*= 0*/)                     = &onLoadObjectAssetDummy;
-bool (*onAfterLoadObjectAsset)(cocos2d::Node*,
-                               cocos2d::ResourceData& assets,
+bool (*onAfterLoadObjectAsset)(axis::Node*,
+                               axis::ResourceData& assets,
                                int index /*= 0*/)                      = &onLoadObjectAssetDummy;
 void (*onLoadSpriteFramesWithFile)(std::string& file)                  = nullptr;
 void (*onNestingNodeLoading)(std::string_view filePath)                = nullptr;
-void (*onNestingNodeLoaded)(cocos2d::Node*, std::string_view filePath) = nullptr;
-cocos2d::Node* (*aNode)();
-cocos2d::ui::Widget* (*aWidget)();
-cocos2d::Sprite* (*aSprite)();
-cocos2d::ui::ImageView* (*aImageView)();
-cocos2d::ui::Button* (*aButton)();
-cocos2d::ui::CheckBox* (*aCheckBox)();
-cocos2d::ui::Slider* (*aSlider)();
-cocos2d::ui::LoadingBar* (*aLoadingBar)();
-cocos2d::ui::Text* (*aText)();
-cocos2d::ui::TextField* (*aTextField)();
-cocos2d::ui::TextAtlas* (*aTextAtlas)();
-cocos2d::ui::TextBMFont* (*aTextBMFont)();
-cocos2d::ui::Layout* (*aLayout)();
-cocos2d::ui::ScrollView* (*aScrollView)();
-cocos2d::ui::ListView* (*aListView)();
-cocos2d::ui::PageView* (*aPageView)();
-cocos2d::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
-cocos2d::Node* (*aArmatureNode)();
+void (*onNestingNodeLoaded)(axis::Node*, std::string_view filePath) = nullptr;
+axis::Node* (*aNode)();
+axis::ui::Widget* (*aWidget)();
+axis::Sprite* (*aSprite)();
+axis::ui::ImageView* (*aImageView)();
+axis::ui::Button* (*aButton)();
+axis::ui::CheckBox* (*aCheckBox)();
+axis::ui::Slider* (*aSlider)();
+axis::ui::LoadingBar* (*aLoadingBar)();
+axis::ui::Text* (*aText)();
+axis::ui::TextField* (*aTextField)();
+axis::ui::TextAtlas* (*aTextAtlas)();
+axis::ui::TextBMFont* (*aTextBMFont)();
+axis::ui::Layout* (*aLayout)();
+axis::ui::ScrollView* (*aScrollView)();
+axis::ui::ListView* (*aListView)();
+axis::ui::PageView* (*aPageView)();
+axis::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
+axis::Node* (*aArmatureNode)();
 cocostudio::timeline::SkeletonNode* (*aSkeletonNode)();
 cocostudio::timeline::BoneNode* (*aBoneNode)();
-cocos2d::Node* (*aNestingNode)(std::string);
+axis::Node* (*aNestingNode)(std::string);
 
 // 3d stubs
-cocos2d::Node* (*aNode3D)();
-cocos2d::Node* (*aGameNode3D)();
-cocos2d::Node* (*aLight3D)();
-cocos2d::Camera* (*aCamera)();
-cocos2d::MeshRenderer* (*aSprite3D)();
-cocos2d::Node* (*aParticleSystem3D)();
+axis::Node* (*aNode3D)();
+axis::Node* (*aGameNode3D)();
+axis::Node* (*aLight3D)();
+axis::Camera* (*aCamera)();
+axis::MeshRenderer* (*aSprite3D)();
+axis::Node* (*aParticleSystem3D)();
 
 void resetReaderAllHooks()
 {
@@ -125,29 +124,30 @@ void resetReaderAllHooks()
 }
 
 static uint8_t _AUTO_INIT_VARS = (resetReaderAllHooks(), 0);
-};  // namespace wext
-};  // namespace cocos2d
+} // namespace wext
 
-cocos2d::ResourceData cocos2d::wext::makeResourceData(const flatbuffers::ResourceData* orig)
+NS_AX_END // namespace axis
+
+axis::ResourceData axis::wext::makeResourceData(const flatbuffers::ResourceData* orig)
 {
-    cocos2d::ResourceData fileData;
+    axis::ResourceData fileData;
     fileData.file  = orig->path()->c_str();
     fileData.plist = orig->plistFile()->c_str();
     fileData.type  = orig->resourceType();
     return fileData;
 }
 
-cocos2d::ResourceData cocos2d::wext::makeResourceData(std::string_view path, int type)
+axis::ResourceData axis::wext::makeResourceData(std::string_view path, int type)
 {
-    cocos2d::ResourceData fileData;
+    axis::ResourceData fileData;
     fileData.file = path;
     fileData.type = type;
     return fileData;
 }
 
-cocos2d::ResourceData cocos2d::wext::makeResourceData(std::string&& path, int type)
+axis::ResourceData axis::wext::makeResourceData(std::string&& path, int type)
 {
-    cocos2d::ResourceData fileData;
+    axis::ResourceData fileData;
     fileData.file = std::move(path);
     fileData.type = type;
     return fileData;

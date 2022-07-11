@@ -63,7 +63,7 @@ void TouchManager::touchesBegan(float x1, float y1, float x2, float y2)
     touchSingle = false;
 }
 
-void TouchManager::touchesMoved(cocos2d::Point touches[], int num)
+void TouchManager::touchesMoved(axis::Point touches[], int num)
 {
     // 前回のクリック位置に最も近いものを選びだす
     // pt1、pt2の両点への距離の和が最小となる点の組み合わせを総当たりで探す
@@ -72,13 +72,13 @@ void TouchManager::touchesMoved(cocos2d::Point touches[], int num)
     index2 = 1;
     for (int i1 = 0; i1 < num; i1 ++)
     {
-        cocos2d::Point pp1 = touches[i1];
+        axis::Point pp1 = touches[i1];
 
         for (int i2 = 0; i2 < num; i2++)
         {
             if (i1 == i2) continue ;
 
-            cocos2d::Point pp2 = touches[i2];
+            axis::Point pp2 = touches[i2];
 
             int distTotal = ((lastX1 - pp1.x) * (lastX1 - pp1.x) + (lastY1 - pp1.y) * (lastY1 - pp1.y))
                     + ((lastX2 - pp2.x) * (lastX2 - pp2.x) + (lastY2 - pp2.y) * (lastY2 - pp2.y));
@@ -94,8 +94,8 @@ void TouchManager::touchesMoved(cocos2d::Point touches[], int num)
 
     if (minDist2 > 70 * 70 * 2 && num > 2) return; // 処理しない
     // pt2に一番近い点
-    cocos2d::Point pt1 = touches[index1];
-    cocos2d::Point pt2 = touches[index2];
+    axis::Point pt1 = touches[index1];
+    axis::Point pt2 = touches[index2];
 
     touchesMoved(pt1.x, pt1.y, pt2.x, pt2.y);
 }

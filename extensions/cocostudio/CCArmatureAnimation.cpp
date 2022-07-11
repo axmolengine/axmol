@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "CCArmatureDefine.h"
 #include "CCDatas.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -185,7 +185,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
 
     int durationTween = _movementData->durationTween == 0 ? _rawDuration : _movementData->durationTween;
 
-    cocos2d::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
+    axis::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
     loop                                      = (loop < 0) ? _movementData->loop : loop;
 
     _onMovementList = false;

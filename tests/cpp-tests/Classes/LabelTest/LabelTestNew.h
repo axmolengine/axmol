@@ -170,22 +170,22 @@ public:
     void snapArrowsToEdge();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void stringChanged(cocos2d::Ref* sender);
-    void alignmentChanged(cocos2d::Ref* sender);
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void selectAlignmentItem(cocos2d::MenuItemFont* item);
-    void selectSentenceItem(cocos2d::MenuItemFont* item);
-    virtual std::string getItemString(cocos2d::MenuItemFont* item);
+    void stringChanged(axis::Ref* sender);
+    void alignmentChanged(axis::Ref* sender);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void selectAlignmentItem(axis::MenuItemFont* item);
+    void selectSentenceItem(axis::MenuItemFont* item);
+    virtual std::string getItemString(axis::MenuItemFont* item);
 
 protected:
-    cocos2d::Label* _label      = nullptr;
-    cocos2d::Sprite* _arrowsBar = nullptr;
-    cocos2d::Sprite* _arrows    = nullptr;
-    std::vector<cocos2d::MenuItemFont*> _menuItems;
-    cocos2d::MenuItemFont* _lastSentenceItem  = nullptr;
-    cocos2d::MenuItemFont* _lastAlignmentItem = nullptr;
+    axis::Label* _label      = nullptr;
+    axis::Sprite* _arrowsBar = nullptr;
+    axis::Sprite* _arrows    = nullptr;
+    std::vector<axis::MenuItemFont*> _menuItems;
+    axis::MenuItemFont* _lastSentenceItem  = nullptr;
+    axis::MenuItemFont* _lastAlignmentItem = nullptr;
     bool _drag                                = false;
 };
 
@@ -198,7 +198,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual std::string getItemString(cocos2d::MenuItemFont* item) override;
+    virtual std::string getItemString(axis::MenuItemFont* item) override;
 };
 
 class LabelFNTUNICODELanguages : public AtlasDemoNew
@@ -286,13 +286,13 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void setAlignmentLeft(cocos2d::Ref* sender);
-    void setAlignmentCenter(cocos2d::Ref* sender);
-    void setAlignmentRight(cocos2d::Ref* sender);
+    void setAlignmentLeft(axis::Ref* sender);
+    void setAlignmentCenter(axis::Ref* sender);
+    void setAlignmentRight(axis::Ref* sender);
     void updateAlignment();
 
-    cocos2d::Label* _label;
-    cocos2d::TextHAlignment _horizAlign;
+    axis::Label* _label;
+    axis::TextHAlignment _horizAlign;
 };
 
 class LabelTTFEmoji : public AtlasDemoNew
@@ -374,13 +374,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
+    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
 
 private:
-    cocos2d::Label* shadowLabelOutline;
-    cocos2d::Label* shadowLabelTTF;
-    cocos2d::Label* shadowLabelGrow;
-    cocos2d::Label* shadowLabelBMFont;
+    axis::Label* shadowLabelOutline;
+    axis::Label* shadowLabelTTF;
+    axis::Label* shadowLabelGrow;
+    axis::Label* shadowLabelBMFont;
 };
 
 class LabelCharMapTest : public AtlasDemoNew
@@ -459,14 +459,14 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void setAlignmentLeft(cocos2d::Ref* sender);
-    void setAlignmentCenter(cocos2d::Ref* sender);
-    void setAlignmentRight(cocos2d::Ref* sender);
-    void setAlignmentTop(cocos2d::Ref* sender);
-    void setAlignmentMiddle(cocos2d::Ref* sender);
-    void setAlignmentBottom(cocos2d::Ref* sender);
+    void setAlignmentLeft(axis::Ref* sender);
+    void setAlignmentCenter(axis::Ref* sender);
+    void setAlignmentRight(axis::Ref* sender);
+    void setAlignmentTop(axis::Ref* sender);
+    void setAlignmentMiddle(axis::Ref* sender);
+    void setAlignmentBottom(axis::Ref* sender);
 
-    cocos2d::Label* _label;
+    axis::Label* _label;
 };
 
 class LabelIssue4428Test : public AtlasDemoNew
@@ -501,10 +501,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
+    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
 
 private:
-    cocos2d::Label* label;
+    axis::Label* label;
 };
 
 class LabelAdditionalKerningTest : public AtlasDemoNew
@@ -517,10 +517,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(cocos2d::Ref* sender, cocos2d::ui::Slider::EventType type);
+    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
 
 private:
-    cocos2d::Label* label;
+    axis::Label* label;
 };
 
 class LabelIssue8492Test : public AtlasDemoNew
@@ -704,27 +704,27 @@ class LabelLayoutBaseTest : public AtlasDemoNew
 {
 public:
     LabelLayoutBaseTest();
-    void updateDrawNodeSize(const cocos2d::Size& drawNodeSize);
-    cocos2d::extension::ControlStepper* makeControlStepper();
-    void valueChanged(cocos2d::Ref* sender, cocos2d::extension::Control::EventType controlEvent);
+    void updateDrawNodeSize(const axis::Size& drawNodeSize);
+    axis::extension::ControlStepper* makeControlStepper();
+    void valueChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
 
 protected:
-    void setAlignmentLeft(cocos2d::Ref* sender);
-    void setAlignmentCenter(cocos2d::Ref* sender);
-    void setAlignmentRight(cocos2d::Ref* sender);
-    void setAlignmentTop(cocos2d::Ref* sender);
-    void setAlignmentMiddle(cocos2d::Ref* sender);
-    void setAlignmentBottom(cocos2d::Ref* sender);
+    void setAlignmentLeft(axis::Ref* sender);
+    void setAlignmentCenter(axis::Ref* sender);
+    void setAlignmentRight(axis::Ref* sender);
+    void setAlignmentTop(axis::Ref* sender);
+    void setAlignmentMiddle(axis::Ref* sender);
+    void setAlignmentBottom(axis::Ref* sender);
 
-    void initWrapOption(const cocos2d::Size& size);
-    void initToggleLabelTypeOption(const cocos2d::Size& size);
-    void initAlignmentOption(const cocos2d::Size& size);
-    void initFontSizeChange(const cocos2d::Size& size);
-    void initSliders(const cocos2d::Size& size);
-    void initTestLabel(const cocos2d::Size& size);
-    void initDrawNode(const cocos2d::Size& size);
-    cocos2d::DrawNode* _drawNode;
-    cocos2d::Label* _label;
+    void initWrapOption(const axis::Size& size);
+    void initToggleLabelTypeOption(const axis::Size& size);
+    void initAlignmentOption(const axis::Size& size);
+    void initFontSizeChange(const axis::Size& size);
+    void initSliders(const axis::Size& size);
+    void initTestLabel(const axis::Size& size);
+    void initDrawNode(const axis::Size& size);
+    axis::DrawNode* _drawNode;
+    axis::Label* _label;
     int _labelType;
 };
 
@@ -801,7 +801,7 @@ public:
 
     LabelToggleTypeTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton, cocos2d::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -814,7 +814,7 @@ public:
 
     LabelSystemFontTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton, cocos2d::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -861,8 +861,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    cocos2d::Label* _label1a;
-    cocos2d::Label* _label2a;
+    axis::Label* _label1a;
+    axis::Label* _label2a;
 };
 
 class LabelBold : public AtlasDemoNew
@@ -874,8 +874,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    cocos2d::Label* _label1a;
-    cocos2d::Label* _label2a;
+    axis::Label* _label1a;
+    axis::Label* _label2a;
 };
 
 class LabelUnderline : public AtlasDemoNew
@@ -887,8 +887,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    cocos2d::Label* _label1a;
-    cocos2d::Label* _label2a;
+    axis::Label* _label1a;
+    axis::Label* _label2a;
 };
 
 class LabelUnderlineMultiline : public AtlasDemoNew
@@ -900,8 +900,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    cocos2d::Label* _label1a;
-    cocos2d::Label* _label2a;
+    axis::Label* _label1a;
+    axis::Label* _label2a;
 };
 
 class LabelStrikethrough : public AtlasDemoNew
@@ -913,8 +913,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    cocos2d::Label* _label1a;
-    cocos2d::Label* _label2a;
+    axis::Label* _label1a;
+    axis::Label* _label2a;
 };
 
 class LabelLocalizationTest : public AtlasDemoNew
@@ -923,13 +923,13 @@ public:
     CREATE_FUNC(LabelLocalizationTest);
 
     LabelLocalizationTest();
-    void onChangedRadioButtonSelect(cocos2d::ui::RadioButton* radioButton, cocos2d::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    cocos2d::Label* _label1;
-    cocos2d::Label* _label2;
+    axis::Label* _label1;
+    axis::Label* _label2;
     cocostudio::ILocalizationManager* _localizationJson;
     cocostudio::ILocalizationManager* _localizationBin;
 };
@@ -1027,7 +1027,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    static void setLetterColors(cocos2d::Label* label, const cocos2d::Color3B& color);
+    static void setLetterColors(axis::Label* label, const axis::Color3B& color);
 };
 
 #endif

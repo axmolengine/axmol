@@ -7,7 +7,7 @@
 #include "utils/WeakPtr.h"
 
 NS_FGUI_BEGIN
-USING_NS_CC;
+USING_NS_AX;
 
 InputProcessor* InputProcessor::_activeProcessor = nullptr;
 bool InputProcessor::_touchOnUI = false;
@@ -21,13 +21,13 @@ public:
 
     void reset();
 
-    cocos2d::Touch* touch;
-    cocos2d::Vec2 pos;
+    axis::Touch* touch;
+    axis::Vec2 pos;
     int touchId;
     int clickCount;
     int mouseWheelDelta;
-    cocos2d::EventMouse::MouseButton button;
-    cocos2d::Vec2 downPos;
+    axis::EventMouse::MouseButton button;
+    axis::Vec2 downPos;
     bool began;
     bool clickCancelled;
     clock_t lastClickTime;
@@ -86,7 +86,7 @@ InputProcessor::~InputProcessor()
         delete ti;
 }
 
-cocos2d::Vec2 InputProcessor::getTouchPosition(int touchId)
+axis::Vec2 InputProcessor::getTouchPosition(int touchId)
 {
     for (auto &ti : _touches)
     {
@@ -315,17 +315,17 @@ void InputProcessor::disableDefaultTouchEvent()
     _owner->displayObject()->getEventDispatcher()->removeEventListener(_touchListener);
 }
 
-bool InputProcessor::touchDown(cocos2d::Touch *touch, cocos2d::Event *event)
+bool InputProcessor::touchDown(axis::Touch *touch, axis::Event *event)
 {
     return onTouchBegan(touch, event);
 }
 
-void InputProcessor::touchMove(cocos2d::Touch *touch, cocos2d::Event *event)
+void InputProcessor::touchMove(axis::Touch *touch, axis::Event *event)
 {
     onTouchMoved(touch, event);
 }
 
-void InputProcessor::touchUp(cocos2d::Touch *touch, cocos2d::Event *event)
+void InputProcessor::touchUp(axis::Touch *touch, axis::Event *event)
 {
     onTouchEnded(touch, event);
 }
@@ -523,7 +523,7 @@ void InputProcessor::onTouchCancelled(Touch* touch, Event* /*unusedEvent*/)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseDown(cocos2d::EventMouse * event)
+void InputProcessor::onMouseDown(axis::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         return;
@@ -553,7 +553,7 @@ void InputProcessor::onMouseDown(cocos2d::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseUp(cocos2d::EventMouse * event)
+void InputProcessor::onMouseUp(axis::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         return;
@@ -617,7 +617,7 @@ void InputProcessor::onMouseUp(cocos2d::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseMove(cocos2d::EventMouse * event)
+void InputProcessor::onMouseMove(axis::EventMouse * event)
 {
     TouchInfo* ti = getTouch(0);
     Vec2 npos = UIRoot->worldToRoot(Vec2(event->getCursorX(), event->getCursorY()));
@@ -666,7 +666,7 @@ void InputProcessor::onMouseMove(cocos2d::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseScroll(cocos2d::EventMouse * event)
+void InputProcessor::onMouseScroll(axis::EventMouse * event)
 {
     auto camera = Camera::getVisitingCamera();
     Vec2 pt(event->getCursorX(), event->getCursorY());
@@ -688,7 +688,7 @@ void InputProcessor::onMouseScroll(cocos2d::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
+void InputProcessor::onKeyDown(axis::EventKeyboard::KeyCode keyCode, axis::Event * event)
 {
     if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_CTRL || keyCode == EventKeyboard::KeyCode::KEY_RIGHT_CTRL)
         _keyModifiers |= 1;
@@ -702,7 +702,7 @@ void InputProcessor::onKeyDown(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d:
     _recentInput._target->dispatchEvent(UIEventType::KeyDown);
 }
 
-void InputProcessor::onKeyUp(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *)
+void InputProcessor::onKeyUp(axis::EventKeyboard::KeyCode keyCode, axis::Event *)
 {
     if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_CTRL || keyCode == EventKeyboard::KeyCode::KEY_RIGHT_CTRL)
         _keyModifiers &= ~1;

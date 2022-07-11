@@ -35,7 +35,7 @@
  * @{
  */
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  Command used to render one or more Quads, similar to TrianglesCommand.
@@ -78,7 +78,7 @@ protected:
     static uint16_t* __indices;
 };
 
-NS_CC_END
+NS_AX_END
 
 /**
  end of support group

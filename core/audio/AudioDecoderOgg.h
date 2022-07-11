@@ -31,8 +31,7 @@
 #include "vorbis/vorbisfile.h"
 #include <memory>
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.
@@ -78,4 +77,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

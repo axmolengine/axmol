@@ -25,7 +25,7 @@
 
 #include "3d/CCPlane.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Plane::Plane() : _normal(0.f, 0.f, 1.f), _dist(0.f) {}
 
@@ -86,4 +86,4 @@ PointSide Plane::getSide(const Vec3& point) const
         return PointSide::IN_PLANE;
 }
 
-NS_CC_END
+NS_AX_END

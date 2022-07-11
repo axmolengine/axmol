@@ -34,7 +34,7 @@
 #include "extensions/Particle3D/PU/CCPUSlaveEmitter.h"
 #include "extensions/Particle3D/PU/CCPUSphereSurfaceEmitter.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUEmitterManager::PUEmitterManager() {}
 
 PUEmitterManager::~PUEmitterManager() {}
@@ -127,4 +127,4 @@ PUEmitter* PUEmitterManager::createEmitter(std::string_view type)
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

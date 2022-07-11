@@ -18,7 +18,7 @@
 
 #include "CCPhysicsDebugNodeBox2D.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 PhysicsDebugNodeBox2D::PhysicsDebugNodeBox2D()
 {
@@ -29,17 +29,17 @@ PhysicsDebugNodeBox2D::PhysicsDebugNodeBox2D()
 
 PhysicsDebugNodeBox2D::~PhysicsDebugNodeBox2D() {}
 
-cocos2d::DrawNode* PhysicsDebugNodeBox2D::GetDrawNode()
+axis::DrawNode* PhysicsDebugNodeBox2D::GetDrawNode()
 {
     return drawBP;
 }
 
-void PhysicsDebugNodeBox2D::SetDrawNode(cocos2d::DrawNode* drawNode)
+void PhysicsDebugNodeBox2D::SetDrawNode(axis::DrawNode* drawNode)
 {
     drawBP = drawNode;
 }
 
-cocos2d::Vec2& PhysicsDebugNodeBox2D::GetDebugNodeOffset()
+axis::Vec2& PhysicsDebugNodeBox2D::GetDebugNodeOffset()
 {
     return debugNodeOffset;
 }
@@ -110,4 +110,4 @@ void PhysicsDebugNodeBox2D::DrawPoint(const b2Vec2& p, float size, const b2Color
                       Color4F(color.r, color.g, color.b, color.a));
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

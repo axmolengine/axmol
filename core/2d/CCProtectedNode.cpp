@@ -32,7 +32,7 @@
 #include "base/CCDirector.h"
 #include "2d/CCScene.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false) {}
 
@@ -64,12 +64,12 @@ void ProtectedNode::cleanup()
         child->cleanup();
 }
 
-void ProtectedNode::addProtectedChild(cocos2d::Node* child)
+void ProtectedNode::addProtectedChild(axis::Node* child)
 {
     addProtectedChild(child, child->getLocalZOrder(), child->getTag());
 }
 
-void ProtectedNode::addProtectedChild(cocos2d::Node* child, int localZOrder)
+void ProtectedNode::addProtectedChild(axis::Node* child, int localZOrder)
 {
     addProtectedChild(child, localZOrder, child->getTag());
 }
@@ -132,7 +132,7 @@ Node* ProtectedNode::getProtectedChildByTag(int tag)
  * If a class want's to extend the 'removeChild' behavior it only needs
  * to override this method
  */
-void ProtectedNode::removeProtectedChild(cocos2d::Node* child, bool cleanup)
+void ProtectedNode::removeProtectedChild(axis::Node* child, bool cleanup)
 {
     // explicit nil handling
     if (_protectedChildren.empty())
@@ -228,7 +228,7 @@ void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 }
 
 // helper used by reorderChild & add
-void ProtectedNode::insertProtectedChild(cocos2d::Node* child, int z)
+void ProtectedNode::insertProtectedChild(axis::Node* child, int z)
 {
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
@@ -251,7 +251,7 @@ void ProtectedNode::sortAllProtectedChildren()
     }
 }
 
-void ProtectedNode::reorderProtectedChild(cocos2d::Node* child, int localZOrder)
+void ProtectedNode::reorderProtectedChild(axis::Node* child, int localZOrder)
 {
     CCASSERT(child != nullptr, "Child must be non-nil");
     _reorderProtectedChildDirty = true;
@@ -439,4 +439,4 @@ void ProtectedNode::setGlobalZOrder(float globalZOrder)
         child->setGlobalZOrder(globalZOrder);
 }
 
-NS_CC_END
+NS_AX_END

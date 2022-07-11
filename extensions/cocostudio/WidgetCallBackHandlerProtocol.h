@@ -36,9 +36,9 @@ class CCS_DLL WidgetCallBackHandlerProtocol
 public:
     virtual ~WidgetCallBackHandlerProtocol();
 
-    virtual cocos2d::ui::Widget::ccWidgetTouchCallback onLocateTouchCallback(std::string_view callBackName);
-    virtual cocos2d::ui::Widget::ccWidgetClickCallback onLocateClickCallback(std::string_view callBackName);
-    virtual cocos2d::ui::Widget::ccWidgetEventCallback onLocateEventCallback(std::string_view callBackName);
+    virtual axis::ui::Widget::ccWidgetTouchCallback onLocateTouchCallback(std::string_view callBackName);
+    virtual axis::ui::Widget::ccWidgetClickCallback onLocateClickCallback(std::string_view callBackName);
+    virtual axis::ui::Widget::ccWidgetEventCallback onLocateEventCallback(std::string_view callBackName);
 };
 
 }  // namespace cocostudio

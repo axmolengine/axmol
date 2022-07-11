@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "base/CCEventListenerKeyboard.h"
 #include "base/CCEventDispatcher.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -55,32 +55,32 @@ InputDelegate::~InputDelegate(void)
     Device::setAccelerometerEnabled(false);
 }
 
-void InputDelegate::didAccelerate(cocos2d::Acceleration* /*accelerationValue*/) {}
+void InputDelegate::didAccelerate(axis::Acceleration* /*accelerationValue*/) {}
 
-bool InputDelegate::ccTouchBegan(cocos2d::Touch* /*touch*/, cocos2d::Event* /*event*/)
+bool InputDelegate::ccTouchBegan(axis::Touch* /*touch*/, axis::Event* /*event*/)
 {
     return false;
 }
 
-void InputDelegate::ccTouchMoved(cocos2d::Touch* /*touch*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchMoved(axis::Touch* /*touch*/, axis::Event* /*event*/) {}
 
-void InputDelegate::ccTouchEnded(cocos2d::Touch* /*touch*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchEnded(axis::Touch* /*touch*/, axis::Event* /*event*/) {}
 
-void InputDelegate::ccTouchCancelled(cocos2d::Touch* /*touch*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchCancelled(axis::Touch* /*touch*/, axis::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesBegan(cocos2d::__Set* /*touches*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchesBegan(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesMoved(cocos2d::__Set* /*touches*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchesMoved(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesEnded(cocos2d::__Set* /*touches*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchesEnded(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesCancelled(cocos2d::__Set* /*touches*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::ccTouchesCancelled(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
 
-void InputDelegate::onAcceleration(cocos2d::Acceleration* /*acc*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::onAcceleration(axis::Acceleration* /*acc*/, axis::Event* /*event*/) {}
 
-void InputDelegate::onKeyPressed(cocos2d::EventKeyboard::KeyCode /*keyCode*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::onKeyPressed(axis::EventKeyboard::KeyCode /*keyCode*/, axis::Event* /*event*/) {}
 
-void InputDelegate::onKeyReleased(cocos2d::EventKeyboard::KeyCode /*keyCode*/, cocos2d::Event* /*event*/) {}
+void InputDelegate::onKeyReleased(axis::EventKeyboard::KeyCode /*keyCode*/, axis::Event* /*event*/) {}
 
 bool InputDelegate::onTouchBegan(Touch* /*pTouch*/, Event* /*pEvent*/)
 {

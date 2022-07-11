@@ -43,15 +43,15 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "BugChild"; }
 
-    void switchChild(cocos2d::Ref* sender);
+    void switchChild(axis::Ref* sender);
 
 protected:
-    cocos2d::Sprite* parent1;
-    cocos2d::Sprite* parent2;
+    axis::Sprite* parent1;
+    axis::Sprite* parent2;
 
-    cocos2d::Sprite* child;
+    axis::Sprite* child;
 
-    cocos2d::Menu* menu;
+    axis::Menu* menu;
 };
 
 class BugCameraMask : public BugsTestBase
@@ -62,10 +62,10 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "BugCameraMask"; }
 
-    void switchSpriteFlag(cocos2d::Ref* sender);
+    void switchSpriteFlag(axis::Ref* sender);
     void updateSpriteMaskLabel();
     Node* _sprite;
-    cocos2d::Label* _spriteMaskLabel;
+    axis::Label* _spriteMaskLabel;
 };
 
 #endif /* defined(__Bug_Child__) */

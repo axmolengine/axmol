@@ -7,7 +7,7 @@
 
 NS_FGUI_BEGIN
 
-class IUISource : public cocos2d::Ref
+class IUISource : public axis::Ref
 {
 public:
     virtual const std::string& getFileName() = 0;
@@ -89,7 +89,7 @@ private:
     GObject* _contentArea;
     bool _modal;
     bool _bringToFontOnClick;
-    cocos2d::Vector<IUISource*> _uiSources;
+    axis::Vector<IUISource*> _uiSources;
     bool _inited;
     bool _loading;
 };

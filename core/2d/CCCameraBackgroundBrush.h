@@ -35,7 +35,7 @@
 #include "renderer/backend/Types.h"
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CameraBackgroundColorBrush;
 class CameraBackgroundDepthBrush;
@@ -322,4 +322,4 @@ private:
     } _stateBlock;
 };
 
-NS_CC_END
+NS_AX_END

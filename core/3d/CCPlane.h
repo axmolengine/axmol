@@ -29,7 +29,7 @@
 #include "base/ccMacros.h"
 #include "math/CCMath.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 enum class PointSide
 {
@@ -106,6 +106,6 @@ protected:
     float _dist;   // original displacement of the normal
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

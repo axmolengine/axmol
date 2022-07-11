@@ -24,7 +24,7 @@
 
 #include "MultiTouchTest.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 MultiTouchTests::MultiTouchTests()
 {

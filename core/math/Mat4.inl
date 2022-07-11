@@ -20,7 +20,7 @@
 
 #include "math/Mat4.h"
 
-NS_CC_MATH_BEGIN
+NS_AX_MATH_BEGIN
 
 inline Mat4 Mat4::operator+(const Mat4& mat) const
 {
@@ -94,4 +94,4 @@ inline Vec4 operator*(const Mat4& m, const Vec4& v)
     return x;
 }
 
-NS_CC_MATH_END
+NS_AX_MATH_END

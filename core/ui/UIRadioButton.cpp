@@ -25,7 +25,7 @@ THE SOFTWARE.
 
 #include "ui/UIRadioButton.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -354,4 +354,4 @@ void RadioButtonGroup::onChangedRadioButtonSelect(RadioButton* radioButton)
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

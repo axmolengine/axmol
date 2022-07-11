@@ -29,7 +29,7 @@
 #include "platform/CCCommon.h"
 #include "platform/CCGLView.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /** Class that represent the OpenGL View
  */
@@ -85,4 +85,4 @@ protected:
     void* _eaglview;
 };
 
-NS_CC_END
+NS_AX_END

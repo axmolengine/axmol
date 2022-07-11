@@ -51,7 +51,7 @@ enum AnimationType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ProcessBase : public cocos2d::Ref
+class CCS_DLL ProcessBase : public axis::Ref
 {
 public:
     ProcessBase(void);
@@ -155,7 +155,7 @@ protected:
     AnimationType _loopType;
 
     //! The tween easing effect
-    cocos2d::tweenfunc::TweenType _tweenEasing;
+    axis::tweenfunc::TweenType _tweenEasing;
 
     //! The animation update speed
     float _animationInternal;

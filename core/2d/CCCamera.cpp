@@ -32,7 +32,7 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/CCQuadCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 Camera* Camera::_visitingCamera = nullptr;
 Viewport Camera::_defaultViewport;
@@ -407,12 +407,12 @@ void Camera::applyZoom()
 {
     switch (_projectionType)
     {
-    case cocos2d::Director::Projection::_2D:
+    case axis::Director::Projection::_2D:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
         break;
     }
-    case cocos2d::Director::Projection::_3D:
+    case axis::Director::Projection::_3D:
     {
         // Push the far plane farther the more we zoom out.
         if (_zoomFactorFarPlane * _zoomFactor > _farPlane)
@@ -582,4 +582,4 @@ bool Camera::isBrushValid()
     return _clearBrush != nullptr && _clearBrush->isValid();
 }
 
-NS_CC_END
+NS_AX_END

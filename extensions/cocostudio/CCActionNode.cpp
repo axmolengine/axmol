@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "CCActionManagerEx.h"
 
-using namespace cocos2d;
+USING_NS_AX;
 using namespace ui;
 
 namespace cocostudio
@@ -50,7 +50,7 @@ ActionNode::ActionNode()
     _frameArrayNum = (int)kKeyframeMax;
     for (int i = 0; i < _frameArrayNum; i++)
     {
-        _frameArray.push_back(new cocos2d::Vector<ActionFrame*>());
+        _frameArray.push_back(new axis::Vector<ActionFrame*>());
     }
 }
 
@@ -209,7 +209,7 @@ float ActionNode::valueToFloat(std::string_view value)
     return utils::atof(value.data());
 }
 
-void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Ref* root)
+void ActionNode::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, axis::Ref* root)
 {
 
     stExpCocoNode* stChildNode = cocoNode;

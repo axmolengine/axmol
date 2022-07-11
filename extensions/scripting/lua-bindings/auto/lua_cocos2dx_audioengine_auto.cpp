@@ -7,7 +7,7 @@
 int lua_cocos2dx_audioengine_AudioProfile_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    cocos2d::AudioProfile* cobj = nullptr;
+    axis::AudioProfile* cobj = nullptr;
     bool ok  = true;
 
 #if COCOS2D_DEBUG >= 1
@@ -24,7 +24,7 @@ int lua_cocos2dx_audioengine_AudioProfile_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioProfile_constructor'", nullptr);
             return 0;
         }
-        cobj = new cocos2d::AudioProfile();
+        cobj = new axis::AudioProfile();
         tolua_pushusertype(tolua_S,(void*)cobj,"cc.AudioProfile");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -53,7 +53,7 @@ int lua_register_cocos2dx_audioengine_AudioProfile(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"AudioProfile");
         tolua_function(tolua_S,"new",lua_cocos2dx_audioengine_AudioProfile_constructor);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::AudioProfile).name(); // rtti is literal storage
+    auto typeName = typeid(axis::AudioProfile).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AudioProfile";
     g_typeCast[typeName] = "cc.AudioProfile";
     return 1;
@@ -81,7 +81,7 @@ int lua_cocos2dx_audioengine_AudioEngine_lazyInit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_lazyInit'", nullptr);
             return 0;
         }
-        bool ret = cocos2d::AudioEngine::lazyInit();
+        bool ret = axis::AudioEngine::lazyInit();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -119,7 +119,7 @@ int lua_cocos2dx_audioengine_AudioEngine_setCurrentTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_setCurrentTime'", nullptr);
             return 0;
         }
-        bool ret = cocos2d::AudioEngine::setCurrentTime(arg0, arg1);
+        bool ret = axis::AudioEngine::setCurrentTime(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -155,7 +155,7 @@ int lua_cocos2dx_audioengine_AudioEngine_getVolume(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getVolume'", nullptr);
             return 0;
         }
-        double ret = cocos2d::AudioEngine::getVolume(arg0);
+        double ret = axis::AudioEngine::getVolume(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -191,7 +191,7 @@ int lua_cocos2dx_audioengine_AudioEngine_uncache(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_uncache'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::uncache(arg0);
+        axis::AudioEngine::uncache(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -225,7 +225,7 @@ int lua_cocos2dx_audioengine_AudioEngine_resumeAll(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_resumeAll'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::resumeAll();
+        axis::AudioEngine::resumeAll();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -259,7 +259,7 @@ int lua_cocos2dx_audioengine_AudioEngine_stopAll(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_stopAll'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::stopAll();
+        axis::AudioEngine::stopAll();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -295,7 +295,7 @@ int lua_cocos2dx_audioengine_AudioEngine_pause(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_pause'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::pause(arg0);
+        axis::AudioEngine::pause(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -329,7 +329,7 @@ int lua_cocos2dx_audioengine_AudioEngine_getMaxAudioInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getMaxAudioInstance'", nullptr);
             return 0;
         }
-        int ret = cocos2d::AudioEngine::getMaxAudioInstance();
+        int ret = axis::AudioEngine::getMaxAudioInstance();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -363,7 +363,7 @@ int lua_cocos2dx_audioengine_AudioEngine_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_isEnabled'", nullptr);
             return 0;
         }
-        bool ret = cocos2d::AudioEngine::isEnabled();
+        bool ret = axis::AudioEngine::isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -399,7 +399,7 @@ int lua_cocos2dx_audioengine_AudioEngine_getCurrentTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getCurrentTime'", nullptr);
             return 0;
         }
-        double ret = cocos2d::AudioEngine::getCurrentTime(arg0);
+        double ret = axis::AudioEngine::getCurrentTime(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -435,7 +435,7 @@ int lua_cocos2dx_audioengine_AudioEngine_setMaxAudioInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_setMaxAudioInstance'", nullptr);
             return 0;
         }
-        bool ret = cocos2d::AudioEngine::setMaxAudioInstance(arg0);
+        bool ret = axis::AudioEngine::setMaxAudioInstance(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -471,7 +471,7 @@ int lua_cocos2dx_audioengine_AudioEngine_isLoop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_isLoop'", nullptr);
             return 0;
         }
-        bool ret = cocos2d::AudioEngine::isLoop(arg0);
+        bool ret = axis::AudioEngine::isLoop(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -505,7 +505,7 @@ int lua_cocos2dx_audioengine_AudioEngine_pauseAll(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_pauseAll'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::pauseAll();
+        axis::AudioEngine::pauseAll();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -539,7 +539,7 @@ int lua_cocos2dx_audioengine_AudioEngine_uncacheAll(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_uncacheAll'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::uncacheAll();
+        axis::AudioEngine::uncacheAll();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -577,7 +577,7 @@ int lua_cocos2dx_audioengine_AudioEngine_setVolume(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_setVolume'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::setVolume(arg0, arg1);
+        axis::AudioEngine::setVolume(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -617,7 +617,7 @@ int lua_cocos2dx_audioengine_AudioEngine_preload(lua_State* tolua_S)
 		} while(0)
 		;
             if (!ok) { break; }
-            cocos2d::AudioEngine::preload(arg0, arg1);
+            axis::AudioEngine::preload(arg0, arg1);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -630,7 +630,7 @@ int lua_cocos2dx_audioengine_AudioEngine_preload(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:preload");
             if (!ok) { break; }
-            cocos2d::AudioEngine::preload(arg0);
+            axis::AudioEngine::preload(arg0);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -668,7 +668,7 @@ int lua_cocos2dx_audioengine_AudioEngine_setEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_setEnabled'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::setEnabled(arg0);
+        axis::AudioEngine::setEnabled(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -704,7 +704,7 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = cocos2d::AudioEngine::play2d(arg0);
+        int ret = axis::AudioEngine::play2d(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -719,7 +719,7 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = cocos2d::AudioEngine::play2d(arg0, arg1);
+        int ret = axis::AudioEngine::play2d(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -736,7 +736,7 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = cocos2d::AudioEngine::play2d(arg0, arg1, arg2);
+        int ret = axis::AudioEngine::play2d(arg0, arg1, arg2);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -745,17 +745,17 @@ int lua_cocos2dx_audioengine_AudioEngine_play2d(lua_State* tolua_S)
         std::string_view arg0;
         bool arg1;
         double arg2;
-        const cocos2d::AudioProfile* arg3;
+        const axis::AudioProfile* arg3;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:play2d");
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "cc.AudioEngine:play2d");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.AudioEngine:play2d");
-        ok &= luaval_to_object<const cocos2d::AudioProfile>(tolua_S, 5, "cc.AudioProfile",&arg3, "cc.AudioEngine:play2d");
+        ok &= luaval_to_object<const axis::AudioProfile>(tolua_S, 5, "cc.AudioProfile",&arg3, "cc.AudioEngine:play2d");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = cocos2d::AudioEngine::play2d(arg0, arg1, arg2, arg3);
+        int ret = axis::AudioEngine::play2d(arg0, arg1, arg2, arg3);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -791,7 +791,7 @@ int lua_cocos2dx_audioengine_AudioEngine_getState(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getState'", nullptr);
             return 0;
         }
-        int ret = (int)cocos2d::AudioEngine::getState(arg0);
+        int ret = (int)axis::AudioEngine::getState(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -827,7 +827,7 @@ int lua_cocos2dx_audioengine_AudioEngine_resume(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_resume'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::resume(arg0);
+        axis::AudioEngine::resume(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -863,7 +863,7 @@ int lua_cocos2dx_audioengine_AudioEngine_stop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_stop'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::stop(arg0);
+        axis::AudioEngine::stop(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -897,7 +897,7 @@ int lua_cocos2dx_audioengine_AudioEngine_end(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_end'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::end();
+        axis::AudioEngine::end();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -933,7 +933,7 @@ int lua_cocos2dx_audioengine_AudioEngine_getDuration(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getDuration'", nullptr);
             return 0;
         }
-        double ret = cocos2d::AudioEngine::getDuration(arg0);
+        double ret = axis::AudioEngine::getDuration(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -971,7 +971,7 @@ int lua_cocos2dx_audioengine_AudioEngine_setLoop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_setLoop'", nullptr);
             return 0;
         }
-        cocos2d::AudioEngine::setLoop(arg0, arg1);
+        axis::AudioEngine::setLoop(arg0, arg1);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1005,8 +1005,8 @@ int lua_cocos2dx_audioengine_AudioEngine_getDefaultProfile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getDefaultProfile'", nullptr);
             return 0;
         }
-        cocos2d::AudioProfile* ret = cocos2d::AudioEngine::getDefaultProfile();
-        object_to_luaval<cocos2d::AudioProfile>(tolua_S, "cc.AudioProfile",(cocos2d::AudioProfile*)ret);
+        axis::AudioProfile* ret = axis::AudioEngine::getDefaultProfile();
+        object_to_luaval<axis::AudioProfile>(tolua_S, "cc.AudioProfile",(axis::AudioProfile*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "cc.AudioEngine:getDefaultProfile",argc, 0);
@@ -1038,8 +1038,8 @@ int lua_cocos2dx_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "cc.AudioEngine:getProfile");
             if (!ok) { break; }
-            cocos2d::AudioProfile* ret = cocos2d::AudioEngine::getProfile(arg0);
-            object_to_luaval<cocos2d::AudioProfile>(tolua_S, "cc.AudioProfile",(cocos2d::AudioProfile*)ret);
+            axis::AudioProfile* ret = axis::AudioEngine::getProfile(arg0);
+            object_to_luaval<axis::AudioProfile>(tolua_S, "cc.AudioProfile",(axis::AudioProfile*)ret);
             return 1;
         }
     } while (0);
@@ -1051,8 +1051,8 @@ int lua_cocos2dx_audioengine_AudioEngine_getProfile(lua_State* tolua_S)
             int arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.AudioEngine:getProfile");
             if (!ok) { break; }
-            cocos2d::AudioProfile* ret = cocos2d::AudioEngine::getProfile(arg0);
-            object_to_luaval<cocos2d::AudioProfile>(tolua_S, "cc.AudioProfile",(cocos2d::AudioProfile*)ret);
+            axis::AudioProfile* ret = axis::AudioEngine::getProfile(arg0);
+            object_to_luaval<axis::AudioProfile>(tolua_S, "cc.AudioProfile",(axis::AudioProfile*)ret);
             return 1;
         }
     } while (0);
@@ -1087,7 +1087,7 @@ int lua_cocos2dx_audioengine_AudioEngine_getPlayingAudioCount(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_audioengine_AudioEngine_getPlayingAudioCount'", nullptr);
             return 0;
         }
-        int ret = cocos2d::AudioEngine::getPlayingAudioCount();
+        int ret = axis::AudioEngine::getPlayingAudioCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1139,7 +1139,7 @@ int lua_register_cocos2dx_audioengine_AudioEngine(lua_State* tolua_S)
         tolua_function(tolua_S,"getProfile", lua_cocos2dx_audioengine_AudioEngine_getProfile);
         tolua_function(tolua_S,"getPlayingAudioCount", lua_cocos2dx_audioengine_AudioEngine_getPlayingAudioCount);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(cocos2d::AudioEngine).name(); // rtti is literal storage
+    auto typeName = typeid(axis::AudioEngine).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.AudioEngine";
     g_typeCast[typeName] = "cc.AudioEngine";
     return 1;

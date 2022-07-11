@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "ntcvt/ntcvt.hpp"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 int Device::getDPI()
 {
@@ -481,4 +481,4 @@ void Device::vibrate(float duration)
     CC_UNUSED_PARAM(duration);
 }
 
-NS_CC_END
+NS_AX_END

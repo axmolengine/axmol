@@ -27,7 +27,7 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 namespace cocostudio
 {
@@ -86,7 +86,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
 }
 
 void CustomGUIReader::setCustomProps(std::string_view classType,
-                                     cocos2d::Ref* widget,
+                                     axis::Ref* widget,
                                      const rapidjson::Value& customOptions)
 {
     if (_setPropsFunc != 0)

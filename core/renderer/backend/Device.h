@@ -37,7 +37,7 @@
 
 #include <string>
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 class CommandBuffer;
 class Buffer;
@@ -54,7 +54,7 @@ class RenderTarget;
 /**
  * New or create resources from Device.
  */
-class CC_DLL Device : public cocos2d::Ref
+class CC_DLL Device : public axis::Ref
 {
 public:
     friend class ProgramCache;
@@ -150,4 +150,4 @@ private:
 
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

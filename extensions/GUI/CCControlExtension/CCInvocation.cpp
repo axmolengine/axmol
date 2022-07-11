@@ -28,7 +28,7 @@
 
 #include "CCInvocation.h"
 
-NS_CC_EXT_BEGIN
+NS_AX_EXT_BEGIN
 
 Invocation* Invocation::create(Ref* target, Control::Handler action, Control::EventType controlEvent)
 {
@@ -52,4 +52,4 @@ void Invocation::invoke(Ref* sender)
     }
 }
 
-NS_CC_EXT_END
+NS_AX_EXT_END

@@ -52,7 +52,7 @@ THE SOFTWARE.
 #    include "glfw3native.h"
 #endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class GLFWEventHandler;
 class CC_DLL GLViewImpl : public GLView
@@ -205,4 +205,4 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
 };
 
-NS_CC_END  // end of namespace   cocos2d
+NS_AX_END  // end of namespace   cocos2d

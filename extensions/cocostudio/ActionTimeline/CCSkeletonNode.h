@@ -49,7 +49,7 @@ public:
     /**
      *get All bones in this skeleton, <bone's name, BoneNode>
      */
-    const cocos2d::StringMap<BoneNode*>& getAllSubBonesMap() const;
+    const axis::StringMap<BoneNode*>& getAllSubBonesMap() const;
 
     /**
      *@brief: change displays
@@ -70,7 +70,7 @@ public:
      */
     void addSkinGroup(std::string groupName, hlookup::string_map<std::string> boneSkinNameMap);
 
-    cocos2d::Rect getBoundingBox() const override;
+    axis::Rect getBoundingBox() const override;
 
     SkeletonNode();
     virtual ~SkeletonNode();
@@ -80,22 +80,22 @@ protected:
     virtual void updateVertices() override;
     virtual void updateColor() override;
 
-    virtual void visit(cocos2d::Renderer* renderer,
-                       const cocos2d::Mat4& parentTransform,
+    virtual void visit(axis::Renderer* renderer,
+                       const axis::Mat4& parentTransform,
                        uint32_t parentFlags) override;
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
 
 protected:
-    cocos2d::StringMap<BoneNode*> _subBonesMap;
+    axis::StringMap<BoneNode*> _subBonesMap;
 
 private:
     struct VertexData
     {
-        cocos2d::Vec3 vertex;
-        cocos2d::Color4F color;
+        axis::Vec3 vertex;
+        axis::Color4F color;
     };
 
-    cocos2d::Vec2 _squareVertices[8];
+    axis::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
     hlookup::string_map<hlookup::string_map<std::string>>
@@ -104,7 +104,7 @@ private:
 
     void checkSubBonesDirty();
     // for draw skins as ordered bones' local z
-    cocos2d::Vector<BoneNode*> _subOrderedAllBones;
+    axis::Vector<BoneNode*> _subOrderedAllBones;
     void updateOrderedAllbones();
     void sortOrderedAllBones();
     // for batch draw sub bones
@@ -112,7 +112,7 @@ private:
     bool _subBonesOrderDirty;
     std::vector<VertexData> _batchedBoneVertexData;
     int _batchedVeticesCount;
-    cocos2d::CustomCommand _batchBoneCommand;
+    axis::CustomCommand _batchBoneCommand;
 
     void batchDrawAllSubBones();
 };

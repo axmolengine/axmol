@@ -40,7 +40,7 @@
 #include <memory>
 #include <vector>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 struct PipelineDescriptor;
 
 namespace backend
@@ -63,7 +63,7 @@ struct DepthStencilDescriptor;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBuffer : public cocos2d::Ref
+class CommandBuffer : public axis::Ref
 {
 public:
     /**
@@ -221,4 +221,4 @@ protected:
 
 // end of _backend group
 /// @}
-CC_BACKEND_END
+NS_AX_BACKEND_END

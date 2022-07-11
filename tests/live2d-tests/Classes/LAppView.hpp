@@ -16,7 +16,7 @@
 #include <vector>
 #include "LAppLive2DManager.hpp"
 
-class LAppView : public cocos2d::DrawNode
+class LAppView : public axis::DrawNode
 {
 public:
     LAppView();
@@ -25,12 +25,12 @@ public:
     virtual void onEnter();
     virtual void onExit();
 
-    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags);
-    void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
+    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags);
+    void onDraw(const axis::Mat4& transform, uint32_t flags);
 
-    void onTouchesBegan(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesMoved(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
-    void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event* event);
+    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
 
     void updateViewMatrix(float dx, float dy, float cx, float cy, float scale);
     float transformViewX(float deviceX);

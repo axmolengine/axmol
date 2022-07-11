@@ -7,7 +7,7 @@
 #include "base/ccMacros.h"
 #include <functional>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 namespace stimer
 {
 typedef void* TIMER_ID;
@@ -17,6 +17,6 @@ CC_DLL TIMER_ID delay(float delay, vcallback_t callback, bool bNative = true);
 CC_DLL void kill(TIMER_ID timerId, bool bNative = true);
 CC_DLL void killAll(bool bNative = true);
 }  // namespace stimer
-NS_CC_END
+NS_AX_END
 
 #endif

@@ -33,7 +33,7 @@
 #include <vector>
 #include <string>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 struct PUParticle3D;
 class PUParticleSystem3D;
@@ -239,6 +239,6 @@ protected:
     virtual void handleEvent(PUParticle3D* particle, float timeElapsed);
 };
 
-NS_CC_END
+NS_AX_END
 
 #endif

@@ -39,10 +39,10 @@ public:
     ~UIPageViewTest();
     virtual bool init() override;
 
-    void pageViewEvent(cocos2d::Ref* sender, cocos2d::ui::PageView::EventType type);
+    void pageViewEvent(axis::Ref* sender, axis::ui::PageView::EventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewButtonTest : public UIScene
@@ -54,11 +54,11 @@ public:
     ~UIPageViewButtonTest();
     virtual bool init() override;
 
-    void pageViewEvent(cocos2d::Ref* sender, cocos2d::ui::PageView::EventType type);
-    void onButtonClicked(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void pageViewEvent(axis::Ref* sender, axis::ui::PageView::EventType type);
+    void onButtonClicked(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewTouchPropagationTest : public UIScene
@@ -70,11 +70,11 @@ public:
     ~UIPageViewTouchPropagationTest();
     virtual bool init() override;
 
-    void pageViewEvent(cocos2d::Ref* sender, cocos2d::ui::PageView::EventType type);
-    void onButtonClicked(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void pageViewEvent(axis::Ref* sender, axis::ui::PageView::EventType type);
+    void onButtonClicked(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewDynamicAddAndRemoveTest : public UIScene
@@ -86,11 +86,11 @@ public:
     ~UIPageViewDynamicAddAndRemoveTest();
     virtual bool init() override;
 
-    void pageViewEvent(cocos2d::Ref* sender, cocos2d::ui::PageView::EventType type);
-    void onButtonClicked(cocos2d::Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void pageViewEvent(axis::Ref* sender, axis::ui::PageView::EventType type);
+    void onButtonClicked(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewJumpToPageTest : public UIScene
@@ -103,7 +103,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewVerticalTest : public UIScene
@@ -115,10 +115,10 @@ public:
     ~UIPageViewVerticalTest();
     virtual bool init() override;
 
-    void pageViewEvent(cocos2d::Ref* sender, cocos2d::ui::PageView::EventType type);
+    void pageViewEvent(axis::Ref* sender, axis::ui::PageView::EventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewDisableTouchTest : public UIScene
@@ -131,7 +131,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewChildSizeTest : public UIScene
@@ -143,10 +143,10 @@ public:
     ~UIPageViewChildSizeTest();
     virtual bool init() override;
 
-    void pageViewEvent(cocos2d::Ref* sender, cocos2d::ui::PageView::EventType type);
+    void pageViewEvent(axis::Ref* sender, axis::ui::PageView::EventType type);
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 class UIPageViewIndicatorTest : public UIScene
@@ -159,7 +159,7 @@ public:
     virtual bool init() override;
 
 protected:
-    cocos2d::ui::Text* _displayValueLabel;
+    axis::ui::Text* _displayValueLabel;
 };
 
 #endif /* defined(__TestCpp__UIPageViewTest__) */

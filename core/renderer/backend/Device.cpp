@@ -24,8 +24,8 @@
 
 #include "Device.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 Device* Device::_instance = nullptr;
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

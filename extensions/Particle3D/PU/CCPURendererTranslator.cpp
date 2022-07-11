@@ -28,7 +28,7 @@
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 #include "extensions/Particle3D/PU/CCPUMaterialManager.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PURendererTranslator::PURendererTranslator() {}
 
 PURendererTranslator::~PURendererTranslator() {}
@@ -782,4 +782,4 @@ void PURendererTranslator::translate(PUScriptCompiler* compiler, PUAbstractNode*
     // }
 }
 
-NS_CC_END
+NS_AX_END

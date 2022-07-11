@@ -24,8 +24,8 @@
 
 #include "UIListViewTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 const char* font_UIListViewTest = "fonts/Marker Felt.ttf";
 
@@ -192,7 +192,7 @@ bool UIListViewTest_Vertical::init()
     return false;
 }
 
-float UIListViewTest_Vertical::getItemPositionYInView(cocos2d::ui::Widget* item) const
+float UIListViewTest_Vertical::getItemPositionYInView(axis::ui::Widget* item) const
 {
     auto worldPos = item->getParent()->convertToWorldSpaceAR(item->getPosition());
     auto viewPos  = this->_listView->convertToNodeSpaceAR(worldPos);
@@ -258,14 +258,14 @@ void UIListViewTest_Vertical::selectedItemEvent(Ref* pSender, ListView::EventTyp
 {
     switch (type)
     {
-    case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_START:
+    case axis::ui::ListView::EventType::ON_SELECTED_ITEM_START:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
         log("select child start index = %d", item->getTag());
         break;
     }
-    case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_END:
+    case axis::ui::ListView::EventType::ON_SELECTED_ITEM_END:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
@@ -399,7 +399,7 @@ bool UIListViewTest_Horizontal::init()
     return false;
 }
 
-float UIListViewTest_Horizontal::getItemPositionXInView(cocos2d::ui::Widget* item) const
+float UIListViewTest_Horizontal::getItemPositionXInView(axis::ui::Widget* item) const
 {
     auto worldPos = item->getParent()->convertToWorldSpaceAR(item->getPosition());
     auto viewPos  = this->_listView->convertToNodeSpaceAR(worldPos);
@@ -463,14 +463,14 @@ void UIListViewTest_Horizontal::selectedItemEvent(Ref* pSender, ListView::EventT
 {
     switch (type)
     {
-    case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_START:
+    case axis::ui::ListView::EventType::ON_SELECTED_ITEM_START:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());
         log("select child start index = %d", item->getTag());
         break;
     }
-    case cocos2d::ui::ListView::EventType::ON_SELECTED_ITEM_END:
+    case axis::ui::ListView::EventType::ON_SELECTED_ITEM_END:
     {
         ListView* listView = static_cast<ListView*>(pSender);
         auto item          = listView->getItem(listView->getCurSelectedIndex());

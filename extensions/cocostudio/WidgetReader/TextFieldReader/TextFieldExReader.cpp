@@ -12,7 +12,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace ui;
 using namespace flatbuffers;
 
@@ -272,7 +272,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     return *(Offset<Table>*)(&options);
 }
 
-void TextFieldExReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textFieldOptions)
+void TextFieldExReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textFieldOptions)
 {
     TextFieldEx** pTextField = (TextFieldEx**)(node);
     auto options             = (TextFieldExOptions*)textFieldOptions;

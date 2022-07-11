@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <string>
 #include <chrono>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class CC_DLL Application : public ApplicationProtocol
 {
@@ -105,4 +105,4 @@ protected:
     std::string _startupScriptFilename;
 };
 
-NS_CC_END
+NS_AX_END

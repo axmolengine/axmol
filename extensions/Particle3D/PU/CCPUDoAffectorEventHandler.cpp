@@ -28,7 +28,7 @@
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // Constants
 const bool PUDoAffectorEventHandler::DEFAULT_PRE_POST = false;
 
@@ -91,4 +91,4 @@ void PUDoAffectorEventHandler::copyAttributesTo(PUEventHandler* eventHandler)
     doAffectorEventHandler->setPrePost(_prePost);
 }
 
-NS_CC_END
+NS_AX_END

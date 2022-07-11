@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <stdio.h>
 #include <Cocoa/Cocoa.h>
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 void LuaLog(const char* format)
 {
@@ -55,4 +55,4 @@ void ccMessageBox(const char* msg, const char* title)
     [alert beginSheetModalForWindow:window completionHandler:nil];
 }
 
-NS_CC_END
+NS_AX_END

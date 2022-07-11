@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "2d/CCActionInterval.h"
 #include "math/CCMath.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Camera;
 
@@ -183,6 +183,6 @@ protected:
 // end of actions group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__CCCAMERA_ACTION_H__

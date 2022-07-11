@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/ccMacros.h"
 
 // implementation of Vec2
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // implementation of Rect
 
@@ -208,4 +208,4 @@ Rect Rect::unionWithRect(const Rect& rect) const
 
 const Rect Rect::ZERO = Rect(0, 0, 0, 0);
 
-NS_CC_END
+NS_AX_END

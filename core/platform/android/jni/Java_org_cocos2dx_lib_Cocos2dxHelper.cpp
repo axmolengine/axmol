@@ -44,7 +44,7 @@ static void* s_ctx                         = nullptr;
 
 static std::string g_apkPath;
 
-using namespace cocos2d;
+USING_NS_AX;
 using namespace std;
 
 extern "C" {
@@ -94,7 +94,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxHelper_nativeRunOnGLThread(
         void operator()(jobject_type* __ptr) const _NOEXCEPT { JniHelper::getEnv()->DeleteGlobalRef(__ptr); }
     };
 
-    cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+    axis::Director::getInstance()->getScheduler()->performFunctionInCocosThread(
         [wrap = std::make_shared<std::unique_ptr<jobject_type, jobject_delete>>(env->NewGlobalRef(runnable))] {
             auto curEnv = JniHelper::getEnv();
 

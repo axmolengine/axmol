@@ -27,7 +27,7 @@
 #include "CCPUBaseForceAffector.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // Constants
 const Vec3 PUBaseForceAffector::DEFAULT_FORCE_VECTOR(0, 0, 0);
@@ -69,4 +69,4 @@ void PUBaseForceAffector::copyAttributesTo(PUAffector* affector)
     baseForceAffector->_forceApplication   = _forceApplication;
 }
 
-NS_CC_END
+NS_AX_END

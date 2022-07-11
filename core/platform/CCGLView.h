@@ -96,7 +96,7 @@ struct GLContextAttrs
 #endif
 };
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Scene;
 class Renderer;
@@ -453,6 +453,6 @@ protected:
 // end of platform group
 /// @}
 
-NS_CC_END
+NS_AX_END
 
 #endif /* __CCGLVIEW_H__ */

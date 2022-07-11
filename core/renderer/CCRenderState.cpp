@@ -37,7 +37,7 @@
 #include "renderer/CCRenderer.h"
 #include "renderer/CCMaterial.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 std::string RenderState::getName() const
 {
@@ -409,4 +409,4 @@ void RenderState::StateBlock::setDepthFunction(DepthFunction func)
     _modifiedBits |= RS_DEPTH_FUNC;
 }
 
-NS_CC_END
+NS_AX_END

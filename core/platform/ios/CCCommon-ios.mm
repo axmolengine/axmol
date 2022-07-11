@@ -33,7 +33,7 @@
 #include "base/CCDirector.h"
 #include "base/CCConsole.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // ios no MessageBox, use log instead
 void ccMessageBox(const char* msg, const char* title)
@@ -64,4 +64,4 @@ void LuaLog(const char* format)
     puts(format);
 }
 
-NS_CC_END
+NS_AX_END

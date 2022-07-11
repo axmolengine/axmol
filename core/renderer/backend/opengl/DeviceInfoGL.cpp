@@ -36,7 +36,7 @@
 // #define GL_COMPRESSED_RGBA_ASTC_8x8 0x93B7
 #endif
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 /// <summary>
 ///  1px method to detect whether GPU support astc compressed texture really
@@ -204,4 +204,4 @@ bool DeviceInfoGL::checkSupportsCompressedFormat(int compressedFormat)
     return supported;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

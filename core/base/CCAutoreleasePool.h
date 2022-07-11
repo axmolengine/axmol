@@ -34,7 +34,7 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * A pool for managing autorelease objects.
@@ -180,6 +180,6 @@ private:
  * @endcond
  */
 
-NS_CC_END
+NS_AX_END
 
 #endif  //__AUTORELEASEPOOL_H__

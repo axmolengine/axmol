@@ -28,7 +28,7 @@
 
 #include "cocos2d.h"
 
-class HelloWorld : public cocos2d::Scene
+class HelloWorld : public axis::Scene
 {
 public:
     virtual bool init() override;

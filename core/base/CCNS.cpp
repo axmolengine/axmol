@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 typedef std::vector<std::string> strArray;
 
@@ -183,4 +183,4 @@ Vec2 SizeFromString(std::string_view pszContent)
     return ret;
 }
 
-NS_CC_END
+NS_AX_END

@@ -28,7 +28,7 @@
 #include "renderer/CCGroupCommand.h"
 #include "renderer/CCCustomCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class GridBase;
 /**
@@ -107,4 +107,4 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
 };
 /** @} */
-NS_CC_END
+NS_AX_END

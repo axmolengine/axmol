@@ -32,7 +32,7 @@
 #include "ui/UIWidget.h"
 #include "ui/UIScale9Sprite.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @addtogroup ui
@@ -714,6 +714,6 @@ protected:
 
 // end of ui group
 /// @}
-NS_CC_END
+NS_AX_END
 
 #endif /* __UIEDITTEXT_H__ */

@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "base/CCAutoreleasePool.h"
 #include "base/ccMacros.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 AutoreleasePool::AutoreleasePool()
     : _name("")
@@ -166,4 +166,4 @@ void PoolManager::pop()
     _releasePoolStack.pop_back();
 }
 
-NS_CC_END
+NS_AX_END

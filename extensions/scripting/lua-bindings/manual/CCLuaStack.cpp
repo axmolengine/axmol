@@ -106,7 +106,7 @@ int lua_version(lua_State* L)
 }
 }  // namespace
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 LuaStack::~LuaStack()
 {
@@ -737,4 +737,4 @@ int LuaStack::luaLoadBuffer(lua_State* L, const char* chunk, int chunkSize, cons
     return r;
 }
 
-NS_CC_END
+NS_AX_END

@@ -34,8 +34,8 @@
 #    include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #    include "base/CCGameController.h"
 
-static void cloneEventListenerControllerHandler(const cocos2d::EventListenerController* src,
-                                                cocos2d::EventListenerController* dst,
+static void cloneEventListenerControllerHandler(const axis::EventListenerController* src,
+                                                axis::EventListenerController* dst,
                                                 ScriptHandlerMgr::HandlerType type)
 {
     if (nullptr == src || nullptr == dst)
@@ -51,40 +51,40 @@ static void cloneEventListenerControllerHandler(const cocos2d::EventListenerCont
         {
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_CONNECTED:
         {
-            dst->onConnected = [=](cocos2d::Controller* controller, Event* event) {
+            dst->onConnected = [=](axis::Controller* controller, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_DISCONNECTED:
         {
-            dst->onDisconnected = [=](cocos2d::Controller* controller, Event* event) {
+            dst->onDisconnected = [=](axis::Controller* controller, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYDOWN:
         {
-            dst->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, Event* event) {
+            dst->onKeyDown = [=](axis::Controller* controller, int keyCode, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYUP:
         {
-            dst->onKeyUp = [=](cocos2d::Controller* controller, int keyCode, Event* event) {
+            dst->onKeyUp = [=](axis::Controller* controller, int keyCode, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYREPEAT:
         {
-            dst->onKeyRepeat = [=](cocos2d::Controller* controller, int keyCode, Event* event) {};
+            dst->onKeyRepeat = [=](axis::Controller* controller, int keyCode, Event* event) {};
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_AXIS:
         {
-            dst->onAxisEvent = [=](cocos2d::Controller* controller, int keyCode, Event* event) {};
+            dst->onAxisEvent = [=](axis::Controller* controller, int keyCode, Event* event) {};
         }
         break;
         default:
@@ -99,14 +99,14 @@ static int tolua_cocos2dx_EventListenerController_clone(lua_State* tolua_S)
         return 0;
 
     int argc                               = 0;
-    cocos2d::EventListenerController* self = nullptr;
+    axis::EventListenerController* self = nullptr;
 #    if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "cc.EventListenerController", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<cocos2d::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
 #    if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -119,7 +119,7 @@ static int tolua_cocos2dx_EventListenerController_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        cocos2d::EventListenerController* tolua_ret = cocos2d::EventListenerController::create();
+        axis::EventListenerController* tolua_ret = axis::EventListenerController::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -154,14 +154,14 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
         return 0;
 
     int argc                               = 0;
-    cocos2d::EventListenerController* self = nullptr;
+    axis::EventListenerController* self = nullptr;
 #    if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "cc.EventListenerController", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<cocos2d::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
 #    if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -195,7 +195,7 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onConnected = [=](cocos2d::Controller* controller, Event* event) {
+            self->onConnected = [=](axis::Controller* controller, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "cc.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
@@ -208,7 +208,7 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onDisconnected = [=](cocos2d::Controller* controller, Event* event) {
+            self->onDisconnected = [=](axis::Controller* controller, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "cc.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
@@ -222,7 +222,7 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
 
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyDown = [=](cocos2d::Controller* controller, int keyCode, Event* event) {
+            self->onKeyDown = [=](axis::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "cc.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -236,7 +236,7 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyUp = [=](cocos2d::Controller* controller, int keyCode, Event* event) {
+            self->onKeyUp = [=](axis::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "cc.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -250,7 +250,7 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyRepeat = [=](cocos2d::Controller* controller, int keyCode, Event* event) {
+            self->onKeyRepeat = [=](axis::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "cc.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -264,7 +264,7 @@ static int tolua_cocos2dx_EventListenerController_registerScriptHandler(lua_Stat
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onAxisEvent = [=](cocos2d::Controller* controller, int keyCode, Event* event) {
+            self->onAxisEvent = [=](axis::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "cc.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -308,14 +308,14 @@ static int tolua_cocos2dx_Controller_getKeyStatus(lua_State* tolua_S)
         return 0;
 
     int argc                  = 0;
-    cocos2d::Controller* self = nullptr;
+    axis::Controller* self = nullptr;
 #    if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "cc.Controller", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<cocos2d::Controller*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<axis::Controller*>(tolua_tousertype(tolua_S, 1, 0));
 #    if COCOS2D_DEBUG >= 1
     if (nullptr == self)
     {
@@ -333,7 +333,7 @@ static int tolua_cocos2dx_Controller_getKeyStatus(lua_State* tolua_S)
             goto tolua_lerror;
 #    endif
         int keyCode                              = (int)tolua_tonumber(tolua_S, 2, 0);
-        cocos2d::Controller::KeyStatus keyStatus = self->getKeyStatus(keyCode);
+        axis::Controller::KeyStatus keyStatus = self->getKeyStatus(keyCode);
 
         lua_newtable(tolua_S);                                /* L: table */
         lua_pushstring(tolua_S, "isPressed");                 /* L: table key */

@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #include "2d/CCActionTween.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 ActionTween* ActionTween::create(float duration, std::string_view key, float from, float to)
 {
@@ -77,4 +77,4 @@ ActionTween* ActionTween::reverse() const
     return ActionTween::create(_duration, _key, _to, _from);
 }
 
-NS_CC_END
+NS_AX_END

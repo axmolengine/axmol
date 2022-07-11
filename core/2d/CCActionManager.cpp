@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/ccCArray.h"
 #include "uthash/uthash.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 //
 // singleton stuff
 //
@@ -491,4 +491,4 @@ void ActionManager::update(float dt)
     _currentTarget = nullptr;
 }
 
-NS_CC_END
+NS_AX_END

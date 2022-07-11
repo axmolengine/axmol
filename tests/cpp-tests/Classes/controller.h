@@ -31,17 +31,18 @@ THE SOFTWARE.
 #include <thread>
 #include <atomic>
 
+#include "platform/CCPlatformMacros.h"
+
 class TestList;
 class TestSuite;
 class TestCase;
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 class Director;
 class Touch;
 class Event;
 class EventListenerTouchOneByOne;
-}  // namespace cocos2d
+NS_AX_END  // namespace axis
 
 class TestController
 {
@@ -59,7 +60,7 @@ public:
     void onEnterBackground();
     void onEnterForeground();
 
-    bool blockTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool blockTouchBegan(axis::Touch* touch, axis::Event* event);
 
     void setCurrTestSuite(TestSuite* testSuite) { _testSuite = testSuite; }
     TestSuite* getCurrTestSuite() { return _testSuite; }
@@ -87,8 +88,8 @@ private:
     std::condition_variable _sleepCondition;
     std::unique_lock<std::mutex>* _sleepUniqueLock;
 
-    cocos2d::Director* _director;
-    cocos2d::EventListenerTouchOneByOne* _touchListener;
+    axis::Director* _director;
+    axis::EventListenerTouchOneByOne* _touchListener;
 
     std::string _logIndentation;
 };

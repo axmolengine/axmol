@@ -46,7 +46,7 @@
 #include "renderer/CCTechnique.h"
 #include "renderer/CCPass.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight);
 
@@ -725,7 +725,7 @@ void MeshRenderer::removeAllAttachNode()
     _attachments.clear();
 }
 
-void MeshRenderer::visit(cocos2d::Renderer* renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags)
+void MeshRenderer::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -1046,4 +1046,4 @@ static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVerte
     return MeshMaterial::createBuiltInMaterial(type, hasSkin);
 }
 
-NS_CC_END
+NS_AX_END

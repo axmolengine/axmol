@@ -26,7 +26,7 @@
 #include "ui/UILayoutManager.h"
 #include "ui/UILayout.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -213,7 +213,7 @@ RelativeLayoutManager* RelativeLayoutManager::create()
     return ret;
 }
 
-Vector<Widget*> RelativeLayoutManager::getAllWidgets(cocos2d::ui::LayoutProtocol* layout)
+Vector<Widget*> RelativeLayoutManager::getAllWidgets(axis::ui::LayoutProtocol* layout)
 {
     Vector<Node*> container = layout->getLayoutElements();
     Vector<Widget*> widgetChildren;
@@ -618,4 +618,4 @@ void RelativeLayoutManager::doLayout(LayoutProtocol* layout)
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END

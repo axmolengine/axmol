@@ -12,7 +12,7 @@ class GComponent;
 class GButton;
 class GList;
 
-class PopupMenu : public cocos2d::Ref
+class PopupMenu : public axis::Ref
 {
 public:
     static PopupMenu* create(const std::string& resourceURL);

@@ -32,7 +32,7 @@
 #include "Bug-CCDrawNode.h"
 #include "renderer/backend/Types.h"
 
-USING_NS_CC;
+USING_NS_AX;
 
 bool BugDrawNodeLayer::init()
 {

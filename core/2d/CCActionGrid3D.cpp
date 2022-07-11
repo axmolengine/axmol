@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "2d/CCActionGrid3D.h"
 #include "base/CCDirector.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 // implementation of Waves3D
 
 Waves3D* Waves3D::create(float duration, const Vec2& gridSize, unsigned int waves, float amplitude)
@@ -735,4 +735,4 @@ void Twirl::update(float time)
     }
 }
 
-NS_CC_END
+NS_AX_END

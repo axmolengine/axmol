@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "scripting/lua-bindings/manual/CCLuaEngine.h"
 
 using namespace spine;
-USING_NS_CC;
+USING_NS_AX;
 
 LuaSkeletonAnimation::LuaSkeletonAnimation() : spine::SkeletonAnimation() {}
 

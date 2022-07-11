@@ -27,7 +27,7 @@
 #include "CCPUBehaviourManager.h"
 #include "extensions/Particle3D/PU/CCPUSlaveBehaviour.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 PUBehaviourManager::PUBehaviourManager() {}
 
 PUBehaviourManager::~PUBehaviourManager() {}
@@ -56,4 +56,4 @@ PUBehaviour* PUBehaviourManager::createBehaviour(std::string_view type)
     return nullptr;
 }
 
-NS_CC_END
+NS_AX_END

@@ -11,7 +11,7 @@
 #    include "DragonBones/CCDragonBonesHeaders.h"
 #endif
 
-USING_NS_CC;
+USING_NS_AX;
 using namespace cocostudio;
 using namespace flatbuffers;
 
@@ -129,7 +129,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     return *(Offset<Table>*)(&options);
 }
 
-void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions)
+void ArmatureNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
 {
     Node** ppResult = (Node**)(node);
     auto options    = (flatbuffers::CSArmatureNodeOption*)nodeOptions;
@@ -215,7 +215,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flat
     }
 }
 
-cocos2d::Node* ArmatureNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+axis::Node* ArmatureNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     Node* node = nullptr;  // auto node = Armature::create();
 

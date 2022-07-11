@@ -27,7 +27,7 @@
 
 #include "glsl_optimizer.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
     : ShaderModule(stage)
@@ -276,4 +276,4 @@ void ShaderModuleMTL::parseTexture(id<MTLDevice> mtlDevice, glslopt_shader* shad
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

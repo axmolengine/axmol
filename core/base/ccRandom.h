@@ -36,7 +36,7 @@ THE SOFTWARE.
  * @addtogroup base
  * @{
  */
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 /**
  * @class RandomHelper
@@ -97,7 +97,7 @@ inline double random(double min, double max)
  */
 inline int random()
 {
-    return cocos2d::random(0, RAND_MAX);
+    return axis::random(0, RAND_MAX);
 };
 
 /**
@@ -112,7 +112,7 @@ inline float rand_minus1_1()
     // be seeded using std::srand()
     return ((std::rand() / (float)RAND_MAX) * 2) - 1;
 
-    //    return cocos2d::random(-1.f, 1.f);
+    //    return axis::random(-1.f, 1.f);
 };
 
 /**
@@ -127,10 +127,10 @@ inline float rand_0_1()
     // be seeded using std::srand()
     return std::rand() / (float)RAND_MAX;
 
-    //    return cocos2d::random(0.f, 1.f);
+    //    return axis::random(0.f, 1.f);
 };
 
-NS_CC_END
+NS_AX_END
 // end group
 /// @}
 #endif  //__ccRandom_H_

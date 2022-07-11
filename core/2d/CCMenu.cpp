@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 using namespace std;
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 enum
 {
@@ -557,4 +557,4 @@ std::string Menu::getDescription() const
     return StringUtils::format("<Menu | Tag = %d>", _tag);
 }
 
-NS_CC_END
+NS_AX_END

@@ -36,7 +36,7 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "renderer/CCCustomCommand.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 class Image;
 class NinePatchInfo;
@@ -460,4 +460,4 @@ protected:
 // end of textures group
 /// @}
 
-NS_CC_END
+NS_AX_END

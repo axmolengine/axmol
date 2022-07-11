@@ -50,7 +50,7 @@ THE SOFTWARE.
 #include "base/ccUTF8.h"
 #include "renderer/backend/ProgramState.h"
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 const int FastTMXLayer::FAST_TMX_ORIENTATION_ORTHO = 0;
 const int FastTMXLayer::FAST_TMX_ORIENTATION_HEX   = 1;
@@ -1055,4 +1055,4 @@ TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* a
     return ret;
 }
 
-NS_CC_END
+NS_AX_END

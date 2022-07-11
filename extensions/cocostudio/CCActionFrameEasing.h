@@ -58,7 +58,7 @@ enum FrameEasingType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrameEasing : public cocos2d::Ref
+class CCS_DLL ActionFrameEasing : public axis::Ref
 {
 protected:
     FrameEasingType _type;

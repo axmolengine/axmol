@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <exception>
 #include <iostream>
 
-USING_NS_CC;
+USING_NS_AX;
 
 NS_TIMELINE_BEGIN
 
@@ -688,7 +688,7 @@ void EventFrame::init()
 
 EventFrame::EventFrame() : _event(""), _action(nullptr) {}
 
-void EventFrame::setNode(cocos2d::Node* node)
+void EventFrame::setNode(axis::Node* node)
 {
     Frame::setNode(node);
     _action = _timeline->getActionTimeline();

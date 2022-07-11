@@ -30,8 +30,7 @@
 
 #define LOG_TAG "AudioDecoder"
 
-namespace cocos2d
-{
+NS_AX_BEGIN
 
 AudioDecoder::AudioDecoder()
     : _isOpened(false)
@@ -102,4 +101,4 @@ AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
 {
     return _sourceFormat;
 }
-}  // namespace cocos2d
+NS_AX_END  // namespace axis

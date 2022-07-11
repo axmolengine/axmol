@@ -39,7 +39,7 @@ public:
     bool readS(std::string& result);
     const std::string* readSP();
     void writeS(const std::string& value);
-    cocos2d::Color4B readColor();
+    axis::Color4B readColor();
     ByteBuffer* readBuffer();
     bool seek(int indexTablePos, int blockIndex);
 

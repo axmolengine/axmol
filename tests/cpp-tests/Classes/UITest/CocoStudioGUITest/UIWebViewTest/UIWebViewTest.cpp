@@ -25,8 +25,8 @@
 
 #include "UIWebViewTest.h"
 
-USING_NS_CC;
-using namespace cocos2d::ui;
+USING_NS_AX;
+using namespace axis::ui;
 
 WebViewTests::WebViewTests()
 {
@@ -39,7 +39,7 @@ bool WebViewTest::init()
     {
         Size winSize = Director::getInstance()->getVisibleSize();
 
-        _webView = cocos2d::ui::WebView::create();
+        _webView = axis::ui::WebView::create();
         _webView->setPosition(winSize / 2);
         _webView->setContentSize(winSize * 0.5);
         _webView->loadURL("https://www.baidu.com");

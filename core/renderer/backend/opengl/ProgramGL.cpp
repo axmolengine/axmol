@@ -33,7 +33,7 @@
 #include "renderer/backend/opengl/UtilsGL.h"
 #include "yasio/detail/byte_buffer.hpp"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -363,4 +363,4 @@ std::size_t ProgramGL::getUniformBufferSize(ShaderStage stage) const
     return _totalBufferSize;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

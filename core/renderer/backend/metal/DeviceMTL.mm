@@ -35,7 +35,7 @@
 
 #include "base/ccMacros.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 CAMetalLayer* DeviceMTL::_metalLayer            = nil;
 id<CAMetalDrawable> DeviceMTL::_currentDrawable = nil;
@@ -155,4 +155,4 @@ void DeviceMTL::setFrameBufferOnly(bool frameBufferOnly)
     [DeviceMTL::_metalLayer setFramebufferOnly:frameBufferOnly];
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

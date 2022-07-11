@@ -27,7 +27,7 @@
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID) && (CC_TARGET_PLATFORM != CC_PLATFORM_IOS) && \
     (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32) && (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
 
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 namespace ui
 {
@@ -39,6 +39,6 @@ EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
 
 }  // namespace ui
 
-NS_CC_END
+NS_AX_END
 
 #endif /* #if (..) */
