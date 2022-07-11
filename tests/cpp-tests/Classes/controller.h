@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include <thread>
 #include <atomic>
 
+#include "platform/CCPlatformMacros.h"
+
 class TestList;
 class TestSuite;
 class TestCase;
