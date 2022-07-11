@@ -31,7 +31,7 @@
 #include "../PixelFormatUtils.h"
 #include "base/CCConfiguration.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 id<MTLTexture> UtilsMTL::_defaultColorAttachmentTexture        = nil;
 id<MTLTexture> UtilsMTL::_defaultDepthStencilAttachmentTexture = nil;
@@ -199,4 +199,4 @@ void UtilsMTL::swizzleImage(unsigned char* image, std::size_t width, std::size_t
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

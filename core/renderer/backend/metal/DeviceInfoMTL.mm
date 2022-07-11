@@ -26,7 +26,7 @@
 #include "DeviceInfoMTL.h"
 #include "base/ccMacros.h"
 #include "UtilsMTL.h"
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -455,4 +455,4 @@ bool DeviceInfoMTL::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

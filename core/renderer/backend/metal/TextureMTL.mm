@@ -29,7 +29,7 @@
 #include "base/ccMacros.h"
 #include "../PixelFormatUtils.h"
 
-CC_BACKEND_BEGIN
+NS_AX_BACKEND_BEGIN
 
 namespace
 {
@@ -328,4 +328,4 @@ void TextureCubeMTL::generateMipmaps()
     }
 }
 
-CC_BACKEND_END
+NS_AX_BACKEND_END

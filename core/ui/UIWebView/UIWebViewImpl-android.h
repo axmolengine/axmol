@@ -31,6 +31,8 @@
 #include <string>
 #include <string_view>
 
+#include "platform/CCPlatformMacros.h"
+
 NS_AX_BEGIN
 
 class Data;
