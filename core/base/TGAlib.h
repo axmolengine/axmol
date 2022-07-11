@@ -29,6 +29,7 @@ THE SOFTWARE.
 /// @cond DO_NOT_SHOW
 
 #include "stdint.h"
+#include "platform/CCPlatformMacros.h"
 
 NS_AX_BEGIN
 
