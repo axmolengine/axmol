@@ -342,7 +342,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -365,7 +365,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
         blendfunc_to_luaval(L, ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:getBlendFunc", argc, 0);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:getBlendFunc", argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -387,7 +387,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -406,7 +406,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
     {
         axis::BlendFunc arg0;
 
-        ok &= luaval_to_blendfunc(L, 2, &arg0, "cc.Sprite3D:setBlendFunc");
+        ok &= luaval_to_blendfunc(L, 2, &arg0, "ax.Sprite3D:setBlendFunc");
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
@@ -416,7 +416,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
         return 0;
     }
 
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:setBlendFunc", argc, 1);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:setBlendFunc", argc, 1);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -438,7 +438,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -459,17 +459,17 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
         axis::Vec3 arg1;
         axis::Color4F arg2;
 
-        ok &= luaval_to_vec3(L, 2, &arg0, "cc.DrawNode3D:drawLine");
+        ok &= luaval_to_vec3(L, 2, &arg0, "ax.DrawNode3D:drawLine");
 
-        ok &= luaval_to_vec3(L, 3, &arg1, "cc.DrawNode3D:drawLine");
+        ok &= luaval_to_vec3(L, 3, &arg1, "ax.DrawNode3D:drawLine");
 
-        ok &= luaval_to_color4f(L, 4, &arg2, "cc.DrawNode3D:drawLine");
+        ok &= luaval_to_color4f(L, 4, &arg2, "ax.DrawNode3D:drawLine");
         if (!ok)
             return 0;
         cobj->drawLine(arg0, arg1, arg2);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:drawLine", argc, 3);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawLine", argc, 3);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -491,7 +491,7 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -513,7 +513,7 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
         cobj->clear();
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:clear", argc, 0);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:clear", argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -535,7 +535,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertype(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+    if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -585,13 +585,13 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
             lua_pop(L, 1);
         }
 
-        ok &= luaval_to_color4f(L, 3, &arg1, "cc.DrawNode3D:drawCube");
+        ok &= luaval_to_color4f(L, 3, &arg1, "ax.DrawNode3D:drawCube");
         if (!ok)
             return 0;
         cobj->drawCube(&arg0[0], arg1);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DrawNode3D:drawCube", argc, 2);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawCube", argc, 2);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -612,7 +612,7 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(L, 1, "cc.DrawNode3D", 0, &tolua_err))
+    if (!tolua_isusertable(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -623,10 +623,10 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
         if (!ok)
             return 0;
         axis::DrawNode3D* ret = axis::DrawNode3D::create();
-        object_to_luaval<axis::DrawNode3D>(L, "cc.DrawNode3D", (axis::DrawNode3D*)ret);
+        object_to_luaval<axis::DrawNode3D>(L, "ax.DrawNode3D", (axis::DrawNode3D*)ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.DrawNode3D:create", argc, 0);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.DrawNode3D:create", argc, 0);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
@@ -637,8 +637,8 @@ tolua_lerror:
 
 int lua_register_cocos2dx_DrawNode3D(lua_State* L)
 {
-    tolua_usertype(L, "cc.DrawNode3D");
-    tolua_cclass(L, "DrawNode3D", "cc.DrawNode3D", "cc.Node", nullptr);
+    tolua_usertype(L, "ax.DrawNode3D");
+    tolua_cclass(L, "DrawNode3D", "ax.DrawNode3D", "ax.Node", nullptr);
 
     tolua_beginmodule(L, "DrawNode3D");
     tolua_function(L, "getBlendFunc", lua_cocos2dx_DrawNode3D_getBlendFunc);
@@ -648,8 +648,8 @@ int lua_register_cocos2dx_DrawNode3D(lua_State* L)
     tolua_function(L, "create", lua_cocos2dx_DrawNode3D_create);
     tolua_endmodule(L);
     auto typeName                                    = typeid(axis::DrawNode3D).name();
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.DrawNode3D";
-    g_typeCast[typeName]                             = "cc.DrawNode3D";
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.DrawNode3D";
+    g_typeCast[typeName]                             = "ax.DrawNode3D";
     return 1;
 }
 
@@ -663,7 +663,7 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
 #endif
 
 #if COCOS2D_DEBUG >= 1
-    if (!tolua_isusertable(L, 1, "cc.ValueTypeJudgeInTable", 0, &tolua_err))
+    if (!tolua_isusertable(L, 1, "ax.ValueTypeJudgeInTable", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
@@ -672,15 +672,15 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
     if (argc == 1)
     {
         axis::ValueMap arg0;
-        ok &= luaval_to_ccvaluemap(L, 2, &arg0, "cc.ValueTypeJudgeInTable:create");
+        ok &= luaval_to_ccvaluemap(L, 2, &arg0, "ax.ValueTypeJudgeInTable:create");
         if (!ok)
             return 0;
         axis::ValueTypeJudgeInTable* ret = axis::ValueTypeJudgeInTable::create(arg0);
-        object_to_luaval<axis::ValueTypeJudgeInTable>(L, "cc.ValueTypeJudgeInTable",
+        object_to_luaval<axis::ValueTypeJudgeInTable>(L, "ax.ValueTypeJudgeInTable",
                                                          (axis::ValueTypeJudgeInTable*)ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.ValueTypeJudgeInTable:create", argc, 1);
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
@@ -691,23 +691,23 @@ tolua_lerror:
 
 int lua_register_cocos2dx_ValueTypeJudgeInTable(lua_State* L)
 {
-    tolua_usertype(L, "cc.ValueTypeJudgeInTable");
-    tolua_cclass(L, "ValueTypeJudgeInTable", "cc.ValueTypeJudgeInTable", "cc.Node", nullptr);
+    tolua_usertype(L, "ax.ValueTypeJudgeInTable");
+    tolua_cclass(L, "ValueTypeJudgeInTable", "ax.ValueTypeJudgeInTable", "ax.Node", nullptr);
 
     tolua_beginmodule(L, "ValueTypeJudgeInTable");
     tolua_function(L, "create", lua_cocos2dx_ValueTypeJudgeInTable_create);
     tolua_endmodule(L);
     auto typeName                                    = typeid(axis::ValueTypeJudgeInTable).name();
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "cc.ValueTypeJudgeInTable";
-    g_typeCast[typeName]                             = "cc.ValueTypeJudgeInTable";
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ValueTypeJudgeInTable";
+    g_typeCast[typeName]                             = "ax.ValueTypeJudgeInTable";
     return 1;
 }
 
 int register_test_binding(lua_State* L)
 {
     tolua_open(L);
-    tolua_module(L, "cc", 0);
-    tolua_beginmodule(L, "cc");
+    tolua_module(L, "ax", 0);
+    tolua_beginmodule(L, "ax");
     lua_register_cocos2dx_DrawNode3D(L);
     lua_register_cocos2dx_ValueTypeJudgeInTable(L);
     tolua_endmodule(L);

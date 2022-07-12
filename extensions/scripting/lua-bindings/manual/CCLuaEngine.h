@@ -34,7 +34,7 @@ extern "C" {
 #include "base/CCScriptSupport.h"
 #include "scripting/lua-bindings/manual/CCLuaStack.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"
-#include "scripting/lua-bindings/manual/cocos2d/LuaScriptHandlerMgr.h"
+#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 #include "scripting/lua-bindings/manual/Lua-BindingsExport.h"
 
 /**

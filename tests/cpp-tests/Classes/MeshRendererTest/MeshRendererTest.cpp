@@ -859,7 +859,7 @@ void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Ref* sender)
     node->removeAllChildren();  // remove all loaded mesh
 
     // remove cache data
-    MeshRendererCache::getInstance()->removeAllMeshRendererData();
+    MeshRendererCache::getInstance()->removeAllMeshRenderData();
     int32_t index = 0;
     for (const auto& path : _paths)
     {
