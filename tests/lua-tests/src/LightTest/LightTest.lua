@@ -130,12 +130,12 @@ end
 function LightTest:addSprite()
     local s = cc.Director:getInstance():getWinSize()
 
-    local fileName = "Sprite3DTest/orc.c3b"
+    local fileName = "MeshRendererTest/orc.c3b"
     local sprite1 = cc.Sprite3D:create(fileName)
     sprite1:setRotation3D(cc.vec3(0.0, 180.0, 0.0))
     sprite1:setPosition(cc.p(0.0, 0.0))
     sprite1:setScale(2.0)
-    local sp = cc.Sprite3D:create("Sprite3DTest/axe.c3b")
+    local sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
     sprite1:getAttachNode("Bip001 R Hand"):addChild(sp)
     local animation = cc.Animation3D:create(fileName)
     if nil ~=animation then
@@ -145,21 +145,21 @@ function LightTest:addSprite()
     self:addChild(sprite1)
     sprite1:setCameraMask(2)
 
-    local fileName = "Sprite3DTest/sphere.c3b"
+    local fileName = "MeshRendererTest/sphere.c3b"
     local sprite2 = cc.Sprite3D:create(fileName)
     sprite2:setPosition(cc.p(30.0, 0.0))
     self:addChild(sprite2)
     sprite2:setCameraMask(2)
 
     
-    local fileName = "Sprite3DTest/sphere.c3b"
+    local fileName = "MeshRendererTest/sphere.c3b"
     local sprite3   = cc.Sprite3D:create(fileName)
     sprite3:setScale(0.5)
     sprite3:setPosition(cc.p(-50.0, 0.0))
     self:addChild(sprite3)
     sprite3:setCameraMask(2)
     
-    local fileName = "Sprite3DTest/sphere.c3b"
+    local fileName = "MeshRendererTest/sphere.c3b"
     local sprite4 = cc.Sprite3D:create(fileName)
     sprite4:setScale(0.5)
     sprite4:setPosition(cc.p(-30.0, 10.0))

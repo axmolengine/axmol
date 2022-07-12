@@ -226,7 +226,7 @@ function TerrainWalkThru:init()
     self._terrain:setSkirtHeightRatio(3)
     self._terrain:setLODDistance(64,128,192)
 
-    self._player = Player:create("Sprite3DTest/girl.c3b", self._camera, self._terrain)
+    self._player = Player:create("MeshRendererTest/girl.c3b", self._camera, self._terrain)
     self._player:setCameraMask(2)
     self._player:setScale(0.08)
     self._player:setPositionY(self._terrain:getHeight(self._player:getPositionX(), self._player:getPositionZ()) + PLAYER_HEIGHT)
@@ -244,7 +244,7 @@ function TerrainWalkThru:init()
     billboard:setCameraMask(cc.CameraFlag.USER1)
     self._player:addChild(billboard)
 
-    local animation = cc.Animation3D:create("Sprite3DTest/girl.c3b","Take 001")
+    local animation = cc.Animation3D:create("MeshRendererTest/girl.c3b","Take 001")
     if nil ~= animation then
         local animate = cc.Animate3D:create(animation)
         self._player:runAction(cc.RepeatForever:create(animate))
@@ -286,13 +286,13 @@ function Scene3DTest:create3DWorld()
 
     --add two Sprite3D monster, one is transparent
     local playerPos = self._player:getPosition3D()
-    local monster = cc.Sprite3D:create("Sprite3DTest/orc.c3b")
+    local monster = cc.Sprite3D:create("MeshRendererTest/orc.c3b")
     monster:setRotation3D(cc.vec3(0,180,0))
     monster:setPosition3D(cc.vec3(playerPos.x + 50, playerPos.y - 10, playerPos.z))
     monster:setCameraMask(s_CM[GAME_LAYER.LAYER_GAME])
     monster:setOpacity(128)
     self:addChild(monster)
-    monster = cc.Sprite3D:create("Sprite3DTest/orc.c3b")
+    monster = cc.Sprite3D:create("MeshRendererTest/orc.c3b")
     monster:setRotation3D(cc.vec3(0,180,0))
     monster:setPosition3D(cc.vec3(playerPos.x - 50, playerPos.y - 5, playerPos.z))
     monster:setCameraMask(s_CM[GAME_LAYER.LAYER_GAME])
@@ -312,15 +312,15 @@ function Scene3DTest:create3DWorld()
     --then, create skybox
     --create and set our custom shader
 
-    local cmVert = cc.FileUtils:getInstance():getStringFromFile("Sprite3DTest/cube_map.vert")
-    local cmFrag = cc.FileUtils:getInstance():getStringFromFile("Sprite3DTest/cube_map.frag")
+    local cmVert = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/cube_map.vert")
+    local cmFrag = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/cube_map.frag")
     local program = ccb.Device:getInstance():newProgram(cmVert, cmFrag)
     local state = ccb.ProgramState:new(program)
     program:release()
     --create the second texture for cylinder
-    self._textureCube = cc.TextureCube:create("Sprite3DTest/skybox/left.jpg", "Sprite3DTest/skybox/right.jpg",
-                                       "Sprite3DTest/skybox/top.jpg", "Sprite3DTest/skybox/bottom.jpg",
-                                       "Sprite3DTest/skybox/front.jpg", "Sprite3DTest/skybox/back.jpg")
+    self._textureCube = cc.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
+                                       "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
+                                       "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg")
 
     --set texture parameters
     local tRepeatParams = { magFilter = ccb.SamplerFilter.LINEAR , minFilter = ccb.SamplerFilter.LINEAR , sAddressMode = ccb.SamplerAddressMode.MIRRORED_REPEAT  , tAddressMode = ccb.SamplerAddressMode.MIRRORED_REPEAT }
@@ -421,7 +421,7 @@ function Scene3DTest:createPlayerDlg()
     self:addChild(self._playerDlg)
 
     --second, add 3d actor, which on dialog layer
-    local girl = cc.Sprite3D:create("Sprite3DTest/girl.c3b")
+    local girl = cc.Sprite3D:create("MeshRendererTest/girl.c3b")
     girl:setScale(0.5)
     girl:setPosition(bgSize.width / 2, margin * 2)
     girl:setCameraMask(s_CM[GAME_LAYER.LAYER_ACTOR])

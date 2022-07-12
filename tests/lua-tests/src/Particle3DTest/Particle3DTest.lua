@@ -607,12 +607,12 @@ end
 
 function Particle3DWithSprite3DDemo:onEnter()
 
-    local sprite = cc.Sprite3D:create("Sprite3DTest/orc.c3b")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/orc.c3b")
     sprite:setPosition3D(cc.vec3(-20, 0, 0))
     sprite:setRotation3D(cc.vec3(0, 180, 0))
     sprite:setCameraMask(cc.CameraFlag.USER1)
     self:addChild(sprite)
-    local animation = cc.Animation3D:create("Sprite3DTest/orc.c3b")
+    local animation = cc.Animation3D:create("MeshRendererTest/orc.c3b")
     local animate = cc.Animate3D:create(animation)
     sprite:runAction(cc.RepeatForever:create(animate))
     

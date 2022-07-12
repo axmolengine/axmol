@@ -253,7 +253,7 @@ function Camera3DTestDemo:onEnter()
     self:addChild(layer3D,0)
     self._layer3D = layer3D
     self._curState = State.None
-    self:addNewSpriteWithCoords(cc.vec3(0, 0, 0), "Sprite3DTest/girl.c3b", true, 0.2, true)
+    self:addNewSpriteWithCoords(cc.vec3(0, 0, 0), "MeshRendererTest/girl.c3b", true, 0.2, true)
 
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
@@ -546,9 +546,9 @@ function CameraRotationTest:onEnter()
     bill2:addChild(p2)
 
     --3D models
-    local model = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local model = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     model:setScale(4)
-    model:setTexture("Sprite3DTest/boss.png")
+    model:setTexture("MeshRendererTest/boss.png")
     model:setPosition3D(cc.vec3(s.width/2, s.height/2, 0))
     self:addChild(model)
 
@@ -722,16 +722,16 @@ function FogTestDemo:createLayer3D()
     self:addChild(layer3D,0)
     self._layer3D = layer3D
 
-    local vertexShader = cc.FileUtils:getInstance():getStringFromFile("Sprite3DTest/fog.vert")
-    local fragmentShader = cc.FileUtils:getInstance():getStringFromFile("Sprite3DTest/fog.frag")
+    local vertexShader = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/fog.vert")
+    local fragmentShader = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/fog.frag")
 
     local program = ccb.Device:getInstance():newProgram(vertexShader, fragmentShader)
     self._shader1 = ccb.ProgramState:new(program)
     self._shader2 = self._shader1:clone()
     program:release()
 
-    self._sprite3D1 = cc.Sprite3D:create("Sprite3DTest/teapot.c3b")
-    self._sprite3D2 = cc.Sprite3D:create("Sprite3DTest/teapot.c3b")
+    self._sprite3D1 = cc.Sprite3D:create("MeshRendererTest/teapot.c3b")
+    self._sprite3D2 = cc.Sprite3D:create("MeshRendererTest/teapot.c3b")
 
     self._sprite3D1:setProgramState(self._shader1)
     self._sprite3D2:setProgramState(self._shader2)
@@ -979,13 +979,13 @@ function CameraArcBallDemo:createLayer3D()
         self._layer3D:addChild(self._camera)
     end
 
-    self._sprite3D1 = cc.Sprite3D:create("Sprite3DTest/orc.c3b")
+    self._sprite3D1 = cc.Sprite3D:create("MeshRendererTest/orc.c3b")
     self._sprite3D1:setScale(0.5)
     self._sprite3D1:setRotation3D(cc.vec3(0,180,0))
     self._sprite3D1:setPosition3D(cc.vec3(0,0,0))
     self._layer3D:addChild(self._sprite3D1)
 
-    self._sprite3D2 = cc.Sprite3D:create("Sprite3DTest/boss.c3b")
+    self._sprite3D2 = cc.Sprite3D:create("MeshRendererTest/boss.c3b")
     self._sprite3D2:setScale(0.6)
     self._sprite3D2:setRotation3D(cc.vec3(-90,0,0))
     self._sprite3D2:setPosition3D(cc.vec3(20,0,0))

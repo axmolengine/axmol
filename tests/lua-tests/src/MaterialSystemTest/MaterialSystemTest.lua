@@ -82,9 +82,9 @@ function Material_Sprite3DTest:subtitle()
 end
 
 function Material_Sprite3DTest:onEnter()
-    local sprite = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(8.0)
-    sprite:setTexture("Sprite3DTest/boss.png")
+    sprite:setTexture("MeshRendererTest/boss.png")
     self:addChild(sprite)
     sprite:setNormalizedPosition(cc.p(0.5,0.5))
 end
@@ -102,14 +102,14 @@ end
 function Material_MultipleSprite3D:onEnter()
     local names = 
     {
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
-        "Sprite3DTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
+        "MeshRendererTest/ReskinGirl.c3b",
     }
 
     local totalNames = #names
@@ -187,7 +187,7 @@ function Material_setTechnique:subtitle()
 end
 
 function Material_setTechnique:onEnter()
-    local sprite = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(6)
     self:addChild(sprite)
     sprite:setNormalizedPosition(cc.p(0.5,0.5))
@@ -239,7 +239,7 @@ function Material_clone:subtitle()
 end
 
 function Material_clone:onEnter()
-    local sprite = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(3)
     self:addChild(sprite)
     sprite:setNormalizedPosition(cc.p(0.25, 0.5))
@@ -252,7 +252,7 @@ function Material_clone:onEnter()
     sprite:runAction(repeatAction)
 
     -- sprite 2... using same material
-    local sprite2 = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite2 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite2:setScale(3)
     self:addChild(sprite2)
     sprite2:setNormalizedPosition(cc.p(0.5, 0.5))
@@ -260,7 +260,7 @@ function Material_clone:onEnter()
     sprite2:runAction(repeatAction:clone())
 
     -- sprite 3... using cloned material
-    local sprite3 = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite3 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite3:setScale(3)
     self:addChild(sprite3)
     sprite3:setNormalizedPosition(cc.p(0.75, 0.5))
@@ -283,7 +283,7 @@ function Material_clone:subtitle()
 end
 
 function Material_clone:onEnter()
-    local sprite = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(3)
     self:addChild(sprite)
     sprite:setNormalizedPosition(cc.p(0.25, 0.5))
@@ -296,7 +296,7 @@ function Material_clone:onEnter()
     sprite:runAction(repeatAction)
 
     -- sprite 2... using same material
-    local sprite2 = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite2 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite2:setScale(3)
     self:addChild(sprite2)
     sprite2:setNormalizedPosition(cc.p(0.5, 0.5))
@@ -304,7 +304,7 @@ function Material_clone:onEnter()
     sprite2:runAction(repeatAction:clone())
 
     -- sprite 3... using cloned material
-    local sprite3 = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite3 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite3:setScale(3)
     self:addChild(sprite3)
     sprite3:setNormalizedPosition(cc.p(0.75, 0.5))

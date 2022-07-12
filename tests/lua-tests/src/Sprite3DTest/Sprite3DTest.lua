@@ -34,9 +34,9 @@ function Sprite3DBasicTest.onTouchesEnd(touches, event)
 end
 
 function Sprite3DBasicTest.addNewSpriteWithCoords(parent,x,y)
-    local sprite = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite:setScale(3.0)
-    sprite:setTexture("Sprite3DTest/boss.png")
+    sprite:setTexture("MeshRendererTest/boss.png")
 
     parent:addChild(sprite)
     sprite:setPosition(cc.p(x,y))
@@ -89,16 +89,16 @@ function Sprite3DHitTest.create()
     Helper.titleLabel:setString("Testing Sprite3D Touch in 2D")
     Helper.subtitleLabel:setString("Tap Sprite3D and Drag")
 
-    local sprite1 = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite1 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite1:setScale(4.0)
-    sprite1:setTexture("Sprite3DTest/boss.png")
+    sprite1:setTexture("MeshRendererTest/boss.png")
     sprite1:setPosition( cc.p(size.width/2, size.height/2) )
     sprite1:runAction(cc.RepeatForever:create(cc.RotateBy:create(3, 360)))
     layer:addChild(sprite1)
 
-    local sprite2 = cc.Sprite3D:create("Sprite3DTest/boss1.obj")
+    local sprite2 = cc.Sprite3D:create("MeshRendererTest/boss1.obj")
     sprite2:setScale(4.0)
-    sprite2:setTexture("Sprite3DTest/boss.png")
+    sprite2:setTexture("MeshRendererTest/boss.png")
     sprite2:setPosition( cc.p(size.width/2, size.height/2) )
     sprite2:setAnchorPoint(cc.p(0.5, 0.5))
     sprite2:runAction(cc.RepeatForever:create(cc.RotateBy:create(3, -360)))
@@ -153,14 +153,14 @@ function Sprite3DWithSkinTest.onTouchesEnd(touches, event)
 end
 
 function Sprite3DWithSkinTest.addNewSpriteWithCoords(parent,x,y)
-    local sprite = cc.Sprite3D:create("Sprite3DTest/orc.c3b")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/orc.c3b")
     sprite:setScale(3)
     sprite:setRotation3D({x = 0, y = 180, z = 0})
     sprite:setPosition(cc.p(x, y))
     parent:addChild(sprite)
     table.insert(Sprite3DWithSkinTest._sprites, sprite)
 
-    local animation = cc.Animation3D:create("Sprite3DTest/orc.c3b")
+    local animation = cc.Animation3D:create("MeshRendererTest/orc.c3b")
     if nil ~= animation then
         local animate = cc.Animate3D:create(animation)
         local inverse = false
@@ -341,7 +341,7 @@ end
 
 function Animate3DTest:addSprite3D()
     -- body
-    local fileName = "Sprite3DTest/tortoise.c3b"
+    local fileName = "MeshRendererTest/tortoise.c3b"
     local sprite = cc.Sprite3D:create(fileName)
     sprite:setScale(0.1)
     local winSize = cc.Director:getInstance():getWinSize()
@@ -419,7 +419,7 @@ function AttachmentTest.create()
     local _hasWeapon = nil
 
     local function addNewSpriteWithCoords(pos)
-        local fileName = "Sprite3DTest/orc.c3b"
+        local fileName = "MeshRendererTest/orc.c3b"
         local sprite = cc.Sprite3D:create(fileName)
         sprite:setScale(5)
         sprite:setRotation3D({x = 0, y =180, z = 0})
@@ -427,7 +427,7 @@ function AttachmentTest.create()
         sprite:setPosition( cc.p( pos.x, pos.y) )
     
         --test attach
-        local sp = cc.Sprite3D:create("Sprite3DTest/axe.c3b")
+        local sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
         sprite:getAttachNode("Bip001 R Hand"):addChild(sp)
     
         local animation = cc.Animation3D:create(fileName)
@@ -447,7 +447,7 @@ function AttachmentTest.create()
         if _hasWeapon then
             _sprite:removeAllAttachNode()
         else
-            local sp = cc.Sprite3D:create("Sprite3DTest/axe.c3b")
+            local sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
             _sprite:getAttachNode("Bip001 R Hand"):addChild(sp)
         end
 
@@ -623,7 +623,7 @@ function Sprite3DReskinTest:addNewSpriteWithCoords(pos)
     self._useShoesId   =0
     self._useHairId = 0
 
-    local fileName = "Sprite3DTest/ReskinGirl.c3b"
+    local fileName = "MeshRendererTest/ReskinGirl.c3b"
     local sprite = cc.Sprite3D:create(fileName)
     sprite:setScale(4)
     sprite:setRotation3D({x = 0, y =0 ,z = 0})
@@ -864,7 +864,7 @@ function Sprite3DWithOBBPerfromanceTest:calculateRayByLocationInView(ray, locati
 end
 
 function Sprite3DWithOBBPerfromanceTest:addNewSpriteWithCoords(vec2)
-    local fileName = "Sprite3DTest/tortoise.c3b"
+    local fileName = "MeshRendererTest/tortoise.c3b"
     local sprite = cc.Sprite3D:create(fileName)
     sprite:setScale(0.1)
     local s = cc.Director:getInstance():getWinSize()
@@ -920,14 +920,14 @@ function Sprite3DMirrorTest.create()
     Helper.initWithLayer(layer)
     Helper.titleLabel:setString("Sprite3D Mirror Test")
 
-    local fileName = "Sprite3DTest/orc.c3b"
+    local fileName = "MeshRendererTest/orc.c3b"
     local sprite = cc.Sprite3D:create(fileName)
     sprite:setScale(5.0)
     sprite:setRotation3D({x = 0, y = 180, z = 0})
     sprite:setPosition( cc.p(size.width/2 - 80, size.height/2) )
     layer:addChild(sprite)
 
-    local sp = cc.Sprite3D:create("Sprite3DTest/axe.c3b")
+    local sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
     sprite:getAttachNode("Bip001 R Hand"):addChild(sp)
 
     local animation = cc.Animation3D:create(fileName)
@@ -947,7 +947,7 @@ function Sprite3DMirrorTest.create()
     sprite:setPosition( cc.p( size.width/2 + 80, size.height/2))
 
     --test attach
-    sp = cc.Sprite3D:create("Sprite3DTest/axe.c3b")
+    sp = cc.Sprite3D:create("MeshRendererTest/axe.c3b")
     sprite:getAttachNode("Bip001 R Hand"):addChild(sp)
     
     animation = cc.Animation3D:create(fileName)
@@ -1002,7 +1002,7 @@ function AsyncLoadSprite3DTest:onEnter()
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize = 15
 
-    local paths = {"Sprite3DTest/girl.c3b", "Sprite3DTest/orc.c3b", "Sprite3DTest/ReskinGirl.c3b", "Sprite3DTest/axe.c3b"}
+    local paths = {"MeshRendererTest/girl.c3b", "MeshRendererTest/orc.c3b", "MeshRendererTest/ReskinGirl.c3b", "MeshRendererTest/axe.c3b"}
 
     local label1 = cc.Label:createWithTTF(ttfConfig,"AsyncLoad Sprite3D")
     local item1 = cc.MenuItemLabel:create(label1)
@@ -1016,7 +1016,7 @@ function AsyncLoadSprite3DTest:onEnter()
         node:removeAllChildren()
     
         --remove cache data
-        cc.Sprite3DCache:getInstance():removeAllSprite3DData()
+        cc.MeshRendererCache:getInstance():removeAllMeshRenderData()
 
         local function callback(sprite, index)
             local node = self:getChildByTag(101)
@@ -1121,17 +1121,17 @@ function Sprite3DCubeMapTest:addNewSpriteWithCoords(pos)
     camera:setPosition3D(cc.vec3(0.0, 0.0, 50.0))
     camera:setCameraFlag(cc.CameraFlag.USER1)
     --create a teapot
-    self._teapot = cc.Sprite3D:create("Sprite3DTest/teapot.c3b")
+    self._teapot = cc.Sprite3D:create("MeshRendererTest/teapot.c3b")
 
-    local vertexShader = cc.FileUtils:getInstance():getStringFromFile("Sprite3DTest/cube_map.vert")
-    local fragmentShader = cc.FileUtils:getInstance():getStringFromFile("Sprite3DTest/cube_map.frag")
+    local vertexShader = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/cube_map.vert")
+    local fragmentShader = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/cube_map.frag")
     local program = ccb.Device:getInstance():newProgram(vertexShader, fragmentShader)
     local programState = ccb.ProgramState:new(program)
     program:release()
     
-    self._textureCube = cc.TextureCube:create("Sprite3DTest/skybox/left.jpg", "Sprite3DTest/skybox/right.jpg",
-        "Sprite3DTest/skybox/top.jpg", "Sprite3DTest/skybox/bottom.jpg",
-        "Sprite3DTest/skybox/front.jpg", "Sprite3DTest/skybox/back.jpg")
+    self._textureCube = cc.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
+        "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
+        "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg")
 
     --set texture parameters
     local tRepeatParams = { magFilter=ccb.SamplerFilter.LINEAR , minFilter=ccb.SamplerFilter.LINEAR , sAddressMode=ccb.SamplerAddressMode.MIRROR_REPEAT  , tAddressMode=ccb.SamplerAddressMode.MIRROR_REPEAT }
@@ -1214,15 +1214,15 @@ end
 
 function Sprite3DNormalMappingTest:onEnter()
 
-    local sprite3d = cc.Sprite3D:create("Sprite3DTest/sphere.c3b")
+    local sprite3d = cc.Sprite3D:create("MeshRendererTest/sphere.c3b")
     sprite3d:setScale(2.0)
     sprite3d:setPosition(cc.p(-30,0))
     sprite3d:setRotation3D(cc.vec3(90.0, 0.0, 0.0))
-    sprite3d:setTexture("Sprite3DTest/brickwork-texture.jpg")
+    sprite3d:setTexture("MeshRendererTest/brickwork-texture.jpg")
     sprite3d:setCameraMask(2)
     self:addChild(sprite3d)
 
-    local sprite3dBumped = cc.Sprite3D:create("Sprite3DTest/sphere_bumped.c3b")
+    local sprite3dBumped = cc.Sprite3D:create("MeshRendererTest/sphere_bumped.c3b")
     sprite3dBumped:setScale(20.0)
     sprite3dBumped:setPosition(cc.p(30,0))
     sprite3dBumped:setRotation3D(cc.vec3(90.0, 0.0, 0.0))
@@ -1301,8 +1301,8 @@ end
 
 function Sprite3DMaterialTest:onEnter()
 
-    local material = cc.Sprite3DMaterial:createWithFilename("Sprite3DTest/outline.material")
-    local sprite = cc.Sprite3D:create("Sprite3DTest/sphere_bumped.c3b")
+    local material = cc.Sprite3DMaterial:createWithFilename("MeshRendererTest/outline.material")
+    local sprite = cc.Sprite3D:create("MeshRendererTest/sphere_bumped.c3b")
         :setScale(20.0)
         :setPosition(cc.p(0,0))
         :setRotation3D(cc.vec3(90.0, 0.0, 0.0))

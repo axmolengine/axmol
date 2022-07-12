@@ -1833,22 +1833,22 @@ bool luaval_to_texparams(lua_State* L, int lo, axis::Texture2D::TexParams* outVa
     {
         lua_pushstring(L, "minFilter");
         lua_gettable(L, lo);
-        outValue->minFilter = utils::toBackendSamplerFilter(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->minFilter = static_cast<backend::SamplerFilter>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
 
         lua_pushstring(L, "magFilter");
         lua_gettable(L, lo);
-        outValue->magFilter = utils::toBackendSamplerFilter(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->magFilter = static_cast<backend::SamplerFilter>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
 
         lua_pushstring(L, "wrapS");
         lua_gettable(L, lo);
-        outValue->sAddressMode = utils::toBackendAddressMode(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->sAddressMode = static_cast<backend::SamplerAddressMode>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
 
         lua_pushstring(L, "wrapT");
         lua_gettable(L, lo);
-        outValue->tAddressMode = utils::toBackendAddressMode(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
+        outValue->tAddressMode = static_cast<backend::SamplerAddressMode>(lua_isnil(L, -1) ? 0 : lua_tointeger(L, -1));
         lua_pop(L, 1);
     }
     return ok;
@@ -2289,7 +2289,7 @@ void physics_raycastinfo_to_luaval(lua_State* L, const PhysicsRayCastInfo& info)
     {
         int ID     = (int)(shape->_ID);
         int* luaID = &(shape->_luaID);
-        toluafix_pushusertype_ccobject(L, ID, luaID, (void*)shape, "cc.PhysicsShape");
+        toluafix_pushusertype_ccobject(L, ID, luaID, (void*)shape, "ax.PhysicsShape");
     }
     lua_rawset(L, -3); /* table[key] = value, L: table */
 
@@ -2367,57 +2367,57 @@ void rect_to_luaval(lua_State* L, const Rect& rt)
     lua_rawset(L, -3);                             /* table[key] = value, L: table */
 }
 
-void color4b_to_luaval(lua_State* L, const Color4B& cc)
+void color4b_to_luaval(lua_State* L, const Color4B& color)
 {
     if (NULL == L)
         return;
     lua_newtable(L);                     /* L: table */
     lua_pushstring(L, "r");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.r); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "g");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.g); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "b");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.b); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "a");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.a); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
 }
 
-void color4f_to_luaval(lua_State* L, const Color4F& cc)
+void color4f_to_luaval(lua_State* L, const Color4F& color)
 {
     if (NULL == L)
         return;
     lua_newtable(L);                     /* L: table */
     lua_pushstring(L, "r");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.r); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "g");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.g); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "b");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.b); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "a");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.a); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
 }
 
-void color3b_to_luaval(lua_State* L, const Color3B& cc)
+void color3b_to_luaval(lua_State* L, const Color3B& color)
 {
     if (NULL == L)
         return;
     lua_newtable(L);                     /* L: table */
     lua_pushstring(L, "r");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.r); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.r); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "g");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.g); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.g); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
     lua_pushstring(L, "b");              /* L: table key */
-    lua_pushnumber(L, (lua_Number)cc.b); /* L: table key value*/
+    lua_pushnumber(L, (lua_Number)color.b); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
 }
 
@@ -3032,7 +3032,7 @@ bool luaval_to_vertexLayout(lua_State* L, int pos, axis::backend::VertexLayout& 
         return false;
 
     axis::backend::VertexLayout* tmp = nullptr;
-    auto ret = luaval_to_object<axis::backend::VertexLayout>(L, pos, "cc.VertexLayout", &tmp, message);
+    auto ret = luaval_to_object<axis::backend::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
     if (!tmp)
     {
         return false;

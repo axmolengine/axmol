@@ -97,7 +97,7 @@ void CustomGUIReader::setCustomProps(std::string_view classType,
 
         auto stack = LuaEngine::getInstance()->getLuaStack();
         stack->pushString(classType);
-        stack->pushObject(widget, "cc.Ref");
+        stack->pushObject(widget, "ax.Ref");
         stack->pushString(buffer.GetString(), static_cast<int>(buffer.GetSize()));
         stack->executeFunctionByHandler(_setPropsFunc, 3);
     }

@@ -145,11 +145,11 @@ void MeshRenderer::afterAsyncLoad(void* param)
             auto& nodeDatas     = asyncParam->nodeDatas;
             if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
             {
-                auto meshdata = MeshRendererCache::getInstance()->getMeshData(asyncParam->modelPath);
+                auto meshdata = MeshRendererCache::getInstance()->getMeshRenderData(asyncParam->modelPath);
                 if (meshdata == nullptr)
                 {
                     // add to cache
-                    auto data             = new MeshRendererCache::MeshRendererData();
+                    auto data             = new MeshRendererCache::MeshRenderData();
                     data->materialdatas   = materialdatas;
                     data->nodedatas       = nodeDatas;
                     data->meshVertexDatas = _meshVertexDatas;
@@ -158,7 +158,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
                         data->programStates.pushBack(mesh->getProgramState());
                     }
 
-                    MeshRendererCache::getInstance()->addMeshRendererData(asyncParam->modelPath, data);
+                    MeshRendererCache::getInstance()->addMeshRenderData(asyncParam->modelPath, data);
 
                     CC_SAFE_DELETE(meshdatas);
                     materialdatas = nullptr;
@@ -199,7 +199,7 @@ AABB MeshRenderer::getAABBRecursivelyImp(Node* node)
 
 bool MeshRenderer::loadFromCache(std::string_view path)
 {
-    auto meshdata = MeshRendererCache::getInstance()->getMeshData(path);
+    auto meshdata = MeshRendererCache::getInstance()->getMeshRenderData(path);
     if (meshdata)
     {
         for (auto it : meshdata->meshVertexDatas)
@@ -315,7 +315,7 @@ bool MeshRenderer::initWithFile(std::string_view path)
         if (initFrom(*nodeDatas, *meshdatas, *materialdatas))
         {
             // add to cache
-            auto data             = new MeshRendererCache::MeshRendererData();
+            auto data             = new MeshRendererCache::MeshRenderData();
             data->materialdatas   = materialdatas;
             data->nodedatas       = nodeDatas;
             data->meshVertexDatas = _meshVertexDatas;
@@ -324,7 +324,7 @@ bool MeshRenderer::initWithFile(std::string_view path)
                 data->programStates.pushBack(mesh->getProgramState());
             }
 
-            MeshRendererCache::getInstance()->addMeshRendererData(path, data);
+            MeshRendererCache::getInstance()->addMeshRenderData(path, data);
             CC_SAFE_DELETE(meshdatas);
             _contentSize = getBoundingBox().size;
             return true;
@@ -971,7 +971,7 @@ void MeshRendererCache::destroyInstance()
     }
 }
 
-MeshRendererCache::MeshRendererData* MeshRendererCache::getMeshData(std::string_view key) const
+MeshRendererCache::MeshRenderData* MeshRendererCache::getMeshRenderData(std::string_view key) const
 {
     auto it = _meshDatas.find(key);
     if (it != _meshDatas.end())
@@ -979,7 +979,7 @@ MeshRendererCache::MeshRendererData* MeshRendererCache::getMeshData(std::string_
     return nullptr;
 }
 
-bool MeshRendererCache::addMeshRendererData(std::string_view key, MeshRendererCache::MeshRendererData* meshdata)
+bool MeshRendererCache::addMeshRenderData(std::string_view key, MeshRendererCache::MeshRenderData* meshdata)
 {
     auto it = _meshDatas.find(key);
     if (it == _meshDatas.end())
@@ -990,7 +990,7 @@ bool MeshRendererCache::addMeshRendererData(std::string_view key, MeshRendererCa
     return false;
 }
 
-void MeshRendererCache::removeMeshRendererData(std::string_view key)
+void MeshRendererCache::removeMeshRenderData(std::string_view key)
 {
     auto it = _meshDatas.find(key);
     if (it != _meshDatas.end())
@@ -1000,7 +1000,7 @@ void MeshRendererCache::removeMeshRendererData(std::string_view key)
     }
 }
 
-void MeshRendererCache::removeAllMeshRendererData()
+void MeshRendererCache::removeAllMeshRenderData()
 {
     for (auto& it : _meshDatas)
     {
@@ -1012,7 +1012,7 @@ void MeshRendererCache::removeAllMeshRendererData()
 MeshRendererCache::MeshRendererCache() {}
 MeshRendererCache::~MeshRendererCache()
 {
-    removeAllMeshRendererData();
+    removeAllMeshRenderData();
 }
 
 static MeshMaterial* getMeshRendererMaterialForAttribs(MeshVertexData* meshVertexData, bool usesLight)

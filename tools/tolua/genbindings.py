@@ -164,7 +164,7 @@ def main():
 
 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-    cocos_root = os.path.abspath(os.path.join(project_root, ''))
+    axis_root = os.path.abspath(os.path.join(project_root, ''))
     cxx_generator_root = os.path.abspath(os.path.join(project_root, 'tools/bindings-generator'))
 
     extraFlags = _defaultIncludePath()
@@ -180,7 +180,7 @@ def main():
     config.set('DEFAULT', 'androidndkdir', ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
-    config.set('DEFAULT', 'axisdir', cocos_root)
+    config.set('DEFAULT', 'axisdir', axis_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
     config.set('DEFAULT', 'extra_flags', extraFlags)
 
@@ -205,21 +205,21 @@ def main():
         output_dir = '%s/extensions/scripting/lua-bindings/auto' % project_root
 
         cmd_args = {
-                    'cocos2dx.ini' : ('cocos2d-x', 'lua_cocos2dx_auto'), \
-                    'cocos2dx_backend.ini' : ('cocos2dx_backend', 'lua_cocos2dx_backend_auto'), \
-                    'cocos2dx_extension.ini' : ('cocos2dx_extension', 'lua_cocos2dx_extension_auto'), \
-                    'cocos2dx_ui.ini' : ('cocos2dx_ui', 'lua_cocos2dx_ui_auto'), \
-                    'cocos2dx_studio.ini' : ('cocos2dx_studio', 'lua_cocos2dx_studio_auto'), \
-                    'cocos2dx_spine.ini' : ('cocos2dx_spine', 'lua_cocos2dx_spine_auto'), \
-                    'cocos2dx_physics.ini' : ('cocos2dx_physics', 'lua_cocos2dx_physics_auto'), \
-                    'cocos2dx_video.ini' : ('cocos2dx_video', 'lua_cocos2dx_video_auto'), \
-                    'cocos2dx_controller.ini' : ('cocos2dx_controller', 'lua_cocos2dx_controller_auto'), \
-                    'cocos2dx_3d.ini': ('cocos2dx_3d', 'lua_cocos2dx_3d_auto'), \
-                    'cocos2dx_audioengine.ini': ('cocos2dx_audioengine', 'lua_cocos2dx_audioengine_auto'), \
-                    'cocos2dx_csloader.ini' : ('cocos2dx_csloader', 'lua_cocos2dx_csloader_auto'), \
-                    'cocos2dx_webview.ini' : ('cocos2dx_webview', 'lua_cocos2dx_webview_auto'), \
-                    'cocos2dx_physics3d.ini' : ('cocos2dx_physics3d', 'lua_cocos2dx_physics3d_auto'), \
-                    'cocos2dx_navmesh.ini' : ('cocos2dx_navmesh', 'lua_cocos2dx_navmesh_auto'), \
+                    'axis_base.ini' : ('axis_base', 'lua_axis_base_auto'), \
+                    'axis_backend.ini' : ('axis_backend', 'lua_axis_backend_auto'), \
+                    'axis_extension.ini' : ('axis_extension', 'lua_axis_extension_auto'), \
+                    'axis_ui.ini' : ('axis_ui', 'lua_axis_ui_auto'), \
+                    'axis_studio.ini' : ('axis_studio', 'lua_axis_studio_auto'), \
+                    'axis_spine.ini' : ('axis_spine', 'lua_axis_spine_auto'), \
+                    'axis_physics.ini' : ('axis_physics', 'lua_axis_physics_auto'), \
+                    'axis_video.ini' : ('axis_video', 'lua_axis_video_auto'), \
+                    'axis_controller.ini' : ('axis_controller', 'lua_axis_controller_auto'), \
+                    'axis_3d.ini': ('axis_3d', 'lua_axis_3d_auto'), \
+                    'axis_audioengine.ini': ('axis_audioengine', 'lua_axis_audioengine_auto'), \
+                    'axis_csloader.ini' : ('axis_csloader', 'lua_axis_csloader_auto'), \
+                    'axis_webview.ini' : ('axis_webview', 'lua_axis_webview_auto'), \
+                    'axis_physics3d.ini' : ('axis_physics3d', 'lua_axis_physics3d_auto'), \
+                    'axis_navmesh.ini' : ('axis_navmesh', 'lua_axis_navmesh_auto'), \
                     }
         target = 'lua'
         generator_py = '%s/generator.py' % cxx_generator_root

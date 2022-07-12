@@ -140,7 +140,7 @@ function NavMeshBaseTestDemo:initScene()
 end
 
 function NavMeshBaseTestDemo:createAgent(pos)
-    local filePath = "Sprite3DTest/girl.c3b"
+    local filePath = "MeshRendererTest/girl.c3b"
 
     local navMeshAgentParam = {}
     navMeshAgentParam.radius = 2.0
@@ -172,7 +172,7 @@ end
 
 function NavMeshBaseTestDemo:createObstacle(pos)
     local obstacle = cc.NavMeshObstacle:create(2.0, 8.0)
-    local obstacleNode = cc.Sprite3D:create("Sprite3DTest/cylinder.c3b")
+    local obstacleNode = cc.Sprite3D:create("MeshRendererTest/cylinder.c3b")
     obstacleNode:setPosition3D(cc.vec3(pos.x, pos.y -0.5, pos.z))
     obstacleNode:setRotation3D(cc.vec3(-90.0, 0.0, 0.0))
     obstacleNode:setScale(0.3)
