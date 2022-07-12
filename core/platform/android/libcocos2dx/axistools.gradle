@@ -97,7 +97,7 @@ class axistools {
      * @return
      */
     static String[] findNDK(project, ndkVer = "23.2.8568313") {
-        def allowNewerNdk = false
+        def allowNewerNdk = null
         if (ndkVer.endsWith('+')) {
             allowNewerNdk = true
             ndkVer = ndkVer.substring(0, ndkVer.length() - 1)
@@ -126,7 +126,7 @@ class axistools {
         rets[0] = ndkVer
 
         for (ndkDir in ndkDirs) {
-            if (findNDKInDir(ndkVer, ndkDir, rets)) {
+            if (findNDKInDir(ndkVer, allowNewerNdk, ndkDir, rets)) {
                 return rets
             }
         }
@@ -199,7 +199,7 @@ class axistools {
         return new VersionComparator().compare(ver1, ver2);
     }
 
-    private static String findNDKInDir(ndkVer, ndkDir, rets) {
+    private static String findNDKInDir(ndkVer, allowNewerNdk, ndkDir, rets) {
         def found = null
         def properties = new Properties()
         File propertiesFile = new File("$ndkDir/source.properties")
