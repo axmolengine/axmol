@@ -87,62 +87,62 @@ class VersionComparator implements Comparator<String> {
     protected boolean isSnapshot(String version) {
         SNAPSHOT_SUFFIXES.any { String it -> version?.endsWith(it) }
     }
-
-
 }
 
 class axistools {
-    static int compareVersion(String ver1, String ver2) {
-        return new VersionComparator().compare(ver1, ver2);
-    }
-
-    static String[] findNDK(){
-        def ndkVer = "23.2.8568313" // ndk-r23c
-        
+    /**
+     * Find suitable ndk for current project
+     * @param project The current android project
+     * @param ndkVer The required ndk version for current project
+     * @return
+     */
+    static String[] findNDK(project, ndkVer = "23.2.8568313") {
         def allowNewerNdk = false
-        if(ndkVer.endsWith('+')) {
+        if (ndkVer.endsWith('+')) {
             allowNewerNdk = true
             ndkVer = ndkVer.substring(0, ndkVer.length() - 1)
         }
 
+        /* Collect ndk dirs */
         def ndkRoot = Paths.get("${System.env.ANDROID_NDK}")
-        if(Files.exists(ndkRoot)) {
+        def ndkDirs = []
+        if (Files.exists(ndkRoot)) {
             ndkRoot = ndkRoot.toAbsolutePath().toString()
-            def properties = new Properties()
-            File propertiesFile = new File("$ndkRoot/source.properties")
-            propertiesFile.withInputStream {
-                properties.load(it)
-                def foundNdkVer = properties['Pkg.Revision']
-                def ret = axistools.compareVersion(foundNdkVer, ndkVer)
-                if(ret == 0) {
-                    println("Using found ndk (revision=$foundNdkVer,path=$ndkRoot)")
-                }
-                else if(ret > 0){
-                    if(allowNewerNdk) {
-                        println("Using found newer ndk (revision=$foundNdkVer,path=$ndkRoot), (minimum required is: ${ndkVer})")
-                        ndkVer = foundNdkVer
-                    }
-                    else {
-                        throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
-                    }
-                }
-                else {
-                    throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
+            ndkDirs.add(ndkRoot)
+        }
+
+        def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
+        if (Files.exists(sdkRoot)) {
+            File dir = new File(sdkRoot.toAbsolutePath().toString() + '/ndk')
+            if (dir.isDirectory()) {
+                for (ndkDir in dir.listFiles()) {
+                    ndkDirs.add(ndkDir.toString())
                 }
             }
         }
-        else {
-            ndkRoot = null
-            println("No installed ndk found, the gradle will install ndk: $ndkVer automatically")
-        }
 
+        /* Find suitable ndk in dirs */
         def rets = new String[2]
         rets[0] = ndkVer
-        rets[1] = ndkRoot
+
+        for (ndkDir in ndkDirs) {
+            if (findNDKInDir(ndkVer, ndkDir, rets)) {
+                return rets
+            }
+        }
+
+        println("No installed ndk found, the gradle will install ndk: $ndkVer automatically")
+        rets[1] = null
         return rets
     }
 
-    static String findCMake(String cmakeVer, rootProject) {
+    /**
+     * Find suitable cmake for current project
+     * @param project The current android project
+     * @param cmakeVer The required cmake version of project
+     * @return
+     */
+    static String findCMake(project, String cmakeVer = "3.10.2+") {
         def allowNewerCMake = false
         if(cmakeVer.endsWith('+')) {
             allowNewerCMake = true
@@ -151,9 +151,12 @@ class axistools {
 
         def cmakeBinDirs = []
 
-        def cmakeBinDir = getCMakeBinFromLocal(rootProject)
-        if(cmakeBinDir != null) {
-            cmakeBinDirs.add(cmakeBinDir);
+        def cmakeBinDir = null
+        if (project != null) {
+            cmakeBinDir = getCMakeBinFromProjectLocal(project)
+            if (cmakeBinDir != null) {
+                cmakeBinDirs.add(cmakeBinDir);
+            }
         }
 
         def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
@@ -191,8 +194,46 @@ class axistools {
 
         return foundCMakeVer
     }
-    
-    static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
+
+    private static int compareVersion(String ver1, String ver2) {
+        return new VersionComparator().compare(ver1, ver2);
+    }
+
+    private static String findNDKInDir(ndkVer, ndkDir, rets) {
+        def found = null
+        def properties = new Properties()
+        File propertiesFile = new File("$ndkDir/source.properties")
+        propertiesFile.withInputStream {
+            properties.load(it)
+            def foundNdkVer = properties['Pkg.Revision']
+            def ret = axistools.compareVersion(foundNdkVer, ndkVer)
+            if(ret == 0) {
+                println("Using found ndk (revision=$foundNdkVer,path=$ndkDir)")
+                found = true
+            }
+            else if(ret > 0){
+                if(allowNewerNdk) {
+                    println("Using found newer ndk (revision=$foundNdkVer,path=$ndkDir), (minimum required is: ${ndkVer})")
+                    ndkVer = foundNdkVer
+                    found = true
+                }
+                else {
+                    //throw new GradleException("The ndk ${ndkVer} is required, but $foundNdkVer found!")
+                }
+            }
+            else {
+                //throw new GradleException("The ndk ${ndkVer}+ is required, but $foundNdkVer found!")
+            }
+        }
+        if (found) {
+            rets[0] = ndkVer
+            rets[1] = ndkDir
+            return true
+        }
+        return null
+    }
+
+    private static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
         def foundCMakeVer = null
         
         String ninjaPath = cmakeBin + File.separator + getNinjaProgramName()
@@ -240,11 +281,11 @@ class axistools {
         return foundCMakeVer
     }
 
-    static String getCMakeBinFromLocal(rootProject) {
+    private static String getCMakeBinFromProjectLocal(project) {
         String programName = getCMakeProgramName();
         Properties properties = new Properties()
         try {
-            properties.load(rootProject.file("local.properties"))
+            properties.load(project.rootProject.file("local.properties"))
             def cmakeDir = properties.getProperty("cmake.dir")
             if(cmakeDir != null) {
                 def cmakeBin = "$cmakeDir/bin"
@@ -258,7 +299,7 @@ class axistools {
         return null
     }
 
-    static String getCMakeBinFromPath() {
+    private static String getCMakeBinFromPath() {
         String cmakeExecName = getCMakeProgramName();
         def foundBinPath = null
         Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
@@ -275,15 +316,15 @@ class axistools {
         return foundBinPath
     }
 
-    static String getCMakeProgramName() {
+    private static String getCMakeProgramName() {
         return isWindows() ? "cmake.exe" : "cmake"
     }
-    
-    static String getNinjaProgramName() {
+
+    private static String getNinjaProgramName() {
         return isWindows() ? "ninja.exe" : "ninja"
-    } 
-    
-    static boolean isWindows() {
+    }
+
+    private static boolean isWindows() {
         return System.getProperty("os.name").toLowerCase().contains("windows");
     }
 }
