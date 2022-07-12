@@ -500,7 +500,7 @@ CC_DEPRECATED_ATTRIBUTE static inline bool luaval_to_array_of_Point(lua_State* L
  * @param L the current lua_State.
  * @param argc the numbers of Lua values in the stack.
  * @param ret a axis::Vector of type T objects.
- * @return Return false if argc equal to 0 , L equal to nullptr or the Lua userdata at the index isn't `cc.Ref` type,
+ * @return Return false if argc equal to 0 , L equal to nullptr or the Lua userdata at the index isn't `ax.Ref` type,
  * otherwise return true.
  */
 template <class T>
@@ -517,7 +517,7 @@ bool luavals_variadic_to_ccvector(lua_State* L, int argc, axis::Vector<T>* ret)
         {
             tolua_Error err;
 
-            if (!tolua_isusertype(L, i + 2, "cc.Ref", 0, &err))
+            if (!tolua_isusertype(L, i + 2, "ax.Ref", 0, &err))
             {
                 ok = false;
                 break;

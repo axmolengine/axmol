@@ -126,7 +126,7 @@ function BillBoardTest:init()
     table.insert(self._billboards, billboard)
     table.insert(self._billboards, billboard2)
 
-    local sprite3d = cc.Sprite3D:create("Sprite3DTest/orc.c3t")
+    local sprite3d = cc.Sprite3D:create("MeshRendererTest/orc.c3t")
     sprite3d:setScale(2.0)
     sprite3d:addChild(billboard)
     sprite3d:runAction( cc.RepeatForever:create( cc.RotateBy:create( 10.0, cc.vec3(0.0, 360.0, 0.0) ) ) )

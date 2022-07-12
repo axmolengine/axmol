@@ -289,13 +289,13 @@ protected:
 class CC_DLL MeshRendererCache
 {
 public:
-    struct MeshRendererData
+    struct MeshRenderData
     {
         Vector<MeshVertexData*> meshVertexDatas;
         Vector<backend::ProgramState*> programStates;
         NodeDatas* nodedatas;
         MaterialDatas* materialdatas;
-        ~MeshRendererData()
+        ~MeshRenderData()
         {
             if (nodedatas)
                 delete nodedatas;
@@ -314,27 +314,27 @@ public:
      *
      * @lua NA
      */
-    MeshRendererData* getMeshData(std::string_view key) const;
+    MeshRenderData* getMeshRenderData(std::string_view key) const;
 
     /**
      * add a MeshData object into the MeshRenderer with a specified key
      *
      * @lua NA
      */
-    bool addMeshRendererData(std::string_view key, MeshRendererData* meshdata);
+    bool addMeshRenderData(std::string_view key, MeshRenderData* meshdata);
 
     /** remove a MeshData from the MeshRenderer with a specified key */
-    void removeMeshRendererData(std::string_view key);
+    void removeMeshRenderData(std::string_view key);
 
     /** remove all the MeshData objects from the MeshRenderer */
-    void removeAllMeshRendererData();
+    void removeAllMeshRenderData();
 
     MeshRendererCache();
     ~MeshRendererCache();
 
 protected:
     static MeshRendererCache* _cacheInstance;
-    hlookup::string_map<MeshRendererData*> _meshDatas;  // cached mesh data
+    hlookup::string_map<MeshRenderData*> _meshDatas;  // cached mesh data
 };
 
 // end of 3d group

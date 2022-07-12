@@ -35,7 +35,7 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "scripting/lua-bindings/manual/Cocos2dxLuaLoader.h"
+#include "scripting/lua-bindings/manual/AxisLuaLoader.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 #    include "scripting/lua-bindings/manual/platform/ios/CCLuaObjcBridge.h"
@@ -45,13 +45,13 @@ extern "C" {
 #    include "scripting/lua-bindings/manual/platform/android/CCLuaJavaBridge.h"
 #endif
 
-#include "scripting/lua-bindings/manual/cocos2d/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/auto/lua_cocos2dx_auto.hpp"
-#include "scripting/lua-bindings/manual/cocos2d/lua_cocos2dx_manual.hpp"
+#include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
+#include "scripting/lua-bindings/auto/lua_axis_base_auto.hpp"
+#include "scripting/lua-bindings/manual/base/lua_axis_base_manual.hpp"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/auto/lua_cocos2dx_physics_auto.hpp"
-#include "scripting/lua-bindings/manual/cocos2d/lua_cocos2dx_physics_manual.hpp"
-#include "scripting/lua-bindings/auto/lua_cocos2dx_backend_auto.hpp"
+#include "scripting/lua-bindings/auto/lua_axis_physics_auto.hpp"
+#include "scripting/lua-bindings/manual/physics/lua_axis_physics_manual.hpp"
+#include "scripting/lua-bindings/auto/lua_axis_backend_auto.hpp"
 #include "base/ZipUtils.h"
 #include "platform/CCFileUtils.h"
 
@@ -144,19 +144,19 @@ bool LuaStack::init()
     luaL_register(_state, "_G", global_functions);
 
     g_luaType.clear();
-    register_all_cocos2dx(_state);
-    register_all_cocos2dx_backend(_state);
-    register_all_cocos2dx_manual(_state);
-    register_all_cocos2dx_module_manual(_state);
-    register_all_cocos2dx_math_manual(_state);
-    register_all_cocos2dx_shaders_manual(_state);
-    register_all_cocos2dx_bytearray_manual(_state);
+    register_all_axis_base(_state);
+    register_all_axis_backend(_state);
+    register_all_axis_manual(_state);
+    register_all_axis_module_manual(_state);
+    register_all_axis_math_manual(_state);
+    register_all_axis_shaders_manual(_state);
+    register_all_axis_bytearray_manual(_state);
 
     tolua_luanode_open(_state);
     register_luanode_manual(_state);
 #if CC_USE_PHYSICS
-    register_all_cocos2dx_physics(_state);
-    register_all_cocos2dx_physics_manual(_state);
+    register_all_axis_physics(_state);
+    register_all_axis_physics_manual(_state);
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
@@ -170,7 +170,7 @@ bool LuaStack::init()
     tolua_script_handler_mgr_open(_state);
 
     // add cocos2dx loader
-    addLuaLoader(cocos2dx_lua_loader);
+    addLuaLoader(axis_lua_loader);
 
     return true;
 }

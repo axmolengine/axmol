@@ -266,7 +266,7 @@ function TerrainWalkThru:init()
     self._terrain:setSkirtHeightRatio(3)
     self._terrain:setLODDistance(64,128,192)
 
-    self._player = Player:create("Sprite3DTest/girl.c3b", self._camera, self._terrain)
+    self._player = Player:create("MeshRendererTest/girl.c3b", self._camera, self._terrain)
     self._player:setCameraMask(2)
     self._player:setScale(0.08)
     self._player:setPositionY(self._terrain:getHeight(self._player:getPositionX(), self._player:getPositionZ()) + PLAYER_HEIGHT)
@@ -284,7 +284,7 @@ function TerrainWalkThru:init()
     billboard:setCameraMask(cc.CameraFlag.USER1)
     self._player:addChild(billboard)
 
-    local animation = cc.Animation3D:create("Sprite3DTest/girl.c3b","Take 001")
+    local animation = cc.Animation3D:create("MeshRendererTest/girl.c3b","Take 001")
     if nil ~= animation then
         local animate = cc.Animate3D:create(animation)
         self._player:runAction(cc.RepeatForever:create(animate))

@@ -35,6 +35,14 @@ if (unpack) then
     table.unpack = unpack
 end
 
+-- < axis-1.0
+cc = ax
+cc.Director.setDisplayStats = ax.Director.setStatsDisplay
+cc.Sprite3D = ax.MeshRenderer
+ccexp = axexp
+ccui = axui
+ccb = axb
+
 require "cocos.cocos2d.Cocos2d"
 require "cocos.cocos2d.Cocos2dConstants"
 require "cocos.cocos2d.functions"

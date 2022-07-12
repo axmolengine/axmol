@@ -2,32 +2,32 @@ set(cocos_root ${AXIS_ROOT_PATH})
 
 set(lua_bindings_manual_headers
     manual/CCComponentLua.h
-    manual/3d/lua_cocos2dx_3d_manual.h
+    manual/3d/lua_axis_3d_manual.h
     manual/CCLuaStack.h
     manual/CCLuaEngine.h
     manual/lua_module_register.h
     manual/CCLuaBridge.h
-    manual/extension/lua_cocos2dx_extension_manual.h
+    manual/extension/lua_axis_extension_manual.h
     manual/LuaBasicConversions.h
     manual/spine/LuaSkeletonAnimation.h
     manual/platform/ios/CCLuaObjcBridge.h
-    manual/network/lua_cocos2dx_network_manual.h
+    manual/network/lua_axis_network_manual.h
     manual/network/lua_xml_http_request.h
     manual/network/lua_downloader.h
-    manual/audioengine/lua_cocos2dx_audioengine_manual.h
+    manual/audioengine/lua_axis_audioengine_manual.h
     manual/Lua-BindingsExport.h
     manual/tolua_fix.h
-    manual/navmesh/lua_cocos2dx_navmesh_manual.h
-    manual/navmesh/lua_cocos2dx_navmesh_conversions.h
-    manual/cocos2d/LuaScriptHandlerMgr.h
-    manual/cocos2d/lua_cocos2dx_manual.hpp
-    manual/Cocos2dxLuaLoader.h
+    manual/navmesh/lua_axis_navmesh_manual.h
+    manual/navmesh/lua_axis_navmesh_conversions.h
+    manual/base/LuaScriptHandlerMgr.h
+    manual/base/lua_axis_base_manual.hpp
+    manual/AxisLuaLoader.h
     manual/CCLuaValue.h
-    manual/physics3d/lua_cocos2dx_physics3d_manual.h
-    manual/cocostudio/lua-cocos-studio-conversions.h
+    manual/physics3d/lua_axis_physics3d_manual.h
+    manual/cocostudio/lua-cocostudio-conversions.h
     manual/cocostudio/CustomGUIReader.h
-    manual/ui/lua_cocos2dx_ui_manual.hpp
-    manual/controller/lua_cocos2dx_controller_manual.hpp
+    manual/ui/lua_axis_ui_manual.hpp
+    manual/controller/lua_axis_controller_manual.hpp
     )
 
 set(lua_bindings_manual_files
@@ -35,63 +35,63 @@ set(lua_bindings_manual_files
     manual/CCLuaEngine.cpp
     manual/CCLuaStack.cpp
     manual/CCLuaValue.cpp
-    manual/Cocos2dxLuaLoader.cpp
+    manual/AxisLuaLoader.cpp
     manual/LuaBasicConversions.cpp
     manual/lua_module_register.cpp
     manual/tolua_fix.cpp
     manual/CCComponentLua.cpp
-    manual/cocos2d/LuaScriptHandlerMgr.cpp
-    manual/cocos2d/lua_cocos2dx_manual.cpp
-    manual/cocos2d/lua_cocos2dx_physics_manual.cpp
-    manual/3d/lua_cocos2dx_3d_manual.cpp
+    manual/base/LuaScriptHandlerMgr.cpp
+    manual/base/lua_axis_base_manual.cpp
+    manual/physics/lua_axis_physics_manual.cpp
+    manual/3d/lua_axis_3d_manual.cpp
     manual/cocostudio/CustomGUIReader.cpp
-    manual/cocostudio/lua_cocos2dx_coco_studio_manual.cpp
-    manual/cocostudio/lua-cocos-studio-conversions.cpp
-    manual/cocostudio/lua_cocos2dx_csloader_manual.cpp
-    manual/controller/lua_cocos2dx_controller_manual.cpp
-    manual/extension/lua_cocos2dx_extension_manual.cpp
-    manual/network/lua_cocos2dx_network_manual.cpp
+    manual/cocostudio/lua_axis_cocostudio_manual.cpp
+    manual/cocostudio/lua-cocostudio-conversions.cpp
+    manual/cocostudio/lua_axis_csloader_manual.cpp
+    manual/controller/lua_axis_controller_manual.cpp
+    manual/extension/lua_axis_extension_manual.cpp
+    manual/network/lua_axis_network_manual.cpp
     manual/network/lua_xml_http_request.cpp
     manual/network/lua_downloader.cpp
-    manual/spine/lua_cocos2dx_spine_manual.cpp
+    manual/spine/lua_axis_spine_manual.cpp
     manual/spine/LuaSkeletonAnimation.cpp
-    manual/ui/lua_cocos2dx_ui_manual.cpp
-    manual/audioengine/lua_cocos2dx_audioengine_manual.cpp
-    manual/physics3d/lua_cocos2dx_physics3d_manual.cpp
-    manual/navmesh/lua_cocos2dx_navmesh_conversions.cpp
-    manual/navmesh/lua_cocos2dx_navmesh_manual.cpp
+    manual/ui/lua_axis_ui_manual.cpp
+    manual/audioengine/lua_axis_audioengine_manual.cpp
+    manual/physics3d/lua_axis_physics3d_manual.cpp
+    manual/navmesh/lua_axis_navmesh_conversions.cpp
+    manual/navmesh/lua_axis_navmesh_manual.cpp
     )
 
 set(lua_bindings_auto_headers
-    auto/lua_cocos2dx_audioengine_auto.hpp
-    auto/lua_cocos2dx_3d_auto.hpp
-    auto/lua_cocos2dx_controller_auto.hpp
-    auto/lua_cocos2dx_spine_auto.hpp
-    auto/lua_cocos2dx_studio_auto.hpp
-    auto/lua_cocos2dx_auto.hpp
-    auto/lua_cocos2dx_navmesh_auto.hpp
-    auto/lua_cocos2dx_csloader_auto.hpp
-    auto/lua_cocos2dx_physics3d_auto.hpp
-    auto/lua_cocos2dx_ui_auto.hpp
-    auto/lua_cocos2dx_physics_auto.hpp
-    auto/lua_cocos2dx_extension_auto.hpp
-    auto/lua_cocos2dx_backend_auto.hpp
+    auto/lua_axis_audioengine_auto.hpp
+    auto/lua_axis_3d_auto.hpp
+    auto/lua_axis_controller_auto.hpp
+    auto/lua_axis_spine_auto.hpp
+    auto/lua_axis_studio_auto.hpp
+    auto/lua_axis_base_auto.hpp
+    auto/lua_axis_navmesh_auto.hpp
+    auto/lua_axis_csloader_auto.hpp
+    auto/lua_axis_physics3d_auto.hpp
+    auto/lua_axis_ui_auto.hpp
+    auto/lua_axis_physics_auto.hpp
+    auto/lua_axis_extension_auto.hpp
+    auto/lua_axis_backend_auto.hpp
     )
 
 set(lua_bindings_auto_files
-    auto/lua_cocos2dx_3d_auto.cpp
-    auto/lua_cocos2dx_auto.cpp
-    auto/lua_cocos2dx_controller_auto.cpp
-    auto/lua_cocos2dx_extension_auto.cpp
-    auto/lua_cocos2dx_physics_auto.cpp
-    auto/lua_cocos2dx_spine_auto.cpp
-    auto/lua_cocos2dx_studio_auto.cpp
-    auto/lua_cocos2dx_csloader_auto.cpp
-    auto/lua_cocos2dx_ui_auto.cpp
-    auto/lua_cocos2dx_audioengine_auto.cpp
-    auto/lua_cocos2dx_physics3d_auto.cpp
-    auto/lua_cocos2dx_navmesh_auto.cpp
-    auto/lua_cocos2dx_backend_auto.cpp
+    auto/lua_axis_3d_auto.cpp
+    auto/lua_axis_base_auto.cpp
+    auto/lua_axis_controller_auto.cpp
+    auto/lua_axis_extension_auto.cpp
+    auto/lua_axis_physics_auto.cpp
+    auto/lua_axis_spine_auto.cpp
+    auto/lua_axis_studio_auto.cpp
+    auto/lua_axis_csloader_auto.cpp
+    auto/lua_axis_ui_auto.cpp
+    auto/lua_axis_audioengine_auto.cpp
+    auto/lua_axis_physics3d_auto.cpp
+    auto/lua_axis_navmesh_auto.cpp
+    auto/lua_axis_backend_auto.cpp
     )
 
 if(APPLE)
@@ -107,57 +107,57 @@ if(APPLE)
     if(IOS)
         set(lua_bindings_manual_headers
             ${lua_bindings_manual_headers}
-            manual/ui/lua_cocos2dx_webview_manual.hpp
-            auto/lua_cocos2dx_webview_auto.hpp
-            auto/lua_cocos2dx_video_auto.hpp
-            manual/ui/lua_cocos2dx_video_manual.hpp
+            manual/ui/lua_axis_webview_manual.hpp
+            auto/lua_axis_webview_auto.hpp
+            auto/lua_axis_video_auto.hpp
+            manual/ui/lua_axis_video_manual.hpp
             )
         set(lua_bindings_manual_files
             ${lua_bindings_manual_files}
-            manual/ui/lua_cocos2dx_webview_manual.cpp
-            auto/lua_cocos2dx_webview_auto.cpp
-            manual/ui/lua_cocos2dx_video_manual.cpp
-            auto/lua_cocos2dx_video_auto.cpp
+            manual/ui/lua_axis_webview_manual.cpp
+            auto/lua_axis_webview_auto.cpp
+            manual/ui/lua_axis_video_manual.cpp
+            auto/lua_axis_video_auto.cpp
             )
     endif()
 elseif(ANDROID)
     set(lua_bindings_manual_headers
         ${lua_bindings_manual_headers}
-        manual/ui/lua_cocos2dx_webview_manual.hpp
-        auto/lua_cocos2dx_webview_auto.hpp
-        auto/lua_cocos2dx_video_auto.hpp
-        manual/ui/lua_cocos2dx_video_manual.hpp
+        manual/ui/lua_axis_webview_manual.hpp
+        auto/lua_axis_webview_auto.hpp
+        auto/lua_axis_video_auto.hpp
+        manual/ui/lua_axis_video_manual.hpp
         )
     set(lua_bindings_manual_files
         ${lua_bindings_manual_files}
-        manual/ui/lua_cocos2dx_webview_manual.cpp
-        auto/lua_cocos2dx_webview_auto.cpp
-        manual/ui/lua_cocos2dx_video_manual.cpp
-        auto/lua_cocos2dx_video_auto.cpp
+        manual/ui/lua_axis_webview_manual.cpp
+        auto/lua_axis_webview_auto.cpp
+        manual/ui/lua_axis_video_manual.cpp
+        auto/lua_axis_video_auto.cpp
         )
 elseif(WINDOWS)
     if(AX_ENABLE_MFMEDIA)
         set(lua_bindings_manual_headers
             ${lua_bindings_manual_headers}
-            auto/lua_cocos2dx_video_auto.hpp
-            manual/ui/lua_cocos2dx_video_manual.hpp
+            auto/lua_axis_video_auto.hpp
+            manual/ui/lua_axis_video_manual.hpp
             )
         set(lua_bindings_manual_files
             ${lua_bindings_manual_files}
-            manual/ui/lua_cocos2dx_video_manual.cpp
-            auto/lua_cocos2dx_video_auto.cpp
+            manual/ui/lua_axis_video_manual.cpp
+            auto/lua_axis_video_auto.cpp
             )
     endif()
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         set(lua_bindings_manual_headers
             ${lua_bindings_manual_headers}
-            manual/ui/lua_cocos2dx_webview_manual.hpp
-            auto/lua_cocos2dx_webview_auto.hpp
+            manual/ui/lua_axis_webview_manual.hpp
+            auto/lua_axis_webview_auto.hpp
             )
         set(lua_bindings_manual_files
             ${lua_bindings_manual_files}
-            manual/ui/lua_cocos2dx_webview_manual.cpp
-            auto/lua_cocos2dx_webview_auto.cpp
+            manual/ui/lua_axis_webview_manual.cpp
+            auto/lua_axis_webview_auto.cpp
             )
     endif()
 endif()
