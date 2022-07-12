@@ -9,14 +9,14 @@ android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
 
     // setup ndk
-    def ndkInfo = axistools.findNDK()
+    def ndkInfo = axistools.findNDK(project)
     ndkVersion = ndkInfo[0]
     if(ndkInfo[1]) {
         ndkPath = ndkInfo[1]
     }
 
     // setup cmake
-    def cmakeVer = axistools.findCMake("3.10.2+", project.rootProject)
+    def cmakeVer = axistools.findCMake(project)
 
     defaultConfig {
         applicationId "org.cocos2dx.lua_tests"
