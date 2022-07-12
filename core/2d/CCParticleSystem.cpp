@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://axis-project.github.io/
 
@@ -2341,8 +2341,8 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
 
     iter->second = desc;
 
-    CCLOG("Particle emission mask '%lu' baked (%dx%d), %d samples generated taking %.2fmb of memory.",
-          (unsigned long)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
+    CCLOG("Particle emission mask '%u' baked (%dx%d), %zu samples generated taking %.2fmb of memory.",
+          (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 
 const ParticleEmissionMaskDescriptor& ParticleEmissionMaskCache::getEmissionMask(uint32_t fourccId)
