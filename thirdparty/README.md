@@ -5,12 +5,12 @@
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
-- Upstream: https://github.com/ARM-software/astc-encoder
+- [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
 - Version: 3.7
 - License: Apache-2.0
 
 ## Box2D
-- Upstream: https://github.com/erincatto/box2d
+- [![Upstream](https://img.shields.io/github/v/release/erincatto/box2d?label=Upstream)](https://github.com/erincatto/box2d)
 - Version: 2.4.1
 - License: MIT
 
@@ -20,18 +20,18 @@
 - License: MIT
 
 ## Bullet
-- Upstream: https://github.com/bulletphysics/bullet3
+- [![Upstream](https://img.shields.io/github/v/release/bulletphysics/bullet3?label=Upstream)](https://github.com/bulletphysics/bullet3)
 - Version: 3.24
 - License: zlib
 - Update method: Compare `axis/thirdparty/bullet` with `bullet3/src`
 
 ## c-ares
-- Upstream: https://github.com/c-ares/c-ares
+- [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
 - Version: git 1.18.1-c25d4eb (2138)
 - License: MIT
 
 ## Chipmunk2D
-- Upstream: https://github.com/slembcke/Chipmunk2D
+- [![Upstream](https://img.shields.io/github/v/tag/slembcke/Chipmunk2D?label=Upstream)](https://github.com/slembcke/Chipmunk2D)
 - Version: git 7.0.3-0cb05e7 {until Dec 16, 2021}
 - License: MIT
 
@@ -46,17 +46,17 @@
 - License: Apache-2.0 WITH LLVM-exception
 
 ## curl
-- Upstream: https://github.com/curl/curl
+- [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
 - Version: 7.83.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
-- Upstream: https://github.com/google/flatbuffers
+- [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
 - Version: 2.0.0
 - License: Apache-2.0
 
 ## {fmt}
-- Upstream: https://github.com/fmtlib/fmt
+- [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
 - Version: git 8.1.1-9ff91b1 (5518)
 - License: MIT
 
@@ -66,12 +66,12 @@
 - License: BSD-style (The FreeType Project)
 
 ## Glad
-- Upstream: https://github.com/Dav1dde/glad
+- [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
 - Version: 0.1.34
 - License: MIT
 
 ## glfw
-- Upstream: https://github.com/glfw/glfw
+- [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
 - Version: git df8d7bc on 31 Dec 2021 (4398)
 - License: zlib
 
@@ -81,12 +81,12 @@
 - License: MIT
 
 ## GHC (iOS devices only)
-- Upstream: https://github.com/gulrak/filesystem
+- [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
 - Version: 1.5.12
 - License: MIT
 
 ## jni.hpp
-- Upstream: https://github.com/mapbox/jni.hpp
+- [![Upstream](https://img.shields.io/github/v/release/mapbox/jni.hpp?label=Upstream)](https://github.com/mapbox/jni.hpp)
 - Version: v4.0.0
 - License: MIT-like
 
@@ -101,7 +101,7 @@
 - License: MIT
 
 ## llhttp
-- Upstream: https://github.com/nodejs/llhttp
+- [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
 - Version: 6.0.6
 - License: MIT
 
@@ -132,7 +132,7 @@
   - License: MIT
 
 ## lz4
-- Upstream: https://github.com/lz4/lz4
+- [![Upstream](https://img.shields.io/github/v/release/lz4/lz4?label=Upstream)](https://github.com/lz4/lz4)
 - Version: git 1.9.3-bdc9d3b (2541)
 - License: BSD 2-Clause
 
@@ -148,22 +148,22 @@
 
 ## ogg & vorbis
 - ogg
-  - Upstream: https://github.com/xiph/ogg 
+  - [![Upstream](https://img.shields.io/github/v/release/xiph/ogg?label=Upstream)](https://github.com/xiph/ogg)
   - Version: git 1.3.5
   - License: BSD-3-Clause
 
 - vorbis
-  - Upstream: https://github.com/xiph/vorbis
+  - [![Upstream](https://img.shields.io/github/v/release/xiph/vorbis?label=Upstream)](https://github.com/xiph/vorbis)
   - Version: git 1.3.7-83a82dd (1569)
   - License: BSD-3-Clause
 
 ## OpenAL Soft
-- Upstream: https://github.com/kcat/openal-soft
+- [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
 - Version: 1.22.0
 - License: LGPL-2.1
 
 ## OpenSSL
-- Upstream: https://github.com/openssl/openssl
+- [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
 - Version: 3.0.3
 - License: Apache-2.0
 
@@ -183,7 +183,7 @@
 - License: MIT
 
 ## rapidjson
-- Upstream: https://github.com/Tencent/rapidjson
+- [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
 - Version: 1.1.0
 - License: MIT
 
@@ -204,23 +204,18 @@
 - Version: 2.27
 - License: MIT
 
-## tinydir
-- Upstream: https://github.com/cxong/tinydir
-- Version: git 1.2.4-ec6bff2 (168)
-- License: BSD-2-Clause
-
 ## unzip (minizip-1.2)
 - Upstream: https://github.com/simdsoft/mz12
 - Version: 1.2 with bugfixs & improvements
 - License: zlib
 
 ## uthash 
-- Upstream: https://github.com/troydhanson/uthash
+- [![Upstream](https://img.shields.io/github/v/tag/troydhanson/uthash?label=Upstream)](https://github.com/troydhanson/uthash)
 - Version: 2.3.0
 - License: BSD license (https://troydhanson.github.io/uthash/license.html)
 
 ## webp
-- Upstream: https://github.com/webmproject/libwebp
+- [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
 - Version: 1.2.2
 - License: Google Inc
 
@@ -230,29 +225,24 @@
 - License: MIT
 
 ## xxHash
-- Upstream: https://github.com/Cyan4973/xxHash
+- [![Upstream](https://img.shields.io/github/v/release/Cyan4973/xxHash?label=Upstream)](https://github.com/Cyan4973/xxHash)
 - Version: 0.8.1
 - License: BSD-2-Clause
 
 ## yaml-cpp
-- Upstream: https://github.com/jbeder/yaml-cpp
+- [![Upstream](https://img.shields.io/github/v/release/jbeder/yaml-cpp?label=Upstream)](https://github.com/jbeder/yaml-cpp)
 - Version: 0.7.0
 - License: MIT
 
 ## yasio
-- Upstream: https://github.com/yasio/yasio
+- [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
 - Version: 3.39.4
 - License: MIT WITH Anti-996
 
 ## zlib
-- Upstream: https://github.com/madler/zlib
+- [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.12
 - License: zlib
-
-## libiconv
-- Upstream: https://savannah.gnu.org/projects/libiconv
-- Version: 1.16.0
-- License: LGPL-2.1
 
 ## ntcvt
 - Upstream: https://github.com/simdsoft/ntcvt
