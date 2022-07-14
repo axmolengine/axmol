@@ -107,7 +107,7 @@
 
 ## lua
 - plainlua
-  - Upstream: http://www.lua.org/
+  - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
   - Version: 5.4.4
   - License: MIT (http://www.lua.org/license.html)
   
