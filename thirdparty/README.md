@@ -57,7 +57,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: git 8.1.1-9ff91b1 (5518)
+- Version: 9.0.0
 - License: MIT
 
 ## FreeType
@@ -102,7 +102,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 6.0.6
+- Version: 6.0.7
 - License: MIT
 
 ## lua
@@ -159,7 +159,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.22.0
+- Version: 1.22.2
 - License: LGPL-2.1
 
 ## OpenSSL
