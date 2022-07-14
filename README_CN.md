@@ -85,11 +85,11 @@
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. 生成xcode工程, 进入axis根目录执行如下命令之一:  
      - for arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXIS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXIS_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
      - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXIS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64```
 
   4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 

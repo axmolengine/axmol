@@ -116,11 +116,11 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
      - for arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$axis_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXIS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
      - for armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$axis_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXIS_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
      - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$axis_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXIS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
 
   4. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
