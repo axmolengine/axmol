@@ -49,8 +49,8 @@
 #ifdef ALSOFT_EAX
 #include "alc/device.h"
 
-#include "eax_globals.h"
-#include "eax_x_ram.h"
+#include "eax/globals.h"
+#include "eax/x_ram.h"
 #endif // ALSOFT_EAX
 
 
@@ -943,6 +943,7 @@ void UpdateContextProps(ALCcontext *context)
     props->Gain = listener.Gain;
     props->MetersPerUnit = listener.mMetersPerUnit;
 
+    props->AirAbsorptionGainHF = context->mAirAbsorptionGainHF;
     props->DopplerFactor = context->mDopplerFactor;
     props->DopplerVelocity = context->mDopplerVelocity;
     props->SpeedOfSound = context->mSpeedOfSound;

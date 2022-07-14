@@ -4,8 +4,25 @@
 #include <array>
 
 #include "almalloc.h"
+#include "alspan.h"
 #include "bufferline.h"
 #include "resampler_limits.h"
+
+
+struct DecoderBase {
+    virtual ~DecoderBase() = default;
+
+    virtual void decode(const al::span<float*> samples, const size_t samplesToDo,
+        const size_t forwardSamples) = 0;
+
+    /**
+     * The width factor for Super Stereo processing. Can be changed in between
+     * calls to decode, with valid values being between 0...0.7.
+     */
+    float mWidthControl{0.593f};
+
+    float mCurrentWidth{-1.0f};
+};
 
 
 struct UhjFilterBase {
@@ -30,14 +47,18 @@ struct UhjEncoder : public UhjFilterBase {
      * signal. The input must use FuMa channel ordering and UHJ scaling (FuMa
      * with an additional +3dB boost).
      */
-    void encode(float *LeftOut, float *RightOut, const FloatBufferLine *InSamples,
+    void encode(float *LeftOut, float *RightOut, const al::span<const float*const,3> InSamples,
         const size_t SamplesToDo);
 
     DEF_NEWDEL(UhjEncoder)
 };
 
 
-struct UhjDecoder : public UhjFilterBase {
+struct UhjDecoder : public DecoderBase, public UhjFilterBase {
+    /* For 2-channel UHJ, shelf filters should use these LF responses. */
+    static constexpr float sWLFScale{0.661f};
+    static constexpr float sXYLFScale{1.293f};
+
     alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sFilterDelay> mS{};
     alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sFilterDelay> mD{};
     alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sFilterDelay> mT{};
@@ -46,14 +67,6 @@ struct UhjDecoder : public UhjFilterBase {
     alignas(16) std::array<float,sFilterDelay-1> mSHistory{};
 
     alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge + sFilterDelay*2> mTemp{};
-
-    float mCurrentWidth{-1.0f};
-
-    /**
-     * The width factor for Super Stereo processing. Can be changed in between
-     * calls to decodeStereo, with valid values being between 0...0.7.
-     */
-    float mWidthControl{0.593f};
 
     /**
      * Decodes a 3- or 4-channel UHJ signal into a B-Format signal with FuMa
@@ -64,21 +77,22 @@ struct UhjDecoder : public UhjFilterBase {
      * B-Format decoder, as it needs different shelf filters.
      */
     void decode(const al::span<float*> samples, const size_t samplesToDo,
-        const size_t forwardSamples);
+        const size_t forwardSamples) override;
 
+    DEF_NEWDEL(UhjDecoder)
+};
+
+struct UhjStereoDecoder : public UhjDecoder {
     /**
      * Applies Super Stereo processing on a stereo signal to create a B-Format
      * signal with FuMa channel ordering and UHJ scaling. The samples span
      * should contain 3 channels, the first two being the left and right stereo
      * channels, and the third left empty.
      */
-    void decodeStereo(const al::span<float*> samples, const size_t samplesToDo,
-        const size_t forwardSamples);
+    void decode(const al::span<float*> samples, const size_t samplesToDo,
+        const size_t forwardSamples) override;
 
-    using DecoderFunc = void (UhjDecoder::*)(const al::span<float*> samples,
-        const size_t samplesToDo, const size_t forwardSamples);
-
-    DEF_NEWDEL(UhjDecoder)
+    DEF_NEWDEL(UhjStereoDecoder)
 };
 
 #endif /* CORE_UHJFILTER_H */

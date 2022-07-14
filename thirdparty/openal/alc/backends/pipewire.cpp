@@ -50,8 +50,20 @@
 #include "opthelpers.h"
 #include "ringbuffer.h"
 
-/* Ignore warnings caused by PipeWire headers (lots in standard C++ mode). */
+/* Ignore warnings caused by PipeWire headers (lots in standard C++ mode). GCC
+ * doesn't support ignoring -Weverything, so we have the list the individual
+ * warnings to ignore (and ignoring -Winline doesn't seem to work).
+ */
 _Pragma("GCC diagnostic push")
+_Pragma("GCC diagnostic ignored \"-Wpedantic\"")
+_Pragma("GCC diagnostic ignored \"-Wconversion\"")
+_Pragma("GCC diagnostic ignored \"-Wfloat-conversion\"")
+_Pragma("GCC diagnostic ignored \"-Wmissing-field-initializers\"")
+_Pragma("GCC diagnostic ignored \"-Wunused-parameter\"")
+_Pragma("GCC diagnostic ignored \"-Wold-style-cast\"")
+_Pragma("GCC diagnostic ignored \"-Wsign-compare\"")
+_Pragma("GCC diagnostic ignored \"-Winline\"")
+_Pragma("GCC diagnostic ignored \"-Wpragmas\"")
 _Pragma("GCC diagnostic ignored \"-Weverything\"")
 #include "pipewire/pipewire.h"
 #include "pipewire/extensions/metadata.h"
@@ -107,6 +119,11 @@ _Pragma("GCC diagnostic pop")
 
 namespace {
 
+/* Added in 0.3.33, but we currently only require 0.3.23. */
+#ifndef PW_KEY_NODE_RATE
+#define PW_KEY_NODE_RATE "node.rate"
+#endif
+
 using std::chrono::seconds;
 using std::chrono::nanoseconds;
 using uint = unsigned int;
@@ -115,12 +132,27 @@ constexpr char pwireDevice[] = "PipeWire Output";
 constexpr char pwireInput[] = "PipeWire Input";
 
 
+bool check_version(const char *version)
+{
+    /* There doesn't seem to be a function to get the version as an integer, so
+     * instead we have to parse the string, which hopefully won't break in the
+     * future.
+     */
+    int major{0}, minor{0}, revision{0};
+    int ret{sscanf(version, "%d.%d.%d", &major, &minor, &revision)};
+    if(ret == 3 && (major > PW_MAJOR || (major == PW_MAJOR && minor > PW_MINOR)
+        || (major == PW_MAJOR && minor == PW_MINOR && revision >= PW_MICRO)))
+        return true;
+    return false;
+}
+
 #ifdef HAVE_DYNLOAD
 #define PWIRE_FUNCS(MAGIC)                                                    \
     MAGIC(pw_context_connect)                                                 \
     MAGIC(pw_context_destroy)                                                 \
     MAGIC(pw_context_new)                                                     \
     MAGIC(pw_core_disconnect)                                                 \
+    MAGIC(pw_get_library_version)                                             \
     MAGIC(pw_init)                                                            \
     MAGIC(pw_properties_free)                                                 \
     MAGIC(pw_properties_new)                                                  \
@@ -134,7 +166,6 @@ constexpr char pwireInput[] = "PipeWire Input";
     MAGIC(pw_stream_dequeue_buffer)                                           \
     MAGIC(pw_stream_destroy)                                                  \
     MAGIC(pw_stream_get_state)                                                \
-    MAGIC(pw_stream_get_time)                                                 \
     MAGIC(pw_stream_new)                                                      \
     MAGIC(pw_stream_queue_buffer)                                             \
     MAGIC(pw_stream_set_active)                                               \
@@ -146,11 +177,19 @@ constexpr char pwireInput[] = "PipeWire Input";
     MAGIC(pw_thread_loop_lock)                                                \
     MAGIC(pw_thread_loop_wait)                                                \
     MAGIC(pw_thread_loop_signal)                                              \
-    MAGIC(pw_thread_loop_unlock)                                              \
+    MAGIC(pw_thread_loop_unlock)
+#if PW_CHECK_VERSION(0,3,50)
+#define PWIRE_FUNCS2(MAGIC)                                                   \
+    MAGIC(pw_stream_get_time_n)
+#else
+#define PWIRE_FUNCS2(MAGIC)                                                   \
+    MAGIC(pw_stream_get_time)
+#endif
 
 void *pwire_handle;
 #define MAKE_FUNC(f) decltype(f) * p##f;
 PWIRE_FUNCS(MAKE_FUNC)
+PWIRE_FUNCS2(MAKE_FUNC)
 #undef MAKE_FUNC
 
 bool pwire_load()
@@ -173,6 +212,7 @@ bool pwire_load()
     if(p##f == nullptr) missing_funcs += "\n" #f;                             \
 } while(0);
     PWIRE_FUNCS(LOAD_FUNC)
+    PWIRE_FUNCS2(LOAD_FUNC)
 #undef LOAD_FUNC
 
     if(!missing_funcs.empty())
@@ -191,6 +231,7 @@ bool pwire_load()
 #define pw_context_destroy ppw_context_destroy
 #define pw_context_new ppw_context_new
 #define pw_core_disconnect ppw_core_disconnect
+#define pw_get_library_version ppw_get_library_version
 #define pw_init ppw_init
 #define pw_properties_free ppw_properties_free
 #define pw_properties_new ppw_properties_new
@@ -204,7 +245,6 @@ bool pwire_load()
 #define pw_stream_dequeue_buffer ppw_stream_dequeue_buffer
 #define pw_stream_destroy ppw_stream_destroy
 #define pw_stream_get_state ppw_stream_get_state
-#define pw_stream_get_time ppw_stream_get_time
 #define pw_stream_new ppw_stream_new
 #define pw_stream_queue_buffer ppw_stream_queue_buffer
 #define pw_stream_set_active ppw_stream_set_active
@@ -217,6 +257,12 @@ bool pwire_load()
 #define pw_thread_loop_stop ppw_thread_loop_stop
 #define pw_thread_loop_unlock ppw_thread_loop_unlock
 #define pw_thread_loop_wait ppw_thread_loop_wait
+#if PW_CHECK_VERSION(0,3,50)
+#define pw_stream_get_time_n ppw_stream_get_time_n
+#else
+inline auto pw_stream_get_time_n(pw_stream *stream, pw_time *ptime, size_t /*size*/)
+{ return ppw_stream_get_time(stream, ptime); }
+#endif
 #endif
 
 #else
@@ -1181,6 +1227,7 @@ spa_audio_info_raw make_spa_info(DeviceBase *device, bool is51rear, use_f32p_e u
         break;
     case DevFmtX61: map = X61Map; break;
     case DevFmtX71: map = X71Map; break;
+    case DevFmtX3D71: map = X71Map; break;
     case DevFmtAmbi3D:
         info.flags |= SPA_AUDIO_FLAG_UNPOSITIONED;
         info.channels = device->channelsFromFmt();
@@ -1267,32 +1314,42 @@ void PipeWirePlayback::outputCallback()
     pw_buffer *pw_buf{pw_stream_dequeue_buffer(mStream.get())};
     if(unlikely(!pw_buf)) return;
 
+    const al::span<spa_data> datas{pw_buf->buffer->datas,
+        minu(mNumChannels, pw_buf->buffer->n_datas)};
+#if PW_CHECK_VERSION(0,3,49)
+    /* In 0.3.49, pw_buffer::requested specifies the number of samples needed
+     * by the resampler/graph for this audio update.
+     */
+    uint length{static_cast<uint>(pw_buf->requested)};
+#else
+    /* In 0.3.48 and earlier, spa_io_rate_match::size apparently has the number
+     * of samples per update.
+     */
+    uint length{mRateMatch ? mRateMatch->size : 0u};
+#endif
+    /* If no length is specified, use the device's update size as a fallback. */
+    if(unlikely(!length)) length = mDevice->UpdateSize;
+
     /* For planar formats, each datas[] seems to contain one channel, so store
      * the pointers in an array. Limit the render length in case the available
      * buffer length in any one channel is smaller than we wanted (shouldn't
      * be, but just in case).
      */
-    spa_data *datas{pw_buf->buffer->datas};
-    const size_t chancount{minu(mNumChannels, pw_buf->buffer->n_datas)};
-    /* TODO: How many samples should actually be written? 'maxsize' can be 16k
-     * samples, which is excessive (~341ms @ 48khz). SPA_IO_RateMatch contains
-     * a 'size' field that apparently indicates how many samples should be
-     * written per update, but it's not obviously right.
-     */
-    uint length{mRateMatch ? mRateMatch->size : mDevice->UpdateSize};
-    for(size_t i{0};i < chancount;++i)
+    float **chanptr_end{mChannelPtrs.get()};
+    for(const auto &data : datas)
     {
-        length = minu(length, datas[i].maxsize/sizeof(float));
-        mChannelPtrs[i] = static_cast<float*>(datas[i].data);
+        length = minu(length, data.maxsize/sizeof(float));
+        *chanptr_end = static_cast<float*>(data.data);
+        ++chanptr_end;
     }
 
-    mDevice->renderSamples({mChannelPtrs.get(), chancount}, length);
+    mDevice->renderSamples({mChannelPtrs.get(), chanptr_end}, length);
 
-    for(size_t i{0};i < chancount;++i)
+    for(const auto &data : datas)
     {
-        datas[i].chunk->offset = 0;
-        datas[i].chunk->stride = sizeof(float);
-        datas[i].chunk->size   = length * sizeof(float);
+        data.chunk->offset = 0;
+        data.chunk->stride = sizeof(float);
+        data.chunk->size   = length * sizeof(float);
     }
     pw_buf->size = length;
     pw_stream_queue_buffer(mStream.get(), pw_buf);
@@ -1482,11 +1539,10 @@ bool PipeWirePlayback::reset()
             "Error connecting PipeWire stream (res: %d)", res};
 
     /* Wait for the stream to become paused (ready to start streaming). */
-    pw_stream_state state{};
-    const char *error{};
-    plock.wait([stream=mStream.get(),&state,&error]()
+    plock.wait([stream=mStream.get()]()
     {
-        state = pw_stream_get_state(stream, &error);
+        const char *error{};
+        pw_stream_state state{pw_stream_get_state(stream, &error)};
         if(state == PW_STREAM_STATE_ERROR)
             throw al::backend_exception{al::backend_error::DeviceError,
                 "Error connecting PipeWire stream: \"%s\"", error};
@@ -1517,18 +1573,17 @@ void PipeWirePlayback::start()
     /* Wait for the stream to start playing (would be nice to not, but we need
      * the actual update size which is only available after starting).
      */
-    pw_stream_state state{};
-    const char *error{};
-    plock.wait([stream=mStream.get(),&state,&error]()
+    plock.wait([stream=mStream.get()]()
     {
-        state = pw_stream_get_state(stream, &error);
-        return state != PW_STREAM_STATE_PAUSED;
+        const char *error{};
+        pw_stream_state state{pw_stream_get_state(stream, &error)};
+        if(state == PW_STREAM_STATE_ERROR)
+            throw al::backend_exception{al::backend_error::DeviceError,
+                "PipeWire stream error: %s", error ? error : "(unknown)"};
+        return state == PW_STREAM_STATE_STREAMING;
     });
 
-    if(state == PW_STREAM_STATE_ERROR)
-        throw al::backend_exception{al::backend_error::DeviceError,
-            "PipeWire stream error: %s", error ? error : "(unknown)"};
-    if(state == PW_STREAM_STATE_STREAMING && mRateMatch && mRateMatch->size)
+    if(mRateMatch && mRateMatch->size)
     {
         mDevice->UpdateSize = mRateMatch->size;
         mDevice->BufferSize = mDevice->UpdateSize * 2;
@@ -1560,7 +1615,7 @@ ClockLatency PipeWirePlayback::getClockLatency()
     if(mStream)
     {
         MainloopLockGuard _{mLoop};
-        if(int res{pw_stream_get_time(mStream.get(), &ptime)})
+        if(int res{pw_stream_get_time_n(mStream.get(), &ptime, sizeof(ptime))})
             ERR("Failed to get PipeWire stream time (res: %d)\n", res);
     }
 
@@ -1851,11 +1906,10 @@ void PipeWireCapture::open(const char *name)
             "Error connecting PipeWire stream (res: %d)", res};
 
     /* Wait for the stream to become paused (ready to start streaming). */
-    pw_stream_state state{};
-    const char *error{};
-    plock.wait([stream=mStream.get(),&state,&error]()
+    plock.wait([stream=mStream.get()]()
     {
-        state = pw_stream_get_state(stream, &error);
+        const char *error{};
+        pw_stream_state state{pw_stream_get_state(stream, &error)};
         if(state == PW_STREAM_STATE_ERROR)
             throw al::backend_exception{al::backend_error::DeviceError,
                 "Error connecting PipeWire stream: \"%s\"", error};
@@ -1878,17 +1932,15 @@ void PipeWireCapture::start()
         throw al::backend_exception{al::backend_error::DeviceError,
             "Failed to start PipeWire stream (res: %d)", res};
 
-    pw_stream_state state{};
-    const char *error{};
-    plock.wait([stream=mStream.get(),&state,&error]()
+    plock.wait([stream=mStream.get()]()
     {
-        state = pw_stream_get_state(stream, &error);
-        return state != PW_STREAM_STATE_PAUSED;
+        const char *error{};
+        pw_stream_state state{pw_stream_get_state(stream, &error)};
+        if(state == PW_STREAM_STATE_ERROR)
+            throw al::backend_exception{al::backend_error::DeviceError,
+                "PipeWire stream error: %s", error ? error : "(unknown)"};
+        return state == PW_STREAM_STATE_STREAMING;
     });
-
-    if(state == PW_STREAM_STATE_ERROR)
-        throw al::backend_exception{al::backend_error::DeviceError,
-            "PipeWire stream error: %s", error ? error : "(unknown)"};
 }
 
 void PipeWireCapture::stop()
@@ -1915,6 +1967,15 @@ bool PipeWireBackendFactory::init()
 {
     if(!pwire_load())
         return false;
+
+    const char *version{pw_get_library_version()};
+    if(!check_version(version))
+    {
+        WARN("PipeWire version \"%s\" too old (%s or newer required)\n", version,
+            pw_get_headers_version());
+        return false;
+    }
+    TRACE("Found PipeWire version \"%s\" (%s or newer)\n", version, pw_get_headers_version());
 
     pw_init(0, nullptr);
     if(!gEventHandler.init())

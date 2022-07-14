@@ -454,10 +454,8 @@ struct ReverbState final : public EffectState {
     alignas(16) std::array<ReverbUpdateLine,NUM_LINES> mEarlySamples{};
     alignas(16) std::array<ReverbUpdateLine,NUM_LINES> mLateSamples{};
 
-    using MixOutT = void (ReverbState::*)(const al::span<FloatBufferLine> samplesOut,
-        const size_t counter, const size_t offset, const size_t todo);
 
-    MixOutT mMixOut{&ReverbState::MixOutPlain};
+    bool mUpmixOutput{false};
     std::array<float,MaxAmbiOrder+1> mOrderScales{};
     std::array<std::array<BandSplitter,NUM_LINES>,2> mAmbiSplitter;
 
@@ -533,6 +531,15 @@ struct ReverbState final : public EffectState {
             MixSamples(tmpspan, samplesOut, mLate.CurrentGain[c], mLate.PanGain[c], counter,
                 offset);
         }
+    }
+
+    void mixOut(const al::span<FloatBufferLine> samplesOut, const size_t counter,
+        const size_t offset, const size_t todo)
+    {
+        if(mUpmixOutput)
+            MixOutAmbiUp(samplesOut, counter, offset, todo);
+        else
+            MixOutPlain(samplesOut, counter, offset, todo);
     }
 
     void allocLines(const float frequency);
@@ -688,12 +695,12 @@ void ReverbState::deviceUpdate(const DeviceBase *device, const Buffer&)
 
     if(device->mAmbiOrder > 1)
     {
-        mMixOut = &ReverbState::MixOutAmbiUp;
+        mUpmixOutput = true;
         mOrderScales = AmbiScale::GetHFOrderScales(1, device->mAmbiOrder);
     }
     else
     {
-        mMixOut = &ReverbState::MixOutPlain;
+        mUpmixOutput = false;
         mOrderScales.fill(1.0f);
     }
     mAmbiSplitter[0][0].init(device->mXOverFreq / frequency);
@@ -1427,14 +1434,14 @@ void ReverbState::earlyFaded(const size_t offset, const size_t todo, const float
 
 void Modulation::calcDelays(size_t todo)
 {
-    constexpr float inv_scale{MOD_FRACONE / al::numbers::pi_v<float> / 2.0f};
+    constexpr float mod_scale{al::numbers::pi_v<float> * 2.0f / MOD_FRACONE};
     uint idx{Index};
     const uint step{Step};
     const float depth{Depth[0]};
     for(size_t i{0};i < todo;++i)
     {
         idx += step;
-        const float lfo{std::sin(static_cast<float>(idx&MOD_FRACMASK) / inv_scale)};
+        const float lfo{std::sin(static_cast<float>(idx&MOD_FRACMASK) * mod_scale)};
         ModDelays[i] = (lfo+1.0f) * depth;
     }
     Index = idx;
@@ -1442,7 +1449,7 @@ void Modulation::calcDelays(size_t todo)
 
 void Modulation::calcFadedDelays(size_t todo, float fadeCount, float fadeStep)
 {
-    constexpr float inv_scale{MOD_FRACONE / al::numbers::pi_v<float> / 2.0f};
+    constexpr float mod_scale{al::numbers::pi_v<float> * 2.0f / MOD_FRACONE};
     uint idx{Index};
     const uint step{Step};
     const float depth{Depth[0]};
@@ -1451,7 +1458,7 @@ void Modulation::calcFadedDelays(size_t todo, float fadeCount, float fadeStep)
     {
         fadeCount += 1.0f;
         idx += step;
-        const float lfo{std::sin(static_cast<float>(idx&MOD_FRACMASK) / inv_scale)};
+        const float lfo{std::sin(static_cast<float>(idx&MOD_FRACMASK) * mod_scale)};
         ModDelays[i] = (lfo+1.0f) * (depth + depthStep*fadeCount);
     }
     Index = idx;
@@ -1650,7 +1657,7 @@ void ReverbState::process(const size_t samplesToDo, const al::span<const FloatBu
             lateUnfaded(offset, todo);
 
             /* Finally, mix early reflections and late reverb. */
-            (this->*mMixOut)(samplesOut, samplesToDo-base, base, todo);
+            mixOut(samplesOut, samplesToDo-base, base, todo);
 
             offset += todo;
             base += todo;
@@ -1670,7 +1677,7 @@ void ReverbState::process(const size_t samplesToDo, const al::span<const FloatBu
             earlyFaded(offset, todo, fadeCount, fadeStep);
             lateFaded(offset, todo, fadeCount, fadeStep);
 
-            (this->*mMixOut)(samplesOut, samplesToDo-base, base, todo);
+            mixOut(samplesOut, samplesToDo-base, base, todo);
 
             offset += todo;
             base += todo;

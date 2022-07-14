@@ -863,6 +863,7 @@ HRESULT WasapiPlayback::resetProxy()
         ERR("Failed to get mix format: 0x%08lx\n", hr);
         return hr;
     }
+    TraceFormat("Device mix format", wfx);
 
     WAVEFORMATEXTENSIBLE OutputType;
     if(!MakeExtensible(&OutputType, wfx))
@@ -875,28 +876,43 @@ HRESULT WasapiPlayback::resetProxy()
 
     const ReferenceTime per_time{ReferenceTime{seconds{mDevice->UpdateSize}} / mDevice->Frequency};
     const ReferenceTime buf_time{ReferenceTime{seconds{mDevice->BufferSize}} / mDevice->Frequency};
+    bool isRear51{false};
 
     if(!mDevice->Flags.test(FrequencyRequest))
         mDevice->Frequency = OutputType.Format.nSamplesPerSec;
     if(!mDevice->Flags.test(ChannelsRequest))
     {
+        /* If not requesting a channel configuration, auto-select given what
+         * fits the mask's lsb (to ensure no gaps in the output channels). If
+         * there's no mask, we can only assume mono or stereo.
+         */
         const uint32_t chancount{OutputType.Format.nChannels};
         const DWORD chanmask{OutputType.dwChannelMask};
         if(chancount >= 8 && (chanmask&X71Mask) == X7DOT1)
             mDevice->FmtChans = DevFmtX71;
         else if(chancount >= 7 && (chanmask&X61Mask) == X6DOT1)
             mDevice->FmtChans = DevFmtX61;
-        else if(chancount >= 6 && ((chanmask&X51Mask) == X5DOT1
-            || (chanmask&X51RearMask) == X5DOT1REAR))
+        else if(chancount >= 6 && (chanmask&X51Mask) == X5DOT1)
             mDevice->FmtChans = DevFmtX51;
+        else if(chancount >= 6 && (chanmask&X51RearMask) == X5DOT1REAR)
+        {
+            mDevice->FmtChans = DevFmtX51;
+            isRear51 = true;
+        }
         else if(chancount >= 4 && (chanmask&QuadMask) == QUAD)
             mDevice->FmtChans = DevFmtQuad;
-        else if(chancount >= 2 && (chanmask&StereoMask) == STEREO)
+        else if(chancount >= 2 && ((chanmask&StereoMask) == STEREO || !chanmask))
             mDevice->FmtChans = DevFmtStereo;
-        else if(chancount >= 1 && (chanmask&MonoMask) == MONO)
+        else if(chancount >= 1 && ((chanmask&MonoMask) == MONO || !chanmask))
             mDevice->FmtChans = DevFmtMono;
         else
             ERR("Unhandled channel config: %d -- 0x%08lx\n", chancount, chanmask);
+    }
+    else
+    {
+        const uint32_t chancount{OutputType.Format.nChannels};
+        const DWORD chanmask{OutputType.dwChannelMask};
+        isRear51 = (chancount == 6 && (chanmask&X51RearMask) == X5DOT1REAR);
     }
 
     OutputType.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
@@ -919,13 +935,14 @@ HRESULT WasapiPlayback::resetProxy()
         break;
     case DevFmtX51:
         OutputType.Format.nChannels = 6;
-        OutputType.dwChannelMask = X5DOT1;
+        OutputType.dwChannelMask = isRear51 ? X5DOT1REAR : X5DOT1;
         break;
     case DevFmtX61:
         OutputType.Format.nChannels = 7;
         OutputType.dwChannelMask = X6DOT1;
         break;
     case DevFmtX71:
+    case DevFmtX3D71:
         OutputType.Format.nChannels = 8;
         OutputType.dwChannelMask = X7DOT1;
         break;
@@ -1002,26 +1019,31 @@ HRESULT WasapiPlayback::resetProxy()
         bool chansok{false};
         if(mDevice->Flags.test(ChannelsRequest))
         {
+            /* When requesting a channel configuration, make sure it fits the
+             * mask's lsb (to ensure no gaps in the output channels). If
+             * there's no mask, assume the request fits with enough channels.
+             */
             switch(mDevice->FmtChans)
             {
             case DevFmtMono:
-                chansok = (chancount >= 1 && (chanmask&MonoMask) == MONO);
+                chansok = (chancount >= 1 && ((chanmask&MonoMask) == MONO || !chanmask));
                 break;
             case DevFmtStereo:
-                chansok = (chancount >= 2 && (chanmask&StereoMask) == STEREO);
+                chansok = (chancount >= 2 && ((chanmask&StereoMask) == STEREO || !chanmask));
                 break;
             case DevFmtQuad:
-                chansok = (chancount >= 4 && (chanmask&QuadMask) == QUAD);
+                chansok = (chancount >= 4 && ((chanmask&QuadMask) == QUAD || !chanmask));
                 break;
             case DevFmtX51:
                 chansok = (chancount >= 6 && ((chanmask&X51Mask) == X5DOT1
-                        || (chanmask&X51RearMask) == X5DOT1REAR));
+                        || (chanmask&X51RearMask) == X5DOT1REAR || !chanmask));
                 break;
             case DevFmtX61:
-                chansok = (chancount >= 7 && (chanmask&X61Mask) == X6DOT1);
+                chansok = (chancount >= 7 && ((chanmask&X61Mask) == X6DOT1 || !chanmask));
                 break;
             case DevFmtX71:
-                chansok = (chancount >= 8 && (chanmask&X71Mask) == X7DOT1);
+            case DevFmtX3D71:
+                chansok = (chancount >= 8 && ((chanmask&X71Mask) == X7DOT1 || !chanmask));
                 break;
             case DevFmtAmbi3D:
                 break;
@@ -1038,9 +1060,9 @@ HRESULT WasapiPlayback::resetProxy()
                 mDevice->FmtChans = DevFmtX51;
             else if(chancount >= 4 && (chanmask&QuadMask) == QUAD)
                 mDevice->FmtChans = DevFmtQuad;
-            else if(chancount >= 2 && (chanmask&StereoMask) == STEREO)
+            else if(chancount >= 2 && ((chanmask&StereoMask) == STEREO || !chanmask))
                 mDevice->FmtChans = DevFmtStereo;
-            else if(chancount >= 1 && (chanmask&MonoMask) == MONO)
+            else if(chancount >= 1 && ((chanmask&MonoMask) == MONO || !chanmask))
                 mDevice->FmtChans = DevFmtMono;
             else
             {
@@ -1087,7 +1109,7 @@ HRESULT WasapiPlayback::resetProxy()
     const EndpointFormFactor formfactor{get_device_formfactor(mMMDev.get())};
     mDevice->Flags.set(DirectEar, (formfactor == Headphones || formfactor == Headset));
 
-    setChannelOrderFromWFXMask(OutputType.dwChannelMask);
+    setDefaultWFXChannelOrder();
 
     hr = mClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
         buf_time.count(), 0, &OutputType.Format, nullptr);
@@ -1443,11 +1465,32 @@ HRESULT WasapiCapture::resetProxy()
     }
     mClient = ComPtr<IAudioClient>{static_cast<IAudioClient*>(ptr)};
 
+    WAVEFORMATEX *wfx;
+    hr = mClient->GetMixFormat(&wfx);
+    if(FAILED(hr))
+    {
+        ERR("Failed to get capture format: 0x%08lx\n", hr);
+        return hr;
+    }
+    TraceFormat("Device capture format", wfx);
+
+    WAVEFORMATEXTENSIBLE InputType{};
+    if(!MakeExtensible(&InputType, wfx))
+    {
+        CoTaskMemFree(wfx);
+        return E_FAIL;
+    }
+    CoTaskMemFree(wfx);
+    wfx = nullptr;
+
+    const bool isRear51{InputType.Format.nChannels == 6
+        && (InputType.dwChannelMask&X51RearMask) == X5DOT1REAR};
+
     // Make sure buffer is at least 100ms in size
     ReferenceTime buf_time{ReferenceTime{seconds{mDevice->BufferSize}} / mDevice->Frequency};
     buf_time = std::max(buf_time, ReferenceTime{milliseconds{100}});
 
-    WAVEFORMATEXTENSIBLE InputType{};
+    InputType = {};
     InputType.Format.wFormatTag = WAVE_FORMAT_EXTENSIBLE;
     switch(mDevice->FmtChans)
     {
@@ -1465,7 +1508,7 @@ HRESULT WasapiCapture::resetProxy()
         break;
     case DevFmtX51:
         InputType.Format.nChannels = 6;
-        InputType.dwChannelMask = X5DOT1;
+        InputType.dwChannelMask = isRear51 ? X5DOT1REAR : X5DOT1;
         break;
     case DevFmtX61:
         InputType.Format.nChannels = 7;
@@ -1476,6 +1519,7 @@ HRESULT WasapiCapture::resetProxy()
         InputType.dwChannelMask = X7DOT1;
         break;
 
+    case DevFmtX3D71:
     case DevFmtAmbi3D:
         return E_FAIL;
     }
@@ -1512,8 +1556,12 @@ HRESULT WasapiCapture::resetProxy()
     InputType.Format.cbSize = sizeof(InputType) - sizeof(InputType.Format);
 
     TraceFormat("Requesting capture format", &InputType.Format);
-    WAVEFORMATEX *wfx;
     hr = mClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, &InputType.Format, &wfx);
+    if(FAILED(hr))
+    {
+        WARN("Failed to check format support: 0x%08lx\n", hr);
+        hr = mClient->GetMixFormat(&wfx);
+    }
     if(FAILED(hr))
     {
         ERR("Failed to check format support: 0x%08lx\n", hr);
@@ -1556,6 +1604,7 @@ HRESULT WasapiCapture::resetProxy()
             case DevFmtX61:
                 return (chancount == 7 && (chanmask == 0 || (chanmask&X61Mask) == X6DOT1));
             case DevFmtX71:
+            case DevFmtX3D71:
                 return (chancount == 8 && (chanmask == 0 || (chanmask&X71Mask) == X7DOT1));
             case DevFmtAmbi3D:
                 return (chanmask == 0 && chancount == device->channelsFromFmt());

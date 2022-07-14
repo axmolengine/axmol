@@ -514,8 +514,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
     std::transform(Device->mSampleData.end() - mChans.size(), Device->mSampleData.end(),
         MixingSamples.begin(), offset_bufferline);
 
-    const uint PostPadding{MaxResamplerEdge +
-        (mDecoder ? uint{UhjDecoder::sFilterDelay} : 0u)};
+    const uint PostPadding{MaxResamplerEdge + mDecoderPadding};
     uint buffers_done{0u};
     uint OutPos{0u};
     do {
@@ -637,8 +636,8 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
             if(mDecoder)
             {
                 SrcBufferSize = SrcBufferSize - PostPadding + MaxResamplerEdge;
-                ((*mDecoder).*mDecoderFunc)(MixingSamples, SrcBufferSize,
-                    srcOffset * likely(vstate == Playing));
+                mDecoder->decode(MixingSamples, SrcBufferSize,
+                    likely(vstate == Playing) ? srcOffset : 0);
             }
             /* Store the last source samples used for next time. */
             if(likely(vstate == Playing))
@@ -853,16 +852,20 @@ void Voice::prepare(DeviceBase *device)
     mPrevSamples.reserve(maxu(2, num_channels));
     mPrevSamples.resize(num_channels);
 
-    if(IsUHJ(mFmtChannels))
+    if(mFmtChannels == FmtSuperStereo)
+    {
+        mDecoder = std::make_unique<UhjStereoDecoder>();
+        mDecoderPadding = UhjStereoDecoder::sFilterDelay;
+    }
+    else if(IsUHJ(mFmtChannels))
     {
         mDecoder = std::make_unique<UhjDecoder>();
-        mDecoderFunc = (mFmtChannels == FmtSuperStereo) ? &UhjDecoder::decodeStereo
-            : &UhjDecoder::decode;
+        mDecoderPadding = UhjDecoder::sFilterDelay;
     }
     else
     {
         mDecoder = nullptr;
-        mDecoderFunc = nullptr;
+        mDecoderPadding = 0;
     }
 
     /* Clear the stepping value explicitly so the mixer knows not to mix this
@@ -905,9 +908,9 @@ void Voice::prepare(DeviceBase *device)
          */
         if(mFmtChannels == FmtUHJ2)
         {
-            mChans[0].mAmbiLFScale = 0.661f;
-            mChans[1].mAmbiLFScale = 1.293f;
-            mChans[2].mAmbiLFScale = 1.293f;
+            mChans[0].mAmbiLFScale = UhjDecoder::sWLFScale;
+            mChans[1].mAmbiLFScale = UhjDecoder::sXYLFScale;
+            mChans[2].mAmbiLFScale = UhjDecoder::sXYLFScale;
         }
         mFlags.set(VoiceIsAmbisonic);
     }
@@ -927,9 +930,9 @@ void Voice::prepare(DeviceBase *device)
             chandata.mDryParams.NFCtrlFilter = device->mNFCtrlFilter;
             std::fill_n(chandata.mWetParams.begin(), device->NumAuxSends, SendParams{});
         }
-        mChans[0].mAmbiLFScale = 0.661f;
-        mChans[1].mAmbiLFScale = 1.293f;
-        mChans[2].mAmbiLFScale = 1.293f;
+        mChans[0].mAmbiLFScale = UhjDecoder::sWLFScale;
+        mChans[1].mAmbiLFScale = UhjDecoder::sXYLFScale;
+        mChans[2].mAmbiLFScale = UhjDecoder::sXYLFScale;
         mFlags.set(VoiceIsAmbisonic);
     }
     else

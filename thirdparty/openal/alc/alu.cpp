@@ -135,9 +135,6 @@ float XScale{1.0f};
 float YScale{1.0f};
 float ZScale{1.0f};
 
-} // namespace
-
-namespace {
 
 struct ChanMap {
     Channel channel;
@@ -213,30 +210,30 @@ inline ResamplerFunc SelectResampler(Resampler resampler, uint increment)
         return Resample_<CubicTag,CTag>;
     case Resampler::BSinc12:
     case Resampler::BSinc24:
-        if(increment <= MixerFracOne)
+        if(increment > MixerFracOne)
         {
-            /* fall-through */
-        case Resampler::FastBSinc12:
-        case Resampler::FastBSinc24:
 #ifdef HAVE_NEON
             if((CPUCapFlags&CPU_CAP_NEON))
-                return Resample_<FastBSincTag,NEONTag>;
+                return Resample_<BSincTag,NEONTag>;
 #endif
 #ifdef HAVE_SSE
             if((CPUCapFlags&CPU_CAP_SSE))
-                return Resample_<FastBSincTag,SSETag>;
+                return Resample_<BSincTag,SSETag>;
 #endif
-            return Resample_<FastBSincTag,CTag>;
+            return Resample_<BSincTag,CTag>;
         }
+        /* fall-through */
+    case Resampler::FastBSinc12:
+    case Resampler::FastBSinc24:
 #ifdef HAVE_NEON
         if((CPUCapFlags&CPU_CAP_NEON))
-            return Resample_<BSincTag,NEONTag>;
+            return Resample_<FastBSincTag,NEONTag>;
 #endif
 #ifdef HAVE_SSE
         if((CPUCapFlags&CPU_CAP_SSE))
-            return Resample_<BSincTag,SSETag>;
+            return Resample_<FastBSincTag,SSETag>;
 #endif
-        return Resample_<BSincTag,CTag>;
+        return Resample_<FastBSincTag,CTag>;
     }
 
     return Resample_<PointTag,CTag>;
@@ -308,7 +305,7 @@ void DeviceBase::ProcessUhj(const size_t SamplesToDo)
 
     /* Encode to stereo-compatible 2-channel UHJ output. */
     mUhjEncoder->encode(RealOut.Buffer[lidx].data(), RealOut.Buffer[ridx].data(),
-        Dry.Buffer.data(), SamplesToDo);
+        {{Dry.Buffer[0].data(), Dry.Buffer[1].data(), Dry.Buffer[2].data()}}, SamplesToDo);
 }
 
 void DeviceBase::ProcessBs2b(const size_t SamplesToDo)
@@ -327,6 +324,8 @@ void DeviceBase::ProcessBs2b(const size_t SamplesToDo)
 
 
 namespace {
+
+using AmbiRotateMatrix = std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels>;
 
 /* This RNG method was created based on the math found in opusdec. It's quick,
  * and starting with a seed value of 22222, is suitable for generating
@@ -573,14 +572,13 @@ const auto RotatorCoeffArray = RotatorCoeffs::ConcatArrays(RotatorCoeffs::GenCoe
  * coefficients, this fills in the coefficients for the higher orders up to and
  * including the given order. The matrix is in ACN layout.
  */
-void AmbiRotator(std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &matrix,
-    const int order)
+void AmbiRotator(AmbiRotateMatrix &matrix, const int order)
 {
     /* Don't do anything for < 2nd order. */
     if(order < 2) return;
 
     auto P = [](const int i, const int l, const int a, const int n, const size_t last_band,
-        const std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &R)
+        const AmbiRotateMatrix &R)
     {
         const float ri1{ R[static_cast<uint>(i+2)][ 1+2]};
         const float rim1{R[static_cast<uint>(i+2)][-1+2]};
@@ -595,12 +593,12 @@ void AmbiRotator(std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &
     };
 
     auto U = [P](const int l, const int m, const int n, const size_t last_band,
-        const std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &R)
+        const AmbiRotateMatrix &R)
     {
         return P(0, l, m, n, last_band, R);
     };
     auto V = [P](const int l, const int m, const int n, const size_t last_band,
-        const std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &R)
+        const AmbiRotateMatrix &R)
     {
         using namespace al::numbers;
         if(m > 0)
@@ -616,7 +614,7 @@ void AmbiRotator(std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &
         return d ? p1*sqrt2_v<float> : (p0 + p1);
     };
     auto W = [P](const int l, const int m, const int n, const size_t last_band,
-        const std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> &R)
+        const AmbiRotateMatrix &R)
     {
         assert(m != 0);
         if(m > 0)
@@ -863,7 +861,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
              * order elements, then construct the rotation for the higher
              * orders.
              */
-            std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> shrot{};
+            AmbiRotateMatrix shrot{};
             shrot[0][0] = 1.0f;
             shrot[1][1] =  U[0]; shrot[1][2] = -V[0]; shrot[1][3] = -N[0];
             shrot[2][1] = -U[1]; shrot[2][2] =  V[1]; shrot[2][3] =  N[1];
@@ -1393,7 +1391,7 @@ void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBa
          */
         for(uint i{props->WetGainAuto ? 0u : NumSends};i < NumSends;++i)
         {
-            if(!SendSlots[i])
+            if(!SendSlots[i] || !(SendSlots[i]->DecayTime > 0.0f))
                 continue;
 
             auto calc_attenuation = [](float distance, float refdist, float rolloff) noexcept
@@ -2006,50 +2004,50 @@ void DeviceBase::renderSamples(void *outBuffer, const uint numSamples, const siz
 
 void DeviceBase::handleDisconnect(const char *msg, ...)
 {
-    if(!Connected.exchange(false, std::memory_order_acq_rel))
-        return;
-
-    AsyncEvent evt{AsyncEvent::Disconnected};
-
-    va_list args;
-    va_start(args, msg);
-    int msglen{vsnprintf(evt.u.disconnect.msg, sizeof(evt.u.disconnect.msg), msg, args)};
-    va_end(args);
-
-    if(msglen < 0 || static_cast<size_t>(msglen) >= sizeof(evt.u.disconnect.msg))
-        evt.u.disconnect.msg[sizeof(evt.u.disconnect.msg)-1] = 0;
-
     IncrementRef(MixCount);
-    for(ContextBase *ctx : *mContexts.load())
+    if(Connected.exchange(false, std::memory_order_acq_rel))
     {
-        const uint enabledevt{ctx->mEnabledEvts.load(std::memory_order_acquire)};
-        if((enabledevt&AsyncEvent::Disconnected))
+        AsyncEvent evt{AsyncEvent::Disconnected};
+
+        va_list args;
+        va_start(args, msg);
+        int msglen{vsnprintf(evt.u.disconnect.msg, sizeof(evt.u.disconnect.msg), msg, args)};
+        va_end(args);
+
+        if(msglen < 0 || static_cast<size_t>(msglen) >= sizeof(evt.u.disconnect.msg))
+            evt.u.disconnect.msg[sizeof(evt.u.disconnect.msg)-1] = 0;
+
+        for(ContextBase *ctx : *mContexts.load())
         {
-            RingBuffer *ring{ctx->mAsyncEvents.get()};
-            auto evt_data = ring->getWriteVector().first;
-            if(evt_data.len > 0)
+            const uint enabledevt{ctx->mEnabledEvts.load(std::memory_order_acquire)};
+            if((enabledevt&AsyncEvent::Disconnected))
             {
-                al::construct_at(reinterpret_cast<AsyncEvent*>(evt_data.buf), evt);
-                ring->writeAdvance(1);
-                ctx->mEventSem.post();
+                RingBuffer *ring{ctx->mAsyncEvents.get()};
+                auto evt_data = ring->getWriteVector().first;
+                if(evt_data.len > 0)
+                {
+                    al::construct_at(reinterpret_cast<AsyncEvent*>(evt_data.buf), evt);
+                    ring->writeAdvance(1);
+                    ctx->mEventSem.post();
+                }
             }
-        }
 
-        if(!ctx->mStopVoicesOnDisconnect)
-        {
-            ProcessVoiceChanges(ctx);
-            continue;
-        }
+            if(!ctx->mStopVoicesOnDisconnect)
+            {
+                ProcessVoiceChanges(ctx);
+                continue;
+            }
 
-        auto voicelist = ctx->getVoicesSpanAcquired();
-        auto stop_voice = [](Voice *voice) -> void
-        {
-            voice->mCurrentBuffer.store(nullptr, std::memory_order_relaxed);
-            voice->mLoopBuffer.store(nullptr, std::memory_order_relaxed);
-            voice->mSourceID.store(0u, std::memory_order_relaxed);
-            voice->mPlayState.store(Voice::Stopped, std::memory_order_release);
-        };
-        std::for_each(voicelist.begin(), voicelist.end(), stop_voice);
+            auto voicelist = ctx->getVoicesSpanAcquired();
+            auto stop_voice = [](Voice *voice) -> void
+            {
+                voice->mCurrentBuffer.store(nullptr, std::memory_order_relaxed);
+                voice->mLoopBuffer.store(nullptr, std::memory_order_relaxed);
+                voice->mSourceID.store(0u, std::memory_order_relaxed);
+                voice->mPlayState.store(Voice::Stopped, std::memory_order_release);
+            };
+            std::for_each(voicelist.begin(), voicelist.end(), stop_voice);
+        }
     }
     IncrementRef(MixCount);
 }

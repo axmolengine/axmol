@@ -30,8 +30,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
     endif()
 endif()
 
-project(OpenAL)
-
 if(COMMAND CMAKE_POLICY)
     cmake_policy(SET CMP0003 NEW)
     cmake_policy(SET CMP0005 NEW)
@@ -47,7 +45,15 @@ if(COMMAND CMAKE_POLICY)
     if(POLICY CMP0075)
         cmake_policy(SET CMP0075 NEW)
     endif(POLICY CMP0075)
+    if(POLICY CMP0092)
+        cmake_policy(SET CMP0092 NEW)
+    endif(POLICY CMP0092)
+    if(POLICY CMP0117)
+        cmake_policy(SET CMP0117 NEW)
+    endif(POLICY CMP0117)
 endif(COMMAND CMAKE_POLICY)
+
+project(OpenAL)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
@@ -96,6 +102,11 @@ option(ALSOFT_INSTALL_UTILS "Install utility programs (openal-info, alsoft-confi
 option(ALSOFT_UPDATE_BUILD_VERSION "Update git build version info" ON)
 
 option(ALSOFT_EAX "Enable legacy EAX extensions" ${WIN32})
+
+option(ALSOFT_SEARCH_INSTALL_DATADIR "Search the installation data directory" OFF)
+if(ALSOFT_SEARCH_INSTALL_DATADIR)
+    set(ALSOFT_INSTALL_DATADIR ${CMAKE_INSTALL_FULL_DATADIR})
+endif()
 
 if(DEFINED SHARE_INSTALL_DIR)
     message(WARNING "SHARE_INSTALL_DIR is deprecated.  Use the variables provided by the GNUInstallDirs module instead")
@@ -151,7 +162,7 @@ endif()
 
 set(LIB_MAJOR_VERSION "1")
 set(LIB_MINOR_VERSION "22")
-set(LIB_REVISION "0")
+set(LIB_REVISION "2")
 set(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 set(LIB_VERSION_NUM ${LIB_MAJOR_VERSION},${LIB_MINOR_VERSION},${LIB_REVISION},0)
 
@@ -220,13 +231,6 @@ if(MSVC)
         set(C_FLAGS ${C_FLAGS} $<$<COMPILE_LANGUAGE:CXX>:/permissive->)
     endif()
     set(C_FLAGS ${C_FLAGS} /W4 /w14640 /wd4065 /wd4127 /wd4268 /wd4324 /wd5030)
-    # Remove /W3, which is added by default, since we set /W4. Some build
-    # generators with MSVC complain about both /W3 and /W4 being specified.
-    foreach(flag_var  CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
-        if(${flag_var} MATCHES "/W3")
-            string(REGEX REPLACE "/W3" "" ${flag_var} "${${flag_var}}")
-        endif()
-    endforeach()
 
     if(NOT DXSDK_DIR)
         string(REGEX REPLACE "\\\\" "/" DXSDK_DIR "$ENV{DXSDK_DIR}")
@@ -677,30 +681,42 @@ set(CORE_OBJS
     core/voice_change.h)
 
 set(HAVE_RTKIT 0)
-option(ALSOFT_REQUIRE_RTKIT "Require RTKit/D-Bus support" FALSE)
-find_package(DBus1 QUIET)
-if(DBus1_FOUND)
-    option(ALSOFT_RTKIT "Enable RTKit support" ON)
-    if(ALSOFT_RTKIT)
-        set(HAVE_RTKIT 1)
-        set(CORE_OBJS ${CORE_OBJS} core/dbus_wrap.cpp core/dbus_wrap.h core/rtkit.cpp core/rtkit.h)
-        if(WIN32 OR HAVE_DLFCN_H)
-            set(INC_PATHS ${INC_PATHS} ${DBus1_INCLUDE_DIRS})
-            set(CPP_DEFS ${CPP_DEFS} ${DBus1_DEFINITIONS})
-        else()
-            set(EXTRA_LIBS ${EXTRA_LIBS} ${DBus1_LIBRARIES})
+if(NOT WIN32)
+    option(ALSOFT_REQUIRE_RTKIT "Require RTKit/D-Bus support" FALSE)
+    find_package(DBus1 QUIET)
+    if(NOT DBus1_FOUND AND PkgConfig_FOUND)
+        pkg_check_modules(DBUS dbus-1)
+    endif()
+    if(DBus1_FOUND OR DBUS_FOUND)
+        option(ALSOFT_RTKIT "Enable RTKit support" ON)
+        if(ALSOFT_RTKIT)
+            set(HAVE_RTKIT 1)
+            set(CORE_OBJS ${CORE_OBJS} core/dbus_wrap.cpp core/dbus_wrap.h
+                core/rtkit.cpp core/rtkit.h)
+            if(NOT DBus1_FOUND)
+                set(INC_PATHS ${INC_PATHS} ${DBUS_INCLUDE_DIRS})
+                set(CPP_DEFS ${CPP_DEFS} ${DBUS_CFLAGS_OTHER})
+                if(NOT HAVE_DLFCN_H)
+                    set(EXTRA_LIBS ${EXTRA_LIBS} ${DBUS_LINK_LIBRARIES})
+                endif()
+            elseif(HAVE_DLFCN_H)
+                set(INC_PATHS ${INC_PATHS} ${DBus1_INCLUDE_DIRS})
+                set(CPP_DEFS ${CPP_DEFS} ${DBus1_DEFINITIONS})
+            else()
+                set(EXTRA_LIBS ${EXTRA_LIBS} ${DBus1_LIBRARIES})
+            endif()
         endif()
+    else()
+        set(MISSING_VARS "")
+        if(NOT DBus1_INCLUDE_DIRS)
+            set(MISSING_VARS "${MISSING_VARS} DBus1_INCLUDE_DIRS")
+        endif()
+        if(NOT DBus1_LIBRARIES)
+            set(MISSING_VARS "${MISSING_VARS} DBus1_LIBRARIES")
+        endif()
+        message(STATUS "Could NOT find DBus1 (missing:${MISSING_VARS})")
+        unset(MISSING_VARS)
     endif()
-else()
-    set(MISSING_VARS "")
-    if(NOT DBus1_INCLUDE_DIRS)
-        set(MISSING_VARS "${MISSING_VARS} DBus1_INCLUDE_DIRS")
-    endif()
-    if(NOT DBus1_LIBRARIES)
-        set(MISSING_VARS "${MISSING_VARS} DBus1_LIBRARIES")
-    endif()
-    message(STATUS "Could NOT find DBus1 (missing:${MISSING_VARS})")
-    unset(MISSING_VARS)
 endif()
 if(ALSOFT_REQUIRE_RTKIT AND NOT HAVE_RTKIT)
     message(FATAL_ERROR "Failed to enabled required RTKit support")
@@ -781,24 +797,22 @@ set(ALC_OBJS
 if (ALSOFT_EAX)
     set(OPENAL_OBJS
         ${OPENAL_OBJS}
-        al/eax_api.cpp
-        al/eax_api.h
-        al/eax_eax_call.cpp
-        al/eax_eax_call.h
-        al/eax_effect.cpp
-        al/eax_effect.h
-        al/eax_exception.cpp
-        al/eax_exception.h
-        al/eax_fx_slot_index.cpp
-        al/eax_fx_slot_index.h
-        al/eax_fx_slots.cpp
-        al/eax_fx_slots.h
-        al/eax_globals.cpp
-        al/eax_globals.h
-        al/eax_utils.cpp
-        al/eax_utils.h
-        al/eax_x_ram.cpp
-        al/eax_x_ram.h
+        al/eax/api.cpp
+        al/eax/api.h
+        al/eax/call.cpp
+        al/eax/call.h
+        al/eax/effect.h
+        al/eax/exception.cpp
+        al/eax/exception.h
+        al/eax/fx_slot_index.cpp
+        al/eax/fx_slot_index.h
+        al/eax/fx_slots.cpp
+        al/eax/fx_slots.h
+        al/eax/globals.cpp
+        al/eax/globals.h
+        al/eax/utils.cpp
+        al/eax/utils.h
+        al/eax/x_ram.h
 )
 endif ()
 
@@ -903,7 +917,7 @@ endif()
 # Check PipeWire backend
 option(ALSOFT_REQUIRE_PIPEWIRE "Require PipeWire backend" OFF)
 if(PkgConfig_FOUND)
-    pkg_check_modules(PIPEWIRE libpipewire-0.3)
+    pkg_check_modules(PIPEWIRE libpipewire-0.3>=0.3.23)
     if(PIPEWIRE_FOUND)
         option(ALSOFT_BACKEND_PIPEWIRE "Enable PipeWire backend" ON)
         if(ALSOFT_BACKEND_PIPEWIRE)
@@ -1128,8 +1142,11 @@ if(ANDROID)
 
         set(OBOE_TARGET oboe)
     else()
-        find_package(Oboe)
-        if(OBOE_FOUND)
+        find_package(oboe CONFIG)
+        if(NOT TARGET oboe::oboe)
+            find_package(Oboe)
+        endif()
+        if(TARGET oboe::oboe)
             set(OBOE_TARGET "oboe::oboe")
         endif()
     endif()
@@ -1244,9 +1261,9 @@ endif()
 # Needed for openal.pc.in
 set(prefix ${CMAKE_INSTALL_PREFIX})
 set(exec_prefix "\${prefix}")
-set(libdir "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
-set(bindir "\${exec_prefix}/${CMAKE_INSTALL_BINDIR}")
-set(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
+set(bindir "${CMAKE_INSTALL_FULL_BINDIR}")
+set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
 set(PACKAGE_VERSION "${LIB_VERSION}")
 set(PKG_CONFIG_CFLAGS )
 set(PKG_CONFIG_PRIVATE_LIBS )

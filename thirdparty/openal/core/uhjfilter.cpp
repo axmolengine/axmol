@@ -36,17 +36,17 @@ const PhaseShifterT<UhjFilterBase::sFilterDelay*2> PShift{};
  * impulse with the desired shift.
  */
 
-void UhjEncoder::encode(float *LeftOut, float *RightOut, const FloatBufferLine *InSamples,
-    const size_t SamplesToDo)
+void UhjEncoder::encode(float *LeftOut, float *RightOut,
+    const al::span<const float*const,3> InSamples, const size_t SamplesToDo)
 {
     ASSUME(SamplesToDo > 0);
 
     float *RESTRICT left{al::assume_aligned<16>(LeftOut)};
     float *RESTRICT right{al::assume_aligned<16>(RightOut)};
 
-    const float *RESTRICT winput{al::assume_aligned<16>(InSamples[0].data())};
-    const float *RESTRICT xinput{al::assume_aligned<16>(InSamples[1].data())};
-    const float *RESTRICT yinput{al::assume_aligned<16>(InSamples[2].data())};
+    const float *RESTRICT winput{al::assume_aligned<16>(InSamples[0])};
+    const float *RESTRICT xinput{al::assume_aligned<16>(InSamples[1])};
+    const float *RESTRICT yinput{al::assume_aligned<16>(InSamples[2])};
 
     /* Combine the previously delayed S/D signal with the input. Include any
      * existing direct signal with it.
@@ -174,7 +174,7 @@ void UhjDecoder::decode(const al::span<float*> samples, const size_t samplesToDo
  * where j is a +90 degree phase shift. w is a variable control for the
  * resulting stereo width, with the range 0 <= w <= 0.7.
  */
-void UhjDecoder::decodeStereo(const al::span<float*> samples, const size_t samplesToDo,
+void UhjStereoDecoder::decode(const al::span<float*> samples, const size_t samplesToDo,
     const size_t forwardSamples)
 {
     ASSUME(samplesToDo > 0);

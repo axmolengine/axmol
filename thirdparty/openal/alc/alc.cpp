@@ -156,8 +156,8 @@
 #endif
 
 #ifdef ALSOFT_EAX
-#include "al/eax_globals.h"
-#include "al/eax_x_ram.h"
+#include "al/eax/globals.h"
+#include "al/eax/x_ram.h"
 #endif // ALSOFT_EAX
 
 
@@ -223,14 +223,14 @@ BackendInfo BackendList[] = {
 #ifdef HAVE_OPENSL
     { "opensl", OSLBackendFactory::getFactory },
 #endif
+#ifdef HAVE_ALSA
+    { "alsa", AlsaBackendFactory::getFactory },
+#endif
 #ifdef HAVE_SOLARIS
     { "solaris", SolarisBackendFactory::getFactory },
 #endif
 #ifdef HAVE_SNDIO
     { "sndio", SndIOBackendFactory::getFactory },
-#endif
-#ifdef HAVE_ALSA
-    { "alsa", AlsaBackendFactory::getFactory },
 #endif
 #ifdef HAVE_OSS
     { "oss", OSSBackendFactory::getFactory },
@@ -1299,15 +1299,21 @@ void alc_initconfig(void)
         else
             eax_g_is_enabled = true;
 
-        if(eax_g_is_enabled && DisabledEffects[EAXREVERB_EFFECT])
+        if((DisabledEffects[EAXREVERB_EFFECT] || DisabledEffects[CHORUS_EFFECT])
+            && eax_g_is_enabled)
         {
             eax_g_is_enabled = false;
-            TRACE("%s\n", "EAX disabled because EAXReverb is disabled.");
+            TRACE("EAX disabled because %s disabled.\n",
+                (DisabledEffects[EAXREVERB_EFFECT] && DisabledEffects[CHORUS_EFFECT])
+                    ? "EAXReverb and Chorus are" :
+                DisabledEffects[EAXREVERB_EFFECT] ? "EAXReverb is" :
+                DisabledEffects[CHORUS_EFFECT] ? "Chorus is" : "");
         }
     }
 #endif // ALSOFT_EAX
 }
-#define DO_INITCONFIG() std::call_once(alc_config_once, [](){alc_initconfig();})
+inline void InitConfig()
+{ std::call_once(alc_config_once, [](){alc_initconfig();}); }
 
 
 /************************************************
@@ -1315,7 +1321,7 @@ void alc_initconfig(void)
  ************************************************/
 void ProbeAllDevicesList()
 {
-    DO_INITCONFIG();
+    InitConfig();
 
     std::lock_guard<std::recursive_mutex> _{ListLock};
     if(!PlaybackFactory)
@@ -1329,7 +1335,7 @@ void ProbeAllDevicesList()
 }
 void ProbeCaptureDeviceList()
 {
-    DO_INITCONFIG();
+    InitConfig();
 
     std::lock_guard<std::recursive_mutex> _{ListLock};
     if(!CaptureFactory)
@@ -1441,6 +1447,8 @@ ALCenum EnumFromDevFmt(DevFmtChannels channels)
     case DevFmtX61: return ALC_6POINT1_SOFT;
     case DevFmtX71: return ALC_7POINT1_SOFT;
     case DevFmtAmbi3D: return ALC_BFORMAT3D_SOFT;
+    /* FIXME: Shouldn't happen. */
+    case DevFmtX3D71: break;
     }
     throw std::runtime_error{"Invalid DevFmtChannels: "+std::to_string(int(channels))};
 }
@@ -1911,6 +1919,7 @@ ALCenum UpdateDeviceParams(ALCdevice *device, const int *attrList)
                 { "surround51", DevFmtX51,    0 },
                 { "surround61", DevFmtX61,    0 },
                 { "surround71", DevFmtX71,    0 },
+                { "surround3d71", DevFmtX3D71, 0 },
                 { "surround51rear", DevFmtX51, 0 },
                 { "ambi1", DevFmtAmbi3D, 1 },
                 { "ambi2", DevFmtAmbi3D, 2 },
@@ -2090,6 +2099,7 @@ ALCenum UpdateDeviceParams(ALCdevice *device, const int *attrList)
     case DevFmtX51: device->RealOut.RemixMap = X51Downmix; break;
     case DevFmtX61: device->RealOut.RemixMap = X61Downmix; break;
     case DevFmtX71: device->RealOut.RemixMap = X71Downmix; break;
+    case DevFmtX3D71: device->RealOut.RemixMap = X51Downmix; break;
     case DevFmtAmbi3D: break;
     }
 
@@ -3366,7 +3376,7 @@ END_API_FUNC
 ALC_API ALCdevice* ALC_APIENTRY alcOpenDevice(const ALCchar *deviceName)
 START_API_FUNC
 {
-    DO_INITCONFIG();
+    InitConfig();
 
     if(!PlaybackFactory)
     {
@@ -3395,6 +3405,13 @@ START_API_FUNC
             deviceName = nullptr;
     }
 
+    const uint DefaultSends{
+#ifdef ALSOFT_EAX
+        eax_g_is_enabled ? uint{EAX_MAX_FXSLOTS} :
+#endif // ALSOFT_EAX
+        DEFAULT_SENDS
+    };
+
     DeviceRef device{new ALCdevice{DeviceType::Playback}};
 
     /* Set output format */
@@ -3406,11 +3423,7 @@ START_API_FUNC
 
     device->SourcesMax = 256;
     device->AuxiliaryEffectSlotMax = 64;
-    device->NumAuxSends = DEFAULT_SENDS;
-#ifdef ALSOFT_EAX
-    if(eax_g_is_enabled)
-        device->NumAuxSends = EAX_MAX_FXSLOTS;
-#endif // ALSOFT_EAX
+    device->NumAuxSends = DefaultSends;
 
     try {
         auto backend = PlaybackFactory->createBackend(device.get(), BackendType::Playback);
@@ -3447,8 +3460,10 @@ START_API_FUNC
         device->AuxiliaryEffectSlotMax = minu(slotsmax, INT_MAX);
 
     if(auto sendsopt = device->configValue<int>(nullptr, "sends"))
-        device->NumAuxSends = minu(DEFAULT_SENDS,
-            static_cast<uint>(clampi(*sendsopt, 0, MAX_SENDS)));
+    {
+        const int max_sends{clampi(*sendsopt, 0, MAX_SENDS)};
+        device->NumAuxSends = minu(DefaultSends, static_cast<uint>(max_sends));
+    }
 
     device->NumStereoSources = 1;
     device->NumMonoSources = device->SourcesMax - device->NumStereoSources;
@@ -3521,7 +3536,7 @@ END_API_FUNC
 ALC_API ALCdevice* ALC_APIENTRY alcCaptureOpenDevice(const ALCchar *deviceName, ALCuint frequency, ALCenum format, ALCsizei samples)
 START_API_FUNC
 {
-    DO_INITCONFIG();
+    InitConfig();
 
     if(!CaptureFactory)
     {
@@ -3704,7 +3719,7 @@ END_API_FUNC
 ALC_API ALCdevice* ALC_APIENTRY alcLoopbackOpenDeviceSOFT(const ALCchar *deviceName)
 START_API_FUNC
 {
-    DO_INITCONFIG();
+    InitConfig();
 
     /* Make sure the device name, if specified, is us. */
     if(deviceName && strcmp(deviceName, alcDefaultName) != 0)
@@ -3713,11 +3728,18 @@ START_API_FUNC
         return nullptr;
     }
 
+    const uint DefaultSends{
+#ifdef ALSOFT_EAX
+        eax_g_is_enabled ? uint{EAX_MAX_FXSLOTS} :
+#endif // ALSOFT_EAX
+        DEFAULT_SENDS
+    };
+
     DeviceRef device{new ALCdevice{DeviceType::Loopback}};
 
     device->SourcesMax = 256;
     device->AuxiliaryEffectSlotMax = 64;
-    device->NumAuxSends = DEFAULT_SENDS;
+    device->NumAuxSends = DefaultSends;
 
     //Set output format
     device->BufferSize = 0;
@@ -3734,8 +3756,10 @@ START_API_FUNC
         device->AuxiliaryEffectSlotMax = minu(slotsmax, INT_MAX);
 
     if(auto sendsopt = ConfigValueInt(nullptr, nullptr, "sends"))
-        device->NumAuxSends = minu(DEFAULT_SENDS,
-            static_cast<uint>(clampi(*sendsopt, 0, MAX_SENDS)));
+    {
+        const int max_sends{clampi(*sendsopt, 0, MAX_SENDS)};
+        device->NumAuxSends = minu(DefaultSends, static_cast<uint>(max_sends));
+    }
 
     device->NumStereoSources = 1;
     device->NumMonoSources = device->SourcesMax - device->NumStereoSources;
