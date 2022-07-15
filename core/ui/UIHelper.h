@@ -46,7 +46,7 @@ class Widget;
  * Helper class for traversing children in widget tree.
  * It also provides some helper functions for layout.
  */
-class AX_GUI_DLL Helper
+class CC_GUI_DLL Helper
 {
 public:
     /**

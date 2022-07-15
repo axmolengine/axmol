@@ -66,7 +66,7 @@ bool ActionEase::initWithAction(ActionInterval* action)
 
 ActionEase::~ActionEase()
 {
-    AX_SAFE_RELEASE(_inner);
+    CC_SAFE_RELEASE(_inner);
 }
 
 void ActionEase::startWithTarget(Node* target)
@@ -115,7 +115,7 @@ EaseRateAction* EaseRateAction::create(ActionInterval* action, float rate)
         return easeRateAction;
     }
 
-    AX_SAFE_DELETE(easeRateAction);
+    CC_SAFE_DELETE(easeRateAction);
     return nullptr;
 }
 
@@ -141,7 +141,7 @@ bool EaseRateAction::initWithAction(ActionInterval* action, float rate)
         if (ease->initWithAction(action))                                    \
             ease->autorelease();                                             \
         else                                                                 \
-            AX_SAFE_DELETE(ease);                                            \
+            CC_SAFE_DELETE(ease);                                            \
         return ease;                                                         \
     }                                                                        \
     CLASSNAME* CLASSNAME::clone() const                                      \
@@ -192,7 +192,7 @@ EASE_TEMPLATE_IMPL(EaseCubicActionInOut, tweenfunc::cubicEaseInOut, EaseCubicAct
         if (ease->initWithAction(action, rate))                                     \
             ease->autorelease();                                                    \
         else                                                                        \
-            AX_SAFE_DELETE(ease);                                                   \
+            CC_SAFE_DELETE(ease);                                                   \
         return ease;                                                                \
     }                                                                               \
     CLASSNAME* CLASSNAME::clone() const                                             \
@@ -235,7 +235,7 @@ bool EaseElastic::initWithAction(ActionInterval* action, float period /* = 0.3f*
         if (ease->initWithAction(action, period))                                           \
             ease->autorelease();                                                            \
         else                                                                                \
-            AX_SAFE_DELETE(ease);                                                           \
+            CC_SAFE_DELETE(ease);                                                           \
         return ease;                                                                        \
     }                                                                                       \
     CLASSNAME* CLASSNAME::clone() const                                                     \

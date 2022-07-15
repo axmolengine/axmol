@@ -45,10 +45,10 @@ Particle3DQuadRender::Particle3DQuadRender()
 
 Particle3DQuadRender::~Particle3DQuadRender()
 {
-    // AX_SAFE_RELEASE(_texture);
-    AX_SAFE_RELEASE(_programState);
-    AX_SAFE_RELEASE(_vertexBuffer);
-    AX_SAFE_RELEASE(_indexBuffer);
+    // CC_SAFE_RELEASE(_texture);
+    CC_SAFE_RELEASE(_programState);
+    CC_SAFE_RELEASE(_vertexBuffer);
+    CC_SAFE_RELEASE(_indexBuffer);
 }
 
 Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
@@ -61,7 +61,7 @@ Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -167,8 +167,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     auto afterCommand = renderer->nextCallbackCommand();
     afterCommand->init(depthZ);
 
-    beforeCommand->func = [=]() { onBeforeDraw(); };  // AX_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
-    afterCommand->func  = [=]() { onAfterDraw(); };   // AX_CALLBACK_0(Particle3DQuadRender::onAfterDraw, this);
+    beforeCommand->func = [=]() { onBeforeDraw(); };  // CC_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
+    afterCommand->func  = [=]() { onAfterDraw(); };   // CC_CALLBACK_0(Particle3DQuadRender::onAfterDraw, this);
 
     _meshCommand.setVertexBuffer(_vertexBuffer);
     _meshCommand.setIndexBuffer(_indexBuffer, MeshCommand::IndexFormat::U_SHORT);
@@ -193,7 +193,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
 
 bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
 
     if (!texFile.empty())
     {

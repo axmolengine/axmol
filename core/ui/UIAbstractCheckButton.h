@@ -35,7 +35,7 @@ THE SOFTWARE.
  */
 NS_AX_BEGIN
 class Sprite;
-struct AX_DLL ResourceData;
+struct CC_DLL ResourceData;
 
 namespace ui
 {
@@ -43,7 +43,7 @@ namespace ui
 /**
  *  AbstractCheckButton is a specific type of two-states button that can be either checked or unchecked.
  */
-class AX_GUI_DLL AbstractCheckButton : public Widget
+class CC_GUI_DLL AbstractCheckButton : public Widget
 {
 
 public:

@@ -39,9 +39,9 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
 #include "2d/CCCamera.h"
-#if AX_ICON_SET_SUPPORT
+#if CC_ICON_SET_SUPPORT
 #    include "platform/CCImage.h"
-#endif /* AX_ICON_SET_SUPPORT */
+#endif /* CC_ICON_SET_SUPPORT */
 #include "renderer/backend/metal/DeviceMTL.h"
 #include "renderer/CCRenderer.h"
 #include "renderer/backend/metal/UtilsMTL.h"
@@ -322,7 +322,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -334,7 +334,7 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, flo
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -346,7 +346,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -360,7 +360,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -380,7 +380,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
 
     glfwWindowHint(GLFW_SAMPLES, _glContextAttrs.multisamplingCount);
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
     // Don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
@@ -410,7 +410,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     size.width  = static_cast<CGFloat>(fbWidth);
     size.height = static_cast<CGFloat>(fbHeight);
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
     // Initialize device.
     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
     if (!device)
@@ -452,7 +452,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
         rect.size.height = realH / _frameZoomFactor;
     }
 
-#if defined(AX_USE_GL)
+#if defined(CC_USE_GL)
     glfwMakeContextCurrent(_mainWindow);
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 #endif
@@ -519,7 +519,7 @@ void GLViewImpl::end()
 
 void GLViewImpl::swapBuffers()
 {
-#if defined(AX_USE_GL)
+#if defined(CC_USE_GL)
     if (_mainWindow)
         glfwSwapBuffers(_mainWindow);
 #endif
@@ -554,7 +554,7 @@ void GLViewImpl::enableRetina(bool enabled)
 
 void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
 
-#if AX_ICON_SET_SUPPORT
+#if CC_ICON_SET_SUPPORT
 void GLViewImpl::setIcon(std::string_view filename) const
 {
     std::vector<std::string> vec = {filename};
@@ -575,7 +575,7 @@ void GLViewImpl::setIcon(const std::vector<std::string>& filelist) const
         }
         else
         {
-            AX_SAFE_DELETE(icon);
+            CC_SAFE_DELETE(icon);
         }
     }
 
@@ -595,10 +595,10 @@ void GLViewImpl::setIcon(const std::vector<std::string>& filelist) const
     GLFWwindow* window = this->getWindow();
     glfwSetWindowIcon(window, iconsCount, images);
 
-    AX_SAFE_DELETE_ARRAY(images);
+    CC_SAFE_DELETE_ARRAY(images);
     for (auto& icon : icons)
     {
-        AX_SAFE_DELETE(icon);
+        CC_SAFE_DELETE(icon);
     }
 }
 
@@ -607,7 +607,7 @@ void GLViewImpl::setDefaultIcon() const
     GLFWwindow* window = this->getWindow();
     glfwSetWindowIcon(window, 0, nullptr);
 }
-#endif /* AX_ICON_SET_SUPPORT */
+#endif /* CC_ICON_SET_SUPPORT */
 
 void GLViewImpl::setCursorVisible(bool isVisible)
 {
@@ -711,7 +711,7 @@ void GLViewImpl::setWindowed(int width, int height)
         ypos += (int)((videoMode->height - height) * 0.5f);
         _monitor = nullptr;
         glfwSetWindowMonitor(_mainWindow, nullptr, xpos, ypos, width, height, GLFW_DONT_CARE);
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
         // on mac window will sometimes lose title when windowed
         glfwSetWindowTitle(_mainWindow, _viewName.c_str());
 #endif
@@ -1030,7 +1030,7 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int width, int
         Director::getInstance()->setViewport();
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
         // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);

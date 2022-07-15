@@ -51,7 +51,7 @@ bool Bug1159Layer::init()
         addChild(sprite_b);
 
         auto label = MenuItemLabel::create(Label::createWithSystemFont("Flip Me", "Helvetica", 24),
-                                           AX_CALLBACK_1(Bug1159Layer::callBack, this));
+                                           CC_CALLBACK_1(Bug1159Layer::callBack, this));
         auto menu  = Menu::create(label, nullptr);
         menu->setPosition(s.width - 200.0f, 50.0f);
         addChild(menu);

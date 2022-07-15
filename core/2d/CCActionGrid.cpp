@@ -206,7 +206,7 @@ AccelDeccelAmplitude* AccelDeccelAmplitude::clone() const
 
 AccelDeccelAmplitude::~AccelDeccelAmplitude()
 {
-    AX_SAFE_RELEASE(_other);
+    CC_SAFE_RELEASE(_other);
 }
 
 void AccelDeccelAmplitude::startWithTarget(Node* target)
@@ -276,7 +276,7 @@ AccelAmplitude* AccelAmplitude::clone() const
 
 AccelAmplitude::~AccelAmplitude()
 {
-    AX_SAFE_DELETE(_other);
+    CC_SAFE_DELETE(_other);
 }
 
 void AccelAmplitude::startWithTarget(Node* target)
@@ -330,7 +330,7 @@ bool DeccelAmplitude::initWithAction(Action* action, float duration)
 
 DeccelAmplitude::~DeccelAmplitude()
 {
-    AX_SAFE_RELEASE(_other);
+    CC_SAFE_RELEASE(_other);
 }
 
 void DeccelAmplitude::startWithTarget(Node* target)

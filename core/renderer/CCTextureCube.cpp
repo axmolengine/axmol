@@ -149,7 +149,7 @@ TextureCube::TextureCube()
 
 TextureCube::~TextureCube()
 {
-    AX_SAFE_RELEASE_NULL(_texture);
+    CC_SAFE_RELEASE_NULL(_texture);
 }
 
 TextureCube* TextureCube::create(std::string_view positive_x,
@@ -165,7 +165,7 @@ TextureCube* TextureCube::create(std::string_view positive_x,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -256,7 +256,7 @@ bool TextureCube::init(std::string_view positive_x,
 
     for (auto img : images)
     {
-        AX_SAFE_RELEASE(img);
+        CC_SAFE_RELEASE(img);
     }
 
     return true;

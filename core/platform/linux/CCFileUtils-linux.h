@@ -39,7 +39,7 @@ NS_AX_BEGIN
  */
 
 //! @brief  Helper class to handle file operations
-class AX_DLL FileUtilsLinux : public FileUtils
+class CC_DLL FileUtilsLinux : public FileUtils
 {
     friend class FileUtils;
 

@@ -27,11 +27,11 @@ THE SOFTWARE.
 #pragma once
 
 #include "platform/CCPlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
 #    include "glad/glad.h"
 
-#    if defined(AX_USE_GLES)
+#    if defined(CC_USE_GLES)
 #        undef GL_DEPTH_STENCIL
 #        undef GL_DEPTH24_STENCIL8
 #        undef GL_UNSIGNED_INT_24_8
@@ -90,4 +90,4 @@ THE SOFTWARE.
 
 #    endif
 
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32

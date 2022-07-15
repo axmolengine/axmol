@@ -30,7 +30,7 @@
 // But in case they are included, it won't be compiled.
 
 #include "platform/CCPlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 // #    include "platform/CCPlatformMacros.h"
 #    import <QuartzCore/QuartzCore.h>
@@ -57,4 +57,4 @@
 - (unsigned int)msaaColorBuffer;
 @end
 
-#endif  // AX_PLATFORM_IOS
+#endif  // CC_PLATFORM_IOS

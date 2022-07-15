@@ -442,7 +442,7 @@ void HttpClient::dispatchResponseCallbacks()
     if (_finishedResponseQueue.unsafe_empty())
         return;
 
-    auto AX_UNUSED lck = _finishedResponseQueue.get_lock();
+    auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
     if (!_finishedResponseQueue.unsafe_empty())
     {
         HttpResponse* response = _finishedResponseQueue.front();
@@ -495,13 +495,13 @@ void HttpClient::clearResponseQueue()
 
 void HttpClient::clearPendingResponseQueue()
 {
-    auto AX_UNUSED lck = _pendingResponseQueue.get_lock();
+    auto CC_UNUSED lck = _pendingResponseQueue.get_lock();
     __clearQueueUnsafe(_pendingResponseQueue, ClearResponsePredicate{});
 }
 
 void HttpClient::clearFinishedResponseQueue()
 {
-    auto AX_UNUSED lck = _finishedResponseQueue.get_lock();
+    auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
     __clearQueueUnsafe(_finishedResponseQueue, ClearResponsePredicate{});
 }
 

@@ -51,7 +51,7 @@ is turned on in Director using:
 
  @since v0.8.2
 */
-class AX_DLL TransitionPageTurn : public TransitionScene
+class CC_DLL TransitionPageTurn : public TransitionScene
 {
 public:
     /**

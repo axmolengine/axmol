@@ -30,7 +30,7 @@
 // But in case they are included, it won't be compiled.
 
 #include "platform/CCPlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 #    import "platform/ios/CCESRenderer-ios.h"
 
@@ -80,4 +80,4 @@
 - (BOOL)resizeFromLayer:(CAEAGLLayer*)layer;
 @end
 
-#endif  // AX_PLATFORM_IOS
+#endif  // CC_PLATFORM_IOS

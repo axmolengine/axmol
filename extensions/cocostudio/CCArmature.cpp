@@ -53,7 +53,7 @@ Armature* Armature::create()
         armature->autorelease();
         return armature;
     }
-    AX_SAFE_DELETE(armature);
+    CC_SAFE_DELETE(armature);
     return nullptr;
 }
 
@@ -65,7 +65,7 @@ Armature* Armature::create(std::string_view name)
         armature->autorelease();
         return armature;
     }
-    AX_SAFE_DELETE(armature);
+    CC_SAFE_DELETE(armature);
     return nullptr;
 }
 
@@ -77,7 +77,7 @@ Armature* Armature::create(std::string_view name, Bone* parentBone)
         armature->autorelease();
         return armature;
     }
-    AX_SAFE_DELETE(armature);
+    CC_SAFE_DELETE(armature);
     return nullptr;
 }
 
@@ -94,7 +94,7 @@ Armature::~Armature()
     _boneDic.clear();
     _topBoneList.clear();
 
-    AX_SAFE_DELETE(_animation);
+    CC_SAFE_DELETE(_animation);
 }
 
 bool Armature::init()
@@ -109,7 +109,7 @@ bool Armature::init(std::string_view name)
     {
         removeAllChildren();
 
-        AX_SAFE_DELETE(_animation);
+        CC_SAFE_DELETE(_animation);
         _animation = new ArmatureAnimation();
         _animation->init(this);
 
@@ -142,13 +142,13 @@ bool Armature::init(std::string_view name)
                 do
                 {
                     MovementData* movData = animationData->getMovement(animationData->movementNames.at(0));
-                    AX_BREAK_IF(!movData);
+                    CC_BREAK_IF(!movData);
 
                     MovementBoneData* movBoneData = movData->getMovementBoneData(bone->getName());
-                    AX_BREAK_IF(!movBoneData || movBoneData->frameList.size() <= 0);
+                    CC_BREAK_IF(!movBoneData || movBoneData->frameList.size() <= 0);
 
                     FrameData* frameData = movBoneData->getFrameData(0);
-                    AX_BREAK_IF(!frameData);
+                    CC_BREAK_IF(!frameData);
 
                     bone->getTweenData()->copy(frameData);
                     bone->changeDisplayWithIndex(frameData->displayIndex, false);
@@ -372,7 +372,7 @@ void Armature::draw(axis::Renderer* renderer, const Mat4& transform, uint32_t fl
 {
     if (_parentBone == nullptr && _batchNode == nullptr)
     {
-        //        AX_NODE_DRAW_SETUP();
+        //        CC_NODE_DRAW_SETUP();
     }
 
     for (auto& object : _children)
@@ -419,7 +419,7 @@ void Armature::draw(axis::Renderer* renderer, const Mat4& transform, uint32_t fl
             default:
             {
                 node->visit(renderer, transform, flags);
-                //                AX_NODE_DRAW_SETUP();
+                //                CC_NODE_DRAW_SETUP();
             }
             break;
             }
@@ -427,7 +427,7 @@ void Armature::draw(axis::Renderer* renderer, const Mat4& transform, uint32_t fl
         else if (Node* node = dynamic_cast<Node*>(object))
         {
             node->visit(renderer, transform, flags);
-            //            AX_NODE_DRAW_SETUP();
+            //            CC_NODE_DRAW_SETUP();
         }
     }
 }

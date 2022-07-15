@@ -43,7 +43,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create()
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -58,7 +58,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D* p
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -73,7 +73,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithTexture(Texture2D* p
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -88,7 +88,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrame(SpriteFr
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -103,7 +103,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::createWithSpriteFrameName(cons
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -118,7 +118,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char* pszFileName
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -133,7 +133,7 @@ PhysicsSpriteChipmunk2D* PhysicsSpriteChipmunk2D::create(const char* pszFileName
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -246,7 +246,7 @@ void PhysicsSpriteChipmunk2D::setPosition3D(const Vec3& position)
 
 float PhysicsSpriteChipmunk2D::getRotation() const
 {
-    return (_ignoreBodyRotation ? Sprite::getRotation() : -AX_RADIANS_TO_DEGREES(cpBodyGetAngle(_CPBody)));
+    return (_ignoreBodyRotation ? Sprite::getRotation() : -CC_RADIANS_TO_DEGREES(cpBodyGetAngle(_CPBody)));
 }
 
 void PhysicsSpriteChipmunk2D::setRotation(float fRotation)
@@ -257,7 +257,7 @@ void PhysicsSpriteChipmunk2D::setRotation(float fRotation)
     }
     else
     {
-        cpBodySetAngle(_CPBody, -AX_DEGREES_TO_RADIANS(fRotation));
+        cpBodySetAngle(_CPBody, -CC_DEGREES_TO_RADIANS(fRotation));
     }
 }
 
@@ -267,7 +267,7 @@ void PhysicsSpriteChipmunk2D::syncPhysicsTransform() const
     // the sprite is animated (scaled up/down) using actions.
     // For more info see: http://www.cocos2d-iphone.org/forum/topic/68990
 
-    cpVect rot = (_ignoreBodyRotation ? cpvforangle(-AX_DEGREES_TO_RADIANS(_rotationX)) : cpBodyGetRotation(_CPBody));
+    cpVect rot = (_ignoreBodyRotation ? cpvforangle(-CC_DEGREES_TO_RADIANS(_rotationX)) : cpBodyGetRotation(_CPBody));
     float x    = cpBodyGetPosition(_CPBody).x + rot.x * -_anchorPointInPoints.x * _scaleX -
               rot.y * -_anchorPointInPoints.y * _scaleY;
     float y = cpBodyGetPosition(_CPBody).y + rot.y * -_anchorPointInPoints.x * _scaleX +

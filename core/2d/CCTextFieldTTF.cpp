@@ -42,7 +42,7 @@ static std::size_t _calcCharCount(const char* text)
     char ch = 0;
     while ((ch = *text))
     {
-        AX_BREAK_IF(!ch);
+        CC_BREAK_IF(!ch);
 
         if (0x80 != (0xC0 & ch))
         {
@@ -125,7 +125,7 @@ TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(std::string_view placeholde
         }
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -143,7 +143,7 @@ TextFieldTTF* TextFieldTTF::textFieldWithPlaceHolder(std::string_view placeholde
         }
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -186,8 +186,8 @@ bool TextFieldTTF::initWithPlaceHolder(std::string_view placeholder, std::string
     setTextColorInternally(_colorSpaceHolder);
     Label::setString(_placeHolder);
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
     // On desktop default enable cursor
     if (_currentLabelType == LabelType::TTF)
     {

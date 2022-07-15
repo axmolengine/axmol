@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class AX_DLL Application : public ApplicationProtocol
+class CC_DLL Application : public ApplicationProtocol
 {
 public:
     /**
@@ -61,7 +61,7 @@ public:
     static Application* getInstance();
 
     /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
+    CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
 
     /**
     @brief Get current language config

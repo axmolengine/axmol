@@ -43,7 +43,7 @@ namespace ui
  *@brief RelativeBox is just a convenient wrapper class for relative layout type.
  * RelativeBox lays out its children relative to a widget or a position.
  */
-class AX_GUI_DLL RelativeBox : public Layout
+class CC_GUI_DLL RelativeBox : public Layout
 {
 
 public:

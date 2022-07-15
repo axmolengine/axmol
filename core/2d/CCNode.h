@@ -41,7 +41,7 @@
 #include "2d/CCComponentContainer.h"
 #include "2d/CCComponent.h"
 
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 #    include "physics/CCPhysicsBody.h"
 #endif
 
@@ -114,7 +114,7 @@ Node and override `draw`.
 
  */
 
-class AX_DLL Node : public Ref
+class CC_DLL Node : public Ref
 {
 public:
     /** Default tag used for all the nodes */
@@ -949,7 +949,7 @@ public:
     inline static void sortNodes(axis::Vector<_T*>& nodes)
     {
         static_assert(std::is_base_of<Node, _T>::value, "Node::sortNodes: Only accept derived of Node!");
-#if AX_64BITS
+#if CC_64BITS
         std::sort(std::begin(nodes), std::end(nodes),
                   [](_T* n1, _T* n2) { return (n1->_localZOrder$Arrival < n2->_localZOrder$Arrival); });
 #else
@@ -1344,13 +1344,13 @@ public:
      // firstly, implement a schedule function
      void MyNode::TickMe(float dt);
      // wrap this function into a selector via schedule_selector macro.
-     this->schedule(AX_SCHEDULE_SELECTOR(MyNode::TickMe), 0, 0, 0);
+     this->schedule(CC_SCHEDULE_SELECTOR(MyNode::TickMe), 0, 0, 0);
      @endcode
      *
      * @param selector  The SEL_SCHEDULE selector to be scheduled.
      * @param interval  Tick interval in seconds. 0 means tick every frame. If interval = 0, it's recommended to use
      scheduleUpdate() instead.
-     * @param repeat    The selector will be executed (repeat + 1) times, you can use AX_REPEAT_FOREVER for tick
+     * @param repeat    The selector will be executed (repeat + 1) times, you can use CC_REPEAT_FOREVER for tick
      infinitely.
      * @param delay     The amount of time that the first tick will wait before execution.
      * @lua NA
@@ -1420,7 +1420,7 @@ public:
      *
      * @param callback  The lambda function to be schedule.
      * @param interval  Tick interval in seconds. 0 means tick every frame.
-     * @param repeat    The selector will be executed (repeat + 1) times, you can use AX_REPEAT_FOREVER for tick
+     * @param repeat    The selector will be executed (repeat + 1) times, you can use CC_REPEAT_FOREVER for tick
      * infinitely.
      * @param delay     The amount of time that the first tick will wait before execution.
      * @param key       The key of the lambda function. To be used if you want to unschedule it.
@@ -1915,7 +1915,7 @@ protected:
     mutable Mat4 _inverse;               ///< inverse transform
     mutable Mat4* _additionalTransform;  ///< two transforms needed by additional transforms
 
-#if AX_LITTLE_ENDIAN
+#if CC_LITTLE_ENDIAN
     union
     {
         struct
@@ -1982,7 +1982,7 @@ protected:
     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
     unsigned short _cameraMask;
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     int _scriptHandler;        ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
     int _updateScriptHandler;  ///< script handler for update() callback per frame, which is invoked from lua &
                                ///< javascript.
@@ -2004,7 +2004,7 @@ protected:
     backend::ProgramState* _programState = nullptr;
 
 // Physics:remaining backwardly compatible
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
     PhysicsBody* _physicsBody;
 
 public:
@@ -2025,7 +2025,7 @@ public:
     static int __attachedNodeCount;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Node);
+    CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
 /**
@@ -2043,7 +2043,7 @@ private:
  * @parma p         Point to a Vec3 for store the intersect point, if don't need them set to nullptr.
  * @return true if the point is in content rectangle, false otherwise.
  */
-bool AX_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3* p);
+bool CC_DLL isScreenPointInRect(const Vec2& pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3* p);
 
 // end of _2d group
 /// @}

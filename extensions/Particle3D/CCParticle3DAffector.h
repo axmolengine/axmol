@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PARTICLE_3D_AFFECTOR_H__
-#define __AX_PARTICLE_3D_AFFECTOR_H__
+#ifndef __CC_PARTICLE_3D_AFFECTOR_H__
+#define __CC_PARTICLE_3D_AFFECTOR_H__
 
 #include "base/CCRef.h"
 #include <vector>
@@ -35,7 +35,7 @@ NS_AX_BEGIN
 class ParticleSystem3D;
 struct Particle3D;
 
-class AX_EX_DLL Particle3DAffector : public Ref
+class CC_EX_DLL Particle3DAffector : public Ref
 {
     friend class ParticleSystem3D;
 

@@ -45,7 +45,7 @@ class NodeGrid;
 @brief Base class for Grid actions.
 @details Grid actions are the actions take effect on GridBase.
 */
-class AX_DLL GridAction : public ActionInterval
+class CC_DLL GridAction : public ActionInterval
 {
 public:
     /**
@@ -57,7 +57,7 @@ public:
     // overrides
     virtual GridAction* clone() const override
     {
-        AX_ASSERT(0);
+        CC_ASSERT(0);
         return nullptr;
     }
     virtual GridAction* reverse() const override;
@@ -81,14 +81,14 @@ protected:
     void cacheTargetAsGridNode();
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(GridAction);
+    CC_DISALLOW_COPY_AND_ASSIGN(GridAction);
 };
 
 /**
  @brief Base class for Grid3D actions.
  @details Grid3D actions can modify a non-tiled grid.
  */
-class AX_DLL Grid3DAction : public GridAction
+class CC_DLL Grid3DAction : public GridAction
 {
 public:
     virtual GridBase* getGrid() override;
@@ -122,7 +122,7 @@ public:
     // Overrides
     virtual Grid3DAction* clone() const override
     {
-        AX_ASSERT(0);
+        CC_ASSERT(0);
         return nullptr;
     }
 
@@ -136,7 +136,7 @@ public:
 /**
 @brief Base class for TiledGrid3D actions.
 */
-class AX_DLL TiledGrid3DAction : public GridAction
+class CC_DLL TiledGrid3DAction : public GridAction
 {
 public:
     /**
@@ -180,7 +180,7 @@ public:
     // Override
     virtual TiledGrid3DAction* clone() const override
     {
-        AX_ASSERT(0);
+        CC_ASSERT(0);
         return nullptr;
     }
 };
@@ -189,7 +189,7 @@ public:
 @brief AccelDeccelAmplitude action.
 @js NA
 */
-class AX_DLL AccelDeccelAmplitude : public ActionInterval
+class CC_DLL AccelDeccelAmplitude : public ActionInterval
 {
 public:
     /**
@@ -233,14 +233,14 @@ protected:
     ActionInterval* _other;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(AccelDeccelAmplitude);
+    CC_DISALLOW_COPY_AND_ASSIGN(AccelDeccelAmplitude);
 };
 
 /**
 @brief AccelAmplitude action.
 @js NA
 */
-class AX_DLL AccelAmplitude : public ActionInterval
+class CC_DLL AccelAmplitude : public ActionInterval
 {
 public:
     /**
@@ -278,14 +278,14 @@ protected:
     ActionInterval* _other;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(AccelAmplitude);
+    CC_DISALLOW_COPY_AND_ASSIGN(AccelAmplitude);
 };
 
 /**
 @brief DeccelAmplitude action.
 @js NA
 */
-class AX_DLL DeccelAmplitude : public ActionInterval
+class CC_DLL DeccelAmplitude : public ActionInterval
 {
 public:
     /**
@@ -329,7 +329,7 @@ protected:
     ActionInterval* _other;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(DeccelAmplitude);
+    CC_DISALLOW_COPY_AND_ASSIGN(DeccelAmplitude);
 };
 
 /**
@@ -340,7 +340,7 @@ private:
  Sequence::create(Lens3D::create(...), StopGrid::create(), nullptr);
  @endcode
  */
-class AX_DLL StopGrid : public ActionInstant
+class CC_DLL StopGrid : public ActionInstant
 {
 public:
     /**
@@ -363,13 +363,13 @@ protected:
     void cacheTargetAsGridNode();
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(StopGrid);
+    CC_DISALLOW_COPY_AND_ASSIGN(StopGrid);
 };
 
 /**
 @brief ReuseGrid action.
 */
-class AX_DLL ReuseGrid : public ActionInstant
+class CC_DLL ReuseGrid : public ActionInstant
 {
 public:
     /**
@@ -402,7 +402,7 @@ protected:
     int _times;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ReuseGrid);
+    CC_DISALLOW_COPY_AND_ASSIGN(ReuseGrid);
 };
 
 // end of actions group

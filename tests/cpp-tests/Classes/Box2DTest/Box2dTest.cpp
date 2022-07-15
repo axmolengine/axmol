@@ -58,7 +58,7 @@ bool Box2DTest::init()
     auto dispatcher = Director::getInstance()->getEventDispatcher();
 
     auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = AX_CALLBACK_2(Box2DTest::onTouchesEnded, this);
+    touchListener->onTouchesEnded = CC_CALLBACK_2(Box2DTest::onTouchesEnded, this);
     dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     // init physics
@@ -88,7 +88,7 @@ bool Box2DTest::init()
 
     // menu for debug layer
     MenuItemFont::setFontSize(18);
-    auto item = MenuItemFont::create("Toggle debug", AX_CALLBACK_1(Box2DTest::toggleDebugCallback, this));
+    auto item = MenuItemFont::create("Toggle debug", CC_CALLBACK_1(Box2DTest::toggleDebugCallback, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -107,7 +107,7 @@ Box2DTest::Box2DTest() : _spriteTexture(nullptr), world(nullptr) {}
 
 Box2DTest::~Box2DTest()
 {
-    AX_SAFE_DELETE(world);
+    CC_SAFE_DELETE(world);
 }
 
 void Box2DTest::toggleDebugCallback(Ref* sender)

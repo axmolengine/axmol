@@ -55,7 +55,7 @@ message(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 
 # custom target property for lua/js link
 define_property(TARGET
-    PROPERTY AX_LUA_DEPEND
+    PROPERTY CC_LUA_DEPEND
     BRIEF_DOCS "axis lua depend libs"
     FULL_DOCS "use to save depend libs of axis lua project"
 ) 
@@ -151,7 +151,7 @@ function(use_axis_compile_define target)
                 PRIVATE _USEGUIDLL # ui
             )
         else()
-            target_compile_definitions(${target} PUBLIC AX_STATIC)
+            target_compile_definitions(${target} PUBLIC CC_STATIC)
         endif()
     endif()
 endfunction()

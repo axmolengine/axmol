@@ -31,9 +31,9 @@
 #include "physics3d/CCPhysics3DObject.h"
 #include "physics3d/CCPhysics3DComponent.h"
 
-#if AX_USE_3D_PHYSICS
+#if CC_USE_3D_PHYSICS
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
+#    if (CC_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 /**
@@ -44,7 +44,7 @@ NS_AX_BEGIN
 /**
  * @brief Convenient class to create a rigid body with a MeshRenderer
  */
-class AX_DLL PhysicsMeshRenderer : public axis::MeshRenderer
+class CC_DLL PhysicsMeshRenderer : public axis::MeshRenderer
 {
 public:
     /** creates a PhysicsMeshRenderer */
@@ -82,8 +82,8 @@ protected:
 /// @}
 NS_AX_END
 
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
+#    endif  // CC_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // CC_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_MESH_RENDERER_H__

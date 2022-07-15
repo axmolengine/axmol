@@ -1,5 +1,5 @@
 #include "base/ccConfig.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 #ifndef __axis_physics_h__
 #define __axis_physics_h__
 
@@ -277,4 +277,4 @@ int register_all_axis_physics(lua_State* tolua_S);
 
 
 #endif // __axis_physics_h__
-#endif //#if AX_USE_PHYSICS
+#endif //#if CC_USE_PHYSICS

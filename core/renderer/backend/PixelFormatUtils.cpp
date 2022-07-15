@@ -72,14 +72,14 @@ static const PixelFormatDescriptor s_pixelFormatDescriptors[] = {
     {8, 1, 1, 1, 1, 1, true, "A8"},          // A8
     {8, 1, 1, 1, 1, 1, false, "L8"},         // L8
     {16, 1, 1, 2, 1, 1, true, "LA8"},        // LA8
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
     {32, 1, 1, 4, 1, 1, false, "D24S8"},  // D24S8
 #else
     {64, 1, 1, 8, 1, 1, false, "D32FS8"},  // D32FS8 iOS
 #endif
 };
 
-static_assert(AX_ARRAYSIZE(s_pixelFormatDescriptors) == (int)PixelFormat::COUNT,
+static_assert(CC_ARRAYSIZE(s_pixelFormatDescriptors) == (int)PixelFormat::COUNT,
               "The pixel format descriptor table incomplete!");
 
 //////////////////////////////////////////////////////////////////////////

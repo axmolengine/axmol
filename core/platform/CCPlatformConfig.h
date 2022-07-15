@@ -25,8 +25,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __BASE_AX_PLATFORM_CONFIG_H__
-#define __BASE_AX_PLATFORM_CONFIG_H__
+#ifndef __BASE_CC_PLATFORM_CONFIG_H__
+#define __BASE_CC_PLATFORM_CONFIG_H__
 /// @cond DO_NOT_SHOW
 
 /**
@@ -40,53 +40,53 @@ THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////
 
 // define supported target platform macro which CC uses.
-#define AX_PLATFORM_UNKNOWN 0
-#define AX_PLATFORM_IOS 1
-#define AX_PLATFORM_ANDROID 2
-#define AX_PLATFORM_WIN32 3
-// #define AX_PLATFORM_MARMALADE          4
-#define AX_PLATFORM_LINUX 5
-// #define AX_PLATFORM_BADA               6
-// #define AX_PLATFORM_BLACKBERRY         7
-#define AX_PLATFORM_MAC 8
-// #define AX_PLATFORM_NACL               9
-// #define AX_PLATFORM_EMSCRIPTEN        10
-// #define AX_PLATFORM_TIZEN             11
-// #define AX_PLATFORM_QT5               12
-// #define AX_PLATFORM_WINRT             13
+#define CC_PLATFORM_UNKNOWN 0
+#define CC_PLATFORM_IOS 1
+#define CC_PLATFORM_ANDROID 2
+#define CC_PLATFORM_WIN32 3
+// #define CC_PLATFORM_MARMALADE          4
+#define CC_PLATFORM_LINUX 5
+// #define CC_PLATFORM_BADA               6
+// #define CC_PLATFORM_BLACKBERRY         7
+#define CC_PLATFORM_MAC 8
+// #define CC_PLATFORM_NACL               9
+// #define CC_PLATFORM_EMSCRIPTEN        10
+// #define CC_PLATFORM_TIZEN             11
+// #define CC_PLATFORM_QT5               12
+// #define CC_PLATFORM_WINRT             13
 
 // Determine target platform by compile environment macro.
-#define AX_TARGET_PLATFORM AX_PLATFORM_UNKNOWN
+#define CC_TARGET_PLATFORM CC_PLATFORM_UNKNOWN
 
 // Apple: Mac and iOS
 #if defined(__APPLE__) && !defined(__ANDROID__)  // exclude android for binding generator.
 #    include <TargetConditionals.h>
 #    if TARGET_OS_IPHONE  // TARGET_OS_IPHONE includes TARGET_OS_IOS TARGET_OS_TV and TARGET_OS_WATCH. see
                           // TargetConditionals.h
-#        undef AX_TARGET_PLATFORM
-#        define AX_TARGET_PLATFORM AX_PLATFORM_IOS
+#        undef CC_TARGET_PLATFORM
+#        define CC_TARGET_PLATFORM CC_PLATFORM_IOS
 #    elif TARGET_OS_MAC
-#        undef AX_TARGET_PLATFORM
-#        define AX_TARGET_PLATFORM AX_PLATFORM_MAC
+#        undef CC_TARGET_PLATFORM
+#        define CC_TARGET_PLATFORM CC_PLATFORM_MAC
 #    endif
 #endif
 
 // android
 #if defined(__ANDROID__)
-#    undef AX_TARGET_PLATFORM
-#    define AX_TARGET_PLATFORM AX_PLATFORM_ANDROID
+#    undef CC_TARGET_PLATFORM
+#    define CC_TARGET_PLATFORM CC_PLATFORM_ANDROID
 #endif
 
 // win32
 #if defined(_WIN32) && defined(_WINDOWS)
-#    undef AX_TARGET_PLATFORM
-#    define AX_TARGET_PLATFORM AX_PLATFORM_WIN32
+#    undef CC_TARGET_PLATFORM
+#    define CC_TARGET_PLATFORM CC_PLATFORM_WIN32
 #endif
 
 // linux
 #if defined(LINUX) && !defined(__APPLE__)
-#    undef AX_TARGET_PLATFORM
-#    define AX_TARGET_PLATFORM AX_PLATFORM_LINUX
+#    undef CC_TARGET_PLATFORM
+#    define CC_TARGET_PLATFORM CC_PLATFORM_LINUX
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -94,15 +94,15 @@ THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////
 
 // check user set platform
-#if !AX_TARGET_PLATFORM
+#if !CC_TARGET_PLATFORM
 #    error "Cannot recognize the target platform; are you targeting an unsupported platform?"
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    ifndef __MINGW32__
 #        pragma warning(disable : 4127)
 #    endif
-#endif  // AX_PLATFORM_WIN32
+#endif  // CC_PLATFORM_WIN32
 
 /*
 windows: https://github.com/google/angle
@@ -114,35 +114,35 @@ other: GL
 #    define AX_USE_COMPAT_GL 0
 #endif
 
-#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS))
-#    define AX_PLATFORM_MOBILE
+#if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))
+#    define CC_PLATFORM_MOBILE
 #else
-#    define AX_PLATFORM_PC
+#    define CC_PLATFORM_PC
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 #    if !AX_USE_COMPAT_GL
-#        define AX_USE_METAL
+#        define CC_USE_METAL
 #    else
-#        define AX_USE_GL
+#        define CC_USE_GL
 #    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #    if !AX_USE_COMPAT_GL
-#        define AX_USE_METAL
+#        define CC_USE_METAL
 #    else
-#        define AX_USE_GLES
+#        define CC_USE_GLES
 #    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    define AX_USE_GLES
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#    define CC_USE_GLES
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    if !AX_USE_COMPAT_GL
-#        define AX_USE_GL
+#        define CC_USE_GL
 #    else
-#        define AX_USE_GLES
+#        define CC_USE_GLES
 #    endif
 #else
-#    define AX_USE_GL
+#    define CC_USE_GL
 #endif
 
 /// @endcond
-#endif  // __BASE_AX_PLATFORM_CONFIG_H__
+#endif  // __BASE_CC_PLATFORM_CONFIG_H__

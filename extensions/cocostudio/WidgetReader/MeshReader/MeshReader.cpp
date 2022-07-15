@@ -63,12 +63,12 @@ MeshReader* MeshReader::getInstance()
 
 void MeshReader::purge()
 {
-    AX_SAFE_DELETE(_instanceMeshReader);
+    CC_SAFE_DELETE(_instanceMeshReader);
 }
 
 void MeshReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceMeshReader);
+    CC_SAFE_DELETE(_instanceMeshReader);
 }
 
 Vec2 MeshReader::getVec2Attribute(pugi::xml_attribute attribute) const

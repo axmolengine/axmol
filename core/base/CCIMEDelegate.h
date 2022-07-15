@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_IME_DELEGATE_H__
-#define __AX_IME_DELEGATE_H__
+#ifndef __CC_IME_DELEGATE_H__
+#define __CC_IME_DELEGATE_H__
 
 #include <string>
 #include "math/CCMath.h"
@@ -40,7 +40,7 @@ NS_AX_BEGIN
 /**
  * A static global empty std::string install.
  */
-extern const std::string AX_DLL STD_STRING_EMPTY;
+extern const std::string CC_DLL STD_STRING_EMPTY;
 
 /**
  * Keyboard notification event type.
@@ -55,7 +55,7 @@ typedef struct
 /**
  *@brief    Input method editor delegate.
  */
-class AX_DLL IMEDelegate
+class CC_DLL IMEDelegate
 {
 public:
     /**
@@ -175,4 +175,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif  // __AX_IME_DELEGATE_H__
+#endif  // __CC_IME_DELEGATE_H__

@@ -45,7 +45,7 @@ namespace ui
  *@brief Rich text element base class.
  * It defines the basic common properties for all rich text element.
  */
-class AX_GUI_DLL RichElement : public Ref
+class CC_GUI_DLL RichElement : public Ref
 {
 public:
     /**
@@ -97,7 +97,7 @@ protected:
 /**
  *@brief Rich element for displaying text.
  */
-class AX_GUI_DLL RichElementText : public RichElement
+class CC_GUI_DLL RichElementText : public RichElement
 {
 public:
     /**
@@ -212,7 +212,7 @@ protected:
 /**
  *@brief Rich element for displaying images.
  */
-class AX_GUI_DLL RichElementImage : public RichElement
+class CC_GUI_DLL RichElementImage : public RichElement
 {
 public:
     /**
@@ -283,7 +283,7 @@ protected:
 /**
  *@brief Rich element for displaying custom node type.
  */
-class AX_GUI_DLL RichElementCustomNode : public RichElement
+class CC_GUI_DLL RichElementCustomNode : public RichElement
 {
 public:
     /**
@@ -298,7 +298,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementCustomNode() { AX_SAFE_RELEASE(_customNode); };
+    virtual ~RichElementCustomNode() { CC_SAFE_RELEASE(_customNode); };
 
     /**
      * @brief Initialize a RichElementCustomNode with various arguments.
@@ -330,7 +330,7 @@ protected:
 /**
  *@brief Rich element for new line.
  */
-class AX_GUI_DLL RichElementNewLine : public RichElement
+class CC_GUI_DLL RichElementNewLine : public RichElement
 {
 public:
     /**
@@ -366,7 +366,7 @@ protected:
  *@brief A container for displaying various RichElements.
  * We could use it to display texts with images easily.
  */
-class AX_GUI_DLL RichText : public Widget
+class CC_GUI_DLL RichText : public Widget
 {
 public:
     enum WrapMode

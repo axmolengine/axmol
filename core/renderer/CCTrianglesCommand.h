@@ -46,7 +46,7 @@ class Program;
 
 class Texture2D;
 
-class AX_DLL TrianglesCommand : public RenderCommand
+class CC_DLL TrianglesCommand : public RenderCommand
 {
 public:
     /**The structure of Triangles. */

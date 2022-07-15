@@ -98,7 +98,7 @@ ScrollView* ScrollView::create()
         widget->autorelease();
         return widget;
     }
-    AX_SAFE_DELETE(widget);
+    CC_SAFE_DELETE(widget);
     return nullptr;
 }
 

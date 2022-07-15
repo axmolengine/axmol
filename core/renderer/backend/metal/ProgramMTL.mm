@@ -40,14 +40,14 @@ ProgramMTL::ProgramMTL(std::string_view vertexShader, std::string_view fragmentS
     combinedSource += fragmentShader;
     _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(std::move(combinedSource)));
 
-    AX_SAFE_RETAIN(_vertexShader);
-    AX_SAFE_RETAIN(_fragmentShader);
+    CC_SAFE_RETAIN(_vertexShader);
+    CC_SAFE_RETAIN(_fragmentShader);
 }
 
 ProgramMTL::~ProgramMTL()
 {
-    AX_SAFE_RELEASE(_vertexShader);
-    AX_SAFE_RELEASE(_fragmentShader);
+    CC_SAFE_RELEASE(_vertexShader);
+    CC_SAFE_RELEASE(_fragmentShader);
 }
 
 int ProgramMTL::getAttributeLocation(Attribute name) const

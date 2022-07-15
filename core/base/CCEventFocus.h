@@ -44,7 +44,7 @@ class Widget;
 /** @class EventFocus
  * @brief Focus event.
  */
-class AX_DLL EventFocus : public Event
+class CC_DLL EventFocus : public Event
 {
 public:
     /** Constructor.

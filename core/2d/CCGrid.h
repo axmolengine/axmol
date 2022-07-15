@@ -53,7 +53,7 @@ class RenderTarget;
 
 /** Base class for Other grid.
  */
-class AX_DLL GridBase : public Ref
+class CC_DLL GridBase : public Ref
 {
 public:
     /**
@@ -174,7 +174,7 @@ protected:
 /**
  Grid3D is a 3D grid implementation. Each vertex has 3 dimensions: x,y,z
  */
-class AX_DLL Grid3D : public GridBase
+class CC_DLL Grid3D : public GridBase
 {
 public:
     /** create one Grid. */
@@ -248,7 +248,7 @@ protected:
  TiledGrid3D is a 3D grid implementation. It differs from Grid3D in that
  the tiles can be separated from the grid.
 */
-class AX_DLL TiledGrid3D : public GridBase
+class CC_DLL TiledGrid3D : public GridBase
 {
 public:
     /** Create one Grid. */

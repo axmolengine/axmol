@@ -33,7 +33,7 @@ NS_AX_BEGIN
 
 /** Class that represent the OpenGL View
  */
-class AX_DLL GLViewImpl : public GLView
+class CC_DLL GLViewImpl : public GLView
 {
 public:
     /** creates a GLViewImpl with a objective-c CCEAGLViewImpl instance */

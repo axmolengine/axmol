@@ -1,5 +1,5 @@
 #include "scripting/lua-bindings/auto/lua_axis_navmesh_auto.hpp"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 #include "navmesh/CCNavMesh.h"
 #include "scripting/lua-bindings/manual/navmesh/lua_axis_navmesh_conversions.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"

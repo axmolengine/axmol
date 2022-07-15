@@ -47,7 +47,7 @@ THE SOFTWARE.
 #include "math/TransformUtils.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-#if AX_NODE_RENDER_SUBPIXEL
+#if CC_NODE_RENDER_SUBPIXEL
 #    define RENDER_IN_SUBPIXEL
 #else
 #    define RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
@@ -56,7 +56,7 @@ THE SOFTWARE.
 /*
  * 4.5x faster than std::hash in release mode
  */
-#define AX_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
+#define CC_HASH_NODE_NAME(name) (!name.empty() ? XXH3_64bits(name.data(), name.length()) : 0)
 
 NS_AX_BEGIN
 
@@ -106,7 +106,7 @@ Node::Node()
     , _ignoreAnchorPointForPosition(false)
     , _reorderChildDirty(false)
     , _isTransitionFinished(false)
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     , _scriptHandler(0)
     , _updateScriptHandler(0)
 #endif
@@ -123,7 +123,7 @@ Node::Node()
     , _onExitCallback(nullptr)
     , _onEnterTransitionDidFinishCallback(nullptr)
     , _onExitTransitionDidStartCallback(nullptr)
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
     , _physicsBody(nullptr)
 #endif
 {
@@ -148,7 +148,7 @@ Node* Node::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -157,9 +157,9 @@ Node::~Node()
 {
     CCLOGINFO("deallocing Node: %p - tag: %i", this, _tag);
 
-    AX_SAFE_DELETE(_childrenIndexer);
+    CC_SAFE_DELETE(_childrenIndexer);
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     if (_updateScriptHandler)
     {
         ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_updateScriptHandler);
@@ -168,8 +168,8 @@ Node::~Node()
 
     // User object has to be released before others, since userObject may have a weak reference of this node
     // It may invoke `node->stopAllActions();` while `_actionManager` is null if the next line is after
-    // `AX_SAFE_RELEASE_NULL(_actionManager)`.
-    AX_SAFE_RELEASE_NULL(_userObject);
+    // `CC_SAFE_RELEASE_NULL(_actionManager)`.
+    CC_SAFE_RELEASE_NULL(_userObject);
 
     for (auto& child : _children)
     {
@@ -178,26 +178,26 @@ Node::~Node()
 
     removeAllComponents();
 
-    AX_SAFE_DELETE(_componentContainer);
+    CC_SAFE_DELETE(_componentContainer);
 
     stopAllActions();
     unscheduleAllCallbacks();
-    AX_SAFE_RELEASE_NULL(_actionManager);
-    AX_SAFE_RELEASE_NULL(_scheduler);
+    CC_SAFE_RELEASE_NULL(_actionManager);
+    CC_SAFE_RELEASE_NULL(_scheduler);
 
     _eventDispatcher->removeEventListenersForTarget(this);
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
     _eventDispatcher->debugCheckNodeHasNoEventListenersOnDestruction(this);
 #endif
 
     CCASSERT(!_running,
              "Node still marked as running on node destruction! Was base class onExit() called in derived class "
              "onExit() implementations?");
-    AX_SAFE_RELEASE(_eventDispatcher);
+    CC_SAFE_RELEASE(_eventDispatcher);
 
     delete[] _additionalTransform;
-    AX_SAFE_RELEASE(_programState);
+    CC_SAFE_RELEASE(_programState);
 }
 
 bool Node::init()
@@ -214,9 +214,9 @@ bool Node::initLayer() {
 
 void Node::cleanup()
 {
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::sendNodeEventToLua(this, kNodeOnCleanup);
-#endif  // #if AX_ENABLE_SCRIPT_BINDING
+#endif  // #if CC_ENABLE_SCRIPT_BINDING
 
     // actions
     this->stopAllActions();
@@ -360,8 +360,8 @@ void Node::updateRotationQuat()
     // convert Euler angle to quaternion
     // when _rotationZ_X == _rotationZ_Y, _rotationQuat = RotationZ_X * RotationY * RotationX
     // when _rotationZ_X != _rotationZ_Y, _rotationQuat = RotationY * RotationX
-    float halfRadx = AX_DEGREES_TO_RADIANS(_rotationX / 2.f), halfRady = AX_DEGREES_TO_RADIANS(_rotationY / 2.f),
-          halfRadz    = _rotationZ_X == _rotationZ_Y ? -AX_DEGREES_TO_RADIANS(_rotationZ_X / 2.f) : 0;
+    float halfRadx = CC_DEGREES_TO_RADIANS(_rotationX / 2.f), halfRady = CC_DEGREES_TO_RADIANS(_rotationY / 2.f),
+          halfRadz    = _rotationZ_X == _rotationZ_Y ? -CC_DEGREES_TO_RADIANS(_rotationZ_X / 2.f) : 0;
     float coshalfRadx = cosf(halfRadx), sinhalfRadx = sinf(halfRadx), coshalfRady = cosf(halfRady),
           sinhalfRady = sinf(halfRady), coshalfRadz = cosf(halfRadz), sinhalfRadz = sinf(halfRadz);
     _rotationQuat.x = sinhalfRadx * coshalfRady * coshalfRadz - coshalfRadx * sinhalfRady * sinhalfRadz;
@@ -380,9 +380,9 @@ void Node::updateRotation3D()
     _rotationY   = asinf(sy);
     _rotationZ_X = atan2f(2.f * (w * z + x * y), 1.f - 2.f * (y * y + z * z));
 
-    _rotationX   = AX_RADIANS_TO_DEGREES(_rotationX);
-    _rotationY   = AX_RADIANS_TO_DEGREES(_rotationY);
-    _rotationZ_X = _rotationZ_Y = -AX_RADIANS_TO_DEGREES(_rotationZ_X);
+    _rotationX   = CC_RADIANS_TO_DEGREES(_rotationX);
+    _rotationY   = CC_RADIANS_TO_DEGREES(_rotationY);
+    _rotationZ_X = _rotationZ_Y = -CC_RADIANS_TO_DEGREES(_rotationZ_X);
 }
 
 void Node::setRotationQuat(const Quaternion& quat)
@@ -727,11 +727,11 @@ void Node::updateParentChildrenIndexer(int tag)
 
 void Node::updateParentChildrenIndexer(std::string_view name)
 {
-    uint64_t newHash           = AX_HASH_NODE_NAME(name);
+    uint64_t newHash           = CC_HASH_NODE_NAME(name);
     auto parentChildrenIndexer = getParentChildrenIndexer();
     if (parentChildrenIndexer)
     {
-        auto oldHash = AX_HASH_NODE_NAME(_name);
+        auto oldHash = CC_HASH_NODE_NAME(_name);
         if (oldHash != newHash)
             parentChildrenIndexer->erase(oldHash);
         (*parentChildrenIndexer)[newHash] = this;
@@ -763,7 +763,7 @@ void Node::setUserData(void* userData)
 
 void Node::setUserObject(Ref* userObject)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -772,9 +772,9 @@ void Node::setUserObject(Ref* userObject)
         if (_userObject)
             sEngine->releaseScriptObject(this, _userObject);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
-    AX_SAFE_RETAIN(userObject);
-    AX_SAFE_RELEASE(_userObject);
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    CC_SAFE_RETAIN(userObject);
+    CC_SAFE_RELEASE(_userObject);
     _userObject = userObject;
 }
 
@@ -828,7 +828,7 @@ Node* Node::getChildByTag(int tag) const
 Node* Node::getChildByName(std::string_view name) const
 {
     // CCASSERT(!name.empty(), "Invalid name");
-    auto hash = AX_HASH_NODE_NAME(name);
+    auto hash = CC_HASH_NODE_NAME(name);
     if (_childrenIndexer)
     {
         auto it = _childrenIndexer->find(hash);
@@ -1082,7 +1082,7 @@ void Node::removeChild(Node* child, bool cleanup /* = true */)
     }
 
     ssize_t index = _children.getIndex(child);
-    if (index != AX_INVALID_INDEX)
+    if (index != CC_INVALID_INDEX)
         this->detachChild(child, index, cleanup);
 }
 
@@ -1132,7 +1132,7 @@ void Node::removeAllChildrenWithCleanup(bool cleanup)
     }
 
     _children.clear();
-    AX_SAFE_DELETE(_childrenIndexer);
+    CC_SAFE_DELETE(_childrenIndexer);
 }
 
 void Node::resetChild(Node* child, bool cleanup)
@@ -1152,13 +1152,13 @@ void Node::resetChild(Node* child, bool cleanup)
         child->cleanup();
     }
 
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->releaseScriptObject(this, child);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     // set parent nil at the end
     child->setParent(nullptr);
 }
@@ -1178,13 +1178,13 @@ void Node::detachChild(Node* child, ssize_t childIndex, bool cleanup)
 // helper used by reorderChild & add
 void Node::insertChild(Node* child, int z)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, child);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _transformUpdated  = true;
     _reorderChildDirty = true;
     _children.pushBack(child);
@@ -1350,7 +1350,7 @@ void Node::onEnter()
 
     _running = true;
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::sendNodeEventToLua(this, kNodeOnEnter);
 #endif
 }
@@ -1364,7 +1364,7 @@ void Node::onEnterTransitionDidFinish()
     for (const auto& child : _children)
         child->onEnterTransitionDidFinish();
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::sendNodeEventToLua(this, kNodeOnEnterTransitionDidFinish);
 #endif
 }
@@ -1377,7 +1377,7 @@ void Node::onExitTransitionDidStart()
     for (const auto& child : _children)
         child->onExitTransitionDidStart();
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::sendNodeEventToLua(this, kNodeOnExitTransitionDidStart);
 #endif
 }
@@ -1404,7 +1404,7 @@ void Node::onExit()
     for (const auto& child : _children)
         child->onExit();
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::sendNodeEventToLua(this, kNodeOnExit);
 #endif
 }
@@ -1414,8 +1414,8 @@ void Node::setEventDispatcher(EventDispatcher* dispatcher)
     if (dispatcher != _eventDispatcher)
     {
         _eventDispatcher->removeEventListenersForTarget(this);
-        AX_SAFE_RETAIN(dispatcher);
-        AX_SAFE_RELEASE(_eventDispatcher);
+        CC_SAFE_RETAIN(dispatcher);
+        CC_SAFE_RELEASE(_eventDispatcher);
         _eventDispatcher = dispatcher;
     }
 }
@@ -1425,8 +1425,8 @@ void Node::setActionManager(ActionManager* actionManager)
     if (actionManager != _actionManager)
     {
         this->stopAllActions();
-        AX_SAFE_RETAIN(actionManager);
-        AX_SAFE_RELEASE(_actionManager);
+        CC_SAFE_RETAIN(actionManager);
+        CC_SAFE_RELEASE(_actionManager);
         _actionManager = actionManager;
     }
 }
@@ -1493,8 +1493,8 @@ void Node::setScheduler(Scheduler* scheduler)
     if (scheduler != _scheduler)
     {
         this->unscheduleAllCallbacks();
-        AX_SAFE_RETAIN(scheduler);
-        AX_SAFE_RELEASE(_scheduler);
+        CC_SAFE_RETAIN(scheduler);
+        CC_SAFE_RELEASE(_scheduler);
         _scheduler = scheduler;
     }
 }
@@ -1523,7 +1523,7 @@ void Node::scheduleUpdateWithPriorityLua(int nHandler, int priority)
 {
     unscheduleUpdate();
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     _updateScriptHandler = nHandler;
 #endif
 
@@ -1534,7 +1534,7 @@ void Node::unscheduleUpdate()
 {
     _scheduler->unscheduleUpdate(this);
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     if (_updateScriptHandler)
     {
         ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_updateScriptHandler);
@@ -1545,12 +1545,12 @@ void Node::unscheduleUpdate()
 
 void Node::schedule(SEL_SCHEDULE selector)
 {
-    this->schedule(selector, 0.0f, AX_REPEAT_FOREVER, 0.0f);
+    this->schedule(selector, 0.0f, CC_REPEAT_FOREVER, 0.0f);
 }
 
 void Node::schedule(SEL_SCHEDULE selector, float interval)
 {
-    this->schedule(selector, interval, AX_REPEAT_FOREVER, 0.0f);
+    this->schedule(selector, interval, CC_REPEAT_FOREVER, 0.0f);
 }
 
 void Node::schedule(SEL_SCHEDULE selector, float interval, unsigned int repeat, float delay)
@@ -1626,7 +1626,7 @@ void Node::pause()
 // override me
 void Node::update(float fDelta)
 {
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     if (0 != _updateScriptHandler)
     {
         // only lua use
@@ -1702,8 +1702,8 @@ const Mat4& Node::getNodeToParentTransform() const
             // Rotation values
             // Change rotation code to handle X and Y
             // If we skew with the exact same value for both x and y then we're simply just rotating
-            float radiansX = -AX_DEGREES_TO_RADIANS(_rotationZ_X);
-            float radiansY = -AX_DEGREES_TO_RADIANS(_rotationZ_Y);
+            float radiansX = -CC_DEGREES_TO_RADIANS(_rotationZ_X);
+            float radiansY = -CC_DEGREES_TO_RADIANS(_rotationZ_Y);
             float cx       = cosf(radiansX);
             float sx       = sinf(radiansX);
             float cy       = cosf(radiansY);
@@ -1744,10 +1744,10 @@ const Mat4& Node::getNodeToParentTransform() const
         if (needsSkewMatrix)
         {
             float skewMatArray[16] = {1,
-                                      (float)tanf(AX_DEGREES_TO_RADIANS(_skewY)),
+                                      (float)tanf(CC_DEGREES_TO_RADIANS(_skewY)),
                                       0,
                                       0,
-                                      (float)tanf(AX_DEGREES_TO_RADIANS(_skewX)),
+                                      (float)tanf(CC_DEGREES_TO_RADIANS(_skewX)),
                                       1,
                                       0,
                                       0,
@@ -2225,10 +2225,10 @@ bool Node::setProgramState(backend::ProgramState* programState, bool needsRetain
 {
     if (_programState != programState)
     {
-        AX_SAFE_RELEASE(_programState);
+        CC_SAFE_RELEASE(_programState);
         _programState = programState;
         if (needsRetain)
-            AX_SAFE_RETAIN(_programState);
+            CC_SAFE_RETAIN(_programState);
         return !!_programState;
     }
     return false;

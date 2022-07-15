@@ -25,7 +25,7 @@
 #ifndef _JNI_TEST_H_
 #define _JNI_TEST_H_
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
 #    include "cocos2d.h"
 #    include "../BaseTest.h"

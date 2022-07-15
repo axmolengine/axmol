@@ -27,7 +27,7 @@
 #ifndef __UIEditBoxIMPLIOS_H__
 #define __UIEditBoxIMPLIOS_H__
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 #    include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
@@ -87,6 +87,6 @@ private:
 
 NS_AX_END
 
-#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
+#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
 
 #endif /* __UIEditBoxIMPLIOS_H__ */

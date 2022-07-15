@@ -29,7 +29,7 @@
 NS_AX_EXT_BEGIN
 
 // This class implements debug drawing callbacks that are invoked inside b2World::Step.
-class AX_EX_DLL PhysicsDebugNodeBox2D : public b2Draw
+class CC_EX_DLL PhysicsDebugNodeBox2D : public b2Draw
 {
 public:
     PhysicsDebugNodeBox2D();

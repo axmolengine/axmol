@@ -27,7 +27,7 @@
 #define __CCNAV_MESH_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "base/CCRef.h"
 #    include "math/Vec3.h"
@@ -51,7 +51,7 @@ NS_AX_BEGIN
  */
 class Renderer;
 /** @brief NavMesh: The NavMesh information container, include mesh, tileCache, and so on. */
-class AX_DLL NavMesh : public Ref
+class CC_DLL NavMesh : public Ref
 {
 public:
     /**
@@ -130,6 +130,6 @@ protected:
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH
 
 #endif  // __CCNAV_MESH_H__

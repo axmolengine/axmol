@@ -42,7 +42,7 @@ class Texture2D;
 /** @class MotionStreak.
  * @brief Creates a trailing path.
  */
-class AX_DLL MotionStreak : public Node, public TextureProtocol
+class CC_DLL MotionStreak : public Node, public TextureProtocol
 {
 public:
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture
@@ -200,7 +200,7 @@ protected:
     backend::UniformLocation _textureLocation;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MotionStreak);
+    CC_DISALLOW_COPY_AND_ASSIGN(MotionStreak);
 };
 
 // end of _2d group

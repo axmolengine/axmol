@@ -40,7 +40,7 @@ NS_AX_EXT_BEGIN
 /**
  * Abstract class for SWTableView cell node
  */
-class AX_EX_DLL TableViewCell : public Node
+class CC_EX_DLL TableViewCell : public Node
 {
 public:
     CREATE_FUNC(TableViewCell);

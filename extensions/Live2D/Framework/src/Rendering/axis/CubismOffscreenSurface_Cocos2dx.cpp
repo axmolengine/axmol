@@ -146,7 +146,7 @@ void CubismOffscreenFrame_Cocos2dx::DestroyOffscreenFrame()
 {
     if ((_renderTexture != NULL) && !_isInheritedRenderTexture)
     {
-        AX_SAFE_RELEASE_NULL(_renderTexture);
+        CC_SAFE_RELEASE_NULL(_renderTexture);
         _colorBuffer = NULL;
     }
 }

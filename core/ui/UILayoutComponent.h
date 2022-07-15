@@ -41,7 +41,7 @@ namespace ui
  *@brief A component class used for layout.
  * The LayoutComponent holds all the data for layouting.
  */
-class AX_GUI_DLL LayoutComponent : public Component
+class CC_GUI_DLL LayoutComponent : public Component
 {
 public:
     /**

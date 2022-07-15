@@ -315,9 +315,9 @@ void LayerTest1::onEnter()
     LayerTest::onEnter();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(LayerTest1::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(LayerTest1::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(LayerTest1::onTouchesEnded, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(LayerTest1::onTouchesBegan, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(LayerTest1::onTouchesMoved, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(LayerTest1::onTouchesEnded, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -419,7 +419,7 @@ LayerTestBlend::LayerTestBlend()
     sister1->setPosition(Vec2(s.width * 1 / 3, s.height / 2));
     sister2->setPosition(Vec2(s.width * 2 / 3, s.height / 2));
 
-    schedule(AX_SCHEDULE_SELECTOR(LayerTestBlend::newBlend), 1.0f);
+    schedule(CC_SCHEDULE_SELECTOR(LayerTestBlend::newBlend), 1.0f);
 }
 
 void LayerTestBlend::newBlend(float dt)
@@ -460,7 +460,7 @@ LayerGradientTest::LayerGradientTest()
     addChild(layer1, 0, kTagLayer);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(LayerGradientTest::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(LayerGradientTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto label1 = Label::createWithTTF("Compressed Interpolation: Enabled", "fonts/Marker Felt.ttf", 26);
@@ -468,7 +468,7 @@ LayerGradientTest::LayerGradientTest()
     auto item1  = MenuItemLabel::create(label1);
     auto item2  = MenuItemLabel::create(label2);
     auto item =
-        MenuItemToggle::createWithCallback(AX_CALLBACK_1(LayerGradientTest::toggleItem, this), item1, item2, nullptr);
+        MenuItemToggle::createWithCallback(CC_CALLBACK_1(LayerGradientTest::toggleItem, this), item1, item2, nullptr);
 
     auto menu = Menu::create(item, nullptr);
     addChild(menu);
@@ -554,7 +554,7 @@ void LayerIgnoreAnchorPointPos::onEnter()
     child->setPosition(Vec2(lsize.width / 2, lsize.height / 2));
 
     auto item =
-        MenuItemFont::create("Toggle ignore anchor point", AX_CALLBACK_1(LayerIgnoreAnchorPointPos::onToggle, this));
+        MenuItemFont::create("Toggle ignore anchor point", CC_CALLBACK_1(LayerIgnoreAnchorPointPos::onToggle, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -602,7 +602,7 @@ void LayerIgnoreAnchorPointRot::onEnter()
     child->setPosition(Vec2(lsize.width / 2, lsize.height / 2));
 
     auto item =
-        MenuItemFont::create("Toggle ignore anchor point", AX_CALLBACK_1(LayerIgnoreAnchorPointRot::onToggle, this));
+        MenuItemFont::create("Toggle ignore anchor point", CC_CALLBACK_1(LayerIgnoreAnchorPointRot::onToggle, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -653,7 +653,7 @@ void LayerIgnoreAnchorPointScale::onEnter()
     child->setPosition(Vec2(lsize.width / 2, lsize.height / 2));
 
     auto item =
-        MenuItemFont::create("Toggle ignore anchor point", AX_CALLBACK_1(LayerIgnoreAnchorPointScale::onToggle, this));
+        MenuItemFont::create("Toggle ignore anchor point", CC_CALLBACK_1(LayerIgnoreAnchorPointScale::onToggle, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -736,7 +736,7 @@ void LayerBug3162A::onEnter()
 
     this->addChild(_layer[0]);
 
-    schedule(AX_SCHEDULE_SELECTOR(LayerBug3162A::step), 0.5, AX_REPEAT_FOREVER, 0);
+    schedule(CC_SCHEDULE_SELECTOR(LayerBug3162A::step), 0.5, CC_REPEAT_FOREVER, 0);
 }
 
 void LayerBug3162A::step(float dt)
@@ -782,7 +782,7 @@ void LayerBug3162B::onEnter()
     _layer[1]->setCascadeColorEnabled(true);
     _layer[2]->setCascadeColorEnabled(true);
 
-    schedule(AX_SCHEDULE_SELECTOR(LayerBug3162B::step), 0.5, AX_REPEAT_FOREVER, 0);
+    schedule(CC_SCHEDULE_SELECTOR(LayerBug3162B::step), 0.5, CC_REPEAT_FOREVER, 0);
 }
 
 void LayerBug3162B::step(float dt)
@@ -862,7 +862,7 @@ axis::ui::Slider* LayerRadialGradientTest::createSlider()
     slider->loadBarTexture("cocosui/sliderTrack.png");
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
-    slider->addEventListener(AX_CALLBACK_2(LayerRadialGradientTest::sliderCallback, this));
+    slider->addEventListener(CC_CALLBACK_2(LayerRadialGradientTest::sliderCallback, this));
     slider->setRotation(90);
     slider->setTag(101);
     slider->setPercent(50);
@@ -980,7 +980,7 @@ axis::ui::ListView* LayerRadialGradientTest::createListView()
     listview->setCurSelectedIndex(0);
     listview->setTouchEnabled(true);
     listview->addEventListener(
-        (ui::ListView::ccListViewCallback)AX_CALLBACK_2(LayerRadialGradientTest::listviewCallback, this));
+        (ui::ListView::ccListViewCallback)CC_CALLBACK_2(LayerRadialGradientTest::listviewCallback, this));
     listview->setTag(100);
 
     return listview;

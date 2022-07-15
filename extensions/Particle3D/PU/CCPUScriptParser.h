@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_SCRIPT_PARSER_H__
-#define __AX_PU_SCRIPT_PARSER_H__
+#ifndef __CC_PU_SCRIPT_PARSER_H__
+#define __CC_PU_SCRIPT_PARSER_H__
 
 #include <iostream>
 #include <string>

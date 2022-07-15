@@ -218,7 +218,7 @@ private:
     Viewport _viewPort;
     GLboolean _alphaTestEnabled = false;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };

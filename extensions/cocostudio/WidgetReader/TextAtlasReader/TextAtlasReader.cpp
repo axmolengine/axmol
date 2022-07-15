@@ -42,7 +42,7 @@ TextAtlasReader* TextAtlasReader::getInstance()
 
 void TextAtlasReader::destroyInstance()
 {
-    AX_SAFE_DELETE(instanceTextAtlasReader);
+    CC_SAFE_DELETE(instanceTextAtlasReader);
 }
 
 void TextAtlasReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
@@ -67,9 +67,9 @@ void TextAtlasReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* c
         std::string value = stChildArray[i].GetValue(cocoLoader);
 
         // read all basic properties of widget
-        AX_BASIC_PROPERTY_BINARY_READER
+        CC_BASIC_PROPERTY_BINARY_READER
         // read all color related properties of widget
-        AX_COLOR_PROPERTY_BINARY_READER
+        CC_COLOR_PROPERTY_BINARY_READER
 
         else if (key == P_StringValue) { stringValue = value; }
         else if (key == P_CharMapFileData)

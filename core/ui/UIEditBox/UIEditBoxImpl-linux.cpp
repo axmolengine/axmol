@@ -26,7 +26,7 @@
 
 #include "ui/UIEditBox/UIEditBoxImpl-linux.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "2d/CCLabel.h"
@@ -112,4 +112,4 @@ void EditBoxImplLinux::nativeOpenKeyboard()
 
 NS_AX_END
 
-#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */
+#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) */

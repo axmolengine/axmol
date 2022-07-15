@@ -27,7 +27,7 @@
 #define __CCPHYSICS_WORLD_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 
 #    include <list>
 #    include "base/CCVector.h"
@@ -97,7 +97,7 @@ typedef PhysicsQueryRectCallbackFunc PhysicsQueryPointCallbackFunc;
  * @brief An PhysicsWorld object simulates collisions and other physical properties. You do not create PhysicsWorld
  * objects directly; instead, you can get it from an Scene object.
  */
-class AX_DLL PhysicsWorld
+class CC_DLL PhysicsWorld
 {
 public:
     static const int DEBUGDRAW_NONE;     ///< draw nothing
@@ -449,12 +449,12 @@ protected:
     friend class PhysicsDebugDraw;
 };
 
-extern const float AX_DLL PHYSICS_INFINITY;
+extern const float CC_DLL PHYSICS_INFINITY;
 
 /** @} */
 /** @} */
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS
 #endif  // __CCPHYSICS_WORLD_H__

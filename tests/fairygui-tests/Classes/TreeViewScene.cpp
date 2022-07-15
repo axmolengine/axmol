@@ -18,11 +18,11 @@ void TreeViewScene::continueInit()
     _groot->addChild(_view);
 
     _tree1 = _view->getChild("tree")->as<GTree>();
-    _tree1->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(TreeViewScene::onClickNode, this));
+    _tree1->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(TreeViewScene::onClickNode, this));
 
     _tree2 = _view->getChild("tree2")->as<GTree>();
-    _tree2->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(TreeViewScene::onClickNode, this));
-    _tree2->treeNodeRender = AX_CALLBACK_2(TreeViewScene::renderTreeNode, this);
+    _tree2->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(TreeViewScene::onClickNode, this));
+    _tree2->treeNodeRender = CC_CALLBACK_2(TreeViewScene::renderTreeNode, this);
 
     GTreeNode* topNode = GTreeNode::create(true);
     topNode->setData(Value("I'm a top node"));

@@ -47,7 +47,7 @@ class RelativeLayoutParameter;
  *@brief Base class for managing layout.
  * All the concrete layout manager should inherit from this class.
  */
-class AX_GUI_DLL LayoutManager : public Ref
+class CC_GUI_DLL LayoutManager : public Ref
 {
 public:
     virtual ~LayoutManager(){};
@@ -67,7 +67,7 @@ public:
  * @lua NA
  * @js NA
  */
-class AX_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
+class CC_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
 {
 private:
     LinearVerticalLayoutManager(){};
@@ -84,7 +84,7 @@ private:
  * @lua NA
  * @js NA
  */
-class AX_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
+class CC_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
 {
 private:
     LinearHorizontalLayoutManager(){};
@@ -101,7 +101,7 @@ private:
  * @lua NA
  * @js NA
  */
-class AX_GUI_DLL LinearCenterVerticalLayoutManager : public LayoutManager
+class CC_GUI_DLL LinearCenterVerticalLayoutManager : public LayoutManager
 {
 private:
     LinearCenterVerticalLayoutManager(){};
@@ -118,7 +118,7 @@ private:
  * @lua NA
  * @js NA
  */
-class AX_GUI_DLL RelativeLayoutManager : public LayoutManager
+class CC_GUI_DLL RelativeLayoutManager : public LayoutManager
 {
 private:
     RelativeLayoutManager()

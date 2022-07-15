@@ -43,7 +43,7 @@ NS_AX_EXT_BEGIN
  * @lua NA
  */
 
-class AX_EX_DLL PhysicsDebugNode : public DrawNode
+class CC_EX_DLL PhysicsDebugNode : public DrawNode
 {
 
 public:

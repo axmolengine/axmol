@@ -30,12 +30,12 @@ local view = director:getOpenGLView()
 if not view then
     local width = 960
     local height = 640
-    if AX_DESIGN_RESOLUTION then
-        if AX_DESIGN_RESOLUTION.width then
-            width = AX_DESIGN_RESOLUTION.width
+    if CC_DESIGN_RESOLUTION then
+        if CC_DESIGN_RESOLUTION.width then
+            width = CC_DESIGN_RESOLUTION.width
         end
-        if AX_DESIGN_RESOLUTION.height then
-            height = AX_DESIGN_RESOLUTION.height
+        if CC_DESIGN_RESOLUTION.height then
+            height = CC_DESIGN_RESOLUTION.height
         end
     end
     view = cc.GLViewImpl:createWithRect("Cocos2d-Lua", cc.rect(0, 0, width, height))
@@ -157,8 +157,8 @@ function display.setAutoScale(configs)
     setConstants()
 end
 
-if type(AX_DESIGN_RESOLUTION) == "table" then
-    display.setAutoScale(AX_DESIGN_RESOLUTION)
+if type(CC_DESIGN_RESOLUTION) == "table" then
+    display.setAutoScale(CC_DESIGN_RESOLUTION)
 end
 
 display.COLOR_WHITE = cc.c3b(255, 255, 255)

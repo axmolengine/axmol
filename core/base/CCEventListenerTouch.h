@@ -43,7 +43,7 @@ class Touch;
  * @brief Single touch event listener.
  * @js cc._EventListenerTouchOneByOne
  */
-class AX_DLL EventListenerTouchOneByOne : public EventListener
+class CC_DLL EventListenerTouchOneByOne : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
@@ -96,7 +96,7 @@ private:
 /** @class EventListenerTouchAllAtOnce
  * @brief Multiple touches event listener.
  */
-class AX_DLL EventListenerTouchAllAtOnce : public EventListener
+class CC_DLL EventListenerTouchAllAtOnce : public EventListener
 {
 public:
     static const std::string LISTENER_ID;

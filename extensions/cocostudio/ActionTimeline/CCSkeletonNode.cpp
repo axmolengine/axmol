@@ -40,7 +40,7 @@ SkeletonNode* SkeletonNode::create()
         skeletonNode->autorelease();
         return skeletonNode;
     }
-    AX_SAFE_DELETE(skeletonNode);
+    CC_SAFE_DELETE(skeletonNode);
     return nullptr;
 }
 
@@ -268,7 +268,7 @@ void SkeletonNode::batchDrawAllSubBones()
                                          axis::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateVertexBuffer(_batchedBoneVertexData.data(), sizeof(VertexData) * _batchedVeticesCount);
 
-#ifdef AX_STUDIO_ENABLED_VIEW
+#ifdef CC_STUDIO_ENABLED_VIEW
 // TODO
 //     glLineWidth(1);
 //     glEnable(GL_LINE_SMOOTH);
@@ -278,7 +278,7 @@ void SkeletonNode::batchDrawAllSubBones()
 //         glDrawArrays(GL_TRIANGLE_FAN, i, 4);
 //         glDrawArrays(GL_LINE_LOOP, i, 4);
 //     }
-//     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _batchedVeticesCount);
+//     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _batchedVeticesCount);
 #else
     unsigned short* indices = (unsigned short*)malloc(sizeof(unsigned short) * _batchedVeticesCount);
     for (int i = 0; i < _batchedVeticesCount; i += 4)
@@ -295,7 +295,7 @@ void SkeletonNode::batchDrawAllSubBones()
                                         axis::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateIndexBuffer(indices, sizeof(unsigned short) * _batchedVeticesCount);
     free(indices);
-#endif  // AX_STUDIO_ENABLED_VIEW
+#endif  // CC_STUDIO_ENABLED_VIEW
 }
 
 void SkeletonNode::changeSkins(const hlookup::string_map<std::string>& boneSkinNameMap)

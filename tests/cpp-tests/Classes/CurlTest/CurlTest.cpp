@@ -42,7 +42,7 @@ CurlTest::CurlTest()
     label->setPosition(VisibleRect::center().x, VisibleRect::top().y - 50);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(CurlTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(CurlTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a label to display the tip string

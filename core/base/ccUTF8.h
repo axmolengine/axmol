@@ -33,7 +33,7 @@
 #include <string>
 #include <sstream>
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include "platform/android/jni/JniHelper.h"
 #endif
 
@@ -67,8 +67,8 @@ std::string toString(T arg)
     return ss.str();
 }
 
-std::string AX_DLL format(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
-std::string AX_DLL vformat(const char* format, va_list ap);
+std::string CC_DLL format(const char* format, ...) CC_FORMAT_PRINTF(1, 2);
+std::string CC_DLL vformat(const char* format, va_list ap);
 
 /**
  *  @brief Converts from UTF8 string to UTF16 string.
@@ -90,44 +90,44 @@ std::string AX_DLL vformat(const char* format, va_list ap);
  *    }
  *  @endcode
  */
-AX_DLL bool UTF8ToUTF16(std::string_view inUtf8, std::u16string& outUtf16);
+CC_DLL bool UTF8ToUTF16(std::string_view inUtf8, std::u16string& outUtf16);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF8 to UTF32.
  *
  *  @see UTF8ToUTF16
  */
-AX_DLL bool UTF8ToUTF32(std::string_view inUtf8, std::u32string& outUtf32);
+CC_DLL bool UTF8ToUTF32(std::string_view inUtf8, std::u32string& outUtf32);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF16 to UTF8.
  *
  *  @see UTF8ToUTF16
  */
-AX_DLL bool UTF16ToUTF8(std::u16string_view inUtf16, std::string& outUtf8);
+CC_DLL bool UTF16ToUTF8(std::u16string_view inUtf16, std::string& outUtf8);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF16 to UTF32.
  *
  *  @see UTF8ToUTF16
  */
-AX_DLL bool UTF16ToUTF32(std::u16string_view inUtf16, std::u32string& outUtf32);
+CC_DLL bool UTF16ToUTF32(std::u16string_view inUtf16, std::u32string& outUtf32);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF32 to UTF8.
  *
  *  @see UTF8ToUTF16
  */
-AX_DLL bool UTF32ToUTF8(std::u32string_view inUtf32, std::string& outUtf8);
+CC_DLL bool UTF32ToUTF8(std::u32string_view inUtf32, std::string& outUtf8);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF32 to UTF16.
  *
  *  @see UTF8ToUTF16
  */
-AX_DLL bool UTF32ToUTF16(std::u32string_view inUtf32, std::u16string& outUtf16);
+CC_DLL bool UTF32ToUTF16(std::u32string_view inUtf32, std::u16string& outUtf16);
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
 /**
  *  @brief convert jstring to utf8 std::string,  same function with env->getStringUTFChars.
@@ -137,7 +137,7 @@ AX_DLL bool UTF32ToUTF16(std::u32string_view inUtf32, std::u16string& outUtf16);
  *  @param ret   True if the conversion succeeds and the ret pointer isn't null
  *  @returns the result of utf8 string
  */
-AX_DLL std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret = nullptr);
+CC_DLL std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret = nullptr);
 
 /**
  *  @brief create a jstring with utf8 std::string, same function with env->newStringUTF
@@ -147,18 +147,18 @@ AX_DLL std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret 
  *  @param ret     True if the conversion succeeds and the ret pointer isn't null
  *  @returns the result of jstring,the jstring need to DeleteLocalRef(jstring);
  */
-AX_DLL jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret = nullptr);
+CC_DLL jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret = nullptr);
 #endif
 
 /**
  *  @brief Trims the unicode spaces at the end of char16_t vector.
  */
-AX_DLL void trimUTF16Vector(std::vector<char16_t>& str);
+CC_DLL void trimUTF16Vector(std::vector<char16_t>& str);
 
 /**
  *  @brief Trims the unicode spaces at the end of char32_t vector.
  */
-AX_DLL void trimUTF32Vector(std::vector<char32_t>& str);
+CC_DLL void trimUTF32Vector(std::vector<char32_t>& str);
 
 /**
  *  @brief Whether the character is a whitespace character.
@@ -168,7 +168,7 @@ AX_DLL void trimUTF32Vector(std::vector<char32_t>& str);
  *  @see http://en.wikipedia.org/wiki/Whitespace_character#Unicode
  *
  */
-AX_DLL bool isUnicodeSpace(char32_t ch);
+CC_DLL bool isUnicodeSpace(char32_t ch);
 
 /**
  *  @brief Whether the character is a Chinese/Japanese/Korean character.
@@ -179,7 +179,7 @@ AX_DLL bool isUnicodeSpace(char32_t ch);
  *  @see http://tieba.baidu.com/p/748765987
  *
  */
-AX_DLL bool isCJKUnicode(char32_t ch);
+CC_DLL bool isCJKUnicode(char32_t ch);
 
 /**
  *  @brief Whether the character is a non-breaking character.
@@ -192,14 +192,14 @@ AX_DLL bool isCJKUnicode(char32_t ch);
  *  @see https://en.wikipedia.org/wiki/Word_joiner
  *
  */
-AX_DLL bool isUnicodeNonBreaking(char32_t ch);
+CC_DLL bool isUnicodeNonBreaking(char32_t ch);
 
 /**
  *  @brief Returns the length of the string in characters.
  *  @param utf8 An UTF-8 encoded string.
  *  @returns The length of the string in characters.
  */
-AX_DLL int32_t getCharacterCountInUTF8String(std::string_view utf8);
+CC_DLL int32_t getCharacterCountInUTF8String(std::string_view utf8);
 
 /**
  *  @brief Gets the index of the last character that is not equal to the character given.
@@ -207,34 +207,34 @@ AX_DLL int32_t getCharacterCountInUTF8String(std::string_view utf8);
  *  @param c     The character to be searched for.
  *  @returns The index of the last character that is not \p c.
  */
-AX_DLL unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c);
+CC_DLL unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c);
 
 /**
  *  @brief Gets char16_t vector from a given utf16 string.
  */
-AX_DLL std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16);
+CC_DLL std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16);
 
 /**
  *  @brief Whether has non-ascii utf-8 characters
  */
-AX_DLL bool hasNonAsciiUTF8(const char* str, size_t len);
+CC_DLL bool hasNonAsciiUTF8(const char* str, size_t len);
 
 /**
  *  @brief Whether contains utf-8 or all characters are ascii
  */
-AX_DLL bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, bool* pAllCharsAreAscii);
+CC_DLL bool detectNonAsciiUTF8(const char* str, size_t len, bool restrictUTF8, bool* pAllCharsAreAscii);
 
 /**
  *  @brief isLegalUTF8String, contains ascii characters
  */
-AX_DLL bool isLegalUTF8String(const char* str, size_t len);
+CC_DLL bool isLegalUTF8String(const char* str, size_t len);
 
 /**
  * Utf8 sequence
  * Store all utf8 chars as std::string
  * Build from std::string
  */
-class AX_DLL StringUTF8
+class CC_DLL StringUTF8
 {
 public:
     struct CharUTF8

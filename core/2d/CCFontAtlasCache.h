@@ -38,7 +38,7 @@ class FontAtlas;
 class Texture2D;
 struct _ttfConfig;
 
-class AX_DLL FontAtlasCache
+class CC_DLL FontAtlasCache
 {
 public:
     static FontAtlas* getFontAtlasTTF(const _ttfConfig* config);
@@ -46,7 +46,7 @@ public:
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName);
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey);
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated);
-    AX_DEPRECATED_ATTRIBUTE static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset);
+    CC_DEPRECATED_ATTRIBUTE static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, const Vec2& imageOffset);
 
     static FontAtlas* getFontAtlasCharMap(std::string_view charMapFile,
                                           int itemWidth,
@@ -68,7 +68,7 @@ public:
     */
     static void reloadFontAtlasFNT(std::string_view fontFileName, const Rect& imageRect, bool imageRotated);
 
-    AX_DEPRECATED_ATTRIBUTE static void reloadFontAtlasFNT(std::string_view fontFileName,
+    CC_DEPRECATED_ATTRIBUTE static void reloadFontAtlasFNT(std::string_view fontFileName,
                                                            const Vec2& imageOffset = Vec2::ZERO);
 
     /** Unload all texture atlas texture create by special file name.

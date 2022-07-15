@@ -34,12 +34,12 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class AX_DLL ObjectFactory
+class CC_DLL ObjectFactory
 {
 public:
     typedef axis::Ref* (*Instance)(void);
     typedef std::function<axis::Ref*(void)> InstanceFunc;
-    struct AX_DLL TInfo
+    struct CC_DLL TInfo
     {
         TInfo();
         TInfo(std::string_view type, Instance ins = nullptr);

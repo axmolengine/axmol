@@ -25,14 +25,14 @@
 
 #include "scripting/lua-bindings/manual/base/lua_axis_base_manual.hpp"
 
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #    include "scripting/lua-bindings/manual/CCLuaValue.h"
 #    include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #    include "2d/CCScene.h"
 
-#    ifndef AX_SAFE_DELETE_ARRAY
+#    ifndef CC_SAFE_DELETE_ARRAY
 #        define do                 \
             {                      \
                 if (p)             \
@@ -375,11 +375,11 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createPolygon(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -411,11 +411,11 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
         ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsBody:createPolygon");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createPolygon(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
 
@@ -450,11 +450,11 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
         ok &= luaval_to_vec2(tolua_S, 4, &arg3, "ax.PhysicsBody:createPolygon");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createPolygon(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -509,11 +509,11 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createEdgePolygon(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -545,11 +545,11 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
         ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsBody:createEdgePolygon");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createEdgePolygon(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -583,11 +583,11 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
         ok &= luaval_to_number(tolua_S, 4, &arg3, "ax.PhysicsBody:createEdgePolygon");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createEdgePolygon(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -642,11 +642,11 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeChain(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -678,11 +678,11 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
         ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsBody:createEdgeChain");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeChain(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -716,11 +716,11 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
         ok &= luaval_to_number(tolua_S, 4, &arg3, "ax.PhysicsBody:createEdgeChain");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeChain(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         do
         {
             if (nullptr != ret)
@@ -775,12 +775,12 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShape::recenterPoints(arg0, arg1);
         vec2_array_to_luaval(tolua_S, arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
 
         return 1;
     }
@@ -800,12 +800,12 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
         ok &= luaval_to_vec2(tolua_S, 3, &arg2, "ax.PhysicsShape:recenterPoints");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShape::recenterPoints(arg0, arg1, arg2);
         vec2_array_to_luaval(tolua_S, arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "recenterPoints", argc, 2);
@@ -847,11 +847,11 @@ int lua_axis_physics_PhysicsShape_getPolygonCenter(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::Vec2 ret = axis::PhysicsShape::getPolygonCenter(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -938,7 +938,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPoints(lua_State* tolua_S)
         axis::Vec2* arg0 = new axis::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
@@ -983,11 +983,11 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
 
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapePolygon* ret = axis::PhysicsShapePolygon::create(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
                                                        (axis::PhysicsShapePolygon*)ret);
         return 1;
@@ -1008,11 +1008,11 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
         ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsShapePolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapePolygon* ret = axis::PhysicsShapePolygon::create(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
                                                        (axis::PhysicsShapePolygon*)ret);
         return 1;
@@ -1035,11 +1035,11 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
         ok &= luaval_to_vec2(tolua_S, 4, &arg3, "ax.PhysicsShapePolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapePolygon* ret = axis::PhysicsShapePolygon::create(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
                                                        (axis::PhysicsShapePolygon*)ret);
         return 1;
@@ -1082,11 +1082,11 @@ int lua_axis_physics_PhysicsShapePolygon_calculateArea(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         double ret = axis::PhysicsShapePolygon::calculateArea(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         return 1;
     }
@@ -1130,11 +1130,11 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg1);
+            CC_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         double ret = axis::PhysicsShapePolygon::calculateMoment(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg1);
+        CC_SAFE_DELETE_ARRAY(arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         return 1;
     }
@@ -1156,11 +1156,11 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
         ok &= luaval_to_vec2(tolua_S, 4, &arg3, "ax.PhysicsShapePolygon:calculateMoment");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg1);
+            CC_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
         double ret = axis::PhysicsShapePolygon::calculateMoment(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg1);
+        CC_SAFE_DELETE_ARRAY(arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         return 1;
     }
@@ -1204,7 +1204,7 @@ int lua_axis_physics_PhysicsShapeEdgeBox_getPoints(lua_State* tolua_S)
         axis::Vec2* arg0 = new axis::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
@@ -1250,7 +1250,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_getPoints(lua_State* tolua_S)
         axis::Vec2* arg0 = new axis::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
@@ -1295,7 +1295,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_getPoints(lua_State* tolua_S)
         axis::Vec2* arg0 = new axis::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
@@ -1449,11 +1449,11 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapeEdgePolygon* ret = axis::PhysicsShapeEdgePolygon::create(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
                                                            (axis::PhysicsShapeEdgePolygon*)ret);
         return 1;
@@ -1474,11 +1474,11 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
         ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsShapeEdgePolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapeEdgePolygon* ret = axis::PhysicsShapeEdgePolygon::create(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
                                                            (axis::PhysicsShapeEdgePolygon*)ret);
         return 1;
@@ -1501,11 +1501,11 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
         ok &= luaval_to_number(tolua_S, 4, &arg3, "ax.PhysicsShapeEdgePolygon:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapeEdgePolygon* ret = axis::PhysicsShapeEdgePolygon::create(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
                                                            (axis::PhysicsShapeEdgePolygon*)ret);
         return 1;
@@ -1549,11 +1549,11 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
         } while (0);
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapeEdgeChain* ret = axis::PhysicsShapeEdgeChain::create(arg0, arg1);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
                                                          (axis::PhysicsShapeEdgeChain*)ret);
         return 1;
@@ -1574,11 +1574,11 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
         ok &= luaval_to_physics_material(tolua_S, 3, &arg2, "ax.PhysicsShapeEdgeChain:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapeEdgeChain* ret = axis::PhysicsShapeEdgeChain::create(arg0, arg1, arg2);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
                                                          (axis::PhysicsShapeEdgeChain*)ret);
         return 1;
@@ -1601,11 +1601,11 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
         ok &= luaval_to_number(tolua_S, 4, &arg3, "ax.PhysicsShapeEdgeChain:create");
         if (!ok)
         {
-            AX_SAFE_DELETE_ARRAY(arg0);
+            CC_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
         axis::PhysicsShapeEdgeChain* ret = axis::PhysicsShapeEdgeChain::create(arg0, arg1, arg2, arg3);
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
         object_to_luaval<axis::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
                                                          (axis::PhysicsShapeEdgeChain*)ret);
         return 1;

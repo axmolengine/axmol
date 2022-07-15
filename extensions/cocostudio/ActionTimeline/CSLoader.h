@@ -75,7 +75,7 @@ public:
 
     CSLoader();
     /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE void purge();
+    CC_DEPRECATED_ATTRIBUTE void purge();
 
     void init();
 

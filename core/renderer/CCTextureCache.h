@@ -43,7 +43,7 @@ THE SOFTWARE.
 #include "renderer/CCTexture2D.h"
 #include "platform/CCImage.h"
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
 #    include <list>
 #endif
 
@@ -62,7 +62,7 @@ NS_AX_BEGIN
  * Once the texture is loaded, the next time it will return.
  * A reference of the previously loaded texture reducing GPU & CPU memory.
  */
-class AX_DLL TextureCache : public Ref
+class CC_DLL TextureCache : public Ref
 {
 public:
     // ETC1 ALPHA supports.
@@ -235,7 +235,7 @@ protected:
     static std::string s_etc1AlphaFileSuffix;
 };
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
 
 class VolatileTexture
 {
@@ -275,7 +275,7 @@ protected:
     FontDefinition _fontDefinition;
 };
 
-class AX_DLL VolatileTextureMgr
+class CC_DLL VolatileTextureMgr
 {
 public:
     static void addImageTexture(Texture2D* tt, std::string_view imageFileName);

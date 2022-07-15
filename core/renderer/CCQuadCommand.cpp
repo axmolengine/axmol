@@ -43,7 +43,7 @@ QuadCommand::~QuadCommand()
 {
     for (auto& indices : _ownedIndices)
     {
-        AX_SAFE_DELETE_ARRAY(indices);
+        CC_SAFE_DELETE_ARRAY(indices);
     }
 }
 

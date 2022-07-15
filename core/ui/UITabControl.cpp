@@ -53,7 +53,7 @@ TabControl::~TabControl()
     for (auto& item : _tabItems)
     {
         if (item)
-            AX_SAFE_DELETE(item);
+            CC_SAFE_DELETE(item);
     }
     _tabItems.clear();
 }
@@ -73,7 +73,7 @@ void TabControl::insertTab(int index, TabHeader* header, Layout* container)
     _tabItems.insert(_tabItems.begin() + index, new TabItem(header, container));
     header->_tabView = this;
     header->_tabSelectedEvent =
-        AX_CALLBACK_2(TabControl::dispatchSelectedTabChanged, this);  // binding tab selected event
+        CC_CALLBACK_2(TabControl::dispatchSelectedTabChanged, this);  // binding tab selected event
 
     initAfterInsert(index);
 }
@@ -134,7 +134,7 @@ void TabControl::removeTab(int index)
     auto header    = tabItem->header;
     auto container = tabItem->container;
     if (tabItem)
-        AX_SAFE_DELETE(tabItem);
+        CC_SAFE_DELETE(tabItem);
     _tabItems.erase(_tabItems.begin() + index);
 
     if (header != nullptr)
@@ -366,7 +366,7 @@ TabControl* TabControl::create()
         tabview->autorelease();
         return tabview;
     }
-    AX_SAFE_DELETE(tabview);
+    CC_SAFE_DELETE(tabview);
     return nullptr;
 }
 
@@ -483,7 +483,7 @@ TabHeader* TabHeader::create()
         tabcell->autorelease();
         return tabcell;
     }
-    AX_SAFE_DELETE(tabcell);
+    CC_SAFE_DELETE(tabcell);
     return nullptr;
 }
 
@@ -501,7 +501,7 @@ TabHeader* TabHeader::create(std::string_view titleStr,
         tabcell->autorelease();
         return tabcell;
     }
-    AX_SAFE_DELETE(tabcell);
+    CC_SAFE_DELETE(tabcell);
     return nullptr;
 }
 
@@ -522,7 +522,7 @@ TabHeader* TabHeader::create(std::string_view titleStr,
         tabcell->autorelease();
         return tabcell;
     }
-    AX_SAFE_DELETE(tabcell);
+    CC_SAFE_DELETE(tabcell);
     return nullptr;
 }
 

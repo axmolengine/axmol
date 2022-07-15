@@ -35,7 +35,7 @@ NS_AX_BEGIN
  * @{
  */
 
-struct AX_DLL ResourceData;
+struct CC_DLL ResourceData;
 
 namespace ui
 {
@@ -46,7 +46,7 @@ class Scale9Sprite;
  * Displays a bar to the user representing how far the operation has progressed.
  *
  */
-class AX_GUI_DLL LoadingBar : public Widget
+class CC_GUI_DLL LoadingBar : public Widget
 {
 
     DECLARE_CLASS_GUI_INFO

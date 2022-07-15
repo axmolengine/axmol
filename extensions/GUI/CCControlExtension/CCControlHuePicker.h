@@ -47,7 +47,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlHuePicker : public Control
+class CC_EX_DLL ControlHuePicker : public Control
 {
 public:
     static ControlHuePicker* create(Node* target, Vec2 pos);
@@ -73,15 +73,15 @@ protected:
     bool checkSliderPosition(Vec2 location);
 
     // manually put in the setters
-    AX_SYNTHESIZE_READONLY(float, _hue, Hue);
+    CC_SYNTHESIZE_READONLY(float, _hue, Hue);
     virtual void setHue(float val);
-    AX_SYNTHESIZE_READONLY(float, _huePercentage, HuePercentage);
+    CC_SYNTHESIZE_READONLY(float, _huePercentage, HuePercentage);
     virtual void setHuePercentage(float val);
 
     // not sure if these need to be there actually. I suppose someone might want to access the sprite?
-    AX_SYNTHESIZE_RETAIN(Sprite*, _background, Background);
-    AX_SYNTHESIZE_RETAIN(Sprite*, _slider, Slider);
-    AX_SYNTHESIZE_READONLY(Vec2, _startPos, StartPos);
+    CC_SYNTHESIZE_RETAIN(Sprite*, _background, Background);
+    CC_SYNTHESIZE_RETAIN(Sprite*, _slider, Slider);
+    CC_SYNTHESIZE_READONLY(Vec2, _startPos, StartPos);
 };
 
 // end of GUI group

@@ -50,7 +50,7 @@ class AssetsManagerEx;
  *
  *        dispatcher->removeEventListener(listener);
  */
-class AX_EX_DLL EventListenerAssetsManagerEx : public axis::EventListenerCustom
+class CC_EX_DLL EventListenerAssetsManagerEx : public axis::EventListenerCustom
 {
 public:
     friend class AssetsManagerEx;

@@ -119,7 +119,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-    AX_SAFE_RELEASE(_clearBrush);
+    CC_SAFE_RELEASE(_clearBrush);
 }
 
 const Mat4& Camera::getProjectionMatrix() const
@@ -572,8 +572,8 @@ void Camera::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t par
 
 void Camera::setBackgroundBrush(CameraBackgroundBrush* clearBrush)
 {
-    AX_SAFE_RETAIN(clearBrush);
-    AX_SAFE_RELEASE(_clearBrush);
+    CC_SAFE_RETAIN(clearBrush);
+    CC_SAFE_RELEASE(_clearBrush);
     _clearBrush = clearBrush;
 }
 

@@ -42,7 +42,7 @@ NS_AX_BEGIN
 /** @class ActionInstant
  * @brief Instant actions are immediate actions. They don't have a duration like the IntervalAction actions.
  **/
-class AX_DLL ActionInstant : public FiniteTimeAction
+class CC_DLL ActionInstant : public FiniteTimeAction
 {
 public:
     //
@@ -50,13 +50,13 @@ public:
     //
     virtual ActionInstant* clone() const override
     {
-        AX_ASSERT(0);
+        CC_ASSERT(0);
         return nullptr;
     }
 
     virtual ActionInstant* reverse() const override
     {
-        AX_ASSERT(0);
+        CC_ASSERT(0);
         return nullptr;
     }
 
@@ -79,7 +79,7 @@ private:
 /** @class Show
  * @brief Show the node.
  **/
-class AX_DLL Show : public ActionInstant
+class CC_DLL Show : public ActionInstant
 {
 public:
     /** Allocates and initializes the action.
@@ -102,13 +102,13 @@ public:
     virtual ~Show() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Show);
+    CC_DISALLOW_COPY_AND_ASSIGN(Show);
 };
 
 /** @class Hide
  * @brief Hide the node.
  */
-class AX_DLL Hide : public ActionInstant
+class CC_DLL Hide : public ActionInstant
 {
 public:
     /** Allocates and initializes the action.
@@ -131,13 +131,13 @@ public:
     virtual ~Hide() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Hide);
+    CC_DISALLOW_COPY_AND_ASSIGN(Hide);
 };
 
 /** @class ToggleVisibility
  * @brief Toggles the visibility of a node.
  */
-class AX_DLL ToggleVisibility : public ActionInstant
+class CC_DLL ToggleVisibility : public ActionInstant
 {
 public:
     /** Allocates and initializes the action.
@@ -160,13 +160,13 @@ public:
     virtual ~ToggleVisibility() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ToggleVisibility);
+    CC_DISALLOW_COPY_AND_ASSIGN(ToggleVisibility);
 };
 
 /** @class RemoveSelf
  * @brief Remove the node.
  */
-class AX_DLL RemoveSelf : public ActionInstant
+class CC_DLL RemoveSelf : public ActionInstant
 {
 public:
     /** Create the action.
@@ -196,14 +196,14 @@ protected:
     bool _isNeedCleanUp;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(RemoveSelf);
+    CC_DISALLOW_COPY_AND_ASSIGN(RemoveSelf);
 };
 
 /** @class FlipX
  * @brief Flips the sprite horizontally.
  * @since v0.99.0
  */
-class AX_DLL FlipX : public ActionInstant
+class CC_DLL FlipX : public ActionInstant
 {
 public:
     /** Create the action.
@@ -233,14 +233,14 @@ protected:
     bool _flipX;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(FlipX);
+    CC_DISALLOW_COPY_AND_ASSIGN(FlipX);
 };
 
 /** @class FlipY
  * @brief Flips the sprite vertically.
  * @since v0.99.0
  */
-class AX_DLL FlipY : public ActionInstant
+class CC_DLL FlipY : public ActionInstant
 {
 public:
     /** Create the action.
@@ -270,13 +270,13 @@ protected:
     bool _flipY;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(FlipY);
+    CC_DISALLOW_COPY_AND_ASSIGN(FlipY);
 };
 
 /** @class Place
  * @brief Places the node in a certain position.
  */
-class AX_DLL Place : public ActionInstant
+class CC_DLL Place : public ActionInstant
 {
 public:
     /** Creates a Place action with a position.
@@ -306,13 +306,13 @@ protected:
     Vec2 _position;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Place);
+    CC_DISALLOW_COPY_AND_ASSIGN(Place);
 };
 
 /** @class CallFunc
  * @brief Calls a 'callback'.
  */
-class AX_DLL CallFunc : public ActionInstant
+class CC_DLL CallFunc : public ActionInstant
 {
 public:
     /** Creates the action with the callback of type std::function<void()>.
@@ -354,14 +354,14 @@ protected:
     std::function<void()> _function;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(CallFunc);
+    CC_DISALLOW_COPY_AND_ASSIGN(CallFunc);
 };
 
 /** @class CallFuncN
  * @brief Calls a 'callback' with the node as the first argument. N means Node.
  * @js NA
  */
-class AX_DLL CallFuncN : public CallFunc
+class CC_DLL CallFuncN : public CallFunc
 {
 public:
     /** Creates the action with the callback of type std::function<void()>.
@@ -389,7 +389,7 @@ protected:
     std::function<void(Node*)> _functionN;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(CallFuncN);
+    CC_DISALLOW_COPY_AND_ASSIGN(CallFuncN);
 };
 
 // end of actions group

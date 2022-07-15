@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "physics/CCPhysicsWorld.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 #    include <algorithm>
 #    include <climits>
 
@@ -115,7 +115,7 @@ cpBool PhysicsWorldCallback::collisionBeginCallbackFunc(cpArbiter* arb, struct c
 
     PhysicsShape* shapeA = static_cast<PhysicsShape*>(cpShapeGetUserData(a));
     PhysicsShape* shapeB = static_cast<PhysicsShape*>(cpShapeGetUserData(b));
-    AX_ASSERT(shapeA != nullptr && shapeB != nullptr);
+    CC_ASSERT(shapeA != nullptr && shapeB != nullptr);
 
     auto contact = PhysicsContact::construct(shapeA, shapeB);
     cpArbiterSetUserData(arb, contact);
@@ -155,7 +155,7 @@ void PhysicsWorldCallback::rayCastCallbackFunc(cpShape* shape,
     }
 
     PhysicsShape* physicsShape = static_cast<PhysicsShape*>(cpShapeGetUserData(shape));
-    AX_ASSERT(physicsShape != nullptr);
+    CC_ASSERT(physicsShape != nullptr);
 
     PhysicsRayCastInfo callbackInfo = {
         physicsShape,
@@ -172,7 +172,7 @@ void PhysicsWorldCallback::rayCastCallbackFunc(cpShape* shape,
 void PhysicsWorldCallback::queryRectCallbackFunc(cpShape* shape, RectQueryCallbackInfo* info)
 {
     PhysicsShape* physicsShape = static_cast<PhysicsShape*>(cpShapeGetUserData(shape));
-    AX_ASSERT(physicsShape != nullptr);
+    CC_ASSERT(physicsShape != nullptr);
 
     if (!PhysicsWorldCallback::continues)
     {
@@ -189,7 +189,7 @@ void PhysicsWorldCallback::getShapesAtPointFunc(cpShape* shape,
                                                 Vector<PhysicsShape*>* arr)
 {
     PhysicsShape* physicsShape = static_cast<PhysicsShape*>(cpShapeGetUserData(shape));
-    AX_ASSERT(physicsShape != nullptr);
+    CC_ASSERT(physicsShape != nullptr);
     arr->pushBack(physicsShape);
 }
 
@@ -200,7 +200,7 @@ void PhysicsWorldCallback::queryPointFunc(cpShape* shape,
                                           PointQueryCallbackInfo* info)
 {
     PhysicsShape* physicsShape = static_cast<PhysicsShape*>(cpShapeGetUserData(shape));
-    AX_ASSERT(physicsShape != nullptr);
+    CC_ASSERT(physicsShape != nullptr);
     PhysicsWorldCallback::continues = info->func(*info->world, *physicsShape, info->data);
 }
 
@@ -518,13 +518,13 @@ bool PhysicsWorld::init()
 {
     do
     {
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
         _cpSpace = cpSpaceNew();
 #    else
         _cpSpace = cpHastySpaceNew();
         cpHastySpaceSetThreads(_cpSpace, 0);
 #    endif
-        AX_BREAK_IF(_cpSpace == nullptr);
+        CC_BREAK_IF(_cpSpace == nullptr);
 
         cpSpaceSetGravity(_cpSpace, PhysicsHelper::vec22cpv(_gravity));
 
@@ -652,7 +652,7 @@ void PhysicsWorld::removeBody(PhysicsBody* body)
 
 void PhysicsWorld::removeBodyOrDelay(PhysicsBody* body)
 {
-    if (_delayAddBodies.getIndex(body) != AX_INVALID_INDEX)
+    if (_delayAddBodies.getIndex(body) != CC_INVALID_INDEX)
     {
         _delayAddBodies.eraseObject(body);
         return;
@@ -660,7 +660,7 @@ void PhysicsWorld::removeBodyOrDelay(PhysicsBody* body)
 
     if (cpSpaceIsLocked(_cpSpace))
     {
-        if (_delayRemoveBodies.getIndex(body) == AX_INVALID_INDEX)
+        if (_delayRemoveBodies.getIndex(body) == CC_INVALID_INDEX)
         {
             _delayRemoveBodies.pushBack(body);
         }
@@ -855,7 +855,7 @@ void PhysicsWorld::setDebugDrawMask(int mask)
     if (mask == DEBUGDRAW_NONE && _debugDraw)
     {
         _debugDraw->removeFromParent();
-        AX_SAFE_RELEASE_NULL(_debugDraw);
+        CC_SAFE_RELEASE_NULL(_debugDraw);
     }
 
     _debugDrawMask = mask;
@@ -939,7 +939,7 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
 
     if (userCall)
     {
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
         cpSpaceStep(_cpSpace, delta);
 #    else
         cpHastySpaceStep(_cpSpace, delta);
@@ -955,7 +955,7 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
             while (_updateTime > step)
             {
                 _updateTime -= step;
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
                 cpSpaceStep(_cpSpace, dt);
 #    else
                 cpHastySpaceStep(_cpSpace, dt);
@@ -969,7 +969,7 @@ void PhysicsWorld::update(float delta, bool userCall /* = false*/)
                 const float dt = _updateTime * _speed / _substeps;
                 for (int i = 0; i < _substeps; ++i)
                 {
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
                     cpSpaceStep(_cpSpace, dt);
 #    else
                     cpHastySpaceStep(_cpSpace, dt);
@@ -1008,7 +1008,7 @@ PhysicsWorld* PhysicsWorld::construct(Scene* scene)
         return world;
     }
 
-    AX_SAFE_DELETE(world);
+    CC_SAFE_DELETE(world);
     return nullptr;
 }
 
@@ -1035,13 +1035,13 @@ PhysicsWorld::~PhysicsWorld()
     removeAllBodies();
     if (_cpSpace)
     {
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
         cpSpaceFree(_cpSpace);
 #    else
         cpHastySpaceFree(_cpSpace);
 #    endif
     }
-    AX_SAFE_RELEASE_NULL(_debugDraw);
+    CC_SAFE_RELEASE_NULL(_debugDraw);
 }
 
 void PhysicsWorld::beforeSimulation(Node* node,
@@ -1093,4 +1093,4 @@ void PhysicsWorld::setPreUpdateCallback(const std::function<void()>& callback)
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS

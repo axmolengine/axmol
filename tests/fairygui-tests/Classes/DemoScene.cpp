@@ -21,7 +21,7 @@ bool DemoScene::init()
     closeButton->addRelation(_groot, RelationType::Right_Right);
     closeButton->addRelation(_groot, RelationType::Bottom_Bottom);
     closeButton->setSortingOrder(100000);
-    closeButton->addClickListener(AX_CALLBACK_1(DemoScene::onClose, this));
+    closeButton->addClickListener(CC_CALLBACK_1(DemoScene::onClose, this));
     _groot->addChild(closeButton);
 
     return true;
@@ -42,7 +42,7 @@ void DemoScene::onClose(EventContext* context)
         //Close the cocos2d-x game scene and quit the application
         Director::getInstance()->end();
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         exit(0);
 #endif
 
@@ -60,5 +60,5 @@ DemoScene::DemoScene() :
 
 DemoScene::~DemoScene()
 {
-    AX_SAFE_RELEASE(_groot);
+    CC_SAFE_RELEASE(_groot);
 }

@@ -194,15 +194,15 @@ void TwoColorTrianglesCommand::updateCommandPipelineDescriptor(axis::backend::Pr
     if (programState != nullptr)
     {
         if (_programState != programState) {
-            AX_SAFE_RELEASE(_programState);
+            CC_SAFE_RELEASE(_programState);
             _programState = programState; // Because the programState belong to Node, so no need to clone
-            AX_SAFE_RETAIN(_programState);
+            CC_SAFE_RETAIN(_programState);
             needsUpdateStateLayout = true;
         }
     }
     else {
         needsUpdateStateLayout = _programState != nullptr && _programState->getProgram() != __twoColorProgramState->getProgram();
-        AX_SAFE_RELEASE(_programState);
+        CC_SAFE_RELEASE(_programState);
         _programState = __twoColorProgramState->clone();
     }
 
@@ -218,7 +218,7 @@ void TwoColorTrianglesCommand::updateCommandPipelineDescriptor(axis::backend::Pr
 
 TwoColorTrianglesCommand::~TwoColorTrianglesCommand()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
 }
 
 void TwoColorTrianglesCommand::generateMaterialID() {

@@ -64,7 +64,7 @@ public:
     static Application* getInstance();
 
     /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
+    CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
 
     /* override functions */
     virtual LanguageType getCurrentLanguage() override;
@@ -91,13 +91,13 @@ public:
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
-    AX_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
+    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
 
     /**
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
      */
-    AX_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
+    CC_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
 
     /**
      @brief Get target platform

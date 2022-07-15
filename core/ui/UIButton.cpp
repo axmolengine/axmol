@@ -88,7 +88,7 @@ Button* Button::create()
         widget->autorelease();
         return widget;
     }
-    AX_SAFE_DELETE(widget);
+    CC_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -103,7 +103,7 @@ Button* Button::create(std::string_view normalImage,
         btn->autorelease();
         return btn;
     }
-    AX_SAFE_DELETE(btn);
+    CC_SAFE_DELETE(btn);
     return nullptr;
 }
 
@@ -170,9 +170,9 @@ void Button::setTitleLabel(Label* label)
 {
     if (_titleRenderer != label)
     {
-        AX_SAFE_RELEASE(_titleRenderer);
+        CC_SAFE_RELEASE(_titleRenderer);
         _titleRenderer = label;
-        AX_SAFE_RETAIN(_titleRenderer);
+        CC_SAFE_RETAIN(_titleRenderer);
 
         addProtectedChild(_titleRenderer, TITLE_RENDERER_Z, -1);
         updateTitleLocation();
@@ -729,7 +729,7 @@ void Button::setTitleText(std::string_view text)
 
     if (getTitleFontSize() <= 0)
     {
-        setTitleFontSize(AX_DEFAULT_FONT_LABEL_SIZE);
+        setTitleFontSize(CC_DEFAULT_FONT_LABEL_SIZE);
     }
     _titleRenderer->setString(text);
 

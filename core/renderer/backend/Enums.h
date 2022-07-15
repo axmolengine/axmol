@@ -263,8 +263,8 @@ enum class ColorWriteMask : uint32_t
     ALPHA     = 1 << ALPHA_BIT,
     ALL       = 0x0000000F
 };
-AX_ENABLE_BITMASK_OPS(ColorWriteMask)
-AX_ENABLE_BITSHIFT_OPS(ColorWriteMask)
+CC_ENABLE_BITMASK_OPS(ColorWriteMask)
+CC_ENABLE_BITSHIFT_OPS(ColorWriteMask)
 
 /**
  * Bitmask for selecting render buffers
@@ -283,7 +283,7 @@ enum class TargetBufferFlags : uint8_t
     DEPTH_AND_STENCIL = DEPTH | STENCIL,             //!< depth and stencil buffer selected.
     ALL               = COLOR_ALL | DEPTH | STENCIL  //!< Color, depth and stencil buffer selected.
 };
-AX_ENABLE_BITMASK_OPS(TargetBufferFlags)
+CC_ENABLE_BITMASK_OPS(TargetBufferFlags)
 
 enum class DepthStencilFlags : unsigned int
 {
@@ -294,8 +294,8 @@ enum class DepthStencilFlags : unsigned int
     DEPTH_STENCIL_TEST = DEPTH_TEST | STENCIL_TEST,
     ALL                = DEPTH_TEST | STENCIL_TEST | DEPTH_WRITE,
 };
-AX_ENABLE_BITMASK_OPS(DepthStencilFlags)
-AX_ENABLE_BITSHIFT_OPS(DepthStencilFlags)
+CC_ENABLE_BITMASK_OPS(DepthStencilFlags)
+CC_ENABLE_BITSHIFT_OPS(DepthStencilFlags)
 
 enum class CullMode : uint32_t
 {

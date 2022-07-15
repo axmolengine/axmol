@@ -29,7 +29,7 @@
 
 #include "platform/CCPlatformConfig.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
 #    include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
@@ -86,6 +86,6 @@ private:
 
 NS_AX_END
 
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
 #endif /* __UIEditBoxIMPLMAC_H__ */

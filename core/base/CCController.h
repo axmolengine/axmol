@@ -25,9 +25,9 @@
 
 #ifndef __cocos2d_libs__CCController__
 #define __cocos2d_libs__CCController__
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||   \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
 #    include "platform/CCPlatformMacros.h"
 #    include <string>
@@ -51,7 +51,7 @@ class EventDispatcher;
  * @brief A Controller object represents a connected physical game controller.
  * @js NA
  */
-class AX_DLL Controller
+class CC_DLL Controller
 {
 public:
     /**
@@ -223,7 +223,7 @@ private:
     EventController* _keyEvent;
     EventController* _axisEvent;
 
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#    if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     // FIXME: Once GLFW 3.3 is bundled with cocos2d-x, remove these unordered
     // maps. They won't be needed. We will only need to provide a mapping from
     // the GLFW gamepad key codes to the Controller::Key.

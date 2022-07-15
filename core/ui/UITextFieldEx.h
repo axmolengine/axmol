@@ -16,7 +16,7 @@ namespace ui
 /**
 @brief  A extension implementation of ui::TextField
 */
-class AX_DLL TextFieldEx : public axis::Node, public IMEDelegate
+class CC_DLL TextFieldEx : public axis::Node, public IMEDelegate
 {
 public:
     /**
@@ -100,7 +100,7 @@ public:
     void setTextFontName(std::string_view fontName);
     std::string_view getTextFontName() const;
 
-    AX_SYNTHESIZE(size_t, charLimit, CharLimit);
+    CC_SYNTHESIZE(size_t, charLimit, CharLimit);
 
     bool isSystemFont(void) const { return systemFontUsed; }
 

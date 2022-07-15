@@ -51,7 +51,7 @@ NS_AX_BEGIN
  * @warning: On windows, linux, use XML to store data, which means there are some limitations of
  * the key string, for example, `/` is not valid.
  */
-class AX_DLL UserDefault
+class CC_DLL UserDefault
 {
 public:
     // get value methods

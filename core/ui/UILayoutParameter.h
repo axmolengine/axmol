@@ -43,7 +43,7 @@ namespace ui
  *@brief Margin of widget's in point. Margin value should be positive.
  *@lua NA
  */
-class AX_GUI_DLL Margin
+class CC_GUI_DLL Margin
 {
 public:
     /**
@@ -113,7 +113,7 @@ public:
 /**
  *@brief Base class for various LayoutParameter.
  */
-class AX_GUI_DLL LayoutParameter : public Ref
+class CC_GUI_DLL LayoutParameter : public Ref
 {
 public:
     /**
@@ -198,7 +198,7 @@ protected:
  * Protocol for getting a LayoutParameter.
  * Every element want to have layout parameter should inherit from this class.
  */
-class AX_GUI_DLL LayoutParameterProtocol
+class CC_GUI_DLL LayoutParameterProtocol
 {
 public:
     /**
@@ -217,7 +217,7 @@ public:
  * @brief Linear layout parameter.
  * It is used by linear layout manager for arranging elements linearly.
  */
-class AX_GUI_DLL LinearLayoutParameter : public LayoutParameter
+class CC_GUI_DLL LinearLayoutParameter : public LayoutParameter
 {
 public:
     /**
@@ -283,7 +283,7 @@ protected:
  * @brief Relative layout parameter.
  * It is mainly used by  `RelativeLayoutManager`.
  */
-class AX_GUI_DLL RelativeLayoutParameter : public LayoutParameter
+class CC_GUI_DLL RelativeLayoutParameter : public LayoutParameter
 {
 public:
     /**

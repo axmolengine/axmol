@@ -50,7 +50,7 @@ NS_AX_BEGIN
  * @brief This class allows to perform background operations without having to manipulate threads.
  * @js NA
  */
-class AX_DLL AsyncTaskPool
+class CC_DLL AsyncTaskPool
 {
 public:
     typedef std::function<void(void*)> TaskCallBack;
@@ -174,7 +174,7 @@ protected:
                 // don't allow enqueueing after stopping the pool
                 if (_stop)
                 {
-                    AX_ASSERT(0 && "already stop");
+                    CC_ASSERT(0 && "already stop");
                     return;
                 }
 

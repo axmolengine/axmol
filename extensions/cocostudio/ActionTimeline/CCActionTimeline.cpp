@@ -41,7 +41,7 @@ ActionTimelineData* ActionTimelineData::create(int actionTag)
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -67,7 +67,7 @@ ActionTimeline* ActionTimeline::create()
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 

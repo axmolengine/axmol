@@ -63,12 +63,12 @@ SpriteReader* SpriteReader::getInstance()
 
 void SpriteReader::purge()
 {
-    AX_SAFE_DELETE(_instanceSpriteReader);
+    CC_SAFE_DELETE(_instanceSpriteReader);
 }
 
 void SpriteReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceSpriteReader);
+    CC_SAFE_DELETE(_instanceSpriteReader);
 }
 
 Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

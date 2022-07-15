@@ -11,7 +11,7 @@
 #    include <string>
 
 NS_AX_BEGIN
-class AX_DLL Colorizer
+class CC_DLL Colorizer
 {
 public:
     static bool enableNodeIntelliShading(Node* node, const Vec3& hsv, const Vec3& filter = Vec3(1.0f, 0.45f, 0.3109f));

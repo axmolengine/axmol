@@ -41,7 +41,7 @@ FastTMXTiledMap* FastTMXTiledMap::create(std::string_view tmxFile)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -53,7 +53,7 @@ FastTMXTiledMap* FastTMXTiledMap::createWithXML(std::string_view tmxString, std:
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 

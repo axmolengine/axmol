@@ -68,7 +68,7 @@ void MotionStreakTest1::onEnter()
     _streak = MotionStreak::create(2, 3, 32, Color3B::GREEN, s_streak);
     addChild(_streak);
     // schedule an update on each frame so we can synchronize the streak with the target
-    schedule(AX_SCHEDULE_SELECTOR(MotionStreakTest1::onUpdate));
+    schedule(CC_SCHEDULE_SELECTOR(MotionStreakTest1::onUpdate));
 
     auto a1 = RotateBy::create(2, 360);
 
@@ -106,7 +106,7 @@ void MotionStreakTest2::onEnter()
     MotionStreakTest::onEnter();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(MotionStreakTest2::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MotionStreakTest2::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
@@ -155,7 +155,7 @@ void Issue1358::onEnter()
     _radius = size.width / 3;
     _angle  = 0.0f;
 
-    schedule(AX_SCHEDULE_SELECTOR(Issue1358::update), 0);
+    schedule(CC_SCHEDULE_SELECTOR(Issue1358::update), 0);
 }
 
 void Issue1358::update(float dt)
@@ -206,13 +206,13 @@ void Issue12226::onEnter()
 
     std::function<void(float)> updateMotionStreak = [=](float dt) {
         Vec2 position =
-            Vec2(outer->getPositionX() + length * cosf(-1 * AX_DEGREES_TO_RADIANS(outer->getRotation() + 90.0f)),
-                 outer->getPositionY() + length * sinf(-1 * AX_DEGREES_TO_RADIANS(outer->getRotation() + 90.0f)));
+            Vec2(outer->getPositionX() + length * cosf(-1 * CC_DEGREES_TO_RADIANS(outer->getRotation() + 90.0f)),
+                 outer->getPositionY() + length * sinf(-1 * CC_DEGREES_TO_RADIANS(outer->getRotation() + 90.0f)));
 
         _streak->setPosition(position);
     };
 
-    outer->schedule(updateMotionStreak, 1 / 240.0f, AX_REPEAT_FOREVER, 0, "motion1scheduler");
+    outer->schedule(updateMotionStreak, 1 / 240.0f, CC_REPEAT_FOREVER, 0, "motion1scheduler");
 
     auto rot     = RotateBy::create(2, 360);
     auto forever = RepeatForever::create(rot);
@@ -255,7 +255,7 @@ void MotionStreakTest::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    auto itemMode = MenuItemToggle::createWithCallback(AX_CALLBACK_1(MotionStreakTest::modeCallback, this),
+    auto itemMode = MenuItemToggle::createWithCallback(CC_CALLBACK_1(MotionStreakTest::modeCallback, this),
                                                        MenuItemFont::create("Use High Quality Mode"),
                                                        MenuItemFont::create("Use Fast Mode"), nullptr);
 

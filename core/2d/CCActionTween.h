@@ -45,7 +45,7 @@ NS_AX_BEGIN
 
         Then once you running ActionTween on the node, the method updateTweenAction will be invoked.
 */
-class AX_DLL ActionTweenDelegate
+class CC_DLL ActionTweenDelegate
 {
 public:
     /**
@@ -82,7 +82,7 @@ public:
 
  @since v0.99.2
  */
-class AX_DLL ActionTween : public ActionInterval
+class CC_DLL ActionTween : public ActionInterval
 {
 public:
     /**

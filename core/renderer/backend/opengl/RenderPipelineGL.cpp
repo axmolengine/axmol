@@ -37,9 +37,9 @@ void RenderPipelineGL::update(const RenderTarget*, const PipelineDescriptor& pip
 {
     if (_programGL != pipelineDescirptor.programState->getProgram())
     {
-        AX_SAFE_RELEASE(_programGL);
+        CC_SAFE_RELEASE(_programGL);
         _programGL = static_cast<ProgramGL*>(pipelineDescirptor.programState->getProgram());
-        AX_SAFE_RETAIN(_programGL);
+        CC_SAFE_RETAIN(_programGL);
     }
 
     updateBlendState(pipelineDescirptor.blendDescriptor);
@@ -74,7 +74,7 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
 
 RenderPipelineGL::~RenderPipelineGL()
 {
-    AX_SAFE_RELEASE(_programGL);
+    CC_SAFE_RELEASE(_programGL);
 }
 
 NS_AX_BACKEND_END

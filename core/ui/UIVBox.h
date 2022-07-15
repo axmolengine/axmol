@@ -42,7 +42,7 @@ namespace ui
  * VBox is just a convenient wrapper class for vertical layout type.
  * VBox lays out its children in a single vertical column.
  */
-class AX_GUI_DLL VBox : public Layout
+class CC_GUI_DLL VBox : public Layout
 {
 public:
     /**

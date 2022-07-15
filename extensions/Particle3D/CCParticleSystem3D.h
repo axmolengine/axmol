@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PARTICLE_SYSTEM_3D_H__
-#define __AX_PARTICLE_SYSTEM_3D_H__
+#ifndef __CC_PARTICLE_SYSTEM_3D_H__
+#define __CC_PARTICLE_SYSTEM_3D_H__
 
 #include "2d/CCNode.h"
 #include "math/CCMath.h"
@@ -42,7 +42,7 @@ class Particle3DEmitter;
 class Particle3DAffector;
 class Particle3DRender;
 
-struct AX_EX_DLL Particle3D
+struct CC_EX_DLL Particle3D
 {
     Particle3D();
     virtual ~Particle3D();
@@ -61,7 +61,7 @@ struct AX_EX_DLL Particle3D
 };
 
 template <typename T>
-class AX_EX_DLL DataPool
+class CC_EX_DLL DataPool
 {
 public:
     typedef typename std::list<T*> PoolList;
@@ -157,7 +157,7 @@ private:
 
 typedef DataPool<Particle3D> ParticlePool;
 
-class AX_EX_DLL ParticleSystem3D : public Node, public BlendProtocol
+class CC_EX_DLL ParticleSystem3D : public Node, public BlendProtocol
 {
 public:
     enum class State

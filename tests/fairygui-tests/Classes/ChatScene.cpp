@@ -9,7 +9,7 @@ ChatScene::ChatScene() :_emojiSelectUI(nullptr)
 
 ChatScene::~ChatScene()
 {
-    AX_SAFE_RELEASE(_emojiSelectUI);
+    CC_SAFE_RELEASE(_emojiSelectUI);
 }
 
 void ChatScene::continueInit()
@@ -22,18 +22,18 @@ void ChatScene::continueInit()
 
     _list = _view->getChild("list")->as<GList>();
     _list->setVirtual();
-    _list->itemProvider = AX_CALLBACK_1(ChatScene::getListItemResource, this);
-    _list->itemRenderer = AX_CALLBACK_2(ChatScene::renderListItem, this);
+    _list->itemProvider = CC_CALLBACK_1(ChatScene::getListItemResource, this);
+    _list->itemRenderer = CC_CALLBACK_2(ChatScene::renderListItem, this);
 
     _input = _view->getChild("input")->as<GTextInput>();
-    _input->addEventListener(UIEventType::Submit, AX_CALLBACK_1(ChatScene::onSubmit, this));
+    _input->addEventListener(UIEventType::Submit, CC_CALLBACK_1(ChatScene::onSubmit, this));
 
-    _view->getChild("btnSend")->addClickListener(AX_CALLBACK_1(ChatScene::onClickSendBtn, this));
-    _view->getChild("btnEmoji")->addClickListener(AX_CALLBACK_1(ChatScene::onClickEmojiBtn, this));
+    _view->getChild("btnSend")->addClickListener(CC_CALLBACK_1(ChatScene::onClickSendBtn, this));
+    _view->getChild("btnEmoji")->addClickListener(CC_CALLBACK_1(ChatScene::onClickEmojiBtn, this));
 
     _emojiSelectUI = UIPackage::createObject("Emoji", "EmojiSelectUI")->as<GComponent>();
     _emojiSelectUI->retain();
-    _emojiSelectUI->getChild("list")->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(ChatScene::onClickEmoji, this));
+    _emojiSelectUI->getChild("list")->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(ChatScene::onClickEmoji, this));
 }
 
 void ChatScene::onClickSendBtn(EventContext * context)

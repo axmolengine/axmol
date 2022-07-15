@@ -209,7 +209,7 @@ FlipY3D* FlipY3D::create(float duration)
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
 
     return action;
@@ -291,7 +291,7 @@ Lens3D* Lens3D::create(float duration, const Vec2& gridSize, const Vec2& positio
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
 
     return action;
@@ -392,7 +392,7 @@ Ripple3D* Ripple3D::create(float duration,
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
 
     return action;
@@ -470,7 +470,7 @@ Shaky3D* Shaky3D::create(float duration, const Vec2& gridSize, int range, bool s
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
     return action;
 }
@@ -531,7 +531,7 @@ Liquid* Liquid::create(float duration, const Vec2& gridSize, unsigned int waves,
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
 
     return action;
@@ -594,7 +594,7 @@ Waves* Waves::create(float duration,
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
 
     return action;
@@ -668,7 +668,7 @@ Twirl* Twirl::create(float duration, const Vec2& gridSize, const Vec2& position,
     }
     else
     {
-        AX_SAFE_DELETE(action);
+        CC_SAFE_DELETE(action);
     }
 
     return action;

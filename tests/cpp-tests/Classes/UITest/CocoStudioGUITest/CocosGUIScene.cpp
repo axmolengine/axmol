@@ -44,36 +44,36 @@
 #include "UIFocusTest/UIFocusTest.h"
 #include "UITabControlTest/UITabControlTest.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) && !defined(AX_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) && !defined(CC_TARGET_OS_TVOS)
 #    include "UIVideoPlayerTest/UIVideoPlayerTest.h"
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
 #    include "UIWebViewTest/UIWebViewTest.h"
 #endif
 #include "UIScale9SpriteTest.h"
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    include "UIEditBoxTest.h"
 #endif
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    include "UIWebViewTest/UIWebViewTest.h"
 #endif
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) && !defined(AX_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) && !defined(CC_TARGET_OS_TVOS)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && \
-        !defined(AX_TARGET_OS_TVOS) ||                                                      \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && \
+        !defined(CC_TARGET_OS_TVOS) ||                                                      \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     addTest("WebView Test", []() { return new WebViewTests; });
 #endif
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || \
+    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     addTest("EditBox Test", []() { return new UIEditBoxTests; });
 #endif
     addTest("Focus Test", []() { return new UIFocusTests; });

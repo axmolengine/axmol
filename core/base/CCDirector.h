@@ -74,7 +74,7 @@ class Console;
  Since the Director is a singleton, the standard way to use it is by calling:
  _ Director::getInstance()->methodName();
  */
-class AX_DLL Director : public Ref
+class CC_DLL Director : public Ref
 {
 public:
     /** Director will trigger an event before set next scene. */
@@ -524,7 +524,7 @@ protected:
     void setNextScene();
 
     void updateFrameRate();
-#if !AX_STRIP_FPS
+#if !CC_STRIP_FPS
     void showStats();
     void createStatsLabel();
     void calculateMPF();

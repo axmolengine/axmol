@@ -162,7 +162,7 @@ void PoolManager::push(AutoreleasePool* pool)
 
 void PoolManager::pop()
 {
-    AX_ASSERT(!_releasePoolStack.empty());
+    CC_ASSERT(!_releasePoolStack.empty());
     _releasePoolStack.pop_back();
 }
 

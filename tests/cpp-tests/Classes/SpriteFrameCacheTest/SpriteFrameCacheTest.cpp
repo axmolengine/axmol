@@ -85,8 +85,8 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB  = 8 * 1024;
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-#ifndef AX_USE_METAL
-    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
+#ifndef CC_USE_METAL
+    CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
     const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
                                                         texture->getStringForFormat(), memorySize);
@@ -113,7 +113,7 @@ void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D* texture       = spriteFrame->getTexture();
-    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
+    CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 
     SpriteFrameCache::getInstance()->removeSpriteFrameByName("sprite_frames_test/grossini.png");
     Director::getInstance()->getTextureCache()->removeTexture(texture);
@@ -411,7 +411,7 @@ protected:
 
         spriteSheet->full = true;
 
-        AX_SAFE_DELETE(image);
+        CC_SAFE_DELETE(image);
     }
 
     void reloadSpriteFramesWithDictionary(const rapidjson::Document& doc,
@@ -500,8 +500,8 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-#ifndef AX_USE_METAL
-    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
+#ifndef CC_USE_METAL
+    CC_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
     const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
                                                         texture->getStringForFormat(), memorySize);

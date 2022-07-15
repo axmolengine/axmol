@@ -68,7 +68,7 @@ static bool checkReallySupportsASTC()
                            astctexels);
 
     auto error = glGetError();
-#if defined(AX_USE_GL)
+#if defined(CC_USE_GL)
     if (!error && glGetTexImage)
     {
         // read pixel RGB: should be: 255, 128, 0
@@ -148,7 +148,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = checkForGLExtension("GL_OES_packed_depth_stencil");
         break;
     case FeatureType::VAO:
-#ifdef AX_PLATFORM_PC
+#ifdef CC_PLATFORM_PC
         featureSupported = checkForGLExtension("vertex_array_object");
 #else
         featureSupported = checkForGLExtension("GL_OES_vertex_array_object");

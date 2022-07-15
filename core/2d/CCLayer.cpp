@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 #    include "platform/desktop/CCGLViewImpl-desktop.h"
 #endif
 
@@ -72,7 +72,7 @@ LayerColor* LayerColor::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -85,7 +85,7 @@ LayerColor* LayerColor::create(const Color4B& color, float width, float height)
         layer->autorelease();
         return layer;
     }
-    AX_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(layer);
     return nullptr;
 }
 
@@ -97,7 +97,7 @@ LayerColor* LayerColor::create(const Color4B& color)
         layer->autorelease();
         return layer;
     }
-    AX_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(layer);
     return nullptr;
 }
 
@@ -162,7 +162,7 @@ LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
         layer->autorelease();
         return layer;
     }
-    AX_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(layer);
     return nullptr;
 }
 
@@ -174,7 +174,7 @@ LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end, c
         layer->autorelease();
         return layer;
     }
-    AX_SAFE_DELETE(layer);
+    CC_SAFE_DELETE(layer);
     return nullptr;
 }
 
@@ -187,7 +187,7 @@ LayerGradient* LayerGradient::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -406,7 +406,7 @@ LayerRadialGradient::LayerRadialGradient()
 
 LayerRadialGradient::~LayerRadialGradient()
 {
-    AX_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
+    CC_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
 bool LayerRadialGradient::initWithColor(const axis::Color4B& startColor,
@@ -603,7 +603,7 @@ LayerMultiplex* LayerMultiplex::create(Node* layer, ...)
         return ret;
     }
     va_end(args);
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -621,7 +621,7 @@ LayerMultiplex* LayerMultiplex::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -635,20 +635,20 @@ LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Node*>& arrayOfLaye
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
 
 void LayerMultiplex::addLayer(Node* layer)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, layer);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _layers.pushBack(layer);
 }
 
@@ -667,24 +667,24 @@ bool LayerMultiplex::initWithLayers(Node* layer, va_list params)
     if (Node::initLayer())
     {
         _layers.reserve(5);
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
             sEngine->retainScriptObject(this, layer);
         }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _layers.pushBack(layer);
 
         Node* l = va_arg(params, Node*);
         while (l)
         {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
             if (sEngine)
             {
                 sEngine->retainScriptObject(this, l);
             }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
             _layers.pushBack(l);
             l = va_arg(params, Node*);
         }
@@ -701,7 +701,7 @@ bool LayerMultiplex::initWithArray(const Vector<Node*>& arrayOfLayers)
 {
     if (Node::initLayer())
     {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
@@ -713,7 +713,7 @@ bool LayerMultiplex::initWithArray(const Vector<Node*>& arrayOfLayers)
                 }
             }
         }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _layers.reserve(arrayOfLayers.size());
         _layers.pushBack(arrayOfLayers);
 
@@ -746,13 +746,13 @@ void LayerMultiplex::switchToAndReleaseMe(int n)
     CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
 
     this->removeChild(_layers.at(_enabledLayer), true);
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->releaseScriptObject(this, _layers.at(_enabledLayer));
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
 
     _layers.replace(_enabledLayer, nullptr);
 

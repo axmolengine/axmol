@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_RENDERCOMMANDPOOL_H__
-#define __AX_RENDERCOMMANDPOOL_H__
+#ifndef __CC_RENDERCOMMANDPOOL_H__
+#define __CC_RENDERCOMMANDPOOL_H__
 /// @cond DO_NOT_SHOW
 
 #include <list>

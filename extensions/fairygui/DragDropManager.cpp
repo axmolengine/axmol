@@ -19,12 +19,12 @@ DragDropManager::DragDropManager() :
     _agent->setAlign(TextHAlignment::CENTER);
     _agent->setVerticalAlign(TextVAlignment::CENTER);
     _agent->setSortingOrder(INT_MAX);
-    _agent->addEventListener(UIEventType::DragEnd, AX_CALLBACK_1(DragDropManager::onDragEnd, this));
+    _agent->addEventListener(UIEventType::DragEnd, CC_CALLBACK_1(DragDropManager::onDragEnd, this));
 }
 
 DragDropManager::~DragDropManager()
 {
-    AX_SAFE_RELEASE(_agent);
+    CC_SAFE_RELEASE(_agent);
 }
 
 DragDropManager* DragDropManager::getInstance()

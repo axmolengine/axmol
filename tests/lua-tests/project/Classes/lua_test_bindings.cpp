@@ -99,7 +99,7 @@ protected:
     backend::UniformLocation _locMVPMatrix;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
+    CC_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
 
     bool _rendererDepthTestEnabled = false;
 
@@ -111,7 +111,7 @@ DrawNode3D::DrawNode3D() {}
 
 DrawNode3D::~DrawNode3D()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
 }
 
 DrawNode3D* DrawNode3D::create()
@@ -123,7 +123,7 @@ DrawNode3D* DrawNode3D::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -176,10 +176,10 @@ bool DrawNode3D::init()
 
     _dirty = true;
 
-    _customCommand.setBeforeCallback(AX_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
-    _customCommand.setAfterCallback(AX_CALLBACK_0(DrawNode3D::onAfterDraw, this));
+    _customCommand.setBeforeCallback(CC_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
+    _customCommand.setAfterCallback(CC_CALLBACK_0(DrawNode3D::onAfterDraw, this));
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // Need to listen the event only when not use batchnode, because it will use VBO
     auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
         /** listen the event that coming to foreground on Android */

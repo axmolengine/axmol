@@ -51,7 +51,7 @@ class MeshVertexData;
  * @js NA
  * @lua NA
  */
-class AX_DLL MeshIndexData : public Ref
+class CC_DLL MeshIndexData : public Ref
 {
 public:
     /** create  */
@@ -96,7 +96,7 @@ protected:
 
     friend class MeshVertexData;
     friend class MeshRenderer;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };
@@ -105,7 +105,7 @@ protected:
  * the MeshVertexData class.
  * @brief the MeshVertexData contain all of the vertices data which mesh need.
  */
-class AX_DLL MeshVertexData : public Ref
+class CC_DLL MeshVertexData : public Ref
 {
     friend class MeshRenderer;
     friend class Mesh;
@@ -149,7 +149,7 @@ protected:
 
     int _vertexCount = 0;  // vertex count
     std::vector<float> _vertexData;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };

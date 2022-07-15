@@ -52,7 +52,7 @@ class LayoutComponent;
  * This class inherent from `ProtectedNode` and `LayoutParameterProtocol`.
  * If you want to implements your own ui widget, you should subclass it.
  */
-class AX_GUI_DLL Widget : public ProtectedNode, public LayoutParameterProtocol
+class CC_GUI_DLL Widget : public ProtectedNode, public LayoutParameterProtocol
 {
 public:
     /**

@@ -42,7 +42,7 @@ EventListenerController* EventListenerController::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }

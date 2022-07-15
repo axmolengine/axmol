@@ -9,7 +9,7 @@ GuideScene::GuideScene():_guideLayer(nullptr)
 
 GuideScene::~GuideScene()
 {
-    AX_SAFE_RELEASE(_guideLayer);
+    CC_SAFE_RELEASE(_guideLayer);
 }
 
 void GuideScene::continueInit()

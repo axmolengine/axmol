@@ -24,7 +24,7 @@
  ****************************************************************************/
 #include "platform/CCPlatformConfig.h"
 #include "base/ccConfig.h"
-#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
 #    include "scripting/lua-bindings/manual/physics3d/lua_axis_physics3d_manual.h"
 #    include "scripting/lua-bindings/auto/lua_axis_physics3d_auto.hpp"
 #    include "scripting/lua-bindings/manual/tolua_fix.h"

@@ -49,7 +49,7 @@ Scale9Sprite* Scale9Sprite::create()
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -61,7 +61,7 @@ Scale9Sprite* Scale9Sprite::create(std::string_view filename, const Rect& rect, 
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -78,7 +78,7 @@ Scale9Sprite* Scale9Sprite::create(const Rect& capInsets, std::string_view file)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -95,7 +95,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame, cons
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -112,7 +112,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFra
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -124,7 +124,7 @@ Scale9Sprite* Scale9Sprite::createWithSpriteFrameName(std::string_view spriteFra
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
 
     log("Could not allocate Scale9Sprite()");
     return nullptr;
@@ -272,8 +272,8 @@ bool Scale9Sprite::updateWithSprite(Sprite* sprite,
                                     const Rect& capInsets)
 {
     SpriteFrame* spriteframe =
-        SpriteFrame::createWithTexture(sprite->getTexture(), AX_RECT_POINTS_TO_PIXELS(textureRect), rotated,
-                                       AX_POINT_POINTS_TO_PIXELS(offset), AX_SIZE_POINTS_TO_PIXELS(originalSize));
+        SpriteFrame::createWithTexture(sprite->getTexture(), CC_RECT_POINTS_TO_PIXELS(textureRect), rotated,
+                                       CC_POINT_POINTS_TO_PIXELS(offset), CC_SIZE_POINTS_TO_PIXELS(originalSize));
     setSpriteFrame(spriteframe);
     setCapInsets(capInsets);
     return true;
@@ -288,7 +288,7 @@ Scale9Sprite* Scale9Sprite::resizableSpriteWithCapInsets(const Rect& capInsets) 
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 

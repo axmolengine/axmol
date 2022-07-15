@@ -41,7 +41,7 @@ NS_AX_BEGIN
  */
 
 /* !!!HACK, the memory model of 'Layer' is identical to 'Node' */
-class AX_DLL Layer : public Node
+class CC_DLL Layer : public Node
 {
 public:
     static Layer* create();
@@ -56,7 +56,7 @@ All features from Layer are valid, plus the following new features:
 - opacity
 - RGB colors
 */
-class AX_DLL LayerColor : public Sprite
+class CC_DLL LayerColor : public Sprite
 {
 public:
 
@@ -103,7 +103,7 @@ public:
     bool initWithColor(const Color4B& color);
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(LayerColor);
+    CC_DISALLOW_COPY_AND_ASSIGN(LayerColor);
 
 };
 
@@ -130,7 +130,7 @@ If ' compressedInterpolation' is enabled (default mode) you will see both the st
 
 @since v0.99.5
 */
-class AX_DLL LayerGradient : public LayerColor
+class CC_DLL LayerGradient : public LayerColor
 {
 public:
     /** Creates a fullscreen black layer.
@@ -257,7 +257,7 @@ protected:
  * @brief LayerRadialGradient is a subclass of Layer that draws radial gradients across the background.
  @since v3.16
  */
-class AX_DLL LayerRadialGradient : public Node, BlendProtocol
+class CC_DLL LayerRadialGradient : public Node, BlendProtocol
 {
 public:
     /** Create a LayerRadialGradient
@@ -349,7 +349,7 @@ Features:
 - It supports one or more children
 - Only one children will be active a time
 */
-class AX_DLL LayerMultiplex : public Node
+class CC_DLL LayerMultiplex : public Node
 {
 public:
     /** Creates and initializes a LayerMultiplex object.
@@ -439,7 +439,7 @@ protected:
     Vector<Node*> _layers;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(LayerMultiplex);
+    CC_DISALLOW_COPY_AND_ASSIGN(LayerMultiplex);
 };
 
 // end of _2d group

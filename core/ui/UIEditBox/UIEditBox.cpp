@@ -45,8 +45,8 @@ EditBox::EditBox()
 
 EditBox::~EditBox()
 {
-    AX_SAFE_DELETE(_editBoxImpl);
-#if AX_ENABLE_SCRIPT_BINDING
+    CC_SAFE_DELETE(_editBoxImpl);
+#if CC_ENABLE_SCRIPT_BINDING
     unregisterScriptEditBoxHandler();
 #endif
 }
@@ -74,7 +74,7 @@ EditBox* EditBox::create(const Vec2& size,
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -92,7 +92,7 @@ EditBox* EditBox::create(const Vec2& size,
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -797,8 +797,8 @@ void EditBox::onEnter()
     {
         _editBoxImpl->onEnter();
     }
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    this->schedule(AX_SCHEDULE_SELECTOR(EditBox::updatePosition), CHECK_EDITBOX_POSITION_INTERVAL);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    this->schedule(CC_SCHEDULE_SELECTOR(EditBox::updatePosition), CHECK_EDITBOX_POSITION_INTERVAL);
 #endif
 }
 
@@ -873,7 +873,7 @@ void EditBox::setGlobalZOrder(float globalZOrder)
     }
 }
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
 void EditBox::registerScriptEditBoxHandler(int handler)
 {
     unregisterScriptEditBoxHandler();

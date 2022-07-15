@@ -43,7 +43,7 @@ class Touch;
 /** @class EventTouch
  * @brief Touch event.
  */
-class AX_DLL EventTouch : public Event
+class CC_DLL EventTouch : public Event
 {
 public:
     static const int MAX_TOUCHES = 15;

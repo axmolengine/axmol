@@ -156,7 +156,7 @@ class Data;
  * of a property. If the type is unknown, its string can be retrieved and interpreted
  * as necessary.
  */
-class AX_DLL Properties
+class CC_DLL Properties
 {
 public:
     /**

@@ -8,7 +8,7 @@ ModalWaitingScene::ModalWaitingScene():_testWin(nullptr)
 
 ModalWaitingScene::~ModalWaitingScene()
 {
-    AX_SAFE_RELEASE(_testWin);
+    CC_SAFE_RELEASE(_testWin);
 }
 
 void ModalWaitingScene::continueInit()

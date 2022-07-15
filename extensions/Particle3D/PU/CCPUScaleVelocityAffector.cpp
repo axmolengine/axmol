@@ -42,7 +42,7 @@ PUScaleVelocityAffector::~PUScaleVelocityAffector()
 {
     if (_dynScaleVelocity)
     {
-        AX_SAFE_DELETE(_dynScaleVelocity);
+        CC_SAFE_DELETE(_dynScaleVelocity);
     }
 }
 //-----------------------------------------------------------------------
@@ -91,7 +91,7 @@ void PUScaleVelocityAffector::updatePUAffector(PUParticle3D* particle, float del
 void PUScaleVelocityAffector::setDynScaleVelocity(PUDynamicAttribute* dynScaleVelocity)
 {
     if (_dynScaleVelocity)
-        AX_SAFE_DELETE(_dynScaleVelocity);
+        CC_SAFE_DELETE(_dynScaleVelocity);
 
     _dynScaleVelocity = dynScaleVelocity;
 }
@@ -100,7 +100,7 @@ void PUScaleVelocityAffector::resetDynScaleVelocity(bool resetToDefault)
 {
     if (resetToDefault)
     {
-        AX_SAFE_DELETE(_dynScaleVelocity);
+        CC_SAFE_DELETE(_dynScaleVelocity);
         _dynScaleVelocity = new PUDynamicAttributeFixed();
         (static_cast<PUDynamicAttributeFixed*>(_dynScaleVelocity))->setValue(DEFAULT_VELOCITY_SCALE);
     }

@@ -68,13 +68,13 @@ bool Configuration::init()
 {
     _valueDict["axis.version"] = Value(axisVersion());
 
-#if AX_ENABLE_PROFILERS
+#if CC_ENABLE_PROFILERS
     _valueDict["axis.compiled_with_profiler"] = Value(true);
 #else
     _valueDict["axis.compiled_with_profiler"]       = Value(false);
 #endif
 
-#if AX_ENABLE_GL_STATE_CACHE == 0
+#if CC_ENABLE_GL_STATE_CACHE == 0
     _valueDict["axis.compiled_with_gl_state_cache"] = Value(false);
 #else
     _valueDict["axis.compiled_with_gl_state_cache"] = Value(true);
@@ -91,21 +91,21 @@ bool Configuration::init()
 
 Configuration::~Configuration()
 {
-    AX_SAFE_DELETE(_loadedEvent);
+    CC_SAFE_DELETE(_loadedEvent);
 }
 
 std::string Configuration::getInfo() const
 {
     // And Dump some warnings as well
-#if AX_ENABLE_PROFILERS
+#if CC_ENABLE_PROFILERS
     CCLOG(
-        "cocos2d: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
+        "cocos2d: **** WARNING **** CC_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
         "ccConfig.h)\n");
 #endif
 
-#if AX_ENABLE_GL_STATE_CACHE == 0
+#if CC_ENABLE_GL_STATE_CACHE == 0
     CCLOG(
-        "cocos2d: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
+        "cocos2d: **** WARNING **** CC_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
         "ccConfig.h)\n");
 #endif
 
@@ -183,7 +183,7 @@ Configuration* Configuration::getInstance()
 
 void Configuration::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(s_sharedConfiguration);
+    CC_SAFE_RELEASE_NULL(s_sharedConfiguration);
 }
 
 bool Configuration::checkForGLExtension(std::string_view searchName) const
@@ -259,7 +259,7 @@ bool Configuration::supportsDiscardFramebuffer() const
 
 bool Configuration::supportsShareableVAO() const
 {
-#if AX_TEXTURE_ATLAS_USE_VAO
+#if CC_TEXTURE_ATLAS_USE_VAO
     return _supportsShareableVAO;
 #else
     return false;
@@ -276,7 +276,7 @@ bool Configuration::supportsMapBuffer() const
     // is always implemented in OpenGL.
 
     // XXX: Warning. On iOS this is always `true`. Avoiding the comparison.
-#if defined(AX_USE_GLES) && !defined(__APPLE__)
+#if defined(CC_USE_GLES) && !defined(__APPLE__)
     return _supportsOESMapBuffer;
 #else
     return true;

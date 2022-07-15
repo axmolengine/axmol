@@ -41,7 +41,7 @@ class EventCustom;
 class Material;
 
 // it is a common mesh
-class AX_DLL MeshCommand : public CustomCommand
+class CC_DLL MeshCommand : public CustomCommand
 {
 public:
     // using PrimitiveType = backend::PrimitiveType;
@@ -73,12 +73,12 @@ public:
 
     void init(float globalZOrder, const Mat4& transform);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     void listenRendererRecreated(EventCustom* event);
 #endif
 
 protected:
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _rendererRecreatedListener;
 #endif
 };

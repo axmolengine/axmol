@@ -43,9 +43,9 @@ GRoot::GRoot() : _windowSizeListener(nullptr),
 GRoot::~GRoot()
 {
     delete _inputProcessor;
-    AX_SAFE_RELEASE(_modalWaitPane);
-    AX_SAFE_RELEASE(_defaultTooltipWin);
-    AX_SAFE_RELEASE(_modalLayer);
+    CC_SAFE_RELEASE(_modalWaitPane);
+    CC_SAFE_RELEASE(_defaultTooltipWin);
+    CC_SAFE_RELEASE(_modalLayer);
     CALL_LATER_CANCEL(GRoot, doShowTooltipsWin);
 
     if (_windowSizeListener)
@@ -533,10 +533,10 @@ bool GRoot::initWithScene(axis::Scene* scene, int zOrder)
         _inst = this;
 
     _inputProcessor = new InputProcessor(this);
-    _inputProcessor->setCaptureCallback(AX_CALLBACK_1(GRoot::onTouchEvent, this));
+    _inputProcessor->setCaptureCallback(CC_CALLBACK_1(GRoot::onTouchEvent, this));
 
-#ifdef AX_PLATFORM_PC
-    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
+#ifdef CC_PLATFORM_PC
+    _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, CC_CALLBACK_0(GRoot::onWindowSizeChanged, this));
 #endif
     onWindowSizeChanged();
 

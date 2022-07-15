@@ -58,7 +58,7 @@ class ProgramState;
 }
 
 /// Material
-class AX_DLL Material : public Ref
+class CC_DLL Material : public Ref
 {
     friend class Node;
     friend class Technique;

@@ -49,13 +49,13 @@ Application::Application() : _instance(nullptr), _accelTable(nullptr)
 {
     _instance                   = GetModuleHandle(nullptr);
     _animationInterval.QuadPart = 0;
-    AX_ASSERT(!sm_pSharedApplication);
+    CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
 Application::~Application()
 {
-    AX_ASSERT(this == sm_pSharedApplication);
+    CC_ASSERT(this == sm_pSharedApplication);
     sm_pSharedApplication = nullptr;
 }
 
@@ -155,7 +155,7 @@ void Application::setAnimationInterval(float interval)
 //////////////////////////////////////////////////////////////////////////
 Application* Application::getInstance()
 {
-    AX_ASSERT(sm_pSharedApplication);
+    CC_ASSERT(sm_pSharedApplication);
     return sm_pSharedApplication;
 }
 

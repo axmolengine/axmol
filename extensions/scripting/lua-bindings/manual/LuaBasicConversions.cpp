@@ -506,7 +506,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const 
     return ok;
 }
 
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue, const char* funcName)
 {
     if (NULL == L || NULL == outValue)
@@ -542,7 +542,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     }
     return ok;
 }
-#endif  //#if AX_USE_PHYSICS
+#endif  //#if CC_USE_PHYSICS
 
 bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* funcName)
 {
@@ -1149,14 +1149,14 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* num
                     luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
                     lua_pop(L, 1);
-                    AX_SAFE_DELETE_ARRAY(array);
+                    CC_SAFE_DELETE_ARRAY(array);
                     return false;
                 }
                 ok &= luaval_to_vec2(L, lua_gettop(L), &array[i]);
                 if (!ok)
                 {
                     lua_pop(L, 1);
-                    AX_SAFE_DELETE_ARRAY(array);
+                    CC_SAFE_DELETE_ARRAY(array);
                     return false;
                 }
                 lua_pop(L, 1);
@@ -2255,7 +2255,7 @@ int vec4_to_luaval(lua_State* L, const axis::Vec4& vec4)
     return 1;
 }
 
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 void physics_material_to_luaval(lua_State* L, const PhysicsMaterial& pm)
 {
     if (nullptr == L)
@@ -2333,7 +2333,7 @@ void physics_contactdata_to_luaval(lua_State* L, const PhysicsContactData* data)
     lua_pushnumber(L, data->POINT_MAX);
     lua_rawset(L, -3);
 }
-#endif  //#if AX_USE_PHYSICS
+#endif  //#if CC_USE_PHYSICS
 
 void size_to_luaval(lua_State* L, const Size& sz)
 {

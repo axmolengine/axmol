@@ -365,7 +365,7 @@ UserDefault* UserDefault::getInstance()
 
 void UserDefault::destroyInstance()
 {
-    AX_SAFE_DELETE(_userDefault);
+    CC_SAFE_DELETE(_userDefault);
 }
 
 void UserDefault::setDelegate(UserDefault* delegate)

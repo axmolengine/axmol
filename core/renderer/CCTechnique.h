@@ -46,7 +46,7 @@ class ProgramState;
 }
 
 /// Technique
-class AX_DLL Technique : public Ref
+class CC_DLL Technique : public Ref
 {
     friend class Material;
     friend class Renderer;

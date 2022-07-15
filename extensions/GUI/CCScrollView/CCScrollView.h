@@ -41,7 +41,7 @@ NS_AX_EXT_BEGIN
 
 class ScrollView;
 
-class AX_EX_DLL ScrollViewDelegate
+class CC_EX_DLL ScrollViewDelegate
 {
 public:
     /**
@@ -65,7 +65,7 @@ public:
  * ScrollView support for cocos2d-x.
  * It provides scroll view functionalities to cocos2d projects natively.
  */
-class AX_EX_DLL ScrollView : public Layer, public ActionTweenDelegate
+class CC_EX_DLL ScrollView : public Layer, public ActionTweenDelegate
 {
 public:
     enum class Direction

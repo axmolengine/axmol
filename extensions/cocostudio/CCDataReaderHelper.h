@@ -87,7 +87,7 @@ protected:
 
 public:
     /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static DataReaderHelper* sharedDataReaderHelper()
+    CC_DEPRECATED_ATTRIBUTE static DataReaderHelper* sharedDataReaderHelper()
     {
         return DataReaderHelper::getInstance();
     }

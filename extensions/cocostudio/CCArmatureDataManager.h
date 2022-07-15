@@ -47,13 +47,13 @@ class CCS_DLL ArmatureDataManager : public axis::Ref
 {
 public:
     /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static ArmatureDataManager* sharedArmatureDataManager()
+    CC_DEPRECATED_ATTRIBUTE static ArmatureDataManager* sharedArmatureDataManager()
     {
         return ArmatureDataManager::getInstance();
     }
 
     /** @deprecated Use destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge() { ArmatureDataManager::destroyInstance(); };
+    CC_DEPRECATED_ATTRIBUTE static void purge() { ArmatureDataManager::destroyInstance(); };
 
     static ArmatureDataManager* getInstance();
     static void destroyInstance();

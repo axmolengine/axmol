@@ -40,7 +40,7 @@ struct AgentUserData
 
 NavMeshTests::NavMeshTests()
 {
-#if (AX_USE_NAVMESH == 0) || (AX_USE_PHYSICS == 0)
+#if (CC_USE_NAVMESH == 0) || (CC_USE_PHYSICS == 0)
     ADD_TEST_CASE(NavMeshDisabled);
 #else
     ADD_TEST_CASE(NavMeshBasicTestDemo);
@@ -48,12 +48,12 @@ NavMeshTests::NavMeshTests()
 #endif
 };
 
-#if (AX_USE_NAVMESH == 0) || (AX_USE_PHYSICS == 0)
+#if (CC_USE_NAVMESH == 0) || (CC_USE_PHYSICS == 0)
 void NavMeshDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
     auto label =
-        Label::createWithTTF(ttfConfig, "Should define AX_USE_NAVMESH & AX_USE_PHYSICS\n to run this test case");
+        Label::createWithTTF(ttfConfig, "Should define CC_USE_NAVMESH & CC_USE_PHYSICS\n to run this test case");
 
     auto size = Director::getInstance()->getWinSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));
@@ -93,9 +93,9 @@ bool NavMeshBaseTestDemo::init()
         this->addChild(_camera);
 
         auto listener = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(NavMeshBaseTestDemo::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(NavMeshBaseTestDemo::onTouchesMoved, this);
-        listener->onTouchesEnded = AX_CALLBACK_2(NavMeshBaseTestDemo::onTouchesEnded, this);
+        listener->onTouchesBegan = CC_CALLBACK_2(NavMeshBaseTestDemo::onTouchesBegan, this);
+        listener->onTouchesMoved = CC_CALLBACK_2(NavMeshBaseTestDemo::onTouchesMoved, this);
+        listener->onTouchesEnded = CC_CALLBACK_2(NavMeshBaseTestDemo::onTouchesEnded, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         initScene();
@@ -118,7 +118,7 @@ void NavMeshBaseTestDemo::onTouchesMoved(const std::vector<axis::Touch*>& touche
         auto touch = touches[0];
         auto delta = touch->getDelta();
 
-        _angle -= AX_DEGREES_TO_RADIANS(delta.x);
+        _angle -= CC_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 50.0f, 100.0f * cosf(_angle)));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
 

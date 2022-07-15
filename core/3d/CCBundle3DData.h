@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_BUNDLE_3D_DATA_H__
-#define __AX_BUNDLE_3D_DATA_H__
+#ifndef __CC_BUNDLE_3D_DATA_H__
+#define __CC_BUNDLE_3D_DATA_H__
 
 #include "base/CCRef.h"
 #include "base/ccTypes.h"
@@ -229,7 +229,7 @@ protected:
  * @js NA
  * @lua NA
  */
-struct AX_DLL MeshVertexAttrib
+struct CC_DLL MeshVertexAttrib
 {
     backend::VertexFormat type;
     shaderinfos::VertexKey vertexAttrib;
@@ -583,4 +583,4 @@ struct Reference
 
 NS_AX_END
 
-#endif  //__AX_BUNDLE_3D_DATA_H__
+#endif  //__CC_BUNDLE_3D_DATA_H__

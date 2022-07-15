@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "physics/CCPhysicsBody.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 
 #    include <climits>
 #    include <algorithm>
@@ -137,7 +137,7 @@ PhysicsBody* PhysicsBody::create()
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -155,7 +155,7 @@ PhysicsBody* PhysicsBody::create(float mass)
         }
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -175,7 +175,7 @@ PhysicsBody* PhysicsBody::create(float mass, float moment)
         }
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -189,7 +189,7 @@ PhysicsBody* PhysicsBody::createCircle(float radius, const PhysicsMaterial& mate
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -203,7 +203,7 @@ PhysicsBody* PhysicsBody::createBox(const Vec2& size, const PhysicsMaterial& mat
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -220,7 +220,7 @@ PhysicsBody* PhysicsBody::createPolygon(const Vec2* points,
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -238,7 +238,7 @@ PhysicsBody* PhysicsBody::createEdgeSegment(const Vec2& a,
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
     return nullptr;
 }
 
@@ -256,7 +256,7 @@ PhysicsBody* PhysicsBody::createEdgeBox(const Vec2& size,
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
 
     return nullptr;
 }
@@ -275,7 +275,7 @@ PhysicsBody* PhysicsBody::createEdgePolygon(const Vec2* points,
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
 
     return nullptr;
 }
@@ -294,7 +294,7 @@ PhysicsBody* PhysicsBody::createEdgeChain(const Vec2* points,
         return body;
     }
 
-    AX_SAFE_DELETE(body);
+    CC_SAFE_DELETE(body);
 
     return nullptr;
 }
@@ -308,7 +308,7 @@ bool PhysicsBody::init()
         cpBodySetUserData(_cpBody, this);
         cpBodySetVelocityUpdateFunc(_cpBody, internalBodyUpdateVelocity);
 
-        AX_BREAK_IF(_cpBody == nullptr);
+        CC_BREAK_IF(_cpBody == nullptr);
 
         return true;
     } while (false);
@@ -1011,4 +1011,4 @@ void PhysicsBody::removeFromPhysicsWorld()
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS

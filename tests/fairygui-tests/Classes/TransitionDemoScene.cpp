@@ -4,12 +4,12 @@ USING_NS_AX;
 
 TransitionDemoScene::~TransitionDemoScene()
 {
-    AX_SAFE_RELEASE(_g1);
-    AX_SAFE_RELEASE(_g2);
-    AX_SAFE_RELEASE(_g3);
-    AX_SAFE_RELEASE(_g4);
-    AX_SAFE_RELEASE(_g5);
-    AX_SAFE_RELEASE(_g6);
+    CC_SAFE_RELEASE(_g1);
+    CC_SAFE_RELEASE(_g2);
+    CC_SAFE_RELEASE(_g3);
+    CC_SAFE_RELEASE(_g4);
+    CC_SAFE_RELEASE(_g5);
+    CC_SAFE_RELEASE(_g6);
 }
 
 void TransitionDemoScene::continueInit()
@@ -30,15 +30,15 @@ void TransitionDemoScene::continueInit()
     _g4->retain();
     _g5 = UIPackage::createObject("Transition", "PowerUp")->as<GComponent>();
     _g5->retain();
-    _g5->getTransition("t0")->setHook("play_num_now", AX_CALLBACK_0(TransitionDemoScene::playNum, this));
+    _g5->getTransition("t0")->setHook("play_num_now", CC_CALLBACK_0(TransitionDemoScene::playNum, this));
     _g6 = UIPackage::createObject("Transition", "PathDemo")->as<GComponent>();
     _g6->retain();
 
     _view->getChild("btn0")->addClickListener([this](EventContext*) { __play(_g1); });
     _view->getChild("btn1")->addClickListener([this](EventContext*) { __play(_g2); });
     _view->getChild("btn2")->addClickListener([this](EventContext*) { __play(_g3); });
-    _view->getChild("btn3")->addClickListener(AX_CALLBACK_1(TransitionDemoScene::__play4, this));
-    _view->getChild("btn4")->addClickListener(AX_CALLBACK_1(TransitionDemoScene::__play5, this));
+    _view->getChild("btn3")->addClickListener(CC_CALLBACK_1(TransitionDemoScene::__play4, this));
+    _view->getChild("btn4")->addClickListener(CC_CALLBACK_1(TransitionDemoScene::__play5, this));
     _view->getChild("btn5")->addClickListener([this](EventContext*) { __play(_g6); });
 }
 

@@ -46,7 +46,7 @@ std::string RenderState::getName() const
 
 void RenderState::bindPass(Pass* pass, MeshCommand* command)
 {
-    AX_ASSERT(pass);
+    CC_ASSERT(pass);
     assert(pass->_technique && pass->_technique->_material);
     auto* technique          = pass->_technique;
     auto* material           = technique->_material;
@@ -87,7 +87,7 @@ void RenderState::StateBlock::bind(PipelineDescriptor* pipelineDescriptor)
 
 void RenderState::StateBlock::apply(PipelineDescriptor* pipelineDescriptor)
 {
-    // AX_ASSERT(_globalState);
+    // CC_ASSERT(_globalState);
 
     auto renderer = Director::getInstance()->getRenderer();
     auto& blend   = pipelineDescriptor->blendDescriptor;

@@ -26,12 +26,12 @@
 
 #include "base/CCScriptSupport.h"
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
 
 #    include "base/CCScheduler.h"
 #    include "2d/CCNode.h"
 
-bool AX_DLL cc_assert_script_compatible(const char* msg)
+bool CC_DLL cc_assert_script_compatible(const char* msg)
 {
     axis::ScriptEngineProtocol* engine = axis::ScriptEngineManager::getInstance()->getScriptEngine();
     if (engine && engine->handleAssert(msg))
@@ -183,4 +183,4 @@ int ScriptEngineManager::sendEventToLua(const ScriptEvent& event)
 
 NS_AX_END
 
-#endif  // #if AX_ENABLE_SCRIPT_BINDING
+#endif  // #if CC_ENABLE_SCRIPT_BINDING

@@ -39,7 +39,7 @@ NS_AX_BEGIN
 /** @class EventCustom
  * @brief Custom event.
  */
-class AX_DLL EventCustom : public Event
+class CC_DLL EventCustom : public Event
 {
 public:
     /** Constructor.

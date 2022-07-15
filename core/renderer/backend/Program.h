@@ -46,7 +46,7 @@ class ShaderModule;
 /**
  * A program.
  */
-class AX_DLL Program : public Ref
+class CC_DLL Program : public Ref
 {
 public:
     /**
@@ -153,7 +153,7 @@ protected:
      */
     Program(std::string_view vs, std::string_view fs);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     /**
      * In case of EGL context lost, the engine will reload shaders. Thus location of uniform may changed.
      * The engine will maintain the relationship between the original uniform location and the current active uniform

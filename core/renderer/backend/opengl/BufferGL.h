@@ -85,7 +85,7 @@ public:
     inline GLuint getHandler() const { return _buffer; }
 
 private:
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     void reloadBuffer();
     void fillBuffer(void* data, std::size_t offset, std::size_t size);
 

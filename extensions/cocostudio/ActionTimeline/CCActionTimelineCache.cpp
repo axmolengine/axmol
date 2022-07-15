@@ -99,7 +99,7 @@ ActionTimelineCache* ActionTimelineCache::getInstance()
 
 void ActionTimelineCache::destroyInstance()
 {
-    AX_SAFE_DELETE(_sharedActionCache);
+    CC_SAFE_DELETE(_sharedActionCache);
 }
 
 void ActionTimelineCache::purge()
@@ -443,7 +443,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std:
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
-    AX_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
+    CC_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
 
     Data buf = FileUtils::getInstance()->getDataFromFile(fullPath);
     action   = createActionWithDataBuffer(buf);
@@ -461,7 +461,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const axis::Dat
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
-    AX_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
+    CC_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
 
     action = createActionWithDataBuffer(data);
     _animationActions.insert(fileName, action);

@@ -47,7 +47,7 @@ class EventCustom;
  * @since v0.99.0
  * @js NA
  */
-class AX_DLL Configuration : public Ref
+class CC_DLL Configuration : public Ref
 {
 public:
     /** Returns a shared instance of Configuration.

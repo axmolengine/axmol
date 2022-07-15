@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "platform/CCPlatformMacros.h"
 #include "base/ccConfig.h"
 
-#define AX_REF_LEAK_DETECTION 0
+#define CC_REF_LEAK_DETECTION 0
 
 /**
  * @addtogroup base
@@ -45,7 +45,7 @@ class Ref;
  * @lua NA
  * @js NA
  */
-class AX_DLL Clonable
+class CC_DLL Clonable
 {
 public:
     /** Returns a copy of the Ref. */
@@ -63,7 +63,7 @@ public:
  * then it is easy to be shared in different places.
  * @js NA
  */
-class AX_DLL Ref
+class CC_DLL Ref
 {
 public:
     /**
@@ -138,7 +138,7 @@ protected:
 
     friend class AutoreleasePool;
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
 public:
     /// object id, ScriptSupport need public _ID
     unsigned int _ID;
@@ -153,8 +153,8 @@ public:
     bool _rooted;
 #endif
 
-    // Memory leak diagnostic data (only included when AX_REF_LEAK_DETECTION is defined and its value isn't zero)
-#if AX_REF_LEAK_DETECTION
+    // Memory leak diagnostic data (only included when CC_REF_LEAK_DETECTION is defined and its value isn't zero)
+#if CC_REF_LEAK_DETECTION
 public:
     static void printLeaks();
 #endif
@@ -169,12 +169,12 @@ typedef void (Ref::*SEL_CallFuncO)(Ref*);
 typedef void (Ref::*SEL_MenuHandler)(Ref*);
 typedef void (Ref::*SEL_SCHEDULE)(float);
 
-#define AX_CALLFUNC_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFunc>(&_SELECTOR)
-#define AX_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncN>(&_SELECTOR)
-#define AX_CALLFUNCND_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncND>(&_SELECTOR)
-#define AX_CALLFUNCO_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncO>(&_SELECTOR)
-#define AX_MENU_SELECTOR(_SELECTOR) static_cast<axis::SEL_MenuHandler>(&_SELECTOR)
-#define AX_SCHEDULE_SELECTOR(_SELECTOR) static_cast<axis::SEL_SCHEDULE>(&_SELECTOR)
+#define CC_CALLFUNC_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFunc>(&_SELECTOR)
+#define CC_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncN>(&_SELECTOR)
+#define CC_CALLFUNCND_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncND>(&_SELECTOR)
+#define CC_CALLFUNCO_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncO>(&_SELECTOR)
+#define CC_MENU_SELECTOR(_SELECTOR) static_cast<axis::SEL_MenuHandler>(&_SELECTOR)
+#define CC_SCHEDULE_SELECTOR(_SELECTOR) static_cast<axis::SEL_SCHEDULE>(&_SELECTOR)
 
 NS_AX_END
 // end of base group

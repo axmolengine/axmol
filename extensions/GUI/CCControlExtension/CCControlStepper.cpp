@@ -60,10 +60,10 @@ ControlStepper::~ControlStepper()
 {
     unscheduleAllCallbacks();
 
-    AX_SAFE_RELEASE(_minusSprite);
-    AX_SAFE_RELEASE(_plusSprite);
-    AX_SAFE_RELEASE(_minusLabel);
-    AX_SAFE_RELEASE(_plusLabel);
+    CC_SAFE_RELEASE(_minusSprite);
+    CC_SAFE_RELEASE(_plusSprite);
+    CC_SAFE_RELEASE(_minusLabel);
+    CC_SAFE_RELEASE(_plusLabel);
 }
 
 bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprite* plusSprite)
@@ -124,7 +124,7 @@ ControlStepper* ControlStepper::create(Sprite* minusSprite, Sprite* plusSprite)
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -224,14 +224,14 @@ void ControlStepper::startAutorepeat()
 {
     _autorepeatCount = -1;
 
-    this->schedule(AX_SCHEDULE_SELECTOR(ControlStepper::update), kAutorepeatDeltaTime, AX_REPEAT_FOREVER,
+    this->schedule(CC_SCHEDULE_SELECTOR(ControlStepper::update), kAutorepeatDeltaTime, CC_REPEAT_FOREVER,
                    kAutorepeatDeltaTime * 3);
 }
 
 /** Stop the autorepeat. */
 void ControlStepper::stopAutorepeat()
 {
-    this->unschedule(AX_SCHEDULE_SELECTOR(ControlStepper::update));
+    this->unschedule(CC_SCHEDULE_SELECTOR(ControlStepper::update));
 }
 
 void ControlStepper::update(float /*dt*/)

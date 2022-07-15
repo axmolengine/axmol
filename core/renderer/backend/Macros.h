@@ -38,4 +38,4 @@
 
 #define MAX_INFLIGHT_BUFFER 3
 
-#define AX_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))
+#define CC_ARRAYSIZE(A) (sizeof(A) / sizeof((A)[0]))

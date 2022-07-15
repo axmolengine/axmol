@@ -36,7 +36,7 @@ HtmlObject::~HtmlObject()
         }
     }
 
-    AX_SAFE_RELEASE(_ui);
+    CC_SAFE_RELEASE(_ui);
 }
 
 void HtmlObject::create(FUIRichText* owner, HtmlElement* element)

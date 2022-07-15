@@ -43,7 +43,7 @@ class DrawNode;
 class LayerColor;
 class LayerGradient;
 class StencilStateManager;
-struct AX_DLL ResourceData;
+struct CC_DLL ResourceData;
 
 namespace ui
 {
@@ -55,7 +55,7 @@ class Scale9Sprite;
  *@brief Layout interface for creating LayoutManger and do actual layout.
  * @js NA
  */
-class AX_GUI_DLL LayoutProtocol
+class CC_GUI_DLL LayoutProtocol
 {
 public:
     /**
@@ -109,7 +109,7 @@ public:
  * - Relative layout: child elements are arranged relative to certain rules.
  *
  */
-class AX_GUI_DLL Layout : public Widget, public LayoutProtocol
+class CC_GUI_DLL Layout : public Widget, public LayoutProtocol
 {
 
     DECLARE_CLASS_GUI_INFO

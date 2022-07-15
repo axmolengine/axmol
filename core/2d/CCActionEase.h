@@ -45,7 +45,7 @@ NS_AX_BEGIN
  The ease action will change the timeline of the inner action.
  @ingroup Actions
  */
-class AX_DLL ActionEase : public ActionInterval
+class CC_DLL ActionEase : public ActionInterval
 {
 public:
     /**
@@ -75,7 +75,7 @@ protected:
     ActionInterval* _inner;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ActionEase);
+    CC_DISALLOW_COPY_AND_ASSIGN(ActionEase);
 };
 
 /**
@@ -84,7 +84,7 @@ private:
  @details Ease the inner action with specified rate.
  @ingroup Actions
  */
-class AX_DLL EaseRateAction : public ActionEase
+class CC_DLL EaseRateAction : public ActionEase
 {
 public:
     static EaseRateAction* create(ActionInterval* action, float rate);
@@ -113,7 +113,7 @@ protected:
     float _rate;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(EaseRateAction);
+    CC_DISALLOW_COPY_AND_ASSIGN(EaseRateAction);
 };
 
 //
@@ -121,7 +121,7 @@ private:
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASE_TEMPLATE_DECL_CLASS(CLASSNAME)               \
-    class AX_DLL CLASSNAME : public ActionEase            \
+    class CC_DLL CLASSNAME : public ActionEase            \
     {                                                     \
     public:                                               \
         virtual ~CLASSNAME() {}                           \
@@ -134,7 +134,7 @@ private:
         virtual ActionEase* reverse() const override;     \
                                                           \
     private:                                              \
-        AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);           \
+        CC_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);           \
     };
 
 /**
@@ -199,7 +199,7 @@ EASE_TEMPLATE_DECL_CLASS(EaseSineInOut);
  @since v0.8.2
  @ingroup Actions
  */
-class AX_DLL EaseBounce : public ActionEase
+class CC_DLL EaseBounce : public ActionEase
 {};
 
 /**
@@ -373,7 +373,7 @@ EASE_TEMPLATE_DECL_CLASS(EaseCubicActionInOut);
 //
 
 #define EASERATE_TEMPLATE_DECL_CLASS(CLASSNAME)                       \
-    class AX_DLL CLASSNAME : public EaseRateAction                    \
+    class CC_DLL CLASSNAME : public EaseRateAction                    \
     {                                                                 \
     public:                                                           \
         virtual ~CLASSNAME() {}                                       \
@@ -385,7 +385,7 @@ EASE_TEMPLATE_DECL_CLASS(EaseCubicActionInOut);
         virtual EaseRateAction* reverse() const override;             \
                                                                       \
     private:                                                          \
-        AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                       \
+        CC_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                       \
     };
 
 /**
@@ -423,7 +423,7 @@ EASERATE_TEMPLATE_DECL_CLASS(EaseInOut);
  @since v0.8.2
  @ingroup Actions
  */
-class AX_DLL EaseElastic : public ActionEase
+class CC_DLL EaseElastic : public ActionEase
 {
 public:
     /**
@@ -451,7 +451,7 @@ protected:
     float _period;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(EaseElastic);
+    CC_DISALLOW_COPY_AND_ASSIGN(EaseElastic);
 };
 
 //
@@ -459,7 +459,7 @@ private:
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASEELASTIC_TEMPLATE_DECL_CLASS(CLASSNAME)                           \
-    class AX_DLL CLASSNAME : public EaseElastic                              \
+    class CC_DLL CLASSNAME : public EaseElastic                              \
     {                                                                        \
     public:                                                                  \
         virtual ~CLASSNAME() {}                                              \
@@ -471,7 +471,7 @@ private:
         virtual EaseElastic* reverse() const override;                       \
                                                                              \
     private:                                                                 \
-        AX_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                              \
+        CC_DISALLOW_COPY_AND_ASSIGN(CLASSNAME);                              \
     };
 
 /**
@@ -516,7 +516,7 @@ EASEELASTIC_TEMPLATE_DECL_CLASS(EaseElasticInOut);
  @brief Ease Bezier
  @ingroup Actions
  */
-class AX_DLL EaseBezierAction : public axis::ActionEase
+class CC_DLL EaseBezierAction : public axis::ActionEase
 {
 public:
     /**
@@ -545,7 +545,7 @@ protected:
     float _p3;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(EaseBezierAction);
+    CC_DISALLOW_COPY_AND_ASSIGN(EaseBezierAction);
 };
 
 // end of actions group

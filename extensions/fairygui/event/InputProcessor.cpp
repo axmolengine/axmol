@@ -45,42 +45,42 @@ InputProcessor::InputProcessor(GComponent* owner) :
     _owner = owner;
     _recentInput._inputProcessor = this;
 
-#ifdef AX_PLATFORM_PC
+#ifdef CC_PLATFORM_PC
     _mouseListener = EventListenerMouse::create();
-    AX_SAFE_RETAIN(_mouseListener);
-    _mouseListener->onMouseDown = AX_CALLBACK_1(InputProcessor::onMouseDown, this);
-    _mouseListener->onMouseUp = AX_CALLBACK_1(InputProcessor::onMouseUp, this);
-    _mouseListener->onMouseMove = AX_CALLBACK_1(InputProcessor::onMouseMove, this);
-    _mouseListener->onMouseScroll = AX_CALLBACK_1(InputProcessor::onMouseScroll, this);
+    CC_SAFE_RETAIN(_mouseListener);
+    _mouseListener->onMouseDown = CC_CALLBACK_1(InputProcessor::onMouseDown, this);
+    _mouseListener->onMouseUp = CC_CALLBACK_1(InputProcessor::onMouseUp, this);
+    _mouseListener->onMouseMove = CC_CALLBACK_1(InputProcessor::onMouseMove, this);
+    _mouseListener->onMouseScroll = CC_CALLBACK_1(InputProcessor::onMouseScroll, this);
     _owner->displayObject()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_mouseListener, _owner->displayObject());
 #endif
 
     _touchListener = EventListenerTouchOneByOne::create();
-    AX_SAFE_RETAIN(_touchListener);
+    CC_SAFE_RETAIN(_touchListener);
     _touchListener->setSwallowTouches(false);
-    _touchListener->onTouchBegan = AX_CALLBACK_2(InputProcessor::onTouchBegan, this);
-    _touchListener->onTouchMoved = AX_CALLBACK_2(InputProcessor::onTouchMoved, this);
-    _touchListener->onTouchEnded = AX_CALLBACK_2(InputProcessor::onTouchEnded, this);
-    _touchListener->onTouchCancelled = AX_CALLBACK_2(InputProcessor::onTouchCancelled, this);
+    _touchListener->onTouchBegan = CC_CALLBACK_2(InputProcessor::onTouchBegan, this);
+    _touchListener->onTouchMoved = CC_CALLBACK_2(InputProcessor::onTouchMoved, this);
+    _touchListener->onTouchEnded = CC_CALLBACK_2(InputProcessor::onTouchEnded, this);
+    _touchListener->onTouchCancelled = CC_CALLBACK_2(InputProcessor::onTouchCancelled, this);
     _owner->displayObject()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_touchListener, _owner->displayObject());
 
     _keyboardListener = EventListenerKeyboard::create();
-    AX_SAFE_RETAIN(_keyboardListener);
-    _keyboardListener->onKeyPressed = AX_CALLBACK_2(InputProcessor::onKeyDown, this);
-    _keyboardListener->onKeyReleased = AX_CALLBACK_2(InputProcessor::onKeyUp, this);
+    CC_SAFE_RETAIN(_keyboardListener);
+    _keyboardListener->onKeyPressed = CC_CALLBACK_2(InputProcessor::onKeyDown, this);
+    _keyboardListener->onKeyReleased = CC_CALLBACK_2(InputProcessor::onKeyUp, this);
     _owner->displayObject()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_keyboardListener, _owner->displayObject());
 }
 
 InputProcessor::~InputProcessor()
 {
-#ifdef AX_PLATFORM_PC
+#ifdef CC_PLATFORM_PC
     _owner->displayObject()->getEventDispatcher()->removeEventListener(_mouseListener);
 #endif
     _owner->displayObject()->getEventDispatcher()->removeEventListener(_touchListener);
     _owner->displayObject()->getEventDispatcher()->removeEventListener(_keyboardListener);
-    AX_SAFE_RELEASE_NULL(_touchListener);
-    AX_SAFE_RELEASE_NULL(_mouseListener);
-    AX_SAFE_RELEASE_NULL(_keyboardListener);
+    CC_SAFE_RELEASE_NULL(_touchListener);
+    CC_SAFE_RELEASE_NULL(_mouseListener);
+    CC_SAFE_RELEASE_NULL(_keyboardListener);
 
     for (auto &ti : _touches)
         delete ti;
@@ -475,7 +475,7 @@ void InputProcessor::onTouchEnded(Touch *touch, Event* /*unusedEvent*/)
         target = wptr.ptr();
     }
 
-#ifndef AX_PLATFORM_PC
+#ifndef CC_PLATFORM_PC
     //on mobile platform, trigger RollOut on up event, but not on PC
     handleRollOver(ti, nullptr);
 #else

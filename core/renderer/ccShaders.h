@@ -37,53 +37,53 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-extern AX_DLL const char* positionColor_vert;
-extern AX_DLL const char* positionColor_frag;
-extern AX_DLL const char* positionTexture_vert;
-extern AX_DLL const char* positionTexture_frag;
-extern AX_DLL const char* positionTextureColor_vert;
-extern AX_DLL const char* positionTextureColor_frag;
-extern AX_DLL const char* positionTextureColorAlphaTest_frag;
-extern AX_DLL const char* label_normal_frag;
-extern AX_DLL const char* label_distanceNormal_frag;
-extern AX_DLL const char* labelOutline_frag;
-extern AX_DLL const char* labelDistanceFieldGlow_frag;
-extern AX_DLL const char* lineColor3D_frag;
-extern AX_DLL const char* lineColor3D_vert;
-extern AX_DLL const char* positionColorLengthTexture_vert;
-extern AX_DLL const char* positionColorLengthTexture_frag;
-extern AX_DLL const char* positionColorTextureAsPointsize_vert;
-extern AX_DLL const char* position_vert;
-extern AX_DLL const char* layer_radialGradient_frag;
-extern AX_DLL const char* grayScale_frag;
-extern AX_DLL const char* positionUColor_vert;
-extern AX_DLL const char* dualSampler_frag;
-extern AX_DLL const char* dualSampler_gray_frag;
-extern AX_DLL const char* cameraClear_vert;
-extern AX_DLL const char* cameraClear_frag;
+extern CC_DLL const char* positionColor_vert;
+extern CC_DLL const char* positionColor_frag;
+extern CC_DLL const char* positionTexture_vert;
+extern CC_DLL const char* positionTexture_frag;
+extern CC_DLL const char* positionTextureColor_vert;
+extern CC_DLL const char* positionTextureColor_frag;
+extern CC_DLL const char* positionTextureColorAlphaTest_frag;
+extern CC_DLL const char* label_normal_frag;
+extern CC_DLL const char* label_distanceNormal_frag;
+extern CC_DLL const char* labelOutline_frag;
+extern CC_DLL const char* labelDistanceFieldGlow_frag;
+extern CC_DLL const char* lineColor3D_frag;
+extern CC_DLL const char* lineColor3D_vert;
+extern CC_DLL const char* positionColorLengthTexture_vert;
+extern CC_DLL const char* positionColorLengthTexture_frag;
+extern CC_DLL const char* positionColorTextureAsPointsize_vert;
+extern CC_DLL const char* position_vert;
+extern CC_DLL const char* layer_radialGradient_frag;
+extern CC_DLL const char* grayScale_frag;
+extern CC_DLL const char* positionUColor_vert;
+extern CC_DLL const char* dualSampler_frag;
+extern CC_DLL const char* dualSampler_gray_frag;
+extern CC_DLL const char* cameraClear_vert;
+extern CC_DLL const char* cameraClear_frag;
 
-extern AX_DLL const char* CC3D_color_frag;
-extern AX_DLL const char* CC3D_colorNormal_frag;
-extern AX_DLL const char* CC3D_colorNormalTexture_frag;
-extern AX_DLL const char* CC3D_colorTexture_frag;
-extern AX_DLL const char* CC3D_particleTexture_frag;
-extern AX_DLL const char* CC3D_particleColor_frag;
-extern AX_DLL const char* CC3D_particle_vert;
-extern AX_DLL const char* CC3D_positionNormalTexture_vert;
-extern AX_DLL const char* CC3D_skinPositionNormalTexture_vert;
-extern AX_DLL const char* CC3D_positionTexture_vert;
-extern AX_DLL const char* CC3D_skinPositionTexture_vert;
-extern AX_DLL const char* CC3D_skybox_frag;
-extern AX_DLL const char* CC3D_skybox_vert;
-extern AX_DLL const char* CC3D_terrain_frag;
-extern AX_DLL const char* CC3D_terrain_vert;
+extern CC_DLL const char* CC3D_color_frag;
+extern CC_DLL const char* CC3D_colorNormal_frag;
+extern CC_DLL const char* CC3D_colorNormalTexture_frag;
+extern CC_DLL const char* CC3D_colorTexture_frag;
+extern CC_DLL const char* CC3D_particleTexture_frag;
+extern CC_DLL const char* CC3D_particleColor_frag;
+extern CC_DLL const char* CC3D_particle_vert;
+extern CC_DLL const char* CC3D_positionNormalTexture_vert;
+extern CC_DLL const char* CC3D_skinPositionNormalTexture_vert;
+extern CC_DLL const char* CC3D_positionTexture_vert;
+extern CC_DLL const char* CC3D_skinPositionTexture_vert;
+extern CC_DLL const char* CC3D_skybox_frag;
+extern CC_DLL const char* CC3D_skybox_vert;
+extern CC_DLL const char* CC3D_terrain_frag;
+extern CC_DLL const char* CC3D_terrain_vert;
 
-extern AX_DLL const char* CC2D_quadTexture_frag;
-extern AX_DLL const char* CC2D_quadColor_frag;
-extern AX_DLL const char* CC2D_quad_vert;
+extern CC_DLL const char* CC2D_quadTexture_frag;
+extern CC_DLL const char* CC2D_quadColor_frag;
+extern CC_DLL const char* CC2D_quad_vert;
 
-extern AX_DLL const char* hsv_frag;
-extern AX_DLL const char* dualSampler_hsv_frag;
+extern CC_DLL const char* hsv_frag;
+extern CC_DLL const char* dualSampler_hsv_frag;
 NS_AX_END
 /**
  end of support group

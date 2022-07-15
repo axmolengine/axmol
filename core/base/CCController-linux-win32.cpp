@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #include "base/CCController.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    include <functional>
 #    include "base/ccMacros.h"
 #    include "base/CCDirector.h"
@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class AX_DLL ControllerImpl
+class CC_DLL ControllerImpl
 {
 public:
     ControllerImpl()
@@ -4454,4 +4454,4 @@ Controller::~Controller()
 
 NS_AX_END
 
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

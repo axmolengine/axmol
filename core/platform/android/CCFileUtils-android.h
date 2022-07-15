@@ -45,7 +45,7 @@ class ZipFile;
  */
 
 //! @brief  Helper class to handle file operations
-class AX_DLL FileUtilsAndroid : public FileUtils
+class CC_DLL FileUtilsAndroid : public FileUtils
 {
     friend class FileUtils;
 

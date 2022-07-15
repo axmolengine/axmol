@@ -51,7 +51,7 @@ EventListenerKeyboard* EventListenerKeyboard::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -67,7 +67,7 @@ EventListenerKeyboard* EventListenerKeyboard::clone()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }

@@ -46,7 +46,7 @@ struct _ccArray;
 The children will be moved faster / slower than the parent according the parallax ratio.
 
 */
-class AX_DLL ParallaxNode : public Node
+class CC_DLL ParallaxNode : public Node
 {
 public:
     /** Create a Parallax node.
@@ -107,7 +107,7 @@ protected:
     struct _ccArray* _parallaxArray;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ParallaxNode);
+    CC_DISALLOW_COPY_AND_ASSIGN(ParallaxNode);
 };
 
 // end of _2d group

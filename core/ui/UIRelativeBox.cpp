@@ -42,7 +42,7 @@ RelativeBox* RelativeBox::create()
         widget->autorelease();
         return widget;
     }
-    AX_SAFE_DELETE(widget);
+    CC_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -54,7 +54,7 @@ RelativeBox* RelativeBox::create(const Vec2& size)
         widget->autorelease();
         return widget;
     }
-    AX_SAFE_DELETE(widget);
+    CC_SAFE_DELETE(widget);
     return nullptr;
 }
 

@@ -158,9 +158,9 @@ TweenConfig::TweenConfig()
 
 TweenConfig::~TweenConfig()
 {
-    AX_SAFE_DELETE(path);
-    AX_SAFE_DELETE(startValue);
-    AX_SAFE_DELETE(endValue);
+    CC_SAFE_DELETE(path);
+    CC_SAFE_DELETE(startValue);
+    CC_SAFE_DELETE(endValue);
 }
 
 class TransitionItem
@@ -253,7 +253,7 @@ TransitionItem::~TransitionItem()
         delete tweenConfig;
     }
 
-    AX_SAFE_DELETE(value);
+    CC_SAFE_DELETE(value);
 }
 
 Transition::Transition(GComponent* owner)
@@ -378,7 +378,7 @@ void Transition::play(int times, float delay, float startTime, float endTime, Pl
     if (delay == 0)
         onDelayedPlay();
     else
-        GTween::delayedCall(delay)->setTarget(this)->onComplete(AX_CALLBACK_0(Transition::onDelayedPlay, this));
+        GTween::delayedCall(delay)->setTarget(this)->onComplete(CC_CALLBACK_0(Transition::onDelayedPlay, this));
 }
 
 void Transition::changePlayTimes(int value)
@@ -867,9 +867,9 @@ void Transition::playItem(TransitionItem* item)
                 ->setRepeat(item->tweenConfig->repeat, item->tweenConfig->yoyo)
                 ->setTimeScale(_timeScale)
                 ->setTargetAny(item)
-                ->onStart(AX_CALLBACK_1(Transition::onTweenStart, this))
-                ->onUpdate(AX_CALLBACK_1(Transition::onTweenUpdate, this))
-                ->onComplete1(AX_CALLBACK_1(Transition::onTweenComplete, this));
+                ->onStart(CC_CALLBACK_1(Transition::onTweenStart, this))
+                ->onUpdate(CC_CALLBACK_1(Transition::onTweenUpdate, this))
+                ->onComplete1(CC_CALLBACK_1(Transition::onTweenComplete, this));
 
             if (_endTime >= 0)
                 item->tweener->setBreakpoint(_endTime - time);
@@ -894,9 +894,9 @@ void Transition::playItem(TransitionItem* item)
                 ->setDelay(time)
                 ->setTimeScale(_timeScale)
                 ->setTargetAny(item)
-                ->onStart(AX_CALLBACK_1(Transition::onTweenStart, this))
-                ->onUpdate(AX_CALLBACK_1(Transition::onTweenUpdate, this))
-                ->onComplete1(AX_CALLBACK_1(Transition::onTweenComplete, this));
+                ->onStart(CC_CALLBACK_1(Transition::onTweenStart, this))
+                ->onUpdate(CC_CALLBACK_1(Transition::onTweenUpdate, this))
+                ->onComplete1(CC_CALLBACK_1(Transition::onTweenComplete, this));
 
             if (_endTime >= 0)
                 item->tweener->setBreakpoint(_endTime - item->time);
@@ -922,7 +922,7 @@ void Transition::playItem(TransitionItem* item)
             item->tweener = GTween::delayedCall(time)
                 ->setTimeScale(_timeScale)
                 ->setTargetAny(item)
-                ->onComplete1(AX_CALLBACK_1(Transition::onDelayedPlayItem, this));
+                ->onComplete1(CC_CALLBACK_1(Transition::onDelayedPlayItem, this));
         }
     }
 

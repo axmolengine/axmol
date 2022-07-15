@@ -60,39 +60,39 @@ void ColliderFilter::updateShape(cpShape* shape)
 #if ENABLE_PHYSICS_BOX2D_DETECT
 ColliderBody::ColliderBody(ContourData* contourData) : _fixture(nullptr), _contourData(contourData)
 {
-    AX_SAFE_RETAIN(_contourData);
+    CC_SAFE_RETAIN(_contourData);
     _filter = new ColliderFilter();
 
 #    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     _calculatedVertexList = Array::create();
-    AX_SAFE_RETAIN(_calculatedVertexList);
+    CC_SAFE_RETAIN(_calculatedVertexList);
 #    endif
 }
 #elif ENABLE_PHYSICS_CHIPMUNK_DETECT
 
 ColliderBody::ColliderBody(ContourData* contourData) : _shape(nullptr), _contourData(contourData)
 {
-    AX_SAFE_RETAIN(_contourData);
+    CC_SAFE_RETAIN(_contourData);
     _filter               = new ColliderFilter();
 
 #    if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     _calculatedVertexList = Array::create();
-    AX_SAFE_RETAIN(_calculatedVertexList);
+    CC_SAFE_RETAIN(_calculatedVertexList);
 #    endif
 }
 #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
 ColliderBody::ColliderBody(ContourData* contourData) : _contourData(contourData)
 {
-    AX_SAFE_RETAIN(_contourData);
+    CC_SAFE_RETAIN(_contourData);
 }
 #endif
 
 ColliderBody::~ColliderBody()
 {
-    AX_SAFE_RELEASE(_contourData);
+    CC_SAFE_RELEASE(_contourData);
 
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
-    AX_SAFE_DELETE(_filter);
+    CC_SAFE_DELETE(_filter);
 #endif
 }
 
@@ -115,7 +115,7 @@ ColliderDetector* ColliderDetector::create()
         pColliderDetector->autorelease();
         return pColliderDetector;
     }
-    AX_SAFE_DELETE(pColliderDetector);
+    CC_SAFE_DELETE(pColliderDetector);
     return nullptr;
 }
 
@@ -127,7 +127,7 @@ ColliderDetector* ColliderDetector::create(Bone* bone)
         pColliderDetector->autorelease();
         return pColliderDetector;
     }
-    AX_SAFE_DELETE(pColliderDetector);
+    CC_SAFE_DELETE(pColliderDetector);
     return nullptr;
 }
 
@@ -144,7 +144,7 @@ ColliderDetector::~ColliderDetector()
     _colliderBodyList.clear();
 
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
-    AX_SAFE_DELETE(_filter);
+    CC_SAFE_DELETE(_filter);
 #endif
 }
 
@@ -413,7 +413,7 @@ void ColliderDetector::setBody(b2Body* pBody)
         b2PolygonShape polygon;
         polygon.Set(b2bv, (int)contourData->vertexList.size());
 
-        AX_SAFE_DELETE(b2bv);
+        CC_SAFE_DELETE(b2bv);
 
         b2FixtureDef fixtureDef;
         fixtureDef.shape    = &polygon;

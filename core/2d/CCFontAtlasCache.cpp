@@ -270,7 +270,7 @@ void FontAtlasCache::reloadFontAtlasFNT(std::string_view fontFileName, const Rec
     auto it = _atlasMap.find(atlasName);
     if (it != _atlasMap.end())
     {
-        AX_SAFE_RELEASE_NULL(it->second);
+        CC_SAFE_RELEASE_NULL(it->second);
         _atlasMap.erase(it);
     }
     FontFNT::reloadBMFontResource(fontFileName);
@@ -297,7 +297,7 @@ void FontAtlasCache::unloadFontAtlasTTF(std::string_view fontFileName)
     {
         if (item->first.find(fontFileName) != std::string::npos)
         {
-            AX_SAFE_RELEASE_NULL(item->second);
+            CC_SAFE_RELEASE_NULL(item->second);
             item = _atlasMap.erase(item);
         }
         else

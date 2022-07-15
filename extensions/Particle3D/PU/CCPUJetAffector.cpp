@@ -44,14 +44,14 @@ PUJetAffector::~PUJetAffector()
     if (!_dynAcceleration)
         return;
 
-    AX_SAFE_DELETE(_dynAcceleration);
+    CC_SAFE_DELETE(_dynAcceleration);
     _dynAcceleration = 0;
 }
 //-----------------------------------------------------------------------
 void PUJetAffector::setDynAcceleration(PUDynamicAttribute* dynAcceleration)
 {
     if (_dynAcceleration)
-        AX_SAFE_DELETE(_dynAcceleration);
+        CC_SAFE_DELETE(_dynAcceleration);
 
     _dynAcceleration = dynAcceleration;
 }

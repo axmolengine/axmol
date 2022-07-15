@@ -41,9 +41,9 @@ ControlColourPicker::ControlColourPicker() : _colourPicker(nullptr), _huePicker(
 
 ControlColourPicker::~ControlColourPicker()
 {
-    AX_SAFE_RELEASE(_background);
-    AX_SAFE_RELEASE(_huePicker);
-    AX_SAFE_RELEASE(_colourPicker);
+    CC_SAFE_RELEASE(_background);
+    CC_SAFE_RELEASE(_huePicker);
+    CC_SAFE_RELEASE(_colourPicker);
 }
 
 bool ControlColourPicker::init()
@@ -77,7 +77,7 @@ bool ControlColourPicker::init()
                                                                       Vec2::ZERO, Vec2(0.5f, 0.5f));
         if (!_background)
             return false;
-        AX_SAFE_RETAIN(_background);
+        CC_SAFE_RETAIN(_background);
 
         Vec2 backgroundPointZero = _background->getPosition() - Vec2(_background->getContentSize().width / 2,
                                                                      _background->getContentSize().height / 2);

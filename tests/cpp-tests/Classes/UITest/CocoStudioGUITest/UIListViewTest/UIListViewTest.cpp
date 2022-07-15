@@ -93,8 +93,8 @@ bool UIListViewTest_Vertical::init()
         _listView->setContentSize(Size(240.0f, 130.0f));
         _listView->setPosition(Vec2((widgetSize - _listView->getContentSize()) / 2.0f));
         _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
-        _listView->addEventListener((ui::ListView::ccScrollViewCallback)AX_CALLBACK_2(
+            (ui::ListView::ccListViewCallback)CC_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
+        _listView->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(
             UIListViewTest_Vertical::selectedItemEventScrollView, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
@@ -346,7 +346,7 @@ bool UIListViewTest_Horizontal::init()
                                     (widgetSize.height - backgroundSize.height) / 2.0f +
                                         (backgroundSize.height - _listView->getContentSize().height) / 2.0f));
         _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
+            (ui::ListView::ccListViewCallback)CC_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
 
@@ -937,7 +937,7 @@ bool UIListViewTest_Padding::init()
             slider->setCapInsets(Rect(0.0f, 0.0f, 0.0f, 0.0f));
             slider->setContentSize(Size(30.0f, 10.0f));
             slider->setPosition(Vec2(60.0f, 150.0f - (25 * i)));
-            slider->addEventListener(AX_CALLBACK_2(UIListViewTest_Padding::sliderEvent, this));
+            slider->addEventListener(CC_CALLBACK_2(UIListViewTest_Padding::sliderEvent, this));
             slider->setTag(i);
             _uiLayer->addChild(slider);
 

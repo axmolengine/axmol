@@ -306,7 +306,7 @@ void SpritePolygonTestSlider::initSliders()
     _epsilonLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 4 + 15));
     addChild(slider);
 
-    slider->addEventListener(AX_CALLBACK_2(SpritePolygonTestSlider::changeEpsilon, this));
+    slider->addEventListener(CC_CALLBACK_2(SpritePolygonTestSlider::changeEpsilon, this));
     slider->setPercent((int)(sqrtf(1.0f / 19.0f) * 100));
 }
 

@@ -558,8 +558,8 @@ Data Device::getTextureDataForText(const char* text,
     {
         BitmapDC& dc = sharedBitmapDC();
 
-        AX_BREAK_IF(!dc.getBitmap(text, textDefinition, align));
-        AX_BREAK_IF(!dc._data);
+        CC_BREAK_IF(!dc.getBitmap(text, textDefinition, align));
+        CC_BREAK_IF(!dc._data);
         width  = dc.iMaxLineWidth;
         height = dc.iMaxLineHeight;
         dc.reset();

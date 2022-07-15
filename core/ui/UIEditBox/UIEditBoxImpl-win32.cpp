@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "ui/UIEditBox/UIEditBoxImpl-win32.h"
 
 #include "platform/CCPlatformConfig.h"
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include <tchar.h>
@@ -438,4 +438,4 @@ LRESULT EditBoxImplWin::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 NS_AX_END
 
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */

@@ -45,7 +45,7 @@ namespace ui
  *to be displayed, use  `TableView` instead. ListView is a subclass of  `ScrollView`, so it shares many features of
  *ScrollView.
  */
-class AX_GUI_DLL ListView : public ScrollView
+class CC_GUI_DLL ListView : public ScrollView
 {
 
     DECLARE_CLASS_GUI_INFO

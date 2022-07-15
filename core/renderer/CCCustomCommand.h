@@ -42,7 +42,7 @@ class Buffer;
 Custom command is used to draw all things except triangle commands. You can use
 this command to draw things, just provide vertex/index data and set corret flags.
 */
-class AX_DLL CustomCommand : public RenderCommand
+class CC_DLL CustomCommand : public RenderCommand
 {
 public:
     enum class DrawType

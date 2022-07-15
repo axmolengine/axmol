@@ -27,7 +27,7 @@
 #define __CCNAV_MESH_OBSTACLE_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "2d/CCComponent.h"
 
@@ -44,7 +44,7 @@ NS_AX_BEGIN
  */
 
 /** @brief NavMeshObstacle: The code wrapping of dtTileCacheObstacle, use component mode. */
-class AX_DLL NavMeshObstacle : public Component
+class CC_DLL NavMeshObstacle : public Component
 {
     friend class NavMesh;
 
@@ -117,6 +117,6 @@ private:
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH
 
 #endif  // __CCNAV_MESH_OBSTACLE_H__

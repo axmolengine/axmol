@@ -24,12 +24,12 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/ui/lua_axis_ui_manual.hpp"
 #include "scripting/lua-bindings/auto/lua_axis_ui_auto.hpp"
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
 #    include "scripting/lua-bindings/auto/lua_axis_video_auto.hpp"
 #    include "scripting/lua-bindings/manual/ui/lua_axis_video_manual.hpp"
 #    include "scripting/lua-bindings/auto/lua_axis_webview_auto.hpp"
 #    include "scripting/lua-bindings/manual/ui/lua_axis_webview_manual.hpp"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 #    if defined(AX_ENABLE_MFMEDIA)
 #        include "scripting/lua-bindings/auto/lua_axis_video_auto.hpp"
 #        include "scripting/lua-bindings/manual/ui/lua_axis_video_manual.hpp"
@@ -1243,12 +1243,12 @@ int register_ui_module(lua_State* L)
     {
         register_all_axis_ui(L);
         register_all_axis_ui_manual(L);
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) && !defined(CC_TARGET_OS_TVOS)
         register_all_axis_video(L);
         register_all_axis_video_manual(L);
         register_all_axis_webview(L);
         register_all_axis_webview_manual(L);
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 #    if defined(AX_ENABLE_MFMEDIA)
         register_all_axis_video(L);
         register_all_axis_video_manual(L);

@@ -37,8 +37,8 @@ ControlPotentiometer::ControlPotentiometer()
 
 ControlPotentiometer::~ControlPotentiometer()
 {
-    AX_SAFE_RELEASE(_thumbSprite);
-    AX_SAFE_RELEASE(_progressTimer);
+    CC_SAFE_RELEASE(_thumbSprite);
+    CC_SAFE_RELEASE(_progressTimer);
 }
 
 ControlPotentiometer* ControlPotentiometer::create(const char* backgroundFile,
@@ -61,7 +61,7 @@ ControlPotentiometer* ControlPotentiometer::create(const char* backgroundFile,
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
     return pRet;
 }

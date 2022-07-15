@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
 
 #    include "UIWebViewImpl-win32.h"
 #    include "UIWebView.h"
@@ -1082,4 +1082,4 @@ void Win32WebControl::setBackgroundTransparent()
     }
 }
 
-#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32

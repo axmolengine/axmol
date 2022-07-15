@@ -39,7 +39,7 @@ NS_AX_BEGIN
 /** @class EventKeyboard
  * @brief Keyboard event.
  */
-class AX_DLL EventKeyboard : public Event
+class CC_DLL EventKeyboard : public Event
 {
 public:
     /**

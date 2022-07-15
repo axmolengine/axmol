@@ -42,7 +42,7 @@ RadioButtonReader* RadioButtonReader::getInstance()
 
 void RadioButtonReader::destroyInstance()
 {
-    AX_SAFE_DELETE(instanceCheckBoxReader);
+    CC_SAFE_DELETE(instanceCheckBoxReader);
 }
 
 Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

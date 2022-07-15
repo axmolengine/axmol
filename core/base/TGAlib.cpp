@@ -44,19 +44,19 @@ bool tgaLoadHeader(unsigned char* buffer, uint32_t bufSize, tImageTGA* info)
     do
     {
         size_t step = sizeof(unsigned char) * 2;
-        AX_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
+        CC_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
         memcpy(&info->type, buffer + step, sizeof(unsigned char));
 
         step += sizeof(unsigned char) * 2;
         step += sizeof(signed short) * 4;
-        AX_BREAK_IF((step + sizeof(signed short) * 2 + sizeof(unsigned char)) > bufSize);
+        CC_BREAK_IF((step + sizeof(signed short) * 2 + sizeof(unsigned char)) > bufSize);
         memcpy(&info->width, buffer + step, sizeof(signed short));
         memcpy(&info->height, buffer + step + sizeof(signed short), sizeof(signed short));
         memcpy(&info->pixelDepth, buffer + step + sizeof(signed short) * 2, sizeof(unsigned char));
 
         step += sizeof(unsigned char);
         step += sizeof(signed short) * 2;
-        AX_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
+        CC_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
         unsigned char cGarbage;
         memcpy(&cGarbage, buffer + step, sizeof(unsigned char));
 
@@ -87,7 +87,7 @@ bool tgaLoadImageData(unsigned char* Buffer, uint32_t bufSize, tImageTGA* info)
         total = info->height * info->width * mode;
 
         size_t dataSize = sizeof(unsigned char) * total;
-        AX_BREAK_IF((step + dataSize) > bufSize);
+        CC_BREAK_IF((step + dataSize) > bufSize);
         memcpy(info->imageData, Buffer + step, dataSize);
 
         // mode=3 or 4 implies that the image is RGB(A). However TGA
@@ -132,7 +132,7 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
         else
         {
             // otherwise, read in the run length token
-            AX_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
+            CC_BREAK_IF((step + sizeof(unsigned char)) > bufSize);
             memcpy(&runlength, buffer + step, sizeof(unsigned char));
             step += sizeof(unsigned char);
 
@@ -149,7 +149,7 @@ static bool tgaLoadRLEImageData(unsigned char* buffer, uint32_t bufSize, tImageT
         if (!skip)
         {
             // no, read in the pixel data
-            AX_BREAK_IF((step + sizeof(unsigned char) * mode) > bufSize);
+            CC_BREAK_IF((step + sizeof(unsigned char) * mode) > bufSize);
 
             memcpy(aux, buffer + step, sizeof(unsigned char) * mode);
             step += sizeof(unsigned char) * mode;
@@ -203,7 +203,7 @@ tImageTGA* tgaLoadBuffer(unsigned char* buffer, int32_t size)
 
     do
     {
-        AX_BREAK_IF(!buffer);
+        CC_BREAK_IF(!buffer);
         info = (tImageTGA*)malloc(sizeof(tImageTGA));
 
         // get the file header info

@@ -39,7 +39,7 @@ NS_AX_BEGIN
 *
  The `Renderer` knows how to render `RenderCommands` objects.
  */
-class AX_DLL RenderCommand
+class CC_DLL RenderCommand
 {
 public:
     /**Enum the type of render command. */

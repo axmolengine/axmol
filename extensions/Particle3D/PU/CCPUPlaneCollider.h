@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_PLANE_COLLIDER_H__
-#define __AX_PU_PARTICLE_3D_PLANE_COLLIDER_H__
+#ifndef __CC_PU_PARTICLE_3D_PLANE_COLLIDER_H__
+#define __CC_PU_PARTICLE_3D_PLANE_COLLIDER_H__
 
 #include "CCPUBaseCollider.h"
 #include "extensions/Particle3D/PU/CCPUPlane.h"
@@ -33,7 +33,7 @@
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUPlaneCollider : public PUBaseCollider
+class CC_EX_DLL PUPlaneCollider : public PUBaseCollider
 {
 public:
     // Constants

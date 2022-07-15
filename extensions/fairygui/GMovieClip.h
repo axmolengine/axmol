@@ -98,7 +98,7 @@ private:
     int _endAt;
     int _status; //0-none, 1-next loop, 2-ending, 3-ended
 
-    AX_DISALLOW_COPY_AND_ASSIGN(ActionMovieClip);
+    CC_DISALLOW_COPY_AND_ASSIGN(ActionMovieClip);
 };
 
 NS_FGUI_END

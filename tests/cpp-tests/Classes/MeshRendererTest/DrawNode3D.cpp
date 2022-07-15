@@ -34,8 +34,8 @@ DrawNode3D::DrawNode3D()
 
 DrawNode3D::~DrawNode3D()
 {
-    AX_SAFE_RELEASE_NULL(_programStateLine);
-    AX_SAFE_DELETE(_depthstencilDescriptor);
+    CC_SAFE_RELEASE_NULL(_programStateLine);
+    CC_SAFE_DELETE(_depthstencilDescriptor);
 }
 
 DrawNode3D* DrawNode3D::create()
@@ -47,7 +47,7 @@ DrawNode3D* DrawNode3D::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -79,8 +79,8 @@ bool DrawNode3D::init()
 
     _locMVPMatrix = _programStateLine->getUniformLocation("u_MVPMatrix");
 
-    _customCommand.setBeforeCallback(AX_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
-    _customCommand.setAfterCallback(AX_CALLBACK_0(DrawNode3D::onAfterDraw, this));
+    _customCommand.setBeforeCallback(CC_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
+    _customCommand.setAfterCallback(CC_CALLBACK_0(DrawNode3D::onAfterDraw, this));
 
     auto layout = _programStateLine->getVertexLayout();
 #define INITIAL_VERTEX_BUFFER_LENGTH 512
@@ -107,7 +107,7 @@ bool DrawNode3D::init()
                                       CustomCommand::BufferUsage::DYNAMIC);
     _isDirty = true;
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // Need to listen the event only when not use batchnode, because it will use VBO
     auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
         /** listen the event that coming to foreground on Android */
@@ -152,7 +152,7 @@ void DrawNode3D::updateCommand(axis::Renderer* renderer, const Mat4& transform, 
     blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = _blendFunc.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = _blendFunc.dst;
 
-    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _bufferLines.size());
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _bufferLines.size());
 }
 
 void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color)

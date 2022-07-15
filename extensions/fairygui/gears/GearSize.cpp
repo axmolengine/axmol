@@ -70,8 +70,8 @@ void GearSize::apply()
                                          ->setEase(_tweenConfig->easeType)
                                          ->setTargetAny(this)
                                          ->setUserData(Value((a ? 1 : 0) + (b ? 2 : 0)))
-                                         ->onUpdate(AX_CALLBACK_1(GearSize::onTweenUpdate, this))
-                                         ->onComplete(AX_CALLBACK_0(GearSize::onTweenComplete, this));
+                                         ->onUpdate(CC_CALLBACK_1(GearSize::onTweenUpdate, this))
+                                         ->onComplete(CC_CALLBACK_0(GearSize::onTweenComplete, this));
         }
     }
     else

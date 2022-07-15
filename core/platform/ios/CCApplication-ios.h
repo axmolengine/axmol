@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class AX_DLL Application : public ApplicationProtocol
+class CC_DLL Application : public ApplicationProtocol
 {
 public:
     /**

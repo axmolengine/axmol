@@ -44,7 +44,7 @@ Animation3D* Animation3D::create(std::string_view fileName, std::string_view ani
     }
     else
     {
-        AX_SAFE_DELETE(animation);
+        CC_SAFE_DELETE(animation);
     }
 
     return animation;
@@ -86,16 +86,16 @@ Animation3D::~Animation3D()
     for (const auto& itor : _boneCurves)
     {
         Curve* curve = itor.second;
-        AX_SAFE_DELETE(curve);
+        CC_SAFE_DELETE(curve);
     }
 }
 
 Animation3D::Curve::Curve() : translateCurve(nullptr), rotCurve(nullptr), scaleCurve(nullptr) {}
 Animation3D::Curve::~Curve()
 {
-    AX_SAFE_RELEASE_NULL(translateCurve);
-    AX_SAFE_RELEASE_NULL(rotCurve);
-    AX_SAFE_RELEASE_NULL(scaleCurve);
+    CC_SAFE_RELEASE_NULL(translateCurve);
+    CC_SAFE_RELEASE_NULL(rotCurve);
+    CC_SAFE_RELEASE_NULL(scaleCurve);
 }
 
 bool Animation3D::init(const Animation3DData& data)
@@ -196,7 +196,7 @@ Animation3DCache* Animation3DCache::getInstance()
 }
 void Animation3DCache::destroyInstance()
 {
-    AX_SAFE_DELETE(_cacheInstance);
+    CC_SAFE_DELETE(_cacheInstance);
 }
 
 Animation3D* Animation3DCache::getAnimation(std::string_view key)
@@ -222,7 +222,7 @@ void Animation3DCache::removeAllAnimations()
 {
     for (auto itor : _animations)
     {
-        AX_SAFE_RELEASE(itor.second);
+        CC_SAFE_RELEASE(itor.second);
     }
     _animations.clear();
 }

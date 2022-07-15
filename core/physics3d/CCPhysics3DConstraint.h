@@ -30,9 +30,9 @@
 #include "base/CCRef.h"
 #include "base/ccConfig.h"
 
-#if AX_USE_3D_PHYSICS
+#if CC_USE_3D_PHYSICS
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
+#    if (CC_ENABLE_BULLET_INTEGRATION)
 
 class btTypedConstraint;
 
@@ -47,7 +47,7 @@ class Physics3DRigidBody;
 
 /** @brief Physics3DConstraint: Constraint affects the movement of physics object, it usually connect one or two physics
  * object. There are some types of physics constraints. */
-class AX_DLL Physics3DConstraint : public Ref
+class CC_DLL Physics3DConstraint : public Ref
 {
 public:
     enum class ConstraintType
@@ -115,7 +115,7 @@ public:
      */
     void setOverrideNumSolverIterations(int overrideNumIterations);
 
-#        if (AX_ENABLE_BULLET_INTEGRATION)
+#        if (CC_ENABLE_BULLET_INTEGRATION)
     btTypedConstraint* getbtContraint() { return _constraint; }
 #        endif
 
@@ -135,7 +135,7 @@ protected:
 /**
  * Point to point constraint limits the translation so that the local pivot points of 2 rigidbodies match in worldspace.
  */
-class AX_DLL Physics3DPointToPointConstraint : public Physics3DConstraint
+class CC_DLL Physics3DPointToPointConstraint : public Physics3DConstraint
 {
 public:
     /**
@@ -193,7 +193,7 @@ public:
  * the hinge axis. This can be useful to represent doors or wheels rotating around one axis. hinge constraint between
  * two rigidbodies each with a pivotpoint that describes the axis location in local space
  */
-class AX_DLL Physics3DHingeConstraint : public Physics3DConstraint
+class CC_DLL Physics3DHingeConstraint : public Physics3DConstraint
 {
 public:
     /**
@@ -334,7 +334,7 @@ public:
  * LimAng - hitting angular limit
  * OrthoLin, OrthoAng - against constraint axis
  */
-class AX_DLL Physics3DSliderConstraint : public Physics3DConstraint
+class CC_DLL Physics3DSliderConstraint : public Physics3DConstraint
 {
 public:
     /**
@@ -441,7 +441,7 @@ public:
 /**
  * It is a special point to point constraint that adds cone and twist axis limits. The x-axis serves as twist axis.
  */
-class AX_DLL Physics3DConeTwistConstraint : public Physics3DConstraint
+class CC_DLL Physics3DConeTwistConstraint : public Physics3DConstraint
 {
 public:
     /**
@@ -544,7 +544,7 @@ public:
  * Lowerlimit > Upperlimit -> axis is free
  * Lowerlimit < Upperlimit -> axis it limited in that range
  */
-class AX_DLL Physics3D6DofConstraint : public Physics3DConstraint
+class CC_DLL Physics3D6DofConstraint : public Physics3DConstraint
 {
 public:
     /**
@@ -615,8 +615,8 @@ public:
 
 NS_AX_END
 
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
+#    endif  // CC_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // CC_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_CONSTRAINT_H__

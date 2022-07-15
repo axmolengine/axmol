@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include "platform/CCGLView.h"
 #include "glfw3.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    ifndef GLFW_EXPOSE_NATIVE_WIN32
 #        define GLFW_EXPOSE_NATIVE_WIN32
 #    endif
@@ -38,9 +38,9 @@ THE SOFTWARE.
 #        define GLFW_EXPOSE_NATIVE_WGL
 #    endif
 #    include "glfw3native.h"
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 #    ifndef GLFW_EXPOSE_NATIVE_NSGL
 #        define GLFW_EXPOSE_NATIVE_NSGL
 #    endif
@@ -48,12 +48,12 @@ THE SOFTWARE.
 #        define GLFW_EXPOSE_NATIVE_COCOA
 #    endif
 #    include "glfw3native.h"
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
 NS_AX_BEGIN
 
 class GLFWEventHandler;
-class AX_DLL GLViewImpl : public GLView
+class CC_DLL GLViewImpl : public GLView
 {
     friend class GLFWEventHandler;
 
@@ -118,11 +118,11 @@ public:
     virtual void setFrameSize(float width, float height) override;
     virtual void setIMEKeyboardState(bool bOpen) override;
 
-#if AX_ICON_SET_SUPPORT
+#if CC_ICON_SET_SUPPORT
     virtual void setIcon(std::string_view filename) const override;
     virtual void setIcon(const std::vector<std::string>& filelist) const override;
     virtual void setDefaultIcon() const override;
-#endif /* AX_ICON_SET_SUPPORT */
+#endif /* CC_ICON_SET_SUPPORT */
 
     /*
      * Set zoom factor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
@@ -191,7 +191,7 @@ public:
     static const std::string EVENT_WINDOW_UNFOCUSED;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
+    CC_DISALLOW_COPY_AND_ASSIGN(GLViewImpl);
 };
 
 NS_AX_END  // end of namespace   cocos2d

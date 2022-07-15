@@ -29,15 +29,15 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformConfig.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 #    include "platform/mac/CCStdC-mac.h"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #    include "platform/ios/CCStdC-ios.h"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #    include "platform/android/CCStdC-android.h"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 #    include "platform/win32/CCStdC-win32.h"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 #    include "platform/linux/CCStdC-linux.h"
 #endif
 

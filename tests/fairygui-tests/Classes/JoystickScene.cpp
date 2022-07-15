@@ -4,7 +4,7 @@ USING_NS_AX;
 
 JoystickScene::~JoystickScene()
 {
-    AX_SAFE_RELEASE(_joystick);
+    CC_SAFE_RELEASE(_joystick);
 }
 
 void JoystickScene::continueInit()

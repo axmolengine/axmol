@@ -28,13 +28,13 @@ THE SOFTWARE.
 #define __PLATFORM_MAC_CCGL_H__
 
 #include "platform/CCPlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #    import <OpenGL/gl.h>
 #    import <OpenGL/glu.h>
 #    import <OpenGL/glext.h>
 
-#    define AX_GL_DEPTH24_STENCIL8 -1
+#    define CC_GL_DEPTH24_STENCIL8 -1
 
 #    define glDeleteVertexArrays glDeleteVertexArraysAPPLE
 #    define glGenVertexArrays glGenVertexArraysAPPLE
@@ -109,4 +109,4 @@ THE SOFTWARE.
 
 #endif  // __PLATFORM_MAC_CCGL_H__
 
-#endif  // s AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#endif  // s CC_TARGET_PLATFORM == CC_PLATFORM_MAC

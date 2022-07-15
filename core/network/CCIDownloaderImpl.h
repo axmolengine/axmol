@@ -32,8 +32,8 @@
 
 #include "base/CCConsole.h"
 
-// #define AX_DOWNLOADER_DEBUG
-#if defined(AX_DOWNLOADER_DEBUG) || defined(_DEBUG)
+// #define CC_DOWNLOADER_DEBUG
+#if defined(CC_DOWNLOADER_DEBUG) || defined(_DEBUG)
 #    define DLLOG(format, ...) axis::log(format, ##__VA_ARGS__)
 #else
 #    define DLLOG(...) \
@@ -48,7 +48,7 @@ namespace network
 {
 class DownloadTask;
 
-class AX_DLL IDownloadTask
+class CC_DLL IDownloadTask
 {
 public:
     virtual ~IDownloadTask() {}

@@ -134,7 +134,7 @@ namespace wext
 {
 // engine extends APIs
 // TODO-2020
-AX_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
+CC_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
 
 CCS_DLL extern void (*onLoadSpriteFramesWithFile)(std::string& file);
 

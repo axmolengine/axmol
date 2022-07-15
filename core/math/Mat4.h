@@ -72,7 +72,7 @@ NS_AX_MATH_BEGIN
  *
  * @see Transform
  */
-class AX_DLL Mat4
+class CC_DLL Mat4
 {
 public:
     // //temp add conversion

@@ -40,7 +40,7 @@ NS_AX_BEGIN
  * @brief Acceleration event listener.
  * @js NA
  */
-class AX_DLL EventListenerAcceleration : public EventListener
+class CC_DLL EventListenerAcceleration : public EventListener
 {
 public:
     static const std::string LISTENER_ID;

@@ -95,7 +95,7 @@ protected:
     float _shining_duration;
     axis::backend::ProgramState* _state = nullptr;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };
@@ -132,7 +132,7 @@ private:
     axis::MeshRenderer* _orc;
     axis::backend::ProgramState* _state = nullptr;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };
@@ -163,7 +163,7 @@ public:
 protected:
     axis::backend::ProgramState* _state;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };
@@ -193,7 +193,7 @@ public:
 protected:
     std::vector<axis::MeshRenderer*> _meshes;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };
@@ -252,7 +252,7 @@ public:
 protected:
     std::vector<axis::MeshRenderer*> _meshes;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };
@@ -486,7 +486,7 @@ protected:
     axis::MeshRenderer* _teapot;
     axis::Camera* _camera;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };
@@ -565,7 +565,7 @@ public:
 
 protected:
     axis::MeshRenderer* _mesh;
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };

@@ -21,9 +21,9 @@ public:
     virtual ~RenderTarget()
     {
         for (auto colorItem : _color)
-            AX_SAFE_RELEASE(colorItem.texture);
-        AX_SAFE_RELEASE(_depth.texture);
-        AX_SAFE_RELEASE(_stencil.texture);
+            CC_SAFE_RELEASE(colorItem.texture);
+        CC_SAFE_RELEASE(_depth.texture);
+        CC_SAFE_RELEASE(_stencil.texture);
     }
 
     bool isDefaultRenderTarget() const { return _defaultRenderTarget; }
@@ -44,37 +44,37 @@ public:
     void setColorAttachment(ColorAttachment attachment)
     {
         for (auto colorItem : _color)
-            AX_SAFE_RELEASE(colorItem.texture);
+            CC_SAFE_RELEASE(colorItem.texture);
         memcpy(_color, attachment, sizeof(ColorAttachment));
         for (auto colorItem : _color)
-            AX_SAFE_RETAIN(colorItem.texture);
+            CC_SAFE_RETAIN(colorItem.texture);
 
         _dirty = true;
     };
 
     void setColorAttachment(TextureBackend* attachment, int level = 0, int index = 0) { 
-        AX_SAFE_RELEASE(_color[index].texture);
+        CC_SAFE_RELEASE(_color[index].texture);
         _color[index].texture = attachment;
         _color[index].level   = level;
-        AX_SAFE_RETAIN(_color[index].texture);
+        CC_SAFE_RETAIN(_color[index].texture);
         _dirty = true;
     }
 
     void setDepthAttachment(TextureBackend* attachment, int level = 0)
     {
-        AX_SAFE_RELEASE(_depth.texture);
+        CC_SAFE_RELEASE(_depth.texture);
         _depth.texture = attachment;
         _depth.level   = level;
-        AX_SAFE_RETAIN(_depth.texture);
+        CC_SAFE_RETAIN(_depth.texture);
 
         _dirty = true;
     };
     void setStencilAttachment(TextureBackend* attachment, int level = 0)
     {
-        AX_SAFE_RELEASE(_stencil.texture);
+        CC_SAFE_RELEASE(_stencil.texture);
         _stencil.texture = attachment;
         _stencil.level   = level;
-        AX_SAFE_RETAIN(_stencil.texture);
+        CC_SAFE_RETAIN(_stencil.texture);
 
         _dirty = true;
     };

@@ -30,13 +30,13 @@
 #        include <string.h>
 #    endif
 
-#    if defined(AX_STATIC)
-#        define AX_EX_DLL
+#    if defined(CC_STATIC)
+#        define CC_EX_DLL
 #    else
 #        if defined(_USREXDLL)
-#            define AX_EX_DLL __declspec(dllexport)
+#            define CC_EX_DLL __declspec(dllexport)
 #        else /* use a DLL library */
-#            define AX_EX_DLL __declspec(dllimport)
+#            define CC_EX_DLL __declspec(dllimport)
 #        endif
 #    endif
 
@@ -49,9 +49,9 @@
 #        endif
 #    endif
 #elif defined(_SHARED_)
-#    define AX_EX_DLL __attribute__((visibility("default")))
+#    define CC_EX_DLL __attribute__((visibility("default")))
 #else
-#    define AX_EX_DLL
+#    define CC_EX_DLL
 #endif
 
 #endif /* __CCEXTENSIONEXPORT_H__*/

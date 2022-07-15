@@ -44,7 +44,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlSlider : public Control
+class CC_EX_DLL ControlSlider : public Control
 {
 public:
     /**
@@ -138,24 +138,24 @@ protected:
 
     // manually put in the setters
     /** Contains the receiver's current value. */
-    AX_SYNTHESIZE_READONLY(float, _value, Value);
+    CC_SYNTHESIZE_READONLY(float, _value, Value);
 
     /** Contains the minimum value of the receiver.
      * The default value of this property is 0.0. */
-    AX_SYNTHESIZE_READONLY(float, _minimumValue, MinimumValue);
+    CC_SYNTHESIZE_READONLY(float, _minimumValue, MinimumValue);
 
     /** Contains the maximum value of the receiver.
      * The default value of this property is 1.0. */
-    AX_SYNTHESIZE_READONLY(float, _maximumValue, MaximumValue);
+    CC_SYNTHESIZE_READONLY(float, _maximumValue, MaximumValue);
 
-    AX_SYNTHESIZE(float, _minimumAllowedValue, MinimumAllowedValue);
-    AX_SYNTHESIZE(float, _maximumAllowedValue, MaximumAllowedValue);
+    CC_SYNTHESIZE(float, _minimumAllowedValue, MinimumAllowedValue);
+    CC_SYNTHESIZE(float, _maximumAllowedValue, MaximumAllowedValue);
 
     // maybe this should be read-only
-    AX_SYNTHESIZE_RETAIN(Sprite*, _thumbSprite, ThumbSprite);
-    AX_SYNTHESIZE_RETAIN(Sprite*, _selectedThumbSprite, SelectedThumbSprite);
-    AX_SYNTHESIZE_RETAIN(Sprite*, _progressSprite, ProgressSprite);
-    AX_SYNTHESIZE_RETAIN(Sprite*, _backgroundSprite, BackgroundSprite);
+    CC_SYNTHESIZE_RETAIN(Sprite*, _thumbSprite, ThumbSprite);
+    CC_SYNTHESIZE_RETAIN(Sprite*, _selectedThumbSprite, SelectedThumbSprite);
+    CC_SYNTHESIZE_RETAIN(Sprite*, _progressSprite, ProgressSprite);
+    CC_SYNTHESIZE_RETAIN(Sprite*, _backgroundSprite, BackgroundSprite);
 };
 
 // end of GUI group

@@ -32,7 +32,7 @@ PopupMenu::PopupMenu() :
 
 PopupMenu::~PopupMenu()
 {
-    AX_SAFE_RELEASE(_contentPane);
+    CC_SAFE_RELEASE(_contentPane);
 }
 
 bool PopupMenu::init(const std::string & resourceURL)
@@ -50,7 +50,7 @@ bool PopupMenu::init(const std::string & resourceURL)
 
     _contentPane = UIPackage::createObjectFromURL(url)->as<GComponent>();
     _contentPane->retain();
-    _contentPane->addEventListener(UIEventType::Enter, AX_CALLBACK_1(PopupMenu::onEnter, this));
+    _contentPane->addEventListener(UIEventType::Enter, CC_CALLBACK_1(PopupMenu::onEnter, this));
 
     _list = _contentPane->getChild("list")->as<GList>();
     _list->removeChildrenToPool();
@@ -59,7 +59,7 @@ bool PopupMenu::init(const std::string & resourceURL)
     _list->removeRelation(_contentPane, RelationType::Height);
     _contentPane->addRelation(_list, RelationType::Height);
 
-    _list->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(PopupMenu::onClickItem, this));
+    _list->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(PopupMenu::onClickItem, this));
 
     return true;
 }

@@ -286,7 +286,7 @@ TestLayer1::TestLayer1(std::string_view transitionName)
     label->setPosition(Vec2(x / 2, y / 2));
     addChild(label);
 
-    schedule(AX_SCHEDULE_SELECTOR(TestLayer1::step), 1.0f);
+    schedule(CC_SCHEDULE_SELECTOR(TestLayer1::step), 1.0f);
 }
 
 TestLayer1::~TestLayer1() {}
@@ -356,7 +356,7 @@ TestLayer2::TestLayer2(std::string_view transitionName)
     label->setPosition(Vec2(x / 2, y / 2));
     addChild(label);
 
-    schedule(AX_SCHEDULE_SELECTOR(TestLayer2::step), 1.0f);
+    schedule(CC_SCHEDULE_SELECTOR(TestLayer2::step), 1.0f);
 }
 
 TestLayer2::~TestLayer2() {}

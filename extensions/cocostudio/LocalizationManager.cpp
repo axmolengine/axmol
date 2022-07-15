@@ -31,7 +31,7 @@ JsonLocalizationManager::JsonLocalizationManager() : languageData(nullptr) {}
 
 JsonLocalizationManager::~JsonLocalizationManager()
 {
-    AX_SAFE_DELETE(languageData);
+    CC_SAFE_DELETE(languageData);
 }
 
 bool JsonLocalizationManager::initLanguageData(std::string file)
@@ -47,7 +47,7 @@ bool JsonLocalizationManager::initLanguageData(std::string file)
         if (languageData->IsObject())
             result = true;
         else
-            AX_SAFE_DELETE(languageData);
+            CC_SAFE_DELETE(languageData);
     }
 
     return result;

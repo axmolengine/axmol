@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_BEAM_RENDER_H__
-#define __AX_PU_PARTICLE_3D_BEAM_RENDER_H__
+#ifndef __CC_PU_PARTICLE_3D_BEAM_RENDER_H__
+#define __CC_PU_PARTICLE_3D_BEAM_RENDER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -76,7 +76,7 @@ public:
 };
 
 // particle render for quad
-class AX_EX_DLL PUBeamRender : public PURender, public PUListener
+class CC_EX_DLL PUBeamRender : public PURender, public PUListener
 {
 public:
     // Constants

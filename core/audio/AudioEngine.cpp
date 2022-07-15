@@ -196,7 +196,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
         auto profileHelper = _defaultProfileHelper;
         if (profile && profile != &profileHelper->profile)
         {
-            AX_ASSERT(!profile->name.empty());
+            CC_ASSERT(!profile->name.empty());
             profileHelper          = &_audioPathProfileHelperMap[profile->name];
             profileHelper->profile = *profile;
         }

@@ -55,7 +55,7 @@ bool UITextBMFontTest::init()
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
-        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UITextBMFontTest::printWidgetResources, this));
+        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UITextBMFontTest::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);

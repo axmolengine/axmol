@@ -33,7 +33,7 @@
 #include "platform/apple/CCDevice-apple.h"
 
 // Accelerometer
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
 #    import <CoreMotion/CoreMotion.h>
 #endif
 #import <CoreFoundation/CoreFoundation.h>
@@ -189,7 +189,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
 
 #define SENSOR_DELAY_GAME 0.02
 
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
 @interface CCAccelerometerDispatcher : NSObject {
     axis::Acceleration* _acceleration;
     CMMotionManager* _motionManager;
@@ -302,7 +302,7 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
     dispatcher->dispatchEvent(&event);
 }
 @end
-#endif  // !defined(AX_TARGET_OS_TVOS)
+#endif  // !defined(CC_TARGET_OS_TVOS)
 
 //
 
@@ -340,14 +340,14 @@ int Device::getDPI()
 
 void Device::setAccelerometerEnabled(bool isEnabled)
 {
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
     [[CCAccelerometerDispatcher sharedAccelerometerDispatcher] setAccelerometerEnabled:isEnabled];
 #endif
 }
 
 void Device::setAccelerometerInterval(float interval)
 {
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
     [[CCAccelerometerDispatcher sharedAccelerometerDispatcher] setAccelerometerInterval:interval];
 #endif
 }
@@ -443,14 +443,14 @@ static bool _initWithString(const char* text,
     bool bRet = false;
     do
     {
-        AX_BREAK_IF(!text || !info);
+        CC_BREAK_IF(!text || !info);
 
         id font = _createSystemFont(fontName, size);
 
-        AX_BREAK_IF(!font);
+        CC_BREAK_IF(!font);
 
         NSString* str = [NSString stringWithUTF8String:text];
-        AX_BREAK_IF(!str);
+        CC_BREAK_IF(!str);
 
         CGSize dimensions;
         dimensions.width  = info->width;
@@ -487,7 +487,7 @@ static bool _initWithString(const char* text,
             realDimensions = _calculateStringSize(stringWithAttributes, font, &dimensions, enableWrap, overflow);
         }
 
-        AX_BREAK_IF(realDimensions.width <= 0 || realDimensions.height <= 0);
+        CC_BREAK_IF(realDimensions.width <= 0 || realDimensions.height <= 0);
         if (dimensions.width <= 0)
         {
             dimensions.width = realDimensions.width;
@@ -517,7 +517,7 @@ static bool _initWithString(const char* text,
         if (!context)
         {
             CGColorSpaceRelease(colorSpace);
-            AX_SAFE_FREE(data);
+            CC_SAFE_FREE(data);
             break;
         }
 

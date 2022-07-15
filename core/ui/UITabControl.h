@@ -45,7 +45,7 @@ class TabControl;
 /**
  * the header button in TabControl
  */
-class AX_GUI_DLL TabHeader : public AbstractCheckButton
+class CC_GUI_DLL TabHeader : public AbstractCheckButton
 {
     friend class TabControl;
 
@@ -188,7 +188,7 @@ private:
 /**
  * TabControl, use header button switch container
  */
-class AX_GUI_DLL TabControl : public Widget
+class CC_GUI_DLL TabControl : public Widget
 {
 public:
     enum class Dock

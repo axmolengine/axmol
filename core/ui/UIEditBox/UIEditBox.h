@@ -51,7 +51,7 @@ class EditBoxImpl;
  * @js NA
  * @lua NA
  */
-class AX_GUI_DLL EditBoxDelegate
+class CC_GUI_DLL EditBoxDelegate
 {
 public:
     /**
@@ -100,7 +100,7 @@ public:
  * You can use this widget to gather small amounts of text from the user.
  *
  */
-class AX_GUI_DLL EditBox : public Widget, public IMEDelegate
+class CC_GUI_DLL EditBox : public Widget, public IMEDelegate
 {
 public:
     /**
@@ -381,7 +381,7 @@ public:
      */
     EditBoxDelegate* getDelegate();
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     /**
      * Registers a script function that will be called for EditBox events.
      *
@@ -423,7 +423,7 @@ public:
      */
     int getScriptEditBoxHandler() { return _scriptEditBoxHandler; }
 
-#endif  // #if AX_ENABLE_SCRIPT_BINDING
+#endif  // #if CC_ENABLE_SCRIPT_BINDING
 
     /**
      * Set the text entered in the edit box.
@@ -706,7 +706,7 @@ protected:
     EditBoxDelegate* _delegate = nullptr;
 
     float _adjustHeight = 0.f;
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     int _scriptEditBoxHandler = 0;
 #endif
 };

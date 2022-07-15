@@ -54,7 +54,7 @@ class AssetsManagerDelegateProtocol;
  *  The updated package should be a zip file. And there should be a file named
  *  version in the server, which contains version code.
  */
-class AX_EX_DLL AssetsManager : public Node
+class CC_EX_DLL AssetsManager : public Node
 {
 public:
     enum class ErrorCode

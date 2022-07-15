@@ -43,7 +43,7 @@ static const std::string SHADER_PREDEFINE = "#version 100\n precision highp floa
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-#if defined(AX_USE_GLES)
+#if defined(CC_USE_GLES)
     // some device required manually specify the precision qualifiers for vertex shader.
     _vertexShaderModule =
         static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(SHADER_PREDEFINE + _vertexShader));
@@ -54,12 +54,12 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
     _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(_fragmentShader));
 #endif
 
-    AX_SAFE_RETAIN(_vertexShaderModule);
-    AX_SAFE_RETAIN(_fragmentShaderModule);
+    CC_SAFE_RETAIN(_vertexShaderModule);
+    CC_SAFE_RETAIN(_fragmentShaderModule);
     compileProgram();
     computeUniformInfos();
     computeLocations();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     for (const auto& uniform : _activeUniformInfos)
     {
         auto location                            = uniform.second.location;
@@ -76,17 +76,17 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
 
 ProgramGL::~ProgramGL()
 {
-    AX_SAFE_RELEASE(_vertexShaderModule);
-    AX_SAFE_RELEASE(_fragmentShaderModule);
+    CC_SAFE_RELEASE(_vertexShaderModule);
+    CC_SAFE_RELEASE(_fragmentShaderModule);
     if (_program)
         glDeleteProgram(_program);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
 void ProgramGL::reloadProgram()
 {
     _activeUniformInfos.clear();
@@ -310,7 +310,7 @@ UniformLocation ProgramGL::getUniformLocation(std::string_view uniform) const
     if (_activeUniformInfos.find(uniform) != _activeUniformInfos.end())
     {
         const auto& uniformInfo = _activeUniformInfos.at(uniform);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
         uniformLocation.location[0] = _mapToOriginalLocation.at(uniformInfo.location);
 #else
         uniformLocation.location[0] = uniformInfo.location;
@@ -329,7 +329,7 @@ int ProgramGL::getMaxFragmentLocation() const
     return _maxLocation;
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
 int ProgramGL::getMappedLocation(int location) const
 {
     if (_mapToCurrentActiveLocation.find(location) != _mapToCurrentActiveLocation.end())

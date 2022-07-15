@@ -25,13 +25,13 @@
  ****************************************************************************/
 #pragma once
 
-#if defined(_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-                        AX_TARGET_PLATFORM == AX_PLATFORM_TIZEN) &&                                           \
-                           !defined(AX_PLATFORM_OS_TVOS)
+#if defined(_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+                        CC_TARGET_PLATFORM == CC_PLATFORM_TIZEN) &&                                           \
+                           !defined(CC_PLATFORM_OS_TVOS)
 
 #    include "ui/UIWidget.h"
 
-#    if AX_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
 #        include "2d/CCDrawNode.h"
 #    endif
 
@@ -247,7 +247,7 @@ protected:
     virtual axis::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
-#    if AX_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
     DrawNode* _debugDrawNode;
 #    endif
 

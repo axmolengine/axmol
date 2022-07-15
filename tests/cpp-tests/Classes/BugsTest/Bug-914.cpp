@@ -35,8 +35,8 @@ bool Bug914Layer::init()
     if (BugsTestBase::init())
     {
         auto listener            = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(Bug914Layer::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(Bug914Layer::onTouchesMoved, this);
+        listener->onTouchesBegan = CC_CALLBACK_2(Bug914Layer::onTouchesBegan, this);
+        listener->onTouchesMoved = CC_CALLBACK_2(Bug914Layer::onTouchesMoved, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         // ask director the the window size
@@ -54,7 +54,7 @@ bool Bug914Layer::init()
 
         // create and initialize a Label
         auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 64.0f);
-        auto item1 = MenuItemFont::create("restart", AX_CALLBACK_1(Bug914Layer::restart, this));
+        auto item1 = MenuItemFont::create("restart", CC_CALLBACK_1(Bug914Layer::restart, this));
 
         auto menu = Menu::create(item1, nullptr);
         menu->alignItemsVertically();

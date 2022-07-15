@@ -27,7 +27,7 @@
 #define __CCNAV_MESH_TOOL_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "platform/CCPlatformMacros.h"
 #    include "math/CCMath.h"
@@ -143,6 +143,6 @@ bool getSteerTarget(dtNavMeshQuery* navQuery,
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH
 
 #endif  // __CCNAV_MESH_H__

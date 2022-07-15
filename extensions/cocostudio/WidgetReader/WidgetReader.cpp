@@ -128,12 +128,12 @@ WidgetReader* WidgetReader::getInstance()
 
 void WidgetReader::purge()
 {
-    AX_SAFE_DELETE(instanceWidgetReader);
+    CC_SAFE_DELETE(instanceWidgetReader);
 }
 
 void WidgetReader::destroyInstance()
 {
-    AX_SAFE_DELETE(instanceWidgetReader);
+    CC_SAFE_DELETE(instanceWidgetReader);
 }
 
 void WidgetReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson::Value& options)
@@ -403,7 +403,7 @@ void WidgetReader::setPropsFromBinary(axis::ui::Widget* widget,
         std::string key   = stChildArray[i].GetName(cocoLoader);
         std::string value = stChildArray[i].GetValue(cocoLoader);
 
-        AX_BASIC_PROPERTY_BINARY_READER
+        CC_BASIC_PROPERTY_BINARY_READER
     }
 
     this->endSetBasicProperties(widget);

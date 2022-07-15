@@ -86,8 +86,8 @@ void GearColor::apply()
                                          ->setDelay(_tweenConfig->delay)
                                          ->setEase(_tweenConfig->easeType)
                                          ->setTargetAny(this)
-                                         ->onUpdate(AX_CALLBACK_1(GearColor::onTweenUpdate, this))
-                                         ->onComplete(AX_CALLBACK_0(GearColor::onTweenComplete, this));
+                                         ->onUpdate(CC_CALLBACK_1(GearColor::onTweenUpdate, this))
+                                         ->onComplete(CC_CALLBACK_0(GearColor::onTweenComplete, this));
         }
     }
     else

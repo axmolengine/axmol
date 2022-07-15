@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_SINE_FORCE_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_SINE_FORCE_AFFECTOR_H__
+#ifndef __CC_PU_PARTICLE_3D_SINE_FORCE_AFFECTOR_H__
+#define __CC_PU_PARTICLE_3D_SINE_FORCE_AFFECTOR_H__
 
 #include "CCPUBaseForceAffector.h"
 #include "base/ccTypes.h"
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUSineForceAffector : public PUBaseForceAffector
+class CC_EX_DLL PUSineForceAffector : public PUBaseForceAffector
 {
 public:
     // Constants

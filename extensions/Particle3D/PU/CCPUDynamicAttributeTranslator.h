@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_DYNAMIC_ATTRIBUTE_TRANSLATOR_H__
-#define __AX_PU_PARTICLE_3D_DYNAMIC_ATTRIBUTE_TRANSLATOR_H__
+#ifndef __CC_PU_PARTICLE_3D_DYNAMIC_ATTRIBUTE_TRANSLATOR_H__
+#define __CC_PU_PARTICLE_3D_DYNAMIC_ATTRIBUTE_TRANSLATOR_H__
 
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 #include "extensions/Particle3D/PU/CCPUScriptTranslator.h"

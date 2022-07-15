@@ -51,7 +51,7 @@ struct HSV;
  * RGB color composed of bytes 3 bytes.
  * @since v3.0
  */
-struct AX_DLL Color3B
+struct CC_DLL Color3B
 {
     Color3B();
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b);
@@ -86,7 +86,7 @@ struct AX_DLL Color3B
  * RGBA color composed of 4 bytes.
  * @since v3.0
  */
-struct AX_DLL Color4B
+struct CC_DLL Color4B
 {
     Color4B();
     Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
@@ -128,7 +128,7 @@ struct AX_DLL Color4B
  * RGBA color composed of 4 floats.
  * @since v3.0
  */
-struct AX_DLL Color4F
+struct CC_DLL Color4F
 {
     Color4F();
     Color4F(float _r, float _g, float _b, float _a);
@@ -182,7 +182,7 @@ Color4F operator/(Color4F lhs, float rhs);
  * 
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
  */
-struct AX_DLL HSV
+struct CC_DLL HSV
 {
     HSV();
     HSV(float _h, float _s, float _v, float _a = 1.0F);
@@ -231,7 +231,7 @@ HSV operator/(HSV lhs, float rhs);
  *
  * Implementation source: https://gist.github.com/ciembor/1494530
  */
-struct AX_DLL HSL
+struct CC_DLL HSL
 {
     HSL();
     HSL(float _h, float _s, float _l, float _a = 1.0F);
@@ -285,7 +285,7 @@ typedef Vec2 Tex2F;
 /** @struct PointSprite
  * Vec2 Sprite component.
  */
-struct AX_DLL PointSprite
+struct CC_DLL PointSprite
 {
     Vec2 pos;          // 8 bytes
     Color4B color;     // 4 bytes
@@ -295,7 +295,7 @@ struct AX_DLL PointSprite
 /** @struct Quad2
  * A 2D Quad. 4 * 2 floats.
  */
-struct AX_DLL Quad2
+struct CC_DLL Quad2
 {
     Vec2 tl;
     Vec2 tr;
@@ -306,7 +306,7 @@ struct AX_DLL Quad2
 /** @struct Quad3
  * A 3D Quad. 4 * 3 floats.
  */
-struct AX_DLL Quad3
+struct CC_DLL Quad3
 {
     Vec3 bl;
     Vec3 br;
@@ -343,7 +343,7 @@ struct V2F_C4B_PF
 /** @struct V2F_C4F_T2F
  * A Vec2 with a vertex point, a tex coord point and a color 4F.
  */
-struct AX_DLL V2F_C4F_T2F
+struct CC_DLL V2F_C4F_T2F
 {
     /// vertices (2F)
     Vec2 vertices;
@@ -356,7 +356,7 @@ struct AX_DLL V2F_C4F_T2F
 /** @struct V3F_C4B_T2F
  * A Vec2 with a vertex point, a tex coord point and a color 4B.
  */
-struct AX_DLL V3F_C4B_T2F
+struct CC_DLL V3F_C4B_T2F
 {
     /// vertices (3F)
     Vec3 vertices;  // 12 bytes
@@ -371,7 +371,7 @@ struct AX_DLL V3F_C4B_T2F
 /** @struct V3F_T2F
  * A Vec2 with a vertex point, a tex coord point.
  */
-struct AX_DLL V3F_T2F
+struct CC_DLL V3F_T2F
 {
     /// vertices (2F)
     Vec3 vertices;
@@ -382,7 +382,7 @@ struct AX_DLL V3F_T2F
 /** @struct V3F_C4F
  * A Vec3 with a vertex point, a color.
  */
-struct AX_DLL V3F_C4F
+struct CC_DLL V3F_C4F
 {
     /// vertices (3F)
     Vec3 vertices;
@@ -393,7 +393,7 @@ struct AX_DLL V3F_C4F
 /** @struct V2F_C4B_T2F_Triangle
  * A Triangle of V2F_C4B_T2F.
  */
-struct AX_DLL V2F_C4B_T2F_Triangle
+struct CC_DLL V2F_C4B_T2F_Triangle
 {
     V2F_C4B_T2F a;
     V2F_C4B_T2F b;
@@ -403,7 +403,7 @@ struct AX_DLL V2F_C4B_T2F_Triangle
 /** @struct V2F_C4B_T2F_Quad
  * A Quad of V2F_C4B_T2F.
  */
-struct AX_DLL V2F_C4B_T2F_Quad
+struct CC_DLL V2F_C4B_T2F_Quad
 {
     /// bottom left
     V2F_C4B_T2F bl;
@@ -418,7 +418,7 @@ struct AX_DLL V2F_C4B_T2F_Quad
 /** @struct V3F_C4B_T2F_Quad
  * 4 Vertex3FTex2FColor4B.
  */
-struct AX_DLL V3F_C4B_T2F_Quad
+struct CC_DLL V3F_C4B_T2F_Quad
 {
     /// top left
     V3F_C4B_T2F tl;
@@ -433,7 +433,7 @@ struct AX_DLL V3F_C4B_T2F_Quad
 /** @struct V2F_C4F_T2F_Quad
  * 4 Vertex2FTex2FColor4F Quad.
  */
-struct AX_DLL V2F_C4F_T2F_Quad
+struct CC_DLL V2F_C4F_T2F_Quad
 {
     /// bottom left
     V2F_C4F_T2F bl;
@@ -448,7 +448,7 @@ struct AX_DLL V2F_C4F_T2F_Quad
 /** @struct V3F_T2F_Quad
  *
  */
-struct AX_DLL V3F_T2F_Quad
+struct CC_DLL V3F_T2F_Quad
 {
     /// bottom left
     V3F_T2F bl;
@@ -468,7 +468,7 @@ enum class BlendFactor : uint32_t;
 /** @struct BlendFunc
  * Blend Function used for textures.
  */
-struct AX_DLL BlendFunc
+struct CC_DLL BlendFunc
 {
     /** source blend function */
     backend::BlendFactor src;
@@ -498,7 +498,7 @@ struct AX_DLL BlendFunc
  *
  * @note If any of these enums are edited and/or reordered, update Texture2D.m.
  */
-enum class AX_DLL TextVAlignment
+enum class CC_DLL TextVAlignment
 {
     TOP,
     CENTER,
@@ -510,7 +510,7 @@ enum class AX_DLL TextVAlignment
  *
  * @note If any of these enums are edited and/or reordered, update Texture2D.m.
  */
-enum class AX_DLL TextHAlignment
+enum class CC_DLL TextHAlignment
 {
     LEFT,
     CENTER,
@@ -536,7 +536,7 @@ enum class GlyphCollection
 /** @struct T2F_Quad
  * Texture coordinates for a quad.
  */
-struct AX_DLL T2F_Quad
+struct CC_DLL T2F_Quad
 {
     /// bottom left
     Tex2F bl;
@@ -551,7 +551,7 @@ struct AX_DLL T2F_Quad
 /** @struct AnimationFrameData
  * Struct that holds the size in pixels, texture coordinates and delays for animated ParticleSystemQuad.
  */
-struct AX_DLL AnimationFrameData
+struct CC_DLL AnimationFrameData
 {
     T2F_Quad texCoords;
     Vec2 size;
@@ -565,7 +565,7 @@ struct AX_DLL AnimationFrameData
 /** @struct FontShadow
  * Shadow attributes.
  */
-struct AX_DLL FontShadow
+struct CC_DLL FontShadow
 {
     /// shadow x and y offset
     Vec2 _shadowOffset;
@@ -580,7 +580,7 @@ struct AX_DLL FontShadow
 /** @struct FontStroke
  * Stroke attributes.
  */
-struct AX_DLL FontStroke
+struct CC_DLL FontStroke
 {
     /// stroke color
     Color3B _strokeColor = Color3B::BLACK;
@@ -595,7 +595,7 @@ struct AX_DLL FontStroke
 /** @struct FontDefinition
  * Font attributes.
  */
-struct AX_DLL FontDefinition
+struct CC_DLL FontDefinition
 {
     /// font name
     std::string _fontName;
@@ -627,7 +627,7 @@ struct AX_DLL FontDefinition
 /** @struct Acceleration
  * The device accelerometer reports values for each axis in units of g-force.
  */
-class AX_DLL Acceleration : public Ref
+class CC_DLL Acceleration : public Ref
 {
 public:
     double x = 0;
@@ -637,10 +637,10 @@ public:
     double timestamp = 0;
 };
 
-extern const std::string AX_DLL STD_STRING_EMPTY;
-extern const ssize_t AX_DLL AX_INVALID_INDEX;
+extern const std::string CC_DLL STD_STRING_EMPTY;
+extern const ssize_t CC_DLL CC_INVALID_INDEX;
 
-struct AX_DLL Viewport
+struct CC_DLL Viewport
 {
     int x          = 0;
     int y          = 0;
@@ -648,7 +648,7 @@ struct AX_DLL Viewport
     unsigned int h = 0;
 };
 
-struct AX_DLL ScissorRect
+struct CC_DLL ScissorRect
 {
     float x      = 0;
     float y      = 0;

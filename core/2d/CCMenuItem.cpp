@@ -88,7 +88,7 @@ void MenuItem::activate()
         {
             _callback(this);
         }
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
         BasicScriptData data(this);
         ScriptEvent scriptEvent(kMenuClickedEvent, &data);
         ScriptEngineManager::sendEventToLua(scriptEvent);
@@ -591,7 +591,7 @@ MenuItemImage* MenuItemImage::create()
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -623,7 +623,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -637,7 +637,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -694,7 +694,7 @@ MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callbac
     MenuItemToggle* ret = new MenuItemToggle();
     ret->MenuItem::initWithCallback(callback);
     ret->autorelease();
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -706,7 +706,7 @@ MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callbac
             }
         }
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     ret->_subItems      = menuItems;
     ret->_selectedIndex = UINT_MAX;
     ret->setSelectedIndex(0);
@@ -739,19 +739,19 @@ bool MenuItemToggle::initWithCallback(const ccMenuCallback& callback, MenuItem* 
     int z       = 0;
     MenuItem* i = item;
 
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
 
     while (i)
     {
         z++;
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         if (sEngine)
         {
             sEngine->retainScriptObject(this, i);
         }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _subItems.pushBack(i);
         i = va_arg(args, MenuItem*);
     }
@@ -787,13 +787,13 @@ bool MenuItemToggle::initWithItem(MenuItem* item)
 
 void MenuItemToggle::addSubItem(MenuItem* item)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, item);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _subItems.pushBack(item);
 }
 
@@ -801,7 +801,7 @@ void MenuItemToggle::cleanup()
 {
     for (const auto& item : _subItems)
     {
-#if defined(AX_NATIVE_CONTROL_SCRIPT) && !AX_NATIVE_CONTROL_SCRIPT
+#if defined(CC_NATIVE_CONTROL_SCRIPT) && !CC_NATIVE_CONTROL_SCRIPT
         ScriptEngineManager::getInstance()->getScriptEngine()->releaseScriptObject(this, item);
 #endif
         item->cleanup();

@@ -52,7 +52,7 @@ protected:
     Effect();
     virtual ~Effect();
     axis::backend::ProgramState* _programState = nullptr;
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string _fragSource;
     axis::EventListenerCustom* _backgroundListener;
 #endif

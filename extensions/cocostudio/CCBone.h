@@ -94,8 +94,8 @@ public:
 
     void removeDisplay(int index);
 
-    AX_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
-    AX_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
+    CC_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
+    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
 
     void changeDisplayWithIndex(int index, bool force);
     void changeDisplayWithName(std::string_view name, bool force);
@@ -194,7 +194,7 @@ public:
      * This function is deprecated, please use isIgnoreMovementBoneData()
      * @lua NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual bool getIgnoreMovementBoneData() const { return isIgnoreMovementBoneData(); }
+    CC_DEPRECATED_ATTRIBUTE virtual bool getIgnoreMovementBoneData() const { return isIgnoreMovementBoneData(); }
 
     /*
      * Set blend function

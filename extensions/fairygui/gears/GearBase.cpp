@@ -76,7 +76,7 @@ GearBase::~GearBase()
 {
     if (_tweenConfig && _tweenConfig->_tweener)
         _tweenConfig->_tweener->kill();
-    AX_SAFE_DELETE(_tweenConfig);
+    CC_SAFE_DELETE(_tweenConfig);
 }
 
 void GearBase::setController(GController* value)

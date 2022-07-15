@@ -30,7 +30,7 @@ NS_AX_EXT_BEGIN
 
 void TableViewCell::reset()
 {
-    _idx = AX_INVALID_INDEX;
+    _idx = CC_INVALID_INDEX;
 }
 
 ssize_t TableViewCell::getIdx() const

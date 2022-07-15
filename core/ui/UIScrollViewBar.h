@@ -42,7 +42,7 @@ namespace ui
 /**
  * Scroll bar being attached to ScrollView layout container.
  */
-class AX_GUI_DLL ScrollViewBar : public ProtectedNode
+class CC_GUI_DLL ScrollViewBar : public ProtectedNode
 {
 
 public:

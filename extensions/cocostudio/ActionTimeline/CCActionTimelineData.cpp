@@ -12,7 +12,7 @@ ActionTimelineData* ActionTimelineData::create(int actionTag)
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }

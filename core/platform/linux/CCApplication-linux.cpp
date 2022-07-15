@@ -39,13 +39,13 @@ Application* Application::sm_pSharedApplication = nullptr;
 
 Application::Application() : _animationInterval(16666667)
 {
-    AX_ASSERT(!sm_pSharedApplication);
+    CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
 Application::~Application()
 {
-    AX_ASSERT(this == sm_pSharedApplication);
+    CC_ASSERT(this == sm_pSharedApplication);
     sm_pSharedApplication = nullptr;
 }
 
@@ -145,7 +145,7 @@ bool Application::openURL(std::string_view url)
 //////////////////////////////////////////////////////////////////////////
 Application* Application::getInstance()
 {
-    AX_ASSERT(sm_pSharedApplication);
+    CC_ASSERT(sm_pSharedApplication);
     return sm_pSharedApplication;
 }
 

@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "physics/CCPhysicsShape.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 
 #    include <climits>
 #    include <cmath>
@@ -288,7 +288,7 @@ PhysicsShapeCircle* PhysicsShapeCircle::create(float radius,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -301,7 +301,7 @@ bool PhysicsShapeCircle::init(float radius,
         _type = Type::CIRCLE;
 
         auto shape = cpCircleShapeNew(s_sharedBody, radius, PhysicsHelper::vec22cpv(offset));
-        AX_BREAK_IF(shape == nullptr);
+        CC_BREAK_IF(shape == nullptr);
         cpShapeSetUserData(shape, this);
 
         addShape(shape);
@@ -380,7 +380,7 @@ PhysicsShapeEdgeSegment* PhysicsShapeEdgeSegment::create(const Vec2& a,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -394,7 +394,7 @@ bool PhysicsShapeEdgeSegment::init(const Vec2& a,
         _type = Type::EDGESEGMENT;
 
         auto shape = cpSegmentShapeNew(s_sharedBody, PhysicsHelper::vec22cpv(a), PhysicsHelper::vec22cpv(b), border);
-        AX_BREAK_IF(shape == nullptr);
+        CC_BREAK_IF(shape == nullptr);
         cpShapeSetUserData(shape, this);
 
         addShape(shape);
@@ -457,7 +457,7 @@ PhysicsShapeBox* PhysicsShapeBox::create(const Vec2& size,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -479,7 +479,7 @@ bool PhysicsShapeBox::init(const Vec2& size,
         cpTransform transform = cpTransformTranslate(PhysicsHelper::vec22cpv(offset));
 
         auto shape = cpPolyShapeNew(s_sharedBody, 4, vec, transform, radius);
-        AX_BREAK_IF(shape == nullptr);
+        CC_BREAK_IF(shape == nullptr);
         cpShapeSetUserData(shape, this);
 
         addShape(shape);
@@ -517,7 +517,7 @@ PhysicsShapePolygon* PhysicsShapePolygon::create(const Vec2* points,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -536,9 +536,9 @@ bool PhysicsShapePolygon::init(const Vec2* points,
                                                           // 0);
         cpTransform transform = cpTransformTranslate(PhysicsHelper::vec22cpv(offset));
         auto shape            = cpPolyShapeNew(s_sharedBody, count, vecs, transform, radius);
-        AX_SAFE_DELETE_ARRAY(vecs);
+        CC_SAFE_DELETE_ARRAY(vecs);
 
-        AX_BREAK_IF(shape == nullptr);
+        CC_BREAK_IF(shape == nullptr);
         cpShapeSetUserData(shape, this);
 
         addShape(shape);
@@ -560,7 +560,7 @@ float PhysicsShapePolygon::calculateArea(const Vec2* points, int count)
     cpVect* vecs = new cpVect[count];
     PhysicsHelper::points2cpvs(points, vecs, count);
     float area = PhysicsHelper::cpfloat2float(cpAreaForPoly(count, vecs, 0.0f));
-    AX_SAFE_DELETE_ARRAY(vecs);
+    CC_SAFE_DELETE_ARRAY(vecs);
 
     return area;
 }
@@ -573,7 +573,7 @@ float PhysicsShapePolygon::calculateMoment(float mass, const Vec2* points, int c
         mass == PHYSICS_INFINITY
             ? PHYSICS_INFINITY
             : PhysicsHelper::cpfloat2float(cpMomentForPoly(mass, count, vecs, PhysicsHelper::vec22cpv(offset), radius));
-    AX_SAFE_DELETE_ARRAY(vecs);
+    CC_SAFE_DELETE_ARRAY(vecs);
 
     return moment;
 }
@@ -586,7 +586,7 @@ float PhysicsShapePolygon::calculateArea()
     for (int i = 0; i < count; ++i)
         vecs[i] = cpPolyShapeGetVert(shape, i);
     float area = PhysicsHelper::cpfloat2float(cpAreaForPoly(count, vecs, cpPolyShapeGetRadius(shape)));
-    AX_SAFE_DELETE_ARRAY(vecs);
+    CC_SAFE_DELETE_ARRAY(vecs);
     return area;
 }
 
@@ -605,7 +605,7 @@ float PhysicsShapePolygon::calculateDefaultMoment()
             vecs[i] = cpPolyShapeGetVert(shape, i);
         float moment =
             PhysicsHelper::cpfloat2float(cpMomentForPoly(_mass, count, vecs, cpvzero, cpPolyShapeGetRadius(shape)));
-        AX_SAFE_DELETE_ARRAY(vecs);
+        CC_SAFE_DELETE_ARRAY(vecs);
         return moment;
     }
 }
@@ -623,7 +623,7 @@ void PhysicsShapePolygon::getPoints(Vec2* outPoints) const
     for (int i = 0; i < count; ++i)
         vecs[i] = cpPolyShapeGetVert(shape, i);
     PhysicsHelper::cpvs2points(vecs, outPoints, count);
-    AX_SAFE_DELETE_ARRAY(vecs);
+    CC_SAFE_DELETE_ARRAY(vecs);
 }
 
 int PhysicsShapePolygon::getPointsCount() const
@@ -640,7 +640,7 @@ Vec2 PhysicsShapePolygon::getCenter()
         vecs[i] = cpPolyShapeGetVert(shape, i);
 
     Vec2 center = PhysicsHelper::cpv2vec2(cpCentroidForPoly(count, vecs));
-    AX_SAFE_DELETE_ARRAY(vecs);
+    CC_SAFE_DELETE_ARRAY(vecs);
 
     return center;
 }
@@ -674,7 +674,7 @@ void PhysicsShapePolygon::updateScale()
     }
 
     cpPolyShapeSetVertsRaw(shape, count, vects);
-    AX_SAFE_DELETE_ARRAY(vects);
+    CC_SAFE_DELETE_ARRAY(vects);
 
     PhysicsShape::updateScale();
 }
@@ -692,7 +692,7 @@ PhysicsShapeEdgeBox* PhysicsShapeEdgeBox::create(const Vec2& size,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -715,11 +715,11 @@ bool PhysicsShapeEdgeBox::init(const Vec2& size,
         for (; i < 4; ++i)
         {
             auto shape = cpSegmentShapeNew(s_sharedBody, vec[i], vec[(i + 1) % 4], border);
-            AX_BREAK_IF(shape == nullptr);
+            CC_BREAK_IF(shape == nullptr);
             cpShapeSetUserData(shape, this);
             addShape(shape);
         }
-        AX_BREAK_IF(i < 4);
+        CC_BREAK_IF(i < 4);
 
         _mass   = PHYSICS_INFINITY;
         _moment = PHYSICS_INFINITY;
@@ -745,7 +745,7 @@ PhysicsShapeEdgePolygon* PhysicsShapeEdgePolygon::create(const Vec2* points,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -766,15 +766,15 @@ bool PhysicsShapeEdgePolygon::init(const Vec2* points,
         for (; i < count; ++i)
         {
             auto shape = cpSegmentShapeNew(s_sharedBody, vec[i], vec[(i + 1) % count], border);
-            AX_BREAK_IF(shape == nullptr);
+            CC_BREAK_IF(shape == nullptr);
             cpShapeSetUserData(shape, this);
             cpShapeSetElasticity(shape, 1.0f);
             cpShapeSetFriction(shape, 1.0f);
             addShape(shape);
         }
-        AX_SAFE_DELETE_ARRAY(vec);
+        CC_SAFE_DELETE_ARRAY(vec);
 
-        AX_BREAK_IF(i < count);
+        CC_BREAK_IF(i < count);
 
         _mass   = PHYSICS_INFINITY;
         _moment = PHYSICS_INFINITY;
@@ -784,7 +784,7 @@ bool PhysicsShapeEdgePolygon::init(const Vec2* points,
         return true;
     } while (false);
 
-    AX_SAFE_DELETE_ARRAY(vec);
+    CC_SAFE_DELETE_ARRAY(vec);
 
     return false;
 }
@@ -832,7 +832,7 @@ PhysicsShapeEdgeChain* PhysicsShapeEdgeChain::create(const Vec2* points,
         return shape;
     }
 
-    AX_SAFE_DELETE(shape);
+    CC_SAFE_DELETE(shape);
     return nullptr;
 }
 
@@ -872,14 +872,14 @@ bool PhysicsShapeEdgeChain::init(const Vec2* points,
         for (; i < count - 1; ++i)
         {
             auto shape = cpSegmentShapeNew(s_sharedBody, vec[i], vec[i + 1], border);
-            AX_BREAK_IF(shape == nullptr);
+            CC_BREAK_IF(shape == nullptr);
             cpShapeSetUserData(shape, this);
             cpShapeSetElasticity(shape, 1.0f);
             cpShapeSetFriction(shape, 1.0f);
             addShape(shape);
         }
-        AX_SAFE_DELETE_ARRAY(vec);
-        AX_BREAK_IF(i < count - 1);
+        CC_SAFE_DELETE_ARRAY(vec);
+        CC_BREAK_IF(i < count - 1);
 
         _mass   = PHYSICS_INFINITY;
         _moment = PHYSICS_INFINITY;
@@ -889,7 +889,7 @@ bool PhysicsShapeEdgeChain::init(const Vec2* points,
         return true;
     } while (false);
 
-    AX_SAFE_DELETE_ARRAY(vec);
+    CC_SAFE_DELETE_ARRAY(vec);
 
     return false;
 }
@@ -975,4 +975,4 @@ bool PhysicsShape::containsPoint(const Vec2& point) const
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS

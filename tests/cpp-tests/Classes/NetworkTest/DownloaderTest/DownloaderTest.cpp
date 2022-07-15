@@ -249,7 +249,7 @@ struct DownloaderTest : public TestCase
                 auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
                 bar->setVisible(false);
             } while (0);
-            AX_SAFE_RELEASE(texture);
+            CC_SAFE_RELEASE(texture);
         };
 
         downloader->onFileTaskSuccess = [this](const axis::network::DownloadTask& task) {
@@ -268,7 +268,7 @@ struct DownloaderTest : public TestCase
                         MIN((viewSize.height - 20) / spriteSize.height, (viewSize.width - 20) / spriteSize.width);
                     sprite->setScale(scale);
                     view->addChild(sprite, 5, TAG_SPRITE);
-                    AX_SAFE_RELEASE(texture);
+                    CC_SAFE_RELEASE(texture);
                 }
                 else
                 {

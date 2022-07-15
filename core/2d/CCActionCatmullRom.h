@@ -55,7 +55,7 @@ class Node;
  * @ingroup Actions
  * @js NA
  */
-class AX_DLL PointArray : public Ref, public Clonable
+class CC_DLL PointArray : public Ref, public Clonable
 {
 public:
     /** Creates and initializes a Points array with capacity.
@@ -163,7 +163,7 @@ private:
  * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline
  * @ingroup Actions
  */
-class AX_DLL CardinalSplineTo : public ActionInterval
+class CC_DLL CardinalSplineTo : public ActionInterval
 {
 public:
     /** Creates an action with a Cardinal Spline array of points and tension.
@@ -212,8 +212,8 @@ public:
      */
     void setPoints(PointArray* points)
     {
-        AX_SAFE_RETAIN(points);
-        AX_SAFE_RELEASE(_points);
+        CC_SAFE_RETAIN(points);
+        CC_SAFE_RELEASE(_points);
         _points = points;
     }
 
@@ -241,7 +241,7 @@ protected:
  * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline
  * @ingroup Actions
  */
-class AX_DLL CardinalSplineBy : public CardinalSplineTo
+class CC_DLL CardinalSplineBy : public CardinalSplineTo
 {
 public:
     /** Creates an action with a Cardinal Spline array of points and tension.
@@ -274,7 +274,7 @@ protected:
  * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
  * @ingroup Actions
  */
-class AX_DLL CatmullRomTo : public CardinalSplineTo
+class CC_DLL CatmullRomTo : public CardinalSplineTo
 {
 public:
     /** Creates an action with a Cardinal Spline array of points and tension.
@@ -307,7 +307,7 @@ public:
  * http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline
  * @ingroup Actions
  */
-class AX_DLL CatmullRomBy : public CardinalSplineBy
+class CC_DLL CatmullRomBy : public CardinalSplineBy
 {
 public:
     /** Creates an action with a Cardinal Spline array of points and tension.
@@ -334,7 +334,7 @@ public:
 };
 
 /** Returns the Cardinal Spline position for a given set of control points, tension and time */
-extern AX_DLL Vec2
+extern CC_DLL Vec2
 ccCardinalSplineAt(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec2& p3, float tension, float t);
 
 // end of actions group

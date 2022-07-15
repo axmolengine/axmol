@@ -110,7 +110,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
 {
     // Create touch listener
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(BillBoardTest::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(BillBoardTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto layer3D = Layer::create();
@@ -174,9 +174,9 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
 
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
     auto label1    = Label::createWithTTF(ttfConfig, "rotate+");
-    auto menuItem1 = MenuItemLabel::create(label1, AX_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, 10));
+    auto menuItem1 = MenuItemLabel::create(label1, CC_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, 10));
     auto label2    = Label::createWithTTF(ttfConfig, "rotate-");
-    auto menuItem2 = MenuItemLabel::create(label2, AX_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, -10));
+    auto menuItem2 = MenuItemLabel::create(label2, CC_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, -10));
     auto menu      = Menu::create(menuItem1, menuItem2, nullptr);
     menu->setPosition(Vec2::ZERO);
     menuItem1->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 160));
@@ -185,9 +185,9 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     _layerBillBoard->setCameraMask(2);
 
     label1    = Label::createWithTTF(ttfConfig, "Point Oriented");
-    menuItem1 = MenuItemLabel::create(label1, AX_CALLBACK_1(BillBoardTest::menuCallback_orientedPoint, this));
+    menuItem1 = MenuItemLabel::create(label1, CC_CALLBACK_1(BillBoardTest::menuCallback_orientedPoint, this));
     label2    = Label::createWithTTF(ttfConfig, "Plane Oriented");
-    menuItem2 = MenuItemLabel::create(label2, AX_CALLBACK_1(BillBoardTest::menuCallback_orientedPlane, this));
+    menuItem2 = MenuItemLabel::create(label2, CC_CALLBACK_1(BillBoardTest::menuCallback_orientedPlane, this));
     menuItem1->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 100));
     menuItem2->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 130));
 
@@ -196,7 +196,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     this->addChild(menu, 10);
     menuCallback_orientedPoint(nullptr);
 
-    schedule(AX_SCHEDULE_SELECTOR(BillBoardTest::update));
+    schedule(CC_SCHEDULE_SELECTOR(BillBoardTest::update));
 }
 
 void BillBoardTest::menuCallback_orientedPoint(Ref* sender)

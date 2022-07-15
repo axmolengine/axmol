@@ -22,7 +22,7 @@ This file was modified to fit the cocos2d-x project
 #include "math/MathUtil.h"
 #include "base/ccMacros.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include <cpu-features.h>
 #endif
 
@@ -33,7 +33,7 @@ This file was modified to fit the cocos2d-x project
 //#define USE_SSE           : SSE code used
 //#define INCLUDE_SSE       : SSE code included
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #    if defined(__arm64__)
 #        define USE_NEON64
 #        define INCLUDE_NEON64
@@ -42,7 +42,7 @@ This file was modified to fit the cocos2d-x project
 #        define INCLUDE_NEON32
 #    else
 #    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    if defined(__arm64__) || defined(__aarch64__)
 #        define USE_NEON64
 #        define INCLUDE_NEON64
@@ -105,7 +105,7 @@ bool MathUtil::isNeon32Enabled()
 {
 #ifdef USE_NEON32
     return true;
-#elif (defined(INCLUDE_NEON32) && (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID))
+#elif (defined(INCLUDE_NEON32) && (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID))
     class AnrdoidNeonChecker
     {
     public:

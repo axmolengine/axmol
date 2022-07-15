@@ -27,11 +27,11 @@ THE SOFTWARE.
 
 #include <assert.h>
 
-#define AX_DLL
+#define CC_DLL
 
-#define AX_ASSERT(cond) assert(cond)
+#define CC_ASSERT(cond) assert(cond)
 
-#define AX_UNUSED_PARAM(unusedparam) (void)unusedparam
+#define CC_UNUSED_PARAM(unusedparam) (void)unusedparam
 
 /* Define NULL pointer value */
 #ifndef NULL

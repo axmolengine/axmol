@@ -37,9 +37,9 @@ NS_AX_BEGIN
  * @{
  */
 
-typedef unsigned char AX_XML_CHAR;
+typedef unsigned char CC_XML_CHAR;
 
-class AX_DLL SAXDelegator
+class CC_DLL SAXDelegator
 {
 public:
     virtual ~SAXDelegator() {}
@@ -61,7 +61,7 @@ public:
     virtual void textHandler(void* ctx, const char* s, size_t len) = 0;
 };
 
-class AX_DLL SAXParser
+class CC_DLL SAXParser
 {
     SAXDelegator* _delegator;
 
@@ -106,17 +106,17 @@ public:
      * @js NA
      * @lua NA
      */
-    static void startElement(void* ctx, const AX_XML_CHAR* name, const AX_XML_CHAR** atts);
+    static void startElement(void* ctx, const CC_XML_CHAR* name, const CC_XML_CHAR** atts);
     /**
      * @js NA
      * @lua NA
      */
-    static void endElement(void* ctx, const AX_XML_CHAR* name);
+    static void endElement(void* ctx, const CC_XML_CHAR* name);
     /**
      * @js NA
      * @lua NA
      */
-    static void textHandler(void* ctx, const AX_XML_CHAR* name, size_t len);
+    static void textHandler(void* ctx, const CC_XML_CHAR* name, size_t len);
 };
 
 // end of platform group

@@ -60,12 +60,12 @@
 
 // !FIXME: the previous version of axis::log not thread safe
 // since axis make it multi-threading safe by default
-#if !defined(AX_LOG_MULTITHREAD)
-#    define AX_LOG_MULTITHREAD 1
+#if !defined(CC_LOG_MULTITHREAD)
+#    define CC_LOG_MULTITHREAD 1
 #endif
 
-#if !defined(AX_LOG_TO_CONSOLE)
-#    define AX_LOG_TO_CONSOLE 1
+#if !defined(CC_LOG_TO_CONSOLE)
+#    define CC_LOG_TO_CONSOLE 1
 #endif
 
 NS_AX_BEGIN
@@ -102,7 +102,7 @@ const char* inet_ntop(int af, const void* src, char* dst, int cnt)
 // Free functions to log
 //
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 void SendLogToWindow(const char* log)
 {
     static const int CCLOG_STRING_TAG = 1;
@@ -123,17 +123,17 @@ void SendLogToWindow(const char* log)
 
 void log(const char* format, ...)
 {
-#define AX_VSNPRINTF_BUFFER_LENGTH 512
+#define CC_VSNPRINTF_BUFFER_LENGTH 512
     va_list args;
 
     va_start(args, format);
     auto buf = StringUtils::vformat(format, args);
     va_end(args);
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     __android_log_print(ANDROID_LOG_DEBUG, "axis debug info", "%s", buf.c_str());
 
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
     buf.push_back('\n');
 
     // print to debugger output window
@@ -141,7 +141,7 @@ void log(const char* format, ...)
 
     OutputDebugStringW(wbuf.c_str());
 
-#    if AX_LOG_TO_CONSOLE
+#    if CC_LOG_TO_CONSOLE
     auto hStdout = ::GetStdHandle(STD_OUTPUT_HANDLE);
     if (hStdout)
     {
@@ -153,7 +153,7 @@ void log(const char* format, ...)
     }
 #    endif
 
-#    if !AX_LOG_MULTITHREAD
+#    if !CC_LOG_MULTITHREAD
     // print to log window
     SendLogToWindow(buf.c_str());
 #    endif
@@ -164,7 +164,7 @@ void log(const char* format, ...)
     fflush(stdout);
 #endif
 
-#if !AX_LOG_MULTITHREAD
+#if !CC_LOG_MULTITHREAD
     Director::getInstance()->getConsole()->log(buf.c_str());
 #endif
 }
@@ -502,14 +502,14 @@ bool Console::listenOnTCP(int port)
     hints.ai_family   = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     WSADATA wsaData;
     n = WSAStartup(MAKEWORD(2, 2), &wsaData);
 #endif
 
     if ((n = getaddrinfo(nullptr, serv, &hints, &res)) != 0)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         fprintf(stderr, "net_listen error for %s: %s", serv, gai_strerrorA(n));
 #else
         fprintf(stderr, "net_listen error for %s: %s", serv, gai_strerror(n));
@@ -546,7 +546,7 @@ bool Console::listenOnTCP(int port)
             break; /* success */
 
 /* bind error, close and try next one */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         closesocket(listenfd);
 #else
         close(listenfd);
@@ -769,7 +769,7 @@ void Console::loop()
                     // receive a SIGPIPE, which will cause linux system shutdown the sending process.
                     // Add this ioctl code to check if the socket has been closed by peer.
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
                     u_long n = 0;
                     ioctlsocket(fd, FIONREAD, &n);
 #else
@@ -826,14 +826,14 @@ void Console::loop()
     // clean up: ignore stdin, stdout and stderr
     for (const auto& fd : _fds)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
         closesocket(fd);
 #else
         close(fd);
 #endif
     }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     closesocket(_listenfd);
     WSACleanup();
 #else
@@ -1028,7 +1028,7 @@ void Console::addClient()
          *
          * The default behaviour for this signal is to end the process.So we make the process ignore SIGPIPE.
          */
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
         int set = 1;
         setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, (void*)&set, sizeof(int));
 #endif
@@ -1042,24 +1042,24 @@ void Console::addClient()
 void Console::createCommandAllocator()
 {
     addCommand({"allocator", "Display allocator diagnostics for all allocators. Args: [-h | help | ]",
-                AX_CALLBACK_2(Console::commandAllocator, this)});
+                CC_CALLBACK_2(Console::commandAllocator, this)});
 }
 
 void Console::createCommandConfig()
 {
     addCommand({"config", "Print the Configuration object. Args: [-h | help | ]",
-                AX_CALLBACK_2(Console::commandConfig, this)});
+                CC_CALLBACK_2(Console::commandConfig, this)});
 }
 
 void Console::createCommandDebugMsg()
 {
     addCommand({"debugmsg",
                 "Whether or not to forward the debug messages on the console. Args: [-h | help | on | off | ]",
-                AX_CALLBACK_2(Console::commandDebugMsg, this)});
+                CC_CALLBACK_2(Console::commandDebugMsg, this)});
     addSubCommand("debugmsg",
-                  {"on", "enable debug logging", AX_CALLBACK_2(Console::commandDebugMsgSubCommandOnOff, this)});
+                  {"on", "enable debug logging", CC_CALLBACK_2(Console::commandDebugMsgSubCommandOnOff, this)});
     addSubCommand("debugmsg",
-                  {"off", "disable debug logging", AX_CALLBACK_2(Console::commandDebugMsgSubCommandOnOff, this)});
+                  {"off", "disable debug logging", CC_CALLBACK_2(Console::commandDebugMsgSubCommandOnOff, this)});
 }
 
 void Console::createCommandDirector()
@@ -1067,96 +1067,96 @@ void Console::createCommandDirector()
     addCommand({"director", "director commands, type -h or [director help] to list supported directives"});
     addSubCommand("director",
                   {"pause", "pause all scheduled timers, the draw rate will be 4 FPS to reduce CPU consumption",
-                   AX_CALLBACK_2(Console::commandDirectorSubCommandPause, this)});
+                   CC_CALLBACK_2(Console::commandDirectorSubCommandPause, this)});
     addSubCommand("director", {"resume", "resume all scheduled timers",
-                               AX_CALLBACK_2(Console::commandDirectorSubCommandResume, this)});
+                               CC_CALLBACK_2(Console::commandDirectorSubCommandResume, this)});
     addSubCommand("director", {"stop", "Stops the animation. Nothing will be drawn.",
-                               AX_CALLBACK_2(Console::commandDirectorSubCommandStop, this)});
+                               CC_CALLBACK_2(Console::commandDirectorSubCommandStop, this)});
     addSubCommand(
         "director",
         {"start", "Restart the animation again, Call this function only if [director stop] was called earlier",
-         AX_CALLBACK_2(Console::commandDirectorSubCommandStart, this)});
-    addSubCommand("director", {"end", "exit this app.", AX_CALLBACK_2(Console::commandDirectorSubCommandEnd, this)});
+         CC_CALLBACK_2(Console::commandDirectorSubCommandStart, this)});
+    addSubCommand("director", {"end", "exit this app.", CC_CALLBACK_2(Console::commandDirectorSubCommandEnd, this)});
 }
 
 void Console::createCommandExit()
 {
     addCommand(
-        {"exit", "Close connection to the console. Args: [-h | help | ]", AX_CALLBACK_2(Console::commandExit, this)});
+        {"exit", "Close connection to the console. Args: [-h | help | ]", CC_CALLBACK_2(Console::commandExit, this)});
 }
 
 void Console::createCommandFileUtils()
 {
     addCommand({"fileutils", "Flush or print the FileUtils info. Args: [-h | help | flush | ]",
-                AX_CALLBACK_2(Console::commandFileUtils, this)});
+                CC_CALLBACK_2(Console::commandFileUtils, this)});
     addSubCommand("fileutils", {"flush", "Purges the file searching cache.",
-                                AX_CALLBACK_2(Console::commandFileUtilsSubCommandFlush, this)});
+                                CC_CALLBACK_2(Console::commandFileUtilsSubCommandFlush, this)});
 }
 
 void Console::createCommandFps()
 {
     addCommand(
-        {"fps", "Turn on / off the FPS. Args: [-h | help | on | off | ]", AX_CALLBACK_2(Console::commandFps, this)});
+        {"fps", "Turn on / off the FPS. Args: [-h | help | on | off | ]", CC_CALLBACK_2(Console::commandFps, this)});
     addSubCommand("fps", {"on", "Display the FPS on the bottom-left corner.",
-                          AX_CALLBACK_2(Console::commandFpsSubCommandOnOff, this)});
+                          CC_CALLBACK_2(Console::commandFpsSubCommandOnOff, this)});
     addSubCommand("fps", {"off", "Hide the FPS on the bottom-left corner.",
-                          AX_CALLBACK_2(Console::commandFpsSubCommandOnOff, this)});
+                          CC_CALLBACK_2(Console::commandFpsSubCommandOnOff, this)});
 }
 
 void Console::createCommandHelp()
 {
-    addCommand({"help", "Print this message. Args: [ ]", AX_CALLBACK_2(Console::commandHelp, this)});
+    addCommand({"help", "Print this message. Args: [ ]", CC_CALLBACK_2(Console::commandHelp, this)});
 }
 
 void Console::createCommandProjection()
 {
     addCommand({"projection", "Change or print the current projection. Args: [-h | help | 2d | 3d | ]",
-                AX_CALLBACK_2(Console::commandProjection, this)});
+                CC_CALLBACK_2(Console::commandProjection, this)});
     addSubCommand("projection", {"2d", "sets a 2D projection (orthogonal projection).",
-                                 AX_CALLBACK_2(Console::commandProjectionSubCommand2d, this)});
+                                 CC_CALLBACK_2(Console::commandProjectionSubCommand2d, this)});
     addSubCommand("projection", {"3d", "sets a 3D projection with a fovy=60, znear=0.5f and zfar=1500.",
-                                 AX_CALLBACK_2(Console::commandProjectionSubCommand3d, this)});
+                                 CC_CALLBACK_2(Console::commandProjectionSubCommand3d, this)});
 }
 
 void Console::createCommandResolution()
 {
     addCommand({"resolution",
                 "Change or print the window resolution. Args: [-h | help | width height resolution_policy | ]",
-                AX_CALLBACK_2(Console::commandResolution, this)});
-    addSubCommand("resolution", {"", "", AX_CALLBACK_2(Console::commandResolutionSubCommandEmpty, this)});
+                CC_CALLBACK_2(Console::commandResolution, this)});
+    addSubCommand("resolution", {"", "", CC_CALLBACK_2(Console::commandResolutionSubCommandEmpty, this)});
 }
 
 void Console::createCommandSceneGraph()
 {
-    addCommand({"scenegraph", "Print the scene graph", AX_CALLBACK_2(Console::commandSceneGraph, this)});
+    addCommand({"scenegraph", "Print the scene graph", CC_CALLBACK_2(Console::commandSceneGraph, this)});
 }
 
 void Console::createCommandTexture()
 {
     addCommand({"texture", "Flush or print the TextureCache info. Args: [-h | help | flush | ] ",
-                AX_CALLBACK_2(Console::commandTextures, this)});
+                CC_CALLBACK_2(Console::commandTextures, this)});
     addSubCommand("texture", {"flush", "Purges the dictionary of loaded textures.",
-                              AX_CALLBACK_2(Console::commandTexturesSubCommandFlush, this)});
+                              CC_CALLBACK_2(Console::commandTexturesSubCommandFlush, this)});
 }
 
 void Console::createCommandTouch()
 {
     addCommand({"touch", "simulate touch event via console, type -h or [touch help] to list supported directives"});
     addSubCommand("touch", {"tap", "touch tap x y: simulate touch tap at (x,y).",
-                            AX_CALLBACK_2(Console::commandTouchSubCommandTap, this)});
+                            CC_CALLBACK_2(Console::commandTouchSubCommandTap, this)});
     addSubCommand("touch", {"swipe", "touch swipe x1 y1 x2 y2: simulate touch swipe from (x1,y1) to (x2,y2).",
-                            AX_CALLBACK_2(Console::commandTouchSubCommandSwipe, this)});
+                            CC_CALLBACK_2(Console::commandTouchSubCommandSwipe, this)});
 }
 
 void Console::createCommandUpload()
 {
     addCommand(
-        {"upload", "upload file. Args: [filename base64_encoded_data]", AX_CALLBACK_1(Console::commandUpload, this)});
+        {"upload", "upload file. Args: [filename base64_encoded_data]", CC_CALLBACK_1(Console::commandUpload, this)});
 }
 
 void Console::createCommandVersion()
 {
-    addCommand({"version", "print version string ", AX_CALLBACK_2(Console::commandVersion, this)});
+    addCommand({"version", "print version string ", CC_CALLBACK_2(Console::commandVersion, this)});
 }
 
 //
@@ -1165,12 +1165,12 @@ void Console::createCommandVersion()
 
 void Console::commandAllocator(socket_native_type fd, std::string_view /*args*/)
 {
-#if AX_ENABLE_ALLOCATOR_DIAGNOSTICS
+#if CC_ENABLE_ALLOCATOR_DIAGNOSTICS
     auto info = allocator::AllocatorDiagnostics::instance()->diagnostics();
     Console::Utility::mydprintf(fd, info.c_str());
 #else
     Console::Utility::mydprintf(
-        fd, "allocator diagnostics not available. AX_ENABLE_ALLOCATOR_DIAGNOSTICS must be set to 1 in ccConfig.h\n");
+        fd, "allocator diagnostics not available. CC_ENABLE_ALLOCATOR_DIAGNOSTICS must be set to 1 in ccConfig.h\n");
 #endif
 }
 
@@ -1229,7 +1229,7 @@ void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 {
     FD_CLR(fd, &_read_set);
     _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     closesocket(fd);
 #else
     close(fd);

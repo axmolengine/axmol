@@ -52,12 +52,12 @@ ProjectNodeReader* ProjectNodeReader::getInstance()
 
 void ProjectNodeReader::purge()
 {
-    AX_SAFE_DELETE(_instanceProjectNodeReader);
+    CC_SAFE_DELETE(_instanceProjectNodeReader);
 }
 
 void ProjectNodeReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceProjectNodeReader);
+    CC_SAFE_DELETE(_instanceProjectNodeReader);
 }
 
 Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

@@ -36,7 +36,7 @@ THE SOFTWARE.
 NS_AX_BEGIN
 
 class Label;
-struct AX_DLL ResourceData;
+struct CC_DLL ResourceData;
 
 namespace ui
 {
@@ -44,7 +44,7 @@ namespace ui
 /**
  * A widget for displaying BMFont label.
  */
-class AX_GUI_DLL TextBMFont : public Widget
+class CC_GUI_DLL TextBMFont : public Widget
 {
 
     DECLARE_CLASS_GUI_INFO

@@ -34,7 +34,7 @@ NS_AX_BEGIN
 namespace ui
 {
 
-class AX_GUI_DLL EditBoxImpl
+class CC_GUI_DLL EditBoxImpl
 {
 public:
     /**

@@ -43,7 +43,7 @@ class Event;
  * @brief Keyboard event listener.
  * @js cc._EventListenerKeyboard
  */
-class AX_DLL EventListenerKeyboard : public EventListener
+class CC_DLL EventListenerKeyboard : public EventListener
 {
 public:
     static const std::string LISTENER_ID;

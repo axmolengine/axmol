@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_MESH_SURFACE_EMITTER_H__
-#define __AX_PU_PARTICLE_MESH_SURFACE_EMITTER_H__
+#ifndef __CC_PU_PARTICLE_MESH_SURFACE_EMITTER_H__
+#define __CC_PU_PARTICLE_MESH_SURFACE_EMITTER_H__
 
 #include "extensions/Particle3D/PU/CCPUEmitter.h"
 
@@ -162,7 +162,7 @@ protected:
     It is also possible to define whether more particles emit on larger faces.
 */
 
-class AX_EX_DLL PUMeshSurfaceEmitter : public PUEmitter
+class CC_EX_DLL PUMeshSurfaceEmitter : public PUEmitter
 {
 public:
     // Constants

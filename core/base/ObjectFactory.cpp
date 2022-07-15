@@ -82,7 +82,7 @@ ObjectFactory* ObjectFactory::getInstance()
 
 void ObjectFactory::destroyInstance()
 {
-    AX_SAFE_DELETE(_sharedFactory);
+    CC_SAFE_DELETE(_sharedFactory);
 }
 
 Ref* ObjectFactory::createObject(std::string_view name)

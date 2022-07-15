@@ -51,7 +51,7 @@ static uint8_t getBitsPerElementMTL(MTLPixelFormat pixleFormat)
     case MTLPixelFormatRGBA8Unorm:
     case MTLPixelFormatDepth32Float:
         return byte(4);
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     case MTLPixelFormatDepth24Unorm_Stencil8:
         return byte(4);
 #else
@@ -275,8 +275,8 @@ void CommandBufferMTL::setVertexBuffer(Buffer* buffer)
 
 void CommandBufferMTL::setProgramState(ProgramState* programState)
 {
-    AX_SAFE_RETAIN(programState);
-    AX_SAFE_RELEASE(_programState);
+    CC_SAFE_RETAIN(programState);
+    CC_SAFE_RELEASE(_programState);
     _programState = programState;
 }
 
@@ -321,7 +321,7 @@ void CommandBufferMTL::readPixels(RenderTarget* rt, std::function<void(const Pix
     // we only read form color attachment 0
     // if it's nullptr, will regard as screen to perform capture
     auto texture = rtMTL->_color[0].texture;
-    AX_SAFE_RETAIN(texture);
+    CC_SAFE_RETAIN(texture);
     _captureCallbacks.emplace_back(texture, std::move(callback));
 }
 
@@ -390,7 +390,7 @@ void CommandBufferMTL::flushCaptureCommands()
                 auto texture = cb.first;
                 assert(texture != nullptr);
                 CommandBufferMTL::readPixels(texture, 0, 0, texture->getWidth(), texture->getHeight(), pixelData);
-                AX_SAFE_RELEASE(texture);
+                CC_SAFE_RELEASE(texture);
                 cb.second(pixelData);
             }
         }
@@ -406,7 +406,7 @@ void CommandBufferMTL::afterDraw()
         _mtlIndexBuffer = nullptr;
     }
 
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
 }
 
 void CommandBufferMTL::prepareDrawing() const
@@ -569,7 +569,7 @@ void CommandBufferMTL::readPixels(id<MTLTexture> texture,
                        destinationLevel:0
                       destinationOrigin:region.origin];
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     [blitCommandEncoder synchronizeResource:readPixelsTexture];
 #endif
     [blitCommandEncoder endEncoding];

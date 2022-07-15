@@ -63,9 +63,9 @@ void Paddle::onEnter()
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
 
-    listener->onTouchBegan = AX_CALLBACK_2(Paddle::onTouchBegan, this);
-    listener->onTouchMoved = AX_CALLBACK_2(Paddle::onTouchMoved, this);
-    listener->onTouchEnded = AX_CALLBACK_2(Paddle::onTouchEnded, this);
+    listener->onTouchBegan = CC_CALLBACK_2(Paddle::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(Paddle::onTouchMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(Paddle::onTouchEnded, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }

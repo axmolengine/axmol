@@ -74,9 +74,9 @@ bool Particle3DTestDemo::init()
     this->addChild(_camera);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(Particle3DTestDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(Particle3DTestDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(Particle3DTestDemo::onTouchesEnded, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(Particle3DTestDemo::onTouchesBegan, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(Particle3DTestDemo::onTouchesMoved, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(Particle3DTestDemo::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     TTFConfig config("fonts/tahoma.ttf", 10);
@@ -99,7 +99,7 @@ void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis
         auto touch = touches[0];
         auto delta = touch->getDelta();
 
-        _angle -= AX_DEGREES_TO_RADIANS(delta.x);
+        _angle -= CC_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 0.0f, 100.0f * cosf(_angle)));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
     }

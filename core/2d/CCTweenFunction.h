@@ -87,210 +87,210 @@ enum TweenType
 /**
  * @param time in seconds.
  */
-float AX_DLL easeIn(float time, float rate);
+float CC_DLL easeIn(float time, float rate);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL easeOut(float time, float rate);
+float CC_DLL easeOut(float time, float rate);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL easeInOut(float time, float rate);
+float CC_DLL easeInOut(float time, float rate);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL bezieratFunction(float a, float b, float c, float d, float t);
+float CC_DLL bezieratFunction(float a, float b, float c, float d, float t);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadraticIn(float time);
+float CC_DLL quadraticIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadraticOut(float time);
+float CC_DLL quadraticOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadraticInOut(float time);
+float CC_DLL quadraticInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadraticInOut(float time);
+float CC_DLL quadraticInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL tweenTo(float time, TweenType type, float* easingParam);
+float CC_DLL tweenTo(float time, TweenType type, float* easingParam);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL linear(float time);
+float CC_DLL linear(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL sineEaseIn(float time);
+float CC_DLL sineEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL sineEaseOut(float time);
+float CC_DLL sineEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL sineEaseInOut(float time);
+float CC_DLL sineEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadEaseIn(float time);
+float CC_DLL quadEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadEaseOut(float time);
+float CC_DLL quadEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quadEaseInOut(float time);
+float CC_DLL quadEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL cubicEaseIn(float time);
+float CC_DLL cubicEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL cubicEaseOut(float time);
+float CC_DLL cubicEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL cubicEaseInOut(float time);
+float CC_DLL cubicEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quartEaseIn(float time);
+float CC_DLL quartEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quartEaseOut(float time);
+float CC_DLL quartEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quartEaseInOut(float time);
+float CC_DLL quartEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quintEaseIn(float time);
+float CC_DLL quintEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL quintEaseOut(float time);
+float CC_DLL quintEaseOut(float time);
 
 /**
  @param time in seconds.
  */
-float AX_DLL quintEaseInOut(float time);
+float CC_DLL quintEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL expoEaseIn(float time);
+float CC_DLL expoEaseIn(float time);
 
 /**
  @param time in seconds.
  */
-float AX_DLL expoEaseOut(float time);
+float CC_DLL expoEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL expoEaseInOut(float time);
+float CC_DLL expoEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL circEaseIn(float time);
+float CC_DLL circEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL circEaseOut(float time);
+float CC_DLL circEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL circEaseInOut(float time);
-
-/**
- * @param time in seconds.
- * @param period in seconds.
- */
-float AX_DLL elasticEaseIn(float time, float period);
+float CC_DLL circEaseInOut(float time);
 
 /**
  * @param time in seconds.
  * @param period in seconds.
  */
-float AX_DLL elasticEaseOut(float time, float period);
+float CC_DLL elasticEaseIn(float time, float period);
 
 /**
  * @param time in seconds.
  * @param period in seconds.
  */
-float AX_DLL elasticEaseInOut(float time, float period);
+float CC_DLL elasticEaseOut(float time, float period);
+
+/**
+ * @param time in seconds.
+ * @param period in seconds.
+ */
+float CC_DLL elasticEaseInOut(float time, float period);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL backEaseIn(float time);
+float CC_DLL backEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL backEaseOut(float time);
+float CC_DLL backEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL backEaseInOut(float time);
+float CC_DLL backEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL bounceEaseIn(float time);
+float CC_DLL bounceEaseIn(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL bounceEaseOut(float time);
+float CC_DLL bounceEaseOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL bounceEaseInOut(float time);
+float CC_DLL bounceEaseInOut(float time);
 
 /**
  * @param time in seconds.
  */
-float AX_DLL customEase(float time, float* easingParam);
+float CC_DLL customEase(float time, float* easingParam);
 }  // namespace tweenfunc
 
 NS_AX_END

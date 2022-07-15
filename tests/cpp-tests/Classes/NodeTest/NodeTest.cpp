@@ -147,8 +147,8 @@ NodeTest4::NodeTest4()
     addChild(sp1, 0, 2);
     addChild(sp2, 0, 3);
 
-    schedule(AX_CALLBACK_1(NodeTest4::delay2, this), 2.0f, "delay2_key");
-    schedule(AX_CALLBACK_1(NodeTest4::delay4, this), 4.0f, "delay4_key");
+    schedule(CC_CALLBACK_1(NodeTest4::delay2, this), 2.0f, "delay2_key");
+    schedule(CC_CALLBACK_1(NodeTest4::delay4, this), 4.0f, "delay4_key");
 }
 
 void NodeTest4::delay2(float dt)
@@ -195,7 +195,7 @@ NodeTest5::NodeTest5()
     sp1->runAction(forever);
     sp2->runAction(forever2);
 
-    schedule(AX_CALLBACK_1(NodeTest5::addAndRemove, this), 2.0f, "add_and_remove_key");
+    schedule(CC_CALLBACK_1(NodeTest5::addAndRemove, this), 2.0f, "add_and_remove_key");
 }
 
 void NodeTest5::addAndRemove(float dt)
@@ -255,7 +255,7 @@ NodeTest6::NodeTest6()
     sp2->runAction(forever2);
     sp21->runAction(forever21);
 
-    schedule(AX_CALLBACK_1(NodeTest6::addAndRemove, this), 2.0f, "add_and_remove_key");
+    schedule(CC_CALLBACK_1(NodeTest6::addAndRemove, this), 2.0f, "add_and_remove_key");
 }
 
 void NodeTest6::addAndRemove(float dt)
@@ -295,7 +295,7 @@ StressTest1::StressTest1()
 
     sp1->setPosition(Vec2(s.width / 2, s.height / 2));
 
-    schedule(AX_CALLBACK_1(StressTest1::shouldNotCrash, this), 1.0f, "should_not_crash_key");
+    schedule(CC_CALLBACK_1(StressTest1::shouldNotCrash, this), 1.0f, "should_not_crash_key");
 }
 
 void StressTest1::shouldNotCrash(float dt)
@@ -313,7 +313,7 @@ void StressTest1::shouldNotCrash(float dt)
 
     explosion->setPosition(Vec2(s.width / 2, s.height / 2));
 
-    runAction(Sequence::create(RotateBy::create(2, 360), CallFuncN::create(AX_CALLBACK_1(StressTest1::removeMe, this)),
+    runAction(Sequence::create(RotateBy::create(2, 360), CallFuncN::create(CC_CALLBACK_1(StressTest1::removeMe, this)),
                                nullptr));
 
     addChild(explosion);
@@ -360,7 +360,7 @@ StressTest2::StressTest2()
     fire->runAction(RepeatForever::create(copy_seq3));
     sublayer->addChild(fire, 2);
 
-    schedule(AX_CALLBACK_1(StressTest2::shouldNotLeak, this), 6.0f, "should_not_leak_key");
+    schedule(CC_CALLBACK_1(StressTest2::shouldNotLeak, this), 6.0f, "should_not_leak_key");
 
     addChild(sublayer, 0, kTagSprite1);
 }
@@ -390,7 +390,7 @@ SchedulerTest1::SchedulerTest1()
     addChild(layer, 0);
     // CCLOG("retain count after addChild is %d", layer->getReferenceCount());      // 2
 
-    layer->schedule(AX_CALLBACK_1(SchedulerTest1::doSomething, this), "do_something_key");
+    layer->schedule(CC_CALLBACK_1(SchedulerTest1::doSomething, this), "do_something_key");
     // CCLOG("retain count after schedule is %d", layer->getReferenceCount());      // 3 : (objective-c version), but
     // win32 version is still 2, because Timer class don't save target.
 
@@ -763,7 +763,7 @@ std::string CameraCenterTest::subtitle() const
 ConvertToNode::ConvertToNode()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(ConvertToNode::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(ConvertToNode::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
@@ -1224,7 +1224,7 @@ void NodeNameTest::onEnter()
 {
     TestCocosNodeDemo::onEnter();
 
-    this->scheduleOnce(AX_CALLBACK_1(NodeNameTest::test, this), 0.05f, "test_key");
+    this->scheduleOnce(CC_CALLBACK_1(NodeNameTest::test, this), 0.05f, "test_key");
 }
 
 void NodeNameTest::onExit()

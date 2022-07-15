@@ -27,13 +27,13 @@
 #include "platform/CCPlatformConfig.h"
 #include "platform/CCDevice.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
+#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #    include <Foundation/Foundation.h>
 #    include <Cocoa/Cocoa.h>
 #    include <string>
 
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 #    import <UIKit/UIKit.h>
 

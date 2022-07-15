@@ -76,7 +76,7 @@ EventListenerTouchOneByOne* EventListenerTouchOneByOne::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -111,7 +111,7 @@ EventListenerTouchOneByOne* EventListenerTouchOneByOne::clone()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -148,7 +148,7 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -179,7 +179,7 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::clone()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }

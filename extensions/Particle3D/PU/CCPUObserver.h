@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_OBSERVER_H__
-#define __AX_PU_PARTICLE_3D_OBSERVER_H__
+#ifndef __CC_PU_PARTICLE_3D_OBSERVER_H__
+#define __CC_PU_PARTICLE_3D_OBSERVER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -46,7 +46,7 @@ enum PUComparisionOperator
     CO_GREATER_THAN
 };
 
-class AX_EX_DLL PUObserver : public Ref
+class CC_EX_DLL PUObserver : public Ref
 {
     friend class PUParticleSystem3D;
 

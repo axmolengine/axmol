@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "navmesh/CCNavMeshObstacle.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "navmesh/CCNavMesh.h"
 #    include "2d/CCNode.h"
@@ -41,7 +41,7 @@ NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
         ref->autorelease();
         return ref;
     }
-    AX_SAFE_DELETE(ref);
+    CC_SAFE_DELETE(ref);
     return nullptr;
 }
 
@@ -164,4 +164,4 @@ void NavMeshObstacle::syncToObstacle()
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH

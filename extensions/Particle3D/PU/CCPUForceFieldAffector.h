@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_FORCE_FIELD_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_FORCE_FIELD_AFFECTOR_H__
+#ifndef __CC_PU_PARTICLE_3D_FORCE_FIELD_AFFECTOR_H__
+#define __CC_PU_PARTICLE_3D_FORCE_FIELD_AFFECTOR_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "extensions/Particle3D/PU/CCPUForceField.h"
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUForceFieldAffector : public PUAffector
+class CC_EX_DLL PUForceFieldAffector : public PUAffector
 {
 public:
     // Constants

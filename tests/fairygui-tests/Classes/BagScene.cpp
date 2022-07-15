@@ -8,7 +8,7 @@ BagScene::BagScene() :_bagWindow(nullptr)
 
 BagScene::~BagScene()
 {
-    AX_SAFE_RELEASE(_bagWindow);
+    CC_SAFE_RELEASE(_bagWindow);
 }
 
 void BagScene::continueInit()

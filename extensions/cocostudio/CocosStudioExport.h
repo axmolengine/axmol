@@ -7,7 +7,7 @@
 #        include <string.h>
 #    endif
 
-#    if defined(AX_STATIC)
+#    if defined(CC_STATIC)
 #        define CCS_DLL
 #    else
 #        if defined(_USRCCS_DLL)

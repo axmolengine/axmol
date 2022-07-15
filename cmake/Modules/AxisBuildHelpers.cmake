@@ -474,13 +474,13 @@ function(cocos_use_pkg target pkg)
             # message(STATUS "${target} add dll: ${_dlls}")
             get_property(pre_dlls
                          TARGET ${target}
-                         PROPERTY AX_DEPEND_DLLS)
+                         PROPERTY CC_DEPEND_DLLS)
             if(pre_dlls)
                 set(_dlls ${pre_dlls} ${_dlls})
             endif()
             set_property(TARGET ${target}
                          PROPERTY
-                         AX_DEPEND_DLLS ${_dlls}
+                         CC_DEPEND_DLLS ${_dlls}
                          )
         endif()
     endif()

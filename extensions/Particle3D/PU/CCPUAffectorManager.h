@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_AFFECTOR_MANAGER_H__
-#define __AX_PU_PARTICLE_3D_AFFECTOR_MANAGER_H__
+#ifndef __CC_PU_PARTICLE_3D_AFFECTOR_MANAGER_H__
+#define __CC_PU_PARTICLE_3D_AFFECTOR_MANAGER_H__
 
 #include "base/CCRef.h"
 #include "extensions/Particle3D/PU/CCPUScriptTranslator.h"
@@ -59,7 +59,7 @@
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUAffectorManager
+class CC_EX_DLL PUAffectorManager
 {
 public:
     static PUAffectorManager* Instance();

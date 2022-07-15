@@ -60,10 +60,10 @@ MouseEventTest::MouseEventTest()
     addChild(_labelPosition);
 
     _mouseListener                = EventListenerMouse::create();
-    _mouseListener->onMouseMove   = AX_CALLBACK_1(MouseEventTest::onMouseMove, this);
-    _mouseListener->onMouseUp     = AX_CALLBACK_1(MouseEventTest::onMouseUp, this);
-    _mouseListener->onMouseDown   = AX_CALLBACK_1(MouseEventTest::onMouseDown, this);
-    _mouseListener->onMouseScroll = AX_CALLBACK_1(MouseEventTest::onMouseScroll, this);
+    _mouseListener->onMouseMove   = CC_CALLBACK_1(MouseEventTest::onMouseMove, this);
+    _mouseListener->onMouseUp     = CC_CALLBACK_1(MouseEventTest::onMouseUp, this);
+    _mouseListener->onMouseDown   = CC_CALLBACK_1(MouseEventTest::onMouseDown, this);
+    _mouseListener->onMouseScroll = CC_CALLBACK_1(MouseEventTest::onMouseScroll, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 }

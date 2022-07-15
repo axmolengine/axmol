@@ -42,7 +42,7 @@ class SpriteFrame;
  *  - TexturePacker Trim mode is not supported at the moment.
  */
 
-class AX_DLL NinePatchImageParser
+class CC_DLL NinePatchImageParser
 {
 public:
     /**

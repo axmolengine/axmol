@@ -90,13 +90,13 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_LUMINANCE_ALPHA,                          GL_SLUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
     
     /* depth stencil internalFormat | internalFormatSrgb | format | formatSrgb | type */
-#if defined(AX_USE_GLES)
+#if defined(CC_USE_GLES)
     { GL_DEPTH_STENCIL_OES,                        GL_ZERO,                                      GL_DEPTH_STENCIL_OES,                       GL_DEPTH_STENCIL_OES,                        GL_UNSIGNED_INT_24_8_OES, }, // D24S8
 #else
     { GL_DEPTH24_STENCIL8,                         GL_ZERO,                                      GL_DEPTH_STENCIL,                            GL_DEPTH_STENCIL,                            GL_UNSIGNED_INT_24_8, }, // D24S8
 #endif
 };
-static_assert(AX_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");
+static_assert(CC_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");
 // clang-format on
 
 /*

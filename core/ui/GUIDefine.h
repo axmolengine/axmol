@@ -60,13 +60,13 @@ public:                                          \
 
 #define CREATE_CLASS_WIDGET_READER_INFO(className) axis::ObjectFactory::TInfo(#className, &className::createInstance)
 
-#define AX_VIDEOPLAYER_DEBUG_DRAW 0
+#define CC_VIDEOPLAYER_DEBUG_DRAW 0
 
 #define __LAYOUT_COMPONENT_NAME "__ui_layout"
 ///@endcond
 
 NS_AX_BEGIN
-struct AX_DLL ResourceData
+struct CC_DLL ResourceData
 {
     int type;
     std::string file;

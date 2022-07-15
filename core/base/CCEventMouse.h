@@ -40,7 +40,7 @@ NS_AX_BEGIN
 /** @class EventMouse
  * @brief The mouse event.
  */
-class AX_DLL EventMouse : public Event
+class CC_DLL EventMouse : public Event
 {
 public:
     /**

@@ -32,9 +32,9 @@ bool JoystickModule::init(GComponent * mainView)
     touchId = -1;
     _radius = 150;
 
-    _touchArea->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(JoystickModule::onTouchBegin, this));
-    _touchArea->addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(JoystickModule::onTouchMove, this));
-    _touchArea->addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(JoystickModule::onTouchEnd, this));
+    _touchArea->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(JoystickModule::onTouchBegin, this));
+    _touchArea->addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(JoystickModule::onTouchMove, this));
+    _touchArea->addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(JoystickModule::onTouchEnd, this));
 
     _tweener = nullptr;
 

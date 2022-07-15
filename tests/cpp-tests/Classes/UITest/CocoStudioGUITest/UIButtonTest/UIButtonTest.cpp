@@ -81,7 +81,7 @@ bool UIButtonTest::init()
         CCLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTest::touchEvent, this));
         button->setZoomScale(0.4f);
         button->setPressedActionEnabled(true);
         _uiLayer->addChild(button);
@@ -99,7 +99,7 @@ bool UIButtonTest::init()
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
-        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UIButtonTest::printWidgetResources, this));
+        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UIButtonTest::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);
@@ -191,7 +191,7 @@ bool UIButtonTest_Scale9::init()
         auto moveByReverse = moveBy->reverse()->clone();
         button->runAction(RepeatForever::create(Sequence::create(moveBy, moveByReverse, NULL)));
         button->setPressedActionEnabled(true);
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Scale9::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTest_Scale9::touchEvent, this));
         _uiLayer->addChild(button);
 
         // Create the imageview
@@ -273,7 +273,7 @@ bool UIButtonTest_Scale9_State_Change::init()
         button->setContentSize(Size(180.0f, 60.0f));
         button->setTitleText("Hello Scale9");
         button->setPressedActionEnabled(false);
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Scale9_State_Change::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTest_Scale9_State_Change::touchEvent, this));
         _uiLayer->addChild(button);
 
         Button* button2 = Button::create("cocosui/button.png", "cocosui/buttonHighlighted.png");
@@ -284,7 +284,7 @@ bool UIButtonTest_Scale9_State_Change::init()
         button2->setPosition(Vec2(widgetSize.width / 2.0f + 100, widgetSize.height / 2.0f));
         button2->setContentSize(Size(180.0f, 60.0f));
         button2->setPressedActionEnabled(true);
-        button2->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Scale9_State_Change::touchEvent, this));
+        button2->addTouchEventListener(CC_CALLBACK_2(UIButtonTest_Scale9_State_Change::touchEvent, this));
         _uiLayer->addChild(button2);
         return true;
     }
@@ -357,7 +357,7 @@ bool UIButtonTest_PressedAction::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->setColor(Color3B::GREEN);
         button->setOpacity(30);
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_PressedAction::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTest_PressedAction::touchEvent, this));
         button->setName("button");
         _uiLayer->addChild(button);
 
@@ -434,7 +434,7 @@ bool UIButtonTest_Title::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->setTitleColor(Color3B::YELLOW);
         CCASSERT(button->getTitleColor() == Color3B::YELLOW, "Button setTitleColor & getTitleColor not match!");
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Title::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTest_Title::touchEvent, this));
         _uiLayer->addChild(button);
         button->setFlippedX(true);
         auto label = button->getTitleRenderer();
@@ -541,7 +541,7 @@ bool UIButtonTestRemoveSelf::init()
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         button->setPosition(Vec2(layout->getContentSize().width / 2.0f, layout->getContentSize().height / 2.0f));
         //        button->addTouchEventListener(this, toucheventselector(UIButtonTest::touchEvent));
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTestRemoveSelf::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTestRemoveSelf::touchEvent, this));
         layout->addChild(button);
 
         return true;
@@ -598,7 +598,7 @@ bool UIButtonTestSwitchScale9::init()
         // Create the button
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->addTouchEventListener(AX_CALLBACK_2(UIButtonTestSwitchScale9::touchEvent, this));
+        button->addTouchEventListener(CC_CALLBACK_2(UIButtonTestSwitchScale9::touchEvent, this));
         button->setTitleText("Button Title");
         button->ignoreContentAdaptWithSize(false);
 
@@ -672,7 +672,7 @@ bool UIButtonTestZoomScale::init()
         slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
         slider->loadProgressBarTexture("cocosui/sliderProgress.png");
         slider->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - 20));
-        slider->addEventListener(AX_CALLBACK_2(UIButtonTestZoomScale::sliderEvent, this));
+        slider->addEventListener(CC_CALLBACK_2(UIButtonTestZoomScale::sliderEvent, this));
         slider->setPercent(button->getZoomScale() * 100);
         _uiLayer->addChild(slider);
         return true;

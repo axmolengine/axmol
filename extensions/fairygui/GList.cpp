@@ -189,9 +189,9 @@ GObject* GList::addChildAt(GObject* child, int index)
         button->setChangeStateOnClick(false);
     }
 
-    child->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GList::onItemTouchBegin, this), EventTag(this));
-    child->addClickListener(AX_CALLBACK_1(GList::onClickItem, this), EventTag(this));
-    child->addEventListener(UIEventType::RightClick, AX_CALLBACK_1(GList::onClickItem, this), EventTag(this));
+    child->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GList::onItemTouchBegin, this), EventTag(this));
+    child->addClickListener(CC_CALLBACK_1(GList::onClickItem, this), EventTag(this));
+    child->addEventListener(UIEventType::RightClick, CC_CALLBACK_1(GList::onClickItem, this), EventTag(this));
 
     return child;
 }
@@ -1033,7 +1033,7 @@ void GList::setVirtual(bool loop)
                 _scrollPane->_loop = 1;
         }
 
-        addEventListener(UIEventType::Scroll, AX_CALLBACK_1(GList::onScroll, this));
+        addEventListener(UIEventType::Scroll, CC_CALLBACK_1(GList::onScroll, this));
         setVirtualListChangedFlag(true);
     }
 }

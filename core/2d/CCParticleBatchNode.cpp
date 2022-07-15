@@ -85,8 +85,8 @@ ParticleBatchNode::ParticleBatchNode()
 
 ParticleBatchNode::~ParticleBatchNode()
 {
-    AX_SAFE_RELEASE(_textureAtlas);
-    AX_SAFE_RELEASE(_customCommand.getPipelineDescriptor().programState);
+    CC_SAFE_RELEASE(_textureAtlas);
+    CC_SAFE_RELEASE(_customCommand.getPipelineDescriptor().programState);
 }
 /*
  * creation with Texture2D
@@ -100,7 +100,7 @@ ParticleBatchNode* ParticleBatchNode::createWithTexture(Texture2D* tex, int capa
         p->autorelease();
         return p;
     }
-    AX_SAFE_DELETE(p);
+    CC_SAFE_DELETE(p);
     return nullptr;
 }
 
@@ -116,7 +116,7 @@ ParticleBatchNode* ParticleBatchNode::create(std::string_view imageFile, int cap
         p->autorelease();
         return p;
     }
-    AX_SAFE_DELETE(p);
+    CC_SAFE_DELETE(p);
     return nullptr;
 }
 
@@ -447,7 +447,7 @@ void ParticleBatchNode::removeAllChildrenWithCleanup(bool doCleanup)
 
 void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    AX_PROFILER_START("CCParticleBatchNode - draw");
+    CC_PROFILER_START("CCParticleBatchNode - draw");
 
     if (_textureAtlas->getTotalQuads() == 0)
         return;
@@ -476,7 +476,7 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
 
     renderer->addCommand(&_customCommand);
 
-    AX_PROFILER_STOP("CCParticleBatchNode - draw");
+    CC_PROFILER_STOP("CCParticleBatchNode - draw");
 }
 
 void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
@@ -564,7 +564,7 @@ void ParticleBatchNode::updateProgramStateTexture()
     auto programState = _customCommand.getPipelineDescriptor().programState;
     programState->setTexture(texture->getBackendTexture());
     // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
-    if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == AX_BLEND_SRC && _blendFunc.dst == AX_BLEND_DST))
+    if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
         _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
 }
 

@@ -87,7 +87,7 @@ LAppLive2DManager::LAppLive2DManager()
     if (_renderBuffer)
     {// 描画ターゲット作成
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
         // Retina対策でこっちからとる
         GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getOpenGLView();
         glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
@@ -323,7 +323,7 @@ void LAppLive2DManager::CreateShader()
         "attribute vec2 uv;"
         "varying vec2 vuv;"
         "void main(void){"
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
         "    gl_Position = vec4(position.x, -position.y, position.z, 1.0);"
 #else
         "    gl_Position = vec4(position, 1.0);"
@@ -332,7 +332,7 @@ void LAppLive2DManager::CreateShader()
         "}";
 
     const char* fragmentShader =
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         "precision mediump float;"
 #endif
         "varying vec2 vuv;"

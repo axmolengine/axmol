@@ -44,16 +44,16 @@
 NS_AX_BEGIN
 
 MeshCommand::MeshCommand()
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     : _rendererRecreatedListener(nullptr)
 #endif
 {
     _type = RenderCommand::Type::MESH_COMMAND;
     _is3D = true;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // listen the event that renderer was recreated on Android/WP8
     _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
-                                                             AX_CALLBACK_1(MeshCommand::listenRendererRecreated, this));
+                                                             CC_CALLBACK_1(MeshCommand::listenRendererRecreated, this));
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
 #endif
 }
@@ -75,12 +75,12 @@ void MeshCommand::init(float globalZOrder, const Mat4& transform)
 
 MeshCommand::~MeshCommand()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
 }
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
 void MeshCommand::listenRendererRecreated(EventCustom* event) {}
 #endif
 

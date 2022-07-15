@@ -29,7 +29,7 @@
 #include "WidgetReader/NodeReaderProtocol.h"
 #include "WidgetReader/NodeReaderDefine.h"
 
-#if defined(AX_BUILD_WITH_SPINE)
+#if defined(CC_BUILD_WITH_SPINE)
 
 namespace cocostudio
 {
@@ -43,7 +43,7 @@ public:
 
     static SpineSkeletonReader* getInstance();
     /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge();
+    CC_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,

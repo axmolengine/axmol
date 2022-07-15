@@ -55,7 +55,7 @@ class SpriteFrame;
  *
  *  Subclass MenuItem (or any subclass) to create your custom MenuItem objects.
  */
-class AX_DLL MenuItem : public Node
+class CC_DLL MenuItem : public Node
 {
 public:
     /** Creates a MenuItem with no target/selector. */
@@ -113,7 +113,7 @@ protected:
     ccMenuCallback _callback;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItem);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItem);
 };
 
 /** @brief An abstract class for "label" MenuItemLabel items.
@@ -124,7 +124,7 @@ private:
  - LabelTTF
  - Label
  */
-class AX_DLL MenuItemLabel : public MenuItem
+class CC_DLL MenuItemLabel : public MenuItem
 {
 public:
     /** Creates a MenuItemLabel with a Label and a callback. */
@@ -180,13 +180,13 @@ protected:
     Node* _label;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItemLabel);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItemLabel);
 };
 
 /** @brief A MenuItemAtlasFont.
  Helper class that creates a MenuItemLabel class with a LabelAtlas.
  */
-class AX_DLL MenuItemAtlasFont : public MenuItemLabel
+class CC_DLL MenuItemAtlasFont : public MenuItemLabel
 {
 public:
     /** Creates a menu item from a string and atlas with a target/selector. */
@@ -222,13 +222,13 @@ public:
                         const ccMenuCallback& callback);
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItemAtlasFont);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItemAtlasFont);
 };
 
 /** @brief A MenuItemFont.
  Helper class that creates a MenuItemLabel class with a Label.
  */
-class AX_DLL MenuItemFont : public MenuItemLabel
+class CC_DLL MenuItemFont : public MenuItemLabel
 {
 public:
     /** Creates a menu item from a string without target/selector. To be used with MenuItemToggle. */
@@ -292,7 +292,7 @@ protected:
     std::string _fontName;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItemFont);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItemFont);
 };
 
 /** @brief MenuItemSprite accepts Node<RGBAProtocol> objects as items.
@@ -303,7 +303,7 @@ private:
 
  @since v0.8.0
  */
-class AX_DLL MenuItemSprite : public MenuItem
+class CC_DLL MenuItemSprite : public MenuItem
 {
 public:
     /** Creates a menu item with a normal, selected and disabled image.*/
@@ -365,7 +365,7 @@ protected:
     Node* _disabledImage;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItemSprite);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItemSprite);
 };
 
 /** @brief MenuItemImage accepts images as items.
@@ -376,7 +376,7 @@ private:
 
  For best results try that all images are of the same size.
  */
-class AX_DLL MenuItemImage : public MenuItemSprite
+class CC_DLL MenuItemImage : public MenuItemSprite
 {
 public:
     /** Creates an MenuItemImage. */
@@ -423,14 +423,14 @@ public:
                              const ccMenuCallback& callback);
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItemImage);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItemImage);
 };
 
 /** @brief A MenuItemToggle.
  A simple container class that "toggles" it's inner items.
  The inner items can be any MenuItem.
  */
-class AX_DLL MenuItemToggle : public MenuItem
+class CC_DLL MenuItemToggle : public MenuItem
 {
 public:
     /**
@@ -440,7 +440,7 @@ public:
     /** Creates a menu item from a list of items with a callable object. */
     static MenuItemToggle* createWithCallback(const ccMenuCallback& callback,
                                               MenuItem* item,
-                                              ...) AX_REQUIRES_NULL_TERMINATION;
+                                              ...) CC_REQUIRES_NULL_TERMINATION;
     /** Creates a menu item with no target/selector and no items. */
     static MenuItemToggle* create();
 
@@ -501,7 +501,7 @@ protected:
     Vector<MenuItem*> _subItems;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(MenuItemToggle);
+    CC_DISALLOW_COPY_AND_ASSIGN(MenuItemToggle);
 };
 
 // end of 2d group

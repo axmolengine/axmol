@@ -245,7 +245,7 @@ void ActionManager::removeAction(Action* action)
     if (element)
     {
         auto i = ccArrayGetIndexOfObject(element->actions, action);
-        if (i != AX_INVALID_INDEX)
+        if (i != CC_INVALID_INDEX)
         {
             removeActionAtIndex(i, element);
         }

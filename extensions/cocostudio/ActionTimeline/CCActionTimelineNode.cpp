@@ -36,7 +36,7 @@ ActionTimelineNode* ActionTimelineNode::create(Node* root, ActionTimeline* actio
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 

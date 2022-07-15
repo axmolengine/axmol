@@ -65,7 +65,7 @@ bool ComAudio::serialize(void* r)
     bool ret = false;
     do
     {
-        AX_BREAK_IF(r == nullptr);
+        CC_BREAK_IF(r == nullptr);
         SerData* serData          = (SerData*)(r);
         const rapidjson::Value* v = serData->_rData;
         stExpCocoNode* cocoNode   = serData->_cocoNode;
@@ -79,27 +79,27 @@ bool ComAudio::serialize(void* r)
         if (v != nullptr)
         {
             className = DICTOOL->getStringValue_json(*v, "classname");
-            AX_BREAK_IF(className == nullptr);
+            CC_BREAK_IF(className == nullptr);
             comName                          = DICTOOL->getStringValue_json(*v, "name");
             const rapidjson::Value& fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
-            AX_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
+            CC_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
             file = DICTOOL->getStringValue_json(fileData, "path");
-            AX_BREAK_IF(file == nullptr);
+            CC_BREAK_IF(file == nullptr);
             resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
-            AX_BREAK_IF(resType != 0);
+            CC_BREAK_IF(resType != 0);
             loop = DICTOOL->getIntValue_json(*v, "loop") != 0 ? true : false;
         }
         else if (cocoNode != nullptr)
         {
             className = cocoNode[1].GetValue(cocoLoader);
-            AX_BREAK_IF(className == nullptr);
+            CC_BREAK_IF(className == nullptr);
             comName                  = cocoNode[2].GetValue(cocoLoader);
             stExpCocoNode* pfileData = cocoNode[4].GetChildArray(cocoLoader);
-            AX_BREAK_IF(!pfileData);
+            CC_BREAK_IF(!pfileData);
             file = pfileData[0].GetValue(cocoLoader);
-            AX_BREAK_IF(file == nullptr);
+            CC_BREAK_IF(file == nullptr);
             resType = atoi(pfileData[2].GetValue(cocoLoader));
-            AX_BREAK_IF(resType != 0);
+            CC_BREAK_IF(resType != 0);
             loop = atoi(cocoNode[5].GetValue(cocoLoader)) != 0 ? true : false;
             ret  = true;
         }
@@ -131,7 +131,7 @@ bool ComAudio::serialize(void* r)
         }
         else
         {
-            AX_BREAK_IF(true);
+            CC_BREAK_IF(true);
         }
         ret = true;
     } while (0);
@@ -147,7 +147,7 @@ ComAudio* ComAudio::create()
     }
     else
     {
-        AX_SAFE_DELETE(pRet);
+        CC_SAFE_DELETE(pRet);
     }
     return pRet;
 }

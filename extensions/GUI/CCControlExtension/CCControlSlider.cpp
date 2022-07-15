@@ -49,10 +49,10 @@ ControlSlider::ControlSlider()
 
 ControlSlider::~ControlSlider()
 {
-    AX_SAFE_RELEASE(_thumbSprite);
-    AX_SAFE_RELEASE(_selectedThumbSprite);
-    AX_SAFE_RELEASE(_progressSprite);
-    AX_SAFE_RELEASE(_backgroundSprite);
+    CC_SAFE_RELEASE(_thumbSprite);
+    CC_SAFE_RELEASE(_selectedThumbSprite);
+    CC_SAFE_RELEASE(_progressSprite);
+    CC_SAFE_RELEASE(_backgroundSprite);
 }
 
 ControlSlider* ControlSlider::create(const char* bgFile, const char* progressFile, const char* thumbFile)

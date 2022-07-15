@@ -26,7 +26,7 @@
 
 #include "base/CCController.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include <functional>
 #    include "base/ccMacros.h"
 #    include "base/CCDirector.h"
@@ -212,4 +212,4 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
 
 }  // extern "C" {
 
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

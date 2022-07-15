@@ -38,7 +38,7 @@
  */
 NS_AX_BEGIN
 
-struct AX_DLL PipelineDescriptor
+struct CC_DLL PipelineDescriptor
 {
     backend::ProgramState* programState = nullptr;
     backend::BlendDescriptor blendDescriptor;

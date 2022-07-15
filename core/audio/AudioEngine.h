@@ -52,7 +52,7 @@ NS_AX_BEGIN
  * @brief
  * @js NA
  */
-class AX_DLL AudioProfile
+class CC_DLL AudioProfile
 {
 public:
     // Profile name can't be empty.
@@ -82,7 +82,7 @@ class AudioEngineImpl;
  * @js NA
  */
 
-class AX_DLL AudioEngine
+class CC_DLL AudioEngine
 {
 public:
     /** AudioState enum,all possible states of an audio instance.*/

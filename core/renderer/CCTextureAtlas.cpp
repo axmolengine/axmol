@@ -53,12 +53,12 @@ TextureAtlas::~TextureAtlas()
 {
     CCLOGINFO("deallocing TextureAtlas: %p", this);
 
-    AX_SAFE_FREE(_quads);
-    AX_SAFE_FREE(_indices);
+    CC_SAFE_FREE(_quads);
+    CC_SAFE_FREE(_indices);
 
-    AX_SAFE_RELEASE(_texture);
+    CC_SAFE_RELEASE(_texture);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_rendererRecreatedListener);
 #endif
 }
@@ -80,8 +80,8 @@ Texture2D* TextureAtlas::getTexture() const
 
 void TextureAtlas::setTexture(Texture2D* var)
 {
-    AX_SAFE_RETAIN(var);
-    AX_SAFE_RELEASE(_texture);
+    CC_SAFE_RETAIN(var);
+    CC_SAFE_RELEASE(_texture);
     _texture = var;
 }
 
@@ -107,7 +107,7 @@ TextureAtlas* TextureAtlas::create(std::string_view file, ssize_t capacity)
         textureAtlas->autorelease();
         return textureAtlas;
     }
-    AX_SAFE_DELETE(textureAtlas);
+    CC_SAFE_DELETE(textureAtlas);
     return nullptr;
 }
 
@@ -119,7 +119,7 @@ TextureAtlas* TextureAtlas::createWithTexture(Texture2D* texture, ssize_t capaci
         textureAtlas->autorelease();
         return textureAtlas;
     }
-    AX_SAFE_DELETE(textureAtlas);
+    CC_SAFE_DELETE(textureAtlas);
     return nullptr;
 }
 
@@ -149,7 +149,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
 
     // retained in property
     this->_texture = texture;
-    AX_SAFE_RETAIN(_texture);
+    CC_SAFE_RETAIN(_texture);
 
     // Re-initialization is not allowed
     CCASSERT(_quads == nullptr && _indices == nullptr, "_quads and _indices should be nullptr.");
@@ -160,12 +160,12 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
     if (!(_quads && _indices) && _capacity > 0)
     {
         // CCLOG("cocos2d: TextureAtlas: not enough memory");
-        AX_SAFE_FREE(_quads);
-        AX_SAFE_FREE(_indices);
+        CC_SAFE_FREE(_quads);
+        CC_SAFE_FREE(_indices);
 
         // release texture, should set it to null, because the destruction will
         // release it too. see cocos2d-x issue #484
-        AX_SAFE_RELEASE_NULL(_texture);
+        CC_SAFE_RELEASE_NULL(_texture);
         return false;
     }
 
@@ -399,10 +399,10 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
     if (!(tmpQuads && tmpIndices))
     {
         CCLOG("cocos2d: TextureAtlas: not enough memory");
-        AX_SAFE_FREE(tmpQuads);
-        AX_SAFE_FREE(tmpIndices);
-        AX_SAFE_FREE(_quads);
-        AX_SAFE_FREE(_indices);
+        CC_SAFE_FREE(tmpQuads);
+        CC_SAFE_FREE(tmpIndices);
+        CC_SAFE_FREE(_quads);
+        CC_SAFE_FREE(_indices);
         _capacity = _totalQuads = 0;
         return false;
     }

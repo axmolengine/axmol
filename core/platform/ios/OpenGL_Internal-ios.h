@@ -62,7 +62,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 */
 
 #include "platform/CCPlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
 /* Generic error reporting */
 #    define REPORT_ERROR(__FORMAT__, ...) \
@@ -101,4 +101,4 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
                 self->__DELEGATE_METHODS_IVAR__ &= ~(1 << __BIT__);               \
         }
 
-#endif  // AX_PLATFORM_IOS
+#endif  // CC_PLATFORM_IOS

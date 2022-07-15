@@ -147,47 +147,47 @@ bool ParticleData::init(int count)
 
 void ParticleData::release()
 {
-    AX_SAFE_FREE(posx);
-    AX_SAFE_FREE(posy);
-    AX_SAFE_FREE(startPosX);
-    AX_SAFE_FREE(startPosY);
-    AX_SAFE_FREE(colorR);
-    AX_SAFE_FREE(colorG);
-    AX_SAFE_FREE(colorB);
-    AX_SAFE_FREE(colorA);
-    AX_SAFE_FREE(deltaColorR);
-    AX_SAFE_FREE(deltaColorG);
-    AX_SAFE_FREE(deltaColorB);
-    AX_SAFE_FREE(deltaColorA);
-    AX_SAFE_FREE(hue);
-    AX_SAFE_FREE(sat);
-    AX_SAFE_FREE(val);
-    AX_SAFE_FREE(opacityFadeInDelta);
-    AX_SAFE_FREE(opacityFadeInLength);
-    AX_SAFE_FREE(scaleInDelta);
-    AX_SAFE_FREE(scaleInLength);
-    AX_SAFE_FREE(size);
-    AX_SAFE_FREE(deltaSize);
-    AX_SAFE_FREE(rotation);
-    AX_SAFE_FREE(staticRotation);
-    AX_SAFE_FREE(deltaRotation);
-    AX_SAFE_FREE(totalTimeToLive);
-    AX_SAFE_FREE(timeToLive);
-    AX_SAFE_FREE(animTimeLength);
-    AX_SAFE_FREE(animTimeDelta);
-    AX_SAFE_FREE(animIndex);
-    AX_SAFE_FREE(animCellIndex);
-    AX_SAFE_FREE(atlasIndex);
+    CC_SAFE_FREE(posx);
+    CC_SAFE_FREE(posy);
+    CC_SAFE_FREE(startPosX);
+    CC_SAFE_FREE(startPosY);
+    CC_SAFE_FREE(colorR);
+    CC_SAFE_FREE(colorG);
+    CC_SAFE_FREE(colorB);
+    CC_SAFE_FREE(colorA);
+    CC_SAFE_FREE(deltaColorR);
+    CC_SAFE_FREE(deltaColorG);
+    CC_SAFE_FREE(deltaColorB);
+    CC_SAFE_FREE(deltaColorA);
+    CC_SAFE_FREE(hue);
+    CC_SAFE_FREE(sat);
+    CC_SAFE_FREE(val);
+    CC_SAFE_FREE(opacityFadeInDelta);
+    CC_SAFE_FREE(opacityFadeInLength);
+    CC_SAFE_FREE(scaleInDelta);
+    CC_SAFE_FREE(scaleInLength);
+    CC_SAFE_FREE(size);
+    CC_SAFE_FREE(deltaSize);
+    CC_SAFE_FREE(rotation);
+    CC_SAFE_FREE(staticRotation);
+    CC_SAFE_FREE(deltaRotation);
+    CC_SAFE_FREE(totalTimeToLive);
+    CC_SAFE_FREE(timeToLive);
+    CC_SAFE_FREE(animTimeLength);
+    CC_SAFE_FREE(animTimeDelta);
+    CC_SAFE_FREE(animIndex);
+    CC_SAFE_FREE(animCellIndex);
+    CC_SAFE_FREE(atlasIndex);
 
-    AX_SAFE_FREE(modeA.dirX);
-    AX_SAFE_FREE(modeA.dirY);
-    AX_SAFE_FREE(modeA.radialAccel);
-    AX_SAFE_FREE(modeA.tangentialAccel);
+    CC_SAFE_FREE(modeA.dirX);
+    CC_SAFE_FREE(modeA.dirY);
+    CC_SAFE_FREE(modeA.radialAccel);
+    CC_SAFE_FREE(modeA.tangentialAccel);
 
-    AX_SAFE_FREE(modeB.angle);
-    AX_SAFE_FREE(modeB.degreesPerSecond);
-    AX_SAFE_FREE(modeB.deltaRadius);
-    AX_SAFE_FREE(modeB.radius);
+    CC_SAFE_FREE(modeB.angle);
+    CC_SAFE_FREE(modeB.degreesPerSecond);
+    CC_SAFE_FREE(modeB.deltaRadius);
+    CC_SAFE_FREE(modeB.radius);
 }
 
 Vector<ParticleSystem*> ParticleSystem::__allInstances;
@@ -279,7 +279,7 @@ ParticleSystem* ParticleSystem::create(std::string_view plistFile)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -291,7 +291,7 @@ ParticleSystem* ParticleSystem::createWithTotalParticles(int numberOfParticles)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -321,10 +321,10 @@ bool ParticleSystem::allocAnimationMem()
 
 void ParticleSystem::deallocAnimationMem()
 {
-    AX_SAFE_FREE(_particleData.animTimeLength);
-    AX_SAFE_FREE(_particleData.animTimeDelta);
-    AX_SAFE_FREE(_particleData.animIndex);
-    AX_SAFE_FREE(_particleData.animCellIndex);
+    CC_SAFE_FREE(_particleData.animTimeLength);
+    CC_SAFE_FREE(_particleData.animTimeDelta);
+    CC_SAFE_FREE(_particleData.animIndex);
+    CC_SAFE_FREE(_particleData.animCellIndex);
     _isAnimAllocated = false;
 }
 
@@ -346,9 +346,9 @@ bool ParticleSystem::allocHSVMem()
 
 void ParticleSystem::deallocHSVMem()
 {
-    AX_SAFE_FREE(_particleData.hue);
-    AX_SAFE_FREE(_particleData.sat);
-    AX_SAFE_FREE(_particleData.val);
+    CC_SAFE_FREE(_particleData.hue);
+    CC_SAFE_FREE(_particleData.sat);
+    CC_SAFE_FREE(_particleData.val);
     _isHSVAllocated = false;
 }
 
@@ -369,8 +369,8 @@ bool ParticleSystem::allocOpacityFadeInMem()
 
 void ParticleSystem::deallocOpacityFadeInMem()
 {
-    AX_SAFE_FREE(_particleData.opacityFadeInDelta);
-    AX_SAFE_FREE(_particleData.opacityFadeInLength);
+    CC_SAFE_FREE(_particleData.opacityFadeInDelta);
+    CC_SAFE_FREE(_particleData.opacityFadeInLength);
     _isOpacityFadeInAllocated = false;
 }
 
@@ -391,8 +391,8 @@ bool ParticleSystem::allocScaleInMem()
 
 void ParticleSystem::deallocScaleInMem()
 {
-    AX_SAFE_FREE(_particleData.scaleInDelta);
-    AX_SAFE_FREE(_particleData.scaleInLength);
+    CC_SAFE_FREE(_particleData.scaleInDelta);
+    CC_SAFE_FREE(_particleData.scaleInLength);
     _isScaleInAllocated = false;
 }
 
@@ -574,7 +574,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
             else
             {
                 CCASSERT(false, "Invalid emitterType in config file");
-                AX_BREAK_IF(true);
+                CC_BREAK_IF(true);
             }
 
             // life span
@@ -639,19 +639,19 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         int decodeLen =
                             base64Decode((unsigned char*)textureData.c_str(), (unsigned int)dataLen, &buffer);
                         CCASSERT(buffer != nullptr, "CCParticleSystem: error decoding textureImageData");
-                        AX_BREAK_IF(!buffer);
+                        CC_BREAK_IF(!buffer);
 
                         unsigned char* deflated = nullptr;
                         ssize_t deflatedLen     = ZipUtils::inflateMemory(buffer, decodeLen, &deflated);
                         CCASSERT(deflated != nullptr, "CCParticleSystem: error ungzipping textureImageData");
-                        AX_BREAK_IF(!deflated);
+                        CC_BREAK_IF(!deflated);
 
                         // For android, we should retain it in VolatileTexture::addImage which invoked in
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image     = new Image();
                         bool isOK = image->initWithImageData(deflated, deflatedLen, true);
                         CCASSERT(isOK, "CCParticleSystem: error init image with Data");
-                        AX_BREAK_IF(!isOK);
+                        CC_BREAK_IF(!isOK);
 
                         setTexture(_director->getTextureCache()->addImage(image, _plistFile + textureName));
 
@@ -712,7 +712,7 @@ bool ParticleSystem::initWithTotalParticles(int numberOfParticles)
 
     // Optimization: compile updateParticle method
     // updateParticleSel = @selector(updateQuadWithParticle:newPosition:);
-    // updateParticleImp = (AX_UPDATE_PARTICLE_IMP) [self methodForSelector:updateParticleSel];
+    // updateParticleImp = (CC_UPDATE_PARTICLE_IMP) [self methodForSelector:updateParticleSel];
     // for batchNode
     _transformSystemDirty = false;
 
@@ -726,7 +726,7 @@ ParticleSystem::~ParticleSystem()
     // unscheduleUpdate();
     _particleData.release();
     _animations.clear();
-    AX_SAFE_RELEASE(_texture);
+    CC_SAFE_RELEASE(_texture);
 }
 
 void ParticleSystem::addParticles(int count, int animationIndex, int animationCellIndex)
@@ -798,7 +798,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 auto val              = _rng.float01() * shape.innerRadius / shape.innerRadius;
                 val                   = powf(val, 1 / shape.edgeBias);
                 auto point            = Vec2(0.0F, val * shape.innerRadius);
-                point                 = point.rotateByAngle(Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -809,7 +809,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 auto val              = _rng.float01() * shape.outerRadius / shape.outerRadius;
                 val                   = powf(val, 1 / shape.edgeBias);
                 auto point            = Vec2(0.0F, ((val * (shape.outerRadius - shape.innerRadius) + shape.outerRadius) - (shape.outerRadius - shape.innerRadius)));
-                point                 = point.rotateByAngle(Vec2::ZERO, -AX_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
+                point                 = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(shape.coneOffset + shape.coneAngle / 2 * _rng.rangef()));
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x / 2;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y / 2;
 
@@ -839,7 +839,7 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
                 point.x = point.x / size.x * overrideSize.x * scale.x;
                 point.y = point.y / size.y * overrideSize.y * scale.y;
 
-                point = point.rotateByAngle(Vec2::ZERO, -AX_DEGREES_TO_RADIANS(angle));
+                point = point.rotateByAngle(Vec2::ZERO, -CC_DEGREES_TO_RADIANS(angle));
 
                 _particleData.posx[i] = _sourcePosition.x + shape.x + point.x;
                 _particleData.posy[i] = _sourcePosition.y + shape.y + point.y;
@@ -1053,20 +1053,20 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
         {
             for (int i = start; i < _particleCount; ++i)
             {
-                float a = AX_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
+                float a = CC_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
                 Vec2 v(cosf(a), sinf(a));
                 float s                     = modeA.speed + modeA.speedVar * _rng.rangef();
                 Vec2 dir                    = v * s;
                 _particleData.modeA.dirX[i] = dir.x;  // v * s ;
                 _particleData.modeA.dirY[i] = dir.y;
-                _particleData.rotation[i]   = -AX_RADIANS_TO_DEGREES(dir.getAngle());
+                _particleData.rotation[i]   = -CC_RADIANS_TO_DEGREES(dir.getAngle());
             }
         }
         else
         {
             for (int i = start; i < _particleCount; ++i)
             {
-                float a = AX_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
+                float a = CC_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
                 Vec2 v(cosf(a), sinf(a));
                 float s                     = modeA.speed + modeA.speedVar * _rng.rangef();
                 Vec2 dir                    = v * s;
@@ -1088,13 +1088,13 @@ void ParticleSystem::addParticles(int count, int animationIndex, int animationCe
 
         for (int i = start; i < _particleCount; ++i)
         {
-            _particleData.modeB.angle[i] = AX_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
+            _particleData.modeB.angle[i] = CC_DEGREES_TO_RADIANS(_angle + _angleVar * _rng.rangef());
         }
 
         for (int i = start; i < _particleCount; ++i)
         {
             _particleData.modeB.degreesPerSecond[i] =
-                AX_DEGREES_TO_RADIANS(modeB.rotatePerSecond + modeB.rotatePerSecondVar * _rng.rangef());
+                CC_DEGREES_TO_RADIANS(modeB.rotatePerSecond + modeB.rotatePerSecondVar * _rng.rangef());
         }
 
         if (modeB.endRadius == START_RADIUS_EQUAL_TO_END_RADIUS)
@@ -1558,7 +1558,7 @@ void ParticleSystem::update(float dt)
     if (!_visible)
         return;
 
-    AX_PROFILER_START_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
+    CC_PROFILER_START_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
 
     if (_componentContainer && !_componentContainer->isEmpty())
     {
@@ -1572,7 +1572,7 @@ void ParticleSystem::update(float dt)
         {
             updateParticleQuads();
             _transformSystemDirty = false;
-            AX_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
+            CC_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
             return;
         }
         dt             = _fixedFPSDelta;
@@ -1838,7 +1838,7 @@ void ParticleSystem::update(float dt)
         postStep();
     }
 
-    AX_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
+    CC_PROFILER_STOP_CATEGORY(kProfilerCategoryParticles, "CCParticleSystem - update");
 }
 
 void ParticleSystem::updateWithNoTime()
@@ -1861,8 +1861,8 @@ void ParticleSystem::setTexture(Texture2D* var)
 {
     if (_texture != var)
     {
-        AX_SAFE_RETAIN(var);
-        AX_SAFE_RELEASE(_texture);
+        CC_SAFE_RETAIN(var);
+        CC_SAFE_RELEASE(_texture);
         _texture = var;
         updateBlendFunc();
     }
@@ -1878,7 +1878,7 @@ void ParticleSystem::updateBlendFunc()
 
         _opacityModifyRGB = false;
 
-        if (_texture && (_blendFunc.src == AX_BLEND_SRC && _blendFunc.dst == AX_BLEND_DST))
+        if (_texture && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
         {
             if (premultiplied)
             {

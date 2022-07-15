@@ -38,7 +38,7 @@ WebView::WebView() : _impl(new WebViewImpl(this)) {}
 
 WebView::~WebView()
 {
-    AX_SAFE_DELETE(_impl);
+    CC_SAFE_DELETE(_impl);
 }
 
 WebView* WebView::create()
@@ -49,7 +49,7 @@ WebView* WebView::create()
         webView->autorelease();
         return webView;
     }
-    AX_SAFE_DELETE(webView);
+    CC_SAFE_DELETE(webView);
     return nullptr;
 }
 

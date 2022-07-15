@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/CCNavMeshUtils.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "recast/DetourCommon.h"
 #    include "recast/DetourNavMeshBuilder.h"
@@ -291,4 +291,4 @@ bool inRange(const float* v1, const float* v2, const float r, const float h)
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH

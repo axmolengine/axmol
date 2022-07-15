@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_FRAMEWORK_COMPONENT_H__
-#define __AX_FRAMEWORK_COMPONENT_H__
+#ifndef __CC_FRAMEWORK_COMPONENT_H__
+#define __CC_FRAMEWORK_COMPONENT_H__
 
 /// @cond DO_NOT_SHOW
 #include <string>
@@ -44,7 +44,7 @@ enum
     kComponentOnUpdate
 };
 
-class AX_DLL Component : public Ref
+class CC_DLL Component : public Ref
 {
 public:
     static Component* create();
@@ -88,4 +88,4 @@ protected:
 NS_AX_END
 
 /// @endcond
-#endif  // __AX_FRAMEWORK_COMPONENT_H__
+#endif  // __CC_FRAMEWORK_COMPONENT_H__

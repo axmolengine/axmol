@@ -35,7 +35,7 @@ THE SOFTWARE.
  */
 NS_AX_BEGIN
 
-struct AX_DLL ResourceData;
+struct CC_DLL ResourceData;
 
 namespace ui
 {
@@ -43,7 +43,7 @@ class Scale9Sprite;
 /**
  * @brief A widget to display images.
  */
-class AX_GUI_DLL ImageView : public Widget, public axis::BlendProtocol
+class CC_GUI_DLL ImageView : public Widget, public axis::BlendProtocol
 {
 
     DECLARE_CLASS_GUI_INFO

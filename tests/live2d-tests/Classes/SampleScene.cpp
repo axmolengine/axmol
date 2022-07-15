@@ -67,7 +67,7 @@ bool SampleScene::init()
     _closeItem = MenuItemImage::create(
         "CloseNormal.png",
         "CloseSelected.png",
-        AX_CALLBACK_1(SampleScene::menuCloseCallback, this)
+        CC_CALLBACK_1(SampleScene::menuCloseCallback, this)
     );
 
     if (_closeItem == nullptr ||
@@ -86,7 +86,7 @@ bool SampleScene::init()
     _changeItem = MenuItemImage::create(
         "icon_gear.png",
         "icon_gear.png",
-        AX_CALLBACK_1(SampleScene::menuChangeCallback, this)
+        CC_CALLBACK_1(SampleScene::menuChangeCallback, this)
     );
 
     if (_changeItem == nullptr ||
@@ -191,7 +191,7 @@ void SampleScene::menuCloseCallback(Ref* pSender)
 
     Director::getInstance()->end();
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
 }

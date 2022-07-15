@@ -164,7 +164,7 @@ void TestSearchPath::onEnter()
     }
 
     // FIXME: should fix the issue on Android
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
 
     // Save old resource root path
     std::string oldDefaultRootPath = sharedFileUtils->getDefaultResourceRootPath();

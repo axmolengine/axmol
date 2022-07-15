@@ -54,7 +54,7 @@ PageViewIndicator* PageViewIndicator::create()
         node->autorelease();
         return node;
     }
-    AX_SAFE_DELETE(node);
+    CC_SAFE_DELETE(node);
     return nullptr;
 }
 

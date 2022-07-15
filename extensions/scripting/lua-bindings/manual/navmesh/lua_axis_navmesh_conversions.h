@@ -25,7 +25,7 @@
 #ifndef __SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_AXIS_NAVMESH_CONVERSIONS_H__
 #define __SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_AXIS_NAVMESH_CONVERSIONS_H__
 
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "platform/CCPlatformMacros.h"
@@ -47,5 +47,5 @@ extern bool luaval_to_offmeshlinkdata(lua_State* L,
 extern void navmeshagentparam_to_luaval(lua_State* L, const axis::NavMeshAgentParam& inValue);
 extern void offmeshlinkdata_to_luaval(lua_State* L, const axis::OffMeshLinkData& inValue);
 
-#endif  // #if AX_USE_NAVMESH
+#endif  // #if CC_USE_NAVMESH
 #endif  // __COCOS_SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_NAVMESH_CONVERSIONS_H__

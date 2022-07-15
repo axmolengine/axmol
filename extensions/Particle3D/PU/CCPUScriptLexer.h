@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_SCRIPT_LEXER_H__
-#define __AX_PU_SCRIPT_LEXER_H__
+#ifndef __CC_PU_SCRIPT_LEXER_H__
+#define __CC_PU_SCRIPT_LEXER_H__
 
 #include "base/CCRef.h"
 #include <vector>

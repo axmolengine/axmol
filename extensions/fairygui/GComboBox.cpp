@@ -28,7 +28,7 @@ GComboBox::GComboBox()
 
 GComboBox::~GComboBox()
 {
-    AX_SAFE_RELEASE(_dropdown);
+    CC_SAFE_RELEASE(_dropdown);
 }
 
 const std::string& GComboBox::getTitle() const
@@ -314,7 +314,7 @@ void GComboBox::constructExtension(ByteBuffer* buffer)
         _list = dynamic_cast<GList*>(_dropdown->getChild("list"));
         CCASSERT(_list != nullptr, "FairyGUI: should container a list component named list.");
 
-        _list->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(GComboBox::onClickItem, this));
+        _list->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(GComboBox::onClickItem, this));
 
         _list->addRelation(_dropdown, RelationType::Width);
         _list->removeRelation(_dropdown, RelationType::Height);
@@ -322,13 +322,13 @@ void GComboBox::constructExtension(ByteBuffer* buffer)
         _dropdown->addRelation(_list, RelationType::Height);
         _dropdown->removeRelation(_list, RelationType::Width);
 
-        _dropdown->addEventListener(UIEventType::Exit, AX_CALLBACK_1(GComboBox::onPopupWinClosed, this));
+        _dropdown->addEventListener(UIEventType::Exit, CC_CALLBACK_1(GComboBox::onPopupWinClosed, this));
     }
 
-    addEventListener(UIEventType::RollOver, AX_CALLBACK_1(GComboBox::onRollover, this));
-    addEventListener(UIEventType::RollOut, AX_CALLBACK_1(GComboBox::onRollout, this));
-    addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GComboBox::onTouchBegin, this));
-    addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(GComboBox::onTouchEnd, this));
+    addEventListener(UIEventType::RollOver, CC_CALLBACK_1(GComboBox::onRollover, this));
+    addEventListener(UIEventType::RollOut, CC_CALLBACK_1(GComboBox::onRollout, this));
+    addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GComboBox::onTouchBegin, this));
+    addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(GComboBox::onTouchEnd, this));
 }
 
 void GComboBox::setup_afterAdd(ByteBuffer* buffer, int beginPos)

@@ -156,7 +156,7 @@ private:
     bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
     void computeUniformInfos();
     void computeLocations();
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;
     virtual int getOriginalLocation(int location) const override;
@@ -172,7 +172,7 @@ private:
 
     std::vector<AttributeInfo> _attributeInfos;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     std::unordered_map<std::string, int>
         _originalUniformLocations;  ///< record the uniform location when shader was first created.
     std::unordered_map<int, int> _mapToCurrentActiveLocation;  ///<

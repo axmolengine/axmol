@@ -60,7 +60,7 @@ GameMapReader* GameMapReader::getInstance()
 
 void GameMapReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceTMXTiledMapReader);
+    CC_SAFE_DELETE(_instanceTMXTiledMapReader);
 }
 
 Offset<Table> GameMapReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

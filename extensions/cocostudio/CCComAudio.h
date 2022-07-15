@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_EXTENTIONS_CCCOMAUDIO_H__
-#define __AX_EXTENTIONS_CCCOMAUDIO_H__
+#ifndef __CC_EXTENTIONS_CCCOMAUDIO_H__
+#define __CC_EXTENTIONS_CCCOMAUDIO_H__
 
 #include "CCComBase.h"
 #include "base/CCProtocols.h"
@@ -129,4 +129,4 @@ private:
 
 }  // namespace cocostudio
 
-#endif  // __AX_EXTENTIONS_CCCOMAUDIO_H__
+#endif  // __CC_EXTENTIONS_CCCOMAUDIO_H__

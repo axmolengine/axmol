@@ -178,14 +178,14 @@ SpriteBatchNode::SpriteBatchNode() {}
 
 SpriteBatchNode::~SpriteBatchNode()
 {
-    AX_SAFE_RELEASE(_textureAtlas);
+    CC_SAFE_RELEASE(_textureAtlas);
 }
 
 // override visit
 // don't call visit on it's children
 void SpriteBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
-    AX_PROFILER_START_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
+    CC_PROFILER_START_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
 
     // CAREFUL:
     // This visit is almost identical to CocosNode#visit
@@ -218,7 +218,7 @@ void SpriteBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uin
         // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
         //    setOrderOfArrival(0);
 
-        AX_PROFILER_STOP_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
+        CC_PROFILER_STOP_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
     }
 }
 
@@ -629,8 +629,8 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
     for (auto iter = children.begin(); iter != children.end();)
     {
         auto child = *iter;
-#if AX_SPRITE_DEBUG_DRAW
-        // when using AX_SPRITE_DEBUG_DRAW, a DrawNode is appended to sprites. remove it since only Sprites can be used
+#if CC_SPRITE_DEBUG_DRAW
+        // when using CC_SPRITE_DEBUG_DRAW, a DrawNode is appended to sprites. remove it since only Sprites can be used
         // as children in SpriteBatchNode
         // Github issue #14730
         if (dynamic_cast<DrawNode*>(child))

@@ -74,7 +74,7 @@ NodeReader* NodeReader::getInstance()
 
 void NodeReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceNodeReader);
+    CC_SAFE_DELETE(_instanceNodeReader);
 }
 
 Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

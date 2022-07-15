@@ -2,7 +2,7 @@
 // Copyright (c) 2020 C4games Ltd
 #include "platform/CCPosixFileStream.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #    include "base/ZipUtils.h"
 #endif
 
@@ -76,7 +76,7 @@ static long long pfs_posix_size(PXFileHandle& handle)
 
 static PXIoF pfs_posix_iof = {pfs_posix_read, pfs_posix_seek, pfs_posix_close, pfs_posix_size};
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 // android AssetManager wrappers
 static int pfs_asset_read(PXFileHandle& handle, void* buf, unsigned int size)
 {
@@ -130,7 +130,7 @@ PosixFileStream::~PosixFileStream()
 bool PosixFileStream::open(std::string_view path, FileStream::Mode mode)
 {
     bool ok = false;
-#if AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     ok = pfs_posix_open(path, mode, _handle) != -1;
 #else  // Android
     if (path[0] != '/')
@@ -223,7 +223,7 @@ int64_t PosixFileStream::size()
 
 bool PosixFileStream::isOpen() const
 {
-#if AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID
     return _handle._fd != -1;
 #else
     return _handle._fd != -1 && _handle._asset != nullptr;

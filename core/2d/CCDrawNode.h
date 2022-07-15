@@ -54,7 +54,7 @@ class PointArray;
  * Faster than the "drawing primitives" since they draws everything in one single batch.
  * @since v2.1
  */
-class AX_DLL DrawNode : public Node
+class CC_DLL DrawNode : public Node
 {
 public:
     /** creates and initialize a DrawNode node.
@@ -412,7 +412,7 @@ protected:
     axis::any_buffer _abuf;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);
+    CC_DISALLOW_COPY_AND_ASSIGN(DrawNode);
 };
 /** @} */
 NS_AX_END

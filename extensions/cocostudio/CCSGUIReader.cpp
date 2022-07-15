@@ -102,7 +102,7 @@ GUIReader* GUIReader::getInstance()
 
 void GUIReader::destroyInstance()
 {
-    AX_SAFE_DELETE(sharedReader);
+    CC_SAFE_DELETE(sharedReader);
 }
 
 int GUIReader::getVersionInteger(const char* str)
@@ -239,7 +239,7 @@ Widget* GUIReader::widgetFromJsonFile(const char* fileName)
         widget  = pReader->createWidget(jsonDict, this->m_strFilePath.c_str(), fileName);
     }
 
-    AX_SAFE_DELETE(pReader);
+    CC_SAFE_DELETE(pReader);
     return widget;
 }
 
@@ -420,7 +420,7 @@ Widget* GUIReader::widgetFromBinaryFile(const char* fileName)
                     widget  = pReader->createWidgetFromBinary(&tCocoLoader, tpRootCocoNode, fileName);
                 }
 
-                AX_SAFE_DELETE(pReader);
+                CC_SAFE_DELETE(pReader);
             }
         }
     }
@@ -965,8 +965,8 @@ void WidgetPropertiesReader0250::setPropsForLabelAtlasFromJsonDictionary(Widget*
                                 DICTOOL->getIntValue_json(options, "itemHeight"),
                                 DICTOOL->getStringValue_json(options, "startCharMap"));
         labelAtlas->setProperty(DICTOOL->getStringValue_json(options, "stringValue"), cmf_tp,
-                                DICTOOL->getIntValue_json(options, "itemWidth") / AX_CONTENT_SCALE_FACTOR(),
-                                DICTOOL->getIntValue_json(options, "itemHeight") / AX_CONTENT_SCALE_FACTOR(),
+                                DICTOOL->getIntValue_json(options, "itemWidth") / CC_CONTENT_SCALE_FACTOR(),
+                                DICTOOL->getIntValue_json(options, "itemHeight") / CC_CONTENT_SCALE_FACTOR(),
                                 DICTOOL->getStringValue_json(options, "startCharMap"));
     }
     setColorPropsForWidgetFromJsonDictionary(widget, options);

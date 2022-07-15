@@ -58,7 +58,7 @@ TextFieldExReader* TextFieldExReader::getInstance()
 
 void TextFieldExReader::destroyInstance()
 {
-    AX_SAFE_DELETE(instanceTextFieldExReader);
+    CC_SAFE_DELETE(instanceTextFieldExReader);
 }
 
 Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

@@ -30,7 +30,7 @@
 #include "audio/AudioMacros.h"
 #include "platform/CCFileUtils.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #    include <unistd.h>
 #    include <errno.h>
 #endif

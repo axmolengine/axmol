@@ -287,8 +287,8 @@ Sequence::Sequence() : _split(0)
 
 Sequence::~Sequence()
 {
-    AX_SAFE_RELEASE(_actions[0]);
-    AX_SAFE_RELEASE(_actions[1]);
+    CC_SAFE_RELEASE(_actions[0]);
+    CC_SAFE_RELEASE(_actions[1]);
 }
 
 void Sequence::startWithTarget(Node* target)
@@ -448,7 +448,7 @@ Repeat* Repeat::clone() const
 
 Repeat::~Repeat()
 {
-    AX_SAFE_RELEASE(_innerAction);
+    CC_SAFE_RELEASE(_innerAction);
 }
 
 void Repeat::startWithTarget(Node* target)
@@ -531,7 +531,7 @@ Repeat* Repeat::reverse() const
 //
 RepeatForever::~RepeatForever()
 {
-    AX_SAFE_RELEASE(_innerAction);
+    CC_SAFE_RELEASE(_innerAction);
 }
 
 RepeatForever* RepeatForever::create(ActionInterval* action)
@@ -742,8 +742,8 @@ Spawn::Spawn() : _one(nullptr), _two(nullptr) {}
 
 Spawn::~Spawn()
 {
-    AX_SAFE_RELEASE(_one);
-    AX_SAFE_RELEASE(_two);
+    CC_SAFE_RELEASE(_one);
+    CC_SAFE_RELEASE(_two);
 }
 
 void Spawn::startWithTarget(Node* target)
@@ -932,7 +932,7 @@ void RotateTo::update(float time)
         }
         else
         {
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
             if (_startAngle.x == _startAngle.y && _diffAngle.x == _diffAngle.y)
             {
                 _target->setRotation(_startAngle.x + _diffAngle.x * time);
@@ -945,7 +945,7 @@ void RotateTo::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _diffAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _diffAngle.y * time);
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS
         }
     }
 }
@@ -1077,7 +1077,7 @@ void RotateBy::update(float time)
         }
         else
         {
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
             if (_startAngle.x == _startAngle.y && _deltaAngle.x == _deltaAngle.y)
             {
                 _target->setRotation(_startAngle.x + _deltaAngle.x * time);
@@ -1090,7 +1090,7 @@ void RotateBy::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _deltaAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _deltaAngle.y * time);
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS
         }
     }
 }
@@ -1174,7 +1174,7 @@ void MoveBy::update(float t)
 {
     if (_target)
     {
-#if AX_ENABLE_STACKABLE_ACTIONS
+#if CC_ENABLE_STACKABLE_ACTIONS
         Vec3 currentPos = _target->getPosition3D();
         Vec3 diff       = currentPos - _previousPosition;
         _startPosition  = _startPosition + diff;
@@ -1183,7 +1183,7 @@ void MoveBy::update(float t)
         _previousPosition = newPos;
 #else
         _target->setPosition3D(_startPosition + _positionDelta * t);
-#endif  // AX_ENABLE_STACKABLE_ACTIONS
+#endif  // CC_ENABLE_STACKABLE_ACTIONS
     }
 }
 
@@ -1583,7 +1583,7 @@ void JumpBy::update(float t)
         y += _delta.y * t;
 
         float x = _delta.x * t;
-#if AX_ENABLE_STACKABLE_ACTIONS
+#if CC_ENABLE_STACKABLE_ACTIONS
         Vec2 currentPos = _target->getPosition();
 
         Vec2 diff      = currentPos - _previousPos;
@@ -1595,7 +1595,7 @@ void JumpBy::update(float t)
         _previousPos = newPos;
 #else
         _target->setPosition(_startPosition + Vec2(x, y));
-#endif  // !AX_ENABLE_STACKABLE_ACTIONS
+#endif  // !CC_ENABLE_STACKABLE_ACTIONS
     }
 }
 
@@ -1726,7 +1726,7 @@ void BezierBy::update(float time)
         float x = bezierat(xa, xb, xc, xd, time);
         float y = bezierat(ya, yb, yc, yd, time);
 
-#if AX_ENABLE_STACKABLE_ACTIONS
+#if CC_ENABLE_STACKABLE_ACTIONS
         Vec2 currentPos = _target->getPosition();
         Vec2 diff       = currentPos - _previousPosition;
         _startPosition  = _startPosition + diff;
@@ -1737,7 +1737,7 @@ void BezierBy::update(float time)
         _previousPosition = newPos;
 #else
         _target->setPosition(_startPosition + Vec2(x, y));
-#endif  // !AX_ENABLE_STACKABLE_ACTIONS
+#endif  // !CC_ENABLE_STACKABLE_ACTIONS
     }
 }
 
@@ -2393,7 +2393,7 @@ bool ReverseTime::initWithAction(FiniteTimeAction* action)
     if (ActionInterval::initWithDuration(action->getDuration()))
     {
         // Don't leak if action is reused
-        AX_SAFE_RELEASE(_other);
+        CC_SAFE_RELEASE(_other);
 
         _other = action;
         action->retain();
@@ -2414,7 +2414,7 @@ ReverseTime::ReverseTime() : _other(nullptr) {}
 
 ReverseTime::~ReverseTime()
 {
-    AX_SAFE_RELEASE(_other);
+    CC_SAFE_RELEASE(_other);
 }
 
 void ReverseTime::startWithTarget(Node* target)
@@ -2464,10 +2464,10 @@ Animate::Animate() {}
 
 Animate::~Animate()
 {
-    AX_SAFE_RELEASE(_animation);
-    AX_SAFE_RELEASE(_origFrame);
-    AX_SAFE_DELETE(_splitTimes);
-    AX_SAFE_RELEASE(_frameDisplayedEvent);
+    CC_SAFE_RELEASE(_animation);
+    CC_SAFE_RELEASE(_origFrame);
+    CC_SAFE_DELETE(_splitTimes);
+    CC_SAFE_RELEASE(_frameDisplayedEvent);
 }
 
 bool Animate::initWithAnimation(Animation* animation)
@@ -2510,8 +2510,8 @@ void Animate::setAnimation(axis::Animation* animation)
 {
     if (_animation != animation)
     {
-        AX_SAFE_RETAIN(animation);
-        AX_SAFE_RELEASE(_animation);
+        CC_SAFE_RETAIN(animation);
+        CC_SAFE_RELEASE(_animation);
         _animation = animation;
     }
 }
@@ -2527,7 +2527,7 @@ void Animate::startWithTarget(Node* target)
     ActionInterval::startWithTarget(target);
     Sprite* sprite = static_cast<Sprite*>(target);
 
-    AX_SAFE_RELEASE(_origFrame);
+    CC_SAFE_RELEASE(_origFrame);
 
     if (_animation->getRestoreOriginalFrame())
     {
@@ -2637,8 +2637,8 @@ TargetedAction::TargetedAction() : _action(nullptr), _forcedTarget(nullptr) {}
 
 TargetedAction::~TargetedAction()
 {
-    AX_SAFE_RELEASE(_forcedTarget);
-    AX_SAFE_RELEASE(_action);
+    CC_SAFE_RELEASE(_forcedTarget);
+    CC_SAFE_RELEASE(_action);
 }
 
 TargetedAction* TargetedAction::create(Node* target, FiniteTimeAction* action)
@@ -2658,9 +2658,9 @@ bool TargetedAction::initWithTarget(Node* target, FiniteTimeAction* action)
 {
     if (ActionInterval::initWithDuration(action->getDuration()))
     {
-        AX_SAFE_RETAIN(target);
+        CC_SAFE_RETAIN(target);
         _forcedTarget = target;
-        AX_SAFE_RETAIN(action);
+        CC_SAFE_RETAIN(action);
         _action = action;
         return true;
     }
@@ -2704,8 +2704,8 @@ void TargetedAction::setForcedTarget(Node* forcedTarget)
 {
     if (_forcedTarget != forcedTarget)
     {
-        AX_SAFE_RETAIN(forcedTarget);
-        AX_SAFE_RELEASE(_forcedTarget);
+        CC_SAFE_RETAIN(forcedTarget);
+        CC_SAFE_RELEASE(_forcedTarget);
         _forcedTarget = forcedTarget;
     }
 }

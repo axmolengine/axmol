@@ -12,7 +12,7 @@ ProgramStateRegistry* ProgramStateRegistry::getInstance()
     _sharedStateRegistry = new ProgramStateRegistry();
     if (!_sharedStateRegistry->init())
     {
-        AX_SAFE_DELETE(_sharedStateRegistry);
+        CC_SAFE_DELETE(_sharedStateRegistry);
     }
 
     return _sharedStateRegistry;
@@ -21,7 +21,7 @@ ProgramStateRegistry* ProgramStateRegistry::getInstance()
 /** purges the cache. It releases the retained instance. */
 void ProgramStateRegistry::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(_sharedStateRegistry);
+    CC_SAFE_RELEASE_NULL(_sharedStateRegistry);
 }
 
 bool ProgramStateRegistry::init()

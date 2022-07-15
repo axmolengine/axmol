@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_TEXT_FIELD_H__
-#define __AX_TEXT_FIELD_H__
+#ifndef __CC_TEXT_FIELD_H__
+#define __CC_TEXT_FIELD_H__
 
 #include "2d/CCLabel.h"
 #include "base/CCIMEDelegate.h"
@@ -41,7 +41,7 @@ class TextFieldTTF;
 /**
  * A input protocol for TextField.
  */
-class AX_DLL TextFieldDelegate
+class CC_DLL TextFieldDelegate
 {
 public:
     /**
@@ -79,7 +79,7 @@ public:
 /**
  *@brief    A simple text input field with TTF font.
  */
-class AX_DLL TextFieldTTF : public Label, public IMEDelegate
+class CC_DLL TextFieldTTF : public Label, public IMEDelegate
 {
 public:
     /**
@@ -300,4 +300,4 @@ NS_AX_END
 // end of ui group
 /// @}
 
-#endif  // __AX_TEXT_FIELD_H__
+#endif  // __CC_TEXT_FIELD_H__

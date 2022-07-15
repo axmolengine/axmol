@@ -3,16 +3,16 @@
 DEBUG = 2
 
 -- use framework, will disable all deprecated API, false - use legacy API
-AX_USE_FRAMEWORK = true
+CC_USE_FRAMEWORK = true
 
 -- show FPS on screen
-AX_SHOW_FPS = true
+CC_SHOW_FPS = true
 
 -- disable create unexpected global variable
-AX_DISABLE_GLOBAL = true
+CC_DISABLE_GLOBAL = true
 
 -- for module display
-AX_DESIGN_RESOLUTION = {
+CC_DESIGN_RESOLUTION = {
     width = 960,
     height = 640,
     autoscale = "SHOW_ALL",

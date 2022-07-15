@@ -43,7 +43,7 @@ NS_AX_EXT_BEGIN
  */
 
 /** @class ControlPotentiometer Potentiometer control for Cocos2D. */
-class AX_EX_DLL ControlPotentiometer : public Control
+class CC_EX_DLL ControlPotentiometer : public Control
 {
 public:
     /**
@@ -110,9 +110,9 @@ protected:
      * The default value of this property is 1.0. */
     float _maximumValue;
 
-    AX_SYNTHESIZE_RETAIN(Sprite*, _thumbSprite, ThumbSprite)
-    AX_SYNTHESIZE_RETAIN(ProgressTimer*, _progressTimer, ProgressTimer)
-    AX_SYNTHESIZE(Vec2, _previousLocation, PreviousLocation)
+    CC_SYNTHESIZE_RETAIN(Sprite*, _thumbSprite, ThumbSprite)
+    CC_SYNTHESIZE_RETAIN(ProgressTimer*, _progressTimer, ProgressTimer)
+    CC_SYNTHESIZE(Vec2, _previousLocation, PreviousLocation)
 };
 
 // end of GUI group

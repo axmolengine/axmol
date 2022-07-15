@@ -37,7 +37,7 @@ NS_AX_BEGIN
  */
 
 class Label;
-struct AX_DLL ResourceData;
+struct CC_DLL ResourceData;
 
 namespace ui
 {
@@ -45,7 +45,7 @@ namespace ui
 /**
  * @brief UI TextAtlas widget.
  */
-class AX_GUI_DLL TextAtlas : public Widget
+class CC_GUI_DLL TextAtlas : public Widget
 {
 
     DECLARE_CLASS_GUI_INFO

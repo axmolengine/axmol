@@ -37,7 +37,7 @@ NodeGrid* NodeGrid::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -56,7 +56,7 @@ NodeGrid::NodeGrid() {}
 
 void NodeGrid::setTarget(Node* target)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -65,16 +65,16 @@ void NodeGrid::setTarget(Node* target)
         if (target)
             sEngine->retainScriptObject(this, target);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
-    AX_SAFE_RELEASE(_gridTarget);
-    AX_SAFE_RETAIN(target);
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    CC_SAFE_RELEASE(_gridTarget);
+    CC_SAFE_RETAIN(target);
     _gridTarget = target;
 }
 
 NodeGrid::~NodeGrid()
 {
-    AX_SAFE_RELEASE(_nodeGrid);
-    AX_SAFE_RELEASE(_gridTarget);
+    CC_SAFE_RELEASE(_nodeGrid);
+    CC_SAFE_RELEASE(_gridTarget);
 }
 
 void NodeGrid::onGridBeginDraw()
@@ -173,8 +173,8 @@ void NodeGrid::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t p
 
 void NodeGrid::setGrid(GridBase* grid)
 {
-    AX_SAFE_RELEASE(_nodeGrid);
-    AX_SAFE_RETAIN(grid);
+    CC_SAFE_RELEASE(_nodeGrid);
+    CC_SAFE_RETAIN(grid);
     _nodeGrid = grid;
 }
 

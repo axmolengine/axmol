@@ -64,24 +64,24 @@ static bool splitWithForm(std::string_view content, strArray& strs)
 
     do
     {
-        AX_BREAK_IF(content.empty());
+        CC_BREAK_IF(content.empty());
 
         size_t nPosLeft  = content.find('{');
         size_t nPosRight = content.find('}');
 
         // don't have '{' and '}'
-        AX_BREAK_IF(nPosLeft == std::string::npos || nPosRight == std::string::npos);
+        CC_BREAK_IF(nPosLeft == std::string::npos || nPosRight == std::string::npos);
         // '}' is before '{'
-        AX_BREAK_IF(nPosLeft > nPosRight);
+        CC_BREAK_IF(nPosLeft > nPosRight);
 
         auto pointStr = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
         // nothing between '{' and '}'
-        AX_BREAK_IF(pointStr.empty());
+        CC_BREAK_IF(pointStr.empty());
 
         size_t nPos1 = pointStr.find('{');
         size_t nPos2 = pointStr.find('}');
         // contain '{' or '}'
-        AX_BREAK_IF(nPos1 != std::string::npos || nPos2 != std::string::npos);
+        CC_BREAK_IF(nPos1 != std::string::npos || nPos2 != std::string::npos);
 
         split(pointStr, ",", strs);
         if (strs.size() != 2 || strs[0].empty() || strs[1].empty())
@@ -104,7 +104,7 @@ Rect RectFromString(std::string_view str)
 
     do
     {
-        AX_BREAK_IF(str.empty());
+        CC_BREAK_IF(str.empty());
         auto content = str;
 
         // find the first '{' and the third '}'
@@ -118,13 +118,13 @@ Rect RectFromString(std::string_view str)
             }
             nPosRight = content.find('}', nPosRight + 1);
         }
-        AX_BREAK_IF(nPosLeft == std::string::npos || nPosRight == std::string::npos);
+        CC_BREAK_IF(nPosLeft == std::string::npos || nPosRight == std::string::npos);
 
         content          = content.substr(nPosLeft + 1, nPosRight - nPosLeft - 1);
         size_t nPointEnd = content.find('}');
-        AX_BREAK_IF(nPointEnd == std::string::npos);
+        CC_BREAK_IF(nPointEnd == std::string::npos);
         nPointEnd = content.find(',', nPointEnd);
-        AX_BREAK_IF(nPointEnd == std::string::npos);
+        CC_BREAK_IF(nPointEnd == std::string::npos);
 
         // get the point string and size string
         auto pointStr = content.substr(0, nPointEnd);
@@ -132,9 +132,9 @@ Rect RectFromString(std::string_view str)
 
         // split the string with ','
         strArray pointInfo;
-        AX_BREAK_IF(!splitWithForm(pointStr, pointInfo));
+        CC_BREAK_IF(!splitWithForm(pointStr, pointInfo));
         strArray sizeInfo;
-        AX_BREAK_IF(!splitWithForm(sizeStr, sizeInfo));
+        CC_BREAK_IF(!splitWithForm(sizeStr, sizeInfo));
 
         float x      = (float)utils::atof(pointInfo[0].c_str());
         float y      = (float)utils::atof(pointInfo[1].c_str());
@@ -154,7 +154,7 @@ Vec2 PointFromString(std::string_view str)
     do
     {
         strArray strs;
-        AX_BREAK_IF(!splitWithForm(str, strs));
+        CC_BREAK_IF(!splitWithForm(str, strs));
 
         float x = (float)utils::atof(strs[0].c_str());
         float y = (float)utils::atof(strs[1].c_str());
@@ -172,7 +172,7 @@ Vec2 SizeFromString(std::string_view pszContent)
     do
     {
         strArray strs;
-        AX_BREAK_IF(!splitWithForm(pszContent, strs));
+        CC_BREAK_IF(!splitWithForm(pszContent, strs));
 
         float width  = (float)utils::atof(strs[0].c_str());
         float height = (float)utils::atof(strs[1].c_str());

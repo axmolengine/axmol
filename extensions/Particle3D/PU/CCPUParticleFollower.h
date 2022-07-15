@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_PARTICLE_FOLLOWER_H__
-#define __AX_PU_PARTICLE_3D_PARTICLE_FOLLOWER_H__
+#ifndef __CC_PU_PARTICLE_3D_PARTICLE_FOLLOWER_H__
+#define __CC_PU_PARTICLE_3D_PARTICLE_FOLLOWER_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "base/ccTypes.h"
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUParticleFollower : public PUAffector
+class CC_EX_DLL PUParticleFollower : public PUAffector
 {
 public:
     // Constants

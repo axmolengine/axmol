@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_REF_PTR_H__
-#define __AX_REF_PTR_H__
+#ifndef __CC_REF_PTR_H__
+#define __CC_REF_PTR_H__
 /// @cond DO_NOT_SHOW
 
 #include "base/CCRef.h"
@@ -39,7 +39,7 @@ NS_AX_BEGIN
  * Utility/support macros. Defined to enable RefPtr<T> to contain types like 'const T' because we do not
  * regard retain()/release() as affecting mutability of state.
  */
-#define AX_REF_PTR_SAFE_RETAIN(ptr)                                   \
+#define CC_REF_PTR_SAFE_RETAIN(ptr)                                   \
                                                                       \
     do                                                                \
     {                                                                 \
@@ -50,7 +50,7 @@ NS_AX_BEGIN
                                                                       \
     } while (0);
 
-#define AX_REF_PTR_SAFE_RELEASE(ptr)                                   \
+#define CC_REF_PTR_SAFE_RELEASE(ptr)                                   \
                                                                        \
     do                                                                 \
     {                                                                  \
@@ -61,7 +61,7 @@ NS_AX_BEGIN
                                                                        \
     } while (0);
 
-#define AX_REF_PTR_SAFE_RELEASE_NULL(ptr)                              \
+#define CC_REF_PTR_SAFE_RELEASE_NULL(ptr)                              \
                                                                        \
     do                                                                 \
     {                                                                  \
@@ -102,7 +102,7 @@ public:
         other._ptr = nullptr;
     }
 
-    RefPtr(T* ptr) : _ptr(ptr) { AX_REF_PTR_SAFE_RETAIN(_ptr); }
+    RefPtr(T* ptr) : _ptr(ptr) { CC_REF_PTR_SAFE_RETAIN(_ptr); }
 
     template <typename _Other>
     RefPtr(ReferencedObject<_Other>&& ptr) : _ptr(ptr._ptr)
@@ -110,16 +110,16 @@ public:
 
     RefPtr(std::nullptr_t ptr) : _ptr(nullptr) {}
 
-    RefPtr(const RefPtr<T>& other) : _ptr(other._ptr) { AX_REF_PTR_SAFE_RETAIN(_ptr); }
+    RefPtr(const RefPtr<T>& other) : _ptr(other._ptr) { CC_REF_PTR_SAFE_RETAIN(_ptr); }
 
-    ~RefPtr() { AX_REF_PTR_SAFE_RELEASE_NULL(_ptr); }
+    ~RefPtr() { CC_REF_PTR_SAFE_RELEASE_NULL(_ptr); }
 
     RefPtr<T>& operator=(const RefPtr<T>& other)
     {
         if (other._ptr != _ptr)
         {
-            AX_REF_PTR_SAFE_RETAIN(other._ptr);
-            AX_REF_PTR_SAFE_RELEASE(_ptr);
+            CC_REF_PTR_SAFE_RETAIN(other._ptr);
+            CC_REF_PTR_SAFE_RELEASE(_ptr);
             _ptr = other._ptr;
         }
 
@@ -130,7 +130,7 @@ public:
     {
         if (&other != this)
         {
-            AX_REF_PTR_SAFE_RELEASE(_ptr);
+            CC_REF_PTR_SAFE_RELEASE(_ptr);
             _ptr       = other._ptr;
             other._ptr = nullptr;
         }
@@ -142,8 +142,8 @@ public:
     {
         if (other != _ptr)
         {
-            AX_REF_PTR_SAFE_RETAIN(other);
-            AX_REF_PTR_SAFE_RELEASE(_ptr);
+            CC_REF_PTR_SAFE_RETAIN(other);
+            CC_REF_PTR_SAFE_RELEASE(_ptr);
             _ptr = other;
         }
 
@@ -152,7 +152,7 @@ public:
 
     RefPtr<T>& operator=(std::nullptr_t other)
     {
-        AX_REF_PTR_SAFE_RELEASE_NULL(_ptr);
+        CC_REF_PTR_SAFE_RELEASE_NULL(_ptr);
         return *this;
     }
 
@@ -214,7 +214,7 @@ public:
 
     explicit operator bool() const { return _ptr != nullptr; }
 
-    void reset() { AX_REF_PTR_SAFE_RELEASE_NULL(_ptr); }
+    void reset() { CC_REF_PTR_SAFE_RELEASE_NULL(_ptr); }
 
     void swap(RefPtr<T>& other)
     {
@@ -242,7 +242,7 @@ public:
      */
     void weakAssign(const RefPtr<T>& other)
     {
-        AX_REF_PTR_SAFE_RELEASE(_ptr);
+        CC_REF_PTR_SAFE_RELEASE(_ptr);
         _ptr = other._ptr;
     }
 
@@ -328,11 +328,11 @@ RefPtr<T> dynamic_pointer_cast(const RefPtr<U>& r)
 /**
  * Done with these macros.
  */
-#undef AX_REF_PTR_SAFE_RETAIN
-#undef AX_REF_PTR_SAFE_RELEASE
-#undef AX_REF_PTR_SAFE_RELEASE_NULL
+#undef CC_REF_PTR_SAFE_RETAIN
+#undef CC_REF_PTR_SAFE_RELEASE
+#undef CC_REF_PTR_SAFE_RELEASE_NULL
 
 NS_AX_END
 
 /// @endcond
-#endif  // __AX_REF_PTR_H__
+#endif  // __CC_REF_PTR_H__

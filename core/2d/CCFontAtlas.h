@@ -59,7 +59,7 @@ struct FontLetterDefinition
     bool rotated;
 };
 
-class AX_DLL FontAtlas : public Ref
+class CC_DLL FontAtlas : public Ref
 {
 public:
     static const int CacheTextureWidth;
@@ -147,7 +147,7 @@ protected:
     int _strideShift                  = 0;
     uint8_t* _currentPageData         = nullptr;
     int _currentPageDataSize          = 0;
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
     // Notes: 
     // Metal backend doesn't support PixelFormat::LA8
     // Currently we use RGBA for texture data upload

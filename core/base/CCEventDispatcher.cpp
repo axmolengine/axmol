@@ -32,9 +32,9 @@
 #include "base/CCEventListenerKeyboard.h"
 #include "base/CCEventListenerCustom.h"
 #include "base/CCEventListenerFocus.h"
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||   \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    include "base/CCEventListenerController.h"
 #endif
 #include "2d/CCScene.h"
@@ -90,9 +90,9 @@ static EventListener::ListenerID __getListenerID(Event* event)
         // EventListenerTouchAllAtOnce. return UNKNOWN instead.
         CCASSERT(false, "Don't call this method if the event is for touch.");
         break;
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
+     CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX ||   \
+     CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     case Event::Type::GAME_CONTROLLER:
         ret = EventListenerController::LISTENER_ID;
         break;
@@ -111,8 +111,8 @@ EventDispatcher::EventListenerVector::EventListenerVector()
 
 EventDispatcher::EventListenerVector::~EventListenerVector()
 {
-    AX_SAFE_DELETE(_sceneGraphListeners);
-    AX_SAFE_DELETE(_fixedListeners);
+    CC_SAFE_DELETE(_sceneGraphListeners);
+    CC_SAFE_DELETE(_fixedListeners);
 }
 
 size_t EventDispatcher::EventListenerVector::size() const
@@ -134,7 +134,7 @@ bool EventDispatcher::EventListenerVector::empty() const
 
 void EventDispatcher::EventListenerVector::push_back(EventListener* listener)
 {
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS
+#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS
     CCASSERT(_sceneGraphListeners == nullptr ||
                  std::count(_sceneGraphListeners->begin(), _sceneGraphListeners->end(), listener) == 0,
              "Listener should not be added twice!");
@@ -439,13 +439,13 @@ void EventDispatcher::addEventListener(EventListener* listener)
     {
         _toAddedListeners.push_back(listener);
     }
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, listener);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     listener->retain();
 }
 
@@ -502,7 +502,7 @@ void EventDispatcher::addEventListenerWithSceneGraphPriority(EventListener* list
     addEventListener(listener);
 }
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
 
 void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
 {
@@ -559,7 +559,7 @@ void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
     }
 }
 
-#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#endif  // #if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
 
 void EventDispatcher::addEventListenerWithFixedPriority(EventListener* listener, int fixedPriority)
 {
@@ -607,7 +607,7 @@ void EventDispatcher::removeEventListener(EventListener* listener)
             auto l = *iter;
             if (l == listener)
             {
-                AX_SAFE_RETAIN(l);
+                CC_SAFE_RETAIN(l);
                 l->setRegistered(false);
                 if (l->getAssociatedNode() != nullptr)
                 {
@@ -653,7 +653,7 @@ void EventDispatcher::removeEventListener(EventListener* listener)
             }
         }
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS
+#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS
         CCASSERT(
             _inDispatch != 0 || !sceneGraphPriorityListeners ||
                 std::count(sceneGraphPriorityListeners->begin(), sceneGraphPriorityListeners->end(), listener) == 0,
@@ -669,7 +669,7 @@ void EventDispatcher::removeEventListener(EventListener* listener)
             _priorityDirtyFlagMap.erase(listener->getListenerID());
             auto list = iter->second;
             iter      = _listenerMap.erase(iter);
-            AX_SAFE_DELETE(list);
+            CC_SAFE_DELETE(list);
         }
         else
         {
@@ -1603,7 +1603,7 @@ void EventDispatcher::cleanToRemovedListeners()
             }
         }
         else
-            AX_SAFE_RELEASE(l);
+            CC_SAFE_RELEASE(l);
     }
 
     _toRemovedListeners.clear();
@@ -1611,14 +1611,14 @@ void EventDispatcher::cleanToRemovedListeners()
 
 void EventDispatcher::releaseListener(EventListener* listener)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (listener && sEngine)
     {
         sEngine->releaseScriptObject(this, listener);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
-    AX_SAFE_RELEASE(listener);
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    CC_SAFE_RELEASE(listener);
 }
 
 NS_AX_END

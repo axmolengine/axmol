@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformConfig.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #    include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
 NS_AX_BEGIN
@@ -39,7 +39,7 @@ namespace ui
 
 class EditBox;
 
-class AX_GUI_DLL EditBoxImplWin : public EditBoxImplCommon
+class CC_GUI_DLL EditBoxImplWin : public EditBoxImplCommon
 {
 public:
     EditBoxImplWin(EditBox* pEditText);
@@ -92,6 +92,6 @@ private:
 
 NS_AX_END
 
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
 
 #endif /* __UIEditBoxIMPLWIN_H__ */

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_QUADCOMMAND_H_
-#define _AX_QUADCOMMAND_H_
+#ifndef _CC_QUADCOMMAND_H_
+#define _CC_QUADCOMMAND_H_
 
 #include <vector>
 
@@ -42,7 +42,7 @@ NS_AX_BEGIN
  Every QuadCommand will have generate material ID by give textureID, glProgramState, Blend function
  if the material id is the same, these QuadCommands could be batched to save draw call.
  */
-class AX_DLL QuadCommand : public TrianglesCommand
+class CC_DLL QuadCommand : public TrianglesCommand
 {
 public:
     /**Constructor.*/
@@ -84,4 +84,4 @@ NS_AX_END
  end of support group
  @}
  */
-#endif  //_AX_QUADCOMMAND_H_
+#endif  //_CC_QUADCOMMAND_H_

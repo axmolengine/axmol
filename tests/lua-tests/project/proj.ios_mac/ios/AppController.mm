@@ -56,13 +56,13 @@ static AppDelegate s_sharedApplication;
                                        multiSampling:axis::GLViewImpl::_multisamplingCount > 0 ? YES : NO
                                      numberOfSamples:axis::GLViewImpl::_multisamplingCount];
 
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
     [eaglView setMultipleTouchEnabled:YES];
 #endif
 
     // Use RootViewController manage CCEAGLView
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
     viewController.wantsFullScreenLayout = YES;
 #endif
     viewController.view = eaglView;
@@ -81,7 +81,7 @@ static AppDelegate s_sharedApplication;
 
     [window makeKeyAndVisible];
 
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 #endif
 

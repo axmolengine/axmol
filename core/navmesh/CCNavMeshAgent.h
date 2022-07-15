@@ -27,7 +27,7 @@
 #define __CCNAV_MESH_AGENT_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 #    include "2d/CCComponent.h"
 
 #    include "base/CCRef.h"
@@ -41,7 +41,7 @@ NS_AX_BEGIN
  * @addtogroup 3d
  * @{
  */
-struct AX_DLL NavMeshAgentParam
+struct CC_DLL NavMeshAgentParam
 {
     NavMeshAgentParam();
 
@@ -69,14 +69,14 @@ struct AX_DLL NavMeshAgentParam
     unsigned char queryFilterType;
 };
 
-struct AX_DLL OffMeshLinkData
+struct CC_DLL OffMeshLinkData
 {
     Vec3 startPosition;  // position in local coordinate system.
     Vec3 endPosition;    // position in local coordinate system.
 };
 
 /** @brief NavMeshAgent: The code wrapping of dtCrowdAgent, use component mode. */
-class AX_DLL NavMeshAgent : public Component
+class CC_DLL NavMeshAgent : public Component
 {
     friend class NavMesh;
 
@@ -232,6 +232,6 @@ private:
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH
 
 #endif  // __CCNAV_MESH_AGENT_H__

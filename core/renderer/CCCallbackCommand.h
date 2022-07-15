@@ -46,7 +46,7 @@ executed. You can do some logic opertion in the callback, such as invoking
 renderer to set depth/stencil test. Don't suggest to invoke backen API in
 the callback function.
 */
-class AX_DLL CallbackCommand : public RenderCommand
+class CC_DLL CallbackCommand : public RenderCommand
 {
     // only allow render to manage the callbackCommand
     friend class Renderer;

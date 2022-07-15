@@ -56,7 +56,7 @@ enum class Animate3DQuality
 /**
  * @brief Animate3D, Animates a MeshRenderer given with an Animation3D
  */
-class AX_DLL Animate3D : public ActionInterval
+class CC_DLL Animate3D : public ActionInterval
 {
 public:
     /**create Animate3D using Animation.*/

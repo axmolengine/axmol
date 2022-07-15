@@ -64,12 +64,12 @@ bool UICheckBoxTest::init()
                                      "cocosui/check_box_active_disable.png");
         _checkBox->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
 
-        _checkBox->addEventListener(AX_CALLBACK_2(UICheckBoxTest::selectedEvent, this));
+        _checkBox->addEventListener(CC_CALLBACK_2(UICheckBoxTest::selectedEvent, this));
         _uiLayer->addChild(_checkBox);
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
-        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UICheckBoxTest::printWidgetResources, this));
+        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UICheckBoxTest::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);

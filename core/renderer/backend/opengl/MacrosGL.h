@@ -59,13 +59,13 @@
  * function calls.
  */
 #if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
-#    define AX_GL_ASSERT(gl_code) gl_code
+#    define CC_GL_ASSERT(gl_code) gl_code
 #else
-#    define AX_GL_ASSERT(gl_code)                               \
+#    define CC_GL_ASSERT(gl_code)                               \
         do                                                      \
         {                                                       \
             gl_code;                                            \
             __gl_error_code = glGetError();                     \
-            AX_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
+            CC_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
         } while (0)
 #endif

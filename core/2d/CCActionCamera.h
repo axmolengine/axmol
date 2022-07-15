@@ -45,7 +45,7 @@ class Camera;
  *@brief Base class for Camera actions.
  *@ingroup Actions
  */
-class AX_DLL ActionCamera : public ActionInterval
+class CC_DLL ActionCamera : public ActionInterval
 {
 public:
     /**
@@ -117,7 +117,7 @@ protected:
  * Orbits the camera around the center of the screen using spherical coordinates.
  * @ingroup Actions
  */
-class AX_DLL OrbitCamera : public ActionCamera
+class CC_DLL OrbitCamera : public ActionCamera
 {
 public:
     /** Creates a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX.

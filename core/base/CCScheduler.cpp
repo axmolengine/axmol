@@ -89,7 +89,7 @@ void Timer::setupTimerWithInterval(float seconds, unsigned int repeat, float del
     _delay         = delay;
     _useDelay      = (_delay > 0.0f) ? true : false;
     _repeat        = repeat;
-    _runForever    = (_repeat == AX_REPEAT_FOREVER) ? true : false;
+    _runForever    = (_repeat == CC_REPEAT_FOREVER) ? true : false;
     _timesExecuted = 0;
 }
 
@@ -214,7 +214,7 @@ void TimerTargetCallback::cancel()
     _scheduler->unschedule(_key, _target);
 }
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
 
 // TimerScriptHandler
 
@@ -259,7 +259,7 @@ Scheduler::Scheduler()
     , _currentTarget(nullptr)
     , _currentTargetSalvaged(false)
     , _updateHashLocked(false)
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     , _scriptHandlerEntries(20)
 #endif
 {
@@ -285,7 +285,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
                          bool paused,
                          std::string_view key)
 {
-    this->schedule(callback, target, interval, AX_REPEAT_FOREVER, 0.0f, paused, key);
+    this->schedule(callback, target, interval, CC_REPEAT_FOREVER, 0.0f, paused, key);
 }
 
 void Scheduler::schedule(const ccSchedulerFunc& callback,
@@ -553,7 +553,7 @@ void Scheduler::removeUpdateFromHash(struct _listEntry* entry)
         // list entry
         DL_DELETE(*element->list, element->entry);
         if (!_updateHashLocked)
-            AX_SAFE_DELETE(element->entry);
+            CC_SAFE_DELETE(element->entry);
         else
         {
             element->entry->markedForDeletion = true;
@@ -623,7 +623,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
             unscheduleUpdate(entry->target);
         }
     }
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     _scriptHandlerEntries.clear();
 #endif
 }
@@ -663,7 +663,7 @@ void Scheduler::unscheduleAllForTarget(void* target)
     unscheduleUpdate(target);
 }
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
 unsigned int Scheduler::scheduleScriptFunc(unsigned int handler, float interval, bool paused)
 {
     SchedulerScriptHandlerEntry* entry = SchedulerScriptHandlerEntry::create(handler, interval, paused);
@@ -916,7 +916,7 @@ void Scheduler::update(float dt)
     _updateHashLocked = false;
     _currentTarget    = nullptr;
 
-#if AX_ENABLE_SCRIPT_BINDING
+#if CC_ENABLE_SCRIPT_BINDING
     //
     // Script callbacks
     //
@@ -1015,7 +1015,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
 
 void Scheduler::schedule(SEL_SCHEDULE selector, Ref* target, float interval, bool paused)
 {
-    this->schedule(selector, target, interval, AX_REPEAT_FOREVER, 0.0f, paused);
+    this->schedule(selector, target, interval, CC_REPEAT_FOREVER, 0.0f, paused);
 }
 
 bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const

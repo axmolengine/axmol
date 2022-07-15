@@ -16,7 +16,7 @@ GTree::GTree()
 
 GTree::~GTree()
 {
-    AX_SAFE_RELEASE(_rootNode);
+    CC_SAFE_RELEASE(_rootNode);
 }
 
 void GTree::handleInit()
@@ -96,9 +96,9 @@ void GTree::createCell(GTreeNode* node)
     child->_treeNode = node;
     if (node->_cell != child)
     {
-        AX_SAFE_RELEASE(node->_cell);
+        CC_SAFE_RELEASE(node->_cell);
         node->_cell = child;
-        AX_SAFE_RETAIN(node->_cell);
+        CC_SAFE_RETAIN(node->_cell);
     }
 
     GObject* indentObj = node->_cell->getChild("indent");
@@ -110,7 +110,7 @@ void GTree::createCell(GTreeNode* node)
     cc = child->getController("expanded");
     if (cc != nullptr)
     {
-        cc->addEventListener(UIEventType::Changed, AX_CALLBACK_1(GTree::onExpandedStateChanged, this));
+        cc->addEventListener(UIEventType::Changed, CC_CALLBACK_1(GTree::onExpandedStateChanged, this));
         cc->setSelectedIndex(node->isExpanded() ? 1 : 0);
     }
 
@@ -119,7 +119,7 @@ void GTree::createCell(GTreeNode* node)
         cc->setSelectedIndex(node->isFolder() ? 0 : 1);
 
     if (node->isFolder())
-        child->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GTree::onCellTouchBegin, this));
+        child->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GTree::onCellTouchBegin, this));
 
     if (treeNodeRender != nullptr)
         treeNodeRender(node, child);

@@ -166,7 +166,7 @@ Rect NinePatchImageParser::parseCapInset() const
                          verticalLine.y - verticalLine.x);
     }
 
-    capInsets = AX_RECT_PIXELS_TO_POINTS(capInsets);
+    capInsets = CC_RECT_PIXELS_TO_POINTS(capInsets);
     return capInsets;
 }
 

@@ -54,7 +54,7 @@ FileUtilsApple::FileUtilsApple() : pimpl_(new IMPL([NSBundle mainBundle])) {}
 
 FileUtilsApple::~FileUtilsApple() = default;
 
-#if AX_FILEUTILS_APPLE_ENABLE_OBJC
+#if CC_FILEUTILS_APPLE_ENABLE_OBJC
 void FileUtilsApple::setBundle(NSBundle* bundle)
 {
     pimpl_->setBundle(bundle);

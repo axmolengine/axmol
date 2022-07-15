@@ -289,12 +289,12 @@ void GButton::constructExtension(ByteBuffer* buffer)
     if (_mode == ButtonMode::COMMON)
         setState(UP);
 
-    addEventListener(UIEventType::RollOver, AX_CALLBACK_1(GButton::onRollOver, this));
-    addEventListener(UIEventType::RollOut, AX_CALLBACK_1(GButton::onRollOut, this));
-    addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GButton::onTouchBegin, this));
-    addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(GButton::onTouchEnd, this));
-    addEventListener(UIEventType::Click, AX_CALLBACK_1(GButton::onClick, this));
-    addEventListener(UIEventType::Exit, AX_CALLBACK_1(GButton::onExit, this));
+    addEventListener(UIEventType::RollOver, CC_CALLBACK_1(GButton::onRollOver, this));
+    addEventListener(UIEventType::RollOut, CC_CALLBACK_1(GButton::onRollOut, this));
+    addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GButton::onTouchBegin, this));
+    addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(GButton::onTouchEnd, this));
+    addEventListener(UIEventType::Click, CC_CALLBACK_1(GButton::onClick, this));
+    addEventListener(UIEventType::Exit, CC_CALLBACK_1(GButton::onExit, this));
 }
 
 void GButton::setup_afterAdd(ByteBuffer* buffer, int beginPos)

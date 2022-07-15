@@ -36,10 +36,10 @@ GComponent::~GComponent()
     _children.clear();
     _controllers.clear();
     _transitions.clear();
-    AX_SAFE_RELEASE(_maskOwner);
-    AX_SAFE_RELEASE(_container);
-    AX_SAFE_RELEASE(_scrollPane);
-    AX_SAFE_DELETE(_hitArea);
+    CC_SAFE_RELEASE(_maskOwner);
+    CC_SAFE_RELEASE(_container);
+    CC_SAFE_RELEASE(_scrollPane);
+    CC_SAFE_DELETE(_hitArea);
     CALL_LATER_CANCEL(GComponent, doUpdateBounds);
     CALL_LATER_CANCEL(GComponent, buildNativeDisplayList);
 }
@@ -580,7 +580,7 @@ void GComponent::setHitArea(IHitTest* value)
 {
     if (_hitArea != value)
     {
-        AX_SAFE_DELETE(_hitArea);
+        CC_SAFE_DELETE(_hitArea);
         _hitArea = value;
     }
 }

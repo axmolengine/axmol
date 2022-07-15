@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AX_FRAMEWORK_COMCONTAINER_H__
-#define __AX_FRAMEWORK_COMCONTAINER_H__
+#ifndef __CC_FRAMEWORK_COMCONTAINER_H__
+#define __CC_FRAMEWORK_COMCONTAINER_H__
 
 /// @cond DO_NOT_SHOW
 
@@ -36,7 +36,7 @@ NS_AX_BEGIN
 class Component;
 class Node;
 
-class AX_DLL ComponentContainer
+class CC_DLL ComponentContainer
 {
 protected:
     /**
@@ -77,4 +77,4 @@ private:
 NS_AX_END
 
 /// @endcond
-#endif  // __AX_FRAMEWORK_COMCONTAINER_H__
+#endif  // __CC_FRAMEWORK_COMCONTAINER_H__

@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class AX_DLL Application : public ApplicationProtocol
+class CC_DLL Application : public ApplicationProtocol
 {
 public:
     /**
@@ -84,13 +84,13 @@ public:
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
-    AX_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
+    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
 
     /**
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
      */
-    AX_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
+    CC_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
 
     void setStartupScriptFilename(std::string_view startupScriptFile);
 

@@ -41,7 +41,7 @@ public:
 
     static LayoutReader* getInstance();
     /** @deprecated Use method destroyInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static void purge();
+    CC_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);

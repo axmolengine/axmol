@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _AX_GROUPCOMMAND_H_
-#define _AX_GROUPCOMMAND_H_
+#ifndef _CC_GROUPCOMMAND_H_
+#define _CC_GROUPCOMMAND_H_
 
 #include <vector>
 #include <unordered_map>
@@ -59,7 +59,7 @@ protected:
  GroupCommand is used to group several command together, and more, it can be nested.
  So it is used to generate the hierarchy for the rendcommands. Every group command will be assigned by a group ID.
  */
-class AX_DLL GroupCommand : public RenderCommand
+class CC_DLL GroupCommand : public RenderCommand
 {
 public:
     /**@{
@@ -85,4 +85,4 @@ NS_AX_END
  end of support group
  @}
  */
-#endif  //_AX_GROUPCOMMAND_H_
+#endif  //_CC_GROUPCOMMAND_H_

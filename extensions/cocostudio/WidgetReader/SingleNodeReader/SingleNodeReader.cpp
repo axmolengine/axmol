@@ -55,12 +55,12 @@ SingleNodeReader* SingleNodeReader::getInstance()
 
 void SingleNodeReader::purge()
 {
-    AX_SAFE_DELETE(_instanceSingleNodeReader);
+    CC_SAFE_DELETE(_instanceSingleNodeReader);
 }
 
 void SingleNodeReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceSingleNodeReader);
+    CC_SAFE_DELETE(_instanceSingleNodeReader);
 }
 
 Offset<Table> SingleNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

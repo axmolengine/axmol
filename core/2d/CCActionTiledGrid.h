@@ -42,7 +42,7 @@ NS_AX_BEGIN
         You can create the action by these parameters:
         duration, grid size, range, whether shake on the z axis.
  */
-class AX_DLL ShakyTiles3D : public TiledGrid3DAction
+class CC_DLL ShakyTiles3D : public TiledGrid3DAction
 {
 public:
     /**
@@ -77,7 +77,7 @@ protected:
     bool _shakeZ;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ShakyTiles3D);
+    CC_DISALLOW_COPY_AND_ASSIGN(ShakyTiles3D);
 };
 
 /**
@@ -86,7 +86,7 @@ private:
         You can create the action by these parameters:
         duration, grid size, range, whether shatter on the z axis.
 */
-class AX_DLL ShatteredTiles3D : public TiledGrid3DAction
+class CC_DLL ShatteredTiles3D : public TiledGrid3DAction
 {
 public:
     /**
@@ -122,7 +122,7 @@ protected:
     bool _shatterZ;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ShatteredTiles3D);
+    CC_DISALLOW_COPY_AND_ASSIGN(ShatteredTiles3D);
 };
 
 struct Tile;
@@ -132,7 +132,7 @@ struct Tile;
         You can create the action by these parameters:
         duration, grid size, the random seed.
 */
-class AX_DLL ShuffleTiles : public TiledGrid3DAction
+class CC_DLL ShuffleTiles : public TiledGrid3DAction
 {
 public:
     /**
@@ -172,14 +172,14 @@ protected:
     Tile* _tiles;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ShuffleTiles);
+    CC_DISALLOW_COPY_AND_ASSIGN(ShuffleTiles);
 };
 
 /**
 @brief FadeOutTRTiles action.
 @details Fades out the target node with many tiles from Bottom-Left to Top-Right.
  */
-class AX_DLL FadeOutTRTiles : public TiledGrid3DAction
+class CC_DLL FadeOutTRTiles : public TiledGrid3DAction
 {
 public:
     /**
@@ -225,14 +225,14 @@ public:
     virtual ~FadeOutTRTiles() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(FadeOutTRTiles);
+    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutTRTiles);
 };
 
 /**
 @brief FadeOutBLTiles action.
 @details Fades out the target node with many tiles from Top-Right to Bottom-Left.
  */
-class AX_DLL FadeOutBLTiles : public FadeOutTRTiles
+class CC_DLL FadeOutBLTiles : public FadeOutTRTiles
 {
 public:
     /**
@@ -251,14 +251,14 @@ public:
     virtual ~FadeOutBLTiles() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
+    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
 };
 
 /**
 @brief FadeOutUpTiles action.
 @details Fades out the target node with many tiles from bottom to top.
  */
-class AX_DLL FadeOutUpTiles : public FadeOutTRTiles
+class CC_DLL FadeOutUpTiles : public FadeOutTRTiles
 {
 public:
     /**
@@ -279,14 +279,14 @@ public:
     virtual ~FadeOutUpTiles() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(FadeOutUpTiles);
+    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutUpTiles);
 };
 
 /**
 @brief FadeOutDownTiles action.
 @details Fades out the target node with many tiles from top to bottom.
  */
-class AX_DLL FadeOutDownTiles : public FadeOutUpTiles
+class CC_DLL FadeOutDownTiles : public FadeOutUpTiles
 {
 public:
     /**
@@ -305,14 +305,14 @@ public:
     virtual ~FadeOutDownTiles() {}
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(FadeOutDownTiles);
+    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutDownTiles);
 };
 
 /**
 @brief TurnOffTiles action.
 @details Turn off the target node with many tiles in random order.
  */
-class AX_DLL TurnOffTiles : public TiledGrid3DAction
+class CC_DLL TurnOffTiles : public TiledGrid3DAction
 {
 public:
     /**
@@ -373,14 +373,14 @@ protected:
     unsigned int* _tilesOrder;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(TurnOffTiles);
+    CC_DISALLOW_COPY_AND_ASSIGN(TurnOffTiles);
 };
 
 /**
 @brief WavesTiles3D action.
 @details This action wave the target node with many tiles.
 */
-class AX_DLL WavesTiles3D : public TiledGrid3DAction
+class CC_DLL WavesTiles3D : public TiledGrid3DAction
 {
 public:
     /**
@@ -438,14 +438,14 @@ protected:
     float _amplitudeRate;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(WavesTiles3D);
+    CC_DISALLOW_COPY_AND_ASSIGN(WavesTiles3D);
 };
 
 /**
 @brief JumpTiles3D action.
 @details Move the tiles of a target node across the Z axis.
 */
-class AX_DLL JumpTiles3D : public TiledGrid3DAction
+class CC_DLL JumpTiles3D : public TiledGrid3DAction
 {
 public:
     /**
@@ -503,7 +503,7 @@ protected:
     float _amplitudeRate;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(JumpTiles3D);
+    CC_DISALLOW_COPY_AND_ASSIGN(JumpTiles3D);
 };
 
 /**
@@ -511,7 +511,7 @@ private:
 @details Split the target node in many rows.
         Then move out some rows from left, move out the other rows from right.
 */
-class AX_DLL SplitRows : public TiledGrid3DAction
+class CC_DLL SplitRows : public TiledGrid3DAction
 {
 public:
     /**
@@ -543,7 +543,7 @@ protected:
     Vec2 _winSize;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(SplitRows);
+    CC_DISALLOW_COPY_AND_ASSIGN(SplitRows);
 };
 
 /**
@@ -551,7 +551,7 @@ private:
 @details Split the target node in many columns.
         Then move out some columns from top, move out the other columns from bottom.
 */
-class AX_DLL SplitCols : public TiledGrid3DAction
+class CC_DLL SplitCols : public TiledGrid3DAction
 {
 public:
     /**
@@ -586,7 +586,7 @@ protected:
     Vec2 _winSize;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(SplitCols);
+    CC_DISALLOW_COPY_AND_ASSIGN(SplitCols);
 };
 
 // end of actions group

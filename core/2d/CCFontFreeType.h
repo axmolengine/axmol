@@ -42,7 +42,7 @@ typedef struct FT_BBox_ FT_BBox;
 
 NS_AX_BEGIN
 
-class AX_DLL FontFreeType : public Font
+class CC_DLL FontFreeType : public Font
 {
 public:
     static const int DistanceMapSpread;

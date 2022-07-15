@@ -23,18 +23,18 @@ Window::Window() :
 
 Window::~Window()
 {
-    AX_SAFE_RELEASE(_contentPane);
-    AX_SAFE_RELEASE(_frame);
-    AX_SAFE_RELEASE(_closeButton);
-    AX_SAFE_RELEASE(_dragArea);
-    AX_SAFE_RELEASE(_modalWaitPane);
+    CC_SAFE_RELEASE(_contentPane);
+    CC_SAFE_RELEASE(_frame);
+    CC_SAFE_RELEASE(_closeButton);
+    CC_SAFE_RELEASE(_dragArea);
+    CC_SAFE_RELEASE(_modalWaitPane);
 }
 
 void Window::handleInit()
 {
     GComponent::handleInit();
 
-    addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(Window::onTouchBegin, this));
+    addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(Window::onTouchBegin, this));
 }
 
 void Window::setContentPane(GComponent* value)
@@ -45,7 +45,7 @@ void Window::setContentPane(GComponent* value)
         {
             removeChild(_contentPane);
 
-            AX_SAFE_RELEASE(_frame);
+            CC_SAFE_RELEASE(_frame);
             _contentPane->release();
         }
         _contentPane = value;
@@ -82,7 +82,7 @@ void Window::setCloseButton(GObject * value)
     if (_closeButton != nullptr)
     {
         _closeButton->retain();
-        _closeButton->addClickListener(AX_CALLBACK_1(Window::closeEventHandler, this), EventTag(this));
+        _closeButton->addClickListener(CC_CALLBACK_1(Window::closeEventHandler, this), EventTag(this));
     }
 }
 
@@ -104,7 +104,7 @@ void Window::setDragArea(GObject * value)
             if (dynamic_cast<GGraph*>(_dragArea) && ((GGraph*)_dragArea)->isEmpty())
                 ((GGraph*)_dragArea)->drawRect(_dragArea->getWidth(), _dragArea->getHeight(), 0, Color4F(0, 0, 0, 0), Color4F(0, 0, 0, 0));
             _dragArea->setDraggable(true);
-            _dragArea->addEventListener(UIEventType::DragStart, AX_CALLBACK_1(Window::onDragStart, this), EventTag(this));
+            _dragArea->addEventListener(UIEventType::DragStart, CC_CALLBACK_1(Window::onDragStart, this), EventTag(this));
         }
     }
 }
@@ -204,7 +204,7 @@ void Window::initWindow()
             IUISource* lib = _uiSources.at(i);
             if (!lib->isLoaded())
             {
-                lib->load(AX_CALLBACK_0(Window::onUILoadComplete, this));
+                lib->load(CC_CALLBACK_0(Window::onUILoadComplete, this));
                 _loading = true;
             }
         }

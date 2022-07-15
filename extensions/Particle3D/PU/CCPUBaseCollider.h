@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_BASE_COLLIDER_H__
-#define __AX_PU_PARTICLE_3D_BASE_COLLIDER_H__
+#ifndef __CC_PU_PARTICLE_3D_BASE_COLLIDER_H__
+#define __CC_PU_PARTICLE_3D_BASE_COLLIDER_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "3d/CCAABB.h"
@@ -33,7 +33,7 @@
 NS_AX_BEGIN
 
 struct PUParticle3D;
-class AX_EX_DLL PUBaseCollider : public PUAffector
+class CC_EX_DLL PUBaseCollider : public PUAffector
 {
 public:
     /** Determines how a particle collision should be determined. IT_POINT means that the position of

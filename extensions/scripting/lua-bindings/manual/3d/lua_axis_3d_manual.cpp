@@ -1228,7 +1228,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_finalize(lua_State* L)
 {
     axis::AABB* self = (axis::AABB*)tolua_tousertype(L, 1, 0);
-    AX_SAFE_DELETE(self);
+    CC_SAFE_DELETE(self);
     return 0;
 }
 
@@ -1979,7 +1979,7 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
             vec3_to_luaval(L, arg0[i - 1]);
             lua_rawset(L, -3);
         }
-        AX_SAFE_DELETE_ARRAY(arg0);
+        CC_SAFE_DELETE_ARRAY(arg0);
 
         return 1;
     }
@@ -1997,7 +1997,7 @@ tolua_lerror:
 int lua_axis_3d_OBB_finalize(lua_State* L)
 {
     axis::OBB* self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-    AX_SAFE_DELETE(self);
+    CC_SAFE_DELETE(self);
     return 0;
 }
 
@@ -2362,7 +2362,7 @@ tolua_lerror:
 int lua_axis_3d_Ray_finalize(lua_State* L)
 {
     axis::Ray* self = (axis::Ray*)tolua_tousertype(L, 1, 0);
-    AX_SAFE_DELETE(self);
+    CC_SAFE_DELETE(self);
     return 0;
 }
 

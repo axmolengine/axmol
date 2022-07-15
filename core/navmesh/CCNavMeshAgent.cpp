@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "navmesh/CCNavMeshAgent.h"
-#if AX_USE_NAVMESH
+#if CC_USE_NAVMESH
 
 #    include "navmesh/CCNavMesh.h"
 #    include "recast/DetourCrowd.h"
@@ -56,7 +56,7 @@ NavMeshAgent* NavMeshAgent::create(const NavMeshAgentParam& param)
         ref->autorelease();
         return ref;
     }
-    AX_SAFE_DELETE(ref);
+    CC_SAFE_DELETE(ref);
     return nullptr;
 }
 
@@ -424,4 +424,4 @@ Vec3 NavMeshAgent::getVelocity() const
 
 NS_AX_END
 
-#endif  // AX_USE_NAVMESH
+#endif  // CC_USE_NAVMESH

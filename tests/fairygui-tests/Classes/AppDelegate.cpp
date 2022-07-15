@@ -41,7 +41,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if (!glview) {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         glview = GLViewImpl::createWithRect("Examples", axis::Rect(0, 0, 1280, 720));
 #else
         glview = GLViewImpl::create("Examples");
@@ -79,7 +79,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     //showing how to regsiter a ttf font
-#ifdef AX_PLATFORM_PC
+#ifdef CC_PLATFORM_PC
     UIConfig::registerFont(UIConfig::defaultFont, "fonts/DroidSansFallback.ttf");
 #endif
 

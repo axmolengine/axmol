@@ -198,11 +198,11 @@ void GSlider::constructExtension(ByteBuffer* buffer)
 
     if (_gripObject != nullptr)
     {
-        _gripObject->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GSlider::onGripTouchBegin, this));
-        _gripObject->addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(GSlider::onGripTouchMove, this));
+        _gripObject->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GSlider::onGripTouchBegin, this));
+        _gripObject->addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(GSlider::onGripTouchMove, this));
     }
 
-    addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GSlider::onTouchBegin, this));
+    addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GSlider::onTouchBegin, this));
 }
 
 void GSlider::setup_afterAdd(ByteBuffer* buffer, int beginPos)

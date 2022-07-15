@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <string>
 #include <ctype.h>
 
-#include "base/ccConfig.h"  // AX_USE_JPEG, AX_USE_WEBP
+#include "base/ccConfig.h"  // CC_USE_JPEG, CC_USE_WEBP
 
 #define STBI_NO_JPEG
 #define STBI_NO_PNG
@@ -43,7 +43,7 @@ THE SOFTWARE.
 #define STBI_NO_HDR
 #define STBI_NO_TGA
 #define STB_IMAGE_IMPLEMENTATION
-#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #    define STBI_NO_THREAD_LOCALS
 #endif
 #include "stb/stb_image.h"
@@ -51,7 +51,7 @@ THE SOFTWARE.
 extern "C" {
 // To resolve link error when building 32bits with Xcode 6.
 // More information please refer to the discussion in https://github.com/cocos2d/cocos2d-x/pull/6986
-#if defined(__unix) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if defined(__unix) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #    ifndef __ENABLE_COMPATIBILITY_WITH_UNIX_2003__
 #        define __ENABLE_COMPATIBILITY_WITH_UNIX_2003__
 #        include <stdio.h>
@@ -93,14 +93,14 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    endif
 #endif
 
-#if AX_USE_PNG
+#if CC_USE_PNG
 #    include "png.h"
-#endif  // AX_USE_PNG
+#endif  // CC_USE_PNG
 
-#if AX_USE_JPEG
+#if CC_USE_JPEG
 #    include "jpeglib.h"
 #    include <setjmp.h>
-#endif  // AX_USE_JPEG
+#endif  // CC_USE_JPEG
 } /* extern "C" */
 
 #include "base/ktxspec_v1.h"
@@ -115,9 +115,9 @@ struct dirent* readdir$INODE64(DIR* dir)
 
 #include "base/astc.h"
 
-#if AX_USE_WEBP
+#if CC_USE_WEBP
 #    include "decode.h"
-#endif  // AX_USE_WEBP
+#endif  // CC_USE_WEBP
 
 #include "base/ccMacros.h"
 #include "platform/CCCommon.h"
@@ -126,7 +126,7 @@ struct dirent* readdir$INODE64(DIR* dir)
 #include "base/CCConfiguration.h"
 #include "base/ccUtils.h"
 #include "base/ZipUtils.h"
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include "platform/android/CCFileUtils-android.h"
 #    include "platform/CCGL.h"
 #endif
@@ -422,7 +422,7 @@ typedef struct
     int offset;
 } tImageSource;
 
-#if AX_USE_PNG
+#if CC_USE_PNG
 void pngWriteCallback(png_structp png_ptr, png_bytep data, size_t length)
 {
     if (png_ptr == NULL)
@@ -450,7 +450,7 @@ static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t leng
         png_error(png_ptr, "pngReaderCallback failed");
     }
 }
-#endif  // AX_USE_PNG
+#endif  // CC_USE_PNG
 }  // namespace
 
 /*
@@ -567,12 +567,12 @@ Image::~Image()
 {
     if (!_unpack)
     {
-        AX_SAFE_FREE(_data);
+        CC_SAFE_FREE(_data);
     }
     else
     {
         for (int i = 0; i < _numberOfMipmaps; ++i)
-            AX_SAFE_FREE(_mipmaps[i].address);
+            CC_SAFE_FREE(_mipmaps[i].address);
     }
 }
 
@@ -621,7 +621,7 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
 
     do
     {
-        AX_BREAK_IF(!data || dataLen == 0);
+        CC_BREAK_IF(!data || dataLen == 0);
 
         uint8_t* unpackedData = nullptr;
         ssize_t unpackedLen   = 0;
@@ -719,7 +719,7 @@ bool Image::initWithRawData(const uint8_t* data,
     bool ret = false;
     do
     {
-        AX_BREAK_IF(0 == width || 0 == height);
+        CC_BREAK_IF(0 == width || 0 == height);
 
         _height                = height;
         _width                 = width;
@@ -730,7 +730,7 @@ bool Image::initWithRawData(const uint8_t* data,
         int bytesPerComponent = 4;
         _dataLen              = height * width * bytesPerComponent;
         _data                 = static_cast<uint8_t*>(malloc(_dataLen));
-        AX_BREAK_IF(!_data);
+        CC_BREAK_IF(!_data);
         memcpy(_data, data, _dataLen);
 
         ret = true;
@@ -819,7 +819,7 @@ bool Image::isPvr(const uint8_t* data, ssize_t dataLen)
     const PVRv3TexHeader* headerv3 = static_cast<const PVRv3TexHeader*>(static_cast<const void*>(data));
 
     return memcmp(&headerv2->pvrTag, gPVRTexIdentifier, strlen(gPVRTexIdentifier)) == 0 ||
-           AX_SWAP_INT32_BIG_TO_HOST(headerv3->version) == 0x50565203;
+           CC_SWAP_INT32_BIG_TO_HOST(headerv3->version) == 0x50565203;
 }
 
 Image::Format Image::detectFormat(const uint8_t* data, ssize_t dataLen)
@@ -923,7 +923,7 @@ namespace
  *
  * Here's the extended error handler struct:
  */
-#if AX_USE_JPEG
+#if CC_USE_JPEG
 struct MyErrorMgr
 {
     struct jpeg_error_mgr pub; /* "public" fields */
@@ -955,12 +955,12 @@ myErrorExit(j_common_ptr cinfo)
     /* Return control to the setjmp point */
     longjmp(myerr->setjmp_buffer, 1);
 }
-#endif  // AX_USE_JPEG
+#endif  // CC_USE_JPEG
 }  // namespace
 
 bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
 {
-#if AX_USE_JPEG
+#if CC_USE_JPEG
     /* these are standard libjpeg structures for reading(decompression) */
     struct jpeg_decompress_struct cinfo;
     /* We use our private extension JPEG error handler.
@@ -991,9 +991,9 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
         /* setup decompression process and source, then read JPEG header */
         jpeg_create_decompress(&cinfo);
 
-#    ifndef AX_TARGET_QT5
+#    ifndef CC_TARGET_QT5
         jpeg_mem_src(&cinfo, const_cast<uint8_t*>(data), dataLen);
-#    endif /* AX_TARGET_QT5 */
+#    endif /* CC_TARGET_QT5 */
 
         /* reading the image header which contains image information */
 #    if (JPEG_LIB_VERSION >= 90)
@@ -1023,7 +1023,7 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
 
         _dataLen = cinfo.output_width * cinfo.output_height * cinfo.output_components;
         _data    = static_cast<uint8_t*>(malloc(_dataLen));
-        AX_BREAK_IF(!_data);
+        CC_BREAK_IF(!_data);
 
         /* now actually read the jpeg into the raw buffer */
         /* read one scan line at a time */
@@ -1049,12 +1049,12 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
 #else
     CCLOG("jpeg is not enabled, please enable it in ccConfig.h");
     return false;
-#endif  // AX_USE_JPEG
+#endif  // CC_USE_JPEG
 }
 
 bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
 {
-#if AX_USE_PNG
+#if CC_USE_PNG
     // length of bytes to check if it is a valid png file
 #    define PNGSIGSIZE 8
     bool ret                    = false;
@@ -1065,21 +1065,21 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
     do
     {
         // png header len is 8 bytes
-        AX_BREAK_IF(dataLen < PNGSIGSIZE);
+        CC_BREAK_IF(dataLen < PNGSIGSIZE);
 
         // check the data is png or not
         memcpy(header, data, PNGSIGSIZE);
-        AX_BREAK_IF(png_sig_cmp(header, 0, PNGSIGSIZE));
+        CC_BREAK_IF(png_sig_cmp(header, 0, PNGSIGSIZE));
 
         // init png_struct
         png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
-        AX_BREAK_IF(!png_ptr);
+        CC_BREAK_IF(!png_ptr);
 
         // init png_info
         info_ptr = png_create_info_struct(png_ptr);
-        AX_BREAK_IF(!info_ptr);
+        CC_BREAK_IF(!info_ptr);
 
-        AX_BREAK_IF(setjmp(png_jmpbuf(png_ptr)));
+        CC_BREAK_IF(setjmp(png_jmpbuf(png_ptr)));
 
         // set the read call back function
         tImageSource imageSource;
@@ -1184,9 +1184,9 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
             }
             else
             {
-                // if PNG_PREMULTIPLIED_ALPHA_ENABLED == false && AX_ENABLE_PREMULTIPLIED_ALPHA != 0,
+                // if PNG_PREMULTIPLIED_ALPHA_ENABLED == false && CC_ENABLE_PREMULTIPLIED_ALPHA != 0,
                 // you must do PMA at shader, such as modify positionTextureColor.frag
-                _hasPremultipliedAlpha = !!AX_ENABLE_PREMULTIPLIED_ALPHA;
+                _hasPremultipliedAlpha = !!CC_ENABLE_PREMULTIPLIED_ALPHA;
             }
         }
 
@@ -1206,7 +1206,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
 #else
     CCLOG("png is not enabled, please enable it in ccConfig.h");
     return false;
-#endif  // AX_USE_PNG
+#endif  // CC_USE_PNG
 }
 
 bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
@@ -1225,7 +1225,7 @@ bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
 
 bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
 {
-#if AX_USE_WEBP
+#if CC_USE_WEBP
     bool ret = false;
 
     do
@@ -1267,7 +1267,7 @@ bool Image::initWithWebpData(uint8_t* data, ssize_t dataLen)
 #else
     CCLOG("webp is not enabled, please enable it in ccConfig.h");
     return false;
-#endif  // AX_USE_WEBP
+#endif  // CC_USE_WEBP
 }
 
 bool Image::initWithTGAData(tImageTGA* tgaData)
@@ -1276,7 +1276,7 @@ bool Image::initWithTGAData(tImageTGA* tgaData)
 
     do
     {
-        AX_BREAK_IF(tgaData == nullptr);
+        CC_BREAK_IF(tgaData == nullptr);
 
         // tgaLoadBuffer only support type 2, 3, 10
         if (2 == tgaData->type || 10 == tgaData->type)
@@ -1365,7 +1365,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     // can not detect the premultiplied alpha from pvr file, use _PVRHaveAlphaPremultiplied instead.
     _hasPremultipliedAlpha = isCompressedImageHavePMA(CompressedImagePMAFlag::PVR);
 
-    unsigned int flags                 = AX_SWAP_INT32_LITTLE_TO_HOST(header->flags);
+    unsigned int flags                 = CC_SWAP_INT32_LITTLE_TO_HOST(header->flags);
     PVR2TexturePixelFormat formatFlags = static_cast<PVR2TexturePixelFormat>(flags & PVR_TEXTURE_FLAG_TYPE_MASK);
     bool flipped                       = (flags & (unsigned int)PVR2TextureFlag::VerticalFlip) ? true : false;
     if (flipped)
@@ -1411,8 +1411,8 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     _numberOfMipmaps = 0;
 
     // Get size of mipmap
-    _width = width = AX_SWAP_INT32_LITTLE_TO_HOST(header->width);
-    _height = height = AX_SWAP_INT32_LITTLE_TO_HOST(header->height);
+    _width = width = CC_SWAP_INT32_LITTLE_TO_HOST(header->width);
+    _height = height = CC_SWAP_INT32_LITTLE_TO_HOST(header->height);
 
     // Move by size of header
     const int pixelOffset = sizeof(PVRv2TexHeader);
@@ -1420,7 +1420,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
     int dataOffset = 0, dataSize = 0;
     // Get ptr to where data starts..
-    int dataLength = AX_SWAP_INT32_LITTLE_TO_HOST(header->dataLength);
+    int dataLength = CC_SWAP_INT32_LITTLE_TO_HOST(header->dataLength);
 
     // Calculate the data size for each texture level and respect the minimum number of blocks
     while (dataOffset < dataLength)
@@ -1520,7 +1520,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     const PVRv3TexHeader* header = static_cast<const PVRv3TexHeader*>(static_cast<const void*>(data));
 
     // validate version
-    if (AX_SWAP_INT32_BIG_TO_HOST(header->version) != 0x50565203)
+    if (CC_SWAP_INT32_BIG_TO_HOST(header->version) != 0x50565203)
     {
         CCLOG("cocos2d: WARNING: pvr file version mismatch");
         return false;
@@ -1562,7 +1562,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     _pixelFormat = finalPixelFormat;
 
     // flags
-    int flags = AX_SWAP_INT32_LITTLE_TO_HOST(header->flags);
+    int flags = CC_SWAP_INT32_LITTLE_TO_HOST(header->flags);
 
     // PVRv3 specifies premultiply alpha in a flag -- should always respect this in PVRv3 files
     if (flags & (unsigned int)PVR3TextureFlag::PremultipliedAlpha)
@@ -1571,8 +1571,8 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     }
 
     // sizing
-    int width  = AX_SWAP_INT32_LITTLE_TO_HOST(header->width);
-    int height = AX_SWAP_INT32_LITTLE_TO_HOST(header->height);
+    int width  = CC_SWAP_INT32_LITTLE_TO_HOST(header->width);
+    int height = CC_SWAP_INT32_LITTLE_TO_HOST(header->height);
     _width     = width;
     _height    = height;
 
@@ -1585,7 +1585,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
     _numberOfMipmaps = header->numberOfMipmaps;
     CCASSERT(_numberOfMipmaps < MIPMAP_MAX,
-             "Image: Maximum number of mimpaps reached. Increase the AX_MIPMAP_MAX value");
+             "Image: Maximum number of mimpaps reached. Increase the CC_MIPMAP_MAX value");
 
     for (int i = 0; i < _numberOfMipmaps; i++)
     {
@@ -1748,7 +1748,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
         }
 
         // software decode fail, release pixels data
-        AX_SAFE_FREE(_data);
+        CC_SAFE_FREE(_data);
         _dataLen = 0;
         return false;
     }
@@ -1810,7 +1810,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
                                                  static_cast<etc2_byte*>(_data), _width, _height) != 0))
             {
                 // software decode fail, release pixels data
-                AX_SAFE_FREE(_data);
+                CC_SAFE_FREE(_data);
                 _dataLen = 0;
                 break;
             }
@@ -1895,7 +1895,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
                                                      dataLen - ASTC_HEAD_SIZE, _data, _width, _height, block_x,
                                                      block_y) != 0))
             {
-                AX_SAFE_FREE(_data);
+                CC_SAFE_FREE(_data);
                 _dataLen = 0;
                 break;
             }
@@ -2197,7 +2197,7 @@ void Image::forwardPixels(uint8_t* data, ssize_t dataLen, int offset, bool ownDa
     }
 }
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
 bool Image::saveToFile(std::string_view filename, bool isToRGB)
 {
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
@@ -2229,7 +2229,7 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
 
 bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
 {
-#if AX_USE_PNG
+#if CC_USE_PNG
     bool ret = false;
     do
     {
@@ -2239,7 +2239,7 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
 
         auto outStream = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
 
-        AX_BREAK_IF(nullptr == outStream);
+        CC_BREAK_IF(nullptr == outStream);
 
         png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
@@ -2367,12 +2367,12 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
 #else
     CCLOG("png is not enabled, please enable it in ccConfig.h");
     return false;
-#endif  // AX_USE_PNG
+#endif  // CC_USE_PNG
 }
 
 bool Image::saveImageToJPG(std::string_view filePath)
 {
-#if AX_USE_JPEG
+#if CC_USE_JPEG
     bool ret = false;
     do
     {
@@ -2387,7 +2387,7 @@ bool Image::saveImageToJPG(std::string_view filePath)
         jpeg_create_compress(&cinfo);
 
         outfile = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
-        AX_BREAK_IF(nullptr == outfile);
+        CC_BREAK_IF(nullptr == outfile);
 
         unsigned char* outputBuffer = nullptr;
         unsigned long outputSize    = 0;
@@ -2472,19 +2472,19 @@ bool Image::saveImageToJPG(std::string_view filePath)
 #else
     CCLOG("jpeg is not enabled, please enable it in ccConfig.h");
     return false;
-#endif  // AX_USE_JPEG
+#endif  // CC_USE_JPEG
 }
 
 void Image::premultiplyAlpha()
 {
-#if AX_ENABLE_PREMULTIPLIED_ALPHA
+#if CC_ENABLE_PREMULTIPLIED_ALPHA
     CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "The pixel format should be RGBA8888!");
 
     unsigned int* fourBytes = (unsigned int*)_data;
     for (int i = 0; i < _width * _height; i++)
     {
         uint8_t* p   = _data + i * 4;
-        fourBytes[i] = AX_RGB_PREMULTIPLY_ALPHA(p[0], p[1], p[2], p[3]);
+        fourBytes[i] = CC_RGB_PREMULTIPLY_ALPHA(p[0], p[1], p[2], p[3]);
     }
 
     _hasPremultipliedAlpha = true;

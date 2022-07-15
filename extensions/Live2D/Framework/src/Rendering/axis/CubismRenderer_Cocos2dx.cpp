@@ -745,7 +745,7 @@ void CubismShader_Cocos2dx::ReleaseShaderProgram()
 
 // SetupMask
 static const csmChar* VertShaderSrcSetupMask =
-#if !defined(AX_PLATFORM_MOBILE) && !defined(AX_USE_GLES)
+#if !defined(CC_PLATFORM_MOBILE) && !defined(CC_USE_GLES)
     "#version 120\n"
 #endif
     "attribute vec2 a_position;"
@@ -777,7 +777,7 @@ static const csmChar* FragShaderSrcSetupMask =
 
     "gl_FragColor = u_channelFlag * texture2D(s_texture0 , v_texCoord).a * isInside;"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcSetupMaskTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"
@@ -801,7 +801,7 @@ static const csmChar* FragShaderSrcSetupMaskTegra =
 //----- バーテックスシェーダプログラム -----
 // Normal & Add & Mult 共通
 static const csmChar* VertShaderSrc =
-#if !defined(AX_PLATFORM_MOBILE) && !defined(AX_USE_GLES)
+#if !defined(CC_PLATFORM_MOBILE) && !defined(CC_USE_GLES)
     "#version 120\n"
 #endif
     "attribute vec2 a_position;" //v.vertex
@@ -818,7 +818,7 @@ static const csmChar* VertShaderSrc =
 
 // Normal & Add & Mult 共通（クリッピングされたものの描画用）
 static const csmChar* VertShaderSrcMasked =
-#if !defined(AX_PLATFORM_MOBILE) && !defined(AX_USE_GLES)
+#if !defined(CC_PLATFORM_MOBILE) && !defined(CC_USE_GLES)
     "#version 120\n"
 #endif
     "attribute vec2 a_position;"
@@ -832,7 +832,7 @@ static const csmChar* VertShaderSrcMasked =
     "vec4 pos = vec4(a_position.x, a_position.y, 0.0, 1.0);"
     "gl_Position = u_matrix * pos;"
     "v_clipPos = u_clipMatrix * pos;"
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
     "v_clipPos = vec4(v_clipPos.x, 1.0 - v_clipPos.y, v_clipPos.zw);"
 #endif
     "v_texCoord = a_texCoord;"
@@ -850,7 +850,7 @@ static const csmChar* FragShaderSrc =
     "vec4 color = texture2D(s_texture0 , v_texCoord) * u_baseColor;"
     "gl_FragColor = vec4(color.rgb * color.a,  color.a);"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"
@@ -873,7 +873,7 @@ static const csmChar* FragShaderSrcPremultipliedAlpha =
     "{"
     "gl_FragColor = texture2D(s_texture0 , v_texCoord) * u_baseColor;"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcPremultipliedAlphaTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"
@@ -903,7 +903,7 @@ static const csmChar* FragShaderSrcMask =
     "col_formask = col_formask * maskVal;"
     "gl_FragColor = col_formask;"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcMaskTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"
@@ -941,7 +941,7 @@ static const csmChar* FragShaderSrcMaskInverted =
     "col_formask = col_formask * (1.0 - maskVal);"
     "gl_FragColor = col_formask;"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcMaskInvertedTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"
@@ -978,7 +978,7 @@ static const csmChar* FragShaderSrcMaskPremultipliedAlpha =
     "col_formask = col_formask * maskVal;"
     "gl_FragColor = col_formask;"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcMaskPremultipliedAlphaTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"
@@ -1014,7 +1014,7 @@ static const csmChar* FragShaderSrcMaskInvertedPremultipliedAlpha =
     "col_formask = col_formask * (1.0 - maskVal);"
     "gl_FragColor = col_formask;"
     "}";
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 static const csmChar* FragShaderSrcMaskInvertedPremultipliedAlphaTegra =
     "#extension GL_NV_shader_framebuffer_fetch : enable\n"
     "precision mediump float;"

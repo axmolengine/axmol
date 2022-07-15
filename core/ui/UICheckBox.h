@@ -41,7 +41,7 @@ namespace ui
 /**
  *  Checkbox is a specific type of two-states button that can be either checked or unchecked.
  */
-class AX_GUI_DLL CheckBox : public AbstractCheckButton
+class CC_GUI_DLL CheckBox : public AbstractCheckButton
 {
 
     DECLARE_CLASS_GUI_INFO

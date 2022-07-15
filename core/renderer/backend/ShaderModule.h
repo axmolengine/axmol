@@ -62,7 +62,7 @@ enum Attribute : uint32_t
 /**
  * Create shader.
  */
-class AX_DLL ShaderModule : public axis::Ref
+class CC_DLL ShaderModule : public axis::Ref
 {
 public:
     /**

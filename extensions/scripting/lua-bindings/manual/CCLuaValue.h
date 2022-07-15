@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_LUA_VALUE_H_
-#define __AX_LUA_VALUE_H_
+#ifndef __CC_LUA_VALUE_H_
+#define __CC_LUA_VALUE_H_
 
 #include <string>
 #include <map>
@@ -38,7 +38,7 @@ extern "C" {
 #include "base/ccTypes.h"
 #include "base/CCRef.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_BLACKBERRY
+#if CC_TARGET_PLATFORM == CC_PLATFORM_BLACKBERRY
 using std::memcpy;
 using std::memset;
 #endif
@@ -281,4 +281,4 @@ NS_AX_END
 
 // end group
 /// @}
-#endif  // __AX_LUA_VALUE_H_
+#endif  // __CC_LUA_VALUE_H_

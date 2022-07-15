@@ -24,7 +24,7 @@ NS_AX_BEGIN
  * Note: The minimum required Android version is 5.0.
  *
  */
-class AX_DLL EnhanceAPI
+class CC_DLL EnhanceAPI
 {
 public:
     /**

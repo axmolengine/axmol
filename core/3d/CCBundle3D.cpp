@@ -161,7 +161,7 @@ void Bundle3D::clear()
     if (_isBinary)
     {
         _binaryBuffer.clear();
-        AX_SAFE_DELETE_ARRAY(_references);
+        CC_SAFE_DELETE_ARRAY(_references);
     }
     else
     {
@@ -489,7 +489,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
 
 FAILED:
 {
-    AX_SAFE_DELETE(meshData);
+    CC_SAFE_DELETE(meshData);
     for (auto& meshdata : meshdatas.meshDatas)
     {
         delete meshdata;
@@ -512,7 +512,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
     enum
@@ -536,7 +536,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
         {
             CCLOG("warning: Failed to read meshdata: usage or size '%s'.", _path.c_str());
-            AX_SAFE_DELETE(meshdata);
+            CC_SAFE_DELETE(meshdata);
             return false;
         }
 
@@ -575,7 +575,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     if (_binaryReader.read(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
     {
         CCLOG("warning: Failed to read meshdata: vertexSizeInFloat '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
 
@@ -583,7 +583,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
     if (_binaryReader.read(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
     {
         CCLOG("warning: Failed to read meshdata: vertex element '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
 
@@ -595,7 +595,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
         {
             CCLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
-            AX_SAFE_DELETE(meshdata);
+            CC_SAFE_DELETE(meshdata);
             return false;
         }
 
@@ -604,7 +604,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
             CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
-            AX_SAFE_DELETE(meshdata);
+            CC_SAFE_DELETE(meshdata);
             return false;
         }
 
@@ -630,7 +630,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     if (_binaryReader.read(&attribSize, 4, 1) != 1 || attribSize < 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
     enum
@@ -654,7 +654,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         if (_binaryReader.read(&vUsage, 4, 1) != 1 || _binaryReader.read(&vSize, 4, 1) != 1)
         {
             CCLOG("warning: Failed to read meshdata: usage or size '%s'.", _path.c_str());
-            AX_SAFE_DELETE(meshdata);
+            CC_SAFE_DELETE(meshdata);
             return false;
         }
 
@@ -689,7 +689,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     if (_binaryReader.read(&meshdata->vertexSizeInFloat, 4, 1) != 1 || meshdata->vertexSizeInFloat == 0)
     {
         CCLOG("warning: Failed to read meshdata: vertexSizeInFloat '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
 
@@ -697,7 +697,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     if (_binaryReader.read(&meshdata->vertex[0], 4, meshdata->vertexSizeInFloat) != meshdata->vertexSizeInFloat)
     {
         CCLOG("warning: Failed to read meshdata: vertex element '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
 
@@ -706,7 +706,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
     if (_binaryReader.read(&submeshCount, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read meshdata: submeshCount '%s'.", _path.c_str());
-        AX_SAFE_DELETE(meshdata);
+        CC_SAFE_DELETE(meshdata);
         return false;
     }
 
@@ -716,7 +716,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
         {
             CCLOG("warning: Failed to read meshdata: nIndexCount '%s'.", _path.c_str());
-            AX_SAFE_DELETE(meshdata);
+            CC_SAFE_DELETE(meshdata);
             return false;
         }
 
@@ -725,7 +725,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         if (_binaryReader.read(indices.data(), 2, nIndexCount) != nIndexCount)
         {
             CCLOG("warning: Failed to read meshdata: indices '%s'.", _path.c_str());
-            AX_SAFE_DELETE(meshdata);
+            CC_SAFE_DELETE(meshdata);
             return false;
         }
 
@@ -1131,7 +1131,7 @@ bool Bundle3D::loadBinary(std::string_view path)
     }
 
     // Read all refs
-    AX_SAFE_DELETE_ARRAY(_references);
+    CC_SAFE_DELETE_ARRAY(_references);
     _references = new Reference[_referenceCount];
     for (unsigned int i = 0; i < _referenceCount; ++i)
     {
@@ -1141,7 +1141,7 @@ bool Bundle3D::loadBinary(std::string_view path)
         {
             clear();
             CCLOG("warning: Failed to read ref number %u for bundle '%s'.", i, path.data());
-            AX_SAFE_DELETE_ARRAY(_references);
+            CC_SAFE_DELETE_ARRAY(_references);
             return false;
         }
     }
@@ -1749,8 +1749,8 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
             if (modelnodedata->subMeshId == "" || modelnodedata->materialId == "")
             {
                 CCLOG("warning: Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
+                CC_SAFE_DELETE(modelnodedata);
+                CC_SAFE_DELETE(nodedata);
                 return nullptr;
             }
 
@@ -1766,8 +1766,8 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
                     if (!bone.HasMember(NODE))
                     {
                         CCLOG("warning: Bone node ID missing");
-                        AX_SAFE_DELETE(modelnodedata);
-                        AX_SAFE_DELETE(nodedata);
+                        CC_SAFE_DELETE(modelnodedata);
+                        CC_SAFE_DELETE(nodedata);
                         return nullptr;
                     }
 
@@ -1894,8 +1894,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             if (modelnodedata->subMeshId.empty() || modelnodedata->materialId.empty())
             {
                 CCLOG("Node %s part is missing meshPartId or materialId", nodedata->id.c_str());
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
+                CC_SAFE_DELETE(modelnodedata);
+                CC_SAFE_DELETE(nodedata);
                 return nullptr;
             }
 
@@ -1904,8 +1904,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             if (_binaryReader.read(&bonesSize, 4, 1) != 1)
             {
                 CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
+                CC_SAFE_DELETE(modelnodedata);
+                CC_SAFE_DELETE(nodedata);
                 return nullptr;
             }
 
@@ -1919,8 +1919,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                     Mat4 invbindpos;
                     if (!_binaryReader.readMatrix(invbindpos.m))
                     {
-                        AX_SAFE_DELETE(modelnodedata);
-                        AX_SAFE_DELETE(nodedata);
+                        CC_SAFE_DELETE(modelnodedata);
+                        CC_SAFE_DELETE(nodedata);
                         return nullptr;
                     }
 
@@ -1932,8 +1932,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
             if (_binaryReader.read(&uvMapping, 4, 1) != 1)
             {
                 CCLOG("warning: Failed to read nodedata: uvMapping '%s'.", _path.c_str());
-                AX_SAFE_DELETE(modelnodedata);
-                AX_SAFE_DELETE(nodedata);
+                CC_SAFE_DELETE(modelnodedata);
+                CC_SAFE_DELETE(nodedata);
                 return nullptr;
             }
             for (unsigned int j = 0; j < uvMapping; ++j)
@@ -1942,8 +1942,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                 if (_binaryReader.read(&textureIndexSize, 4, 1) != 1)
                 {
                     CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
-                    AX_SAFE_DELETE(modelnodedata);
-                    AX_SAFE_DELETE(nodedata);
+                    CC_SAFE_DELETE(modelnodedata);
+                    CC_SAFE_DELETE(nodedata);
                     return nullptr;
                 }
                 for (unsigned int k = 0; k < textureIndexSize; ++k)
@@ -1951,8 +1951,8 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                     unsigned int index = 0;
                     if (_binaryReader.read(&index, 4, 1) != 1)
                     {
-                        AX_SAFE_DELETE(modelnodedata);
-                        AX_SAFE_DELETE(nodedata);
+                        CC_SAFE_DELETE(modelnodedata);
+                        CC_SAFE_DELETE(nodedata);
                         return nullptr;
                     }
                 }
@@ -1983,7 +1983,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
     if (_binaryReader.read(&childrenSize, 4, 1) != 1)
     {
         CCLOG("warning: Failed to read meshdata: attribCount '%s'.", _path.c_str());
-        AX_SAFE_DELETE(nodedata);
+        CC_SAFE_DELETE(nodedata);
         return nullptr;
     }
     if (childrenSize > 0)

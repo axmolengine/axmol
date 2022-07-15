@@ -36,7 +36,7 @@ NS_AX_BEGIN
 /**
  * @brief Inherit from Sprite, achieve BillBoard.
  */
-class AX_DLL BillBoard : public Sprite
+class CC_DLL BillBoard : public Sprite
 {
 public:
     enum class Mode
@@ -118,7 +118,7 @@ protected:
     bool _modeDirty;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(BillBoard);
+    CC_DISALLOW_COPY_AND_ASSIGN(BillBoard);
 };
 
 // end of 3d group

@@ -61,7 +61,7 @@ enum class LightFlag
 /**
 @js NA
 */
-class AX_DLL BaseLight : public Node
+class CC_DLL BaseLight : public Node
 {
 public:
     /**
@@ -103,7 +103,7 @@ protected:
 /**
 @js NA
 */
-class AX_DLL DirectionLight : public BaseLight
+class CC_DLL DirectionLight : public BaseLight
 {
 public:
     /**
@@ -142,7 +142,7 @@ public:
 /**
 @js NA
 */
-class AX_DLL PointLight : public BaseLight
+class CC_DLL PointLight : public BaseLight
 {
 public:
     /**
@@ -172,7 +172,7 @@ protected:
 /**
 @js NA
 */
-class AX_DLL SpotLight : public BaseLight
+class CC_DLL SpotLight : public BaseLight
 {
 public:
     /**
@@ -270,7 +270,7 @@ protected:
 /**
 @js NA
 */
-class AX_DLL AmbientLight : public BaseLight
+class CC_DLL AmbientLight : public BaseLight
 {
 public:
     /**

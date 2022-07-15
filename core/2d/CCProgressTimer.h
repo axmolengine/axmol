@@ -48,7 +48,7 @@ class Sprite;
  * The progress can be Radial, Horizontal or vertical.
  * @since v0.99.1
  */
-class AX_DLL ProgressTimer : public Node
+class CC_DLL ProgressTimer : public Node
 {
 public:
     /** Types of progress
@@ -201,7 +201,7 @@ protected:
     backend::UniformLocation _locTex2;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ProgressTimer);
+    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTimer);
 };
 
 // end of misc_nodes group

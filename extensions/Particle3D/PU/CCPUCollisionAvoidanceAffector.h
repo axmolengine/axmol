@@ -24,14 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_COLLISION_AVOIDDANCE_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_COLLISION_AVOIDDANCE_AFFECTOR_H__
+#ifndef __CC_PU_PARTICLE_3D_COLLISION_AVOIDDANCE_AFFECTOR_H__
+#define __CC_PU_PARTICLE_3D_COLLISION_AVOIDDANCE_AFFECTOR_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUCollisionAvoidanceAffector : public PUAffector
+class CC_EX_DLL PUCollisionAvoidanceAffector : public PUAffector
 {
 public:
     // Constants

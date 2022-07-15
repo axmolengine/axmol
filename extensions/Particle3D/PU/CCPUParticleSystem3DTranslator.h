@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_SYSTEM_3D_TRANSLATOR_H__
-#define __AX_PU_PARTICLE_SYSTEM_3D_TRANSLATOR_H__
+#ifndef __CC_PU_PARTICLE_SYSTEM_3D_TRANSLATOR_H__
+#define __CC_PU_PARTICLE_SYSTEM_3D_TRANSLATOR_H__
 
 //#include <iostream>
 #include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"

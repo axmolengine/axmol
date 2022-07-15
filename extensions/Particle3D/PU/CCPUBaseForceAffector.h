@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_BASE_FORCE_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_BASE_FORCE_AFFECTOR_H__
+#ifndef __CC_PU_PARTICLE_3D_BASE_FORCE_AFFECTOR_H__
+#define __CC_PU_PARTICLE_3D_BASE_FORCE_AFFECTOR_H__
 
 #include "math/CCMath.h"
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUBaseForceAffector : public PUAffector
+class CC_EX_DLL PUBaseForceAffector : public PUAffector
 {
 public:
     enum ForceApplication

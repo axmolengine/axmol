@@ -34,9 +34,9 @@
 #include "renderer/ccShaders.h"
 #include "renderer/backend/Buffer.h"
 
-#if AX_USE_3D_PHYSICS
+#if CC_USE_3D_PHYSICS
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
+#    if (CC_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
@@ -110,7 +110,7 @@ void Physics3DDebugDrawer::draw(Renderer* renderer)
 
     _customCommand.setVertexDrawInfo(0, _buffer.size());
 
-    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _buffer.size());
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _buffer.size());
 
     renderer->addCommand(&_customCommand);
 }
@@ -122,12 +122,12 @@ Physics3DDebugDrawer::Physics3DDebugDrawer()
 
 Physics3DDebugDrawer::~Physics3DDebugDrawer()
 {
-    AX_SAFE_RELEASE(_programState);
+    CC_SAFE_RELEASE(_programState);
 }
 
 void Physics3DDebugDrawer::init()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
     _programState = new backend::ProgramState(program);
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
@@ -148,8 +148,8 @@ void Physics3DDebugDrawer::init()
     _customCommand.getPipelineDescriptor().programState = _programState;
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::LINE);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
-    _customCommand.setBeforeCallback(AX_CALLBACK_0(Physics3DDebugDrawer::onBeforeDraw, this));
-    _customCommand.setAfterCallback(AX_CALLBACK_0(Physics3DDebugDrawer::onAfterDraw, this));
+    _customCommand.setBeforeCallback(CC_CALLBACK_0(Physics3DDebugDrawer::onBeforeDraw, this));
+    _customCommand.setAfterCallback(CC_CALLBACK_0(Physics3DDebugDrawer::onAfterDraw, this));
 }
 
 void Physics3DDebugDrawer::onBeforeDraw()
@@ -172,6 +172,6 @@ void Physics3DDebugDrawer::clear()
 
 NS_AX_END
 
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
+#    endif  // CC_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // CC_USE_3D_PHYSICS

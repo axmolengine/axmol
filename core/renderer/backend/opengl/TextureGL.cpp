@@ -98,12 +98,12 @@ void TextureInfoGL::setCurrentTexParameters(GLenum target)
 void TextureInfoGL::apply(int slot, int index, GLenum target) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
+    glBindTexture(target, index < CC_META_TEXTURES ? textures[index] : textures[0]);
 }
 
 GLuint TextureInfoGL::ensure(int index, GLenum target)
 {
-    if (index >= AX_META_TEXTURES)
+    if (index >= CC_META_TEXTURES)
         return 0;
     // glActiveTexture(GL_TEXTURE0 + index);
     auto& texID = this->textures[index];
@@ -139,7 +139,7 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 {
     updateTextureDescriptor(descriptor);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         _textureInfo.recreateAll(GL_TEXTURE_2D);
@@ -184,7 +184,7 @@ void Texture2DGL::initWithZeros()
 
 Texture2DGL::~Texture2DGL()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -318,7 +318,7 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
     _textureType = TextureType::TEXTURE_CUBE;
     updateTextureDescriptor(descriptor);
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(
         EVENT_COME_TO_FOREGROUND, [this](EventCustom*) { _textureInfo.recreateAll(GL_TEXTURE_CUBE_MAP); });
@@ -339,7 +339,7 @@ void TextureCubeGL::updateTextureDescriptor(const axis::backend::TextureDescript
 
 TextureCubeGL::~TextureCubeGL()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }

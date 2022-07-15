@@ -49,7 +49,7 @@ TextBMFont* TextBMFont::create()
         widget->autorelease();
         return widget;
     }
-    AX_SAFE_DELETE(widget);
+    CC_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -63,7 +63,7 @@ TextBMFont* TextBMFont::create(std::string_view text, std::string_view filename)
         widget->autorelease();
         return widget;
     }
-    AX_SAFE_DELETE(widget);
+    CC_SAFE_DELETE(widget);
     return nullptr;
 }
 

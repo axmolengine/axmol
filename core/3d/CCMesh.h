@@ -59,7 +59,7 @@ class Buffer;
 /**
  * @brief Mesh: contains ref to index buffer, GLProgramState, texture, skin, blend function, aabb and so on
  */
-class AX_DLL Mesh : public Ref
+class CC_DLL Mesh : public Ref
 {
     friend class MeshRenderer;
 
@@ -293,7 +293,7 @@ protected:
 /// @}
 
 /// @cond
-extern std::string AX_DLL s_uniformSamplerName[];  // uniform sampler names array
+extern std::string CC_DLL s_uniformSamplerName[];  // uniform sampler names array
 /// @endcond
 
 NS_AX_END

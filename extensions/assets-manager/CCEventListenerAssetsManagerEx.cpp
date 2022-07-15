@@ -47,7 +47,7 @@ EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::create(
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -81,7 +81,7 @@ EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::clone()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }

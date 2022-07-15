@@ -1030,7 +1030,7 @@ float LayoutHelper::VisibleRect::getNodeTop(Node* pNode)
 
 void LayoutHelper::VisibleRect::setNodeLeft(Node* pNode, float left)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1045,7 +1045,7 @@ void LayoutHelper::VisibleRect::setNodeLeft(Node* pNode, float left)
 }
 void LayoutHelper::VisibleRect::setNodeTop(Node* pNode, float top)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1060,7 +1060,7 @@ void LayoutHelper::VisibleRect::setNodeTop(Node* pNode, float top)
 }
 void LayoutHelper::VisibleRect::setNodeRight(Node* pNode, float right)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1075,7 +1075,7 @@ void LayoutHelper::VisibleRect::setNodeRight(Node* pNode, float right)
 }
 void LayoutHelper::VisibleRect::setNodeBottom(Node* pNode, float bottom)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1091,7 +1091,7 @@ void LayoutHelper::VisibleRect::setNodeBottom(Node* pNode, float bottom)
 
 void LayoutHelper::VisibleRect::setNodeLT(Node* pNode, const axis::Point& p)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1108,7 +1108,7 @@ void LayoutHelper::VisibleRect::setNodeLT(Node* pNode, const axis::Point& p)
 }
 void LayoutHelper::VisibleRect::setNodeRT(Node* pNode, const axis::Point& p)
 {  // right top
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1124,7 +1124,7 @@ void LayoutHelper::VisibleRect::setNodeRT(Node* pNode, const axis::Point& p)
 }
 void LayoutHelper::VisibleRect::setNodeLB(Node* pNode, const axis::Point& p)
 {  // left bottom
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(0, 0) - LayoutHelper::VisibleRect::leftBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1140,7 +1140,7 @@ void LayoutHelper::VisibleRect::setNodeLB(Node* pNode, const axis::Point& p)
 }
 void LayoutHelper::VisibleRect::setNodeRB(Node* pNode, const axis::Point& p)
 {  // right bottom
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize              = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta      = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
     Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
@@ -1159,7 +1159,7 @@ void LayoutHelper::VisibleRect::setNodeRB(Node* pNode, const axis::Point& p)
 /// ratio position
 void LayoutHelper::VisibleRect::setNodeNormalizedLT(Node* pNode, const axis::Point& ratio)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
 
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta = axis::Vec2(0, scrSize.height) - LayoutHelper::VisibleRect::leftTop();
@@ -1181,7 +1181,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedLT(Node* pNode, const axis::Poi
 }
 void LayoutHelper::VisibleRect::setNodeNormalizedRT(Node* pNode, const axis::Point& ratio)
 {  // right top
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta = axis::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
 
@@ -1202,7 +1202,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedRT(Node* pNode, const axis::Poi
 }
 void LayoutHelper::VisibleRect::setNodeNormalizedLB(Node* pNode, const axis::Point& ratio)
 {  // left bottom
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta = axis::Vec2(0, 0) - LayoutHelper::VisibleRect::leftBottom();
 
@@ -1223,7 +1223,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedLB(Node* pNode, const axis::Poi
 }
 void LayoutHelper::VisibleRect::setNodeNormalizedRB(Node* pNode, const axis::Point& ratio)
 {  // right bottom
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta = axis::Vec2(scrSize.width, 0) - LayoutHelper::VisibleRect::rightBottom();
 
@@ -1245,7 +1245,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedRB(Node* pNode, const axis::Poi
 
 void LayoutHelper::VisibleRect::setNodeNormalizedTop(Node* pNode, const float ratioTop)
 {  // right top
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     Vec2 scrSize         = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     axis::Point delta = axis::Vec2(scrSize.width, scrSize.height) - LayoutHelper::VisibleRect::rightTop();
 
@@ -1265,7 +1265,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedTop(Node* pNode, const float ra
 
 void LayoutHelper::VisibleRect::setNodeNormalizedPositionX(axis::Node* pNode, float ratio)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     axis::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
     axis::Point ptWorld(visibleRect.size.width * ratio + visibleRect.origin.x, 0);
     auto ptLocal = pNode->getParent()->convertToNodeSpace(ptWorld);
@@ -1274,7 +1274,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedPositionX(axis::Node* pNode, fl
 
 void LayoutHelper::VisibleRect::setNodeNormalizedPositionY(axis::Node* pNode, float ratio)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     axis::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();
 
     axis::Point ptWorld(0, visibleRect.size.height * ratio + visibleRect.origin.y);
@@ -1283,7 +1283,7 @@ void LayoutHelper::VisibleRect::setNodeNormalizedPositionY(axis::Node* pNode, fl
 }
 void LayoutHelper::VisibleRect::setNodeNormalizedPosition(Node* pNode, const axis::Point& ratio)
 {
-    AX_ASSERT(pNode);
+    CC_ASSERT(pNode);
     pNode->setIgnoreAnchorPointForPosition(false);
     pNode->setAnchorPoint(axis::Vec2(.5f, .5f));
     axis::Rect visibleRect = LayoutHelper::LayoutHelper::VisibleRect::getScreenVisibleRect();

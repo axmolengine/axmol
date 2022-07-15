@@ -41,7 +41,7 @@ NS_AX_BEGIN
  * @{
  */
 
-#define AX_DEFAULT_FONT_LABEL_SIZE 12
+#define CC_DEFAULT_FONT_LABEL_SIZE 12
 
 /**
  * @struct TTFConfig
@@ -64,7 +64,7 @@ typedef struct _ttfConfig
     bool strikethrough;
 
     _ttfConfig(std::string_view filePath              = {},
-               float size                             = AX_DEFAULT_FONT_LABEL_SIZE,
+               float size                             = CC_DEFAULT_FONT_LABEL_SIZE,
                const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
                const char* customGlyphCollection      = nullptr, /* nullable */
                bool useDistanceField                  = false,
@@ -113,7 +113,7 @@ class TextureAtlas;
  * - http://www.angelcode.com/products/bmfont/ (Free, Windows only)
  * @js NA
  */
-class AX_DLL Label : public Node, public LabelProtocol, public BlendProtocol
+class CC_DLL Label : public Node, public LabelProtocol, public BlendProtocol
 {
 public:
     enum class Overflow
@@ -274,7 +274,7 @@ public:
      * @return An automatically released Label object.
      * @see setBMFontFilePath setMaxLineWidth
      */
-    AX_DEPRECATED_ATTRIBUTE static Label* createWithBMFont(std::string_view bmfontPath,
+    CC_DEPRECATED_ATTRIBUTE static Label* createWithBMFont(std::string_view bmfontPath,
                                                            std::string_view text,
                                                            const TextHAlignment& hAlignment,
                                                            int maxLineWidth,
@@ -344,7 +344,7 @@ public:
     virtual bool setBMFontFilePath(std::string_view bmfontFilePath, std::string_view subTextureKey, float fontSize = 0);
 
     /** Sets a new bitmap font to Label */
-    AX_DEPRECATED_ATTRIBUTE virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
+    CC_DEPRECATED_ATTRIBUTE virtual bool setBMFontFilePath(std::string_view bmfontFilePath,
                                                            const Vec2& imageOffset,
                                                            float fontSize = 0);
 
@@ -899,7 +899,7 @@ protected:
     EventListenerCustom* _purgeTextureListener;
     EventListenerCustom* _resetTextureListener;
 
-#if AX_LABEL_DEBUG_DRAW
+#if CC_LABEL_DEBUG_DRAW
     DrawNode* _debugDrawNode;
 #endif
 
@@ -920,7 +920,7 @@ protected:
     backend::UniformLocation _effectTypeLocation;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Label);
+    CC_DISALLOW_COPY_AND_ASSIGN(Label);
 };
 
 // end group

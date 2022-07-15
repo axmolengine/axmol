@@ -78,7 +78,7 @@ TileDemoNew::TileDemoNew()
     Director::getInstance()->getRenderer()->setDepthWrite(true);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(TileDemoNew::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(TileDemoNew::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -122,7 +122,7 @@ TileMapTestNew::TileMapTestNew()
     // Convert it to "alias" (GL_LINEAR filtering)
     map->getTexture()->setAntiAliasTexParameters();
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     // If you are not going to use the Map, you can free it now
@@ -157,13 +157,13 @@ TileMapEditTestNew::TileMapEditTestNew()
     // Create an Aliased Atlas
     map->getTexture()->setAliasTexParameters();
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     // If you are not going to use the Map, you can free it now
     // [tilemap releaseMap);
     // And if you are going to use, it you can access the data with:
-    schedule(AX_SCHEDULE_SELECTOR(TileMapEditTestNew::updateMap), 0.2f);
+    schedule(CC_SCHEDULE_SELECTOR(TileMapEditTestNew::updateMap), 0.2f);
 
     addChild(map, 0, kTagTileMap);
 
@@ -227,7 +227,7 @@ TMXOrthoTestNew::TMXOrthoTestNew()
 
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     auto scale  = ScaleBy::create(10, 0.1f);
@@ -269,7 +269,7 @@ TMXOrthoTest2New::TMXOrthoTest2New()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test1.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     map->runAction(ScaleBy::create(2, 0.5f));
@@ -290,7 +290,7 @@ TMXOrthoTest3New::TMXOrthoTest3New()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test3.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     map->setScale(0.2f);
@@ -312,7 +312,7 @@ TMXOrthoTest4New::TMXOrthoTest4New()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test4.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s1 = map->getContentSize();
+    Size CC_UNUSED s1 = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s1.width, s1.height);
 
     map->setAnchorPoint(Vec2(0.0f, 0.0f));
@@ -330,12 +330,12 @@ TMXOrthoTest4New::TMXOrthoTest4New()
     sprite = layer->getTileAt(Vec2(s.width - 1, s.height - 1));
     sprite->setScale(2);
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXOrthoTest4New::removeSprite), 2);
+    schedule(CC_SCHEDULE_SELECTOR(TMXOrthoTest4New::removeSprite), 2);
 }
 
 void TMXOrthoTest4New::removeSprite(float dt)
 {
-    unschedule(AX_SCHEDULE_SELECTOR(TMXOrthoTest4New::removeSprite));
+    unschedule(CC_SCHEDULE_SELECTOR(TMXOrthoTest4New::removeSprite));
 
     auto map   = static_cast<axis::FastTMXTiledMap*>(getChildByTag(kTagTileMap));
     auto layer = map->getLayer("Layer 0");
@@ -373,7 +373,7 @@ TMXReadWriteTestNew::TMXReadWriteTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     auto layer = map->getLayer("Layer 0");
@@ -395,7 +395,7 @@ TMXReadWriteTestNew::TMXReadWriteTestNew()
     auto opacity   = FadeOut::create(2);
     auto fadein    = FadeIn::create(2);
     auto scaleback = ScaleTo::create(1, 1);
-    auto finish    = CallFuncN::create(AX_CALLBACK_1(TMXReadWriteTestNew::removeSprite, this));
+    auto finish    = CallFuncN::create(CC_CALLBACK_1(TMXReadWriteTestNew::removeSprite, this));
     auto seq0      = Sequence::create(move, rotate, scale, opacity, fadein, scaleback, finish, nullptr);
     auto seq1      = seq0->clone();
     auto seq2      = seq0->clone();
@@ -409,9 +409,9 @@ TMXReadWriteTestNew::TMXReadWriteTestNew()
     _gid = layer->getTileGIDAt(Vec2(0, 63));
     ////----CCLOG("Tile GID at:(0,63) is: %d", _gid);
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::updateCol), 2.0f);
-    schedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::repaintWithGID), 2.05f);
-    schedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::removeTiles), 1.0f);
+    schedule(CC_SCHEDULE_SELECTOR(TMXReadWriteTestNew::updateCol), 2.0f);
+    schedule(CC_SCHEDULE_SELECTOR(TMXReadWriteTestNew::repaintWithGID), 2.05f);
+    schedule(CC_SCHEDULE_SELECTOR(TMXReadWriteTestNew::removeTiles), 1.0f);
 
     ////----CCLOG("++++atlas quantity: %d", layer->textureAtlas()->getTotalQuads());
     ////----CCLOG("++++children: %d", layer->getChildren()->count() );
@@ -468,7 +468,7 @@ void TMXReadWriteTestNew::repaintWithGID(float dt)
 
 void TMXReadWriteTestNew::removeTiles(float dt)
 {
-    unschedule(AX_SCHEDULE_SELECTOR(TMXReadWriteTestNew::removeTiles));
+    unschedule(CC_SCHEDULE_SELECTOR(TMXReadWriteTestNew::removeTiles));
 
     auto map   = (axis::FastTMXTiledMap*)getChildByTag(kTagTileMap);
     auto layer = (axis::FastTMXLayer*)map->getChildByTag(0);
@@ -498,7 +498,7 @@ TMXHexTestNew::TMXHexTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/hexa-test.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 }
 
@@ -544,7 +544,7 @@ TMXIsoTest1New::TMXIsoTest1New()
     auto map = axis::FastTMXTiledMap::create("TileMaps/iso-test1.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     map->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -568,7 +568,7 @@ TMXIsoTest2New::TMXIsoTest2New()
     auto map = axis::FastTMXTiledMap::create("TileMaps/iso-test2.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     // move map to the center of the screen
@@ -595,7 +595,7 @@ TMXUncompressedTestNew::TMXUncompressedTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/iso-test2-uncompressed.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     // move map to the center of the screen
@@ -629,7 +629,7 @@ TMXTilesetTestNew::TMXTilesetTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test5.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 }
 
@@ -648,7 +648,7 @@ TMXOrthoObjectsTestNew::TMXOrthoObjectsTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/ortho-objects.tmx");
     addChild(map, -1, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     auto group    = map->getObjectGroup("Object Group 1");
@@ -697,7 +697,7 @@ TMXIsoObjectsTestNew::TMXIsoObjectsTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/iso-test-objectgroup.tmx");
     addChild(map, -1, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     auto group = map->getObjectGroup("Object Group 1");
@@ -747,7 +747,7 @@ TMXResizeTestNew::TMXResizeTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test5.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     axis::FastTMXLayer* layer;
@@ -792,7 +792,7 @@ TMXIsoZorderNew::TMXIsoZorderNew()
     map->addChild(_tamara, (int)map->getChildren().size());
     _tamara->retain();
     int mapWidth = map->getMapSize().width * map->getTileSize().width;
-    _tamara->setPosition(AX_POINT_PIXELS_TO_POINTS(Vec2(mapWidth / 2.0f, 0.0f)));
+    _tamara->setPosition(CC_POINT_PIXELS_TO_POINTS(Vec2(mapWidth / 2.0f, 0.0f)));
     _tamara->setAnchorPoint(Vec2(0.5f, 0.0f));
 
     auto move = MoveBy::create(10, Vec2(300.0f, 250.0f));
@@ -800,7 +800,7 @@ TMXIsoZorderNew::TMXIsoZorderNew()
     auto seq  = Sequence::create(move, back, nullptr);
     _tamara->runAction(RepeatForever::create(seq));
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXIsoZorderNew::repositionSprite));
+    schedule(CC_SCHEDULE_SELECTOR(TMXIsoZorderNew::repositionSprite));
 }
 
 TMXIsoZorderNew::~TMXIsoZorderNew()
@@ -810,14 +810,14 @@ TMXIsoZorderNew::~TMXIsoZorderNew()
 
 void TMXIsoZorderNew::onExit()
 {
-    unschedule(AX_SCHEDULE_SELECTOR(TMXIsoZorderNew::repositionSprite));
+    unschedule(CC_SCHEDULE_SELECTOR(TMXIsoZorderNew::repositionSprite));
     TileDemoNew::onExit();
 }
 
 void TMXIsoZorderNew::repositionSprite(float dt)
 {
     auto p   = _tamara->getPosition();
-    p        = AX_POINT_POINTS_TO_PIXELS(p);
+    p        = CC_POINT_POINTS_TO_PIXELS(p);
     auto map = getChildByTag(kTagTileMap);
 
     // there are only 4 layers. (grass and 3 trees layers)
@@ -851,7 +851,7 @@ TMXOrthoZorderNew::TMXOrthoZorderNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test-zorder.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     _tamara = Sprite::create(s_pathSister1);
@@ -864,7 +864,7 @@ TMXOrthoZorderNew::TMXOrthoZorderNew()
     auto seq  = Sequence::create(move, back, nullptr);
     _tamara->runAction(RepeatForever::create(seq));
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXOrthoZorderNew::repositionSprite));
+    schedule(CC_SCHEDULE_SELECTOR(TMXOrthoZorderNew::repositionSprite));
 }
 
 TMXOrthoZorderNew::~TMXOrthoZorderNew()
@@ -875,7 +875,7 @@ TMXOrthoZorderNew::~TMXOrthoZorderNew()
 void TMXOrthoZorderNew::repositionSprite(float dt)
 {
     auto p   = _tamara->getPosition();
-    p        = AX_POINT_POINTS_TO_PIXELS(p);
+    p        = CC_POINT_POINTS_TO_PIXELS(p);
     auto map = getChildByTag(kTagTileMap);
 
     // there are only 4 layers. (grass and 3 trees layers)
@@ -920,12 +920,12 @@ TMXIsoVertexZNew::TMXIsoVertexZNew()
     _tamara    = layer->getTileAt(Vec2(29.0f, 29.0f));
     _tamara->retain();
 
-    auto move = MoveBy::create(10, Vec2(300, 250) * (1 / AX_CONTENT_SCALE_FACTOR()));
+    auto move = MoveBy::create(10, Vec2(300, 250) * (1 / CC_CONTENT_SCALE_FACTOR()));
     auto back = move->reverse();
     auto seq  = Sequence::create(move, back, nullptr);
     _tamara->runAction(RepeatForever::create(seq));
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXIsoVertexZNew::repositionSprite));
+    schedule(CC_SCHEDULE_SELECTOR(TMXIsoVertexZNew::repositionSprite));
 }
 
 TMXIsoVertexZNew::~TMXIsoVertexZNew()
@@ -938,7 +938,7 @@ void TMXIsoVertexZNew::repositionSprite(float dt)
     // tile height is 64x32
     // map size: 30x30
     auto p     = _tamara->getPosition();
-    p          = AX_POINT_POINTS_TO_PIXELS(p);
+    p          = CC_POINT_POINTS_TO_PIXELS(p);
     float newZ = -(p.y + 32) / 16;
     _tamara->setPositionZ(newZ);
 }
@@ -982,7 +982,7 @@ TMXOrthoVertexZNew::TMXOrthoVertexZNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test-vertexz.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     // because I'm lazy, I'm reusing a tile as an sprite, but since this method uses vertexZ, you
@@ -992,12 +992,12 @@ TMXOrthoVertexZNew::TMXOrthoVertexZNew()
     CCLOG("%p vertexZ: %f", _tamara, _tamara->getPositionZ());
     _tamara->retain();
 
-    auto move = MoveBy::create(10, Vec2(400, 450) * (1 / AX_CONTENT_SCALE_FACTOR()));
+    auto move = MoveBy::create(10, Vec2(400, 450) * (1 / CC_CONTENT_SCALE_FACTOR()));
     auto back = move->reverse();
     auto seq  = Sequence::create(move, back, nullptr);
     _tamara->runAction(RepeatForever::create(seq));
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXOrthoVertexZNew::repositionSprite));
+    schedule(CC_SCHEDULE_SELECTOR(TMXOrthoVertexZNew::repositionSprite));
 }
 
 TMXOrthoVertexZNew::~TMXOrthoVertexZNew()
@@ -1010,7 +1010,7 @@ void TMXOrthoVertexZNew::repositionSprite(float dt)
     // tile height is 101x81
     // map size: 12x12
     auto p = _tamara->getPosition();
-    p      = AX_POINT_POINTS_TO_PIXELS(p);
+    p      = CC_POINT_POINTS_TO_PIXELS(p);
     _tamara->setPositionZ(-((p.y + 81) / 81));
 }
 
@@ -1055,7 +1055,7 @@ TMXIsoMoveLayerNew::TMXIsoMoveLayerNew()
 
     map->setPosition(Vec2(-700.0f, -50.0f));
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 }
 
@@ -1079,7 +1079,7 @@ TMXOrthoMoveLayerNew::TMXOrthoMoveLayerNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test-movelayer.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 }
 
@@ -1134,7 +1134,7 @@ TMXOrthoFlipTestNew::TMXOrthoFlipTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/ortho-rotation-test.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     log("ContentSize: %f, %f", s.width, s.height);
 
     auto action = ScaleBy::create(2, 0.5f);
@@ -1163,7 +1163,7 @@ TMXOrthoFlipRunTimeTestNew::TMXOrthoFlipRunTimeTestNew()
     auto action = ScaleBy::create(2, 0.5f);
     map->runAction(action);
 
-    schedule(AX_SCHEDULE_SELECTOR(TMXOrthoFlipRunTimeTestNew::flipIt), 1.0f);
+    schedule(CC_SCHEDULE_SELECTOR(TMXOrthoFlipRunTimeTestNew::flipIt), 1.0f);
 }
 
 std::string TMXOrthoFlipRunTimeTestNew::title() const
@@ -1280,7 +1280,7 @@ TMXBug987New::TMXBug987New()
     auto map = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test6.tmx");
     addChild(map, 0, kTagTileMap);
 
-    Size AX_UNUSED s1 = map->getContentSize();
+    Size CC_UNUSED s1 = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s1.width, s1.height);
 
     map->setAnchorPoint(Vec2(0.0f, 0.0f));
@@ -1331,7 +1331,7 @@ TMXGIDObjectsTestNew::TMXGIDObjectsTestNew()
     auto map = axis::FastTMXTiledMap::create("TileMaps/test-object-layer.tmx");
     addChild(map, -1, kTagTileMap);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("Contentsize: %f, %f", s.width, s.height);
 
     CCLOG("----> Iterating over all the group objects");
@@ -1379,10 +1379,10 @@ TileAnimTestNew::TileAnimTestNew()
     addChild(map, 0, kTagTileMap);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(TileAnimTestNew::onTouchBegan, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(TileAnimTestNew::onTouchBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    Size AX_UNUSED s = map->getContentSize();
+    Size CC_UNUSED s = map->getContentSize();
     CCLOG("ContentSize: %f, %f", s.width, s.height);
 
     map->setTileAnimEnabled(_animStarted);

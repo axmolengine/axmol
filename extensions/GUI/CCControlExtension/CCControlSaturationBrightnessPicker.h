@@ -47,19 +47,19 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlSaturationBrightnessPicker : public Control
+class CC_EX_DLL ControlSaturationBrightnessPicker : public Control
 {
     /** Contains the receiver's current saturation value. */
-    AX_SYNTHESIZE_READONLY(float, _saturation, Saturation);
+    CC_SYNTHESIZE_READONLY(float, _saturation, Saturation);
     /** Contains the receiver's current brightness value. */
-    AX_SYNTHESIZE_READONLY(float, _brightness, Brightness);
+    CC_SYNTHESIZE_READONLY(float, _brightness, Brightness);
 
     // not sure if these need to be there actually. I suppose someone might want to access the sprite?
-    AX_SYNTHESIZE_READONLY(Sprite*, _background, Background);
-    AX_SYNTHESIZE_READONLY(Sprite*, _overlay, Overlay);
-    AX_SYNTHESIZE_READONLY(Sprite*, _shadow, Shadow);
-    AX_SYNTHESIZE_READONLY(Sprite*, _slider, Slider);
-    AX_SYNTHESIZE_READONLY(Vec2, _startPos, StartPos);
+    CC_SYNTHESIZE_READONLY(Sprite*, _background, Background);
+    CC_SYNTHESIZE_READONLY(Sprite*, _overlay, Overlay);
+    CC_SYNTHESIZE_READONLY(Sprite*, _shadow, Shadow);
+    CC_SYNTHESIZE_READONLY(Sprite*, _slider, Slider);
+    CC_SYNTHESIZE_READONLY(Vec2, _startPos, StartPos);
 
 protected:
     int boxPos;

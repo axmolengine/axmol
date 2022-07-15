@@ -133,12 +133,12 @@ void PolygonInfo::releaseVertsAndIndices()
     {
         if (nullptr != triangles.verts)
         {
-            AX_SAFE_DELETE_ARRAY(triangles.verts);
+            CC_SAFE_DELETE_ARRAY(triangles.verts);
         }
 
         if (nullptr != triangles.indices)
         {
-            AX_SAFE_DELETE_ARRAY(triangles.indices);
+            CC_SAFE_DELETE_ARRAY(triangles.indices);
         }
     }
 }
@@ -184,7 +184,7 @@ AutoPolygon::AutoPolygon(std::string_view filename)
 
 AutoPolygon::~AutoPolygon()
 {
-    AX_SAFE_DELETE(_image);
+    CC_SAFE_DELETE(_image);
 }
 
 std::vector<Vec2> AutoPolygon::trace(const Rect& rect, float threshold)
@@ -694,7 +694,7 @@ Rect AutoPolygon::getRealRect(const Rect& rect)
     else
     {
         // rect is specified, so convert to real rect
-        realRect = AX_RECT_POINTS_TO_PIXELS(rect);
+        realRect = CC_RECT_POINTS_TO_PIXELS(rect);
     }
     return realRect;
 }

@@ -340,7 +340,7 @@ void PUBeamRender::destroyAll()
     static_cast<PUParticleSystem3D*>(_particleSystem)->removeListener(this);
 
     // Delete the BillboardChain
-    AX_SAFE_DELETE(_billboardChain);
+    CC_SAFE_DELETE(_billboardChain);
 
     // Delete the visual data
     std::vector<PUParticle3DBeamVisualData*>::const_iterator it;

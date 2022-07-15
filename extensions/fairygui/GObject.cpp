@@ -66,12 +66,12 @@ GObject::~GObject()
     if (_displayObject)
     {
         _displayObject->removeFromParent();
-        AX_SAFE_RELEASE(_displayObject);
+        CC_SAFE_RELEASE(_displayObject);
     }
     for (int i = 0; i < 10; i++)
-        AX_SAFE_DELETE(_gears[i]);
-    AX_SAFE_DELETE(_relations);
-    AX_SAFE_DELETE(_dragBounds);
+        CC_SAFE_DELETE(_gears[i]);
+    CC_SAFE_DELETE(_relations);
+    CC_SAFE_DELETE(_dragBounds);
 
     if (_weakPtrRef > 0)
         WeakPtr::markDisposed(this);
@@ -85,8 +85,8 @@ bool GObject::init()
     {
         _displayObject->setAnchorPoint(Vec2(0, 1));
         _displayObject->setCascadeOpacityEnabled(true);
-        _displayObject->setOnEnterCallback(AX_CALLBACK_0(GObject::onEnter, this));
-        _displayObject->setOnExitCallback(AX_CALLBACK_0(GObject::onExit, this));
+        _displayObject->setOnEnterCallback(CC_CALLBACK_0(GObject::onEnter, this));
+        _displayObject->setOnExitCallback(CC_CALLBACK_0(GObject::onExit, this));
     }
     return true;
 }
@@ -402,8 +402,8 @@ void GObject::setTooltips(const std::string& value)
     _tooltips = value;
     if (!_tooltips.empty())
     {
-        addEventListener(UIEventType::RollOver, AX_CALLBACK_1(GObject::onRollOver, this), EventTag(this));
-        addEventListener(UIEventType::RollOut, AX_CALLBACK_1(GObject::onRollOut, this), EventTag(this));
+        addEventListener(UIEventType::RollOver, CC_CALLBACK_1(GObject::onRollOver, this), EventTag(this));
+        addEventListener(UIEventType::RollOut, CC_CALLBACK_1(GObject::onRollOut, this), EventTag(this));
     }
 }
 
@@ -908,9 +908,9 @@ void GObject::initDrag()
 {
     if (_draggable)
     {
-        addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GObject::onTouchBegin, this), EventTag(this));
-        addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(GObject::onTouchMove, this), EventTag(this));
-        addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(GObject::onTouchEnd, this), EventTag(this));
+        addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GObject::onTouchBegin, this), EventTag(this));
+        addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(GObject::onTouchMove, this), EventTag(this));
+        addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(GObject::onTouchEnd, this), EventTag(this));
     }
     else
     {
@@ -937,8 +937,8 @@ void GObject::dragBegin(int touchId)
     _dragTesting = true;
     UIRoot->getInputProcessor()->addTouchMonitor(touchId, this);
 
-    addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(GObject::onTouchMove, this), EventTag(this));
-    addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(GObject::onTouchEnd, this), EventTag(this));
+    addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(GObject::onTouchMove, this), EventTag(this));
+    addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(GObject::onTouchEnd, this), EventTag(this));
 }
 
 void GObject::dragEnd()
@@ -964,7 +964,7 @@ void GObject::onTouchMove(EventContext* context)
     if (_draggingObject != this && _draggable && _dragTesting)
     {
         int sensitivity;
-#ifdef AX_PLATFORM_PC
+#ifdef CC_PLATFORM_PC
         sensitivity = UIConfig::clickDragSensitivity;
 #else
         sensitivity = UIConfig::touchDragSensitivity;

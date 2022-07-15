@@ -27,15 +27,15 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "2d/CCScene.h"
 
-#if AX_USE_3D_PHYSICS
+#if CC_USE_3D_PHYSICS
 
-#    if (AX_ENABLE_BULLET_INTEGRATION)
+#    if (CC_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
 Physics3DComponent::~Physics3DComponent()
 {
-    AX_SAFE_RELEASE(_physics3DObj);
+    CC_SAFE_RELEASE(_physics3DObj);
 }
 
 std::string& Physics3DComponent::getPhysics3DComponentName()
@@ -62,14 +62,14 @@ Physics3DComponent* Physics3DComponent::create(Physics3DObject* physicsObj,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
 void Physics3DComponent::setPhysics3DObject(Physics3DObject* physicsObj)
 {
-    AX_SAFE_RETAIN(physicsObj);
-    AX_SAFE_RELEASE(_physics3DObj);
+    CC_SAFE_RETAIN(physicsObj);
+    CC_SAFE_RELEASE(_physics3DObj);
     _physics3DObj = physicsObj;
 }
 
@@ -250,6 +250,6 @@ void Physics3DComponent::syncNodeToPhysics()
 
 NS_AX_END
 
-#    endif  // AX_ENABLE_BULLET_INTEGRATION
+#    endif  // CC_ENABLE_BULLET_INTEGRATION
 
-#endif  // AX_USE_3D_PHYSICS
+#endif  // CC_USE_3D_PHYSICS

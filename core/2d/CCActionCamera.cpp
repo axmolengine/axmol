@@ -180,8 +180,8 @@ bool OrbitCamera::initWithDuration(float t,
         _angleX      = angleX;
         _deltaAngleX = deltaAngleX;
 
-        _radDeltaZ = (float)AX_DEGREES_TO_RADIANS(deltaAngleZ);
-        _radDeltaX = (float)AX_DEGREES_TO_RADIANS(deltaAngleX);
+        _radDeltaZ = (float)CC_DEGREES_TO_RADIANS(deltaAngleZ);
+        _radDeltaX = (float)CC_DEGREES_TO_RADIANS(deltaAngleX);
         return true;
     }
     return false;
@@ -196,12 +196,12 @@ void OrbitCamera::startWithTarget(Node* target)
     if (std::isnan(_radius))
         _radius = r;
     if (std::isnan(_angleZ))
-        _angleZ = (float)AX_RADIANS_TO_DEGREES(zenith);
+        _angleZ = (float)CC_RADIANS_TO_DEGREES(zenith);
     if (std::isnan(_angleX))
-        _angleX = (float)AX_RADIANS_TO_DEGREES(azimuth);
+        _angleX = (float)CC_RADIANS_TO_DEGREES(azimuth);
 
-    _radZ = (float)AX_DEGREES_TO_RADIANS(_angleZ);
-    _radX = (float)AX_DEGREES_TO_RADIANS(_angleX);
+    _radZ = (float)CC_DEGREES_TO_RADIANS(_angleZ);
+    _radX = (float)CC_DEGREES_TO_RADIANS(_angleX);
 }
 
 void OrbitCamera::update(float dt)

@@ -28,7 +28,7 @@
 #define __CCPHYSICS_BODY_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 
 #    include "2d/CCComponent.h"
 #    include "math/CCMath.h"
@@ -62,7 +62,7 @@ const PhysicsMaterial PHYSICSBODY_MATERIAL_DEFAULT(0.1f, 0.5f, 0.5f);
  * static body. You can change mass and moment with setMass() and setMoment(). And you can change the body to be dynamic
  * or static by use function setDynamic().
  */
-class AX_DLL PhysicsBody : public Component
+class CC_DLL PhysicsBody : public Component
 {
 public:
     const static std::string COMPONENT_NAME;
@@ -618,5 +618,5 @@ protected:
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS
 #endif  // __CCPHYSICS_BODY_H__

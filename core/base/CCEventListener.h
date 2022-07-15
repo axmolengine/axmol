@@ -49,7 +49,7 @@ class Node;
  *  For instance, you could refer to EventListenerAcceleration, EventListenerKeyboard, EventListenerTouchOneByOne,
  * EventListenerCustom.
  */
-class AX_DLL EventListener : public Ref
+class CC_DLL EventListener : public Ref
 {
 public:
     /** Type Event type.*/

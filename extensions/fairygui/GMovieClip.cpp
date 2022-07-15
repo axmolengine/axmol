@@ -18,7 +18,7 @@ GMovieClip::GMovieClip()
 
 GMovieClip::~GMovieClip()
 {
-    AX_SAFE_RELEASE(_playAction);
+    CC_SAFE_RELEASE(_playAction);
 }
 
 void GMovieClip::handleInit()
@@ -192,7 +192,7 @@ _timeScale(1)
 
 ActionMovieClip::~ActionMovieClip()
 {
-    AX_SAFE_RELEASE(_animation);
+    CC_SAFE_RELEASE(_animation);
 }
 
 ActionMovieClip* ActionMovieClip::create(axis::Animation* animation, float repeatDelay, bool swing)
@@ -307,7 +307,7 @@ void ActionMovieClip::startWithTarget(Node* target)
 
 ActionMovieClip* ActionMovieClip::reverse() const
 {
-    AX_ASSERT(0);
+    CC_ASSERT(0);
     return nullptr;
 }
 
@@ -421,8 +421,8 @@ void ActionMovieClip::setAnimation(axis::Animation* animation, float repeatDelay
 {
     if (_animation != animation)
     {
-        AX_SAFE_RETAIN(animation);
-        AX_SAFE_RELEASE(_animation);
+        CC_SAFE_RETAIN(animation);
+        CC_SAFE_RELEASE(_animation);
         _animation = animation;
     }
 

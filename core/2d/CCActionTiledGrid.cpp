@@ -225,8 +225,8 @@ ShuffleTiles* ShuffleTiles::clone() const
 
 ShuffleTiles::~ShuffleTiles()
 {
-    AX_SAFE_DELETE_ARRAY(_tilesOrder);
-    AX_SAFE_DELETE_ARRAY(_tiles);
+    CC_SAFE_DELETE_ARRAY(_tilesOrder);
+    CC_SAFE_DELETE_ARRAY(_tiles);
 }
 
 void ShuffleTiles::shuffle(unsigned int* array, unsigned int len)
@@ -569,7 +569,7 @@ TurnOffTiles* TurnOffTiles::clone() const
 
 TurnOffTiles::~TurnOffTiles()
 {
-    AX_SAFE_DELETE_ARRAY(_tilesOrder);
+    CC_SAFE_DELETE_ARRAY(_tilesOrder);
 }
 
 void TurnOffTiles::shuffle(unsigned int* array, unsigned int len)

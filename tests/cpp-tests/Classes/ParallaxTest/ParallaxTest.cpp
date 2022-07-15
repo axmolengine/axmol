@@ -113,7 +113,7 @@ std::string Parallax1::title() const
 Parallax2::Parallax2()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(Parallax2::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(Parallax2::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // Top Layer, a simple image

@@ -41,7 +41,7 @@ ArmatureAnimation* ArmatureAnimation::create(Armature* armature)
         pArmatureAnimation->autorelease();
         return pArmatureAnimation;
     }
-    AX_SAFE_DELETE(pArmatureAnimation);
+    CC_SAFE_DELETE(pArmatureAnimation);
     return nullptr;
 }
 
@@ -69,9 +69,9 @@ ArmatureAnimation::ArmatureAnimation()
 
 ArmatureAnimation::~ArmatureAnimation(void)
 {
-    AX_SAFE_RELEASE_NULL(_animationData);
+    CC_SAFE_RELEASE_NULL(_animationData);
 
-    AX_SAFE_RELEASE_NULL(_userObject);
+    CC_SAFE_RELEASE_NULL(_userObject);
 }
 
 bool ArmatureAnimation::init(Armature* armature)
@@ -254,7 +254,7 @@ void ArmatureAnimation::playByIndex(int animationIndex, int durationTo, int loop
 void ArmatureAnimation::playWithIndex(int animationIndex, int durationTo, int loop)
 {
     std::vector<std::string>& movName = _animationData->movementNames;
-    AX_ASSERT((animationIndex > -1) && ((unsigned int)animationIndex < movName.size()));
+    CC_ASSERT((animationIndex > -1) && ((unsigned int)animationIndex < movName.size()));
 
     std::string animationName = movName.at(animationIndex);
     play(animationName, durationTo, loop);
@@ -366,7 +366,7 @@ void ArmatureAnimation::update(float dt)
 
         _ignoreFrameEvent = false;
 
-        AX_SAFE_DELETE(event);
+        CC_SAFE_DELETE(event);
     }
 
     while (_movementEventQueue.size() > 0)
@@ -384,7 +384,7 @@ void ArmatureAnimation::update(float dt)
             _movementEventListener(event->armature, event->movementType, event->movementID);
         }
 
-        AX_SAFE_DELETE(event);
+        CC_SAFE_DELETE(event);
     }
 }
 
@@ -482,8 +482,8 @@ void ArmatureAnimation::setFrameEventCallFunc(
 
 void ArmatureAnimation::setUserObject(Ref* pUserObject)
 {
-    AX_SAFE_RETAIN(pUserObject);
-    AX_SAFE_RELEASE(_userObject);
+    CC_SAFE_RETAIN(pUserObject);
+    CC_SAFE_RELEASE(_userObject);
     _userObject = pUserObject;
 }
 

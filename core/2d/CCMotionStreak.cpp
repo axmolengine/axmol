@@ -44,12 +44,12 @@ MotionStreak::MotionStreak()
 
 MotionStreak::~MotionStreak()
 {
-    AX_SAFE_RELEASE(_texture);
-    AX_SAFE_FREE(_pointState);
-    AX_SAFE_FREE(_pointVertexes);
-    AX_SAFE_FREE(_vertices);
-    AX_SAFE_FREE(_colorPointer);
-    AX_SAFE_FREE(_texCoords);
+    CC_SAFE_RELEASE(_texture);
+    CC_SAFE_FREE(_pointState);
+    CC_SAFE_FREE(_pointVertexes);
+    CC_SAFE_FREE(_vertices);
+    CC_SAFE_FREE(_colorPointer);
+    CC_SAFE_FREE(_texCoords);
 }
 
 MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
@@ -61,7 +61,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
         return ret;
     }
 
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -74,7 +74,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
         return ret;
     }
 
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -215,8 +215,8 @@ void MotionStreak::setTexture(Texture2D* texture)
 {
     if (_texture != texture)
     {
-        AX_SAFE_RETAIN(texture);
-        AX_SAFE_RELEASE(_texture);
+        CC_SAFE_RETAIN(texture);
+        CC_SAFE_RELEASE(_texture);
         _texture = texture;
 
         setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, _texture);

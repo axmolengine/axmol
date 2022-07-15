@@ -266,7 +266,7 @@ AssetsManager::~AssetsManager()
     {
         delete _delegate;
     }
-    AX_SAFE_DELETE(_downloader);
+    CC_SAFE_DELETE(_downloader);
 }
 
 void AssetsManager::checkStoragePath()

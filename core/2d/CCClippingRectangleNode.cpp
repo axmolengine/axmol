@@ -38,7 +38,7 @@ ClippingRectangleNode* ClippingRectangleNode::create(const Rect& clippingRegion)
         node->autorelease();
     }
     else
-        AX_SAFE_DELETE(node);
+        CC_SAFE_DELETE(node);
 
     return node;
 }
@@ -49,7 +49,7 @@ ClippingRectangleNode* ClippingRectangleNode::create()
     if (node->init())
         node->autorelease();
     else
-        AX_SAFE_DELETE(node);
+        CC_SAFE_DELETE(node);
 
     return node;
 }
@@ -94,14 +94,14 @@ void ClippingRectangleNode::visit(Renderer* renderer, const Mat4& parentTransfor
 {
     auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
     beforeVisitCmdScissor->init(_globalZOrder);
-    beforeVisitCmdScissor->func = AX_CALLBACK_0(ClippingRectangleNode::onBeforeVisitScissor, this);
+    beforeVisitCmdScissor->func = CC_CALLBACK_0(ClippingRectangleNode::onBeforeVisitScissor, this);
     renderer->addCommand(beforeVisitCmdScissor);
 
     Node::visit(renderer, parentTransform, parentFlags);
 
     auto afterVisitCmdScissor = renderer->nextCallbackCommand();
     afterVisitCmdScissor->init(_globalZOrder);
-    afterVisitCmdScissor->func = AX_CALLBACK_0(ClippingRectangleNode::onAfterVisitScissor, this);
+    afterVisitCmdScissor->func = CC_CALLBACK_0(ClippingRectangleNode::onAfterVisitScissor, this);
     renderer->addCommand(afterVisitCmdScissor);
 }
 

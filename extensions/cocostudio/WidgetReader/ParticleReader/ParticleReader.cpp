@@ -58,12 +58,12 @@ ParticleReader* ParticleReader::getInstance()
 
 void ParticleReader::purge()
 {
-    AX_SAFE_DELETE(_instanceParticleReader);
+    CC_SAFE_DELETE(_instanceParticleReader);
 }
 
 void ParticleReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceParticleReader);
+    CC_SAFE_DELETE(_instanceParticleReader);
 }
 
 Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

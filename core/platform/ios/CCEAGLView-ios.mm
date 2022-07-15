@@ -69,7 +69,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import "base/CCIMEDispatcher.h"
 #import "platform/ios/CCInputView-ios.h"
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
 #    import <Metal/Metal.h>
 #    import "renderer/backend/metal/DeviceMTL.h"
 #    import "renderer/backend/metal/UtilsMTL.h"
@@ -94,7 +94,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 @synthesize surfaceSize = size_;
 @synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
-#if !defined(AX_USE_METAL)
+#if !defined(CC_USE_METAL)
 @synthesize context = context_;
 #endif
 @synthesize multiSampling            = multiSampling_;
@@ -104,7 +104,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 + (Class)layerClass
 {
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
     return [CAMetalLayer class];
 #else
     return [CAEAGLLayer class];
@@ -190,7 +190,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
             self.contentScaleFactor = [[UIScreen mainScreen] scale];
         }
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
         id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         if (!device)
         {
@@ -224,7 +224,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if ((self = [super initWithCoder:aDecoder]))
     {
         self.textInputView = [[CCInputView alloc] initWithCoder:aDecoder];
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
         size_ = [self bounds].size;
 #else
         CAEAGLLayer* eaglLayer = (CAEAGLLayer*)[self layer];
@@ -258,7 +258,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     return (int)bound.height * self.contentScaleFactor;
 }
 
-#if !defined(AX_USE_METAL)
+#if !defined(CC_USE_METAL)
 - (BOOL)setupSurfaceWithSharegroup:(EAGLSharegroup*)sharegroup
 {
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
@@ -296,7 +296,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];  // remove keyboard notification
-#if !defined(AX_USE_METAL)
+#if !defined(CC_USE_METAL)
     [renderer_ release];
 #endif
     [self.textInputView release];
@@ -308,7 +308,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (!axis::Director::getInstance()->isValid())
         return;
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
@@ -333,7 +333,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     }
 }
 
-#if defined(AX_USE_METAL)
+#if defined(CC_USE_METAL)
 - (void)swapBuffers
 {}
 #else
@@ -582,7 +582,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
     dis /= self.contentScaleFactor;
 
-#if defined(AX_TARGET_OS_TVOS)
+#if defined(CC_TARGET_OS_TVOS)
     self.frame = CGRectMake(originalRect_.origin.x, originalRect_.origin.y - dis, originalRect_.size.width,
                             originalRect_.size.height);
 #else
@@ -626,7 +626,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #pragma UIKeyboard notification
 
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
 namespace
 {
 UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrientation)
@@ -642,7 +642,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
 
 - (void)didMoveToWindow
 {
-#if !defined(AX_TARGET_OS_TVOS)
+#if !defined(CC_TARGET_OS_TVOS)
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onUIKeyboardNotification:)
                                                  name:UIKeyboardWillShowNotification

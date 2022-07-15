@@ -24,14 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_PU_PARTICLE_3D_FLOCK_CENTERING_AFFECTOR_H__
-#define __AX_PU_PARTICLE_3D_FLOCK_CENTERING_AFFECTOR_H__
+#ifndef __CC_PU_PARTICLE_3D_FLOCK_CENTERING_AFFECTOR_H__
+#define __CC_PU_PARTICLE_3D_FLOCK_CENTERING_AFFECTOR_H__
 
 #include "Particle3D/PU/CCPUAffector.h"
 
 NS_AX_BEGIN
 
-class AX_EX_DLL PUFlockCenteringAffector : public PUAffector
+class CC_EX_DLL PUFlockCenteringAffector : public PUAffector
 {
 public:
     static PUFlockCenteringAffector* create();

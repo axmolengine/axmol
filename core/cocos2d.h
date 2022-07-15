@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-AX_DLL const char* cocos2dVersion();
+CC_DLL const char* cocos2dVersion();
 
 /** Backward compatibility with old axis projects */
 

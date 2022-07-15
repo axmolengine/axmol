@@ -48,8 +48,8 @@ ParticleSystem3D::~ParticleSystem3D()
 {
     // stopParticle();
     removeAllAffector();
-    AX_SAFE_RELEASE(_emitter);
-    AX_SAFE_RELEASE(_render);
+    CC_SAFE_RELEASE(_emitter);
+    CC_SAFE_RELEASE(_render);
 }
 
 void ParticleSystem3D::startParticleSystem()
@@ -96,10 +96,10 @@ void ParticleSystem3D::setEmitter(Particle3DEmitter* emitter)
 {
     if (_emitter != emitter)
     {
-        AX_SAFE_RELEASE(_emitter);
+        CC_SAFE_RELEASE(_emitter);
         emitter->_particleSystem = this;
         _emitter                 = emitter;
-        AX_SAFE_RETAIN(_emitter);
+        CC_SAFE_RETAIN(_emitter);
     }
 }
 
@@ -107,10 +107,10 @@ void ParticleSystem3D::setRender(Particle3DRender* render)
 {
     if (_render != render)
     {
-        AX_SAFE_RELEASE(_render);
+        CC_SAFE_RELEASE(_render);
         _render                  = render;
         _render->_particleSystem = this;
-        AX_SAFE_RETAIN(_render);
+        CC_SAFE_RETAIN(_render);
     }
 }
 

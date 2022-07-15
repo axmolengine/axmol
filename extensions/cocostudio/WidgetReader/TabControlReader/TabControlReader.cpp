@@ -53,7 +53,7 @@ TabControlReader* TabControlReader::getInstance()
 
 void TabControlReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_tabReaderInstance);
+    CC_SAFE_DELETE(_tabReaderInstance);
 }
 
 flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatBuffers(
@@ -217,7 +217,7 @@ TabHeaderReader* TabHeaderReader::getInstance()
 
 void TabHeaderReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_tabheaderReaderInstance);
+    CC_SAFE_DELETE(_tabheaderReaderInstance);
 }
 
 flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBuffers(
@@ -900,7 +900,7 @@ TabItemReader* TabItemReader::getInstance()
 
 void TabItemReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_tabItemReaderInstance);
+    CC_SAFE_DELETE(_tabItemReaderInstance);
 }
 
 flatbuffers::Offset<flatbuffers::TabItemOption> TabItemReader::createTabItemOptionWithFlatBuffers(

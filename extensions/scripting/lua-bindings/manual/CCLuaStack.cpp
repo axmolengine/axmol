@@ -37,11 +37,11 @@ extern "C" {
 
 #include "scripting/lua-bindings/manual/AxisLuaLoader.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 #    include "scripting/lua-bindings/manual/platform/ios/CCLuaObjcBridge.h"
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include "scripting/lua-bindings/manual/platform/android/CCLuaJavaBridge.h"
 #endif
 
@@ -154,16 +154,16 @@ bool LuaStack::init()
 
     tolua_luanode_open(_state);
     register_luanode_manual(_state);
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
     register_all_axis_physics(_state);
     register_all_axis_physics_manual(_state);
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     LuaObjcBridge::luaopen_luaoc(_state);
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     LuaJavaBridge::luaopen_luaj(_state);
 #endif
 

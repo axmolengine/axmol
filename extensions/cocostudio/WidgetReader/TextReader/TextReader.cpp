@@ -46,7 +46,7 @@ TextReader* TextReader::getInstance()
 
 void TextReader::destroyInstance()
 {
-    AX_SAFE_DELETE(instanceTextReader);
+    CC_SAFE_DELETE(instanceTextReader);
 }
 
 void TextReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
@@ -64,9 +64,9 @@ void TextReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLo
         std::string key   = stChildArray[i].GetName(cocoLoader);
         std::string value = stChildArray[i].GetValue(cocoLoader);
         // read all basic properties of widget
-        AX_BASIC_PROPERTY_BINARY_READER
+        CC_BASIC_PROPERTY_BINARY_READER
         // read all color related properties of widget
-        AX_COLOR_PROPERTY_BINARY_READER
+        CC_COLOR_PROPERTY_BINARY_READER
 
         else if (key == P_TouchScaleEnable) { label->setTouchScaleChangeEnabled(valueToBool(value)); }
 

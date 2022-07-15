@@ -46,7 +46,7 @@ class CCS_DLL SpriteFrameCacheHelper
 {
 public:
     /** @deprecated Use getInstance() instead */
-    AX_DEPRECATED_ATTRIBUTE static SpriteFrameCacheHelper* sharedSpriteFrameCacheHelper()
+    CC_DEPRECATED_ATTRIBUTE static SpriteFrameCacheHelper* sharedSpriteFrameCacheHelper()
     {
         return SpriteFrameCacheHelper::getInstance();
     }

@@ -158,7 +158,7 @@ std::string MeshRendererEmptyTest::subtitle() const
 MeshRendererBasicTest::MeshRendererBasicTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererBasicTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererBasicTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
@@ -258,9 +258,9 @@ MeshRendererUVAnimationTest::MeshRendererUVAnimationTest()
     cylinder->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
 
     // the callback function update cylinder's texcoord
-    schedule(AX_SCHEDULE_SELECTOR(MeshRendererUVAnimationTest::cylinderUpdate));
+    schedule(CC_SCHEDULE_SELECTOR(MeshRendererUVAnimationTest::cylinderUpdate));
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [=](EventCustom*) {
         auto mat = MeshMaterial::createWithFilename("MeshRendererTest/UVAnimation.material");
 
@@ -273,7 +273,7 @@ MeshRendererUVAnimationTest::MeshRendererUVAnimationTest()
 
 MeshRendererUVAnimationTest::~MeshRendererUVAnimationTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -324,9 +324,9 @@ MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesBegan, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesMoved, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesEnded, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesBegan, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesMoved, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererFakeShadowTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto layer = Layer::create();
@@ -363,9 +363,9 @@ MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
     layer->addChild(_camera);
     layer->setCameraMask(2);
 
-    schedule(AX_SCHEDULE_SELECTOR(MeshRendererFakeShadowTest::updateCamera), 0.0f);
+    schedule(CC_SCHEDULE_SELECTOR(MeshRendererFakeShadowTest::updateCamera), 0.0f);
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto mat = MeshMaterial::createWithFilename("MeshRendererTest/FakeShadow.material");
         _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
@@ -383,7 +383,7 @@ MeshRendererFakeShadowTest::MeshRendererFakeShadowTest()
 
 MeshRendererFakeShadowTest::~MeshRendererFakeShadowTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -564,7 +564,7 @@ MeshRendererBasicToonShaderTest::MeshRendererBasicToonShaderTest()
     addChild(teapot);
     addChild(_camera);
     setCameraMask(2);
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [=](EventCustom*) {
         auto mat = MeshMaterial::createWithFilename("MeshRendererTest/BasicToon.material");
         _state   = mat->getTechniqueByIndex(0)->getPassByIndex(0)->getProgramState();
@@ -576,7 +576,7 @@ MeshRendererBasicToonShaderTest::MeshRendererBasicToonShaderTest()
 
 MeshRendererBasicToonShaderTest::~MeshRendererBasicToonShaderTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -620,7 +620,7 @@ MeshRendererLightMapTest::MeshRendererLightMapTest()
 
     // create a listener
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(MeshRendererLightMapTest::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererLightMapTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 MeshRendererLightMapTest::~MeshRendererLightMapTest() {}
@@ -737,9 +737,9 @@ MeshRendererEffectTest::MeshRendererEffectTest()
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererEffectTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererEffectTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_noneskinned");
@@ -754,7 +754,7 @@ MeshRendererEffectTest::MeshRendererEffectTest()
 
 MeshRendererEffectTest::~MeshRendererEffectTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -823,7 +823,7 @@ AsyncLoadMeshRendererTest::AsyncLoadMeshRendererTest()
     TTFConfig ttfConfig("fonts/arial.ttf", 15);
     auto label1 = Label::createWithTTF(ttfConfig, "AsyncLoad MeshRenderer");
     auto item1 =
-        MenuItemLabel::create(label1, AX_CALLBACK_1(AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh, this));
+        MenuItemLabel::create(label1, CC_CALLBACK_1(AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh, this));
 
     auto s = Director::getInstance()->getWinSize();
     item1->setPosition(s.width * .5f, s.height * .8f);
@@ -863,7 +863,7 @@ void AsyncLoadMeshRendererTest::menuCallback_asyncLoadMesh(Ref* sender)
     int32_t index = 0;
     for (const auto& path : _paths)
     {
-        MeshRenderer::createAsync(path, AX_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this), (void*)index++);
+        MeshRenderer::createAsync(path, CC_CALLBACK_2(AsyncLoadMeshRendererTest::asyncLoad_Callback, this), (void*)index++);
     }
 }
 
@@ -881,7 +881,7 @@ void AsyncLoadMeshRendererTest::asyncLoad_Callback(MeshRenderer* mesh, void* par
 MeshRendererWithSkinTest::MeshRendererWithSkinTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererWithSkinTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererWithSkinTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // switch animation quality. In fact, you can set the mesh3d out of frustum to Animate3DQuality::QUALITY_NONE, it
@@ -890,7 +890,7 @@ MeshRendererWithSkinTest::MeshRendererWithSkinTest()
     MenuItemFont::setFontSize(15);
     _animateQuality = (int)Animate3DQuality::QUALITY_LOW;
     _menuItem       = MenuItemFont::create(getAnimationQualityMessage(),
-                                           AX_CALLBACK_1(MeshRendererWithSkinTest::switchAnimationQualityCallback, this));
+                                           CC_CALLBACK_1(MeshRendererWithSkinTest::switchAnimationQualityCallback, this));
     _menuItem->setColor(Color3B(0, 200, 20));
     auto menu = Menu::create(_menuItem, NULL);
     menu->setPosition(Vec2::ZERO);
@@ -987,13 +987,13 @@ void MeshRendererWithSkinTest::onTouchesEnded(const std::vector<Touch*>& touches
 MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererWithSkinOutlineTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererWithSkinOutlineTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_skinned");
@@ -1007,7 +1007,7 @@ MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
 }
 MeshRendererWithSkinOutlineTest::~MeshRendererWithSkinOutlineTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -1073,7 +1073,7 @@ Animate3DTest::Animate3DTest()
     addMeshRenderer();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(Animate3DTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(Animate3DTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     scheduleUpdate();
@@ -1081,9 +1081,9 @@ Animate3DTest::Animate3DTest()
 
 Animate3DTest::~Animate3DTest()
 {
-    AX_SAFE_RELEASE(_moveAction);
-    AX_SAFE_RELEASE(_hurt);
-    AX_SAFE_RELEASE(_swim);
+    CC_SAFE_RELEASE(_moveAction);
+    CC_SAFE_RELEASE(_hurt);
+    CC_SAFE_RELEASE(_swim);
 }
 
 std::string Animate3DTest::title() const
@@ -1144,7 +1144,7 @@ void Animate3DTest::addMeshRenderer()
     _moveAction = MoveTo::create(4.f, Vec2(s.width / 5.f, s.height / 2.f));
     _moveAction->retain();
     auto seq =
-        Sequence::create(_moveAction, CallFunc::create(AX_CALLBACK_0(Animate3DTest::reachEndCallBack, this)), nullptr);
+        Sequence::create(_moveAction, CallFunc::create(CC_CALLBACK_0(Animate3DTest::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
     mesh->runAction(seq);
 }
@@ -1159,7 +1159,7 @@ void Animate3DTest::reachEndCallBack()
     _moveAction = inverse;
     auto rot    = RotateBy::create(1.f, Vec3(0.f, 180.f, 0.f));
     auto seq    = Sequence::create(rot, _moveAction,
-                                   CallFunc::create(AX_CALLBACK_0(Animate3DTest::reachEndCallBack, this)), nullptr);
+                                   CallFunc::create(CC_CALLBACK_0(Animate3DTest::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
     _mesh->runAction(seq);
 }
@@ -1192,7 +1192,7 @@ void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
                     _mesh->runAction(_hurt);
                     auto delay = DelayTime::create(_hurt->getDuration() - Animate3D::getTransitionTime());
                     auto seq   = Sequence::create(
-                          delay, CallFunc::create(AX_CALLBACK_0(Animate3DTest::renewCallBack, this)), nullptr);
+                          delay, CallFunc::create(CC_CALLBACK_0(Animate3DTest::renewCallBack, this)), nullptr);
                     seq->setTag(101);
                     _mesh->runAction(seq);
                 }
@@ -1208,7 +1208,7 @@ AttachmentTest::AttachmentTest() : _hasWeapon(false), _mesh(nullptr)
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(AttachmentTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(AttachmentTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 std::string AttachmentTest::title() const
@@ -1264,19 +1264,19 @@ MeshRendererReskinTest::MeshRendererReskinTest() : _mesh(nullptr)
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererReskinTest::onTouchesEnded, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererReskinTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
     auto label1 = Label::createWithTTF(ttfConfig, "Hair");
-    auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
+    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label2 = Label::createWithTTF(ttfConfig, "Glasses");
-    auto item2  = MenuItemLabel::create(label2, AX_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
+    auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label3 = Label::createWithTTF(ttfConfig, "Coat");
-    auto item3  = MenuItemLabel::create(label3, AX_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
+    auto item3  = MenuItemLabel::create(label3, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label4 = Label::createWithTTF(ttfConfig, "Pants");
-    auto item4  = MenuItemLabel::create(label4, AX_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
+    auto item4  = MenuItemLabel::create(label4, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     auto label5 = Label::createWithTTF(ttfConfig, "Shoes");
-    auto item5  = MenuItemLabel::create(label5, AX_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
+    auto item5  = MenuItemLabel::create(label5, CC_CALLBACK_1(MeshRendererReskinTest::menuCallback_reSkin, this));
     item1->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 4));
     item2->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 5));
     item3->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 6));
@@ -1383,9 +1383,9 @@ void MeshRendererReskinTest::applyCurSkin()
 MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesBegan, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesEnded, this);
-    listener->onTouchesMoved = AX_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesMoved, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesBegan, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesEnded, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererWithOBBPerformanceTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     auto s = Director::getInstance()->getWinSize();
     initDrawBox();
@@ -1393,9 +1393,9 @@ MeshRendererWithOBBPerformanceTest::MeshRendererWithOBBPerformanceTest()
     addNewMeshWithCoords(Vec2(s.width / 2, s.height / 2));
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
-    auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::delOBBCallback, this));
+    auto decrease = MenuItemFont::create(" - ", CC_CALLBACK_1(MeshRendererWithOBBPerformanceTest::delOBBCallback, this));
     decrease->setColor(Color3B(0, 200, 20));
-    auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(MeshRendererWithOBBPerformanceTest::addOBBCallback, this));
+    auto increase = MenuItemFont::create(" + ", CC_CALLBACK_1(MeshRendererWithOBBPerformanceTest::addOBBCallback, this));
     increase->setColor(Color3B(0, 200, 20));
 
     auto menu = Menu::create(decrease, increase, nullptr);
@@ -1530,7 +1530,7 @@ void MeshRendererWithOBBPerformanceTest::addNewMeshWithCoords(Vec2 p)
     _moveAction = MoveTo::create(4.f, Vec2(s.width / 5.f, s.height / 2.f));
     _moveAction->retain();
     auto seq = Sequence::create(
-        _moveAction, CallFunc::create(AX_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)), nullptr);
+        _moveAction, CallFunc::create(CC_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
     mesh->runAction(seq);
 
@@ -1548,7 +1548,7 @@ void MeshRendererWithOBBPerformanceTest::reachEndCallBack()
     _moveAction = inverse;
     auto rot    = RotateBy::create(1.0f, Vec3(0.f, 180.f, 0.f));
     auto seq    = Sequence::create(rot, _moveAction,
-                                   CallFunc::create(AX_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)),
+                                   CallFunc::create(CC_CALLBACK_0(MeshRendererWithOBBPerformanceTest::reachEndCallBack, this)),
                                    nullptr);
     seq->setTag(100);
     _mesh->runAction(seq);
@@ -1693,7 +1693,7 @@ void MeshRendererMirrorTest::addNewMeshWithCoords(Vec2 p)
     _mirrorMesh = mesh;
 }
 
-QuaternionTest::QuaternionTest() : _arcSpeed(AX_DEGREES_TO_RADIANS(90)), _radius(100.f), _accAngle(0.f)
+QuaternionTest::QuaternionTest() : _arcSpeed(CC_DEGREES_TO_RADIANS(90)), _radius(100.f), _accAngle(0.f)
 {
     auto s = Director::getInstance()->getWinSize();
     addNewMeshWithCoords(Vec2(s.width / 2.f, s.height / 2.f));
@@ -1858,9 +1858,9 @@ void UseCaseMeshRenderer::switchCase()
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Message");
-        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UseCaseMeshRenderer::menuCallback_Message, this));
+        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UseCaseMeshRenderer::menuCallback_Message, this));
         auto label2 = Label::createWithTTF(ttfConfig, "Message");
-        auto item2  = MenuItemLabel::create(label2, AX_CALLBACK_1(UseCaseMeshRenderer::menuCallback_Message, this));
+        auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(UseCaseMeshRenderer::menuCallback_Message, this));
 
         item1->setPosition(Vec2(s.width * 0.5f - item1->getContentSize().width * 0.5f,
                                 s.height * 0.5f - item1->getContentSize().height));
@@ -1902,7 +1902,7 @@ void UseCaseMeshRenderer::update(float delta)
     if (_caseIdx == 0)
     {
         static float accAngle = 0.f;
-        accAngle += delta * AX_DEGREES_TO_RADIANS(60);
+        accAngle += delta * CC_DEGREES_TO_RADIANS(60);
 
         float radius = 30.f;
         float x = cosf(accAngle) * radius, z = sinf(accAngle) * radius;
@@ -2021,7 +2021,7 @@ MeshRendererCubeMapTest::MeshRendererCubeMapTest() : _textureCube(nullptr), _sky
 
 MeshRendererCubeMapTest::~MeshRendererCubeMapTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 
@@ -2048,7 +2048,7 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
     _camera->setCameraFlag(CameraFlag::USER1);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(MeshRendererCubeMapTest::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(MeshRendererCubeMapTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a teapot
@@ -2097,9 +2097,9 @@ void MeshRendererCubeMapTest::addNewMeshWithCoords(Vec2 p)
 
     addChild(_camera);
     setCameraMask(2);
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
-        AX_SAFE_RELEASE(_textureCube);
+        CC_SAFE_RELEASE(_textureCube);
         _textureCube = TextureCube::create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
                                            "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",
                                            "MeshRendererTest/skybox/front.jpg", "MeshRendererTest/skybox/back.jpg");
@@ -2133,7 +2133,7 @@ void MeshRendererCubeMapTest::onTouchesMoved(const std::vector<Touch*>& touches,
         auto delta = touch->getDelta();
 
         static float _angle = 0.f;
-        _angle -= AX_DEGREES_TO_RADIANS(delta.x);
+        _angle -= CC_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(50.0f * sinf(_angle), 0.0f, 50.0f * cosf(_angle)));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
     }
@@ -2153,7 +2153,7 @@ Issue9767::Issue9767()
 
     TTFConfig ttfConfig("fonts/arial.ttf", 15);
     auto label1 = Label::createWithTTF(ttfConfig, "switch shader");
-    auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(Issue9767::menuCallback_SwitchShader, this));
+    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(Issue9767::menuCallback_SwitchShader, this));
 
     item1->setPosition(
         Vec2(s.width * 0.9f - item1->getContentSize().width * 0.5f, s.height * 0.5f - item1->getContentSize().height));
@@ -2167,7 +2167,7 @@ Issue9767::~Issue9767() {}
 
 void Issue9767::menuCallback_SwitchShader(axis::Ref* sender)
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
     if (_shaderType == Issue9767::ShaderType::SHADER_TEX)
     {
         _shaderType   = Issue9767::ShaderType::SHADER_COLOR;
@@ -2310,7 +2310,7 @@ MeshRendererVertexColorTest::MeshRendererVertexColorTest()
     camera->lookAt(Vec3(0.f, 0.f, 0.f));
     addChild(camera);
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [=](EventCustom*) {
         auto mat = MeshMaterial::createWithFilename("MeshRendererTest/VertexColor.material");
         mesh->setMaterial(mat);
@@ -2321,7 +2321,7 @@ MeshRendererVertexColorTest::MeshRendererVertexColorTest()
 
 MeshRendererVertexColorTest::~MeshRendererVertexColorTest()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -2340,7 +2340,7 @@ CameraBackgroundClearTest::CameraBackgroundClearTest()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
     auto label1 = Label::createWithTTF(ttfConfig, "Clear Mode");
-    auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(CameraBackgroundClearTest::switch_CameraClearMode, this));
+    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(CameraBackgroundClearTest::switch_CameraClearMode, this));
 
     item1->setPosition(Vec2(VisibleRect::left().x + 50, VisibleRect::bottom().y + item1->getContentSize().height * 4));
 
@@ -2553,17 +2553,17 @@ MeshRendererPropertyTest::MeshRendererPropertyTest()
     setCameraMask(2);
 
     // auto listener = EventListenerTouchAllAtOnce::create();
-    ////listener->onTouchesEnded = AX_CALLBACK_2(MeshRendererReskinTest::onTouchesEnded, this);
+    ////listener->onTouchesEnded = CC_CALLBACK_2(MeshRendererReskinTest::onTouchesEnded, this);
     //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
 
     auto label1 = Label::createWithTTF(ttfConfig, "Print Mesh Name");
-    auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(MeshRendererPropertyTest::printMeshName, this));
+    auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(MeshRendererPropertyTest::printMeshName, this));
     auto label2 = Label::createWithTTF(ttfConfig, "Remove Used Texture");
-    auto item2  = MenuItemLabel::create(label2, AX_CALLBACK_1(MeshRendererPropertyTest::removeUsedTexture, this));
+    auto item2  = MenuItemLabel::create(label2, CC_CALLBACK_1(MeshRendererPropertyTest::removeUsedTexture, this));
     auto label3 = Label::createWithTTF(ttfConfig, "Reset");
-    auto item3  = MenuItemLabel::create(label3, AX_CALLBACK_1(MeshRendererPropertyTest::resetTexture, this));
+    auto item3  = MenuItemLabel::create(label3, CC_CALLBACK_1(MeshRendererPropertyTest::resetTexture, this));
 
     item1->setPosition(Vec2(VisibleRect::left().x + 100, VisibleRect::bottom().y + item1->getContentSize().height * 4));
     item2->setPosition(Vec2(VisibleRect::left().x + 100, VisibleRect::bottom().y + item1->getContentSize().height * 5));

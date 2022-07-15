@@ -49,7 +49,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-class AX_EX_DLL ControlColourPicker : public Control
+class CC_EX_DLL ControlColourPicker : public Control
 {
 public:
     static ControlColourPicker* create();
@@ -79,9 +79,9 @@ protected:
     virtual bool onTouchBegan(Touch* touch, Event* pEvent) override;
 
     HSV _hsv;
-    AX_SYNTHESIZE_RETAIN(ControlSaturationBrightnessPicker*, _colourPicker, colourPicker)
-    AX_SYNTHESIZE_RETAIN(ControlHuePicker*, _huePicker, HuePicker)
-    AX_SYNTHESIZE_RETAIN(Sprite*, _background, Background)
+    CC_SYNTHESIZE_RETAIN(ControlSaturationBrightnessPicker*, _colourPicker, colourPicker)
+    CC_SYNTHESIZE_RETAIN(ControlHuePicker*, _huePicker, HuePicker)
+    CC_SYNTHESIZE_RETAIN(Sprite*, _background, Background)
 };
 
 // end of GUI group

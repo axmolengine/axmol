@@ -94,8 +94,8 @@ void GearXY::apply()
                                          ->setDelay(_tweenConfig->delay)
                                          ->setEase(_tweenConfig->easeType)
                                          ->setTargetAny(this)
-                                         ->onUpdate(AX_CALLBACK_1(GearXY::onTweenUpdate, this))
-                                         ->onComplete(AX_CALLBACK_0(GearXY::onTweenComplete, this));
+                                         ->onUpdate(CC_CALLBACK_1(GearXY::onTweenUpdate, this))
+                                         ->onComplete(CC_CALLBACK_0(GearXY::onTweenComplete, this));
         }
     }
     else

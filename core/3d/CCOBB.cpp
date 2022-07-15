@@ -85,7 +85,7 @@ static float& _getElement(Vec3& point, int index)
     if (index == 2)
         return point.z;
 
-    AX_ASSERT(0);
+    CC_ASSERT(0);
     return point.x;
 }
 

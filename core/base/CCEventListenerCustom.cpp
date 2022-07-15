@@ -40,7 +40,7 @@ EventListenerCustom* EventListenerCustom::create(std::string_view eventName,
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -74,7 +74,7 @@ EventListenerCustom* EventListenerCustom::clone()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
     return ret;
 }

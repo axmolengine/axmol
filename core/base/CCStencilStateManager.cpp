@@ -66,7 +66,7 @@ StencilStateManager::StencilStateManager()
 
 StencilStateManager::~StencilStateManager()
 {
-    AX_SAFE_RELEASE(_programState);
+    CC_SAFE_RELEASE(_programState);
 }
 
 void StencilStateManager::drawFullScreenQuadClearStencil(float globalZOrder)
@@ -111,8 +111,8 @@ void StencilStateManager::updateLayerMask()
 
 void StencilStateManager::onBeforeVisit(float globalZOrder)
 {
-    _customCommand.setBeforeCallback(AX_CALLBACK_0(StencilStateManager::onBeforeDrawQuadCmd, this));
-    _customCommand.setAfterCallback(AX_CALLBACK_0(StencilStateManager::onAfterDrawQuadCmd, this));
+    _customCommand.setBeforeCallback(CC_CALLBACK_0(StencilStateManager::onBeforeDrawQuadCmd, this));
+    _customCommand.setAfterCallback(CC_CALLBACK_0(StencilStateManager::onAfterDrawQuadCmd, this));
 
     // draw a fullscreen solid rectangle to clear the stencil buffer
     drawFullScreenQuadClearStencil(globalZOrder);

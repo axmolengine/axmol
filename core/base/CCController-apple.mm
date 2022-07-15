@@ -26,7 +26,7 @@
 
 #include "base/CCController.h"
 #include "platform/CCPlatformConfig.h"
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
 #    include "base/ccMacros.h"
 #    include "base/CCEventDispatcher.h"
@@ -325,7 +325,7 @@ void Controller::registerListeners()
           }
         };
     }
-#    if defined(AX_TARGET_OS_TVOS)
+#    if defined(CC_TARGET_OS_TVOS)
     else if (_impl->_gcController.microGamepad != nil)
     {
         _impl->_gcController.microGamepad.dpad.up.valueChangedHandler =
@@ -386,4 +386,4 @@ void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive) {}
 
 NS_AX_END
 
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

@@ -103,7 +103,7 @@ struct ParticleFrameDescriptor
     bool isRotated;
 };
 
-class AX_DLL ParticleData
+class CC_DLL ParticleData
 {
 public:
     float* posx;
@@ -239,7 +239,7 @@ public:
  * Particle emission mask cache.
  * @since axis-1.0.0b8
  */
-class AX_DLL ParticleEmissionMaskCache : public axis::Ref
+class CC_DLL ParticleEmissionMaskCache : public axis::Ref
 {
 public:
     static ParticleEmissionMaskCache* getInstance();
@@ -306,7 +306,7 @@ private:
 
 };
 
-// typedef void (*AX_UPDATE_PARTICLE_IMP)(id, SEL, tParticle*, Vec2);
+// typedef void (*CC_UPDATE_PARTICLE_IMP)(id, SEL, tParticle*, Vec2);
 
 class Texture2D;
 
@@ -354,7 +354,7 @@ emitter.startSpin = 0;
 @endcode
 
 */
-class AX_DLL ParticleSystem : public Node, public TextureProtocol, public PlayableProtocol
+class CC_DLL ParticleSystem : public Node, public TextureProtocol, public PlayableProtocol
 {
 public:
     /** Mode
@@ -1535,7 +1535,7 @@ protected:
     float _emitCounter;
 
     // Optimization
-    // AX_UPDATE_PARTICLE_IMP    updateParticleImp;
+    // CC_UPDATE_PARTICLE_IMP    updateParticleImp;
     // SEL                        updateParticleSel;
 
     /** weak reference to the SpriteBatchNode that renders the Sprite */
@@ -1684,7 +1684,7 @@ protected:
     FastRNG _rng;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(ParticleSystem);
+    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystem);
 };
 
 // end of _2d group

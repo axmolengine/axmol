@@ -24,7 +24,7 @@ void ScrollPaneHeader::onConstruct()
 {
     _c1 = getController("c1");
 
-    addEventListener(UIEventType::SizeChange, AX_CALLBACK_1(ScrollPaneHeader::onSizeChanged, this));
+    addEventListener(UIEventType::SizeChange, CC_CALLBACK_1(ScrollPaneHeader::onSizeChanged, this));
 }
 
 void ScrollPaneHeader::onSizeChanged(EventContext*)
@@ -52,16 +52,16 @@ void PullToRefreshScene::continueInit()
     _groot->addChild(_view);
 
     _list1 = _view->getChild("list1")->as<GList>();
-    _list1->itemRenderer = AX_CALLBACK_2(PullToRefreshScene::renderListItem1, this);
+    _list1->itemRenderer = CC_CALLBACK_2(PullToRefreshScene::renderListItem1, this);
     _list1->setVirtual();
     _list1->setNumItems(1);
-    _list1->addEventListener(UIEventType::PullDownRelease, AX_CALLBACK_1(PullToRefreshScene::onPullDownToRefresh, this));
+    _list1->addEventListener(UIEventType::PullDownRelease, CC_CALLBACK_1(PullToRefreshScene::onPullDownToRefresh, this));
 
     _list2 = _view->getChild("list2")->as<GList>();
-    _list2->itemRenderer = AX_CALLBACK_2(PullToRefreshScene::renderListItem2, this);
+    _list2->itemRenderer = CC_CALLBACK_2(PullToRefreshScene::renderListItem2, this);
     _list2->setVirtual();
     _list2->setNumItems(1);
-    _list2->addEventListener(UIEventType::PullUpRelease, AX_CALLBACK_1(PullToRefreshScene::onPullUpToRefresh, this));
+    _list2->addEventListener(UIEventType::PullUpRelease, CC_CALLBACK_1(PullToRefreshScene::onPullUpToRefresh, this));
 }
 
 void PullToRefreshScene::renderListItem1(int index, GObject* obj)

@@ -71,14 +71,14 @@ bool UISliderTest::init()
         slider->setMaxPercent(10000);
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 2.0f*/));
-        slider->addEventListener(AX_CALLBACK_2(UISliderTest::sliderEvent, this));
+        slider->addEventListener(CC_CALLBACK_2(UISliderTest::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         _slider = slider;
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
-        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UISliderTest::printWidgetResources, this));
+        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UISliderTest::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);
@@ -153,7 +153,7 @@ bool UISliderTest_Scale9::init()
         slider->setContentSize(Size(250.0f, 19.0f));
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 3.0f*/));
-        slider->addEventListener(AX_CALLBACK_2(UISliderTest_Scale9::sliderEvent, this));
+        slider->addEventListener(CC_CALLBACK_2(UISliderTest_Scale9::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         return true;
@@ -362,7 +362,7 @@ bool UISliderNewEventCallbackTest::init()
         slider->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
         slider->addEventListener([=](Ref* widget, Slider::EventType type) {
             Slider* slider = (Slider*)widget;
-            AX_UNUSED_PARAM(slider);
+            CC_UNUSED_PARAM(slider);
             if (type == Slider::EventType::ON_SLIDEBALL_DOWN)
             {
                 CCLOG("slider button pressed!");
@@ -411,7 +411,7 @@ bool UISliderIssue12249Test::init()
         slider->setMaxPercent(10000);
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 2.0f*/));
-        slider->addEventListener(AX_CALLBACK_2(UISliderIssue12249Test::sliderEvent, this));
+        slider->addEventListener(CC_CALLBACK_2(UISliderIssue12249Test::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         return true;

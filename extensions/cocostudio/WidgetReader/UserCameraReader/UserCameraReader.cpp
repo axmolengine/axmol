@@ -60,12 +60,12 @@ UserCameraReader* UserCameraReader::getInstance()
 
 void UserCameraReader::purge()
 {
-    AX_SAFE_DELETE(_instanceUserCameraReader);
+    CC_SAFE_DELETE(_instanceUserCameraReader);
 }
 
 void UserCameraReader::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceUserCameraReader);
+    CC_SAFE_DELETE(_instanceUserCameraReader);
 }
 
 Vec2 UserCameraReader::getVec2Attribute(pugi::xml_attribute attribute) const

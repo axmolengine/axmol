@@ -45,39 +45,39 @@ NS_AX_BEGIN
 // implementation RenderTexture
 RenderTexture::RenderTexture()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to save render texture before come to background.
     // Then it can be restored after coming to foreground on Android.
     auto toBackgroundListener =
-        EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, AX_CALLBACK_1(RenderTexture::listenToBackground, this));
+        EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, CC_CALLBACK_1(RenderTexture::listenToBackground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toBackgroundListener, this);
 
     auto toForegroundListener =
-        EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, AX_CALLBACK_1(RenderTexture::listenToForeground, this));
+        EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, CC_CALLBACK_1(RenderTexture::listenToForeground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
 #endif
 }
 
 RenderTexture::~RenderTexture()
 {
-    AX_SAFE_RELEASE(_renderTarget);
-    AX_SAFE_RELEASE(_sprite);
-    AX_SAFE_RELEASE(_depthStencilTexture);
-    AX_SAFE_RELEASE(_UITextureImage);
+    CC_SAFE_RELEASE(_renderTarget);
+    CC_SAFE_RELEASE(_sprite);
+    CC_SAFE_RELEASE(_depthStencilTexture);
+    CC_SAFE_RELEASE(_UITextureImage);
 }
 
 void RenderTexture::listenToBackground(EventCustom* /*event*/)
 {
     // We have not found a way to dispatch the enter background message before the texture data are destroyed.
     // So we disable this pair of message handler at present.
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     // to get the rendered texture data
     auto func = [&](Image* uiTextureImage) {
         if (uiTextureImage)
         {
-            AX_SAFE_RELEASE(_UITextureImage);
+            CC_SAFE_RELEASE(_UITextureImage);
             _UITextureImage = uiTextureImage;
-            AX_SAFE_RETAIN(_UITextureImage);
+            CC_SAFE_RETAIN(_UITextureImage);
             const Vec2& s = _texture2D->getContentSizeInPixels();
             VolatileTextureMgr::addDataTexture(_texture2D, uiTextureImage->getData(), s.width * s.height * 4,
                                                backend::PixelFormat::RGBA8, s);
@@ -86,7 +86,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
         {
             CCLOG("Cache rendertexture failed!");
         }
-        AX_SAFE_RELEASE(uiTextureImage);
+        CC_SAFE_RELEASE(uiTextureImage);
     };
     auto callback = std::bind(func, std::placeholders::_1);
     newImage(callback, false);
@@ -96,7 +96,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 
 void RenderTexture::listenToForeground(EventCustom* /*event*/)
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     const Vec2& s = _texture2D->getContentSizeInPixels();
     // TODO new-renderer: field _depthAndStencilFormat removal
     //    if (_depthAndStencilFormat != 0)
@@ -117,7 +117,7 @@ RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -130,7 +130,7 @@ RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat,
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -143,7 +143,7 @@ RenderTexture* RenderTexture::create(int w, int h, bool sharedRenderTarget)
         ret->autorelease();
         return ret;
     }
-    AX_SAFE_DELETE(ret);
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -164,8 +164,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
     do
     {
         _fullRect = _rtTextureRect = Rect(0, 0, w, h);
-        w                          = (int)(w * AX_CONTENT_SCALE_FACTOR());
-        h                          = (int)(h * AX_CONTENT_SCALE_FACTOR());
+        w                          = (int)(w * CC_CONTENT_SCALE_FACTOR());
+        h                          = (int)(h * CC_CONTENT_SCALE_FACTOR());
         _fullviewPort              = Rect(0, 0, w, h);
 
         // textures must be power of two squared
@@ -189,7 +189,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         descriptor.textureUsage  = TextureUsage::RENDER_TARGET;
         descriptor.textureFormat = PixelFormat::RGBA8;
         _texture2D               = new Texture2D();
-        _texture2D->updateTextureDescriptor(descriptor, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
+        _texture2D->updateTextureDescriptor(descriptor, !!CC_ENABLE_PREMULTIPLIED_ALPHA);
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
         if (PixelFormat::D24S8 == depthStencilFormat)
@@ -201,7 +201,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
 
-        AX_SAFE_RELEASE(_renderTarget);
+        CC_SAFE_RELEASE(_renderTarget);
 
         if (sharedRenderTarget)
         {
@@ -229,7 +229,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         // retained
         setSprite(Sprite::createWithTexture(_texture2D));
 
-#if defined(AX_USE_GL) || defined(AX_USE_GLES)
+#if defined(CC_USE_GL) || defined(CC_USE_GLES)
         _sprite->setFlippedY(true);
 #endif
 
@@ -260,7 +260,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
 
 void RenderTexture::setSprite(Sprite* sprite)
 {
-#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -269,9 +269,9 @@ void RenderTexture::setSprite(Sprite* sprite)
         if (_sprite)
             sEngine->releaseScriptObject(this, _sprite);
     }
-#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
-    AX_SAFE_RETAIN(sprite);
-    AX_SAFE_RELEASE(_sprite);
+#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    CC_SAFE_RETAIN(sprite);
+    CC_SAFE_RELEASE(_sprite);
     _sprite = sprite;
 }
 
@@ -430,7 +430,7 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
     auto renderer          = _director->getRenderer();
     auto saveToFileCommand = renderer->nextCallbackCommand();
     saveToFileCommand->init(_globalZOrder);
-    saveToFileCommand->func = AX_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
+    saveToFileCommand->func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
 
     renderer->addCommand(saveToFileCommand);
     return true;
@@ -453,7 +453,7 @@ bool RenderTexture::saveToFile(std::string_view fileName,
     auto renderer          = _director->getRenderer();
     auto saveToFileCommand = renderer->nextCallbackCommand();
     saveToFileCommand->init(_globalZOrder);
-    saveToFileCommand->func = AX_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
+    saveToFileCommand->func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
 
     _director->getRenderer()->addCommand(saveToFileCommand);
     return true;
@@ -619,7 +619,7 @@ void RenderTexture::begin()
 
     auto beginCommand = renderer->nextCallbackCommand();
     beginCommand->init(_globalZOrder);
-    beginCommand->func = AX_CALLBACK_0(RenderTexture::onBegin, this);
+    beginCommand->func = CC_CALLBACK_0(RenderTexture::onBegin, this);
     renderer->addCommand(beginCommand);
 }
 
@@ -629,7 +629,7 @@ void RenderTexture::end()
 
     auto endCommand = renderer->nextCallbackCommand();
     endCommand->init(_globalZOrder);
-    endCommand->func = AX_CALLBACK_0(RenderTexture::onEnd, this);
+    endCommand->func = CC_CALLBACK_0(RenderTexture::onEnd, this);
 
     renderer->addCommand(endCommand);
     renderer->popGroup();

@@ -40,7 +40,7 @@ NS_AX_BEGIN
  * A pool for managing autorelease objects.
  * @js NA
  */
-class AX_DLL AutoreleasePool
+class CC_DLL AutoreleasePool
 {
 public:
     /**
@@ -149,7 +149,7 @@ private:
 /**
  * @cond
  */
-class AX_DLL PoolManager
+class CC_DLL PoolManager
 {
 public:
     static PoolManager* getInstance();

@@ -29,7 +29,7 @@ static const char* starFlame = STRINGIFY(
     uniform vec2 center; uniform vec2 resolution;
 
     vec2 iResolution  = resolution;  // viewport resolution (in pixels)
-    float iGlobalTime = AX_Time[1];  // shader playback time (in seconds)
+    float iGlobalTime = CC_Time[1];  // shader playback time (in seconds)
     // uniform float     iChannelTime[4];       // channel playback time (in seconds)
     // uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
     vec4 iMouse = vec4(0, 0, 0, 0);  // mouse pixel coords. xy: current (if MLB down), zw: click
@@ -102,7 +102,7 @@ static const char* starNestFrg = STRINGIFY(
 
     vec2 iCenter      = center;
     vec2 iResolution  = resolution;  // viewport resolution (in pixels)
-    float iGlobalTime = AX_Time[1];  // shader playback time (in seconds)
+    float iGlobalTime = CC_Time[1];  // shader playback time (in seconds)
     // uniform float     iChannelTime[4];       // channel playback time (in seconds)
     // uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
     vec4 iMouse = vec4(0, 0, 0, 0);  // mouse pixel coords. xy: current (if MLB down), zw: click
@@ -189,7 +189,7 @@ static const char* shadertoyRelentlessFrag = STRINGIFY(
 
     vec2 iCenter      = center;
     vec2 iResolution  = resolution;  // viewport resolution (in pixels)
-    float iGlobalTime = AX_Time[1];  // shader playback time (in seconds)
+    float iGlobalTime = CC_Time[1];  // shader playback time (in seconds)
                                      // uniform float     iChannelTime[4];       // channel playback time (in seconds)
     // uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
 

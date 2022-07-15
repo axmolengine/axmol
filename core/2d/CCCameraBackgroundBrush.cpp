@@ -36,7 +36,7 @@
 #include "renderer/CCTextureCube.h"
 #include "renderer/ccShaders.h"
 
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
 #    include "base/CCEventCustom.h"
 #    include "base/CCEventListenerCustom.h"
 #    include "base/CCEventType.h"
@@ -49,7 +49,7 @@ CameraBackgroundBrush::CameraBackgroundBrush() {}
 
 CameraBackgroundBrush::~CameraBackgroundBrush()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
 }
 
 CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
@@ -86,11 +86,11 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundBrush::createSkyboxBrush(std::strin
 CameraBackgroundDepthBrush::CameraBackgroundDepthBrush()
     : _depth(0.f)
     , _clearColor(false)
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     , _backToForegroundListener(nullptr)
 #endif
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { initBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -98,7 +98,7 @@ CameraBackgroundDepthBrush::CameraBackgroundDepthBrush()
 }
 CameraBackgroundDepthBrush::~CameraBackgroundDepthBrush()
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -114,7 +114,7 @@ CameraBackgroundDepthBrush* CameraBackgroundDepthBrush::create(float depth)
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -122,7 +122,7 @@ CameraBackgroundDepthBrush* CameraBackgroundDepthBrush::create(float depth)
 
 bool CameraBackgroundDepthBrush::init()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::CAMERA_CLEAR);
     _programState = new backend::ProgramState(program);
 
@@ -166,8 +166,8 @@ bool CameraBackgroundDepthBrush::init()
     _vertices[2].texCoords = Tex2F(1, 1);
     _vertices[3].texCoords = Tex2F(0, 1);
 
-    _customCommand.setBeforeCallback(AX_CALLBACK_0(CameraBackgroundDepthBrush::onBeforeDraw, this));
-    _customCommand.setAfterCallback(AX_CALLBACK_0(CameraBackgroundDepthBrush::onAfterDraw, this));
+    _customCommand.setBeforeCallback(CC_CALLBACK_0(CameraBackgroundDepthBrush::onBeforeDraw, this));
+    _customCommand.setAfterCallback(CC_CALLBACK_0(CameraBackgroundDepthBrush::onAfterDraw, this));
 
     initBuffer();
     return true;
@@ -273,7 +273,7 @@ CameraBackgroundColorBrush* CameraBackgroundColorBrush::create(const Color4F& co
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -284,11 +284,11 @@ CameraBackgroundSkyBoxBrush::CameraBackgroundSkyBoxBrush()
     : _texture(nullptr)
     , _actived(true)
     , _textureValid(true)
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     , _backToForegroundListener(nullptr)
 #endif
 {
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { initBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -297,8 +297,8 @@ CameraBackgroundSkyBoxBrush::CameraBackgroundSkyBoxBrush()
 
 CameraBackgroundSkyBoxBrush::~CameraBackgroundSkyBoxBrush()
 {
-    AX_SAFE_RELEASE(_texture);
-#if AX_ENABLE_CACHE_TEXTURE_DATA
+    CC_SAFE_RELEASE(_texture);
+#if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -333,8 +333,8 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(std::string_vie
         }
         else
         {
-            AX_SAFE_DELETE(texture);
-            AX_SAFE_DELETE(ret);
+            CC_SAFE_DELETE(texture);
+            CC_SAFE_DELETE(ret);
         }
     }
 
@@ -351,7 +351,7 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create()
     }
     else
     {
-        AX_SAFE_DELETE(ret);
+        CC_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -386,16 +386,16 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
 
     renderer->popGroup();
 
-    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
 }
 
 bool CameraBackgroundSkyBoxBrush::init()
 {
 
-    _customCommand.setBeforeCallback(AX_CALLBACK_0(CameraBackgroundSkyBoxBrush::onBeforeDraw, this));
-    _customCommand.setAfterCallback(AX_CALLBACK_0(CameraBackgroundSkyBoxBrush::onAfterDraw, this));
+    _customCommand.setBeforeCallback(CC_CALLBACK_0(CameraBackgroundSkyBoxBrush::onBeforeDraw, this));
+    _customCommand.setAfterCallback(CC_CALLBACK_0(CameraBackgroundSkyBoxBrush::onAfterDraw, this));
 
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
     auto* program        = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
     _programState        = new backend::ProgramState(program);
     _uniformColorLoc     = _programState->getUniformLocation("u_color");
@@ -444,8 +444,8 @@ void CameraBackgroundSkyBoxBrush::initBuffer()
 
 void CameraBackgroundSkyBoxBrush::setTexture(TextureCube* texture)
 {
-    AX_SAFE_RETAIN(texture);
-    AX_SAFE_RELEASE(_texture);
+    CC_SAFE_RETAIN(texture);
+    CC_SAFE_RELEASE(_texture);
     _texture = texture;
     _programState->setTexture(_uniformEnvLoc, 0, _texture->getBackendTexture());
 }

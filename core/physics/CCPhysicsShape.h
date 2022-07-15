@@ -28,7 +28,7 @@
 #define __CCPHYSICS_SHAPE_H__
 
 #include "base/ccConfig.h"
-#if AX_USE_PHYSICS
+#if CC_USE_PHYSICS
 
 #    include "base/CCRef.h"
 #    include "math/CCMath.h"
@@ -39,7 +39,7 @@ NS_AX_BEGIN
 
 class PhysicsBody;
 
-typedef struct AX_DLL PhysicsMaterial
+typedef struct CC_DLL PhysicsMaterial
 {
     float density;      ///< The density of the object.
     float restitution;  ///< The bounciness of the physics body.
@@ -66,7 +66,7 @@ const PhysicsMaterial PHYSICSSHAPE_MATERIAL_DEFAULT;
  * @brief A shape for body. You do not create PhysicsWorld objects directly, instead, you can view PhysicsBody to see
  * how to create it.
  */
-class AX_DLL PhysicsShape : public Ref
+class CC_DLL PhysicsShape : public Ref
 {
 public:
     enum class Type
@@ -383,7 +383,7 @@ protected:
 };
 
 /** A circle shape. */
-class AX_DLL PhysicsShapeCircle : public PhysicsShape
+class CC_DLL PhysicsShapeCircle : public PhysicsShape
 {
 public:
     /**
@@ -450,7 +450,7 @@ protected:
 };
 
 /** A polygon shape. */
-class AX_DLL PhysicsShapePolygon : public PhysicsShape
+class CC_DLL PhysicsShapePolygon : public PhysicsShape
 {
 public:
     /**
@@ -543,7 +543,7 @@ protected:
 };
 
 /** A box shape. */
-class AX_DLL PhysicsShapeBox : public PhysicsShapePolygon
+class CC_DLL PhysicsShapeBox : public PhysicsShapePolygon
 {
 public:
     /**
@@ -585,7 +585,7 @@ protected:
 };
 
 /** A segment shape. */
-class AX_DLL PhysicsShapeEdgeSegment : public PhysicsShape
+class CC_DLL PhysicsShapeEdgeSegment : public PhysicsShape
 {
 public:
     /**
@@ -638,7 +638,7 @@ protected:
 };
 
 /** An edge polygon shape. */
-class AX_DLL PhysicsShapeEdgePolygon : public PhysicsShape
+class CC_DLL PhysicsShapeEdgePolygon : public PhysicsShape
 {
 public:
     /**
@@ -691,7 +691,7 @@ protected:
 };
 
 /** An edge box shape. */
-class AX_DLL PhysicsShapeEdgeBox : public PhysicsShapeEdgePolygon
+class CC_DLL PhysicsShapeEdgeBox : public PhysicsShapeEdgePolygon
 {
 public:
     /**
@@ -729,7 +729,7 @@ protected:
 };
 
 /** A chain shape. */
-class AX_DLL PhysicsShapeEdgeChain : public PhysicsShape
+class CC_DLL PhysicsShapeEdgeChain : public PhysicsShape
 {
 public:
     /**
@@ -786,5 +786,5 @@ protected:
 
 NS_AX_END
 
-#endif  // AX_USE_PHYSICS
+#endif  // CC_USE_PHYSICS
 #endif  // __CCPHYSICS_FIXTURE_H__

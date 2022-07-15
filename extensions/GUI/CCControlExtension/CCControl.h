@@ -61,11 +61,11 @@ class Invocation;
  *
  * To use the Control you have to subclass it.
  */
-class AX_EX_DLL Control : public Layer
+class CC_EX_DLL Control : public Layer
 {
 public:
     /** Kinds of possible events for the control objects. */
-    enum class AX_EX_DLL EventType
+    enum class CC_EX_DLL EventType
     {
         TOUCH_DOWN   = 1 << 0,  // A touch-down event in the control.
         DRAG_INSIDE  = 1 << 1,  // An event where a finger is dragged inside the bounds of the control.
@@ -267,13 +267,13 @@ protected:
     bool _isOpacityModifyRGB;
 
     /** The current control state constant. */
-    AX_SYNTHESIZE_READONLY(State, _state, State);
+    CC_SYNTHESIZE_READONLY(State, _state, State);
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Control);
+    CC_DISALLOW_COPY_AND_ASSIGN(Control);
 };
 
-AX_EX_DLL Control::EventType operator|(Control::EventType a, Control::EventType b);
+CC_EX_DLL Control::EventType operator|(Control::EventType a, Control::EventType b);
 
 // end of GUI group
 /// @}

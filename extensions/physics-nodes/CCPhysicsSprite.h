@@ -30,7 +30,7 @@
 #include "extensions/ExtensionExport.h"
 #include "base/CCEventListenerCustom.h"
 
-#if (AX_ENABLE_CHIPMUNK_INTEGRATION || AX_ENABLE_BOX2D_INTEGRATION)
+#if (CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION)
 
 struct cpBody;
 class b2Body;
@@ -39,9 +39,9 @@ NS_AX_EXT_BEGIN
 
 /** A Sprite subclass that is bound to a physics body.
  It works with:
- - Chipmunk: Preprocessor macro AX_ENABLE_CHIPMUNK_INTEGRATION should be defined
- - Objective-Chipmunk: Preprocessor macro AX_ENABLE_CHIPMUNK_INTEGRATION should be defined
- - Box2d: Preprocessor macro AX_ENABLE_BOX2D_INTEGRATION should be defined
+ - Chipmunk: Preprocessor macro CC_ENABLE_CHIPMUNK_INTEGRATION should be defined
+ - Objective-Chipmunk: Preprocessor macro CC_ENABLE_CHIPMUNK_INTEGRATION should be defined
+ - Box2d: Preprocessor macro CC_ENABLE_BOX2D_INTEGRATION should be defined
 
  Features and Limitations:
  - Scale and Skew properties are ignored.
@@ -50,7 +50,7 @@ NS_AX_EXT_BEGIN
  - You can't enble both Chipmunk support and Box2d support at the same time. Only one can be enabled at compile time
  * @lua NA
  */
-class AX_EX_DLL PhysicsSprite : public Sprite
+class CC_EX_DLL PhysicsSprite : public Sprite
 {
 public:
     static PhysicsSprite* create();
@@ -149,6 +149,6 @@ protected:
 
 NS_AX_EXT_END
 
-#endif  // AX_ENABLE_CHIPMUNK_INTEGRATION || AX_ENABLE_BOX2D_INTEGRATION
+#endif  // CC_ENABLE_CHIPMUNK_INTEGRATION || CC_ENABLE_BOX2D_INTEGRATION
 
 #endif  // __PHYSICSNODES_CCPHYSICSSPRITE_H__

@@ -52,7 +52,7 @@ using DepthFunction = backend::CompareFunction;
 /**
  * Defines the rendering state of the graphics device.
  */
-class AX_DLL RenderState : public Ref
+class CC_DLL RenderState : public Ref
 {
     friend class Material;
     friend class Technique;
@@ -71,7 +71,7 @@ public:
      * Defines a block of fixed-function render states that can be applied to a
      * RenderState object.
      */
-    class AX_DLL StateBlock  // : public Ref
+    class CC_DLL StateBlock  // : public Ref
     {
         friend class RenderState;
         friend class Pass;

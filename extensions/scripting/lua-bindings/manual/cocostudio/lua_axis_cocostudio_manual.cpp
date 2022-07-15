@@ -276,7 +276,7 @@ static int lua_axis_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_Sta
                                                           ScriptHandlerMgr::HandlerType::ARMATURE_EVENT);
 
         self->addArmatureFileInfoAsync(configFilePath, wrapper,
-                                       AX_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
+                                       CC_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
 
         return 0;
     }
@@ -302,7 +302,7 @@ static int lua_axis_ArmatureDataManager_addArmatureFileInfoAsyncCallFunc(lua_Sta
                                                           ScriptHandlerMgr::HandlerType::ARMATURE_EVENT);
 
         self->addArmatureFileInfoAsync(imagePath, plistPath, configFilePath, wrapper,
-                                       AX_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
+                                       CC_SCHEDULE_SELECTOR(LuaArmatureWrapper::addArmatureFileInfoAsyncCallback));
 
         return 0;
     }

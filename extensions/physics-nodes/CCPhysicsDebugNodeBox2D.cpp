@@ -68,7 +68,7 @@ void PhysicsDebugNodeBox2D::DrawSolidPolygon(const b2Vec2* verts, int vertexCoun
 void PhysicsDebugNodeBox2D::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
 {
     drawBP->drawCircle(Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset, radius * mRatio,
-                       AX_DEGREES_TO_RADIANS(0), 30, true, 1.0f, 1.0f, Color4F(color.r, color.g, color.b, color.a));
+                       CC_DEGREES_TO_RADIANS(0), 30, true, 1.0f, 1.0f, Color4F(color.r, color.g, color.b, color.a));
 }
 
 void PhysicsDebugNodeBox2D::DrawSolidCircle(const b2Vec2& center,
@@ -77,7 +77,7 @@ void PhysicsDebugNodeBox2D::DrawSolidCircle(const b2Vec2& center,
                                             const b2Color& color)
 {
     Vec2 c = {Vec2(center.x * mRatio, center.y * mRatio) + debugNodeOffset};
-    drawBP->drawSolidCircle(c, radius * mRatio, AX_DEGREES_TO_RADIANS(0), 20, 1.0f, 1.0f,
+    drawBP->drawSolidCircle(c, radius * mRatio, CC_DEGREES_TO_RADIANS(0), 20, 1.0f, 1.0f,
                             Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.4f,
                             Color4F(color.r, color.g, color.b, color.a));
 

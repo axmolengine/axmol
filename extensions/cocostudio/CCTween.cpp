@@ -41,7 +41,7 @@ Tween* Tween::create(Bone* bone)
         pTween->autorelease();
         return pTween;
     }
-    AX_SAFE_DELETE(pTween);
+    CC_SAFE_DELETE(pTween);
     return nullptr;
 }
 
@@ -62,8 +62,8 @@ Tween::Tween()
 
 Tween::~Tween(void)
 {
-    AX_SAFE_DELETE(_from);
-    AX_SAFE_DELETE(_between);
+    CC_SAFE_DELETE(_from);
+    CC_SAFE_DELETE(_between);
 }
 
 bool Tween::init(Bone* bone)
@@ -260,7 +260,7 @@ void Tween::updateHandler()
 
     if (_currentPercent < 1 && _loopType <= ANIMATION_TO_LOOP_BACK)
     {
-        _currentPercent = sin(_currentPercent * AX_HALF_PI);
+        _currentPercent = sin(_currentPercent * CC_HALF_PI);
     }
 
     float percent = _currentPercent;

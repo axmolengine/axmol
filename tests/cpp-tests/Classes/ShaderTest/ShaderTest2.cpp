@@ -87,7 +87,7 @@ public:
             ret->autorelease();
             return ret;
         }
-        AX_SAFE_RELEASE(ret);
+        CC_SAFE_RELEASE(ret);
         return nullptr;
     }
 
@@ -97,9 +97,9 @@ public:
         {
             effect->setTarget(this);
 
-            AX_SAFE_RELEASE(_defaultEffect);
+            CC_SAFE_RELEASE(_defaultEffect);
             _defaultEffect = effect;
-            AX_SAFE_RETAIN(_defaultEffect);
+            CC_SAFE_RETAIN(_defaultEffect);
 
             setProgramState(_defaultEffect->getProgramState());
         }
@@ -116,7 +116,7 @@ public:
 
     void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override
     {
-#if AX_USE_CULLING
+#if CC_USE_CULLING
         // Don't do calculate the culling if the transform was not updated
         _insideBounds =
             (flags & FLAGS_TRANSFORM_DIRTY) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
@@ -170,7 +170,7 @@ protected:
         {
             std::get<1>(tuple)->release();
         }
-        AX_SAFE_RELEASE(_defaultEffect);
+        CC_SAFE_RELEASE(_defaultEffect);
     }
 
     std::vector<std::tuple<ssize_t, Effect*, QuadCommand>> _effects;
@@ -187,13 +187,13 @@ bool Effect::initProgramState(std::string_view fragmentFilename)
     auto fragmentFullPath = fileUtiles->fullPathForFilename(fragmentFilename);
     auto fragSource       = fileUtiles->getStringFromFile(fragmentFullPath);
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     _fragSource = fragSource;
 #endif
     auto program      = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
     auto programState = new backend::ProgramState(program);
-    AX_SAFE_RELEASE(_programState);
-    AX_SAFE_RELEASE(program);
+    CC_SAFE_RELEASE(_programState);
+    CC_SAFE_RELEASE(program);
     _programState = programState;
 
     return _programState != nullptr;
@@ -203,7 +203,7 @@ Effect::Effect() {}
 
 Effect::~Effect()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    CC_SAFE_RELEASE_NULL(_programState);
 }
 
 // Blur
@@ -416,7 +416,7 @@ public:
             normalMappedSprite->autorelease();
             return normalMappedSprite;
         }
-        AX_SAFE_DELETE(normalMappedSprite);
+        CC_SAFE_DELETE(normalMappedSprite);
         return nullptr;
     }
     void setKBump(float value);
@@ -566,9 +566,9 @@ bool EffectSpriteLamp::init()
         _sprite->setEffect(lampEffect);
         _effect                  = lampEffect;
         auto listener            = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = AX_CALLBACK_2(EffectSpriteLamp::onTouchesBegan, this);
-        listener->onTouchesMoved = AX_CALLBACK_2(EffectSpriteLamp::onTouchesMoved, this);
-        listener->onTouchesEnded = AX_CALLBACK_2(EffectSpriteLamp::onTouchesEnded, this);
+        listener->onTouchesBegan = CC_CALLBACK_2(EffectSpriteLamp::onTouchesBegan, this);
+        listener->onTouchesMoved = CC_CALLBACK_2(EffectSpriteLamp::onTouchesMoved, this);
+        listener->onTouchesEnded = CC_CALLBACK_2(EffectSpriteLamp::onTouchesEnded, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
         return true;
     }

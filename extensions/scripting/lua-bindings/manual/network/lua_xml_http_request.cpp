@@ -152,7 +152,7 @@ LuaMinXmlHttpRequest::~LuaMinXmlHttpRequest()
 {
     _httpHeader.clear();
     _requestHeader.clear();
-    AX_SAFE_RELEASE_NULL(_httpRequest);
+    CC_SAFE_RELEASE_NULL(_httpRequest);
 }
 
 /**
@@ -714,7 +714,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
 
         pStack->pushLuaValueArray(array);
 
-        AX_SAFE_DELETE_ARRAY(tmpData);
+        CC_SAFE_DELETE_ARRAY(tmpData);
         return 1;
     }
     else

@@ -32,7 +32,7 @@
 USING_NS_AX;
 using namespace axis::network;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #    if defined(__arm64__)
 #        define USE_NEON64
 #        define INCLUDE_NEON64
@@ -41,7 +41,7 @@ using namespace axis::network;
 #        define INCLUDE_NEON32
 #    else
 #    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    if defined(__arm64__) || defined(__aarch64__)
 #        define USE_NEON64
 #        define INCLUDE_NEON64
@@ -165,7 +165,7 @@ void TemplateVectorTest::onEnter()
     Vector<Node*> vec4(createVector());
     for (const auto& child : vec4)
     {
-        AX_UNUSED_PARAM(child);
+        CC_UNUSED_PARAM(child);
         CCASSERT(child->getReferenceCount() == 2, "child's reference count should be 2.");
     }
 
@@ -189,7 +189,7 @@ void TemplateVectorTest::onEnter()
 
     for (const auto& child : vec5)
     {
-        AX_UNUSED_PARAM(child);
+        CC_UNUSED_PARAM(child);
         CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
@@ -284,7 +284,7 @@ void TemplateVectorTest::onEnter()
     CCASSERT(vec7.size() == 20, "vec7's size is 20.");
     for (const auto& child : vec7)
     {
-        AX_UNUSED_PARAM(child);
+        CC_UNUSED_PARAM(child);
         CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
@@ -339,7 +339,7 @@ void TemplateVectorTest::onEnter()
 
     for (const auto& child : vecSelfAssign)
     {
-        AX_UNUSED_PARAM(child);
+        CC_UNUSED_PARAM(child);
         CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
@@ -348,7 +348,7 @@ void TemplateVectorTest::onEnter()
 
     for (const auto& child : vecSelfAssign)
     {
-        AX_UNUSED_PARAM(child);
+        CC_UNUSED_PARAM(child);
         CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
@@ -396,7 +396,7 @@ void TemplateMapTest::onEnter()
     auto map2 = createMap();
     for (const auto& e : map2)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 2, "e.second element's reference count is 2.");
     }
 
@@ -404,7 +404,7 @@ void TemplateMapTest::onEnter()
     auto map3(map2);
     for (const auto& e : map3)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 3, "e.second's reference count is 3.");
     }
 
@@ -416,7 +416,7 @@ void TemplateMapTest::onEnter()
     CCASSERT(unusedNode->getReferenceCount() == 1, "unusedNode's reference count is 1.");
     for (const auto& e : map4)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
     }
 
@@ -425,7 +425,7 @@ void TemplateMapTest::onEnter()
     map5 = map4;
     for (const auto& e : map5)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 3, "e.second's reference count is 3.");
     }
 
@@ -434,7 +434,7 @@ void TemplateMapTest::onEnter()
 
     for (const auto& e : map4)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second == map5.find(e.first)->second, "e.second can't be found in map5.");
     }
 
@@ -478,7 +478,7 @@ void TemplateMapTest::onEnter()
 
     // find
     auto nodeToFind = map4.find("10");
-    AX_UNUSED_PARAM(nodeToFind);
+    CC_UNUSED_PARAM(nodeToFind);
     CCASSERT(nodeToFind->second->getTag() == 1010, "nodeToFind's tag value is 1010.");
 
     // insert
@@ -524,7 +524,7 @@ void TemplateMapTest::onEnter()
 
     for (const auto& e : mapForClearCopy)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
     }
 
@@ -546,7 +546,7 @@ void TemplateMapTest::onEnter()
 
     for (const auto& e : mapForSelfAssign)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
     }
 
@@ -555,7 +555,7 @@ void TemplateMapTest::onEnter()
 
     for (const auto& e : mapForSelfAssign)
     {
-        AX_UNUSED_PARAM(e);
+        CC_UNUSED_PARAM(e);
         CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference's count is 2.");
     }
 }
@@ -775,101 +775,101 @@ void UIHelperSubStringTest::onEnter()
     {
         // Trivial case
         std::string source = "abcdefghij";
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "ab");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "cd");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 2) == "ef");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "ab");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "cd");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 2) == "ef");
     }
     {
         // Empty string
         std::string source = "";
 
         // OK
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
 
         // Error: These cases cause "out of range" error
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
     }
     {
         // Ascii
         std::string source = "abc";
 
         // OK
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "abc");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "abc");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 2) == "bc");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 3) == "bc");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 1) == "c");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "c");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 2) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "abc");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "abc");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 2) == "bc");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 3) == "bc");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 1) == "c");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "c");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 2) == "");
 
         // Error: These cases cause "out of range" error
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 1) == "");
     }
     {
         // CJK characters
         std::string source = "这里是中文测试例";
 
         // OK
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 7, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "\xe8\xbf\x99");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 8) ==
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 7, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "\xe8\xbf\x99");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 8) ==
                   "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 100) ==
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 100) ==
                   "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 5) ==
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 5) ==
                   "\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 2) == "\xe8\xaf\x95\xe4\xbe\x8b");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 100) == "\xe8\xaf\x95\xe4\xbe\x8b");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 2) == "\xe8\xaf\x95\xe4\xbe\x8b");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 100) == "\xe8\xaf\x95\xe4\xbe\x8b");
 
         // Error: These cases cause "out of range" error
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 1) == "");
     }
     {
         // Redundant UTF-8 sequence for Directory traversal attack (1)
         std::string source = "\xC0\xAF";
 
         // Error: Can't convert string to correct encoding such as UTF-32
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "");
     }
     {
         // Redundant UTF-8 sequence for Directory traversal attack (2)
         std::string source = "\xE0\x80\xAF";
 
         // Error: Can't convert string to correct encoding such as UTF-32
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "");
     }
     {
         // Redundant UTF-8 sequence for Directory traversal attack (3)
         std::string source = "\xF0\x80\x80\xAF";
 
         // Error: Can't convert string to correct encoding such as UTF-32
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
-        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "");
     }
 }
 

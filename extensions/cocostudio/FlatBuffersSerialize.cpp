@@ -124,12 +124,12 @@ FlatBuffersSerialize* FlatBuffersSerialize::getInstance()
 
 void FlatBuffersSerialize::purge()
 {
-    AX_SAFE_DELETE(_instanceFlatBuffersSerialize);
+    CC_SAFE_DELETE(_instanceFlatBuffersSerialize);
 }
 
 void FlatBuffersSerialize::destroyInstance()
 {
-    AX_SAFE_DELETE(_instanceFlatBuffersSerialize);
+    CC_SAFE_DELETE(_instanceFlatBuffersSerialize);
 }
 
 void FlatBuffersSerialize::deleteFlatBufferBuilder()
@@ -137,7 +137,7 @@ void FlatBuffersSerialize::deleteFlatBufferBuilder()
     if (_builder != nullptr)
     {
         _builder->Clear();
-        AX_SAFE_DELETE(_builder);
+        CC_SAFE_DELETE(_builder);
     }
 }
 

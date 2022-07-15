@@ -52,7 +52,7 @@ struct transformValues_;
 #    undef SPRITE_RENDER_IN_SUBPIXEL
 #endif
 
-#if AX_SPRITEBATCHNODE_RENDER_SUBPIXEL
+#if CC_SPRITEBATCHNODE_RENDER_SUBPIXEL
 #    define SPRITE_RENDER_IN_SUBPIXEL
 #else
 #    define SPRITE_RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
@@ -98,7 +98,7 @@ struct transformValues_;
  *
  * The default anchorPoint in Sprite is (0.5, 0.5).
  */
-class AX_DLL Sprite : public Node, public TextureProtocol
+class CC_DLL Sprite : public Node, public TextureProtocol
 {
 public:
     enum class RenderMode
@@ -660,9 +660,9 @@ protected:
     TrianglesCommand _trianglesCommand;
 
     backend::UniformLocation _mvpMatrixLocation;
-#if AX_SPRITE_DEBUG_DRAW
+#if CC_SPRITE_DEBUG_DRAW
     DrawNode* _debugDrawNode = nullptr;
-#endif  // AX_SPRITE_DEBUG_DRAW
+#endif  // CC_SPRITE_DEBUG_DRAW
     //
     // Shared data
     //
@@ -702,7 +702,7 @@ protected:
     bool _stretchEnabled = true;
 
 private:
-    AX_DISALLOW_COPY_AND_ASSIGN(Sprite);
+    CC_DISALLOW_COPY_AND_ASSIGN(Sprite);
 };
 
 // end of sprite_nodes group

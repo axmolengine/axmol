@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __AX_LUA_ENGINE_H__
-#define __AX_LUA_ENGINE_H__
+#ifndef __CC_LUA_ENGINE_H__
+#define __CC_LUA_ENGINE_H__
 
 extern "C" {
 #include "lua.h"
@@ -50,7 +50,7 @@ NS_AX_BEGIN
  * @lua NA
  * @js NA
  */
-class AX_LUA_DLL LuaEngine : public ScriptEngineProtocol
+class CC_LUA_DLL LuaEngine : public ScriptEngineProtocol
 {
 public:
     /**
@@ -64,7 +64,7 @@ public:
      *
      * @return the instance of LuaEngine.
      */
-    AX_DEPRECATED_ATTRIBUTE static LuaEngine* defaultEngine(void) { return LuaEngine::getInstance(); }
+    CC_DEPRECATED_ATTRIBUTE static LuaEngine* defaultEngine(void) { return LuaEngine::getInstance(); }
 
     /**
      * Destructor of LuaEngine.
@@ -264,4 +264,4 @@ NS_AX_END
 // end group
 /// @}
 
-#endif  // __AX_LUA_ENGINE_H__
+#endif  // __CC_LUA_ENGINE_H__

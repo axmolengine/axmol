@@ -126,7 +126,7 @@ class GroupCommandManager;
 
 Whenever possible prefer to use `TrianglesCommand` objects since the renderer will automatically batch them.
  */
-class AX_DLL Renderer
+class CC_DLL Renderer
 {
 public:
     /**The max number of vertices in a vertex buffer object.*/

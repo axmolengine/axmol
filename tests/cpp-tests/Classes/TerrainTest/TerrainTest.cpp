@@ -58,7 +58,7 @@ TerrainSimple::TerrainSimple()
     _terrain->setCameraMask(2);
     _terrain->setDrawWire(false);
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(TerrainSimple::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(TerrainSimple::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     //     add Particle3D for test blend
     auto rootps = PUParticleSystem3D::create("Particle3D/scripts/mp_torch.pu");
@@ -113,8 +113,8 @@ std::string TerrainWalkThru::subtitle() const
 TerrainWalkThru::TerrainWalkThru()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = AX_CALLBACK_2(TerrainWalkThru::onTouchesBegan, this);
-    listener->onTouchesEnded = AX_CALLBACK_2(TerrainWalkThru::onTouchesEnd, this);
+    listener->onTouchesBegan = CC_CALLBACK_2(TerrainWalkThru::onTouchesBegan, this);
+    listener->onTouchesEnded = CC_CALLBACK_2(TerrainWalkThru::onTouchesEnd, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -334,7 +334,7 @@ Player* Player::create(const char* file, Camera* cam, Terrain* terrain)
         player->scheduleUpdate();
         return player;
     }
-    AX_SAFE_DELETE(player);
+    CC_SAFE_DELETE(player);
     return nullptr;
 }
 
@@ -361,7 +361,7 @@ TerrainWithLightMap::TerrainWithLightMap()
     _terrain->setDrawWire(false);
     _terrain->setLightMap("TerrainTest/Lightmap.png");
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = AX_CALLBACK_2(TerrainWithLightMap::onTouchesMoved, this);
+    listener->onTouchesMoved = CC_CALLBACK_2(TerrainWithLightMap::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 std::string TerrainWithLightMap::title() const

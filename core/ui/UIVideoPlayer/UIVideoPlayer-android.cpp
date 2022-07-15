@@ -26,7 +26,7 @@
 
 #include "ui/UIVideoPlayer/UIVideoPlayer.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <jni.h>
@@ -113,7 +113,7 @@ VideoPlayer::VideoPlayer()
     _videoPlayerIndex                    = createVideoWidgetJNI();
     s_allVideoPlayers[_videoPlayerIndex] = this;
 
-#    if AX_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
 #    endif
@@ -169,7 +169,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
                                         (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);
     }
 
-#    if AX_VIDEOPLAYER_DEBUG_DRAW
+#    if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
     auto size         = getContentSize();
     Point vertices[4] = {Point::ZERO, Point(size.width, 0), Point(size.width, size.height), Point(0, size.height)};

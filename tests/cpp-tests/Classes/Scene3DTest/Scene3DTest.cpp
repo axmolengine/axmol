@@ -240,7 +240,7 @@ bool Scene3DTestScene::init()
     bool ret = false;
     do
     {
-        AX_BREAK_IF(false == TestCase::init());
+        CC_BREAK_IF(false == TestCase::init());
 
         // prepare for camera creation, we need several custom cameras
         _gameCameras.resize(CAMERA_COUNT);
@@ -350,8 +350,8 @@ bool Scene3DTestScene::init()
         ////////////////////////////////////////////////////////////////////////
         // add touch event callback
         auto listener          = EventListenerTouchOneByOne::create();
-        listener->onTouchBegan = AX_CALLBACK_2(Scene3DTestScene::onTouchBegan, this);
-        listener->onTouchEnded = AX_CALLBACK_2(Scene3DTestScene::onTouchEnd, this);
+        listener->onTouchBegan = CC_CALLBACK_2(Scene3DTestScene::onTouchBegan, this);
+        listener->onTouchEnded = CC_CALLBACK_2(Scene3DTestScene::onTouchEnd, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         ret = true;
