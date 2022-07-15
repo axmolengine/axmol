@@ -50,7 +50,7 @@ TransitionProgress* TransitionProgress::create(float t, Scene* scene)
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 
@@ -87,7 +87,7 @@ void TransitionProgress::onEnter()
 
     // create the blend action
     auto layerAction = Sequence::create(ProgressFromTo::create(_duration, _from, _to),
-                                        CallFunc::create(CC_CALLBACK_0(TransitionScene::finish, this)), nullptr);
+                                        CallFunc::create(AX_CALLBACK_0(TransitionScene::finish, this)), nullptr);
     // run the blend action
     node->runAction(layerAction);
 
@@ -150,7 +150,7 @@ TransitionProgressRadialCCW* TransitionProgressRadialCCW::create(float t, Scene*
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 
@@ -163,7 +163,7 @@ TransitionProgressRadialCW* TransitionProgressRadialCW::create(float t, Scene* s
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 
@@ -195,7 +195,7 @@ TransitionProgressHorizontal* TransitionProgressHorizontal::create(float t, Scen
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 
@@ -228,7 +228,7 @@ TransitionProgressVertical* TransitionProgressVertical::create(float t, Scene* s
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 
@@ -261,7 +261,7 @@ TransitionProgressInOut* TransitionProgressInOut::create(float t, Scene* scene)
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 
@@ -306,7 +306,7 @@ TransitionProgressOutIn* TransitionProgressOutIn::create(float t, Scene* scene)
         newScene->autorelease();
         return newScene;
     }
-    CC_SAFE_DELETE(newScene);
+    AX_SAFE_DELETE(newScene);
     return nullptr;
 }
 

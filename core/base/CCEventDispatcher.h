@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_EVENT_DISPATCHER_H__
-#define __CC_EVENT_DISPATCHER_H__
+#ifndef __AX_EVENT_DISPATCHER_H__
+#define __AX_EVENT_DISPATCHER_H__
 
 #include <functional>
 #include <string>
@@ -60,7 +60,7 @@ from within an EventListener, while events are being
 dispatched.
 @js NA
 */
-class CC_DLL EventDispatcher : public Ref
+class AX_DLL EventDispatcher : public Ref
 {
 public:
     // Adds event listener.
@@ -196,7 +196,7 @@ public:
      */
     ~EventDispatcher();
 
-#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
 
     /**
      * To help track down event listener issues in debug builds.
@@ -360,4 +360,4 @@ NS_AX_END
 // end of base group
 /// @}
 
-#endif  // __CC_EVENT_DISPATCHER_H__
+#endif  // __AX_EVENT_DISPATCHER_H__

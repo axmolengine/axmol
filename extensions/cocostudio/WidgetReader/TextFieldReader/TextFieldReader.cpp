@@ -46,7 +46,7 @@ TextFieldReader* TextFieldReader::getInstance()
 
 void TextFieldReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceTextFieldReader);
+    AX_SAFE_DELETE(instanceTextFieldReader);
 }
 
 void TextFieldReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
@@ -63,9 +63,9 @@ void TextFieldReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* c
         std::string value = stChildArray[i].GetValue(cocoLoader);
 
         // read all basic properties of widget
-        CC_BASIC_PROPERTY_BINARY_READER
+        AX_BASIC_PROPERTY_BINARY_READER
         // read all color related properties of widget
-        CC_COLOR_PROPERTY_BINARY_READER
+        AX_COLOR_PROPERTY_BINARY_READER
 
         else if (key == P_PlaceHolder) { textField->setPlaceHolder(value); }
         else if (key == P_Text) { textField->setString(value); }

@@ -188,7 +188,7 @@ std::string TextureASTC::title() const
 TextureETC1Alpha::TextureETC1Alpha()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(TextureETC1Alpha::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(TextureETC1Alpha::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -269,7 +269,7 @@ std::string TextureETC1Alpha::subtitle() const
 TextureETC2::TextureETC2()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(TextureETC2::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(TextureETC2::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -332,7 +332,7 @@ std::string TextureETC2::subtitle() const
 TextureBMP::TextureBMP()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(TextureBMP::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(TextureBMP::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
@@ -875,7 +875,7 @@ void TexturePVRRGBA4444GZ::onEnter()
     TextureDemo::onEnter();
     auto s = Director::getInstance()->getWinSize();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     // android can not pack .gz file into apk file
     auto img = Sprite::create("Images/test_image_rgba4444.pvr");
 #else
@@ -1739,7 +1739,7 @@ void TextureAsync::onEnter()
     auto seq        = Sequence::create(scale, scale_back, nullptr);
     label->runAction(RepeatForever::create(seq));
 
-    scheduleOnce(CC_SCHEDULE_SELECTOR(TextureAsync::loadImages), 1.0f);
+    scheduleOnce(AX_SCHEDULE_SELECTOR(TextureAsync::loadImages), 1.0f);
 }
 
 TextureAsync::~TextureAsync()
@@ -1758,15 +1758,15 @@ void TextureAsync::loadImages(float dt)
         {
             char szSpriteName[100] = {0};
             sprintf(szSpriteName, "Images/sprites_test/sprite-%d-%d.png", i, j);
-            textureCache->addImageAsync(szSpriteName, CC_CALLBACK_1(TextureAsync::imageLoaded, this));
+            textureCache->addImageAsync(szSpriteName, AX_CALLBACK_1(TextureAsync::imageLoaded, this));
         }
     }
 
-    textureCache->addImageAsync("Images/background1.jpg", CC_CALLBACK_1(TextureAsync::imageLoaded, this));
-    textureCache->addImageAsync("Images/background2.jpg", CC_CALLBACK_1(TextureAsync::imageLoaded, this));
-    textureCache->addImageAsync("Images/background.png", CC_CALLBACK_1(TextureAsync::imageLoaded, this));
-    textureCache->addImageAsync("Images/atlastest.png", CC_CALLBACK_1(TextureAsync::imageLoaded, this));
-    textureCache->addImageAsync("Images/grossini_dance_atlas.png", CC_CALLBACK_1(TextureAsync::imageLoaded, this));
+    textureCache->addImageAsync("Images/background1.jpg", AX_CALLBACK_1(TextureAsync::imageLoaded, this));
+    textureCache->addImageAsync("Images/background2.jpg", AX_CALLBACK_1(TextureAsync::imageLoaded, this));
+    textureCache->addImageAsync("Images/background.png", AX_CALLBACK_1(TextureAsync::imageLoaded, this));
+    textureCache->addImageAsync("Images/atlastest.png", AX_CALLBACK_1(TextureAsync::imageLoaded, this));
+    textureCache->addImageAsync("Images/grossini_dance_atlas.png", AX_CALLBACK_1(TextureAsync::imageLoaded, this));
 }
 
 void TextureAsync::imageLoaded(Texture2D* texture)
@@ -2096,19 +2096,19 @@ void TextureMemoryAlloc::onEnter()
 
     MenuItemFont::setFontSize(24);
 
-    auto item1 = MenuItemFont::create("PNG", CC_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
+    auto item1 = MenuItemFont::create("PNG", AX_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
     item1->setTag(0);
 
-    auto item2 = MenuItemFont::create("RGBA8", CC_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
+    auto item2 = MenuItemFont::create("RGBA8", AX_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
     item2->setTag(1);
 
-    auto item3 = MenuItemFont::create("RGB8", CC_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
+    auto item3 = MenuItemFont::create("RGB8", AX_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
     item3->setTag(2);
 
-    auto item4 = MenuItemFont::create("RGBA4", CC_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
+    auto item4 = MenuItemFont::create("RGBA4", AX_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
     item4->setTag(3);
 
-    auto item5 = MenuItemFont::create("A8", CC_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
+    auto item5 = MenuItemFont::create("A8", AX_CALLBACK_1(TextureMemoryAlloc::updateImage, this));
     item5->setTag(4);
 
     auto menu = Menu::create(item1, item2, item3, item4, item5, nullptr);
@@ -2117,7 +2117,7 @@ void TextureMemoryAlloc::onEnter()
     addChild(menu);
 
     auto warmup =
-        MenuItemFont::create("warm up texture", CC_CALLBACK_1(TextureMemoryAlloc::changeBackgroundVisible, this));
+        MenuItemFont::create("warm up texture", AX_CALLBACK_1(TextureMemoryAlloc::changeBackgroundVisible, this));
 
     auto menu2 = Menu::create(warmup, nullptr);
 

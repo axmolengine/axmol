@@ -45,7 +45,7 @@ GLViewImpl* GLViewImpl::createWithEAGLView(void* eaglview)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -57,7 +57,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -69,7 +69,7 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const Rect& re
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -81,7 +81,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -151,7 +151,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float
                                      numberOfSamples:0];
 
     // Not available on tvOS
-#if !defined(CC_TARGET_OS_TVOS)
+#if !defined(AX_TARGET_OS_TVOS)
     [eaglview setMultipleTouchEnabled:YES];
 #endif
 
@@ -183,7 +183,7 @@ bool GLViewImpl::isOpenGLReady()
 
 bool GLViewImpl::setContentScaleFactor(float contentScaleFactor)
 {
-    CC_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
+    AX_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
     _scaleX = _scaleY = contentScaleFactor;
 
     CCEAGLView* eaglview = (CCEAGLView*)_eaglview;

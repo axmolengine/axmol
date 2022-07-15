@@ -26,7 +26,7 @@
 #pragma once
 
 #include "base/ccConfig.h"
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 
 #    include "renderer/CCRenderState.h"
 #    include "renderer/backend/ProgramState.h"
@@ -122,4 +122,4 @@ private:
 
 NS_AX_END
 
-#endif  // CC_USE_NAVMESH
+#endif  // AX_USE_NAVMESH

@@ -52,22 +52,22 @@ const char* SHADER_LAYER_RADIAL_GRADIENT                = "ShaderLayerRadialGrad
 namespace uniform
 {
 // uniform names
-const char* UNIFORM_NAME_AMBIENT_COLOR        = "CC_AmbientColor";
-const char* UNIFORM_NAME_P_MATRIX             = "CC_PMatrix";
-const char* UNIFORM_NAME_MULTIVIEW_P_MATRIX   = "CC_MultiViewPMatrix";
-const char* UNIFORM_NAME_MV_MATRIX            = "CC_MVMatrix";
-const char* UNIFORM_NAME_MVP_MATRIX           = "CC_MVPMatrix";
-const char* UNIFORM_NAME_MULTIVIEW_MVP_MATRIX = "CC_MultiViewMVPMatrix";
-const char* UNIFORM_NAME_NORMAL_MATRIX        = "CC_NormalMatrix";
-const char* UNIFORM_NAME_TIME                 = "CC_Time";
-const char* UNIFORM_NAME_SIN_TIME             = "CC_SinTime";
-const char* UNIFORM_NAME_COS_TIME             = "CC_CosTime";
-const char* UNIFORM_NAME_RANDOM01             = "CC_Random01";
-const char* UNIFORM_NAME_SAMPLER0             = "CC_Texture0";
-const char* UNIFORM_NAME_SAMPLER1             = "CC_Texture1";
-const char* UNIFORM_NAME_SAMPLER2             = "CC_Texture2";
-const char* UNIFORM_NAME_SAMPLER3             = "CC_Texture3";
-const char* UNIFORM_NAME_ALPHA_TEST_VALUE     = "CC_alpha_value";
+const char* UNIFORM_NAME_AMBIENT_COLOR        = "AX_AmbientColor";
+const char* UNIFORM_NAME_P_MATRIX             = "AX_PMatrix";
+const char* UNIFORM_NAME_MULTIVIEW_P_MATRIX   = "AX_MultiViewPMatrix";
+const char* UNIFORM_NAME_MV_MATRIX            = "AX_MVMatrix";
+const char* UNIFORM_NAME_MVP_MATRIX           = "AX_MVPMatrix";
+const char* UNIFORM_NAME_MULTIVIEW_MVP_MATRIX = "AX_MultiViewMVPMatrix";
+const char* UNIFORM_NAME_NORMAL_MATRIX        = "AX_NormalMatrix";
+const char* UNIFORM_NAME_TIME                 = "AX_Time";
+const char* UNIFORM_NAME_SIN_TIME             = "AX_SinTime";
+const char* UNIFORM_NAME_COS_TIME             = "AX_CosTime";
+const char* UNIFORM_NAME_RANDOM01             = "AX_Random01";
+const char* UNIFORM_NAME_SAMPLER0             = "AX_Texture0";
+const char* UNIFORM_NAME_SAMPLER1             = "AX_Texture1";
+const char* UNIFORM_NAME_SAMPLER2             = "AX_Texture2";
+const char* UNIFORM_NAME_SAMPLER3             = "AX_Texture3";
+const char* UNIFORM_NAME_ALPHA_TEST_VALUE     = "AX_alpha_value";
 }  // namespace uniform
 
 namespace attribute

@@ -43,8 +43,8 @@ VertexAttribBinding::~VertexAttribBinding()
         __vertexAttribBindingCache.erase(itr);
     }
 
-    CC_SAFE_RELEASE(_meshIndexData);
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_meshIndexData);
+    AX_SAFE_RELEASE(_programState);
     _attributes.clear();
 }
 
@@ -57,7 +57,7 @@ VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, P
     for (size_t i = 0, count = __vertexAttribBindingCache.size(); i < count; ++i)
     {
         b = __vertexAttribBindingCache[i];
-        CC_ASSERT(b);
+        AX_ASSERT(b);
         if (b->_meshIndexData == meshIndexData && b->_programState == pass->getProgramState())
         {
             // Found a match!

@@ -39,7 +39,7 @@ NS_AX_BEGIN
 /** @class EventAcceleration
  * @brief Accelerometer event.
  */
-class CC_DLL EventAcceleration : public Event
+class AX_DLL EventAcceleration : public Event
 {
 public:
     /** Constructor.

@@ -1174,7 +1174,7 @@ bool UIS9GrayStateOpacityTest::init()
         slider->setMaxPercent(100);
         slider->setPercent(100 * 100.0f / 255.0);
         slider->setPosition(Vec2(winSize.width / 2.0f, winSize.height / 2.0f - 100));
-        slider->addEventListener(CC_CALLBACK_2(UIS9GrayStateOpacityTest::sliderEvent, this));
+        slider->addEventListener(AX_CALLBACK_2(UIS9GrayStateOpacityTest::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         return true;

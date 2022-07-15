@@ -79,8 +79,8 @@ public:
     /*
      * @deprecated, please use changeDisplayWithIndex and changeDisplayWithName
      */
-    CC_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
-    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
+    AX_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
+    AX_DEPRECATED_ATTRIBUTE void changeDisplayByName(std::string_view name, bool force);
 
     /**
      * Change display by index. You can just use this method to change display in the display list.

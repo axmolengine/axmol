@@ -44,7 +44,7 @@ EventListenerMouse* EventListenerMouse::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -62,7 +62,7 @@ EventListenerMouse* EventListenerMouse::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

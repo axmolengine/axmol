@@ -163,7 +163,7 @@ PUParticle3D::~PUParticle3D()
         it->release();
     }
 
-    // CC_SAFE_RELEASE(particleEntityPtr);
+    // AX_SAFE_RELEASE(particleEntityPtr);
 }
 
 void PUParticle3D::copyBehaviours(const ParticleBehaviourList& list)
@@ -269,7 +269,7 @@ PUParticleSystem3D* PUParticleSystem3D::create(std::string_view filePath, std::s
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 }
@@ -284,7 +284,7 @@ PUParticleSystem3D* PUParticleSystem3D::create(std::string_view filePath)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 }
@@ -1148,14 +1148,14 @@ void PUParticleSystem3D::addBehaviourTemplate(PUBehaviour* behaviour)
 
 void PUParticleSystem3D::convertToUnixStylePath(std::string& path)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     for (auto& iter : path)
     {
         if (iter == '\\')
             iter = '/';
     }
 #else
-    CC_UNUSED_PARAM(path);
+    AX_UNUSED_PARAM(path);
 #endif
 }
 

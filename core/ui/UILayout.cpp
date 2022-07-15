@@ -84,8 +84,8 @@ Layout::Layout()
 
 Layout::~Layout()
 {
-    CC_SAFE_RELEASE(_clippingStencil);
-    CC_SAFE_DELETE(_stencilStateManager);
+    AX_SAFE_RELEASE(_clippingStencil);
+    AX_SAFE_DELETE(_stencilStateManager);
 }
 
 void Layout::onEnter()
@@ -128,7 +128,7 @@ Layout* Layout::create()
         layout->autorelease();
         return layout;
     }
-    CC_SAFE_DELETE(layout);
+    AX_SAFE_DELETE(layout);
     return nullptr;
 }
 
@@ -139,7 +139,7 @@ bool Layout::init()
         ignoreContentAdaptWithSize(false);
         setContentSize(Vec2::ZERO);
         setAnchorPoint(Vec2::ZERO);
-        onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
+        onPassFocusToChild = AX_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         return true;
     }
     return false;
@@ -254,7 +254,7 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
     //    _beforeVisitCmdStencil.init(_globalZOrder);
-    //    _beforeVisitCmdStencil.func = CC_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
+    //    _beforeVisitCmdStencil.func = AX_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
     //    renderer->addCommand(&_beforeVisitCmdStencil);
     _stencilStateManager->onBeforeVisit(_globalZOrder);
 
@@ -262,7 +262,7 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
 
     auto afterDrawStencilCmd = renderer->nextCallbackCommand();
     afterDrawStencilCmd->init(_globalZOrder);
-    afterDrawStencilCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
+    afterDrawStencilCmd->func = AX_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
     renderer->addCommand(afterDrawStencilCmd);
 
     int i = 0;  // used by _children
@@ -310,7 +310,7 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
 
     auto afterVisitCmdStencil = renderer->nextCallbackCommand();
     afterVisitCmdStencil->init(_globalZOrder);
-    afterVisitCmdStencil->func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
+    afterVisitCmdStencil->func = AX_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
     renderer->addCommand(afterVisitCmdStencil);
 
     renderer->popGroup();
@@ -375,14 +375,14 @@ void Layout::scissorClippingVisit(Renderer* renderer, const Mat4& parentTransfor
 
     auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
     beforeVisitCmdScissor->init(_globalZOrder);
-    beforeVisitCmdScissor->func = CC_CALLBACK_0(Layout::onBeforeVisitScissor, this);
+    beforeVisitCmdScissor->func = AX_CALLBACK_0(Layout::onBeforeVisitScissor, this);
     renderer->addCommand(beforeVisitCmdScissor);
 
     ProtectedNode::visit(renderer, parentTransform, parentFlags);
 
     auto afterVisitCmdScissor = renderer->nextCallbackCommand();
     afterVisitCmdScissor->init(_globalZOrder);
-    afterVisitCmdScissor->func = CC_CALLBACK_0(Layout::onAfterVisitScissor, this);
+    afterVisitCmdScissor->func = AX_CALLBACK_0(Layout::onAfterVisitScissor, this);
     renderer->addCommand(afterVisitCmdScissor);
 
     renderer->popGroup();
@@ -1312,44 +1312,44 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
     {
         if (previousWidgetPosition.x > widgetPosition.x)
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         }
         else
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
         }
     }
     else if (dir == FocusDirection::RIGHT)
     {
         if (previousWidgetPosition.x > widgetPosition.x)
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
         }
         else
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         }
     }
     else if (dir == FocusDirection::DOWN)
     {
         if (previousWidgetPosition.y > widgetPosition.y)
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         }
         else
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
         }
     }
     else if (dir == FocusDirection::UP)
     {
         if (previousWidgetPosition.y < widgetPosition.y)
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         }
         else
         {
-            onPassFocusToChild = CC_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
+            onPassFocusToChild = AX_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
         }
     }
     else

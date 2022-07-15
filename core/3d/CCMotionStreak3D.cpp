@@ -54,7 +54,7 @@ MotionStreak3D::MotionStreak3D()
 
 MotionStreak3D::~MotionStreak3D()
 {
-    CC_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_texture);
 }
 
 MotionStreak3D* MotionStreak3D::create(float fade,
@@ -70,7 +70,7 @@ MotionStreak3D* MotionStreak3D::create(float fade,
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -83,7 +83,7 @@ MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, c
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -274,8 +274,8 @@ void MotionStreak3D::setTexture(Texture2D* texture)
 {
     if (_texture != texture)
     {
-        CC_SAFE_RETAIN(texture);
-        CC_SAFE_RELEASE(_texture);
+        AX_SAFE_RETAIN(texture);
+        AX_SAFE_RELEASE(_texture);
         _texture = texture;
         _programState->setTexture(_locTexture, 0, _texture->getBackendTexture());
     }
@@ -432,8 +432,8 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
 
     _programState->setUniform(_locMVP, mvpMatrix.m, sizeof(mvpMatrix.m));
 
-    beforeCommand->func = CC_CALLBACK_0(MotionStreak3D::onBeforeDraw, this);
-    afterCommand->func  = CC_CALLBACK_0(MotionStreak3D::onAfterDraw, this);
+    beforeCommand->func = AX_CALLBACK_0(MotionStreak3D::onBeforeDraw, this);
+    afterCommand->func  = AX_CALLBACK_0(MotionStreak3D::onAfterDraw, this);
 
     _customCommand.updateVertexBuffer(_vertexData.data(), sizeof(_vertexData[0]) * _nuPoints * 2);
 
@@ -442,7 +442,7 @@ void MotionStreak3D::draw(Renderer* renderer, const Mat4& transform, uint32_t fl
     renderer->addCommand(beforeCommand);
     renderer->addCommand(&_customCommand);
     renderer->addCommand(afterCommand);
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _nuPoints * 2);
+    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _nuPoints * 2);
 }
 
 void MotionStreak3D::onBeforeDraw()

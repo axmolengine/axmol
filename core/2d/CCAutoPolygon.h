@@ -45,7 +45,7 @@ NS_AX_BEGIN
  * PolygonInfo is an object holding the required data to display Sprites.
  * It can be a simple as a triangle, or as complex as a whole 3D mesh
  */
-class CC_DLL PolygonInfo
+class AX_DLL PolygonInfo
 {
 public:
     /// @name Creators
@@ -138,7 +138,7 @@ private:
  * It has functions for each step in the process, from tracing all the points, to triangulation
  * the result can be then passed to Sprite::create() to create a Polygon Sprite
  */
-class CC_DLL AutoPolygon
+class AX_DLL AutoPolygon
 {
 public:
     /**

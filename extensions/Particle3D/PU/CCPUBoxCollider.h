@@ -24,14 +24,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_BOX_COLLIDER_H__
-#define __CC_PU_PARTICLE_3D_BOX_COLLIDER_H__
+#ifndef __AX_PU_PARTICLE_3D_BOX_COLLIDER_H__
+#define __AX_PU_PARTICLE_3D_BOX_COLLIDER_H__
 
 #include "CCPUBaseCollider.h"
 
 NS_AX_BEGIN
 
-class CC_EX_DLL PUBoxCollider : public PUBaseCollider
+class AX_EX_DLL PUBoxCollider : public PUBaseCollider
 {
 public:
     static const float DEFAULT_WIDTH;

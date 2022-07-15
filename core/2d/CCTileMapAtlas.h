@@ -53,7 +53,7 @@ You SHOULD not use this class.
 Instead, use the newer TMX file format: TMXTiledMap
 @js NA
 */
-class CC_DLL TileMapAtlas : public AtlasNode
+class AX_DLL TileMapAtlas : public AtlasNode
 {
 public:
     /** creates a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.

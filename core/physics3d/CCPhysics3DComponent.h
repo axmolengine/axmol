@@ -31,9 +31,9 @@
 
 #include "2d/CCComponent.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
@@ -47,7 +47,7 @@ class Physics3DWorld;
 
 /** @brief Physics3DComponent: A component with 3D physics, you can add a rigid body to it, and then add this component
  * to a node, the node will move and rotate with this rigid body */
-class CC_DLL Physics3DComponent : public axis::Component
+class AX_DLL Physics3DComponent : public axis::Component
 {
     friend class Physics3DWorld;
 
@@ -143,8 +143,8 @@ protected:
 /// @}
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_COMPONENT_H__

@@ -1,6 +1,6 @@
 #include "SpineSkeletonDataCache.h"
 
-#if !defined(CC_USE_SPINE_CPP) || CC_USE_SPINE_CPP
+#if !defined(AX_USE_SPINE_CPP) || AX_USE_SPINE_CPP
 SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 {
     static SpineSkeletonDataCache internalShared;

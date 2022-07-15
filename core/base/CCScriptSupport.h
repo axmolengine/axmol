@@ -41,7 +41,7 @@
  * @{
  */
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
 
 typedef struct lua_State lua_State;
 
@@ -587,7 +587,7 @@ struct ScriptEvent
  * ScriptEngine. So a crash will appear on Win32 if you click the close button.
  * @js NA
  */
-class CC_DLL ScriptEngineProtocol
+class AX_DLL ScriptEngineProtocol
 {
 public:
     /**
@@ -783,7 +783,7 @@ class Node;
  * @since v0.99.5-x-0.8.5
  * @js NA
  */
-class CC_DLL ScriptEngineManager
+class AX_DLL ScriptEngineManager
 {
 public:
     /**
@@ -866,7 +866,7 @@ private:
 
 NS_AX_END
 
-#endif  // #if CC_ENABLE_SCRIPT_BINDING
+#endif  // #if AX_ENABLE_SCRIPT_BINDING
 
 // end group
 /// @}

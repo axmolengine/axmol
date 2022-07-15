@@ -100,7 +100,7 @@ IMEDispatcher::IMEDispatcher() : _impl(new IMEDispatcher::Impl)
 
 IMEDispatcher::~IMEDispatcher()
 {
-    CC_SAFE_DELETE(_impl);
+    AX_SAFE_DELETE(_impl);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -126,13 +126,13 @@ bool IMEDispatcher::attachDelegateWithIME(IMEDelegate* delegate)
     bool ret = false;
     do
     {
-        CC_BREAK_IF(!_impl || !delegate);
+        AX_BREAK_IF(!_impl || !delegate);
 
         DelegateIter end  = _impl->_delegateList.end();
         DelegateIter iter = _impl->findDelegate(delegate);
 
         // if pDelegate is not in delegate list, return
-        CC_BREAK_IF(end == iter);
+        AX_BREAK_IF(end == iter);
 
         if (_impl->_delegateWithIme)
         {
@@ -141,7 +141,7 @@ bool IMEDispatcher::attachDelegateWithIME(IMEDelegate* delegate)
                 // if old delegate canDetachWithIME return false
                 // or pDelegate canAttachWithIME return false,
                 // do nothing.
-                CC_BREAK_IF(!_impl->_delegateWithIme->canDetachWithIME() || !delegate->canAttachWithIME());
+                AX_BREAK_IF(!_impl->_delegateWithIme->canDetachWithIME() || !delegate->canAttachWithIME());
 
                 // detach first
                 IMEDelegate* oldDelegate = _impl->_delegateWithIme;
@@ -156,7 +156,7 @@ bool IMEDispatcher::attachDelegateWithIME(IMEDelegate* delegate)
         }
 
         // delegate hasn't attached to IME yet
-        CC_BREAK_IF(!delegate->canAttachWithIME());
+        AX_BREAK_IF(!delegate->canAttachWithIME());
 
         _impl->_delegateWithIme = *iter;
         delegate->didAttachWithIME();
@@ -170,12 +170,12 @@ bool IMEDispatcher::detachDelegateWithIME(IMEDelegate* delegate)
     bool ret = false;
     do
     {
-        CC_BREAK_IF(!_impl || !delegate);
+        AX_BREAK_IF(!_impl || !delegate);
 
         // if pDelegate is not the current delegate attached to IME, return
-        CC_BREAK_IF(_impl->_delegateWithIme != delegate);
+        AX_BREAK_IF(_impl->_delegateWithIme != delegate);
 
-        CC_BREAK_IF(!delegate->canDetachWithIME());
+        AX_BREAK_IF(!delegate->canDetachWithIME());
 
         _impl->_delegateWithIme = 0;
         delegate->didDetachWithIME();
@@ -188,11 +188,11 @@ void IMEDispatcher::removeDelegate(IMEDelegate* delegate)
 {
     do
     {
-        CC_BREAK_IF(!delegate || !_impl);
+        AX_BREAK_IF(!delegate || !_impl);
 
         DelegateIter iter = _impl->findDelegate(delegate);
         DelegateIter end  = _impl->_delegateList.end();
-        CC_BREAK_IF(end == iter);
+        AX_BREAK_IF(end == iter);
 
         if (_impl->_delegateWithIme)
 
@@ -212,10 +212,10 @@ void IMEDispatcher::dispatchInsertText(const char* text, size_t len)
 {
     do
     {
-        CC_BREAK_IF(!_impl || !text || len <= 0);
+        AX_BREAK_IF(!_impl || !text || len <= 0);
 
         // there is no delegate attached to IME
-        CC_BREAK_IF(!_impl->_delegateWithIme);
+        AX_BREAK_IF(!_impl->_delegateWithIme);
 
         _impl->_delegateWithIme->insertText(text, len);
     } while (0);
@@ -225,10 +225,10 @@ void IMEDispatcher::dispatchDeleteBackward()
 {
     do
     {
-        CC_BREAK_IF(!_impl);
+        AX_BREAK_IF(!_impl);
 
         // there is no delegate attached to IME
-        CC_BREAK_IF(!_impl->_delegateWithIme);
+        AX_BREAK_IF(!_impl->_delegateWithIme);
 
         _impl->_delegateWithIme->deleteBackward();
     } while (0);
@@ -238,10 +238,10 @@ void IMEDispatcher::dispatchControlKey(EventKeyboard::KeyCode keyCode)
 {
     do
     {
-        CC_BREAK_IF(!_impl);
+        AX_BREAK_IF(!_impl);
 
         // there is no delegate attached to IME
-        CC_BREAK_IF(!_impl->_delegateWithIme);
+        AX_BREAK_IF(!_impl->_delegateWithIme);
 
         _impl->_delegateWithIme->controlKey(keyCode);
     } while (0);

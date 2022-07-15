@@ -65,7 +65,7 @@ UICCTextField* UICCTextField::create(std::string_view placeholder, std::string_v
         }
         return pRet;
     }
-    CC_SAFE_DELETE(pRet);
+    AX_SAFE_DELETE(pRet);
 
     return nullptr;
 }
@@ -288,7 +288,7 @@ TextField* TextField::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -303,7 +303,7 @@ TextField* TextField::create(std::string_view placeholder, std::string_view font
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 

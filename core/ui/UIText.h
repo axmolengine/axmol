@@ -46,7 +46,7 @@ namespace ui
 /**
  *  For creating a system font or a TTF font Text
  */
-class CC_GUI_DLL Text : public Widget, public axis::BlendProtocol
+class AX_GUI_DLL Text : public Widget, public axis::BlendProtocol
 {
 
     DECLARE_CLASS_GUI_INFO

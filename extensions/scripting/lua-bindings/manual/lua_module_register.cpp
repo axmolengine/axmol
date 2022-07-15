@@ -66,10 +66,10 @@ int lua_module_register(lua_State* L)
     register_spine_module(L);
     register_cocos3d_module(L);
     register_audioengine_module(L);
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
     register_physics3d_module(L);
 #endif
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
     register_navmesh_module(L);
 #endif
 

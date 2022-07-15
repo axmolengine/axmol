@@ -43,7 +43,7 @@ Bone* Bone::create()
         pBone->autorelease();
         return pBone;
     }
-    CC_SAFE_DELETE(pBone);
+    AX_SAFE_DELETE(pBone);
     return nullptr;
 }
 
@@ -56,7 +56,7 @@ Bone* Bone::create(std::string_view name)
         pBone->autorelease();
         return pBone;
     }
-    CC_SAFE_DELETE(pBone);
+    AX_SAFE_DELETE(pBone);
     return nullptr;
 }
 
@@ -80,14 +80,14 @@ Bone::Bone()
 
 Bone::~Bone(void)
 {
-    CC_SAFE_DELETE(_tweenData);
-    CC_SAFE_DELETE(_tween);
-    CC_SAFE_DELETE(_displayManager);
-    CC_SAFE_DELETE(_worldInfo);
+    AX_SAFE_DELETE(_tweenData);
+    AX_SAFE_DELETE(_tween);
+    AX_SAFE_DELETE(_displayManager);
+    AX_SAFE_DELETE(_worldInfo);
 
-    CC_SAFE_RELEASE_NULL(_boneData);
+    AX_SAFE_RELEASE_NULL(_boneData);
 
-    CC_SAFE_RELEASE(_childArmature);
+    AX_SAFE_RELEASE(_childArmature);
 }
 
 bool Bone::init()
@@ -103,21 +103,21 @@ bool Bone::init(std::string_view name)
 
         _name = name;
 
-        CC_SAFE_DELETE(_tweenData);
+        AX_SAFE_DELETE(_tweenData);
         _tweenData = new FrameData();
 
-        CC_SAFE_DELETE(_tween);
+        AX_SAFE_DELETE(_tween);
         _tween = new Tween();
         _tween->init(this);
 
-        CC_SAFE_DELETE(_displayManager);
+        AX_SAFE_DELETE(_displayManager);
         _displayManager = new DisplayManager();
         _displayManager->init(this);
 
-        CC_SAFE_DELETE(_worldInfo);
+        AX_SAFE_DELETE(_worldInfo);
         _worldInfo = new BaseData();
 
-        CC_SAFE_DELETE(_boneData);
+        AX_SAFE_DELETE(_boneData);
         _boneData = new BoneData();
 
         bRet = true;
@@ -132,8 +132,8 @@ void Bone::setBoneData(BoneData* boneData)
 
     if (_boneData != boneData)
     {
-        CC_SAFE_RETAIN(boneData);
-        CC_SAFE_RELEASE(_boneData);
+        AX_SAFE_RETAIN(boneData);
+        AX_SAFE_RELEASE(_boneData);
         _boneData = boneData;
     }
 
@@ -192,8 +192,8 @@ void Bone::update(float delta)
         _worldInfo->y      = _worldInfo->y + _position.y;
         _worldInfo->scaleX = _worldInfo->scaleX * _scaleX;
         _worldInfo->scaleY = _worldInfo->scaleY * _scaleY;
-        _worldInfo->skewX  = _worldInfo->skewX + _skewX + CC_DEGREES_TO_RADIANS(_rotationZ_X);
-        _worldInfo->skewY  = _worldInfo->skewY + _skewY - CC_DEGREES_TO_RADIANS(_rotationZ_Y);
+        _worldInfo->skewX  = _worldInfo->skewX + _skewX + AX_DEGREES_TO_RADIANS(_rotationZ_X);
+        _worldInfo->skewY  = _worldInfo->skewY + _skewY - AX_DEGREES_TO_RADIANS(_rotationZ_Y);
 
         if (_parentBone)
         {
@@ -249,17 +249,17 @@ void Bone::setBlendFunc(const BlendFunc& blendFunc)
 
 void Bone::updateDisplayedColor(const Color3B& parentColor)
 {
-#ifdef CC_STUDIO_ENABLED_VIEW
+#ifdef AX_STUDIO_ENABLED_VIEW
     _realColor = Color3B(255, 255, 255);
-#endif  // CC_STUDIO_ENABLED_VIEW
+#endif  // AX_STUDIO_ENABLED_VIEW
     Node::updateDisplayedColor(parentColor);
 }
 
 void Bone::updateDisplayedOpacity(uint8_t parentOpacity)
 {
-#ifdef CC_STUDIO_ENABLED_VIEW
+#ifdef AX_STUDIO_ENABLED_VIEW
     _realOpacity = 255;
-#endif  // CC_STUDIO_ENABLED_VIEW
+#endif  // AX_STUDIO_ENABLED_VIEW
     Node::updateDisplayedOpacity(parentOpacity);
 }
 
@@ -297,7 +297,7 @@ void Bone::addChildBone(Bone* child)
         _children.reserve(4);
     }
 
-    if (_children.getIndex(child) == CC_INVALID_INDEX)
+    if (_children.getIndex(child) == AX_INVALID_INDEX)
     {
         _children.pushBack(child);
         child->setParentBone(this);
@@ -306,7 +306,7 @@ void Bone::addChildBone(Bone* child)
 
 void Bone::removeChildBone(Bone* bone, bool recursion)
 {
-    if (!_children.empty() && _children.getIndex(bone) != CC_INVALID_INDEX)
+    if (!_children.empty() && _children.getIndex(bone) != AX_INVALID_INDEX)
     {
         if (recursion)
         {
@@ -354,8 +354,8 @@ void Bone::setChildArmature(Armature* armature)
             _childArmature->setParentBone(nullptr);
         }
 
-        CC_SAFE_RETAIN(armature);
-        CC_SAFE_RELEASE(_childArmature);
+        AX_SAFE_RETAIN(armature);
+        AX_SAFE_RELEASE(_childArmature);
         _childArmature = armature;
     }
 }

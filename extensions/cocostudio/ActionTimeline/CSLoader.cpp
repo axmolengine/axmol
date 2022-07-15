@@ -79,7 +79,7 @@
 #include "WidgetReader/SkeletonReader/BoneNodeReader.h"
 #include "WidgetReader/SkeletonReader/SkeletonNodeReader.h"
 
-#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
+#if defined(AX_BUILD_WITH_SPINE) && AX_BUILD_WITH_SPINE
 #    include "WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
 #endif
 #include "WidgetReader/RichTextReader/RichTextReader.h"
@@ -197,7 +197,7 @@ CSLoader* CSLoader::getInstance()
 
 void CSLoader::destroyInstance()
 {
-    CC_SAFE_DELETE(_sharedCSLoader);
+    AX_SAFE_DELETE(_sharedCSLoader);
     ActionTimelineCache::destroyInstance();
 }
 
@@ -238,7 +238,7 @@ CSLoader::CSLoader()
 
     /// Added by x-studio
     CREATE_CLASS_NODE_READER_INFO(RichTextReader);
-#if defined(CC_BUILD_WITH_SPINE) && CC_BUILD_WITH_SPINE
+#if defined(AX_BUILD_WITH_SPINE) && AX_BUILD_WITH_SPINE
     CREATE_CLASS_NODE_READER_INFO(SpineSkeletonReader);
 #endif
     CREATE_CLASS_NODE_READER_INFO(RadioButtonReader);
@@ -897,9 +897,9 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
     Node* node       = nullptr;
     do
     {
-        CC_BREAK_IF(data.isNull() || data.getSize() <= 0);
+        AX_BREAK_IF(data.isNull() || data.getSize() <= 0);
         auto csparsebinary = GetCSParseBinary(data.getBytes());
-        CC_BREAK_IF(nullptr == csparsebinary);
+        AX_BREAK_IF(nullptr == csparsebinary);
         auto csBuildId = csparsebinary->version();
         if (csBuildId)
         {
@@ -1004,14 +1004,14 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
-    CC_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
+    AX_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
 
     Data buf = FileUtils::getInstance()->getDataFromFile(fullPath);
 
     if (buf.isNull())
     {
         CCLOG("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.data());
-        CC_ASSERT(false);
+        AX_ASSERT(false);
         return nullptr;
     }
 
@@ -1308,7 +1308,7 @@ bool CSLoader::isCustomWidget(std::string_view type)
     Widget* widget = dynamic_cast<Widget*>(ObjectFactory::getInstance()->createObject(type));
     if (widget)
     {
-        CC_SAFE_DELETE(widget);
+        AX_SAFE_DELETE(widget);
         return true;
     }
 

@@ -92,7 +92,7 @@ BMFontConfiguration* BMFontConfiguration::create(std::string_view FNTfile)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -121,13 +121,13 @@ BMFontConfiguration::~BMFontConfiguration()
     this->purgeFontDefDictionary();
     this->purgeKerningDictionary();
     _atlasName.clear();
-    CC_SAFE_DELETE(_characterSet);
+    AX_SAFE_DELETE(_characterSet);
 }
 
 std::string BMFontConfiguration::description() const
 {
     return StringUtils::format(
-        "<BMFontConfiguration = " CC_FORMAT_PRINTF_SIZE_T " | Glphys:%d Kernings:%d | Image = %s>", (size_t)this,
+        "<BMFontConfiguration = " AX_FORMAT_PRINTF_SIZE_T " | Glphys:%d Kernings:%d | Image = %s>", (size_t)this,
         static_cast<int>(_fontDefDictionary.size()), static_cast<int>(_kerningDictionary.size()), _atlasName.c_str());
 }
 
@@ -596,7 +596,7 @@ FontFNT* FontFNT::create(std::string_view fntFilePath, const Vec2& imageOffset)
 }
 
 FontFNT::FontFNT(BMFontConfiguration* theContfig, const Rect& imageRect, bool imageRotated)
-    : _configuration(theContfig), _imageRectInPoints(CC_RECT_PIXELS_TO_POINTS(imageRect)), _imageRotated(imageRotated)
+    : _configuration(theContfig), _imageRectInPoints(AX_RECT_PIXELS_TO_POINTS(imageRect)), _imageRotated(imageRotated)
 {
     _configuration->retain();
 }
@@ -615,7 +615,7 @@ void FontFNT::purgeCachedData()
     if (s_configurations)
     {
         s_configurations->clear();
-        CC_SAFE_DELETE(s_configurations);
+        AX_SAFE_DELETE(s_configurations);
     }
 }
 
@@ -709,7 +709,7 @@ FontAtlas* FontFNT::newFontAtlas()
 
         FontLetterDefinition tempDefinition;
 
-        const auto tempRect = CC_RECT_PIXELS_TO_POINTS(fontDef.rect);
+        const auto tempRect = AX_RECT_PIXELS_TO_POINTS(fontDef.rect);
 
         tempDefinition.offsetX = fontDef.xOffset;
         tempDefinition.offsetY = fontDef.yOffset;
@@ -751,7 +751,7 @@ FontAtlas* FontFNT::newFontAtlas()
     Texture2D* tempTexture = Director::getInstance()->getTextureCache()->addImage(_configuration->getAtlasName());
     if (!tempTexture)
     {
-        CC_SAFE_RELEASE(tempAtlas);
+        AX_SAFE_RELEASE(tempAtlas);
         return nullptr;
     }
 

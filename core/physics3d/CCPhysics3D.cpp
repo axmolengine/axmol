@@ -25,15 +25,15 @@
 
 #include "physics3d/CCPhysics3D.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
-CC_DLL const char* physics3dVersion()
+AX_DLL const char* physics3dVersion()
 {
-#        if CC_ENABLE_BULLET_INTEGRATION
+#        if AX_ENABLE_BULLET_INTEGRATION
     return "bullet2.82";
 #        endif
 }
@@ -91,6 +91,6 @@ btQuaternion convertQuatTobtQuat(const axis::Quaternion& quat)
     return btQuaternion(quat.x, quat.y, quat.z, quat.w);
 }
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS

@@ -180,7 +180,7 @@ LabelFNTColorAndOpacity::LabelFNTColorAndOpacity()
     label2->setPosition(VisibleRect::center());
     label3->setPosition(VisibleRect::rightTop());
 
-    schedule(CC_CALLBACK_1(LabelFNTColorAndOpacity::step, this), "step_key");
+    schedule(AX_CALLBACK_1(LabelFNTColorAndOpacity::step, this), "step_key");
 }
 
 void LabelFNTColorAndOpacity::step(float dt)
@@ -259,7 +259,7 @@ LabelFNTSpriteActions::LabelFNTSpriteActions()
     auto lastChar = (Sprite*)label2->getLetter(3);
     lastChar->runAction(rot_4ever->clone());
 
-    schedule(CC_CALLBACK_1(LabelFNTSpriteActions::step, this), 0.1f, "step_key");
+    schedule(AX_CALLBACK_1(LabelFNTSpriteActions::step, this), 0.1f, "step_key");
 }
 
 void LabelFNTSpriteActions::step(float dt)
@@ -473,7 +473,7 @@ LabelFNTandTTFEmpty::LabelFNTandTTFEmpty()
     addChild(label3, 0, kTagBitmapAtlas3);
     label3->setPosition(Vec2(s.width / 2, 100.0f));
 
-    schedule(CC_CALLBACK_1(LabelFNTandTTFEmpty::updateStrings, this), 1.0f, "update_strings_key");
+    schedule(AX_CALLBACK_1(LabelFNTandTTFEmpty::updateStrings, this), 1.0f, "update_strings_key");
 
     setEmpty = false;
 }
@@ -593,9 +593,9 @@ bool LabelFNTMultiLineAlignment::init()
     }
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(LabelFNTMultiLineAlignment::onTouchesEnded, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     // ask director the the window size
@@ -609,11 +609,11 @@ bool LabelFNTMultiLineAlignment::init()
 
     MenuItemFont::setFontSize(20);
     auto longSentences =
-        MenuItemFont::create("Long Flowing Sentences", CC_CALLBACK_1(LabelFNTMultiLineAlignment::stringChanged, this));
+        MenuItemFont::create("Long Flowing Sentences", AX_CALLBACK_1(LabelFNTMultiLineAlignment::stringChanged, this));
     auto lineBreaks = MenuItemFont::create("Short Sentences With Intentional Line Breaks",
-                                           CC_CALLBACK_1(LabelFNTMultiLineAlignment::stringChanged, this));
+                                           AX_CALLBACK_1(LabelFNTMultiLineAlignment::stringChanged, this));
     auto mixed      = MenuItemFont::create("Long Sentences Mixed With Intentional Line Breaks",
-                                           CC_CALLBACK_1(LabelFNTMultiLineAlignment::stringChanged, this));
+                                           AX_CALLBACK_1(LabelFNTMultiLineAlignment::stringChanged, this));
     auto stringMenu = Menu::create(longSentences, lineBreaks, mixed, nullptr);
     stringMenu->alignItemsVertically();
 
@@ -627,9 +627,9 @@ bool LabelFNTMultiLineAlignment::init()
 
     MenuItemFont::setFontSize(30);
 
-    auto left   = MenuItemFont::create("Left", CC_CALLBACK_1(LabelFNTMultiLineAlignment::alignmentChanged, this));
-    auto center = MenuItemFont::create("Center", CC_CALLBACK_1(LabelFNTMultiLineAlignment::alignmentChanged, this));
-    auto right  = MenuItemFont::create("Right", CC_CALLBACK_1(LabelFNTMultiLineAlignment::alignmentChanged, this));
+    auto left   = MenuItemFont::create("Left", AX_CALLBACK_1(LabelFNTMultiLineAlignment::alignmentChanged, this));
+    auto center = MenuItemFont::create("Center", AX_CALLBACK_1(LabelFNTMultiLineAlignment::alignmentChanged, this));
+    auto right  = MenuItemFont::create("Right", AX_CALLBACK_1(LabelFNTMultiLineAlignment::alignmentChanged, this));
 
     auto alignmentMenu = Menu::create(left, center, right, nullptr);
     alignmentMenu->alignItemsHorizontallyWithPadding(alignmentItemPadding);
@@ -1055,9 +1055,9 @@ LabelTTFDynamicAlignment::LabelTTFDynamicAlignment()
     addChild(_label);
 
     auto menu = Menu::create(
-        MenuItemFont::create("Left", CC_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentLeft, this)),
-        MenuItemFont::create("Center", CC_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentCenter, this)),
-        MenuItemFont::create("Right", CC_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentRight, this)), nullptr);
+        MenuItemFont::create("Left", AX_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentLeft, this)),
+        MenuItemFont::create("Center", AX_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentCenter, this)),
+        MenuItemFont::create("Right", AX_CALLBACK_1(LabelTTFDynamicAlignment::setAlignmentRight, this)), nullptr);
 
     menu->alignItemsHorizontallyWithPadding(20);
     menu->setPosition(winSize.width / 2, winSize.height * 0.25f);
@@ -1376,7 +1376,7 @@ void LabelShadowTest::onEnter()
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider->setPosition(Vec2(size.width / 2.0f, size.height * 0.15f + slider->getContentSize().height * 2.0f));
     slider->setPercent(52);
-    slider->addEventListener(CC_CALLBACK_2(LabelShadowTest::sliderEvent, this));
+    slider->addEventListener(AX_CALLBACK_2(LabelShadowTest::sliderEvent, this));
     addChild(slider, 999);
 
     auto slider2 = ui::Slider::create();
@@ -1388,7 +1388,7 @@ void LabelShadowTest::onEnter()
     slider2->setPosition(Vec2(size.width * 0.15f, size.height / 2.0f));
     slider2->setRotation(90);
     slider2->setPercent(52);
-    slider2->addEventListener(CC_CALLBACK_2(LabelShadowTest::sliderEvent, this));
+    slider2->addEventListener(AX_CALLBACK_2(LabelShadowTest::sliderEvent, this));
     addChild(slider2, 999);
 
     float subtitleY         = _subtitleLabel->getPosition().y;
@@ -1465,7 +1465,7 @@ LabelCharMapTest::LabelCharMapTest()
     label2->setPosition(Vec2(10, 200));
     label2->setOpacity(32);
 
-    schedule(CC_CALLBACK_1(LabelCharMapTest::step, this), "step_key");
+    schedule(AX_CALLBACK_1(LabelCharMapTest::step, this), "step_key");
 }
 
 void LabelCharMapTest::step(float dt)
@@ -1513,14 +1513,14 @@ LabelCharMapColorTest::LabelCharMapColorTest()
 
     auto fade    = FadeOut::create(1.0f);
     auto fade_in = fade->reverse();
-    auto cb      = CallFunc::create(CC_CALLBACK_0(LabelCharMapColorTest::actionFinishCallback, this));
+    auto cb      = CallFunc::create(AX_CALLBACK_0(LabelCharMapColorTest::actionFinishCallback, this));
     auto seq     = Sequence::create(fade, fade_in, cb, nullptr);
     auto repeat  = RepeatForever::create(seq);
     label2->runAction(repeat);
 
     _time = 0;
 
-    schedule(CC_CALLBACK_1(LabelCharMapColorTest::step, this), "step_key");
+    schedule(AX_CALLBACK_1(LabelCharMapColorTest::step, this), "step_key");
 }
 
 void LabelCharMapColorTest::actionFinishCallback()
@@ -1661,16 +1661,16 @@ LabelAlignmentTest::LabelAlignmentTest()
 
     MenuItemFont::setFontSize(30);
     auto menu = Menu::create(
-        MenuItemFont::create("Left", CC_CALLBACK_1(LabelAlignmentTest::setAlignmentLeft, this)),
-        MenuItemFont::create("Center", CC_CALLBACK_1(LabelAlignmentTest::setAlignmentCenter, this)),
-        MenuItemFont::create("Right", CC_CALLBACK_1(LabelAlignmentTest::setAlignmentRight, this)), nullptr);
+        MenuItemFont::create("Left", AX_CALLBACK_1(LabelAlignmentTest::setAlignmentLeft, this)),
+        MenuItemFont::create("Center", AX_CALLBACK_1(LabelAlignmentTest::setAlignmentCenter, this)),
+        MenuItemFont::create("Right", AX_CALLBACK_1(LabelAlignmentTest::setAlignmentRight, this)), nullptr);
     menu->alignItemsVerticallyWithPadding(4);
     menu->setPosition(Vec2(50.0f, s.height / 2 - 20));
     this->addChild(menu);
 
-    menu = Menu::create(MenuItemFont::create("Top", CC_CALLBACK_1(LabelAlignmentTest::setAlignmentTop, this)),
-                        MenuItemFont::create("Middle", CC_CALLBACK_1(LabelAlignmentTest::setAlignmentMiddle, this)),
-                        MenuItemFont::create("Bottom", CC_CALLBACK_1(LabelAlignmentTest::setAlignmentBottom, this)),
+    menu = Menu::create(MenuItemFont::create("Top", AX_CALLBACK_1(LabelAlignmentTest::setAlignmentTop, this)),
+                        MenuItemFont::create("Middle", AX_CALLBACK_1(LabelAlignmentTest::setAlignmentMiddle, this)),
+                        MenuItemFont::create("Bottom", AX_CALLBACK_1(LabelAlignmentTest::setAlignmentBottom, this)),
                         nullptr);
     menu->alignItemsVerticallyWithPadding(4);
     menu->setPosition(Vec2(s.width - 50, s.height / 2 - 20));
@@ -1793,7 +1793,7 @@ LabelLineHeightTest::LabelLineHeightTest()
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider->setPosition(Vec2(size.width / 2.0f, size.height * 0.15f + slider->getContentSize().height * 2.0f));
     slider->setPercent(label->getLineHeight());
-    slider->addEventListener(CC_CALLBACK_2(LabelLineHeightTest::sliderEvent, this));
+    slider->addEventListener(AX_CALLBACK_2(LabelLineHeightTest::sliderEvent, this));
     addChild(slider);
 }
 
@@ -1837,7 +1837,7 @@ LabelAdditionalKerningTest::LabelAdditionalKerningTest()
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider->setPosition(Vec2(size.width / 2.0f, size.height * 0.15f + slider->getContentSize().height * 2.0f));
     slider->setPercent(0);
-    slider->addEventListener(CC_CALLBACK_2(LabelAdditionalKerningTest::sliderEvent, this));
+    slider->addEventListener(AX_CALLBACK_2(LabelAdditionalKerningTest::sliderEvent, this));
     addChild(slider);
 }
 
@@ -2352,16 +2352,16 @@ void LabelLayoutBaseTest::initAlignmentOption(const axis::Size& size)
     // add text alignment settings
     MenuItemFont::setFontSize(30);
     auto menu = Menu::create(
-        MenuItemFont::create("Left", CC_CALLBACK_1(LabelLayoutBaseTest::setAlignmentLeft, this)),
-        MenuItemFont::create("Center", CC_CALLBACK_1(LabelLayoutBaseTest::setAlignmentCenter, this)),
-        MenuItemFont::create("Right", CC_CALLBACK_1(LabelLayoutBaseTest::setAlignmentRight, this)), nullptr);
+        MenuItemFont::create("Left", AX_CALLBACK_1(LabelLayoutBaseTest::setAlignmentLeft, this)),
+        MenuItemFont::create("Center", AX_CALLBACK_1(LabelLayoutBaseTest::setAlignmentCenter, this)),
+        MenuItemFont::create("Right", AX_CALLBACK_1(LabelLayoutBaseTest::setAlignmentRight, this)), nullptr);
     menu->alignItemsVerticallyWithPadding(4);
     menu->setPosition(Vec2(50.0f, size.height / 2 - 20));
     this->addChild(menu);
 
-    menu = Menu::create(MenuItemFont::create("Top", CC_CALLBACK_1(LabelLayoutBaseTest::setAlignmentTop, this)),
-                        MenuItemFont::create("Middle", CC_CALLBACK_1(LabelLayoutBaseTest::setAlignmentMiddle, this)),
-                        MenuItemFont::create("Bottom", CC_CALLBACK_1(LabelLayoutBaseTest::setAlignmentBottom, this)),
+    menu = Menu::create(MenuItemFont::create("Top", AX_CALLBACK_1(LabelLayoutBaseTest::setAlignmentTop, this)),
+                        MenuItemFont::create("Middle", AX_CALLBACK_1(LabelLayoutBaseTest::setAlignmentMiddle, this)),
+                        MenuItemFont::create("Bottom", AX_CALLBACK_1(LabelLayoutBaseTest::setAlignmentBottom, this)),
                         nullptr);
     menu->alignItemsVerticallyWithPadding(4);
     menu->setPosition(Vec2(size.width - 50, size.height / 2 - 20));
@@ -2767,7 +2767,7 @@ void LabelToggleTypeTest::initToggleCheckboxes()
         float posX               = startPosX + BUTTON_WIDTH * i;
         radioButton->setPosition(Vec2(posX, winSize.height / 2.0f + 70));
         radioButton->setScale(1.2f);
-        radioButton->addEventListener(CC_CALLBACK_2(LabelToggleTypeTest::onChangedRadioButtonSelect, this));
+        radioButton->addEventListener(AX_CALLBACK_2(LabelToggleTypeTest::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
         radioButtonGroup->addRadioButton(radioButton);
         this->addChild(radioButton);
@@ -2913,7 +2913,7 @@ void LabelSystemFontTest::initToggleCheckboxes()
         float posX               = startPosX + BUTTON_WIDTH * i;
         radioButton->setPosition(Vec2(posX, winSize.height / 2.0f + 70));
         radioButton->setScale(1.2f);
-        radioButton->addEventListener(CC_CALLBACK_2(LabelSystemFontTest::onChangedRadioButtonSelect, this));
+        radioButton->addEventListener(AX_CALLBACK_2(LabelSystemFontTest::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
         radioButtonGroup->addRadioButton(radioButton);
         this->addChild(radioButton);
@@ -3313,7 +3313,7 @@ LabelLocalizationTest::LabelLocalizationTest()
         float posX               = startPosX + BUTTON_WIDTH * i;
         radioButton->setPosition(Vec2(posX, winSize.height / 2.0f + 70));
         radioButton->setScale(1.2f);
-        radioButton->addEventListener(CC_CALLBACK_2(LabelLocalizationTest::onChangedRadioButtonSelect, this));
+        radioButton->addEventListener(AX_CALLBACK_2(LabelLocalizationTest::onChangedRadioButtonSelect, this));
         radioButton->setTag(i);
         radioButtonGroup->addRadioButton(radioButton);
         this->addChild(radioButton);
@@ -3571,7 +3571,7 @@ LabelIssue17902::LabelIssue17902()
     label->setPosition(center);
     addChild(label);
 
-    scheduleOnce(CC_CALLBACK_0(LabelIssue17902::purgeCachedData, this), 1.0f, "purge_cached_data");
+    scheduleOnce(AX_CALLBACK_0(LabelIssue17902::purgeCachedData, this), 1.0f, "purge_cached_data");
 }
 
 void LabelIssue17902::purgeCachedData()
@@ -3606,7 +3606,7 @@ LabelIssue20523::LabelIssue20523()
             ++_i;
             _crashingLabel->setString(std::to_string(_i));
         },
-        1, CC_REPEAT_FOREVER, 0, "repeat");
+        1, AX_REPEAT_FOREVER, 0, "repeat");
 }
 
 std::string LabelIssue20523::title() const

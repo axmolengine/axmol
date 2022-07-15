@@ -52,7 +52,7 @@ LuaEngine* LuaEngine::getInstance(void)
 
 LuaEngine::~LuaEngine(void)
 {
-    CC_SAFE_RELEASE(_stack);
+    AX_SAFE_RELEASE(_stack);
     _defaultEngine = nullptr;
 }
 

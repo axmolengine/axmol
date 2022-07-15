@@ -44,7 +44,7 @@ struct FontDefinition;
  * @class Device
  * @brief
  */
-class CC_DLL Device
+class AX_DLL Device
 {
 public:
     /** Defines the alignment of text. */
@@ -104,7 +104,7 @@ public:
                                       bool& hasPremultipliedAlpha);
 
 private:
-    CC_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
+    AX_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
 };
 
 // end group

@@ -26,9 +26,9 @@
 #include "physics3d/CCPhysics3D.h"
 #include "renderer/CCRenderer.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
@@ -49,13 +49,13 @@ Physics3DWorld::~Physics3DWorld()
     removeAllPhysics3DConstraints();
     removeAllPhysics3DObjects();
 
-    CC_SAFE_DELETE(_collisionConfiguration);
-    CC_SAFE_DELETE(_dispatcher);
-    CC_SAFE_DELETE(_broadphase);
-    CC_SAFE_DELETE(_ghostCallback);
-    CC_SAFE_DELETE(_solver);
-    CC_SAFE_DELETE(_btPhyiscsWorld);
-    CC_SAFE_DELETE(_debugDrawer);
+    AX_SAFE_DELETE(_collisionConfiguration);
+    AX_SAFE_DELETE(_dispatcher);
+    AX_SAFE_DELETE(_broadphase);
+    AX_SAFE_DELETE(_ghostCallback);
+    AX_SAFE_DELETE(_solver);
+    AX_SAFE_DELETE(_btPhyiscsWorld);
+    AX_SAFE_DELETE(_debugDrawer);
     for (auto it : _physicsComponents)
         it->setPhysics3DObject(nullptr);
     _physicsComponents.clear();
@@ -309,7 +309,7 @@ bool Physics3DWorld::sweepShape(Physics3DShape* shape,
                                 const axis::Mat4& endTransform,
                                 Physics3DWorld::HitResult* result)
 {
-    CC_ASSERT(shape->getShapeType() != Physics3DShape::ShapeType::HEIGHT_FIELD &&
+    AX_ASSERT(shape->getShapeType() != Physics3DShape::ShapeType::HEIGHT_FIELD &&
               shape->getShapeType() != Physics3DShape::ShapeType::MESH);
     auto btStart = convertMat4TobtTransform(startTransform);
     auto btEnd   = convertMat4TobtTransform(endTransform);
@@ -423,6 +423,6 @@ void Physics3DWorld::setGhostPairCallback()
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS

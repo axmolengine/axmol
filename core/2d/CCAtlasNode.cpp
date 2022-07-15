@@ -44,7 +44,7 @@ NS_AX_BEGIN
 
 AtlasNode::~AtlasNode()
 {
-    CC_SAFE_RELEASE(_textureAtlas);
+    AX_SAFE_RELEASE(_textureAtlas);
 }
 
 AtlasNode* AtlasNode::create(std::string_view tile, int tileWidth, int tileHeight, int itemsToRender)
@@ -55,7 +55,7 @@ AtlasNode* AtlasNode::create(std::string_view tile, int tileWidth, int tileHeigh
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -270,8 +270,8 @@ Texture2D* AtlasNode::getTexture() const
 
 void AtlasNode::setTextureAtlas(TextureAtlas* textureAtlas)
 {
-    CC_SAFE_RETAIN(textureAtlas);
-    CC_SAFE_RELEASE(_textureAtlas);
+    AX_SAFE_RETAIN(textureAtlas);
+    AX_SAFE_RELEASE(_textureAtlas);
     _textureAtlas = textureAtlas;
 }
 

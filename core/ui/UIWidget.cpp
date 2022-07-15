@@ -129,7 +129,7 @@ void Widget::FocusNavigationController::addKeyboardEventListener()
     if (nullptr == _keyboardListener)
     {
         _keyboardListener                = EventListenerKeyboard::create();
-        _keyboardListener->onKeyReleased = CC_CALLBACK_2(Widget::FocusNavigationController::onKeypadKeyPressed, this);
+        _keyboardListener->onKeyReleased = AX_CALLBACK_2(Widget::FocusNavigationController::onKeypadKeyPressed, this);
         EventDispatcher* dispatcher      = Director::getInstance()->getEventDispatcher();
         dispatcher->addEventListenerWithFixedPriority(_keyboardListener, _keyboardEventPriority);
     }
@@ -186,13 +186,13 @@ void Widget::cleanupWidget()
 {
     // clean up _touchListener
     _eventDispatcher->removeEventListener(_touchListener);
-    CC_SAFE_RELEASE_NULL(_touchListener);
+    AX_SAFE_RELEASE_NULL(_touchListener);
 
     // cleanup focused widget and focus navigation controller
     if (_focusedWidget == this)
     {
         // delete
-        CC_SAFE_DELETE(_focusNavigationController);
+        AX_SAFE_DELETE(_focusNavigationController);
         _focusedWidget = nullptr;
     }
 }
@@ -205,7 +205,7 @@ Widget* Widget::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -215,7 +215,7 @@ bool Widget::init()
     {
         initRenderer();
         setBright(true);
-        onFocusChanged      = CC_CALLBACK_2(Widget::onFocusChange, this);
+        onFocusChanged      = AX_CALLBACK_2(Widget::onFocusChange, this);
         onNextFocusedWidget = nullptr;
         this->setAnchorPoint(Vec2(0.5f, 0.5f));
 
@@ -560,18 +560,18 @@ void Widget::setTouchEnabled(bool enable)
     if (_touchEnabled)
     {
         _touchListener = EventListenerTouchOneByOne::create();
-        CC_SAFE_RETAIN(_touchListener);
+        AX_SAFE_RETAIN(_touchListener);
         _touchListener->setSwallowTouches(true);
-        _touchListener->onTouchBegan     = CC_CALLBACK_2(Widget::onTouchBegan, this);
-        _touchListener->onTouchMoved     = CC_CALLBACK_2(Widget::onTouchMoved, this);
-        _touchListener->onTouchEnded     = CC_CALLBACK_2(Widget::onTouchEnded, this);
-        _touchListener->onTouchCancelled = CC_CALLBACK_2(Widget::onTouchCancelled, this);
+        _touchListener->onTouchBegan     = AX_CALLBACK_2(Widget::onTouchBegan, this);
+        _touchListener->onTouchMoved     = AX_CALLBACK_2(Widget::onTouchMoved, this);
+        _touchListener->onTouchEnded     = AX_CALLBACK_2(Widget::onTouchEnded, this);
+        _touchListener->onTouchCancelled = AX_CALLBACK_2(Widget::onTouchCancelled, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
     }
     else
     {
         _eventDispatcher->removeEventListener(_touchListener);
-        CC_SAFE_RELEASE_NULL(_touchListener);
+        AX_SAFE_RELEASE_NULL(_touchListener);
     }
 }
 
@@ -1415,7 +1415,7 @@ void Widget::enableDpadNavigation(bool enable)
     }
     else
     {
-        CC_SAFE_DELETE(_focusNavigationController);
+        AX_SAFE_DELETE(_focusNavigationController);
     }
 
     if (nullptr != _focusNavigationController)

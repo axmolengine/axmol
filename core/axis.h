@@ -183,13 +183,13 @@ THE SOFTWARE.
 #include "platform/CCPlatformMacros.h"
 #include "platform/CCSAXParser.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    include "platform/ios/CCApplication-ios.h"
 #    include "platform/ios/CCGLViewImpl-ios.h"
 #    include "platform/ios/CCStdC-ios.h"
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "platform/android/CCApplication-android.h"
 #    include "platform/android/CCGLViewImpl-android.h"
 #    include "platform/android/CCGL-android.h"
@@ -197,27 +197,27 @@ THE SOFTWARE.
 // Enhance modification begin
 #    include "platform/android/CCEnhanceAPI-android.h"
 // Enhance modification end
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "platform/win32/CCApplication-win32.h"
 #    include "platform/desktop/CCGLViewImpl-desktop.h"
 #    include "platform/win32/CCGL-win32.h"
 #    include "platform/win32/CCStdC-win32.h"
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #    include "platform/desktop/CCGLViewImpl-desktop.h"
 #    include "platform/mac/CCApplication-mac.h"
 #    include "platform/mac/CCStdC-mac.h"
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "platform/linux/CCApplication-linux.h"
 #    include "platform/desktop/CCGLViewImpl-desktop.h"
 #    include "platform/linux/CCGL-linux.h"
 #    include "platform/linux/CCStdC-linux.h"
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 
 // script_support
 #include "base/CCScriptSupport.h"
@@ -272,7 +272,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-CC_DLL const char* axisVersion();
+AX_DLL const char* axisVersion();
 
 NS_AX_END
 

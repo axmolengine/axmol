@@ -57,7 +57,7 @@ Sprite* Sprite::createWithTexture(Texture2D* texture)
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -69,7 +69,7 @@ Sprite* Sprite::createWithTexture(Texture2D* texture, const Rect& rect, bool rot
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -86,7 +86,7 @@ Sprite* Sprite::create(std::string_view filename, PixelFormat format)
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -98,7 +98,7 @@ Sprite* Sprite::create(const PolygonInfo& info)
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -110,7 +110,7 @@ Sprite* Sprite::create(std::string_view filename, const Rect& rect)
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -122,7 +122,7 @@ Sprite* Sprite::createWithSpriteFrame(SpriteFrame* spriteFrame)
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -147,7 +147,7 @@ Sprite* Sprite::create()
         sprite->autorelease();
         return sprite;
     }
-    CC_SAFE_DELETE(sprite);
+    AX_SAFE_DELETE(sprite);
     return nullptr;
 }
 
@@ -307,18 +307,18 @@ bool Sprite::initWithTexture(Texture2D* texture, const Rect& rect, bool rotated)
 
 Sprite::Sprite()
 {
-#if CC_SPRITE_DEBUG_DRAW
+#if AX_SPRITE_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
-#endif  // CC_SPRITE_DEBUG_DRAW
+#endif  // AX_SPRITE_DEBUG_DRAW
 }
 
 Sprite::~Sprite()
 {
-    CC_SAFE_FREE(_trianglesVertex);
-    CC_SAFE_FREE(_trianglesIndex);
-    CC_SAFE_RELEASE(_spriteFrame);
-    CC_SAFE_RELEASE(_texture);
+    AX_SAFE_FREE(_trianglesVertex);
+    AX_SAFE_FREE(_trianglesIndex);
+    AX_SAFE_RELEASE(_spriteFrame);
+    AX_SAFE_RELEASE(_texture);
 }
 
 /*
@@ -340,7 +340,7 @@ static unsigned char cc_2x2_white_image[] = {
     // RGBA8888
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-#define CC_2x2_WHITE_IMAGE_KEY "/cc_2x2_white_image"
+#define AX_2x2_WHITE_IMAGE_KEY "/cc_2x2_white_image"
 
 // MARK: texture
 void Sprite::setTexture(std::string_view filename)
@@ -409,17 +409,17 @@ void Sprite::setTexture(Texture2D* texture)
     if (texture == nullptr)
     {
         // Gets the texture by key firstly.
-        texture = _director->getTextureCache()->getTextureForKey(CC_2x2_WHITE_IMAGE_KEY);
+        texture = _director->getTextureCache()->getTextureForKey(AX_2x2_WHITE_IMAGE_KEY);
 
         // If texture wasn't in cache, create it from RAW data.
         if (texture == nullptr)
         {
             Image* image        = new Image();
-            bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
+            bool AX_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
             CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
 
-            texture = _director->getTextureCache()->addImage(image, CC_2x2_WHITE_IMAGE_KEY);
-            CC_SAFE_RELEASE(image);
+            texture = _director->getTextureCache()->addImage(image, AX_2x2_WHITE_IMAGE_KEY);
+            AX_SAFE_RELEASE(image);
         }
     }
 
@@ -431,8 +431,8 @@ void Sprite::setTexture(Texture2D* texture)
     {
         if (_texture != texture)
         {
-            CC_SAFE_RETAIN(texture);
-            CC_SAFE_RELEASE(_texture);
+            AX_SAFE_RETAIN(texture);
+            AX_SAFE_RELEASE(_texture);
             _texture = texture;
         }
         updateBlendFunc();
@@ -817,7 +817,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQua
     if (tex == nullptr)
         return;
 
-    const auto rectInPixels = CC_RECT_POINTS_TO_PIXELS(rectInPoints);
+    const auto rectInPixels = AX_RECT_POINTS_TO_PIXELS(rectInPoints);
 
     const float atlasWidth  = (float)tex->getPixelsWide();
     const float atlasHeight = (float)tex->getPixelsHigh();
@@ -838,7 +838,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQua
     if (_rectRotated)
         std::swap(rw, rh);
 
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
     float left   = (2 * rectInPixels.origin.x + 1) / (2 * atlasWidth);
     float right  = left + (rw * 2 - 2) / (2 * atlasWidth);
     float top    = (2 * rectInPixels.origin.y + 1) / (2 * atlasHeight);
@@ -848,7 +848,7 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQua
     float right  = (rectInPixels.origin.x + rw) / atlasWidth;
     float top    = rectInPixels.origin.y / atlasHeight;
     float bottom = (rectInPixels.origin.y + rh) / atlasHeight;
-#endif  // CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#endif  // AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
 
     if ((!_rectRotated && _flippedX) || (_rectRotated && _flippedY))
         std::swap(left, right);
@@ -1073,7 +1073,7 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     // TODO: arnold: current camera can be a non-default one.
     setMVPMatrixUniform();
 
-#if CC_USE_CULLING
+#if AX_USE_CULLING
     // Don't calculate the culling if the transform was not updated
     auto visitingCamera = Camera::getVisitingCamera();
     auto defaultCamera  = Camera::getDefaultCamera();
@@ -1093,7 +1093,7 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         _trianglesCommand.init(_globalZOrder, _texture, _blendFunc, _polyInfo.triangles, transform, flags);
         renderer->addCommand(&_trianglesCommand);
 
-#if CC_SPRITE_DEBUG_DRAW
+#if AX_SPRITE_DEBUG_DRAW
         _debugDrawNode->clear();
         auto count   = _polyInfo.triangles.indexCount / 3;
         auto indices = _polyInfo.triangles.indices;
@@ -1113,7 +1113,7 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
             to   = verts[indices[i * 3]].vertices;
             _debugDrawNode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::WHITE);
         }
-#endif  // CC_SPRITE_DEBUG_DRAW
+#endif  // AX_SPRITE_DEBUG_DRAW
     }
 }
 
@@ -1316,7 +1316,7 @@ void Sprite::setScaleX(float scaleX)
 
 void Sprite::setScaleY(float scaleY)
 {
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     if (_texture->isRenderTarget())
         scaleY = std::abs(scaleY);
 #endif
@@ -1445,7 +1445,7 @@ bool Sprite::isFlippedX() const
 
 void Sprite::setFlippedY(bool flippedY)
 {
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     if (_texture->isRenderTarget())
         flippedY = !flippedY;
 #endif
@@ -1570,7 +1570,7 @@ void Sprite::setSpriteFrame(SpriteFrame* spriteFrame)
     // do not removed by SpriteFrameCache::removeUnusedSpriteFrames
     if (_spriteFrame != spriteFrame)
     {
-        CC_SAFE_RELEASE(_spriteFrame);
+        AX_SAFE_RELEASE(_spriteFrame);
         _spriteFrame = spriteFrame;
         spriteFrame->retain();
     }
@@ -1631,9 +1631,9 @@ SpriteFrame* Sprite::getSpriteFrame() const
     if (nullptr != this->_spriteFrame)
         return this->_spriteFrame;
 
-    return SpriteFrame::createWithTexture(_texture, CC_RECT_POINTS_TO_PIXELS(_rect), _rectRotated,
-                                          CC_POINT_POINTS_TO_PIXELS(_unflippedOffsetPositionFromCenter),
-                                          CC_SIZE_POINTS_TO_PIXELS(_originalContentSize));
+    return SpriteFrame::createWithTexture(_texture, AX_RECT_POINTS_TO_PIXELS(_rect), _rectRotated,
+                                          AX_POINT_POINTS_TO_PIXELS(_unflippedOffsetPositionFromCenter),
+                                          AX_SIZE_POINTS_TO_PIXELS(_originalContentSize));
 }
 
 SpriteBatchNode* Sprite::getBatchNode() const

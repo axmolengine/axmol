@@ -33,9 +33,9 @@
 #include "2d/CCLabel.h"
 #include "ui/UIHelper.h"
 
-static const int CC_EDIT_BOX_PADDING = 5;
+static const int AX_EDIT_BOX_PADDING = 5;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    define PASSWORD_CHAR "*"
 #else
 #    define PASSWORD_CHAR "\u25CF"
@@ -45,7 +45,7 @@ NS_AX_BEGIN
 
 static Vec2 applyPadding(const Vec2& sizeToCorrect)
 {
-    return Vec2(sizeToCorrect.width - CC_EDIT_BOX_PADDING * 2, sizeToCorrect.height);
+    return Vec2(sizeToCorrect.width - AX_EDIT_BOX_PADDING * 2, sizeToCorrect.height);
 }
 
 namespace ui
@@ -116,20 +116,20 @@ void EditBoxImplCommon::placeInactiveLabels(const Vec2& size)
 
     if (_editBoxInputMode == EditBox::InputMode::ANY)
     {
-        _label->setPosition(Vec2((float)CC_EDIT_BOX_PADDING, size.height - CC_EDIT_BOX_PADDING));
+        _label->setPosition(Vec2((float)AX_EDIT_BOX_PADDING, size.height - AX_EDIT_BOX_PADDING));
         _label->setVerticalAlignment(TextVAlignment::TOP);
         _label->enableWrap(true);
 
-        _labelPlaceHolder->setPosition(Vec2((float)CC_EDIT_BOX_PADDING, size.height - CC_EDIT_BOX_PADDING));
+        _labelPlaceHolder->setPosition(Vec2((float)AX_EDIT_BOX_PADDING, size.height - AX_EDIT_BOX_PADDING));
         _labelPlaceHolder->setVerticalAlignment(TextVAlignment::TOP);
     }
     else
     {
         _label->enableWrap(false);
-        _label->setPosition(Vec2((float)CC_EDIT_BOX_PADDING, size.height));
+        _label->setPosition(Vec2((float)AX_EDIT_BOX_PADDING, size.height));
         _label->setVerticalAlignment(TextVAlignment::CENTER);
 
-        _labelPlaceHolder->setPosition(Vec2((float)CC_EDIT_BOX_PADDING, (size.height + placeholderSize.height) / 2));
+        _labelPlaceHolder->setPosition(Vec2((float)AX_EDIT_BOX_PADDING, (size.height + placeholderSize.height) / 2));
         _labelPlaceHolder->setVerticalAlignment(TextVAlignment::CENTER);
     }
 }
@@ -364,7 +364,7 @@ void EditBoxImplCommon::editBoxEditingDidBegin()
         pDelegate->editBoxEditingDidBegin(_editBox);
     }
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
         axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
@@ -386,7 +386,7 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
         pDelegate->editBoxReturn(_editBox);
     }
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     if (_editBox != nullptr && 0 != _editBox->getScriptEditBoxHandler())
     {
         axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
@@ -415,7 +415,7 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
         pDelegate->editBoxTextChanged(_editBox, text);
     }
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
         axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);

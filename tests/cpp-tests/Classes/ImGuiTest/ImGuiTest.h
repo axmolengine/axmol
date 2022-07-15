@@ -30,7 +30,7 @@
 #include "cocos2d.h"
 #include "../BaseTest.h"
 
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
 
 DEFINE_TEST_SUITE(ImGuiTests);
 

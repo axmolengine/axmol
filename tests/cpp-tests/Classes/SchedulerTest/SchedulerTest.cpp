@@ -73,8 +73,8 @@ void SchedulerAutoremove::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerAutoremove::autoremove), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerAutoremove::tick), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerAutoremove::autoremove), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerAutoremove::tick), 0.5f);
     accum = 0;
 }
 
@@ -85,7 +85,7 @@ void SchedulerAutoremove::autoremove(float dt)
 
     if (accum > 3)
     {
-        unschedule(CC_SCHEDULE_SELECTOR(SchedulerAutoremove::autoremove));
+        unschedule(AX_SCHEDULE_SELECTOR(SchedulerAutoremove::autoremove));
         CCLOG("autoremove scheduler: scheduler removed");
     }
 }
@@ -113,9 +113,9 @@ std::string SchedulerAutoremove::subtitle() const
 void SchedulerPauseResume::onEnter()
 {
     SchedulerTestLayer::onEnter();
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResume::tick1), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResume::tick2), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResume::pause), 3.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResume::tick1), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResume::tick2), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResume::pause), 3.0f);
 }
 
 void SchedulerPauseResume::tick1(float /*dt*/)
@@ -164,9 +164,9 @@ void SchedulerPauseResumeAll::onEnter()
     sprite->runAction(RepeatForever::create(RotateBy::create(3.0f, 360.0f)));
     sprite->setTag(123);
     scheduleUpdate();
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResumeAll::tick1), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResumeAll::tick2), 1.0f);
-    scheduleOnce(CC_SCHEDULE_SELECTOR(SchedulerPauseResumeAll::pause), 3.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResumeAll::tick1), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResumeAll::tick2), 1.0f);
+    scheduleOnce(AX_SCHEDULE_SELECTOR(SchedulerPauseResumeAll::pause), 3.0f);
 }
 
 void SchedulerPauseResumeAll::update(float /*delta*/)
@@ -246,9 +246,9 @@ void SchedulerPauseResumeAllUser::onEnter()
     this->addChild(sprite);
     sprite->runAction(RepeatForever::create(RotateBy::create(3.0f, 360.0f)));
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResumeAllUser::tick1), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResumeAllUser::tick2), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerPauseResumeAllUser::pause), 3.0f, false, 0);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResumeAllUser::tick1), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResumeAllUser::tick2), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerPauseResumeAllUser::pause), 3.0f, false, 0);
 }
 
 void SchedulerPauseResumeAllUser::onExit()
@@ -305,11 +305,11 @@ void SchedulerUnscheduleAll::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick1), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick2), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick3), 1.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick4), 1.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::unscheduleAll), 4);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick1), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick2), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick3), 1.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::tick4), 1.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAll::unscheduleAll), 4);
 }
 
 void SchedulerUnscheduleAll::tick1(float /*dt*/)
@@ -365,11 +365,11 @@ void SchedulerUnscheduleAllHard::onEnter()
 
     _actionManagerActive = true;
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick1), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick2), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick3), 1.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick4), 1.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::unscheduleAll), 4);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick1), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick2), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick3), 1.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::tick4), 1.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllHard::unscheduleAll), 4);
 }
 
 void SchedulerUnscheduleAllHard::onExit()
@@ -436,11 +436,11 @@ void SchedulerUnscheduleAllUserLevel::onEnter()
     this->addChild(sprite);
     sprite->runAction(RepeatForever::create(RotateBy::create(3.0f, 360.0f)));
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick1), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick2), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick3), 1.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick4), 1.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::unscheduleAll), 4);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick1), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick2), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick3), 1.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::tick4), 1.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUnscheduleAllUserLevel::unscheduleAll), 4);
 }
 
 void SchedulerUnscheduleAllUserLevel::tick1(float /*dt*/)
@@ -487,9 +487,9 @@ void SchedulerSchedulesAndRemove::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick1), 0.5f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick2), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::scheduleAndUnschedule), 4.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick1), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick2), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::scheduleAndUnschedule), 4.0f);
 }
 
 void SchedulerSchedulesAndRemove::tick1(float /*dt*/)
@@ -524,12 +524,12 @@ std::string SchedulerSchedulesAndRemove::subtitle() const
 
 void SchedulerSchedulesAndRemove::scheduleAndUnschedule(float /*dt*/)
 {
-    unschedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick1));
-    unschedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick2));
-    unschedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::scheduleAndUnschedule));
+    unschedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick1));
+    unschedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick2));
+    unschedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::scheduleAndUnschedule));
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick3), 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick4), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick3), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerSchedulesAndRemove::tick4), 1.0f);
 }
 
 //------------------------------------------------------------------
@@ -589,7 +589,7 @@ void SchedulerUpdate::onEnter()
     addChild(f);
     f->release();
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUpdate::removeUpdates), 4.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUpdate::removeUpdates), 4.0f);
 }
 
 void SchedulerUpdate::removeUpdates(float /*dt*/)
@@ -629,8 +629,8 @@ void SchedulerUpdateAndCustom::onEnter()
     SchedulerTestLayer::onEnter();
 
     scheduleUpdate();
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUpdateAndCustom::tick));
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUpdateAndCustom::stopSelectors), 0.4f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUpdateAndCustom::tick));
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUpdateAndCustom::stopSelectors), 0.4f);
 }
 
 void SchedulerUpdateAndCustom::update(float dt)
@@ -668,7 +668,7 @@ void SchedulerUpdateFromCustom::onEnter()
 {
     SchedulerTestLayer::onEnter();
 
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::schedUpdate), 2.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::schedUpdate), 2.0f);
 }
 
 void SchedulerUpdateFromCustom::update(float dt)
@@ -678,15 +678,15 @@ void SchedulerUpdateFromCustom::update(float dt)
 
 void SchedulerUpdateFromCustom::schedUpdate(float /*dt*/)
 {
-    unschedule(CC_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::schedUpdate));
+    unschedule(AX_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::schedUpdate));
     scheduleUpdate();
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::stopUpdate), 2.0f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::stopUpdate), 2.0f);
 }
 
 void SchedulerUpdateFromCustom::stopUpdate(float /*dt*/)
 {
     unscheduleUpdate();
-    unschedule(CC_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::stopUpdate));
+    unschedule(AX_SCHEDULE_SELECTOR(SchedulerUpdateFromCustom::stopUpdate));
 }
 
 std::string SchedulerUpdateFromCustom::title() const
@@ -710,7 +710,7 @@ void RescheduleSelector::onEnter()
 
     _interval = 1.0f;
     _ticks    = 0;
-    schedule(CC_SCHEDULE_SELECTOR(RescheduleSelector::schedUpdate), _interval);
+    schedule(AX_SCHEDULE_SELECTOR(RescheduleSelector::schedUpdate), _interval);
 }
 
 std::string RescheduleSelector::title() const
@@ -731,7 +731,7 @@ void RescheduleSelector::schedUpdate(float dt)
     if (_ticks > 3)
     {
         _interval += 1.0f;
-        schedule(CC_SCHEDULE_SELECTOR(RescheduleSelector::schedUpdate), _interval);
+        schedule(AX_SCHEDULE_SELECTOR(RescheduleSelector::schedUpdate), _interval);
         _ticks = 0;
     }
 }
@@ -741,7 +741,7 @@ void RescheduleSelector::schedUpdate(float dt)
 void SchedulerDelayAndRepeat::onEnter()
 {
     SchedulerTestLayer::onEnter();
-    schedule(CC_SCHEDULE_SELECTOR(SchedulerDelayAndRepeat::update), 0, 4, 3.f);
+    schedule(AX_SCHEDULE_SELECTOR(SchedulerDelayAndRepeat::update), 0, 4, 3.f);
     CCLOG("update is scheduled should begin after 3 seconds");
 }
 
@@ -1040,7 +1040,7 @@ void SchedulerIssue2268::update(float /*dt*/)
 }
 SchedulerIssue2268::~SchedulerIssue2268()
 {
-    CC_SAFE_RELEASE(testNode);
+    AX_SAFE_RELEASE(testNode);
 }
 
 std::string SchedulerIssue2268::title() const
@@ -1125,7 +1125,7 @@ std::string ScheduleCallbackTest::subtitle() const
 {
     return "\n\n\n\nPlease see console.\n\
 schedule(lambda, ...)\n\
-schedule(CC_CALLBACK_1(XXX::member_function), this), this, ...)\n\
+schedule(AX_CALLBACK_1(XXX::member_function), this), this, ...)\n\
 schedule(global_function, ...)\n\
 ";
 }
@@ -1142,14 +1142,14 @@ void ScheduleCallbackTest::onEnter()
     _scheduler->schedule([](float dt) { log("In the callback of schedule(lambda, ...), dt = %f", dt); }, this, 1.0f,
                          false, "lambda");
 
-    _scheduler->schedule(CC_CALLBACK_1(ScheduleCallbackTest::callback, this), this, 1.0f, false, "member_function");
+    _scheduler->schedule(AX_CALLBACK_1(ScheduleCallbackTest::callback, this), this, 1.0f, false, "member_function");
 
     _scheduler->schedule(ScheduleCallbackTest_global_callback, this, 1.0f, false, "global_function");
 }
 
 void ScheduleCallbackTest::callback(float dt)
 {
-    log("In the callback of schedule(CC_CALLBACK_1(XXX::member_function), this), this, ...), dt = %f", dt);
+    log("In the callback of schedule(AX_CALLBACK_1(XXX::member_function), this), this, ...), dt = %f", dt);
 }
 
 // ScheduleUpdatePriority
@@ -1179,7 +1179,7 @@ void ScheduleUpdatePriority::onEnter()
     scheduleUpdate();
 
     auto listener          = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(ScheduleUpdatePriority::onTouchBegan, this);
+    listener->onTouchBegan = AX_CALLBACK_2(ScheduleUpdatePriority::onTouchBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -1425,7 +1425,7 @@ void SchedulerRemoveSelectorDuringCall::onEnter()
     Scheduler* const scheduler(Director::getInstance()->getScheduler());
 
     scheduler->setTimeScale(10);
-    scheduler->schedule(SEL_SCHEDULE(&SchedulerRemoveSelectorDuringCall::callback), this, 0.01f, CC_REPEAT_FOREVER,
+    scheduler->schedule(SEL_SCHEDULE(&SchedulerRemoveSelectorDuringCall::callback), this, 0.01f, AX_REPEAT_FOREVER,
                         0.0f, !isRunning());
 
     _scheduled = true;

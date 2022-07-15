@@ -32,9 +32,9 @@
 
 #include <vector>
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 class btCollisionShape;
 class btRigidBody;
@@ -54,7 +54,7 @@ class Physics3DObject;
 /**
  * @brief The collision information of Physics3DObject.
  */
-struct CC_DLL Physics3DCollisionInfo
+struct AX_DLL Physics3DCollisionInfo
 {
     struct CollisionPoint
     {
@@ -72,7 +72,7 @@ struct CC_DLL Physics3DCollisionInfo
 /**
  * @brief Inherit from Ref, base class
  */
-class CC_DLL Physics3DObject : public Ref
+class AX_DLL Physics3DObject : public Ref
 {
 public:
     typedef std::function<void(const Physics3DCollisionInfo& ci)> CollisionCallbackFunc;
@@ -134,7 +134,7 @@ protected:
 /**
  * @brief The description of Physics3DRigidBody.
  */
-struct CC_DLL Physics3DRigidBodyDes
+struct AX_DLL Physics3DRigidBodyDes
 {
     float mass;                  // Note: mass equals zero means static, default 0
     axis::Vec3 localInertia;  // default (0, 0, 0)
@@ -148,7 +148,7 @@ struct CC_DLL Physics3DRigidBodyDes
 /**
  * @brief Inherit from Physics3DObject, the main class for rigid body objects
  */
-class CC_DLL Physics3DRigidBody : public Physics3DObject
+class AX_DLL Physics3DRigidBody : public Physics3DObject
 {
     friend class Physics3DWorld;
 
@@ -349,7 +349,7 @@ protected:
 /**
  * @brief The description of Physics3DCollider.
  */
-struct CC_DLL Physics3DColliderDes
+struct AX_DLL Physics3DColliderDes
 {
     /**shape pointer*/
     Physics3DShape* shape;
@@ -385,7 +385,7 @@ struct CC_DLL Physics3DColliderDes
 /**
  * @brief Inherit from Physics3DObject, the main class for Colliders.
  */
-class CC_DLL Physics3DCollider : public Physics3DObject
+class AX_DLL Physics3DCollider : public Physics3DObject
 {
 public:
     /**
@@ -495,8 +495,8 @@ protected:
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_OBJECT_H__

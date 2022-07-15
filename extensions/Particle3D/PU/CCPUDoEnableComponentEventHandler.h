@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
-#define __CC_PU_PARTICLE_3D_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
+#ifndef __AX_PU_PARTICLE_3D_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
+#define __AX_PU_PARTICLE_3D_DO_ENABLE_COMPONENT_EVENT_HANDLER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -40,7 +40,7 @@ struct PUParticle3D;
 class PUObserver;
 class PUParticleSystem3D;
 
-class CC_EX_DLL PUDoEnableComponentEventHandler : public PUEventHandler
+class AX_EX_DLL PUDoEnableComponentEventHandler : public PUEventHandler
 {
 public:
     static PUDoEnableComponentEventHandler* create();

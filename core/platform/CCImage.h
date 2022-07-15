@@ -26,8 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_IMAGE_H__
-#define __CC_IMAGE_H__
+#ifndef __AX_IMAGE_H__
+#define __AX_IMAGE_H__
 
 #include "base/CCRef.h"
 #include "renderer/CCTexture2D.h"
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 // premultiply alpha, or the effect will be wrong when using other pixel formats in Texture2D,
 // such as RGB888, RGB5A1
-#define CC_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va)                             \
+#define AX_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va)                             \
     (unsigned)(((unsigned)((uint8_t)(vr) * ((uint8_t)(va) + 1)) >> 8) |      \
                ((unsigned)((uint8_t)(vg) * ((uint8_t)(va) + 1) >> 8) << 8) | \
                ((unsigned)((uint8_t)(vb) * ((uint8_t)(va) + 1) >> 8) << 16) | ((unsigned)(uint8_t)(va) << 24))
@@ -58,7 +58,7 @@ typedef struct _MipmapInfo
 } MipmapInfo;
 
 /** The Image class for loading all images supported by axis . */
-class CC_DLL Image : public Ref
+class AX_DLL Image : public Ref
 {
 public:
     friend class TextureCache;
@@ -269,4 +269,4 @@ protected:
 
 NS_AX_END
 
-#endif  // __CC_IMAGE_H__
+#endif  // __AX_IMAGE_H__

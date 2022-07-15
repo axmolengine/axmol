@@ -90,13 +90,13 @@ SpriteFrame::SpriteFrame() : _rotated(false), _texture(nullptr) {}
 
 bool SpriteFrame::initWithTexture(Texture2D* texture, const Rect& rect)
 {
-    Rect rectInPixels = CC_RECT_POINTS_TO_PIXELS(rect);
+    Rect rectInPixels = AX_RECT_POINTS_TO_PIXELS(rect);
     return initWithTexture(texture, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
 }
 
 bool SpriteFrame::initWithTextureFilename(std::string_view filename, const Rect& rect)
 {
-    Rect rectInPixels = CC_RECT_POINTS_TO_PIXELS(rect);
+    Rect rectInPixels = AX_RECT_POINTS_TO_PIXELS(rect);
     return initWithTextureFilename(filename, rectInPixels, false, Vec2::ZERO, rectInPixels.size);
 }
 
@@ -114,11 +114,11 @@ bool SpriteFrame::initWithTexture(Texture2D* texture,
     }
 
     _rectInPixels         = rect;
-    _rect                 = CC_RECT_PIXELS_TO_POINTS(rect);
+    _rect                 = AX_RECT_PIXELS_TO_POINTS(rect);
     _offsetInPixels       = offset;
-    _offset               = CC_POINT_PIXELS_TO_POINTS(_offsetInPixels);
+    _offset               = AX_POINT_PIXELS_TO_POINTS(_offsetInPixels);
     _originalSizeInPixels = originalSize;
-    _originalSize         = CC_SIZE_PIXELS_TO_POINTS(_originalSizeInPixels);
+    _originalSize         = AX_SIZE_PIXELS_TO_POINTS(_originalSizeInPixels);
     _rotated              = rotated;
     _anchorPoint          = Vec2(NAN, NAN);
     _centerRect           = Rect(NAN, NAN, NAN, NAN);
@@ -137,11 +137,11 @@ bool SpriteFrame::initWithTextureFilename(std::string_view filename,
         _texture              = nullptr;
         _textureFilename      = filename;
         _rectInPixels         = rect;
-        _rect                 = CC_RECT_PIXELS_TO_POINTS(rect);
+        _rect                 = AX_RECT_PIXELS_TO_POINTS(rect);
         _offsetInPixels       = offset;
-        _offset               = CC_POINT_PIXELS_TO_POINTS(_offsetInPixels);
+        _offset               = AX_POINT_PIXELS_TO_POINTS(_offsetInPixels);
         _originalSizeInPixels = originalSize;
-        _originalSize         = CC_SIZE_PIXELS_TO_POINTS(_originalSizeInPixels);
+        _originalSize         = AX_SIZE_PIXELS_TO_POINTS(_originalSizeInPixels);
         _rotated              = rotated;
         _anchorPoint          = Vec2(NAN, NAN);
         _centerRect           = Rect(NAN, NAN, NAN, NAN);
@@ -153,7 +153,7 @@ bool SpriteFrame::initWithTextureFilename(std::string_view filename,
 SpriteFrame::~SpriteFrame()
 {
     CCLOGINFO("deallocing SpriteFrame: %p", this);
-    CC_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_texture);
 }
 
 SpriteFrame* SpriteFrame::clone() const
@@ -169,18 +169,18 @@ SpriteFrame* SpriteFrame::clone() const
 void SpriteFrame::setRect(const Rect& rect)
 {
     _rect         = rect;
-    _rectInPixels = CC_RECT_POINTS_TO_PIXELS(_rect);
+    _rectInPixels = AX_RECT_POINTS_TO_PIXELS(_rect);
 }
 
 void SpriteFrame::setRectInPixels(const Rect& rectInPixels)
 {
     _rectInPixels = rectInPixels;
-    _rect         = CC_RECT_PIXELS_TO_POINTS(rectInPixels);
+    _rect         = AX_RECT_PIXELS_TO_POINTS(rectInPixels);
 }
 
 void SpriteFrame::setCenterRectInPixels(const Rect& centerRect)
 {
-    _centerRect = CC_RECT_PIXELS_TO_POINTS(centerRect);
+    _centerRect = AX_RECT_PIXELS_TO_POINTS(centerRect);
 }
 
 bool SpriteFrame::hasCenterRect() const
@@ -196,7 +196,7 @@ const Vec2& SpriteFrame::getOffset() const
 void SpriteFrame::setOffset(const Vec2& offsets)
 {
     _offset         = offsets;
-    _offsetInPixels = CC_POINT_POINTS_TO_PIXELS(_offset);
+    _offsetInPixels = AX_POINT_POINTS_TO_PIXELS(_offset);
 }
 
 const Vec2& SpriteFrame::getOffsetInPixels() const
@@ -207,7 +207,7 @@ const Vec2& SpriteFrame::getOffsetInPixels() const
 void SpriteFrame::setOffsetInPixels(const Vec2& offsetInPixels)
 {
     _offsetInPixels = offsetInPixels;
-    _offset         = CC_POINT_PIXELS_TO_POINTS(_offsetInPixels);
+    _offset         = AX_POINT_PIXELS_TO_POINTS(_offsetInPixels);
 }
 
 const Vec2& SpriteFrame::getAnchorPoint() const
@@ -229,8 +229,8 @@ void SpriteFrame::setTexture(Texture2D* texture)
 {
     if (_texture != texture)
     {
-        CC_SAFE_RELEASE(_texture);
-        CC_SAFE_RETAIN(texture);
+        AX_SAFE_RELEASE(_texture);
+        AX_SAFE_RETAIN(texture);
         _texture = texture;
     }
 }

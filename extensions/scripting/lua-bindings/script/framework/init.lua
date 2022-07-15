@@ -76,6 +76,6 @@ function cc.disable_global()
     })
 end
 
-if CC_DISABLE_GLOBAL then
+if AX_DISABLE_GLOBAL then
     cc.disable_global()
 end

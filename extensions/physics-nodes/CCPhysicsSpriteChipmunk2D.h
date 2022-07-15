@@ -45,7 +45,7 @@ NS_AX_EXT_BEGIN
  - You can't enble both Chipmunk support and Box2d support at the same time. Only one can be enabled at compile time
  * @lua NA
  */
-class CC_EX_DLL PhysicsSpriteChipmunk2D : public Sprite
+class AX_EX_DLL PhysicsSpriteChipmunk2D : public Sprite
 {
 public:
     static PhysicsSpriteChipmunk2D* create();

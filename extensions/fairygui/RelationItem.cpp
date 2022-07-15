@@ -544,8 +544,8 @@ void RelationItem::addRefTarget(GObject* target)
         return;
 
     if (target != _owner->_parent)
-        target->addEventListener(UIEventType::PositionChange, CC_CALLBACK_1(RelationItem::onTargetXYChanged, this), EventTag(this));
-    target->addEventListener(UIEventType::SizeChange, CC_CALLBACK_1(RelationItem::onTargetSizeChanged, this), EventTag(this));
+        target->addEventListener(UIEventType::PositionChange, AX_CALLBACK_1(RelationItem::onTargetXYChanged, this), EventTag(this));
+    target->addEventListener(UIEventType::SizeChange, AX_CALLBACK_1(RelationItem::onTargetSizeChanged, this), EventTag(this));
 
     _targetData.x = target->_position.x;
     _targetData.y = target->_position.y;

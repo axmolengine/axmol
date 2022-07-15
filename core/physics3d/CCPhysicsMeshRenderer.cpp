@@ -25,9 +25,9 @@
 
 #include "physics3d/CCPhysics3D.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
@@ -46,7 +46,7 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -65,7 +65,7 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view mo
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -97,6 +97,6 @@ PhysicsMeshRenderer::~PhysicsMeshRenderer() {}
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS

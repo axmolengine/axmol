@@ -42,7 +42,7 @@ NS_AX_BEGIN
 
 class Scheduler;
 
-class CC_DLL AudioEngineImpl : public axis::Ref
+class AX_DLL AudioEngineImpl : public axis::Ref
 {
 public:
     AudioEngineImpl();

@@ -30,8 +30,8 @@ GLoader3D::GLoader3D()
 
 GLoader3D::~GLoader3D()
 {
-    CC_SAFE_RELEASE(_content);
-    CC_SAFE_RELEASE(_container);
+    AX_SAFE_RELEASE(_content);
+    AX_SAFE_RELEASE(_container);
 }
 
 void GLoader3D::handleInit()
@@ -235,7 +235,7 @@ void GLoader3D::onChangeSpine()
     if (skeletonAni == nullptr)
         return;
 
-#if !defined(CC_USE_SPINE_CPP) || CC_USE_SPINE_CPP
+#if !defined(AX_USE_SPINE_CPP) || AX_USE_SPINE_CPP
     spine::AnimationState* state = skeletonAni->getState();
 
     spine::Animation* aniToUse = !_animationName.empty() ? skeletonAni->findAnimation(_animationName) : nullptr;
@@ -311,7 +311,7 @@ void GLoader3D::clearContent()
     if (_content != nullptr)
     {
         _container->removeChild(_content);
-        CC_SAFE_RELEASE_NULL(_content);
+        AX_SAFE_RELEASE_NULL(_content);
     }
     
     _contentItem = nullptr;

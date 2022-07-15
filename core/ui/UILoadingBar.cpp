@@ -67,7 +67,7 @@ LoadingBar* LoadingBar::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -86,7 +86,7 @@ LoadingBar* LoadingBar::create(std::string_view textureName, TextureResType texT
         widget->setPercent(percentage);
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 

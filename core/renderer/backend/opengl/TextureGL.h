@@ -80,7 +80,7 @@ struct TextureInfoGL
     GLenum format        = GL_RGBA;
     GLenum type          = GL_UNSIGNED_BYTE;
 
-    std::array<GLuint, CC_META_TEXTURES + 1> textures;
+    std::array<GLuint, AX_META_TEXTURES + 1> textures;
     int maxIdx = 0;
 };
 

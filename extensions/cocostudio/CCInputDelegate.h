@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_EXTENTIONS_CCINPUTDELEGATE_H__
-#define __CC_EXTENTIONS_CCINPUTDELEGATE_H__
+#ifndef __AX_EXTENTIONS_CCINPUTDELEGATE_H__
+#define __AX_EXTENTIONS_CCINPUTDELEGATE_H__
 
 #include "platform/CCPlatformMacros.h"
 #include "base/CCTouch.h"
@@ -68,40 +68,40 @@ public:
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void didAccelerate(axis::Acceleration* accelerationValue) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void didAccelerate(axis::Acceleration* accelerationValue) final;
     // Deprecated touch callbacks.
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual bool ccTouchBegan(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual bool ccTouchBegan(axis::Touch* touch, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchMoved(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchMoved(axis::Touch* touch, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchEnded(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchEnded(axis::Touch* touch, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchCancelled(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchCancelled(axis::Touch* touch, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchesBegan(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesBegan(axis::__Set* touches, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchesMoved(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesMoved(axis::__Set* touches, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchesEnded(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesEnded(axis::__Set* touches, axis::Event* event) final;
     /**
      * @js NA
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void ccTouchesCancelled(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesCancelled(axis::__Set* touches, axis::Event* event) final;
     /**
      * @js NA
      */
@@ -162,4 +162,4 @@ private:
 
 }  // namespace cocostudio
 
-#endif  // __CC_EXTENTIONS_CCINPUTDELEGATE_H__
+#endif  // __AX_EXTENTIONS_CCINPUTDELEGATE_H__

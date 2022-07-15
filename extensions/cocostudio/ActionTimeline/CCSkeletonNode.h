@@ -100,7 +100,7 @@ private:
 
     hlookup::string_map<hlookup::string_map<std::string>>
         _skinGroupMap;  // map< suit name, map< bone name, skin name> >
-    CC_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
+    AX_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
 
     void checkSubBonesDirty();
     // for draw skins as ordered bones' local z

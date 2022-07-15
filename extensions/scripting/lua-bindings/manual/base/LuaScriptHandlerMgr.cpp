@@ -56,7 +56,7 @@ LuaCallFunc* LuaCallFunc::create(const std::function<void(void*, Node*)>& func)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -120,7 +120,7 @@ ScriptHandlerMgr* ScriptHandlerMgr::getInstance()
 
 void ScriptHandlerMgr::destroyInstance()
 {
-    CC_SAFE_DELETE(_scriptHandlerMgr);
+    AX_SAFE_DELETE(_scriptHandlerMgr);
 }
 
 void ScriptHandlerMgr::init()

@@ -42,7 +42,7 @@ ArmatureDataManager* ArmatureDataManager::getInstance()
         s_sharedArmatureDataManager = new ArmatureDataManager();
         if (!s_sharedArmatureDataManager->init())
         {
-            CC_SAFE_DELETE(s_sharedArmatureDataManager);
+            AX_SAFE_DELETE(s_sharedArmatureDataManager);
         }
     }
     return s_sharedArmatureDataManager;
@@ -52,7 +52,7 @@ void ArmatureDataManager::destroyInstance()
 {
     SpriteFrameCacheHelper::purge();
     DataReaderHelper::purge();
-    CC_SAFE_RELEASE_NULL(s_sharedArmatureDataManager);
+    AX_SAFE_RELEASE_NULL(s_sharedArmatureDataManager);
 }
 
 ArmatureDataManager::ArmatureDataManager(void)

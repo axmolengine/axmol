@@ -418,7 +418,7 @@ PUMeshSurfaceEmitter::~PUMeshSurfaceEmitter()
 {
     if (_meshInfo)
     {
-        CC_SAFE_DELETE(_meshInfo);
+        AX_SAFE_DELETE(_meshInfo);
     }
 }
 //-----------------------------------------------------------------------
@@ -569,7 +569,7 @@ void PUMeshSurfaceEmitter::build()
     // Delete the mesh info if already existing
     if (_meshInfo)
     {
-        CC_SAFE_DELETE(_meshInfo);
+        AX_SAFE_DELETE(_meshInfo);
     }
 
     // Generate meshinfo.

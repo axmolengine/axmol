@@ -36,7 +36,7 @@
  */
 NS_AX_BEGIN
 
-class CC_DLL StencilStateManager
+class AX_DLL StencilStateManager
 {
 public:
     StencilStateManager();
@@ -50,7 +50,7 @@ public:
     float getAlphaThreshold() const;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(StencilStateManager);
+    AX_DISALLOW_COPY_AND_ASSIGN(StencilStateManager);
     static int s_layer;
     /**draw fullscreen quad to clear stencil bits
      */

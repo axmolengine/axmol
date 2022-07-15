@@ -40,8 +40,8 @@ ControlHuePicker::ControlHuePicker() : _hue(0.0f), _huePercentage(0.0f), _backgr
 ControlHuePicker::~ControlHuePicker()
 {
     removeAllChildrenWithCleanup(true);
-    CC_SAFE_RELEASE(_background);
-    CC_SAFE_RELEASE(_slider);
+    AX_SAFE_RELEASE(_background);
+    AX_SAFE_RELEASE(_slider);
 }
 
 ControlHuePicker* ControlHuePicker::create(Node* target, Vec2 pos)
@@ -102,7 +102,7 @@ void ControlHuePicker::setHuePercentage(float hueValueInPercent)
 
     // Update angle
     float angleDeg = _huePercentage * 360.0f - 180.0f;
-    float angle    = CC_DEGREES_TO_RADIANS(angleDeg);
+    float angle    = AX_DEGREES_TO_RADIANS(angleDeg);
 
     // Set new position of the slider
     float x = centerX + limit * cosf(angle);
@@ -135,7 +135,7 @@ void ControlHuePicker::updateSliderPosition(Vec2 location)
 
     // Update angle by using the direction of the location
     float angle    = atan2f(dy, dx);
-    float angleDeg = CC_RADIANS_TO_DEGREES(angle) + 180.0f;
+    float angleDeg = AX_RADIANS_TO_DEGREES(angle) + 180.0f;
 
     // use the position / slider width to determine the percentage the dragger is at
     setHue(angleDeg);

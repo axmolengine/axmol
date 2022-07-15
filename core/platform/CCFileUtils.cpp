@@ -465,7 +465,7 @@ FileUtils* FileUtils::s_sharedFileUtils = nullptr;
 
 void FileUtils::destroyInstance()
 {
-    CC_SAFE_DELETE(s_sharedFileUtils);
+    AX_SAFE_DELETE(s_sharedFileUtils);
 }
 
 void FileUtils::setDelegate(FileUtils* delegate)
@@ -519,7 +519,7 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string
     {
         auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::WRITE);
         // Read the file from hardware
-        CC_BREAK_IF(!fileStream);
+        AX_BREAK_IF(!fileStream);
 
         fileStream->write(data, static_cast<unsigned int>(dataSize));
         return true;
@@ -1127,7 +1127,7 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
         const auto isDir = entry.is_directory();
         if (isDir || entry.is_regular_file())
         {
-#    if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#    if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #        if defined(__cpp_lib_char8_t)
             std::u8string u8path = entry.path().u8string();
             std::string pathStr  = {u8path.begin(), u8path.end()};
@@ -1159,7 +1159,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
         const auto isDir = entry.is_directory();
         if (isDir || entry.is_regular_file())
         {
-#    if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#    if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #        if defined(__cpp_lib_char8_t)
             std::u8string u8path = entry.path().u8string();
             std::string pathStr  = {u8path.begin(), u8path.end()};
@@ -1177,7 +1177,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
     }
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 {
@@ -1228,7 +1228,7 @@ int64_t FileUtils::getFileSize(std::string_view filepath) const
 #    include <dirent.h>
 
 // android doesn't have ftw.h
-#    if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
 #        include <ftw.h>
 #    endif
 
@@ -1307,7 +1307,7 @@ bool FileUtils::createDirectory(std::string_view path) const
 
 namespace
 {
-#    if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
 int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW* ftwbuf)
 {
     int rv = remove(fpath);
@@ -1322,9 +1322,9 @@ int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW
 
 bool FileUtils::removeDirectory(std::string_view path) const
 {
-#    if !defined(CC_TARGET_OS_TVOS)
+#    if !defined(AX_TARGET_OS_TVOS)
 
-#        if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+#        if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
     if (nftw(path.data(), unlink_cb, 64, FTW_DEPTH | FTW_PHYS) == -1)
         return false;
     else
@@ -1337,11 +1337,11 @@ bool FileUtils::removeDirectory(std::string_view path) const
         return true;
     else
         return false;
-#        endif  // (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID)
+#        endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
 
 #    else
     return false;
-#    endif  // !defined(CC_TARGET_OS_TVOS)
+#    endif  // !defined(AX_TARGET_OS_TVOS)
 }
 
 bool FileUtils::removeFile(std::string_view path) const

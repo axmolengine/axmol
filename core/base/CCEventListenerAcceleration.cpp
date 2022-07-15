@@ -47,7 +47,7 @@ EventListenerAcceleration* EventListenerAcceleration::create(const std::function
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -79,7 +79,7 @@ EventListenerAcceleration* EventListenerAcceleration::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;

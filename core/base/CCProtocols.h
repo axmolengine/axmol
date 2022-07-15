@@ -39,7 +39,7 @@ NS_AX_BEGIN
 /**
  * RGBA protocol that affects Node's color and opacity
  */
-class CC_DLL __RGBAProtocol
+class AX_DLL __RGBAProtocol
 {
 public:
     virtual ~__RGBAProtocol() {}
@@ -168,7 +168,7 @@ public:
  * Please refer to glBlendFunc in OpenGL ES Manual
  * http://www.khronos.org/opengles/sdk/docs/man/xhtml/glBlendFunc.xml for more details.
  */
-class CC_DLL BlendProtocol
+class AX_DLL BlendProtocol
 {
 public:
     virtual ~BlendProtocol() {}
@@ -203,7 +203,7 @@ public:
  *   src=BlendFactor::SRC_ALPHA dst= BlendFactor::ONE_MINUS_SRC_ALPHA
  * But you can change the blending function at any time.
  */
-class CC_DLL TextureProtocol : public BlendProtocol
+class AX_DLL TextureProtocol : public BlendProtocol
 {
 public:
     virtual ~TextureProtocol() {}
@@ -229,7 +229,7 @@ public:
 /**
  * Common interface for Labels
  */
-class CC_DLL LabelProtocol
+class AX_DLL LabelProtocol
 {
 public:
     virtual ~LabelProtocol() {}
@@ -256,7 +256,7 @@ public:
 /**
  * OpenGL projection protocol
  */
-class CC_DLL DirectorDelegate
+class AX_DLL DirectorDelegate
 {
 public:
     virtual ~DirectorDelegate() {}
@@ -272,7 +272,7 @@ public:
 /**
  * interface for playable items
  */
-class CC_DLL PlayableProtocol
+class AX_DLL PlayableProtocol
 {
 public:
     virtual ~PlayableProtocol() {}

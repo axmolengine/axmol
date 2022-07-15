@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_OBB_H__
-#define __CC_OBB_H__
+#ifndef __AX_OBB_H__
+#define __AX_OBB_H__
 
 #include "3d/CCAABB.h"
 
@@ -41,7 +41,7 @@ NS_AX_BEGIN
  * MeshRenderer. so collision detection is more precise than AABB.
  * @js NA
  */
-class CC_DLL OBB
+class AX_DLL OBB
 {
 public:
     OBB();

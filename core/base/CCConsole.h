@@ -57,7 +57,7 @@ static const int MAX_LOG_LENGTH = 16 * 1024;
 /**
  @brief Output Debug message.
  */
-void CC_DLL log(const char* format, ...) CC_FORMAT_PRINTF(1, 2);
+void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.
@@ -69,7 +69,7 @@ void CC_DLL log(const char* format, ...) CC_FORMAT_PRINTF(1, 2);
  ```
  */
 
-class CC_DLL Console : public Ref
+class AX_DLL Console : public Ref
 {
 public:
     /** Console Utils */
@@ -108,7 +108,7 @@ public:
     };
 
     /** Command Struct */
-    class CC_DLL Command
+    class AX_DLL Command
     {
     public:
         using Callback = std::function<void(int fd, std::string_view args)>;
@@ -208,7 +208,7 @@ public:
     bool isIpv6Server() const;
 
     /** The command separator */
-    CC_SYNTHESIZE(char, _commandSeparator, CommandSeparator);
+    AX_SYNTHESIZE(char, _commandSeparator, CommandSeparator);
 
 protected:
     // Main Loop
@@ -291,7 +291,7 @@ protected:
     std::string _bindAddress;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Console);
+    AX_DISALLOW_COPY_AND_ASSIGN(Console);
 
     // helper functions
     int printSceneGraph(socket_native_type fd, Node* node, int level);

@@ -185,11 +185,11 @@ Renderer::~Renderer()
 
     free(_triBatchesToDraw);
 
-    CC_SAFE_RELEASE(_depthStencilState);
-    CC_SAFE_RELEASE(_commandBuffer);
-    CC_SAFE_RELEASE(_renderPipeline);
-    CC_SAFE_RELEASE(_defaultRT);
-    CC_SAFE_RELEASE(_offscreenRT);
+    AX_SAFE_RELEASE(_depthStencilState);
+    AX_SAFE_RELEASE(_commandBuffer);
+    AX_SAFE_RELEASE(_renderPipeline);
+    AX_SAFE_RELEASE(_defaultRT);
+    AX_SAFE_RELEASE(_offscreenRT);
 }
 
 void Renderer::init()
@@ -298,7 +298,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
             drawBatchedTriangles();
 
             _queuedTotalIndexCount = _queuedTotalVertexCount = 0;
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
             _queuedIndexCount = _queuedVertexCount = 0;
             _triangleCommandBufferManager.prepareNextBuffer();
             _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
@@ -308,7 +308,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
 
         // queue it
         _queuedTriangleCommands.push_back(cmd);
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
         _queuedIndexCount += cmd->getIndexCount();
         _queuedVertexCount += cmd->getVertexCount();
 #endif
@@ -408,7 +408,7 @@ void Renderer::endFrame()
 {
     _commandBuffer->endFrame();
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     _triangleCommandBufferManager.putbackAllBuffers();
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer  = _triangleCommandBufferManager.getIndexBuffer();
@@ -609,7 +609,7 @@ void Renderer::drawBatchedTriangles()
         return;
 
         /************** 1: Setup up vertices/indices *************/
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
     unsigned int indexBufferFillOffset  = _queuedTotalIndexCount - _queuedIndexCount;
 #else
@@ -638,7 +638,7 @@ void Renderer::drawBatchedTriangles()
         // in the same batch ?
         if (batchable && (prevMaterialID == currentMaterialID || firstCommand))
         {
-            CC_ASSERT((firstCommand || _triBatchesToDraw[batchesTotal].cmd->getMaterialID() == cmd->getMaterialID()) &&
+            AX_ASSERT((firstCommand || _triBatchesToDraw[batchesTotal].cmd->getMaterialID() == cmd->getMaterialID()) &&
                       "argh... error in logic");
             _triBatchesToDraw[batchesTotal].indicesToDraw += cmd->getIndexCount();
             _triBatchesToDraw[batchesTotal].cmd = cmd;
@@ -673,7 +673,7 @@ void Renderer::drawBatchedTriangles()
         firstCommand   = false;
     }
     batchesTotal++;
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]), _filledVertex * sizeof(_verts[0]));
     _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]),
                                 _filledIndex * sizeof(_indices[0]));
@@ -706,7 +706,7 @@ void Renderer::drawBatchedTriangles()
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     _queuedIndexCount  = 0;
     _queuedVertexCount = 0;
 #endif
@@ -975,7 +975,7 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
 {
     auto device = backend::Device::getInstance();
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     // Metal doesn't need to update buffer to make sure it has the correct size.
     auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
                                           backend::BufferUsage::DYNAMIC);

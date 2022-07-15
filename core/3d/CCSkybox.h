@@ -44,7 +44,7 @@ class TextureCube;
 /**
  * Sky box technology is usually used to simulate infinity sky, mountains and other phenomena.
  */
-class CC_DLL Skybox : public Node
+class AX_DLL Skybox : public Node
 {
 public:
     CREATE_FUNC(Skybox);
@@ -109,7 +109,7 @@ protected:
     TextureCube* _texture;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Skybox);
+    AX_DISALLOW_COPY_AND_ASSIGN(Skybox);
 
     backend::UniformLocation _uniformColorLoc;
     backend::UniformLocation _uniformCameraRotLoc;

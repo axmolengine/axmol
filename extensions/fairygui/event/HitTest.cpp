@@ -15,7 +15,7 @@ PixelHitTestData::PixelHitTestData() :
 
 PixelHitTestData::~PixelHitTestData()
 {
-    CC_SAFE_DELETE(pixels);
+    AX_SAFE_DELETE(pixels);
 }
 
 void PixelHitTestData::load(ByteBuffer* buffer)

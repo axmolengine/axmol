@@ -84,7 +84,7 @@ TriggerObj* TriggerObj::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }

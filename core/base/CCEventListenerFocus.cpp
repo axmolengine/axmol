@@ -47,7 +47,7 @@ EventListenerFocus* EventListenerFocus::create()
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -62,7 +62,7 @@ EventListenerFocus* EventListenerFocus::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

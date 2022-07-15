@@ -76,7 +76,7 @@ bool ComponentContainer::remove(std::string_view componentName)
     do
     {
         auto iter = _componentMap.find(componentName);
-        CC_BREAK_IF(iter == _componentMap.end());
+        AX_BREAK_IF(iter == _componentMap.end());
 
         auto component = iter->second;
         _componentMap.erase(componentName);
@@ -116,12 +116,12 @@ void ComponentContainer::visit(float delta)
 {
     if (!_componentMap.empty())
     {
-        CC_SAFE_RETAIN(_owner);
+        AX_SAFE_RETAIN(_owner);
         for (auto& iter : _componentMap)
         {
             iter.second->update(delta);
         }
-        CC_SAFE_RELEASE(_owner);
+        AX_SAFE_RELEASE(_owner);
     }
 }
 

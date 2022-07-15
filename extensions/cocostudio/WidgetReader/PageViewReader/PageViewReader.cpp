@@ -37,7 +37,7 @@ PageViewReader* PageViewReader::getInstance()
 
 void PageViewReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instancePageViewReader);
+    AX_SAFE_DELETE(instancePageViewReader);
 }
 
 void PageViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)

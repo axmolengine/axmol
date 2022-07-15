@@ -39,7 +39,7 @@ TextBMFontReader* TextBMFontReader::getInstance()
 
 void TextBMFontReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceTextBMFontReader);
+    AX_SAFE_DELETE(instanceTextBMFontReader);
 }
 
 void TextBMFontReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
@@ -55,9 +55,9 @@ void TextBMFontReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* 
         std::string key   = stChildArray[i].GetName(cocoLoader);
         std::string value = stChildArray[i].GetValue(cocoLoader);
         // read all basic properties of widget
-        CC_BASIC_PROPERTY_BINARY_READER
+        AX_BASIC_PROPERTY_BINARY_READER
         // read all color related properties of widget
-        CC_COLOR_PROPERTY_BINARY_READER
+        AX_COLOR_PROPERTY_BINARY_READER
 
         else if (key == P_FileNameData)
         {

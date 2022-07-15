@@ -29,7 +29,7 @@
 #include <functional>
 
 #include "base/ccConfig.h"
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 
 #    include "base/CCRef.h"
 #    include "math/CCMath.h"
@@ -54,7 +54,7 @@ class WriteCache;
 /**
  * @brief An PhysicsJoint object connects two physics bodies together.
  */
-class CC_DLL PhysicsJoint
+class AX_DLL PhysicsJoint
 {
 protected:
     typedef std::function<void()> DelayTask;
@@ -145,7 +145,7 @@ protected:
  * @brief A fixed joint fuses the two bodies together at a reference point. Fixed joints are useful for creating complex
  * shapes that can be broken apart later.
  */
-class CC_DLL PhysicsJointFixed : public PhysicsJoint
+class AX_DLL PhysicsJointFixed : public PhysicsJoint
 {
 public:
     /** Create a fixed joint.
@@ -169,7 +169,7 @@ protected:
 /**
  * @brief A limit joint imposes a maximum distance between the two bodies, as if they were connected by a rope.
  */
-class CC_DLL PhysicsJointLimit : public PhysicsJoint
+class AX_DLL PhysicsJointLimit : public PhysicsJoint
 {
 public:
     /** Create a limit joint.
@@ -236,7 +236,7 @@ protected:
 /**
  * @brief A pin joint allows the two bodies to independently rotate around the anchor point as if pinned together.
  */
-class CC_DLL PhysicsJointPin : public PhysicsJoint
+class AX_DLL PhysicsJointPin : public PhysicsJoint
 {
 public:
     /** Create a pin joint.
@@ -270,7 +270,7 @@ protected:
 };
 
 /** Set the fixed distance with two bodies */
-class CC_DLL PhysicsJointDistance : public PhysicsJoint
+class AX_DLL PhysicsJointDistance : public PhysicsJoint
 {
 public:
     /** Create a fixed distance joint.
@@ -298,7 +298,7 @@ protected:
 };
 
 /** Connecting two physics bodies together with a spring. */
-class CC_DLL PhysicsJointSpring : public PhysicsJoint
+class AX_DLL PhysicsJointSpring : public PhysicsJoint
 {
 public:
     /** Create a fixed distance joint.
@@ -361,7 +361,7 @@ protected:
 };
 
 /** Attach body a to a line, and attach body b to a dot. */
-class CC_DLL PhysicsJointGroove : public PhysicsJoint
+class AX_DLL PhysicsJointGroove : public PhysicsJoint
 {
 public:
     /** Create a groove joint.
@@ -409,7 +409,7 @@ protected:
 };
 
 /** Likes a spring joint, but works with rotary. */
-class CC_DLL PhysicsJointRotarySpring : public PhysicsJoint
+class AX_DLL PhysicsJointRotarySpring : public PhysicsJoint
 {
 public:
     /** Create a damped rotary spring joint.
@@ -451,7 +451,7 @@ protected:
 };
 
 /** Likes a limit joint, but works with rotary. */
-class CC_DLL PhysicsJointRotaryLimit : public PhysicsJoint
+class AX_DLL PhysicsJointRotaryLimit : public PhysicsJoint
 {
 public:
     /** Create a limit rotary joint.
@@ -495,7 +495,7 @@ protected:
 };
 
 /** Works like a socket wrench. */
-class CC_DLL PhysicsJointRatchet : public PhysicsJoint
+class AX_DLL PhysicsJointRatchet : public PhysicsJoint
 {
 public:
     /** Create a ratchet joint.
@@ -536,7 +536,7 @@ protected:
 };
 
 /** Keeps the angular velocity ratio of a pair of bodies constant. */
-class CC_DLL PhysicsJointGear : public PhysicsJoint
+class AX_DLL PhysicsJointGear : public PhysicsJoint
 {
 public:
     /** Create a gear joint.
@@ -572,7 +572,7 @@ protected:
 };
 
 /** Keeps the relative angular velocity of a pair of bodies constant. */
-class CC_DLL PhysicsJointMotor : public PhysicsJoint
+class AX_DLL PhysicsJointMotor : public PhysicsJoint
 {
 public:
     /** Create a motor joint.
@@ -603,5 +603,5 @@ protected:
 
 NS_AX_END
 
-#endif  // CC_USE_PHYSICS
+#endif  // AX_USE_PHYSICS
 #endif  // __CCPHYSICS_JOINT_H__

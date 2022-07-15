@@ -106,7 +106,7 @@ struct timezone
     int tz_dsttime;
 };
 
-int CC_DLL gettimeofday(struct timeval*, struct timezone*);
+int AX_DLL gettimeofday(struct timeval*, struct timezone*);
 
 NS_AX_END
 

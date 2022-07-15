@@ -740,9 +740,9 @@ void ActionSequence2::onEnter()
 
     auto action = Sequence::create(
         Place::create(Vec2(200.0f, 200.0f)), Show::create(), MoveBy::create(1, Vec2(100.0f, 0.0f)),
-        CallFunc::create(CC_CALLBACK_0(ActionSequence2::callback1, this)),
-        CallFunc::create(CC_CALLBACK_0(ActionSequence2::callback2, this, _grossini)),
-        CallFunc::create(CC_CALLBACK_0(ActionSequence2::callback3, this, _grossini, 0xbebabeba)), nullptr);
+        CallFunc::create(AX_CALLBACK_0(ActionSequence2::callback1, this)),
+        CallFunc::create(AX_CALLBACK_0(ActionSequence2::callback2, this, _grossini)),
+        CallFunc::create(AX_CALLBACK_0(ActionSequence2::callback3, this, _grossini, 0xbebabeba)), nullptr);
 
     _grossini->runAction(action);
 }
@@ -822,7 +822,7 @@ void ActionCallFuncN::onEnter()
     centerSprites(1);
 
     auto action = Sequence::create(MoveBy::create(2.0f, Vec2(150.0f, 0.0f)),
-                                   CallFuncN::create(CC_CALLBACK_1(ActionCallFuncN::callback, this)), nullptr);
+                                   CallFuncN::create(AX_CALLBACK_1(ActionCallFuncN::callback, this)), nullptr);
 
     _grossini->runAction(action);
 }
@@ -856,7 +856,7 @@ void ActionCallFuncND::onEnter()
 
     auto action = Sequence::create(
         MoveBy::create(2.0f, Vec2(200.0f, 0.0f)),
-        CallFuncN::create(CC_CALLBACK_1(ActionCallFuncND::doRemoveFromParentAndCleanup, this, true)), nullptr);
+        CallFuncN::create(AX_CALLBACK_1(ActionCallFuncND::doRemoveFromParentAndCleanup, this, true)), nullptr);
 
     _grossini->runAction(action);
 }
@@ -1371,7 +1371,7 @@ void ActionStacked::onEnter()
     this->centerSprites(0);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(ActionStacked::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(ActionStacked::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();

@@ -63,7 +63,7 @@ enum class CameraFlag
 /**
  * Defines a camera .
  */
-class CC_DLL Camera : public Node
+class AX_DLL Camera : public Node
 {
     friend class Scene;
     friend class Director;

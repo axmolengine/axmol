@@ -65,7 +65,7 @@ struct TextureInfoMTL
     TextureDescriptor _descriptor;
 
     id<MTLDevice> _mtlDevice;
-    std::array<id<MTLTexture>, CC_META_TEXTURES + 1> _mtlTextures;
+    std::array<id<MTLTexture>, AX_META_TEXTURES + 1> _mtlTextures;
     int _maxIdx = -1;
 
     id<MTLSamplerState> _mtlSamplerState = nil;

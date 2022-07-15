@@ -46,7 +46,7 @@ typedef std::function<void(float)> ccSchedulerFunc;
 /**
  * @cond
  */
-class CC_DLL Timer : public Ref
+class AX_DLL Timer : public Ref
 {
 protected:
     Timer();
@@ -75,7 +75,7 @@ protected:
     bool _aborted;
 };
 
-class CC_DLL TimerTargetSelector : public Timer
+class AX_DLL TimerTargetSelector : public Timer
 {
 public:
     TimerTargetSelector();
@@ -99,7 +99,7 @@ protected:
     SEL_SCHEDULE _selector;
 };
 
-class CC_DLL TimerTargetCallback : public Timer
+class AX_DLL TimerTargetCallback : public Timer
 {
 public:
     TimerTargetCallback();
@@ -126,9 +126,9 @@ protected:
     std::string _key;
 };
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
 
-class CC_DLL TimerScriptHandler : public Timer
+class AX_DLL TimerScriptHandler : public Timer
 {
 public:
     bool initWithScriptHandler(int handler, float seconds);
@@ -156,7 +156,7 @@ struct _listEntry;
 struct _hashSelectorEntry;
 struct _hashUpdateEntry;
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
 class SchedulerScriptHandlerEntry;
 #endif
 
@@ -172,7 +172,7 @@ The 'custom selectors' should be avoided when possible. It is faster, and consum
 selector'.
 
 */
-class CC_DLL Scheduler : public Ref
+class AX_DLL Scheduler : public Ref
 {
 public:
     /** Priority level reserved for system services.
@@ -232,7 +232,7 @@ public:
      If paused is true, then it won't be called until it is resumed.
      If 'interval' is 0, it will be called every frame, but if so, it's recommended to use 'scheduleUpdate' instead.
      If the 'callback' is already scheduled, then only the interval parameter will be updated without re-scheduling it
-     again. repeat let the action be repeated repeat + 1 times, use CC_REPEAT_FOREVER to let the action run continuously
+     again. repeat let the action be repeated repeat + 1 times, use AX_REPEAT_FOREVER to let the action run continuously
      delay is the amount of time the action will wait before it'll start.
      @param callback The callback function.
      @param target The target of the callback function.
@@ -269,7 +269,7 @@ public:
      If paused is true, then it won't be called until it is resumed.
      If 'interval' is 0, it will be called every frame, but if so, it's recommended to use 'scheduleUpdate' instead.
      If the selector is already scheduled, then only the interval parameter will be updated without re-scheduling it
-     again. repeat let the action be repeated repeat + 1 times, use CC_REPEAT_FOREVER to let the action run continuously
+     again. repeat let the action be repeated repeat + 1 times, use AX_REPEAT_FOREVER to let the action run continuously
      delay is the amount of time the action will wait before it'll start
 
      @param selector The callback function.
@@ -306,7 +306,7 @@ public:
         this->schedulePerFrame([target](float dt) { target->update(dt); }, target, priority, paused);
     }
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     // Schedule for script bindings.
     /** The scheduled script callback will be called every 'interval' seconds.
      If paused is true, then it won't be called until it is resumed.
@@ -367,7 +367,7 @@ public:
      */
     void unscheduleAllWithMinPriority(int minPriority);
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     /** Unschedule a script entry.
      * @warning Don't invoke this function unless you know what you are doing.
      * @js NA
@@ -497,7 +497,7 @@ protected:
     // If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.
     bool _updateHashLocked;
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     Vector<SchedulerScriptHandlerEntry*> _scriptHandlerEntries;
 #endif
 

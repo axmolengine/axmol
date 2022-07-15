@@ -55,8 +55,8 @@ ControlButton::ControlButton()
 
 ControlButton::~ControlButton()
 {
-    CC_SAFE_RELEASE(_titleLabel);
-    CC_SAFE_RELEASE(_backgroundSprite);
+    AX_SAFE_RELEASE(_titleLabel);
+    AX_SAFE_RELEASE(_backgroundSprite);
 }
 
 // initialisers
@@ -740,7 +740,7 @@ ControlButton* ControlButton::create()
         pControlButton->autorelease();
         return pControlButton;
     }
-    CC_SAFE_DELETE(pControlButton);
+    AX_SAFE_DELETE(pControlButton);
     return nullptr;
 }
 

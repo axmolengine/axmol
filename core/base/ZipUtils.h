@@ -33,9 +33,9 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include <string>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "platform/android/CCFileUtils-android.h"
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 // for import ssize_t on win32 platform
 #    include "platform/CCStdC.h"
 #endif
@@ -70,7 +70,7 @@ enum
     CCZ_COMPRESSION_NONE,  /** plain (not supported yet). */
 };
 
-class CC_DLL ZipUtils
+class AX_DLL ZipUtils
 {
 public:
     /**
@@ -237,7 +237,7 @@ struct ZipFileStream
  *
  * @since v2.0.5
  */
-class CC_DLL ZipFile
+class AX_DLL ZipFile
 {
 public:
     /**
@@ -323,7 +323,7 @@ public:
      *  @return Upon success, a pointer to the data is returned, otherwise nullptr.
      *  @warning Recall: you are responsible for calling free() on any Non-nullptr pointer returned.
      */
-    CC_DEPRECATED()
+    AX_DEPRECATED()
     static unsigned char* getFileDataFromZip(std::string_view zipFilePath, std::string_view filename, ssize_t* size);
 
 private:

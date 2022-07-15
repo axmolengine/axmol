@@ -47,7 +47,7 @@ class ScrollViewBar;
  * Layout container for a view hierarchy that can be scrolled by the user, allowing it to be larger than the physical
  * display. It holds a inner `Layout` container for storing child items horizontally or vertically.
  */
-class CC_GUI_DLL ScrollView : public Layout
+class AX_GUI_DLL ScrollView : public Layout
 {
 
     DECLARE_CLASS_GUI_INFO

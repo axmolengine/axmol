@@ -100,7 +100,7 @@ TMXMapInfo* TMXMapInfo::create(std::string_view tmxFile)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -112,7 +112,7 @@ TMXMapInfo* TMXMapInfo::createWithXML(std::string_view tmxString, std::string_vi
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -502,14 +502,14 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         Vec2 p(x + objectGroup->getPositionOffset().x, _mapSize.height * _tileSize.height - y -
                                                            objectGroup->getPositionOffset().y -
                                                            attributeDict["height"].asInt());
-        p         = CC_POINT_PIXELS_TO_POINTS(p);
+        p         = AX_POINT_PIXELS_TO_POINTS(p);
         dict["x"] = Value(p.x);
         dict["y"] = Value(p.y);
 
         int width  = attributeDict["width"].asInt();
         int height = attributeDict["height"].asInt();
         Vec2 s(width, height);
-        s              = CC_SIZE_PIXELS_TO_POINTS(s);
+        s              = AX_SIZE_PIXELS_TO_POINTS(s);
         dict["width"]  = Value(s.width);
         dict["height"] = Value(s.height);
 
@@ -705,7 +705,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 // int sizeHint = s.width * s.height * sizeof(uint32_t);
                 ssize_t sizeHint = s.width * s.height * sizeof(unsigned int);
 
-                ssize_t CC_UNUSED inflatedLen = ZipUtils::inflateMemoryWithHint(buffer, len, &deflated, sizeHint);
+                ssize_t AX_UNUSED inflatedLen = ZipUtils::inflateMemoryWithHint(buffer, len, &deflated, sizeHint);
                 CCASSERT(inflatedLen == sizeHint, "inflatedLen should be equal to sizeHint!");
 
                 free(buffer);

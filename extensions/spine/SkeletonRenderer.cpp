@@ -266,7 +266,7 @@ void SkeletonRenderer::draw (Renderer* renderer, const Mat4& transform, uint32_t
 	VLA(float, worldCoords, coordCount);
 	transformWorldVertices(worldCoords, coordCount, *_skeleton, _startSlotIndex, _endSlotIndex);
 
-#if CC_USE_CULLING
+#if AX_USE_CULLING
 	const axis::Rect bb = computeBoundingRect(worldCoords, coordCount / 2);
 
 	if (cullRectangle(renderer, transform, bb)) {
@@ -851,7 +851,7 @@ bool SkeletonRenderer::getDebugBoundingRectEnabled() const {
 }
 
 void SkeletonRenderer::onEnter () {
-#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
+#if AX_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
 	if (_scriptType == kScriptTypeJavascript && ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter)) return;
 #endif
 	Node::onEnter();
@@ -859,7 +859,7 @@ void SkeletonRenderer::onEnter () {
 }
 
 void SkeletonRenderer::onExit () {
-#if CC_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
+#if AX_ENABLE_SCRIPT_BINDING && COCOS2D_VERSION < 0x00040000
 	if (_scriptType == kScriptTypeJavascript && ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit)) return;
 #endif
 	Node::onExit();

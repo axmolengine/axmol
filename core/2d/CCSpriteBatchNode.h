@@ -62,7 +62,7 @@ class Sprite;
  *
  * @since v0.7.1
  */
-class CC_DLL SpriteBatchNode : public Node, public TextureProtocol
+class AX_DLL SpriteBatchNode : public Node, public TextureProtocol
 {
     static const int DEFAULT_CAPACITY = 29;
 
@@ -100,8 +100,8 @@ public:
     {
         if (textureAtlas != _textureAtlas)
         {
-            CC_SAFE_RETAIN(textureAtlas);
-            CC_SAFE_RELEASE(_textureAtlas);
+            AX_SAFE_RETAIN(textureAtlas);
+            AX_SAFE_RELEASE(_textureAtlas);
             _textureAtlas = textureAtlas;
         }
     }

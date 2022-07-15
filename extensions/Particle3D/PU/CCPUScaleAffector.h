@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
-#define __CC_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
+#ifndef __AX_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
+#define __AX_PU_PARTICLE_3D_SCALE_AFFECTOR_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
@@ -33,7 +33,7 @@
 
 NS_AX_BEGIN
 
-class CC_EX_DLL PUScaleAffector : public PUAffector
+class AX_EX_DLL PUScaleAffector : public PUAffector
 {
 public:
     // Constants

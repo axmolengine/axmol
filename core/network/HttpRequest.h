@@ -60,7 +60,7 @@ typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRe
  * @lua NA
  */
 
-class CC_DLL HttpRequest : public Ref
+class AX_DLL HttpRequest : public Ref
 {
     friend class HttpClient;
 

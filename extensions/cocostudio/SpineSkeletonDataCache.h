@@ -6,7 +6,7 @@
 #include "CocosStudioExport.h"
 #include <functional>
 
-#if !defined(CC_USE_SPINE_CPP) || CC_USE_SPINE_CPP
+#if !defined(AX_USE_SPINE_CPP) || AX_USE_SPINE_CPP
 class CCS_DLL SpineSkeletonDataCache
 {
 public:

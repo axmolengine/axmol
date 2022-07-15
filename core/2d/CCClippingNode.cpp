@@ -43,7 +43,7 @@ ClippingNode::~ClippingNode()
         _stencil->stopAllActions();
         _stencil->release();
     }
-    CC_SAFE_DELETE(_stencilStateManager);
+    AX_SAFE_DELETE(_stencilStateManager);
 }
 
 ClippingNode* ClippingNode::create()
@@ -55,7 +55,7 @@ ClippingNode* ClippingNode::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -70,7 +70,7 @@ ClippingNode* ClippingNode::create(Node* pStencil)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -153,7 +153,7 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     renderer->pushGroup(_groupCommandStencil.getRenderQueueID());
 
     // _beforeVisitCmd.init(_globalZOrder);
-    // _beforeVisitCmd.func = CC_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
+    // _beforeVisitCmd.func = AX_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
     // renderer->addCommand(&_beforeVisitCmd);
     _stencilStateManager->onBeforeVisit(_globalZOrder);
 
@@ -166,14 +166,14 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
         programState->setUniform(alphaLocation, &alphaThreshold, sizeof(alphaThreshold));
         setProgramStateRecursively(_stencil, programState);
 
-        CC_SAFE_RELEASE_NULL(programState);
+        AX_SAFE_RELEASE_NULL(programState);
     }
     _stencil->visit(renderer, _modelViewTransform, flags);
 
 
     auto afterDrawStencilCmd = renderer->nextCallbackCommand();
     afterDrawStencilCmd->init(_globalZOrder);
-    afterDrawStencilCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
+    afterDrawStencilCmd->func = AX_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
     renderer->addCommand(afterDrawStencilCmd);
 
     bool visibleByCamera = isVisitableByVisitingCamera();
@@ -215,7 +215,7 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 
     auto _afterVisitCmd = renderer->nextCallbackCommand();
     _afterVisitCmd->init(_globalZOrder);
-    _afterVisitCmd->func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
+    _afterVisitCmd->func = AX_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
     renderer->addCommand(_afterVisitCmd);
 
     renderer->popGroup();
@@ -242,7 +242,7 @@ void ClippingNode::setStencil(Node* stencil)
     if (_stencil == stencil)
         return;
 
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -251,7 +251,7 @@ void ClippingNode::setStencil(Node* stencil)
         if (stencil)
             sEngine->retainScriptObject(this, stencil);
     }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
 
     // cleanup current stencil
     if (_stencil != nullptr && _stencil->isRunning())
@@ -259,11 +259,11 @@ void ClippingNode::setStencil(Node* stencil)
         _stencil->onExitTransitionDidStart();
         _stencil->onExit();
     }
-    CC_SAFE_RELEASE_NULL(_stencil);
+    AX_SAFE_RELEASE_NULL(_stencil);
 
     // initialise new stencil
     _stencil = stencil;
-    CC_SAFE_RETAIN(_stencil);
+    AX_SAFE_RETAIN(_stencil);
     if (_stencil != nullptr && this->isRunning())
     {
         _stencil->onEnter();

@@ -54,7 +54,7 @@ class VertexAttribValue;
  * arrays, since it is slower than the server-side VAOs used by OpenGL
  * (when creating a VertexAttribBinding between a Mesh and Effect).
  */
-class CC_DLL VertexAttribBinding : public Ref
+class AX_DLL VertexAttribBinding : public Ref
 {
 public:
     /**

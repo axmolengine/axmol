@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_LISTENER_H__
-#define __CC_PU_PARTICLE_3D_LISTENER_H__
+#ifndef __AX_PU_PARTICLE_3D_LISTENER_H__
+#define __AX_PU_PARTICLE_3D_LISTENER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -38,7 +38,7 @@ NS_AX_BEGIN
 struct PUParticle3D;
 class PUParticleSystem3D;
 
-class CC_EX_DLL PUListener
+class AX_EX_DLL PUListener
 {
 public:
     PUListener();

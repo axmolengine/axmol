@@ -58,7 +58,7 @@ class EventCustom;
  * \endcode
  * @js cc._EventListenerCustom
  */
-class CC_DLL EventListenerCustom : public EventListener
+class AX_DLL EventListenerCustom : public EventListener
 {
 public:
     /** Creates an event listener with type and callback.

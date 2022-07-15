@@ -38,7 +38,7 @@ NS_AX_BEGIN
 
 class FontAtlas;
 
-class CC_DLL Font : public Ref
+class AX_DLL Font : public Ref
 {
 public:
     virtual FontAtlas* newFontAtlas()                                                                   = 0;

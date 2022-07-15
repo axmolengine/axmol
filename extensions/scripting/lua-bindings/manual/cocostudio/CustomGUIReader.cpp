@@ -75,7 +75,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
     ObjectFactory* factoryCreate = ObjectFactory::getInstance();
     ObjectFactory::TInfo t;
     t._class = className;
-    t._func  = CC_CALLBACK_0(CustomGUIReader::createInstance, this);
+    t._func  = AX_CALLBACK_0(CustomGUIReader::createInstance, this);
     factoryCreate->registerType(t);
 
     auto guiReader            = GUIReader::getInstance();

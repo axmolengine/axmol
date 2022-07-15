@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_BUNDLE_READER_H__
-#define __CC_BUNDLE_READER_H__
+#ifndef __AX_BUNDLE_READER_H__
+#define __AX_BUNDLE_READER_H__
 
 #include <string>
 #include <vector>

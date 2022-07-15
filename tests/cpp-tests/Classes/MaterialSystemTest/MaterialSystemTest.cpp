@@ -150,10 +150,10 @@ void Material_2DEffects::onEnter()
     FETCH_CCTIME_LOCATION(meshNoise);
     FETCH_CCTIME_LOCATION(meshEdgeDetect);
 
-    schedule(CC_SCHEDULE_SELECTOR(Material_2DEffects::updateCCTimeUniforms));
+    schedule(AX_SCHEDULE_SELECTOR(Material_2DEffects::updateCCTimeUniforms));
 
     // properties is not a "Ref" object
-    CC_SAFE_DELETE(properties);
+    AX_SAFE_DELETE(properties);
 }
 
 std::string Material_2DEffects::subtitle() const
@@ -195,13 +195,13 @@ bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* progra
     if (autoBinding.compare("DYNAMIC_RADIUS") == 0)
     {
         auto loc = programState->getUniformLocation(uniform);
-        programState->setCallbackUniform(loc, CC_CALLBACK_2(EffectAutoBindingResolver::callbackRadius, this));
+        programState->setCallbackUniform(loc, AX_CALLBACK_2(EffectAutoBindingResolver::callbackRadius, this));
         return true;
     }
     else if (autoBinding.compare("OUTLINE_COLOR") == 0)
     {
         auto loc = programState->getUniformLocation(uniform);
-        programState->setCallbackUniform(loc, CC_CALLBACK_2(EffectAutoBindingResolver::callbackColor, this));
+        programState->setCallbackUniform(loc, AX_CALLBACK_2(EffectAutoBindingResolver::callbackColor, this));
         return true;
     }
     return false;
@@ -268,9 +268,9 @@ void Material_AutoBindings::onEnter()
     _noiseProgramState = meshNoise->getProgramState();
     _locationTime      = _noiseProgramState->getUniformLocation("u_Time");
 
-    schedule(CC_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
+    schedule(AX_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
     // properties is not a "Ref" object
-    CC_SAFE_DELETE(properties);
+    AX_SAFE_DELETE(properties);
 }
 
 std::string Material_AutoBindings::subtitle() const
@@ -308,7 +308,7 @@ void Material_setTechnique::onEnter()
     auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color3B::GREEN);
     addChild(light2);
 
-    this->schedule(CC_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");
+    this->schedule(AX_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");
     _techniqueState = 0;
 
     auto rot    = RotateBy::create(5, Vec3(30.0f, 60.0f, 270.0f));

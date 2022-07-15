@@ -91,7 +91,7 @@ void captureScreen(std::function<void(RefPtr<Image>)> imageCallback)
     auto eventDispatcher = director->getEventDispatcher();
 
     // !!!Metal: needs setFrameBufferOnly before draw
-#if defined(CC_USE_METAL)
+#if defined(AX_USE_METAL)
     s_captureScreenListener =
         eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom* /*event*/) {
 #else
@@ -309,7 +309,7 @@ Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key)
 
         if (!imageResult)
         {
-            CC_SAFE_RELEASE_NULL(image);
+            AX_SAFE_RELEASE_NULL(image);
             return nullptr;
         }
 
@@ -333,7 +333,7 @@ Sprite* createSpriteFromBase64(const char* base64String)
 
     if (!imageResult)
     {
-        CC_SAFE_RELEASE_NULL(image);
+        AX_SAFE_RELEASE_NULL(image);
         return nullptr;
     }
 
@@ -780,7 +780,7 @@ std::string urlDecode(std::string_view st)
     return decoded;
 }
 
-CC_DLL uint32_t fourccValue(std::string_view str)
+AX_DLL uint32_t fourccValue(std::string_view str)
 {
     if (str.empty() || str[0] != '#')
         return (uint32_t)-1;

@@ -53,7 +53,7 @@ SkeletonNodeReader* SkeletonNodeReader::getInstance()
 
 void SkeletonNodeReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceSkeletonNodeReader);
+    AX_SAFE_DELETE(_instanceSkeletonNodeReader);
 }
 
 axis::Node* SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)

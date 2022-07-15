@@ -56,7 +56,7 @@ ComRender::ComRender(axis::Node* node, const char* comName)
 
 ComRender::~ComRender()
 {
-    CC_SAFE_RELEASE_NULL(_render);
+    AX_SAFE_RELEASE_NULL(_render);
 }
 
 void ComRender::onEnter()
@@ -116,7 +116,7 @@ bool ComRender::serialize(void* r)
     bool ret = false;
     do
     {
-        CC_BREAK_IF(r == nullptr);
+        AX_BREAK_IF(r == nullptr);
         SerData* serData          = (SerData*)(r);
         const rapidjson::Value* v = serData->_rData;
         stExpCocoNode* cocoNode   = serData->_cocoNode;
@@ -131,25 +131,25 @@ bool ComRender::serialize(void* r)
         if (v != nullptr)
         {
             className = DICTOOL->getStringValue_json(*v, "classname");
-            CC_BREAK_IF(className == nullptr);
+            AX_BREAK_IF(className == nullptr);
             comName                          = DICTOOL->getStringValue_json(*v, "name");
             const rapidjson::Value& fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
-            CC_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
+            AX_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
             file  = DICTOOL->getStringValue_json(fileData, "path");
             plist = DICTOOL->getStringValue_json(fileData, "plistFile");
-            CC_BREAK_IF(file == nullptr && plist == nullptr);
+            AX_BREAK_IF(file == nullptr && plist == nullptr);
             resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
         }
         else if (cocoNode != nullptr)
         {
             className = cocoNode[1].GetValue(cocoLoader);
-            CC_BREAK_IF(className == nullptr);
+            AX_BREAK_IF(className == nullptr);
             comName                  = cocoNode[2].GetValue(cocoLoader);
             stExpCocoNode* pfileData = cocoNode[4].GetChildArray(cocoLoader);
-            CC_BREAK_IF(!pfileData);
+            AX_BREAK_IF(!pfileData);
             file  = pfileData[0].GetValue(cocoLoader);
             plist = pfileData[1].GetValue(cocoLoader);
-            CC_BREAK_IF(file == nullptr && plist == nullptr);
+            AX_BREAK_IF(file == nullptr && plist == nullptr);
             resType = atoi(pfileData[2].GetValue(cocoLoader));
         }
         if (comName != nullptr)
@@ -232,7 +232,7 @@ bool ComRender::serialize(void* r)
                     std::string binaryFilePath = FileUtils::getInstance()->fullPathForFilename(filePath);
                     auto fileData              = FileUtils::getInstance()->getDataFromFile(binaryFilePath);
                     auto fileDataBytes         = fileData.getBytes();
-                    CC_BREAK_IF(fileData.isNull());
+                    AX_BREAK_IF(fileData.isNull());
                     CocoLoader tCocoLoader;
                     if (tCocoLoader.ReadCocoBinBuff((char*)fileDataBytes))
                     {
@@ -321,7 +321,7 @@ bool ComRender::serialize(void* r)
             }
             else
             {
-                CC_BREAK_IF(true);
+                AX_BREAK_IF(true);
             }
         }
         else if (resType == 1)
@@ -343,12 +343,12 @@ bool ComRender::serialize(void* r)
             }
             else
             {
-                CC_BREAK_IF(true);
+                AX_BREAK_IF(true);
             }
         }
         else
         {
-            CC_BREAK_IF(true);
+            AX_BREAK_IF(true);
         }
     } while (0);
 
@@ -364,7 +364,7 @@ ComRender* ComRender::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -378,7 +378,7 @@ ComRender* ComRender::create(axis::Node* node, const char* comName)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -390,7 +390,7 @@ bool ComRender::readJson(std::string_view fileName, rapidjson::Document& doc)
     {
         std::string contentStr = FileUtils::getInstance()->getStringFromFile(fileName);
         doc.Parse<0>(contentStr.c_str());
-        CC_BREAK_IF(doc.HasParseError());
+        AX_BREAK_IF(doc.HasParseError());
         ret = true;
     } while (0);
     return ret;

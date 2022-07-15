@@ -2439,7 +2439,7 @@ tolua_lerror:
     return 0;
 }
 
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 #    include "navmesh/CCNavMesh.h"
 int lua_axis_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
@@ -2591,7 +2591,7 @@ tolua_lerror:
     return 0;
 }
 
-#endif  //#if CC_USE_NAVMESH
+#endif  //#if AX_USE_NAVMESH
 
 static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
 {
@@ -2686,7 +2686,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
         ok &= luaval_to_number(tolua_S, 4, &ten, "ax.CardinalSplineBy:create");
         if (!ok)
         {
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             return 0;
         }
 
@@ -2696,7 +2696,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
 
             if (NULL == points)
             {
-                CC_SAFE_DELETE_ARRAY(arr);
+                AX_SAFE_DELETE_ARRAY(arr);
                 return 0;
             }
 
@@ -2705,7 +2705,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
                 points->addControlPoint(arr[i]);
             }
 
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             CardinalSplineBy* tolua_ret = CardinalSplineBy::create((float)dur, points, (float)ten);
             if (NULL != tolua_ret)
             {
@@ -2763,7 +2763,7 @@ int tolua_cocos2d_CatmullRomBy_create(lua_State* tolua_S)
 
             if (NULL == points)
             {
-                CC_SAFE_DELETE_ARRAY(arr);
+                AX_SAFE_DELETE_ARRAY(arr);
                 return 0;
             }
 
@@ -2772,7 +2772,7 @@ int tolua_cocos2d_CatmullRomBy_create(lua_State* tolua_S)
                 points->addControlPoint(arr[i]);
             }
 
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             CatmullRomBy* tolua_ret = CatmullRomBy::create((float)dur, points);
             if (NULL != tolua_ret)
             {
@@ -2829,7 +2829,7 @@ int tolua_cocos2d_CatmullRomTo_create(lua_State* tolua_S)
 
             if (NULL == points)
             {
-                CC_SAFE_DELETE_ARRAY(arr);
+                AX_SAFE_DELETE_ARRAY(arr);
                 return 0;
             }
 
@@ -2838,7 +2838,7 @@ int tolua_cocos2d_CatmullRomTo_create(lua_State* tolua_S)
                 points->addControlPoint(arr[i]);
             }
 
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             CatmullRomTo* tolua_ret = CatmullRomTo::create((float)dur, points);
             if (NULL != tolua_ret)
             {
@@ -2891,7 +2891,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
 
         if (num < 3)
         {
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             return 0;
         }
 
@@ -2899,7 +2899,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
         config.controlPoint_1 = arr[0];
         config.controlPoint_2 = arr[1];
         config.endPosition    = arr[2];
-        CC_SAFE_DELETE_ARRAY(arr);
+        AX_SAFE_DELETE_ARRAY(arr);
 
         BezierBy* tolua_ret = BezierBy::create((float)t, config);
         if (NULL != tolua_ret)
@@ -2952,7 +2952,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
 
         if (num < 3)
         {
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             return 0;
         }
 
@@ -2960,7 +2960,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
         config.controlPoint_1 = arr[0];
         config.controlPoint_2 = arr[1];
         config.endPosition    = arr[2];
-        CC_SAFE_DELETE_ARRAY(arr);
+        AX_SAFE_DELETE_ARRAY(arr);
 
         BezierTo* tolua_ret = BezierTo::create((float)t, config);
         if (NULL != tolua_ret)
@@ -3026,7 +3026,7 @@ static int tolua_axis_DrawNode_drawPolygon(lua_State* tolua_S)
                 lua_gettable(tolua_S, 2);
                 if (!tolua_istable(tolua_S, -1, 0, &tolua_err))
                 {
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
 #if COCOS2D_DEBUG >= 1
                     goto tolua_lerror;
 #endif
@@ -3035,7 +3035,7 @@ static int tolua_axis_DrawNode_drawPolygon(lua_State* tolua_S)
                 if (!luaval_to_vec2(tolua_S, lua_gettop(tolua_S), &points[i], "ax.DrawNode:drawPolygon"))
                 {
                     lua_pop(tolua_S, 1);
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
                     return 0;
                 }
                 lua_pop(tolua_S, 1);
@@ -3044,7 +3044,7 @@ static int tolua_axis_DrawNode_drawPolygon(lua_State* tolua_S)
             Color4F fillColor;
             if (!luaval_to_color4f(tolua_S, 4, &fillColor, "ax.DrawNode:drawPolygon"))
             {
-                CC_SAFE_DELETE_ARRAY(points);
+                AX_SAFE_DELETE_ARRAY(points);
                 return 0;
             }
 
@@ -3053,12 +3053,12 @@ static int tolua_axis_DrawNode_drawPolygon(lua_State* tolua_S)
             Color4F borderColor;
             if (!luaval_to_color4f(tolua_S, 6, &borderColor, "ax.DrawNode:drawPolygon"))
             {
-                CC_SAFE_DELETE_ARRAY(points);
+                AX_SAFE_DELETE_ARRAY(points);
                 return 0;
             }
 
             self->drawPolygon(points, (int)size, fillColor, borderWidth, borderColor);
-            CC_SAFE_DELETE_ARRAY(points);
+            AX_SAFE_DELETE_ARRAY(points);
             return 0;
         }
     }
@@ -3110,7 +3110,7 @@ int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
                 lua_gettable(tolua_S, 2);
                 if (!tolua_istable(tolua_S, -1, 0, &tolua_err))
                 {
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
 #if COCOS2D_DEBUG >= 1
                     goto tolua_lerror;
 #endif
@@ -3119,7 +3119,7 @@ int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
                 if (!luaval_to_vec2(tolua_S, lua_gettop(tolua_S), &points[i], "ax.DrawNode:drawSolidPoly"))
                 {
                     lua_pop(tolua_S, 1);
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
                     return 0;
                 }
                 lua_pop(tolua_S, 1);
@@ -3131,7 +3131,7 @@ int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
             if (!ok)
                 return 0;
             self->drawSolidPoly(points, size, arg2);
-            CC_SAFE_DELETE_ARRAY(points);
+            AX_SAFE_DELETE_ARRAY(points);
             return 0;
         }
     }
@@ -3188,7 +3188,7 @@ int tolua_axis_DrawNode_drawPoly(lua_State* tolua_S)
                 lua_gettable(tolua_S, 2);
                 if (!tolua_istable(tolua_S, -1, 0, &tolua_err))
                 {
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
 #if COCOS2D_DEBUG >= 1
                     goto tolua_lerror;
 #endif
@@ -3197,7 +3197,7 @@ int tolua_axis_DrawNode_drawPoly(lua_State* tolua_S)
                 if (!luaval_to_vec2(tolua_S, lua_gettop(tolua_S), &points[i], "ax.DrawNode:drawPoly"))
                 {
                     lua_pop(tolua_S, 1);
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
                     return 0;
                 }
                 lua_pop(tolua_S, 1);
@@ -3213,7 +3213,7 @@ int tolua_axis_DrawNode_drawPoly(lua_State* tolua_S)
                 return 0;
 
             self->drawPoly(points, size, arg2, arg3);
-            CC_SAFE_DELETE_ARRAY(points);
+            AX_SAFE_DELETE_ARRAY(points);
             return 0;
         }
     }
@@ -3261,7 +3261,7 @@ int tolua_axis_DrawNode_drawCardinalSpline(lua_State* tolua_S)
         PointArray* config = PointArray::create(num);
         if (NULL == config)
         {
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             return 0;
         }
 
@@ -3269,7 +3269,7 @@ int tolua_axis_DrawNode_drawCardinalSpline(lua_State* tolua_S)
         {
             config->addControlPoint(arr[i]);
         }
-        CC_SAFE_DELETE_ARRAY(arr);
+        AX_SAFE_DELETE_ARRAY(arr);
 
         double arg1;
         unsigned int arg2;
@@ -3329,7 +3329,7 @@ int tolua_axis_DrawNode_drawCatmullRom(lua_State* tolua_S)
         PointArray* config = PointArray::create(num);
         if (NULL == config)
         {
-            CC_SAFE_DELETE_ARRAY(arr);
+            AX_SAFE_DELETE_ARRAY(arr);
             return 0;
         }
 
@@ -3337,7 +3337,7 @@ int tolua_axis_DrawNode_drawCatmullRom(lua_State* tolua_S)
         {
             config->addControlPoint(arr[i]);
         }
-        CC_SAFE_DELETE_ARRAY(arr);
+        AX_SAFE_DELETE_ARRAY(arr);
 
         unsigned int arg1;
         axis::Color4F arg2;
@@ -3400,7 +3400,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
                 lua_gettable(tolua_S, 2);
                 if (!tolua_istable(tolua_S, -1, 0, &tolua_err))
                 {
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
 #if COCOS2D_DEBUG >= 1
                     goto tolua_lerror;
 #endif
@@ -3409,7 +3409,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
                 if (!luaval_to_vec2(tolua_S, lua_gettop(tolua_S), &points[i], "ax.DrawNode:drawPoints"))
                 {
                     lua_pop(tolua_S, 1);
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
                     return 0;
                 }
                 lua_pop(tolua_S, 1);
@@ -3437,7 +3437,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
                 lua_gettable(tolua_S, 2);
                 if (!tolua_istable(tolua_S, -1, 0, &tolua_err))
                 {
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
 #if COCOS2D_DEBUG >= 1
                     goto tolua_lerror;
 #endif
@@ -3446,7 +3446,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
                 if (!luaval_to_vec2(tolua_S, lua_gettop(tolua_S), &points[i], "ax.DrawNode:drawPoints"))
                 {
                     lua_pop(tolua_S, 1);
-                    CC_SAFE_DELETE_ARRAY(points);
+                    AX_SAFE_DELETE_ARRAY(points);
                     return 0;
                 }
                 lua_pop(tolua_S, 1);
@@ -3786,7 +3786,7 @@ tolua_lerror:
     return 0;
 }
 
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 #    include "physics3d/CCPhysics3DWorld.h"
 int lua_axis_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
@@ -3895,12 +3895,12 @@ static void extendScene(lua_State* tolua_S)
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);
     if (lua_istable(tolua_S, -1))
     {
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
         tolua_function(tolua_S, "getPhysics3DWorld", lua_axis_Scene_getPhysics3DWorld);
         tolua_function(tolua_S, "setPhysics3DDebugCamera", lua_axis_Scene_setPhysics3DDebugCamera);
 #endif
 
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
         tolua_function(tolua_S, "setNavMeshDebugCamera", lua_axis_Scene_setNavMeshDebugCamera);
         tolua_function(tolua_S, "setNavMesh", lua_axis_Scene_setNavMesh);
         tolua_function(tolua_S, "getNavMesh", lua_axis_Scene_getNavMesh);
@@ -4541,7 +4541,7 @@ EventListenerAcceleration* LuaEventListenerAcceleration::create()
     }
     else
     {
-        CC_SAFE_DELETE(eventAcceleration);
+        AX_SAFE_DELETE(eventAcceleration);
     }
     return eventAcceleration;
 }
@@ -4558,7 +4558,7 @@ EventListenerCustom* LuaEventListenerCustom::create(std::string_view eventName)
     }
     else
     {
-        CC_SAFE_DELETE(eventCustom);
+        AX_SAFE_DELETE(eventCustom);
     }
     return eventCustom;
 }
@@ -6329,7 +6329,7 @@ int lua_axis_TMXLayer_setTiles(lua_State* tolua_S)
 
         cobj->setTiles(arg0);
 
-        CC_SAFE_DELETE_ARRAY(arg0);
+        AX_SAFE_DELETE_ARRAY(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6817,7 +6817,7 @@ tolua_lerror:
 static int lua_collect_Properties(lua_State* tolua_S)
 {
     axis::Properties* self = (axis::Properties*)tolua_tousertype(tolua_S, 1, 0);
-    CC_SAFE_DELETE(self);
+    AX_SAFE_DELETE(self);
     return 0;
 }
 
@@ -6980,7 +6980,7 @@ tolua_lerror:
 static int lua_collect_PolygonInfo(lua_State* tolua_S)
 {
     axis::PolygonInfo* self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
-    CC_SAFE_DELETE(self);
+    AX_SAFE_DELETE(self);
     return 0;
 }
 
@@ -7336,7 +7336,7 @@ tolua_lerror:
 static int lua_collect_AutoPolygon(lua_State* tolua_S)
 {
     axis::AutoPolygon* self = (axis::AutoPolygon*)tolua_tousertype(tolua_S, 1, 0);
-    CC_SAFE_DELETE(self);
+    AX_SAFE_DELETE(self);
     return 0;
 }
 

@@ -30,7 +30,7 @@
 
 #include "platform/CCPlatformConfig.h"
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
 #import "platform/ios/CCES2Renderer-ios.h"
 // #import "platform/CCPlatformMacros.h"
@@ -254,4 +254,4 @@
 
 @end
 
-#endif // CC_PLATFORM_IOS
+#endif // AX_PLATFORM_IOS

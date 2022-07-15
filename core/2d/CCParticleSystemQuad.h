@@ -55,7 +55,7 @@ Special features and Limitations:
 @since v0.8
 @js NA
 */
-class CC_DLL ParticleSystemQuad : public ParticleSystem
+class AX_DLL ParticleSystemQuad : public ParticleSystem
 {
 public:
     /** Creates a Particle Emitter.
@@ -176,7 +176,7 @@ protected:
     backend::UniformLocation _textureLocation;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystemQuad);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleSystemQuad);
 };
 
 // end of _2d group

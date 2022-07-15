@@ -78,7 +78,7 @@ GTweener* GTweener::setSnapping(bool value)
 
 GTweener* GTweener::setTargetAny(void* value)
 {
-    CC_SAFE_RELEASE(_refTarget);
+    AX_SAFE_RELEASE(_refTarget);
     _refTarget = nullptr;
     _target = value;
     return this;
@@ -91,10 +91,10 @@ GTweener* GTweener::setTarget(axis::Ref* value)
 
 GTweener* GTweener::setTarget(axis::Ref* target, TweenPropType propType)
 {
-    CC_SAFE_RELEASE(_refTarget);
+    AX_SAFE_RELEASE(_refTarget);
     _target = _refTarget = target;
     _propType = propType;
-    CC_SAFE_RETAIN(_refTarget);
+    AX_SAFE_RETAIN(_refTarget);
     return this;
 }
 
@@ -278,7 +278,7 @@ void GTweener::_init()
 
 void GTweener::_reset()
 {
-    CC_SAFE_RELEASE(_refTarget);
+    AX_SAFE_RELEASE(_refTarget);
     _target = nullptr;
     _refTarget = nullptr;
     _userData = nullptr;

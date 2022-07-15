@@ -1,15 +1,15 @@
 
-CC_CONTENT_SCALE_FACTOR = function()
+AX_CONTENT_SCALE_FACTOR = function()
     return cc.Director:getInstance():getContentScaleFactor()
 end
 
 
-CC_POINT_PIXELS_TO_POINTS = function(pixels)
-    return cc.p(pixels.x/CC_CONTENT_SCALE_FACTOR(), pixels.y/CC_CONTENT_SCALE_FACTOR())
+AX_POINT_PIXELS_TO_POINTS = function(pixels)
+    return cc.p(pixels.x/AX_CONTENT_SCALE_FACTOR(), pixels.y/AX_CONTENT_SCALE_FACTOR())
 end
 
-CC_POINT_POINTS_TO_PIXELS = function(points)
-    return cc.p(points.x*CC_CONTENT_SCALE_FACTOR(), points.y*CC_CONTENT_SCALE_FACTOR())
+AX_POINT_POINTS_TO_PIXELS = function(points)
+    return cc.p(points.x*AX_CONTENT_SCALE_FACTOR(), points.y*AX_CONTENT_SCALE_FACTOR())
 end
 
 

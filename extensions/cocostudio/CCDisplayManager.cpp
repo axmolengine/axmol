@@ -42,7 +42,7 @@ DisplayManager* DisplayManager::create(Bone* bone)
         pDisplayManager->autorelease();
         return pDisplayManager;
     }
-    CC_SAFE_DELETE(pDisplayManager);
+    AX_SAFE_DELETE(pDisplayManager);
     return nullptr;
 }
 
@@ -64,7 +64,7 @@ DisplayManager::~DisplayManager()
     {
         _displayRenderNode->removeFromParentAndCleanup(true);
         if (_displayRenderNode->getReferenceCount() > 0)
-            CC_SAFE_RELEASE_NULL(_displayRenderNode);
+            AX_SAFE_RELEASE_NULL(_displayRenderNode);
     }
 }
 

@@ -73,7 +73,7 @@ typedef struct _BMFontPadding
 /** @brief BMFontConfiguration has parsed configuration of the .fnt file
 @since v0.8
 */
-class CC_DLL BMFontConfiguration : public Ref
+class AX_DLL BMFontConfiguration : public Ref
 {
     // FIXME: Creating a public interface so that the bitmapFontArray[] is accessible
 public:  //@public
@@ -141,7 +141,7 @@ private:
     void purgeFontDefDictionary();
 };
 
-class CC_DLL FontFNT : public Font
+class AX_DLL FontFNT : public Font
 {
 
 public:
@@ -149,7 +149,7 @@ public:
     static FontFNT* create(std::string_view fntFilePath, std::string_view subTextureKey);
     static FontFNT* create(std::string_view fntFilePath);
 
-    CC_DEPRECATED_ATTRIBUTE static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
+    AX_DEPRECATED_ATTRIBUTE static FontFNT* create(std::string_view fntFilePath, const Vec2& imageOffset = Vec2::ZERO);
 
     /** Purges the cached data.
     Removes from memory the cached configurations and the atlas name dictionary.

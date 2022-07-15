@@ -44,7 +44,7 @@ class RadioButtonGroup;
  *  RadioButton is a specific type of two-states button that is similar to CheckBox.
  *  Additionally, it can be used together with RadioButtonGroup to interact with other radio buttons.
  */
-class CC_GUI_DLL RadioButton : public AbstractCheckButton
+class AX_GUI_DLL RadioButton : public AbstractCheckButton
 {
 
     DECLARE_CLASS_GUI_INFO
@@ -141,7 +141,7 @@ protected:
  *  RadioButtonGroup groups designated radio buttons to make them interact to each other.
  *  In one RadioButtonGroup, only one or no RadioButton can be checked.
  */
-class CC_GUI_DLL RadioButtonGroup : public Widget
+class AX_GUI_DLL RadioButtonGroup : public Widget
 {
     friend class RadioButton;
 

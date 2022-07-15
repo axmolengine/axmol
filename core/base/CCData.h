@@ -39,7 +39,7 @@
  */
 NS_AX_BEGIN
 
-class CC_DLL Data
+class AX_DLL Data
 {
     friend class Properties;
 
