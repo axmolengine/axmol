@@ -56,7 +56,7 @@ struct _hashElement;
 
  @since v0.8
  */
-class CC_DLL ActionManager : public Ref
+class AX_DLL ActionManager : public Ref
 {
 public:
     /**

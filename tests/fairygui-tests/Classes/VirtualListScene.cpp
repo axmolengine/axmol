@@ -18,7 +18,7 @@ void VirtualListScene::continueInit()
     _view->getChild("n8")->addClickListener([this](EventContext*) { _list->getScrollPane()->scrollBottom(); });
 
     _list = _view->getChild("mailList")->as<GList>();
-    _list->itemRenderer = CC_CALLBACK_2(VirtualListScene::renderListItem, this);
+    _list->itemRenderer = AX_CALLBACK_2(VirtualListScene::renderListItem, this);
     _list->setVirtual();
     _list->setNumItems(1000);
 }

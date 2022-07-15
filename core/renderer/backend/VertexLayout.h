@@ -42,7 +42,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * Store vertex attribute layout.
  */
-class CC_DLL VertexLayout
+class AX_DLL VertexLayout
 {
 public:
     struct Attribute

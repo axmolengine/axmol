@@ -78,16 +78,16 @@ void GScrollBar::constructExtension(ByteBuffer* buffer)
     _arrowButton1 = getChild("arrow1");
     _arrowButton2 = getChild("arrow2");
 
-    _grip->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GScrollBar::onGripTouchBegin, this));
-    _grip->addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(GScrollBar::onGripTouchMove, this));
-    _grip->addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(GScrollBar::onGripTouchEnd, this));
+    _grip->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GScrollBar::onGripTouchBegin, this));
+    _grip->addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(GScrollBar::onGripTouchMove, this));
+    _grip->addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(GScrollBar::onGripTouchEnd, this));
 
-    this->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GScrollBar::onTouchBegin, this));
+    this->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GScrollBar::onTouchBegin, this));
 
     if (_arrowButton1 != nullptr)
-        _arrowButton1->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GScrollBar::onArrowButton1Click, this));
+        _arrowButton1->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GScrollBar::onArrowButton1Click, this));
     if (_arrowButton2 != nullptr)
-        _arrowButton2->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(GScrollBar::onArrowButton2Click, this));
+        _arrowButton2->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(GScrollBar::onArrowButton2Click, this));
 }
 
 void GScrollBar::onTouchBegin(EventContext* context)

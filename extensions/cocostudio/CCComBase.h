@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_EXTENTIONS_CCCOMBASE_H__
-#define __CC_EXTENTIONS_CCCOMBASE_H__
+#ifndef __AX_EXTENTIONS_CCCOMBASE_H__
+#define __AX_EXTENTIONS_CCCOMBASE_H__
 
 #include <string>
 #include "DictionaryHelper.h"

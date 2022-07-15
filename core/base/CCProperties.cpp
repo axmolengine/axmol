@@ -123,7 +123,7 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     if (!p)
     {
         CCLOGWARN("Failed to load properties from url '%s'.", url.data());
-        CC_SAFE_DELETE(properties);
+        AX_SAFE_DELETE(properties);
         return nullptr;
     }
 
@@ -133,7 +133,7 @@ Properties* Properties::createNonRefCounted(std::string_view url)
     if (p != properties)
     {
         p = p->clone();
-        CC_SAFE_DELETE(properties);
+        AX_SAFE_DELETE(properties);
     }
     // XXX
     //    p->setDirectoryPath(FileSystem::getDirectoryName(fileString));
@@ -411,13 +411,13 @@ void Properties::readProperties()
 
 Properties::~Properties()
 {
-    CC_SAFE_DELETE(_dirPath);
+    AX_SAFE_DELETE(_dirPath);
     for (size_t i = 0, count = _namespaces.size(); i < count; ++i)
     {
-        CC_SAFE_DELETE(_namespaces[i]);
+        AX_SAFE_DELETE(_namespaces[i]);
     }
 
-    CC_SAFE_DELETE(_variables);
+    AX_SAFE_DELETE(_variables);
 }
 
 //
@@ -546,7 +546,7 @@ void Properties::resolveInheritance(const char* id)
                 // Delete the child's data.
                 for (size_t i = 0, count = derived->_namespaces.size(); i < count; i++)
                 {
-                    CC_SAFE_DELETE(derived->_namespaces[i]);
+                    AX_SAFE_DELETE(derived->_namespaces[i]);
                 }
 
                 // Copy data from the parent into the child.
@@ -563,7 +563,7 @@ void Properties::resolveInheritance(const char* id)
                 derived->mergeWith(overrides);
 
                 // Delete the child copy.
-                CC_SAFE_DELETE(overrides);
+                AX_SAFE_DELETE(overrides);
             }
         }
 
@@ -1089,7 +1089,7 @@ void Properties::setDirectoryPath(const std::string* path)
     }
     else
     {
-        CC_SAFE_DELETE(_dirPath);
+        AX_SAFE_DELETE(_dirPath);
     }
 }
 

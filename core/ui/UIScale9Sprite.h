@@ -57,7 +57,7 @@ namespace ui
  * Then you could call any methods of Sprite class with the return pointers.
  *
  */
-class CC_GUI_DLL Scale9Sprite : public Sprite
+class AX_GUI_DLL Scale9Sprite : public Sprite
 {
 public:
     /**

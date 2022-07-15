@@ -40,7 +40,7 @@ void ccMessageBox(const char* msg, const char* title)
 {
     // only enable it on iOS.
     // FIXME: Implement it for tvOS
-#if !defined(CC_TARGET_OS_TVOS)
+#if !defined(AX_TARGET_OS_TVOS)
     NSString* tmpTitle = (title) ? [NSString stringWithUTF8String:title] : nil;
     NSString* tmpMsg   = (msg) ? [NSString stringWithUTF8String:msg] : nil;
 

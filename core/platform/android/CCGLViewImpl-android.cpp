@@ -58,7 +58,7 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, flo
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -70,7 +70,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -82,7 +82,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 

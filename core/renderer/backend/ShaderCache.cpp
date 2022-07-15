@@ -37,7 +37,7 @@ ShaderCache* ShaderCache::getInstance()
         _sharedShaderCache = new ShaderCache();
         if (!_sharedShaderCache->init())
         {
-            CC_SAFE_DELETE(_sharedShaderCache);
+            AX_SAFE_DELETE(_sharedShaderCache);
         }
     }
     return _sharedShaderCache;
@@ -45,14 +45,14 @@ ShaderCache* ShaderCache::getInstance()
 
 void ShaderCache::destroyInstance()
 {
-    CC_SAFE_RELEASE_NULL(_sharedShaderCache);
+    AX_SAFE_RELEASE_NULL(_sharedShaderCache);
 }
 
 ShaderCache::~ShaderCache()
 {
     for (auto& shaderModule : _cachedShaders)
     {
-        CC_SAFE_RELEASE(shaderModule.second);
+        AX_SAFE_RELEASE(shaderModule.second);
     }
     CCLOGINFO("deallocing ProgramCache: %p", this);
 }

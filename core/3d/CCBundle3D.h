@@ -49,7 +49,7 @@ class Animation3D;
  * @js NA
  * @lua NA
  */
-class CC_DLL Bundle3D
+class AX_DLL Bundle3D
 {
 public:
     /**

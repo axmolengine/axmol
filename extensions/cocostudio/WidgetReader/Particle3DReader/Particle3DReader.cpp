@@ -59,12 +59,12 @@ Particle3DReader* Particle3DReader::getInstance()
 
 void Particle3DReader::purge()
 {
-    CC_SAFE_DELETE(_instanceParticle3DReader);
+    AX_SAFE_DELETE(_instanceParticle3DReader);
 }
 
 void Particle3DReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceParticle3DReader);
+    AX_SAFE_DELETE(_instanceParticle3DReader);
 }
 
 Offset<Table> Particle3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

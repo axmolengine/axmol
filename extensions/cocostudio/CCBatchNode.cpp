@@ -40,13 +40,13 @@ BatchNode* BatchNode::create()
         batchNode->autorelease();
         return batchNode;
     }
-    CC_SAFE_DELETE(batchNode);
+    AX_SAFE_DELETE(batchNode);
     return nullptr;
 }
 BatchNode::BatchNode() : _groupCommand(nullptr) {}
 BatchNode::~BatchNode()
 {
-    CC_SAFE_DELETE(_groupCommand);
+    AX_SAFE_DELETE(_groupCommand);
 }
 
 bool BatchNode::init()
@@ -131,7 +131,7 @@ void BatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         return;
     }
 
-    //    CC_NODE_DRAW_SETUP();
+    //    AX_NODE_DRAW_SETUP();
 
     bool pushed = false;
     for (auto object : _children)

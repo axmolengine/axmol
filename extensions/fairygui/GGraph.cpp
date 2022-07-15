@@ -27,9 +27,9 @@ GGraph::GGraph() : _shape(nullptr),
 
 GGraph::~GGraph()
 {
-    CC_SAFE_DELETE(_cornerRadius);
-    CC_SAFE_DELETE(_polygonPoints);
-    CC_SAFE_DELETE(_distances);
+    AX_SAFE_DELETE(_cornerRadius);
+    AX_SAFE_DELETE(_polygonPoints);
+    AX_SAFE_DELETE(_distances);
 }
 
 void GGraph::handleInit()

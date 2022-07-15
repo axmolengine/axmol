@@ -317,7 +317,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
 
     spriteSheet->full = true;
 
-    CC_SAFE_DELETE(image);
+    AX_SAFE_DELETE(image);
 }
 
 void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dict,

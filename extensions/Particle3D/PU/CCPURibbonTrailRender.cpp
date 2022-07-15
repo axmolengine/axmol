@@ -332,7 +332,7 @@ void PURibbonTrailRender::destroyAll()
     }
 
     // Delete the Ribbontrail
-    CC_SAFE_DELETE(_trail);
+    AX_SAFE_DELETE(_trail);
 
     // Delete the visual data
     std::vector<PURibbonTrailVisualData*>::const_iterator it;

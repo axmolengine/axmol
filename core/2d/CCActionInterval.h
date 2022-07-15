@@ -68,7 +68,7 @@ auto action = MoveBy::create(1.0f, Vec2::ONE);
 auto pingPongAction = Sequence::create(action, action->reverse(), nullptr);
 @endcode
 */
-class CC_DLL ActionInterval : public FiniteTimeAction
+class AX_DLL ActionInterval : public FiniteTimeAction
 {
 public:
     /** How many seconds had elapsed since the actions started to run.
@@ -100,13 +100,13 @@ public:
     virtual void startWithTarget(Node* target) override;
     virtual ActionInterval* reverse() const override
     {
-        CC_ASSERT(0);
+        AX_ASSERT(0);
         return nullptr;
     }
 
     virtual ActionInterval* clone() const override
     {
-        CC_ASSERT(0);
+        AX_ASSERT(0);
         return nullptr;
     }
 
@@ -125,14 +125,14 @@ protected:
 /** @class Sequence
  * @brief Runs actions sequentially, one after another.
  */
-class CC_DLL Sequence : public ActionInterval
+class AX_DLL Sequence : public ActionInterval
 {
 public:
     /** Helper constructor to create an array of sequenceable actions.
      *
      * @return An autoreleased Sequence object.
      */
-    static Sequence* create(FiniteTimeAction* action1, ...) CC_REQUIRES_NULL_TERMINATION;
+    static Sequence* create(FiniteTimeAction* action1, ...) AX_REQUIRES_NULL_TERMINATION;
 
     /** Helper constructor to create an array of sequenceable actions given an array.
      * @code
@@ -187,14 +187,14 @@ protected:
     int _last;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Sequence);
+    AX_DISALLOW_COPY_AND_ASSIGN(Sequence);
 };
 
 /** @class Repeat
  * @brief Repeats an action a number of times.
  * To repeat an action forever use the RepeatForever action.
  */
-class CC_DLL Repeat : public ActionInterval
+class AX_DLL Repeat : public ActionInterval
 {
 public:
     /** Creates a Repeat action. Times is an unsigned integer between 1 and pow(2,30).
@@ -213,8 +213,8 @@ public:
     {
         if (_innerAction != action)
         {
-            CC_SAFE_RETAIN(action);
-            CC_SAFE_RELEASE(_innerAction);
+            AX_SAFE_RETAIN(action);
+            AX_SAFE_RELEASE(_innerAction);
             _innerAction = action;
         }
     }
@@ -253,7 +253,7 @@ protected:
     FiniteTimeAction* _innerAction;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Repeat);
+    AX_DISALLOW_COPY_AND_ASSIGN(Repeat);
 };
 
 /** @class RepeatForever
@@ -261,7 +261,7 @@ private:
  To repeat the an action for a limited number of times use the Repeat action.
  * @warning This action can't be Sequenceable because it is not an IntervalAction.
  */
-class CC_DLL RepeatForever : public ActionInterval
+class AX_DLL RepeatForever : public ActionInterval
 {
 public:
     /** Creates the action.
@@ -279,9 +279,9 @@ public:
     {
         if (_innerAction != action)
         {
-            CC_SAFE_RELEASE(_innerAction);
+            AX_SAFE_RELEASE(_innerAction);
             _innerAction = action;
-            CC_SAFE_RETAIN(_innerAction);
+            AX_SAFE_RETAIN(_innerAction);
         }
     }
 
@@ -314,13 +314,13 @@ protected:
     ActionInterval* _innerAction;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(RepeatForever);
+    AX_DISALLOW_COPY_AND_ASSIGN(RepeatForever);
 };
 
 /** @class Spawn
  * @brief Spawn a new action immediately
  */
-class CC_DLL Spawn : public ActionInterval
+class AX_DLL Spawn : public ActionInterval
 {
 public:
     /** Helper constructor to create an array of spawned actions.
@@ -332,7 +332,7 @@ public:
      *
      * @return An autoreleased Spawn object.
      */
-    static Spawn* create(FiniteTimeAction* action1, ...) CC_REQUIRES_NULL_TERMINATION;
+    static Spawn* create(FiniteTimeAction* action1, ...) AX_REQUIRES_NULL_TERMINATION;
 
     /** Helper constructor to create an array of spawned actions.
      *
@@ -383,14 +383,14 @@ protected:
     FiniteTimeAction* _two;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Spawn);
+    AX_DISALLOW_COPY_AND_ASSIGN(Spawn);
 };
 
 /** @class RotateTo
  * @brief Rotates a Node object to a certain angle by modifying it's rotation attribute.
  The direction will be decided by the shortest angle.
 */
-class CC_DLL RotateTo : public ActionInterval
+class AX_DLL RotateTo : public ActionInterval
 {
 public:
     /**
@@ -460,13 +460,13 @@ protected:
     Vec3 _diffAngle;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(RotateTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(RotateTo);
 };
 
 /** @class RotateBy
  * @brief Rotates a Node object clockwise a number of degrees by modifying it's rotation attribute.
  */
-class CC_DLL RotateBy : public ActionInterval
+class AX_DLL RotateBy : public ActionInterval
 {
 public:
     /**
@@ -525,7 +525,7 @@ protected:
     Vec3 _startAngle;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(RotateBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(RotateBy);
 };
 
 /** @class MoveBy
@@ -535,7 +535,7 @@ private:
  movement will be the sum of individual movements.
  @since v2.1beta2-custom
  */
-class CC_DLL MoveBy : public ActionInterval
+class AX_DLL MoveBy : public ActionInterval
 {
 public:
     /**
@@ -580,7 +580,7 @@ protected:
     Vec3 _previousPosition;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(MoveBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(MoveBy);
 };
 
 /** @class MoveTo
@@ -589,7 +589,7 @@ private:
  movements.
  @since v2.1beta2-custom
  */
-class CC_DLL MoveTo : public MoveBy
+class AX_DLL MoveTo : public MoveBy
 {
 public:
     /**
@@ -632,14 +632,14 @@ protected:
     Vec3 _endPosition;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(MoveTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(MoveTo);
 };
 
 /** @class SkewTo
  * @brief Skews a Node object to given angles by modifying it's skewX and skewY attributes
 @since v1.0
 */
-class CC_DLL SkewTo : public ActionInterval
+class AX_DLL SkewTo : public ActionInterval
 {
 public:
     /**
@@ -680,14 +680,14 @@ protected:
     float _deltaY;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(SkewTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(SkewTo);
 };
 
 /** @class SkewBy
 * @brief Skews a Node object by skewX and skewY degrees.
 @since v1.0
 */
-class CC_DLL SkewBy : public SkewTo
+class AX_DLL SkewBy : public SkewTo
 {
 public:
     /**
@@ -714,13 +714,13 @@ public:
     bool initWithDuration(float t, float sx, float sy);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(SkewBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(SkewBy);
 };
 
 /** @class ResizeTo
  * @brief Resize a Node object to the final size by modifying it's 'size' attribute.
  */
-class CC_DLL ResizeTo : public ActionInterval
+class AX_DLL ResizeTo : public ActionInterval
 {
 public:
     /**
@@ -756,14 +756,14 @@ protected:
     Vec2 _sizeDelta;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ResizeTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(ResizeTo);
 };
 
 /** @class ResizeBy
  * @brief Resize a Node object by a size. Works on all nodes where setContentSize is effective. But it's mostly useful
  * for nodes where 9-slice is enabled
  */
-class CC_DLL ResizeBy : public ActionInterval
+class AX_DLL ResizeBy : public ActionInterval
 {
 public:
     /**
@@ -798,13 +798,13 @@ protected:
     Vec2 _previousSize;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ResizeBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(ResizeBy);
 };
 
 /** @class JumpBy
  * @brief Moves a Node object simulating a parabolic jump movement by modifying it's position attribute.
  */
-class CC_DLL JumpBy : public ActionInterval
+class AX_DLL JumpBy : public ActionInterval
 {
 public:
     /**
@@ -845,13 +845,13 @@ protected:
     Vec2 _previousPos;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(JumpBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(JumpBy);
 };
 
 /** @class JumpTo
  * @brief Moves a Node object to a parabolic position simulating a jump movement by modifying it's position attribute.
  */
-class CC_DLL JumpTo : public JumpBy
+class AX_DLL JumpTo : public JumpBy
 {
 public:
     /**
@@ -884,7 +884,7 @@ protected:
     Vec2 _endPosition;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(JumpTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(JumpTo);
 };
 
 /** @struct Bezier configuration structure
@@ -902,7 +902,7 @@ typedef struct _ccBezierConfig
 /** @class BezierBy
  * @brief An action that moves the target with a cubic Bezier curve by a certain distance.
  */
-class CC_DLL BezierBy : public ActionInterval
+class AX_DLL BezierBy : public ActionInterval
 {
 public:
     /** Creates the action with a duration and a bezier configuration.
@@ -943,14 +943,14 @@ protected:
     Vec2 _previousPosition;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(BezierBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(BezierBy);
 };
 
 /** @class BezierTo
  * @brief An action that moves the target with a cubic Bezier curve to a destination point.
  @since v0.8.2
  */
-class CC_DLL BezierTo : public BezierBy
+class AX_DLL BezierTo : public BezierBy
 {
 public:
     /** Creates the action with a duration and a bezier configuration.
@@ -983,7 +983,7 @@ protected:
     ccBezierConfig _toConfig;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(BezierTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(BezierTo);
 };
 
 /** @class ScaleTo
@@ -991,7 +991,7 @@ private:
  @warning This action doesn't support "reverse".
  @warning The physics body contained in Node doesn't support this action.
  */
-class CC_DLL ScaleTo : public ActionInterval
+class AX_DLL ScaleTo : public ActionInterval
 {
 public:
     /**
@@ -1066,14 +1066,14 @@ protected:
     float _deltaZ;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ScaleTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(ScaleTo);
 };
 
 /** @class ScaleBy
  * @brief Scales a Node object a zoom factor by modifying it's scale attribute.
  @warning The physics body contained in Node doesn't support this action.
 */
-class CC_DLL ScaleBy : public ScaleTo
+class AX_DLL ScaleBy : public ScaleTo
 {
 public:
     /**
@@ -1114,13 +1114,13 @@ public:
     virtual ~ScaleBy() {}
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ScaleBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(ScaleBy);
 };
 
 /** @class Blink
  * @brief Blinks a Node object by modifying it's visible attribute.
  */
-class CC_DLL Blink : public ActionInterval
+class AX_DLL Blink : public ActionInterval
 {
 public:
     /**
@@ -1157,7 +1157,7 @@ protected:
     bool _originalState;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Blink);
+    AX_DISALLOW_COPY_AND_ASSIGN(Blink);
 };
 
 /** @class FadeTo
@@ -1165,7 +1165,7 @@ private:
  custom one.
  @warning This action doesn't support "reverse"
  */
-class CC_DLL FadeTo : public ActionInterval
+class AX_DLL FadeTo : public ActionInterval
 {
 public:
     /**
@@ -1203,14 +1203,14 @@ protected:
     friend class FadeIn;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(FadeTo);
 };
 
 /** @class FadeIn
  * @brief Fades In an object that implements the RGBAProtocol protocol. It modifies the opacity from 0 to 255.
  The "reverse" of this action is FadeOut
  */
-class CC_DLL FadeIn : public FadeTo
+class AX_DLL FadeIn : public FadeTo
 {
 public:
     /**
@@ -1236,7 +1236,7 @@ public:
     virtual ~FadeIn() {}
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeIn);
+    AX_DISALLOW_COPY_AND_ASSIGN(FadeIn);
     FadeTo* _reverseAction;
 };
 
@@ -1244,7 +1244,7 @@ private:
  * @brief Fades Out an object that implements the RGBAProtocol protocol. It modifies the opacity from 255 to 0.
  The "reverse" of this action is FadeIn
 */
-class CC_DLL FadeOut : public FadeTo
+class AX_DLL FadeOut : public FadeTo
 {
 public:
     /**
@@ -1269,7 +1269,7 @@ public:
     virtual ~FadeOut() {}
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOut);
+    AX_DISALLOW_COPY_AND_ASSIGN(FadeOut);
     FadeTo* _reverseAction;
 };
 
@@ -1278,7 +1278,7 @@ private:
  @warning This action doesn't support "reverse"
  @since v0.7.2
 */
-class CC_DLL TintTo : public ActionInterval
+class AX_DLL TintTo : public ActionInterval
 {
 public:
     /**
@@ -1320,14 +1320,14 @@ protected:
     Color3B _from;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TintTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(TintTo);
 };
 
 /** @class TintBy
  @brief Tints a Node that implements the NodeRGB protocol from current tint to a custom one.
  @since v0.7.2
  */
-class CC_DLL TintBy : public ActionInterval
+class AX_DLL TintBy : public ActionInterval
 {
 public:
     /**
@@ -1367,13 +1367,13 @@ protected:
     int16_t _fromB;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TintBy);
+    AX_DISALLOW_COPY_AND_ASSIGN(TintBy);
 };
 
 /** @class DelayTime
  * @brief Delays the action a certain amount of seconds.
  */
-class CC_DLL DelayTime : public ActionInterval
+class AX_DLL DelayTime : public ActionInterval
 {
 public:
     /**
@@ -1397,7 +1397,7 @@ public:
     virtual ~DelayTime() {}
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(DelayTime);
+    AX_DISALLOW_COPY_AND_ASSIGN(DelayTime);
 };
 
 /** @class ReverseTime
@@ -1408,7 +1408,7 @@ private:
  of your own actions, but using it outside the "reversed"
  scope is not recommended.
 */
-class CC_DLL ReverseTime : public ActionInterval
+class AX_DLL ReverseTime : public ActionInterval
 {
 public:
     /** Creates the action.
@@ -1440,14 +1440,14 @@ protected:
     FiniteTimeAction* _other;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ReverseTime);
+    AX_DISALLOW_COPY_AND_ASSIGN(ReverseTime);
 };
 
 class Texture2D;
 /** @class Animate
  * @brief Animates a sprite given the name of an Animation.
  */
-class CC_DLL Animate : public ActionInterval
+class AX_DLL Animate : public ActionInterval
 {
 public:
     /** Creates the action with an Animation and will restore the original frame when the animation is over.
@@ -1504,14 +1504,14 @@ protected:
     AnimationFrame::DisplayedEventInfo _frameDisplayedEventInfo;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Animate);
+    AX_DISALLOW_COPY_AND_ASSIGN(Animate);
 };
 
 /** @class TargetedAction
  * @brief Overrides the target of an action so that it always runs on the target
  * specified at action creation rather than the one specified by runAction.
  */
-class CC_DLL TargetedAction : public ActionInterval
+class AX_DLL TargetedAction : public ActionInterval
 {
 public:
     /** Create an action with the specified action and forced target.
@@ -1557,14 +1557,14 @@ protected:
     Node* _forcedTarget;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TargetedAction);
+    AX_DISALLOW_COPY_AND_ASSIGN(TargetedAction);
 };
 
 /**
  * @class ActionFloat
  * @brief Action used to animate any value in range [from,to] over specified time interval
  */
-class CC_DLL ActionFloat : public ActionInterval
+class AX_DLL ActionFloat : public ActionInterval
 {
 public:
     /**
@@ -1609,7 +1609,7 @@ protected:
     ActionFloatCallback _callback;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ActionFloat);
+    AX_DISALLOW_COPY_AND_ASSIGN(ActionFloat);
 };
 
 // end of actions group

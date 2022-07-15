@@ -58,12 +58,12 @@ Light3DReader* Light3DReader::getInstance()
 
 void Light3DReader::purge()
 {
-    CC_SAFE_DELETE(_instanceLight3DReader);
+    AX_SAFE_DELETE(_instanceLight3DReader);
 }
 
 void Light3DReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceLight3DReader);
+    AX_SAFE_DELETE(_instanceLight3DReader);
 }
 
 Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,
@@ -181,7 +181,7 @@ Node* Light3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* light3D
         break;
     case axis::LightType::SPOT:
         light =
-            SpotLight::create(Vec3::UNIT_Z, Vec3::ZERO, Color3B::WHITE, 0, CC_DEGREES_TO_RADIANS(outerAngle), range);
+            SpotLight::create(Vec3::UNIT_Z, Vec3::ZERO, Color3B::WHITE, 0, AX_DEGREES_TO_RADIANS(outerAngle), range);
         break;
     case axis::LightType::AMBIENT:
         light = AmbientLight::create(Color3B::WHITE);

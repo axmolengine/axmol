@@ -54,7 +54,7 @@ class Buffer;
  * background with given color and depth, Skybox brush clear the background with a skybox. Camera uses depth brush by
  * default.
  */
-class CC_DLL CameraBackgroundBrush : public Ref
+class AX_DLL CameraBackgroundBrush : public Ref
 {
 public:
     /**
@@ -130,7 +130,7 @@ protected:
 /**
  * Depth brush clear depth buffer with given depth
  */
-class CC_DLL CameraBackgroundDepthBrush : public CameraBackgroundBrush
+class AX_DLL CameraBackgroundDepthBrush : public CameraBackgroundBrush
 {
 public:
     /**
@@ -167,7 +167,7 @@ private:
     void onAfterDraw();
 
 protected:
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
 #endif
     void initBuffer();
@@ -191,7 +191,7 @@ protected:
 /**
  * Color brush clear buffer with given depth and color
  */
-class CC_DLL CameraBackgroundColorBrush : public CameraBackgroundDepthBrush
+class AX_DLL CameraBackgroundColorBrush : public CameraBackgroundDepthBrush
 {
 public:
     /**
@@ -235,7 +235,7 @@ class EventListenerCustom;
 /**
  * Skybox brush clear buffer with a skybox
  */
-class CC_DLL CameraBackgroundSkyBoxBrush : public CameraBackgroundBrush
+class AX_DLL CameraBackgroundSkyBoxBrush : public CameraBackgroundBrush
 {
 public:
     /**
@@ -298,7 +298,7 @@ protected:
 
     TextureCube* _texture;
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
 #endif
 

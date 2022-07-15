@@ -924,16 +924,16 @@ void Value::clear()
         _field.boolVal = false;
         break;
     case Type::STRING:
-        CC_SAFE_DELETE(_field.strVal);
+        AX_SAFE_DELETE(_field.strVal);
         break;
     case Type::VECTOR:
-        CC_SAFE_DELETE(_field.vectorVal);
+        AX_SAFE_DELETE(_field.vectorVal);
         break;
     case Type::MAP:
-        CC_SAFE_DELETE(_field.mapVal);
+        AX_SAFE_DELETE(_field.mapVal);
         break;
     case Type::INT_KEY_MAP:
-        CC_SAFE_DELETE(_field.intKeyMapVal);
+        AX_SAFE_DELETE(_field.intKeyMapVal);
         break;
     default:
         break;

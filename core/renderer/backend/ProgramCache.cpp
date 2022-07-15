@@ -58,7 +58,7 @@ ProgramCache* ProgramCache::getInstance()
         _sharedProgramCache = new ProgramCache();
         if (!_sharedProgramCache->init())
         {
-            CC_SAFE_DELETE(_sharedProgramCache);
+            AX_SAFE_DELETE(_sharedProgramCache);
         }
     }
     return _sharedProgramCache;
@@ -66,14 +66,14 @@ ProgramCache* ProgramCache::getInstance()
 
 void ProgramCache::destroyInstance()
 {
-    CC_SAFE_RELEASE_NULL(_sharedProgramCache);
+    AX_SAFE_RELEASE_NULL(_sharedProgramCache);
 }
 
 ProgramCache::~ProgramCache()
 {
     for (auto& program : _cachedPrograms)
     {
-        CC_SAFE_RELEASE(program.second);
+        AX_SAFE_RELEASE(program.second);
     }
     CCLOGINFO("deallocing ProgramCache: %p", this);
     ShaderCache::destroyInstance();

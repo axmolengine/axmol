@@ -44,7 +44,7 @@ PUVortexAffector::~PUVortexAffector()
 {
     if (_dynRotationSpeed)
     {
-        CC_SAFE_DELETE(_dynRotationSpeed);
+        AX_SAFE_DELETE(_dynRotationSpeed);
     }
 }
 //-----------------------------------------------------------------------
@@ -66,7 +66,7 @@ PUDynamicAttribute* PUVortexAffector::getRotationSpeed() const
 void PUVortexAffector::setRotationSpeed(PUDynamicAttribute* dynRotationSpeed)
 {
     if (_dynRotationSpeed)
-        CC_SAFE_DELETE(_dynRotationSpeed);
+        AX_SAFE_DELETE(_dynRotationSpeed);
 
     _dynRotationSpeed = dynRotationSpeed;
 }

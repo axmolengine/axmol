@@ -32,17 +32,17 @@ THE SOFTWARE.
 
 #include <vector>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <windows.h>
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 typedef void* id;
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-#    define CC_ICON_SET_SUPPORT true
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) */
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#    define AX_ICON_SET_SUPPORT true
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */
 
 /** There are some Resolution Policy for Adapt to the screen. */
 enum class ResolutionPolicy
@@ -108,7 +108,7 @@ class Renderer;
 /**
  * @brief By GLView you can operate the frame information of EGL view through some function.
  */
-class CC_DLL GLView : public Ref
+class AX_DLL GLView : public Ref
 {
 public:
     /**
@@ -219,9 +219,9 @@ public:
      */
     virtual bool isRetinaDisplay() const { return false; }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
     virtual void* getEAGLView() const { return nullptr; }
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */
 
     /**
      * Get the visible area size of opengl viewport.
@@ -416,14 +416,14 @@ public:
      */
     ResolutionPolicy getResolutionPolicy() const { return _resolutionPolicy; }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     virtual HWND getWin32Window() = 0;
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     virtual id getCocoaWindow() = 0;
     virtual id getNSGLContext() = 0;  // stevetranby: added
-#endif                                /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
+#endif                                /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
 
     /**
      * Renders a Scene with a Renderer

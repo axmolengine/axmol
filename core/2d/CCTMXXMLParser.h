@@ -26,8 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_TM_XML_PARSER__
-#define __CC_TM_XML_PARSER__
+#ifndef __AX_TM_XML_PARSER__
+#define __AX_TM_XML_PARSER__
 
 /// @cond DO_NOT_SHOW
 
@@ -134,7 +134,7 @@ enum
 
 This information is obtained from the TMX file.
 */
-struct CC_DLL TMXTileAnimFrame
+struct AX_DLL TMXTileAnimFrame
 {
     TMXTileAnimFrame(uint32_t tileID, float duration);
     /** gid of the frame */
@@ -149,7 +149,7 @@ struct CC_DLL TMXTileAnimFrame
 
 This information is obtained from the TMX file.
 */
-struct CC_DLL TMXTileAnimInfo : public Ref
+struct AX_DLL TMXTileAnimInfo : public Ref
 {
     static TMXTileAnimInfo* create(uint32_t tileID);
     explicit TMXTileAnimInfo(uint32_t tileID);
@@ -167,7 +167,7 @@ struct CC_DLL TMXTileAnimInfo : public Ref
 
 This information is obtained from the TMX file.
 */
-class CC_DLL TMXLayerInfo : public Ref
+class AX_DLL TMXLayerInfo : public Ref
 {
 public:
     /**
@@ -203,7 +203,7 @@ public:
 
 This information is obtained from the TMX file.
 */
-class CC_DLL TMXTilesetInfo : public Ref
+class AX_DLL TMXTilesetInfo : public Ref
 {
 public:
     std::string _name;
@@ -246,7 +246,7 @@ And it also contains:
 This information is obtained from the TMX file.
 
 */
-class CC_DLL TMXMapInfo : public Ref, public SAXDelegator
+class AX_DLL TMXMapInfo : public Ref, public SAXDelegator
 {
 public:
     /** creates a TMX Format with a tmx file */

@@ -82,18 +82,18 @@ public:
 
     /** Contains the position (in x-axis) of the slider inside the receiver. */
     float _sliderXPosition;
-    CC_SYNTHESIZE(float, _onPosition, OnPosition)
-    CC_SYNTHESIZE(float, _offPosition, OffPosition)
+    AX_SYNTHESIZE(float, _onPosition, OnPosition)
+    AX_SYNTHESIZE(float, _offPosition, OffPosition)
 
-    CC_SYNTHESIZE_RETAIN(Texture2D*, _maskTexture, MaskTexture)
-    CC_SYNTHESIZE(uint32_t, _textureLocation, TextureLocation)
-    CC_SYNTHESIZE(uint32_t, _maskLocation, MaskLocation)
+    AX_SYNTHESIZE_RETAIN(Texture2D*, _maskTexture, MaskTexture)
+    AX_SYNTHESIZE(uint32_t, _textureLocation, TextureLocation)
+    AX_SYNTHESIZE(uint32_t, _maskLocation, MaskLocation)
 
-    CC_SYNTHESIZE_RETAIN(Sprite*, _onSprite, OnSprite)
-    CC_SYNTHESIZE_RETAIN(Sprite*, _offSprite, OffSprite)
-    CC_SYNTHESIZE_RETAIN(Sprite*, _thumbSprite, ThumbSprite)
-    CC_SYNTHESIZE_RETAIN(Label*, _onLabel, OnLabel)
-    CC_SYNTHESIZE_RETAIN(Label*, _offLabel, OffLabel)
+    AX_SYNTHESIZE_RETAIN(Sprite*, _onSprite, OnSprite)
+    AX_SYNTHESIZE_RETAIN(Sprite*, _offSprite, OffSprite)
+    AX_SYNTHESIZE_RETAIN(Sprite*, _thumbSprite, ThumbSprite)
+    AX_SYNTHESIZE_RETAIN(Label*, _onLabel, OnLabel)
+    AX_SYNTHESIZE_RETAIN(Label*, _offLabel, OffLabel)
 
     Sprite* _clipperStencil;
 
@@ -120,7 +120,7 @@ protected:
                             Label* offLabel);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ControlSwitchSprite);
+    AX_DISALLOW_COPY_AND_ASSIGN(ControlSwitchSprite);
 };
 
 ControlSwitchSprite* ControlSwitchSprite::create(Sprite* maskSprite,
@@ -153,13 +153,13 @@ ControlSwitchSprite::ControlSwitchSprite()
 
 ControlSwitchSprite::~ControlSwitchSprite()
 {
-    CC_SAFE_RELEASE(_onSprite);
-    CC_SAFE_RELEASE(_offSprite);
-    CC_SAFE_RELEASE(_thumbSprite);
-    CC_SAFE_RELEASE(_onLabel);
-    CC_SAFE_RELEASE(_offLabel);
-    CC_SAFE_RELEASE(_maskTexture);
-    CC_SAFE_RELEASE(_clipperStencil);
+    AX_SAFE_RELEASE(_onSprite);
+    AX_SAFE_RELEASE(_offSprite);
+    AX_SAFE_RELEASE(_thumbSprite);
+    AX_SAFE_RELEASE(_onLabel);
+    AX_SAFE_RELEASE(_offLabel);
+    AX_SAFE_RELEASE(_maskTexture);
+    AX_SAFE_RELEASE(_clipperStencil);
 }
 
 bool ControlSwitchSprite::initWithMaskSprite(Sprite* maskSprite,
@@ -282,7 +282,7 @@ ControlSwitch::ControlSwitch() : _switchSprite(nullptr), _initialTouchXPosition(
 
 ControlSwitch::~ControlSwitch()
 {
-    CC_SAFE_RELEASE(_switchSprite);
+    AX_SAFE_RELEASE(_switchSprite);
 }
 
 bool ControlSwitch::initWithMaskSprite(Sprite* maskSprite, Sprite* onSprite, Sprite* offSprite, Sprite* thumbSprite)
@@ -299,7 +299,7 @@ ControlSwitch* ControlSwitch::create(Sprite* maskSprite, Sprite* onSprite, Sprit
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -348,7 +348,7 @@ ControlSwitch* ControlSwitch::create(Sprite* maskSprite,
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }

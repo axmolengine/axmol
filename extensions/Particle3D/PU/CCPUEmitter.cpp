@@ -236,7 +236,7 @@ void PUEmitter::initParticleDirection(PUParticle3D* particle)
 
 void PUEmitter::generateAngle(float& angle)
 {
-    float a = CC_DEGREES_TO_RADIANS(_dynamicAttributeHelper.calculate(
+    float a = AX_DEGREES_TO_RADIANS(_dynamicAttributeHelper.calculate(
         _dynAngle, (static_cast<PUParticleSystem3D*>(_particleSystem))->getTimeElapsedSinceStart()));
     angle   = a;
     if (_dynAngle->getType() == PUDynamicAttribute::DAT_FIXED)

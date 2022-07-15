@@ -17,7 +17,7 @@ FUIInput * FUIInput::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -91,7 +91,7 @@ void FUIInput::continueInit()
 
     //disable default behavior
     this->setTouchEnabled(false);
-    this->addTouchEventListener(CC_CALLBACK_2(FUIInput::_touchDownAction, this));
+    this->addTouchEventListener(AX_CALLBACK_2(FUIInput::_touchDownAction, this));
 }
 
 void FUIInput::_touchDownAction(axis::Ref *sender, axis::ui::Widget::TouchEventType controlEvent)

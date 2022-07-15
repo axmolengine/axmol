@@ -374,7 +374,7 @@ DeviceInfoMTL::DeviceInfoMTL(id<MTLDevice> device)
 {
     _deviceName = [device.name UTF8String];
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
     const FeatureSet minRequiredFeatureSet = FeatureSet::FeatureSet_iOS_GPUFamily1_v1;
     const FeatureSet maxKnownFeatureSet    = FeatureSet::FeatureSet_iOS_GPUFamily4_v2;
 #else

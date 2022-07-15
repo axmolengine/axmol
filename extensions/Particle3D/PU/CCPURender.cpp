@@ -66,7 +66,7 @@ PUParticle3DQuadRender* PUParticle3DQuadRender::create(std::string_view texFile)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -607,15 +607,15 @@ PUParticle3DEntityRender::PUParticle3DEntityRender()
 PUParticle3DEntityRender::~PUParticle3DEntityRender()
 {
     ;
-    // CC_SAFE_RELEASE(_texture);
-    CC_SAFE_RELEASE(_programState);
-    CC_SAFE_RELEASE(_vertexBuffer);
-    CC_SAFE_RELEASE(_indexBuffer);
+    // AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 }
 
 bool PUParticle3DEntityRender::initRender(std::string_view texFile)
 {
-    CC_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_programState);
     if (!texFile.empty())
     {
         auto tex = Director::getInstance()->getTextureCache()->addImage(texFile);
@@ -669,8 +669,8 @@ bool PUParticle3DEntityRender::initRender(std::string_view texFile)
     _stateBlock.setCullFaceSide(backend::CullMode::BACK);
     _stateBlock.setCullFace(true);
 
-    _meshCommand.setBeforeCallback(CC_CALLBACK_0(PUParticle3DEntityRender::onBeforeDraw, this));
-    _meshCommand.setAfterCallback(CC_CALLBACK_0(PUParticle3DEntityRender::onAfterDraw, this));
+    _meshCommand.setBeforeCallback(AX_CALLBACK_0(PUParticle3DEntityRender::onBeforeDraw, this));
+    _meshCommand.setAfterCallback(AX_CALLBACK_0(PUParticle3DEntityRender::onAfterDraw, this));
 
     return true;
 }
@@ -701,7 +701,7 @@ PUParticle3DBoxRender* PUParticle3DBoxRender::create(std::string_view texFile)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -891,7 +891,7 @@ PUSphereRender* PUSphereRender::create(std::string_view texFile)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

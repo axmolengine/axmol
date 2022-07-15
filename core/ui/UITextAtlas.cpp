@@ -55,7 +55,7 @@ TextAtlas* TextAtlas::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -79,7 +79,7 @@ TextAtlas* TextAtlas::create(std::string_view stringValue,
         widget->setProperty(stringValue, charMapFile, itemWidth, itemHeight, startCharMap);
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 

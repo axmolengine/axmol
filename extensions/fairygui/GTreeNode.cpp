@@ -15,7 +15,7 @@ GTreeNode* GTreeNode::create(bool isFolder, const std::string& resURL)
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -41,7 +41,7 @@ GTreeNode::~GTreeNode()
     if (_parent)
         _parent->removeChild(this);
 
-    CC_SAFE_RELEASE(_cell);
+    AX_SAFE_RELEASE(_cell);
 }
 
 bool GTreeNode::init(bool isFolder, const std::string& resURL)

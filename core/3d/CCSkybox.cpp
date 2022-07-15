@@ -60,8 +60,8 @@ bool Skybox::init()
     _customCommand.setTransparent(false);
     _customCommand.set3D(true);
 
-    _customCommand.setBeforeCallback(CC_CALLBACK_0(Skybox::onBeforeDraw, this));
-    _customCommand.setAfterCallback(CC_CALLBACK_0(Skybox::onAfterDraw, this));
+    _customCommand.setBeforeCallback(AX_CALLBACK_0(Skybox::onBeforeDraw, this));
+    _customCommand.setAfterCallback(AX_CALLBACK_0(Skybox::onAfterDraw, this));
 
     // create and set our custom shader
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
@@ -162,13 +162,13 @@ void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
 
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
+    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 }
 
 void Skybox::setTexture(TextureCube* texture)
 {
     CCASSERT(texture != nullptr, __FUNCTION__);
-    CC_SAFE_RELEASE_NULL(_texture);
+    AX_SAFE_RELEASE_NULL(_texture);
     texture->retain();
     _texture = texture;
     _programState->setTexture(_uniformEnvLoc, 0, _texture->getBackendTexture());

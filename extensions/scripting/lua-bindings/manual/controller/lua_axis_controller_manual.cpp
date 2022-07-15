@@ -25,7 +25,7 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/controller/lua_axis_controller_manual.hpp"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
@@ -381,4 +381,4 @@ int register_all_axis_controller_manual(lua_State* L)
     return 0;
 }
 
-#endif  //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif  //#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)

@@ -155,30 +155,30 @@ void MeshMaterial::createBuiltInMaterial()
 
 void MeshMaterial::releaseBuiltInMaterial()
 {
-    CC_SAFE_RELEASE_NULL(_unLitMaterial);
-    CC_SAFE_RELEASE_NULL(_unLitMaterialSkin);
+    AX_SAFE_RELEASE_NULL(_unLitMaterial);
+    AX_SAFE_RELEASE_NULL(_unLitMaterialSkin);
 
-    CC_SAFE_RELEASE_NULL(_unLitNoTexMaterial);
-    CC_SAFE_RELEASE_NULL(_vertexLitMaterial);
-    CC_SAFE_RELEASE_NULL(_diffuseMaterial);
-    CC_SAFE_RELEASE_NULL(_diffuseNoTexMaterial);
-    CC_SAFE_RELEASE_NULL(_bumpedDiffuseMaterial);
+    AX_SAFE_RELEASE_NULL(_unLitNoTexMaterial);
+    AX_SAFE_RELEASE_NULL(_vertexLitMaterial);
+    AX_SAFE_RELEASE_NULL(_diffuseMaterial);
+    AX_SAFE_RELEASE_NULL(_diffuseNoTexMaterial);
+    AX_SAFE_RELEASE_NULL(_bumpedDiffuseMaterial);
 
-    CC_SAFE_RELEASE_NULL(_vertexLitMaterialSkin);
-    CC_SAFE_RELEASE_NULL(_diffuseMaterialSkin);
-    CC_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialSkin);
+    AX_SAFE_RELEASE_NULL(_vertexLitMaterialSkin);
+    AX_SAFE_RELEASE_NULL(_diffuseMaterialSkin);
+    AX_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialSkin);
     // release program states
-    CC_SAFE_RELEASE_NULL(_unLitMaterialProgState);
-    CC_SAFE_RELEASE_NULL(_unLitNoTexMaterialProgState);
-    CC_SAFE_RELEASE_NULL(_vertexLitMaterialProgState);
-    CC_SAFE_RELEASE_NULL(_diffuseMaterialProgState);
-    CC_SAFE_RELEASE_NULL(_diffuseNoTexMaterialProgState);
-    CC_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_unLitMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_unLitNoTexMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_vertexLitMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_diffuseMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_diffuseNoTexMaterialProgState);
+    AX_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialProgState);
 
-    CC_SAFE_RELEASE_NULL(_unLitMaterialSkinProgState);
-    CC_SAFE_RELEASE_NULL(_vertexLitMaterialSkinProgState);
-    CC_SAFE_RELEASE_NULL(_diffuseMaterialSkinProgState);
-    CC_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialSkinProgState);
+    AX_SAFE_RELEASE_NULL(_unLitMaterialSkinProgState);
+    AX_SAFE_RELEASE_NULL(_vertexLitMaterialSkinProgState);
+    AX_SAFE_RELEASE_NULL(_diffuseMaterialSkinProgState);
+    AX_SAFE_RELEASE_NULL(_bumpedDiffuseMaterialSkinProgState);
 }
 
 void MeshMaterial::releaseCachedMaterial()
@@ -284,7 +284,7 @@ MeshMaterial* MeshMaterial::createWithFilename(std::string_view path)
 
             return (MeshMaterial*)material->clone();
         }
-        CC_SAFE_DELETE(material);
+        AX_SAFE_DELETE(material);
     }
     return nullptr;
 }
@@ -300,7 +300,7 @@ MeshMaterial* MeshMaterial::createWithProgramState(backend::ProgramState* progra
         mat->autorelease();
         return mat;
     }
-    CC_SAFE_DELETE(mat);
+    AX_SAFE_DELETE(mat);
     return nullptr;
 }
 
@@ -336,7 +336,7 @@ void MeshMaterialCache::destroyInstance()
 {
     if (_cacheInstance)
     {
-        CC_SAFE_DELETE(_cacheInstance);
+        AX_SAFE_DELETE(_cacheInstance);
     }
 }
 
@@ -345,7 +345,7 @@ bool MeshMaterialCache::addMeshMaterial(std::string_view key, Texture2D* texture
     auto itr = _materials.find(key);
     if (itr == _materials.end())
     {
-        CC_SAFE_RETAIN(texture);
+        AX_SAFE_RETAIN(texture);
         _materials.emplace(key, texture);
         return true;
     }
@@ -366,7 +366,7 @@ void MeshMaterialCache::removeAllMeshMaterial()
 {
     for (auto& itr : _materials)
     {
-        CC_SAFE_RELEASE_NULL(itr.second);
+        AX_SAFE_RELEASE_NULL(itr.second);
     }
     _materials.clear();
 }

@@ -36,7 +36,7 @@ MeshSkin::MeshSkin() : _rootBone(nullptr), _skeleton(nullptr) {}
 MeshSkin::~MeshSkin()
 {
     removeAllBones();
-    CC_SAFE_RELEASE(_skeleton);
+    AX_SAFE_RELEASE(_skeleton);
 }
 
 MeshSkin* MeshSkin::create(Skeleton3D* skeleton,
@@ -127,7 +127,7 @@ ssize_t MeshSkin::getMatrixPaletteSizeInBytes() const
 void MeshSkin::removeAllBones()
 {
     _skinBones.clear();
-    CC_SAFE_RELEASE(_rootBone);
+    AX_SAFE_RELEASE(_rootBone);
 }
 
 void MeshSkin::addSkinBone(Bone3D* bone)

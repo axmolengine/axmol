@@ -26,9 +26,9 @@
 #include "physics3d/CCPhysics3D.h"
 #include "base/ccUTF8.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 #        include "bullet/btBulletCollisionCommon.h"
 #        include "bullet/btBulletDynamicsCommon.h"
@@ -48,9 +48,9 @@ Physics3DRigidBody::~Physics3DRigidBody()
         _constraintList.clear();
     }
     auto ms = _btRigidBody->getMotionState();
-    CC_SAFE_DELETE(ms);
-    CC_SAFE_DELETE(_btRigidBody);
-    CC_SAFE_RELEASE(_physics3DShape);
+    AX_SAFE_DELETE(ms);
+    AX_SAFE_DELETE(_btRigidBody);
+    AX_SAFE_RELEASE(_physics3DShape);
 }
 
 Physics3DRigidBody* Physics3DRigidBody::create(Physics3DRigidBodyDes* info)
@@ -62,7 +62,7 @@ Physics3DRigidBody* Physics3DRigidBody::create(Physics3DRigidBodyDes* info)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -436,8 +436,8 @@ Physics3DCollider::Physics3DCollider() : _btGhostObject(nullptr), _physics3DShap
 
 Physics3DCollider::~Physics3DCollider()
 {
-    CC_SAFE_DELETE(_btGhostObject);
-    CC_SAFE_RELEASE(_physics3DShape);
+    AX_SAFE_DELETE(_btGhostObject);
+    AX_SAFE_RELEASE(_physics3DShape);
 }
 
 Physics3DCollider* Physics3DCollider::create(Physics3DColliderDes* info)
@@ -449,7 +449,7 @@ Physics3DCollider* Physics3DCollider::create(Physics3DColliderDes* info)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -551,6 +551,6 @@ axis::Mat4 Physics3DCollider::getWorldTransform() const
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS

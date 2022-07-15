@@ -31,17 +31,17 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformConfig.h"
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include "platform/android/CCGL-android.h"
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include "platform/win32/CCGL-win32.h"
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/CCGL-linux.h"
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    if AX_USE_COMPAT_GL
 #        include "platform/ios/CCGL-ios.h"
 #    endif
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    if AX_USE_COMPAT_GL
 #        include "platform/mac/CCGL-mac.h"
 #    endif

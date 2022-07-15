@@ -29,18 +29,18 @@ PackageItem::PackageItem() : owner(nullptr),
 
 PackageItem::~PackageItem()
 {
-    CC_SAFE_DELETE(scale9Grid);
+    AX_SAFE_DELETE(scale9Grid);
 
-    CC_SAFE_DELETE(rawData);
+    AX_SAFE_DELETE(rawData);
     if (bitmapFont) //bitmapfont will be released by fontatlas
         bitmapFont->releaseAtlas();
     bitmapFont = nullptr;
-    CC_SAFE_RELEASE(animation);
-    CC_SAFE_RELEASE(texture);
-    CC_SAFE_RELEASE(spriteFrame);
+    AX_SAFE_RELEASE(animation);
+    AX_SAFE_RELEASE(texture);
+    AX_SAFE_RELEASE(spriteFrame);
 
-    CC_SAFE_DELETE(branches);
-    CC_SAFE_DELETE(highResolution);
+    AX_SAFE_DELETE(branches);
+    AX_SAFE_DELETE(highResolution);
 }
 
 void PackageItem::load()

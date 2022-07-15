@@ -28,7 +28,7 @@
 
 #include "../BaseTest.h"
 
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 
 DEFINE_TEST_SUITE(PhysicsTests);
 
@@ -308,4 +308,4 @@ public:
     virtual std::string subtitle() const override;
 };
 
-#endif  // #if CC_USE_PHYSICS
+#endif  // #if AX_USE_PHYSICS

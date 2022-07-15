@@ -188,7 +188,7 @@ bool UIPageViewButtonTest::init()
                     Button* btn =
                         Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
                     btn->setName(StringUtils::format("button %d", j));
-                    btn->addTouchEventListener(CC_CALLBACK_2(UIPageViewButtonTest::onButtonClicked, this));
+                    btn->addTouchEventListener(AX_CALLBACK_2(UIPageViewButtonTest::onButtonClicked, this));
 
                     innerBox->addChild(btn);
                 }
@@ -206,7 +206,7 @@ bool UIPageViewButtonTest::init()
         pageView->removeItem(0);
 
         pageView->addEventListener(
-            (PageView::ccPageViewCallback)CC_CALLBACK_2(UIPageViewButtonTest::pageViewEvent, this));
+            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewButtonTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -294,7 +294,7 @@ bool UIPageViewTouchPropagationTest::init()
                     Button* btn =
                         Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
                     btn->setName(StringUtils::format("button %d", j));
-                    btn->addTouchEventListener(CC_CALLBACK_2(UIPageViewTouchPropagationTest::onButtonClicked, this));
+                    btn->addTouchEventListener(AX_CALLBACK_2(UIPageViewTouchPropagationTest::onButtonClicked, this));
 
                     innerBox->addChild(btn);
                 }
@@ -310,7 +310,7 @@ bool UIPageViewTouchPropagationTest::init()
         }
 
         pageView->addEventListener(
-            (PageView::ccPageViewCallback)CC_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
+            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewTouchPropagationTest::pageViewEvent, this));
         pageView->setName("pageView");
         pageView->addTouchEventListener([](Ref* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::BEGAN)
@@ -502,7 +502,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         }
 
         pageView->addEventListener(
-            (PageView::ccPageViewCallback)CC_CALLBACK_2(UIPageViewDynamicAddAndRemoveTest::pageViewEvent, this));
+            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewDynamicAddAndRemoveTest::pageViewEvent, this));
         pageView->setName("pageView");
         _uiLayer->addChild(pageView);
 
@@ -762,7 +762,7 @@ bool UIPageViewVerticalTest::init()
         }
 
         pageView->addEventListener(
-            (PageView::ccPageViewCallback)CC_CALLBACK_2(UIPageViewVerticalTest::pageViewEvent, this));
+            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewVerticalTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 
@@ -911,7 +911,7 @@ bool UIPageViewChildSizeTest::init()
         }
 
         pageView->addEventListener(
-            (PageView::ccPageViewCallback)CC_CALLBACK_2(UIPageViewChildSizeTest::pageViewEvent, this));
+            (PageView::ccPageViewCallback)AX_CALLBACK_2(UIPageViewChildSizeTest::pageViewEvent, this));
 
         _uiLayer->addChild(pageView);
 

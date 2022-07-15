@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_COLOR_AFFECTOR_H__
-#define __CC_PU_PARTICLE_3D_COLOR_AFFECTOR_H__
+#ifndef __AX_PU_PARTICLE_3D_COLOR_AFFECTOR_H__
+#define __AX_PU_PARTICLE_3D_COLOR_AFFECTOR_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "base/ccTypes.h"
@@ -33,7 +33,7 @@
 
 NS_AX_BEGIN
 
-class CC_EX_DLL PUColorAffector : public PUAffector
+class AX_EX_DLL PUColorAffector : public PUAffector
 {
 public:
     typedef std::map<float, Vec4> ColorMap;

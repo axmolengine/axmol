@@ -29,24 +29,24 @@ THE SOFTWARE.
 #    include <string.h>
 #endif
 
-#if defined(CC_STATIC)
-#    define CC_DLL
+#if defined(AX_STATIC)
+#    define AX_DLL
 #else
 #    if defined(_USRDLL)
-#        define CC_DLL __declspec(dllexport)
+#        define AX_DLL __declspec(dllexport)
 #    else /* use a DLL library */
-#        define CC_DLL __declspec(dllimport)
+#        define AX_DLL __declspec(dllimport)
 #    endif
 #endif
 
 #include <assert.h>
 
-#if CC_DISABLE_ASSERT > 0
-#    define CC_ASSERT(cond)
+#if AX_DISABLE_ASSERT > 0
+#    define AX_ASSERT(cond)
 #else
-#    define CC_ASSERT(cond) assert(cond)
+#    define AX_ASSERT(cond) assert(cond)
 #endif
-#define CC_UNUSED_PARAM(unusedparam) (void)unusedparam
+#define AX_UNUSED_PARAM(unusedparam) (void)unusedparam
 
 /* Define NULL pointer value */
 #ifndef NULL

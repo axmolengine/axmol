@@ -25,9 +25,9 @@
 
 #include "physics3d/CCPhysics3D.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 NS_AX_BEGIN
 
@@ -41,9 +41,9 @@ Physics3DConstraint::Physics3DConstraint()
 
 Physics3DConstraint::~Physics3DConstraint()
 {
-    CC_SAFE_RELEASE(_bodyA);
-    CC_SAFE_RELEASE(_bodyB);
-    CC_SAFE_DELETE(_constraint);
+    AX_SAFE_RELEASE(_bodyA);
+    AX_SAFE_RELEASE(_bodyB);
+    AX_SAFE_DELETE(_constraint);
 }
 
 float Physics3DConstraint::getBreakingImpulse() const
@@ -89,7 +89,7 @@ Physics3DPointToPointConstraint* Physics3DPointToPointConstraint::create(Physics
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -105,7 +105,7 @@ Physics3DPointToPointConstraint* Physics3DPointToPointConstraint::create(Physics
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -880,6 +880,6 @@ void Physics3D6DofConstraint::setUseFrameOffset(bool frameOffsetOnOff) const
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS

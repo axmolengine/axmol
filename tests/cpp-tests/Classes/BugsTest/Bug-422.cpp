@@ -57,9 +57,9 @@ void Bug422Layer::reset()
     removeChild(node, true);
     //    [self removeChildByTag:localtag-1 cleanup:NO];
 
-    auto item1 = MenuItemFont::create("One", CC_CALLBACK_1(Bug422Layer::menuCallback, this));
+    auto item1 = MenuItemFont::create("One", AX_CALLBACK_1(Bug422Layer::menuCallback, this));
     log("MenuItemFont: %p", item1);
-    MenuItem* item2 = MenuItemFont::create("Two", CC_CALLBACK_1(Bug422Layer::menuCallback, this));
+    MenuItem* item2 = MenuItemFont::create("Two", AX_CALLBACK_1(Bug422Layer::menuCallback, this));
     auto menu       = Menu::create(item1, item2, nullptr);
     menu->alignItemsVertically();
 

@@ -53,7 +53,7 @@ backend::ProgramState* initPipelineDescriptor(axis::CustomCommand& command,
     auto& pipelieDescriptor = command.getPipelineDescriptor();
     auto* program           = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
     auto programState       = new backend::ProgramState(program);
-    CC_SAFE_RELEASE(pipelieDescriptor.programState);
+    AX_SAFE_RELEASE(pipelieDescriptor.programState);
     pipelieDescriptor.programState = programState;
 
     // set vertexLayout according to V2F_C4B_T2F structure
@@ -117,7 +117,7 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
     setSprite(sp);
 
     // TODO: Use ProgramState Vector to Node
-    CC_SAFE_RELEASE(_programState2);
+    AX_SAFE_RELEASE(_programState2);
     setProgramState(initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1), false);
     _programState2 = initPipelineDescriptor(_customCommand2, false, _locMVP2, _locTex2);
 
@@ -126,8 +126,8 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
 
 ProgressTimer::~ProgressTimer()
 {
-    CC_SAFE_RELEASE(_sprite);
-    CC_SAFE_RELEASE(_programState2);
+    AX_SAFE_RELEASE(_sprite);
+    AX_SAFE_RELEASE(_programState2);
 }
 
 void ProgressTimer::setPercentage(float percentage)
@@ -143,7 +143,7 @@ void ProgressTimer::setSprite(Sprite* sprite)
 {
     if (_sprite != sprite)
     {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
@@ -152,9 +152,9 @@ void ProgressTimer::setSprite(Sprite* sprite)
             if (sprite)
                 sEngine->retainScriptObject(this, sprite);
         }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-        CC_SAFE_RETAIN(sprite);
-        CC_SAFE_RELEASE(_sprite);
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+        AX_SAFE_RETAIN(sprite);
+        AX_SAFE_RELEASE(_sprite);
         _sprite = sprite;
         setContentSize(_sprite->getContentSize());
 

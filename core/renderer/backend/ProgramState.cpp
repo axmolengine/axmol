@@ -35,7 +35,7 @@
 
 #include "xxhash.h"
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
 #    include "glsl_optimizer.h"
 #endif
 
@@ -125,13 +125,13 @@ TextureInfo::~TextureInfo()
 void TextureInfo::retainTextures()
 {
     for (auto& texture : textures)
-        CC_SAFE_RETAIN(texture);
+        AX_SAFE_RETAIN(texture);
 }
 
 void TextureInfo::releaseTextures()
 {
     for (auto& texture : textures)
-        CC_SAFE_RELEASE(texture);
+        AX_SAFE_RELEASE(texture);
     textures.clear();
 }
 
@@ -158,7 +158,7 @@ void TextureInfo::assign(const TextureInfo& other)
         textures = other.textures;
         retainTextures();
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         location = other.location;
 #endif
     }
@@ -174,7 +174,7 @@ void TextureInfo::assign(TextureInfo&& other)
         slots    = std::move(other.slots);
         textures = std::move(other.textures);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         location       = other.location;
         other.location = -1;
 #endif
@@ -189,19 +189,19 @@ ProgramState::ProgramState(Program* program)
 
 bool ProgramState::init(Program* program)
 {
-    CC_SAFE_RETAIN(program);
+    AX_SAFE_RETAIN(program);
     _program                 = program;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
     _vertexUniformBuffer     = (char*)calloc(1, _vertexUniformBufferSize);
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
     _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
 #endif
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     _uniformHashState = XXH32_createState();
 #endif
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->resetUniforms(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -211,7 +211,7 @@ bool ProgramState::init(Program* program)
 
 void ProgramState::resetUniforms()
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     if (_program == nullptr)
         return;
 
@@ -232,14 +232,14 @@ void ProgramState::resetUniforms()
 
 ProgramState::~ProgramState()
 {
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     XXH32_freeState(_uniformHashState);
 #endif
-    CC_SAFE_RELEASE(_program);
-    CC_SAFE_FREE(_vertexUniformBuffer);
-    CC_SAFE_FREE(_fragmentUniformBuffer);
+    AX_SAFE_RELEASE(_program);
+    AX_SAFE_FREE(_vertexUniformBuffer);
+    AX_SAFE_FREE(_fragmentUniformBuffer);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -251,7 +251,7 @@ ProgramState* ProgramState::clone() const
     cp->_fragmentTextureInfos = _fragmentTextureInfos;
     memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
     cp->_vertexLayout = _vertexLayout;
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
 #endif
     cp->_uniformID = _uniformID;
@@ -292,7 +292,7 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
     }
 }
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
 void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniformInfo,
                                              const void* srcData,
                                              std::size_t srcSize,
@@ -355,12 +355,12 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
         break;
     }
     default:
-        CC_ASSERT(false);
+        AX_ASSERT(false);
         break;
     }
 
     memcpy((char*)buffer + uniformInfo.location, convertedData, uniformInfo.size);
-    CC_SAFE_DELETE_ARRAY(convertedData);
+    AX_SAFE_DELETE_ARRAY(convertedData);
 }
 #endif
 
@@ -370,7 +370,7 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
         return;
 
 // float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
     if (uniformInfo.needConvert)
     {
@@ -391,7 +391,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
         return;
 
 // float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
     if (uniformInfo.needConvert)
     {
@@ -408,7 +408,7 @@ void ProgramState::updateUniformID(int uniformID)
 {
     if (uniformID == -1)
     {
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
         XXH32_reset(_uniformHashState, 0);
         XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
         XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
@@ -425,7 +425,7 @@ void ProgramState::updateUniformID(int uniformID)
 
 void ProgramState::setTexture(backend::TextureBackend* texture)
 {
-    for (int slot = 0; slot < texture->getCount() && slot < CC_META_TEXTURES; ++slot)
+    for (int slot = 0; slot < texture->getCount() && slot < AX_META_TEXTURES; ++slot)
     {
         auto location = getUniformLocation((backend::Uniform)(backend::Uniform::TEXTURE + slot));
         setTexture(location, slot, slot, texture);
@@ -494,7 +494,7 @@ void ProgramState::setTexture(int location,
     auto& info = textureInfo[location];
     info       = {{slot}, {index}, {texture}};
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
 #endif
 }
@@ -509,7 +509,7 @@ void ProgramState::setTextureArray(int location,
     auto& info = textureInfo[location];
     info       = {std::move(slots), std::move(textures)};
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
 #endif
 }

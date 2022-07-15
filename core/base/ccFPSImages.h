@@ -33,7 +33,7 @@ THE SOFTWARE.
 extern "C" {
 #endif
 
-#if !CC_STRIP_FPS
+#if !AX_STRIP_FPS
 extern unsigned char cc_fps_images_png[];
 extern unsigned int cc_fps_images_len(void);
 #endif

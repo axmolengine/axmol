@@ -65,7 +65,7 @@ FastTMXLayer* FastTMXLayer::create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* la
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -88,7 +88,7 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
 
     // tilesetInfo
     _tileSet = tilesetInfo;
-    CC_SAFE_RETAIN(_tileSet);
+    AX_SAFE_RETAIN(_tileSet);
 
     // mapInfo
     _mapTileSize      = mapInfo->getTileSize();
@@ -98,10 +98,10 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
 
     // offset (after layer orientation is set);
     Vec2 offset = this->calculateLayerOffset(layerInfo->_offset);
-    this->setPosition(CC_POINT_PIXELS_TO_POINTS(offset));
+    this->setPosition(AX_POINT_PIXELS_TO_POINTS(offset));
 
     this->setContentSize(
-        CC_SIZE_PIXELS_TO_POINTS(Vec2(_layerSize.width * _mapTileSize.width, _layerSize.height * _mapTileSize.height)));
+        AX_SIZE_PIXELS_TO_POINTS(Vec2(_layerSize.width * _mapTileSize.width, _layerSize.height * _mapTileSize.height)));
 
     this->tileToNodeTransform();
 
@@ -115,15 +115,15 @@ FastTMXLayer::FastTMXLayer() {}
 
 FastTMXLayer::~FastTMXLayer()
 {
-    CC_SAFE_RELEASE(_tileSet);
-    CC_SAFE_RELEASE(_texture);
-    CC_SAFE_FREE(_tiles);
-    CC_SAFE_RELEASE(_vertexBuffer);
-    CC_SAFE_RELEASE(_indexBuffer);
+    AX_SAFE_RELEASE(_tileSet);
+    AX_SAFE_RELEASE(_texture);
+    AX_SAFE_FREE(_tiles);
+    AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 
     for (auto& e : _customCommands)
     {
-        CC_SAFE_RELEASE(e.second->getPipelineDescriptor().programState);
+        AX_SAFE_RELEASE(e.second->getPipelineDescriptor().programState);
         delete e.second;
     }
 }
@@ -167,8 +167,8 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 void FastTMXLayer::updateTiles(const Rect& culledRect)
 {
     Rect visibleTiles        = Rect(culledRect.origin, culledRect.size * _director->getContentScaleFactor());
-    Vec2 mapTileSize         = CC_SIZE_PIXELS_TO_POINTS(_mapTileSize);
-    Vec2 tileSize            = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
+    Vec2 mapTileSize         = AX_SIZE_PIXELS_TO_POINTS(_mapTileSize);
+    Vec2 tileSize            = AX_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
     Mat4 nodeToTileTransform = _tileToNodeTransform.getInversed();
     // transform to tile
     visibleTiles = RectApplyTransform(visibleTiles, nodeToTileTransform);
@@ -275,7 +275,7 @@ void FastTMXLayer::updateVertexBuffer()
 
 void FastTMXLayer::updateIndexBuffer()
 {
-#ifdef CC_FAST_TILEMAP_32_BIT_INDICES
+#ifdef AX_FAST_TILEMAP_32_BIT_INDICES
     unsigned int indexBufferSize = (unsigned int)(sizeof(unsigned int) * _indices.size());
 #else
     unsigned int indexBufferSize = (unsigned int)(sizeof(unsigned short) * _indices.size());
@@ -384,8 +384,8 @@ void FastTMXLayer::setupTiles()
 
 Mat4 FastTMXLayer::tileToNodeTransform()
 {
-    float w    = _mapTileSize.width / CC_CONTENT_SCALE_FACTOR();
-    float h    = _mapTileSize.height / CC_CONTENT_SCALE_FACTOR();
+    float w    = _mapTileSize.width / AX_CONTENT_SCALE_FACTOR();
+    float h    = _mapTileSize.height / AX_CONTENT_SCALE_FACTOR();
     float offY = (_layerSize.height - 1) * h;
 
     switch (_layerOrientation)
@@ -432,7 +432,7 @@ void FastTMXLayer::updatePrimitives()
             command->setVertexBuffer(_vertexBuffer);
 
             CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_SHORT;
-#if CC_FAST_TILEMAP_32_BIT_INDICES
+#if AX_FAST_TILEMAP_32_BIT_INDICES
             indexFormat = CustomCommand::IndexFormat::U_INT;
 #endif
             command->setIndexBuffer(_indexBuffer, indexFormat);
@@ -443,7 +443,7 @@ void FastTMXLayer::updatePrimitives()
 
             if (_useAutomaticVertexZ)
             {
-                CC_SAFE_RELEASE(pipelineDescriptor.programState);
+                AX_SAFE_RELEASE(pipelineDescriptor.programState);
                 auto* program =
                     backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
                 auto programState               = new backend::ProgramState(program);
@@ -454,7 +454,7 @@ void FastTMXLayer::updatePrimitives()
             }
             else
             {
-                CC_SAFE_RELEASE(pipelineDescriptor.programState);
+                AX_SAFE_RELEASE(pipelineDescriptor.programState);
                 auto* program     = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
                 auto programState = new backend::ProgramState(program);
                 pipelineDescriptor.programState = programState;
@@ -504,7 +504,7 @@ void FastTMXLayer::updateTotalQuads()
 {
     if (_quadsDirty)
     {
-        Vec2 tileSize = CC_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
+        Vec2 tileSize = AX_SIZE_PIXELS_TO_POINTS(_tileSet->_tileSize);
         Vec2 texSize  = _tileSet->_imageSize;
         _tileToQuadIndex.clear();
         _totalQuads.resize(int(_layerSize.width * _layerSize.height));
@@ -669,7 +669,7 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
         {
             // tile not created yet. create it
             Rect rect = _tileSet->getRectForGID(gid);
-            rect      = CC_RECT_PIXELS_TO_POINTS(rect);
+            rect      = AX_RECT_PIXELS_TO_POINTS(rect);
             tile      = Sprite::createWithTexture(_texture, rect);
 
             Vec2 p = this->getPositionAt(tileCoordinate);
@@ -890,7 +890,7 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
         {
             Sprite* sprite = it->second.first;
             Rect rect      = _tileSet->getRectForGID(gid);
-            rect           = CC_RECT_PIXELS_TO_POINTS(rect);
+            rect           = AX_RECT_PIXELS_TO_POINTS(rect);
 
             sprite->setTextureRect(rect, false, rect.size);
             this->reorderChild(sprite, z);
@@ -1026,7 +1026,7 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
 void TMXTileAnimTask::tickAndScheduleNext(float dt)
 {
     setCurrFrame();
-    _layer->getParent()->scheduleOnce(CC_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
+    _layer->getParent()->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
                                       _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
 }
 

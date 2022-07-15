@@ -50,7 +50,7 @@ THE SOFTWARE.
 #include "renderer/backend/PixelFormatUtils.h"
 #include "renderer/CCRenderer.h"
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
 #    include "renderer/CCTextureCache.h"
 #endif
 
@@ -80,15 +80,15 @@ Texture2D::Texture2D()
 
 Texture2D::~Texture2D()
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     VolatileTextureMgr::removeTexture(this);
 #endif
     CCLOGINFO("deallocing Texture2D: %p - id=%u", this, _name);
 
-    CC_SAFE_DELETE(_ninePatchInfo);
+    AX_SAFE_DELETE(_ninePatchInfo);
 
-    CC_SAFE_RELEASE(_texture);
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_programState);
 }
 
 backend::PixelFormat Texture2D::getPixelFormat() const
@@ -114,8 +114,8 @@ backend::TextureBackend* Texture2D::getBackendTexture() const
 Vec2 Texture2D::getContentSize() const
 {
     Vec2 ret;
-    ret.width  = _contentSize.width / CC_CONTENT_SCALE_FACTOR();
-    ret.height = _contentSize.height / CC_CONTENT_SCALE_FACTOR();
+    ret.width  = _contentSize.width / AX_CONTENT_SCALE_FACTOR();
+    ret.height = _contentSize.height / AX_CONTENT_SCALE_FACTOR();
 
     return ret;
 }
@@ -219,11 +219,11 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     backend::PixelFormat imagePixelFormat = image->getPixelFormat();
     size_t tempDataLen                    = image->getDataLen();
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     //! override renderFormat, since some render format is not supported by metal
     switch (renderFormat)
     {
-#    if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS || TARGET_OS_SIMULATOR)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
     // packed 16 bits pixels only available on iOS
     case PixelFormat::RGB565:
     case PixelFormat::RGB5A1:
@@ -308,7 +308,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
     if (!pfd.bpp)
     {
         CCLOG("cocos2d: WARNING: unsupported pixelformat: %x", (uint32_t)pixelFormat);
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
         CCASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 #endif
         return false;
@@ -324,7 +324,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         return false;
     }
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     VolatileTextureMgr::findVolotileTexture(this);
 #endif
 
@@ -361,7 +361,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         {
             auto convertedFormat = backend::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat,
                                                                                   renderFormat, &outData, &outDataLen);
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
             CCASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
 #endif
             if (convertedFormat == renderFormat)
@@ -487,7 +487,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
     if (!text || !(*text))
         return false;
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     // cache the texture data
     VolatileTextureMgr::addStringTexture(this, text, textDefinition);
 #endif
@@ -519,7 +519,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
         return false;
     }
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID) && (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
     CCASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
 #endif
 
@@ -530,7 +530,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
     int imageWidth;
     int imageHeight;
     auto textDef            = textDefinition;
-    auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
     textDef._fontSize *= contentScaleFactor;
     textDef._dimensions.width *= contentScaleFactor;
     textDef._dimensions.height *= contentScaleFactor;
@@ -562,7 +562,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
 
 bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha)
 {
-    CC_ASSERT(_texture);
+    AX_ASSERT(_texture);
 
     _texture->updateTextureDescriptor(descriptor);
     _pixelsWide = _contentSize.width = _texture->getWidth();

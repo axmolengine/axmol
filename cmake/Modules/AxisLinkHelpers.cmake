@@ -17,7 +17,7 @@ message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
 function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
-            PRIVATE CC_STATIC=1
+            PRIVATE AX_STATIC=1
         )
     endif()
 

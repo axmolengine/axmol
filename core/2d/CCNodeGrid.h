@@ -40,7 +40,7 @@ class GridBase;
  * @brief Base class for Grid Node.
  */
 
-class CC_DLL NodeGrid : public Node
+class AX_DLL NodeGrid : public Node
 {
 public:
     /** Create a Grid Node.
@@ -104,7 +104,7 @@ protected:
     Rect _gridRect = Rect::ZERO;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
+    AX_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
 };
 /** @} */
 NS_AX_END

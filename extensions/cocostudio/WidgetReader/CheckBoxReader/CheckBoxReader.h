@@ -40,7 +40,7 @@ public:
 
     static CheckBoxReader* getInstance();
     /** @deprecated Use method destroyInstance() instead */
-    CC_DEPRECATED_ATTRIBUTE static void purge();
+    AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);

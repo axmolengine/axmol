@@ -513,7 +513,7 @@ Animate3D::~Animate3D()
     }
     _keyFrameEvent.clear();
 
-    CC_SAFE_RELEASE(_animation);
+    AX_SAFE_RELEASE(_animation);
 }
 
 void Animate3D::removeFromMap()

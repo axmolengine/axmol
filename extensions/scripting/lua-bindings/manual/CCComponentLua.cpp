@@ -68,7 +68,7 @@ int ComponentLua::_index = 0;
 
 ComponentLua* ComponentLua::create(std::string_view scriptFileName)
 {
-    CC_ASSERT(!scriptFileName.empty());
+    AX_ASSERT(!scriptFileName.empty());
 
     initClass();
 

@@ -43,7 +43,7 @@ class IDownloaderImpl;
 class Downloader;
 class DownloaderCURL;
 
-class CC_DLL DownloadTask final
+class AX_DLL DownloadTask final
 {
 public:
     const static int ERROR_NO_ERROR            = 0;
@@ -96,7 +96,7 @@ private:
     std::unique_ptr<IDownloadTask> _coTask;
 };
 
-class CC_DLL DownloaderHints
+class AX_DLL DownloaderHints
 {
 public:
     uint32_t countOfMaxProcessingTasks;
@@ -104,7 +104,7 @@ public:
     std::string tempFileNameSuffix;
 };
 
-class CC_DLL Downloader final
+class AX_DLL Downloader final
 {
 public:
     Downloader();

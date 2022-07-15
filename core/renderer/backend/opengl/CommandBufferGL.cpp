@@ -189,7 +189,7 @@ void CommandBufferGL::setIndexBuffer(Buffer* buffer)
         return;
 
     buffer->retain();
-    CC_SAFE_RELEASE(_indexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
     _indexBuffer = static_cast<BufferGL*>(buffer);
 }
 
@@ -200,14 +200,14 @@ void CommandBufferGL::setVertexBuffer(Buffer* buffer)
         return;
 
     buffer->retain();
-    CC_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_vertexBuffer);
     _vertexBuffer = static_cast<BufferGL*>(buffer);
 }
 
 void CommandBufferGL::setProgramState(ProgramState* programState)
 {
-    CC_SAFE_RETAIN(programState);
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RETAIN(programState);
+    AX_SAFE_RELEASE(_programState);
     _programState = programState;
 }
 
@@ -234,8 +234,8 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 
 void CommandBufferGL::endRenderPass()
 {
-    CC_SAFE_RELEASE_NULL(_indexBuffer);
-    CC_SAFE_RELEASE_NULL(_vertexBuffer);
+    AX_SAFE_RELEASE_NULL(_indexBuffer);
+    AX_SAFE_RELEASE_NULL(_vertexBuffer);
 }
 
 void CommandBufferGL::endFrame() {}
@@ -325,7 +325,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             auto& slots    = iter.second.slots;
             auto& indexs   = iter.second.indexs;
             auto location  = iter.first;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
             location = iter.second.location;
 #endif
             int i = 0;
@@ -425,7 +425,7 @@ void CommandBufferGL::setUniform(bool isArray, GLuint location, unsigned int siz
 
 void CommandBufferGL::cleanResources()
 {
-    CC_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_programState);
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)
@@ -483,8 +483,8 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
     auto bufferSize = bytesPerRow * height;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     GLuint pbo;
     glGenBuffers(1, &pbo);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
@@ -510,8 +510,8 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
         pbd._width  = width;
         pbd._height = height;
     }
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);

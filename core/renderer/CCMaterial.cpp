@@ -40,7 +40,7 @@
 
 #include <sstream>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    define strcasecmp _stricmp
 #endif
 
@@ -138,7 +138,7 @@ bool Material::initWithFile(std::string_view validfilename)
     // get the first material
     parseProperties((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
 
-    CC_SAFE_DELETE(properties);
+    AX_SAFE_DELETE(properties);
     return true;
 }
 
@@ -408,8 +408,8 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
             }
             space = shaderProperties->getNextNamespace();
         }
-        CC_SAFE_RELEASE(program);
-        CC_SAFE_RELEASE(programState);
+        AX_SAFE_RELEASE(program);
+        AX_SAFE_RELEASE(programState);
     }
 
     return true;
@@ -554,7 +554,7 @@ Technique* Material::getTechniqueByName(std::string_view name)
 
 Technique* Material::getTechniqueByIndex(ssize_t index)
 {
-    CC_ASSERT(index >= 0 && index < _techniques.size() && "Invalid size");
+    AX_ASSERT(index >= 0 && index < _techniques.size() && "Invalid size");
 
     return _techniques.at(index);
 }

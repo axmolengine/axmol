@@ -71,9 +71,9 @@ namespace {
             auto listener = EventListenerTouchOneByOne::create();
             listener->setSwallowTouches(true);
 
-            listener->onTouchBegan = CC_CALLBACK_2(TextButton::onTouchBegan, this);
-            listener->onTouchEnded = CC_CALLBACK_2(TextButton::onTouchEnded, this);
-            listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
+            listener->onTouchBegan = AX_CALLBACK_2(TextButton::onTouchBegan, this);
+            listener->onTouchEnded = AX_CALLBACK_2(TextButton::onTouchEnded, this);
+            listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
 
             _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
         }
@@ -266,7 +266,7 @@ public:
         }
         else
         {
-            CC_SAFE_DELETE(ret);
+            AX_SAFE_DELETE(ret);
         }
         return ret;
     }
@@ -483,7 +483,7 @@ void CustomEventTest::onEnter()
         EventCustom event("game_custom_event1");
         event.setUserData(buf);
         _eventDispatcher->dispatchEvent(&event);
-        CC_SAFE_DELETE_ARRAY(buf);
+        AX_SAFE_DELETE_ARRAY(buf);
     });
     sendItem->setPosition(origin + Vec2(size.width / 2, size.height / 2));
 
@@ -509,7 +509,7 @@ void CustomEventTest::onEnter()
         EventCustom event("game_custom_event2");
         event.setUserData(buf);
         _eventDispatcher->dispatchEvent(&event);
-        CC_SAFE_DELETE_ARRAY(buf);
+        AX_SAFE_DELETE_ARRAY(buf);
     });
     sendItem2->setPosition(origin + Vec2(size.width / 2, size.height / 2 - 40));
 
@@ -544,7 +544,7 @@ void LabelKeyboardEventTest::onEnter()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
     auto statusLabel = Label::createWithSystemFont("No keyboard event received!", "", 20);
     statusLabel->setPosition(origin + Vec2(size.width / 2, size.height / 2));
     addChild(statusLabel);
@@ -632,7 +632,7 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
     return "Press keys 1 through 9 to change the stats anchor on the screen.";
 #else
     return "Change the stats anchor [1-9]";
@@ -1120,7 +1120,7 @@ StopPropagationTest::StopPropagationTest()
     auto keyboardEventListener          = EventListenerKeyboard::create();
     keyboardEventListener->onKeyPressed = [](EventKeyboard::KeyCode /*key*/, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CC_UNUSED_PARAM(target);
+        AX_UNUSED_PARAM(target);
         CCASSERT(target->getTag() == TAG_BLUE_SPRITE || target->getTag() == TAG_BLUE_SPRITE2,
                  "Yellow blocks shouldn't response event.");
         // Stop propagation, so yellow blocks will not be able to receive event.
@@ -1528,7 +1528,7 @@ public:
             return ret;
         }
 
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 
@@ -1571,7 +1571,7 @@ private:
 
 DanglingNodePointersTest::DanglingNodePointersTest()
 {
-#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
@@ -1619,11 +1619,11 @@ std::string DanglingNodePointersTest::title() const
 
 std::string DanglingNodePointersTest::subtitle() const
 {
-#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
     return "Tap the square - should not crash!";
 #else
     return "For test to work, must be compiled with:\n"
-           "CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& COCOS2D_DEBUG > 0";
+           "AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& COCOS2D_DEBUG > 0";
 #endif
 }
 
@@ -1668,8 +1668,8 @@ std::string RegisterAndUnregisterWhileEventHanldingTest::subtitle() const
 //
 WindowEventsTest::WindowEventsTest()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
         // TODO: need to create resizeable window
@@ -1689,8 +1689,8 @@ std::string WindowEventsTest::title() const
 
 std::string WindowEventsTest::subtitle() const
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     return "Resize and Switch to another window and back. Read Logs.";
 #else
     return "Unsupported platform.";

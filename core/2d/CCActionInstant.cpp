@@ -150,7 +150,7 @@ RemoveSelf* RemoveSelf::create(bool isNeedCleanUp /*= true*/)
     if (ret->init(isNeedCleanUp))
         ret->autorelease();
     else
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
 
     return ret;
 }
@@ -192,7 +192,7 @@ FlipX* FlipX::create(bool x)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -232,7 +232,7 @@ FlipY* FlipY::create(bool y)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -315,7 +315,7 @@ CallFunc* CallFunc::create(const std::function<void()>& func)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -370,7 +370,7 @@ CallFuncN* CallFuncN::create(const std::function<void(Node*)>& func)
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 

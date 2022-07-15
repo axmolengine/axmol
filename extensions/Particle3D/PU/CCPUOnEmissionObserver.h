@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_ON_EMISSION_OBSERVER_H__
-#define __CC_PU_PARTICLE_3D_ON_EMISSION_OBSERVER_H__
+#ifndef __AX_PU_PARTICLE_3D_ON_EMISSION_OBSERVER_H__
+#define __AX_PU_PARTICLE_3D_ON_EMISSION_OBSERVER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -37,7 +37,7 @@ NS_AX_BEGIN
 
 struct PUParticle3D;
 class PUParticleSystem3D;
-class CC_EX_DLL PUOnEmissionObserver : public PUObserver
+class AX_EX_DLL PUOnEmissionObserver : public PUObserver
 {
 public:
     static PUOnEmissionObserver* create();

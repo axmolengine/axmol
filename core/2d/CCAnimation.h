@@ -25,8 +25,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CC_ANIMATION_H__
-#define __CC_ANIMATION_H__
+#ifndef __AX_ANIMATION_H__
+#define __AX_ANIMATION_H__
 
 #include "platform/CCPlatformConfig.h"
 #include "base/CCRef.h"
@@ -55,7 +55,7 @@ class SpriteFrame;
 
  @since v2.0
  */
-class CC_DLL AnimationFrame : public Ref, public Clonable
+class AX_DLL AnimationFrame : public Ref, public Clonable
 {
 public:
     /** @struct DisplayedEventInfo
@@ -87,8 +87,8 @@ public:
      */
     void setSpriteFrame(SpriteFrame* frame)
     {
-        CC_SAFE_RETAIN(frame);
-        CC_SAFE_RELEASE(_spriteFrame);
+        AX_SAFE_RETAIN(frame);
+        AX_SAFE_RELEASE(_spriteFrame);
         _spriteFrame = frame;
     }
 
@@ -146,7 +146,7 @@ protected:
     ValueMap _userInfo;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(AnimationFrame);
+    AX_DISALLOW_COPY_AND_ASSIGN(AnimationFrame);
 };
 
 /** @class Animation
@@ -157,7 +157,7 @@ private:
  * sprite->runAction(Animate::create(animation));
  * @endcode
  */
-class CC_DLL Animation : public Ref, public Clonable
+class AX_DLL Animation : public Ref, public Clonable
 {
 public:
     /** Creates an animation.
@@ -314,7 +314,7 @@ protected:
     unsigned int _loops;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Animation);
+    AX_DISALLOW_COPY_AND_ASSIGN(Animation);
 };
 
 // end of sprite_nodes group
@@ -322,4 +322,4 @@ private:
 
 NS_AX_END
 
-#endif  // __CC_ANIMATION_H__
+#endif  // __AX_ANIMATION_H__

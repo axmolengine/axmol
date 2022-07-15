@@ -9,8 +9,8 @@ void BagWindow::onInit()
     setModal(true);
 
     _list = _contentPane->getChild("list")->as<GList>();
-    _list->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(BagWindow::onClickItem, this));
-    _list->itemRenderer = CC_CALLBACK_2(BagWindow::renderListItem, this);
+    _list->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(BagWindow::onClickItem, this));
+    _list->itemRenderer = AX_CALLBACK_2(BagWindow::renderListItem, this);
     _list->setNumItems(45);
 }
 
@@ -25,12 +25,12 @@ void BagWindow::doShowAnimation()
     setScale(0.1f, 0.1f);
     setPivot(0.5f, 0.5f);
 
-    GTween::to(getScale(), Vec2::ONE, 0.3f)->setTarget(this, TweenPropType::Scale)->onComplete(CC_CALLBACK_0(BagWindow::onShown, this));
+    GTween::to(getScale(), Vec2::ONE, 0.3f)->setTarget(this, TweenPropType::Scale)->onComplete(AX_CALLBACK_0(BagWindow::onShown, this));
 }
 
 void BagWindow::doHideAnimation()
 {
-    GTween::to(getScale(), Vec2(0.1f, 0.1f), 0.3f)->setTarget(this, TweenPropType::Scale)->onComplete(CC_CALLBACK_0(BagWindow::hideImmediately, this));
+    GTween::to(getScale(), Vec2(0.1f, 0.1f), 0.3f)->setTarget(this, TweenPropType::Scale)->onComplete(AX_CALLBACK_0(BagWindow::hideImmediately, this));
 }
 
 void BagWindow::onClickItem(EventContext* context)

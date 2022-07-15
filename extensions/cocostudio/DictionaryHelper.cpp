@@ -45,7 +45,7 @@ DictionaryHelper* DictionaryHelper::getInstance()
 
 void DictionaryHelper::destroyInstance()
 {
-    CC_SAFE_DELETE(sharedHelper);
+    AX_SAFE_DELETE(sharedHelper);
 }
 
 const rapidjson::Value& DictionaryHelper::getSubDictionary_json(const rapidjson::Value& root, const char* key)
@@ -68,9 +68,9 @@ int DictionaryHelper::getIntValue_json(const rapidjson::Value& root, const char*
     int nRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.HasMember(key));
-        CC_BREAK_IF(root[key].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.HasMember(key));
+        AX_BREAK_IF(root[key].IsNull());
         nRet = root[key].GetInt();
     } while (0);
 
@@ -82,9 +82,9 @@ float DictionaryHelper::getFloatValue_json(const rapidjson::Value& root, const c
     float fRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.HasMember(key));
-        CC_BREAK_IF(root[key].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.HasMember(key));
+        AX_BREAK_IF(root[key].IsNull());
         fRet = (float)root[key].GetDouble();
     } while (0);
 
@@ -96,9 +96,9 @@ bool DictionaryHelper::getBooleanValue_json(const rapidjson::Value& root, const 
     bool bRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.HasMember(key));
-        CC_BREAK_IF(root[key].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.HasMember(key));
+        AX_BREAK_IF(root[key].IsNull());
         bRet = root[key].GetBool();
     } while (0);
 
@@ -110,9 +110,9 @@ const char* DictionaryHelper::getStringValue_json(const rapidjson::Value& root, 
     const char* sRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.HasMember(key));
-        CC_BREAK_IF(root[key].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.HasMember(key));
+        AX_BREAK_IF(root[key].IsNull());
         sRet = root[key].GetString();
     } while (0);
 
@@ -124,9 +124,9 @@ int DictionaryHelper::getArrayCount_json(const rapidjson::Value& root, const cha
     int nRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.HasMember(key));
-        CC_BREAK_IF(root[key].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.HasMember(key));
+        AX_BREAK_IF(root[key].IsNull());
         nRet = (int)(root[key].Size());
     } while (0);
 
@@ -138,10 +138,10 @@ int DictionaryHelper::getIntValueFromArray_json(const rapidjson::Value& root, co
     int nRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.HasMember(arrayKey));
-        CC_BREAK_IF(root[arrayKey].IsNull());
-        CC_BREAK_IF(root[arrayKey][idx].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.HasMember(arrayKey));
+        AX_BREAK_IF(root[arrayKey].IsNull());
+        AX_BREAK_IF(root[arrayKey][idx].IsNull());
         nRet = root[arrayKey][idx].GetInt();
     } while (0);
 
@@ -156,9 +156,9 @@ float DictionaryHelper::getFloatValueFromArray_json(const rapidjson::Value& root
     float fRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(root[arrayKey].IsNull());
-        CC_BREAK_IF(root[arrayKey][idx].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(root[arrayKey].IsNull());
+        AX_BREAK_IF(root[arrayKey][idx].IsNull());
         fRet = (float)root[arrayKey][idx].GetDouble();
     } while (0);
 
@@ -170,9 +170,9 @@ bool DictionaryHelper::getBoolValueFromArray_json(const rapidjson::Value& root, 
     bool bRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(root[arrayKey].IsNull());
-        CC_BREAK_IF(root[arrayKey][idx].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(root[arrayKey].IsNull());
+        AX_BREAK_IF(root[arrayKey][idx].IsNull());
         bRet = root[arrayKey][idx].GetBool();
     } while (0);
 
@@ -187,9 +187,9 @@ const char* DictionaryHelper::getStringValueFromArray_json(const rapidjson::Valu
     const char* sRet = def;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(root[arrayKey].IsNull());
-        CC_BREAK_IF(root[arrayKey][idx].IsNull());
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(root[arrayKey].IsNull());
+        AX_BREAK_IF(root[arrayKey][idx].IsNull());
         sRet = root[arrayKey][idx].GetString();
     } while (0);
 
@@ -208,7 +208,7 @@ bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value& root)
     bool bRet = false;
     do
     {
-        CC_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(root.IsNull());
         bRet = true;
     } while (0);
 
@@ -220,7 +220,7 @@ bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value& root, const
     bool bRet = false;
     do
     {
-        CC_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(root.IsNull());
         bRet = root.HasMember(key);
     } while (0);
 
@@ -232,9 +232,9 @@ bool DictionaryHelper::checkObjectExist_json(const rapidjson::Value& root, int i
     bool bRet = false;
     do
     {
-        CC_BREAK_IF(root.IsNull());
-        CC_BREAK_IF(!root.IsArray());
-        CC_BREAK_IF(index < 0 || root.Size() <= (unsigned int)index);
+        AX_BREAK_IF(root.IsNull());
+        AX_BREAK_IF(!root.IsArray());
+        AX_BREAK_IF(index < 0 || root.Size() <= (unsigned int)index);
         bRet = true;
     } while (0);
 

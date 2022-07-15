@@ -40,13 +40,13 @@ class BaseLight;
 class Renderer;
 class EventListenerCustom;
 class EventCustom;
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 class PhysicsWorld;
 #endif
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 class Physics3DWorld;
 #endif
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 class NavMesh;
 #endif
 
@@ -68,7 +68,7 @@ It is a good practice to use a Scene as the parent of all your nodes.
 
 Scene will create a default camera for you.
 */
-class CC_DLL Scene : public Node
+class AX_DLL Scene : public Node
 {
 public:
     /** Creates a new Scene object.
@@ -151,11 +151,11 @@ protected:
     std::vector<BaseLight*> _lights;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Scene);
+    AX_DISALLOW_COPY_AND_ASSIGN(Scene);
 
-#if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION))
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
 public:
-#    if CC_USE_PHYSICS
+#    if AX_USE_PHYSICS
     /** Get the physics world of the scene.
      * @return The physics world of the scene.
      * @js NA
@@ -163,7 +163,7 @@ public:
     PhysicsWorld* getPhysicsWorld() const { return _physicsWorld; }
 #    endif
 
-#    if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
      * @js NA
@@ -189,17 +189,17 @@ public:
 protected:
     void addChildToPhysicsWorld(Node* child);
 
-#    if CC_USE_PHYSICS
+#    if AX_USE_PHYSICS
     PhysicsWorld* _physicsWorld = nullptr;
 #    endif
 
-#    if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
     Physics3DWorld* _physics3DWorld = nullptr;
     Camera* _physics3dDebugCamera   = nullptr;
 #    endif
-#endif  // (CC_USE_PHYSICS || CC_USE_3D_PHYSICS)
+#endif  // (AX_USE_PHYSICS || AX_USE_3D_PHYSICS)
 
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 public:
     /** set navigation mesh */
     void setNavMesh(NavMesh* navMesh);
@@ -215,7 +215,7 @@ protected:
     Camera* _navMeshDebugCamera = nullptr;
 #endif
 
-#if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION) || CC_USE_NAVMESH)
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
 public:
     void stepPhysicsAndNavigation(float deltaTime);
 #endif

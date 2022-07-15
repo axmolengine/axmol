@@ -84,7 +84,7 @@ bool UIRichTextTest::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextTest::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextTest::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -93,7 +93,7 @@ bool UIRichTextTest::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextTest::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextTest::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -102,7 +102,7 @@ bool UIRichTextTest::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextTest::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextTest::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -215,7 +215,7 @@ bool UIRichTextXMLBasic::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLBasic::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLBasic::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -224,7 +224,7 @@ bool UIRichTextXMLBasic::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLBasic::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLBasic::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -233,7 +233,7 @@ bool UIRichTextXMLBasic::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLBasic::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLBasic::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -322,7 +322,7 @@ bool UIRichTextXMLSmallBig::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSmallBig::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSmallBig::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -331,7 +331,7 @@ bool UIRichTextXMLSmallBig::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSmallBig::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSmallBig::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -340,7 +340,7 @@ bool UIRichTextXMLSmallBig::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSmallBig::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSmallBig::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -428,7 +428,7 @@ bool UIRichTextXMLColor::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLColor::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLColor::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -437,7 +437,7 @@ bool UIRichTextXMLColor::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLColor::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLColor::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -446,7 +446,7 @@ bool UIRichTextXMLColor::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLColor::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLColor::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -534,7 +534,7 @@ bool UIRichTextXMLSUIB::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -543,7 +543,7 @@ bool UIRichTextXMLSUIB::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -552,7 +552,7 @@ bool UIRichTextXMLSUIB::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -640,7 +640,7 @@ bool UIRichTextXMLSUIB2::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB2::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB2::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -649,7 +649,7 @@ bool UIRichTextXMLSUIB2::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB2::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB2::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -658,7 +658,7 @@ bool UIRichTextXMLSUIB2::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB2::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB2::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -747,7 +747,7 @@ bool UIRichTextXMLSUIB3::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB3::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB3::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -756,7 +756,7 @@ bool UIRichTextXMLSUIB3::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB3::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB3::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -765,7 +765,7 @@ bool UIRichTextXMLSUIB3::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSUIB3::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSUIB3::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -854,7 +854,7 @@ bool UIRichTextXMLImg::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLImg::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLImg::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -863,7 +863,7 @@ bool UIRichTextXMLImg::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLImg::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLImg::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -872,7 +872,7 @@ bool UIRichTextXMLImg::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLImg::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLImg::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -962,7 +962,7 @@ bool UIRichTextXMLUrl::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLUrl::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLUrl::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -971,7 +971,7 @@ bool UIRichTextXMLUrl::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLUrl::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLUrl::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -980,7 +980,7 @@ bool UIRichTextXMLUrl::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLUrl::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLUrl::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1068,7 +1068,7 @@ bool UIRichTextXMLUrlImg::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLUrlImg::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLUrlImg::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1077,7 +1077,7 @@ bool UIRichTextXMLUrlImg::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLUrlImg::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLUrlImg::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1086,7 +1086,7 @@ bool UIRichTextXMLUrlImg::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLUrlImg::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLUrlImg::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1175,7 +1175,7 @@ bool UIRichTextXMLFace::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLFace::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLFace::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1184,7 +1184,7 @@ bool UIRichTextXMLFace::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLFace::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLFace::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1193,7 +1193,7 @@ bool UIRichTextXMLFace::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLFace::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLFace::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1282,7 +1282,7 @@ bool UIRichTextXMLBR::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLBR::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLBR::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1291,7 +1291,7 @@ bool UIRichTextXMLBR::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLBR::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLBR::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1300,7 +1300,7 @@ bool UIRichTextXMLBR::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLBR::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLBR::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1424,7 +1424,7 @@ bool UIRichTextXMLOutline::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLOutline::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLOutline::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1433,7 +1433,7 @@ bool UIRichTextXMLOutline::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLOutline::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLOutline::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1442,7 +1442,7 @@ bool UIRichTextXMLOutline::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLOutline::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLOutline::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1531,7 +1531,7 @@ bool UIRichTextXMLShadow::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLShadow::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLShadow::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1540,7 +1540,7 @@ bool UIRichTextXMLShadow::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLShadow::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLShadow::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1549,7 +1549,7 @@ bool UIRichTextXMLShadow::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLShadow::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLShadow::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1638,7 +1638,7 @@ bool UIRichTextXMLGlow::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLGlow::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLGlow::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1647,7 +1647,7 @@ bool UIRichTextXMLGlow::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLGlow::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLGlow::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1656,7 +1656,7 @@ bool UIRichTextXMLGlow::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLGlow::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLGlow::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1744,7 +1744,7 @@ bool UIRichTextXMLExtend::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLExtend::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLExtend::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1753,7 +1753,7 @@ bool UIRichTextXMLExtend::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLExtend::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLExtend::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1762,7 +1762,7 @@ bool UIRichTextXMLExtend::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLExtend::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLExtend::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 
@@ -1886,7 +1886,7 @@ bool UIRichTextXMLSpace::init()
         button->setTitleText("switch");
         button->setPosition(
             Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
-        button->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSpace::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSpace::touchEvent, this));
         button->setLocalZOrder(10);
         _widget->addChild(button);
 
@@ -1895,7 +1895,7 @@ bool UIRichTextXMLSpace::init()
         button2->setTitleText("wrap mode");
         button2->setPosition(
             Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button2->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSpace::switchWrapMode, this));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSpace::switchWrapMode, this));
         button2->setLocalZOrder(10);
         _widget->addChild(button2);
 
@@ -1904,7 +1904,7 @@ bool UIRichTextXMLSpace::init()
         button3->setTitleText("alignment");
         button3->setPosition(
             Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
-        button3->addTouchEventListener(CC_CALLBACK_2(UIRichTextXMLSpace::switchAlignment, this));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextXMLSpace::switchAlignment, this));
         button3->setLocalZOrder(10);
         _widget->addChild(button3);
 

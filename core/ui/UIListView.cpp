@@ -56,7 +56,7 @@ ListView::ListView()
 ListView::~ListView()
 {
     _items.clear();
-    CC_SAFE_RELEASE(_model);
+    AX_SAFE_RELEASE(_model);
 }
 
 ListView* ListView::create()
@@ -67,7 +67,7 @@ ListView* ListView::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -88,9 +88,9 @@ void ListView::setItemModel(Widget* model)
         CCLOG("Can't set a nullptr to item model!");
         return;
     }
-    CC_SAFE_RELEASE_NULL(_model);
+    AX_SAFE_RELEASE_NULL(_model);
     _model = model;
-    CC_SAFE_RETAIN(_model);
+    AX_SAFE_RETAIN(_model);
 }
 
 void ListView::handleReleaseLogic(Touch* touch)

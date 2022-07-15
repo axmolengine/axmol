@@ -79,9 +79,9 @@ private:
         auto listener = EventListenerTouchOneByOne::create();
         listener->setSwallowTouches(true);
 
-        listener->onTouchBegan     = CC_CALLBACK_2(TextButton::onTouchBegan, this);
-        listener->onTouchEnded     = CC_CALLBACK_2(TextButton::onTouchEnded, this);
-        listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
+        listener->onTouchBegan     = AX_CALLBACK_2(TextButton::onTouchBegan, this);
+        listener->onTouchEnded     = AX_CALLBACK_2(TextButton::onTouchEnded, this);
+        listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     }
@@ -161,7 +161,7 @@ public:
 
             return ret;
         }
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return ret;
     }
 

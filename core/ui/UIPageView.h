@@ -44,7 +44,7 @@ class PageViewIndicator;
  *@brief Layout manager that allows the user to flip left & right and up & down through pages of data.
  *
  */
-class CC_GUI_DLL PageView : public ListView
+class AX_GUI_DLL PageView : public ListView
 {
 
     DECLARE_CLASS_GUI_INFO

@@ -43,7 +43,7 @@ class Event;
  * @brief Mouse event listener.
  * @js cc._EventListenerMouse
  */
-class CC_DLL EventListenerMouse : public EventListener
+class AX_DLL EventListenerMouse : public EventListener
 {
 public:
     static const std::string LISTENER_ID;

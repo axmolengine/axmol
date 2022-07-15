@@ -51,7 +51,7 @@ BufferGL::BufferGL(std::size_t size, BufferType type, BufferUsage usage) : Buffe
 {
     glGenBuffers(1, &_buffer);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadBuffer(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
@@ -63,20 +63,20 @@ BufferGL::~BufferGL()
     if (_buffer)
         glDeleteBuffers(1, &_buffer);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    CC_SAFE_DELETE_ARRAY(_data);
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    AX_SAFE_DELETE_ARRAY(_data);
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
 
 void BufferGL::usingDefaultStoredData(bool needDefaultStoredData)
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     _needDefaultStoredData = needDefaultStoredData;
 #endif
 }
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
 void BufferGL::reloadBuffer()
 {
     glGenBuffers(1, &_buffer);
@@ -121,7 +121,7 @@ void BufferGL::updateData(void* data, std::size_t size)
         CHECK_GL_ERROR_DEBUG();
         _bufferAllocated = size;
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         fillBuffer(data, 0, size);
 #endif
     }
@@ -147,7 +147,7 @@ void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
         }
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         fillBuffer(data, offset, size);
 #endif
         CHECK_GL_ERROR_DEBUG();

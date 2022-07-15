@@ -95,7 +95,7 @@ public:
             letter->autorelease();
             return letter;
         }
-        CC_SAFE_DELETE(letter);
+        AX_SAFE_DELETE(letter);
         return nullptr;
     }
 
@@ -206,9 +206,9 @@ Label::BatchCommand::BatchCommand()
 
 Label::BatchCommand::~BatchCommand()
 {
-    CC_SAFE_RELEASE(textCommand.getPipelineDescriptor().programState);
-    CC_SAFE_RELEASE(shadowCommand.getPipelineDescriptor().programState);
-    CC_SAFE_RELEASE(outLineCommand.getPipelineDescriptor().programState);
+    AX_SAFE_RELEASE(textCommand.getPipelineDescriptor().programState);
+    AX_SAFE_RELEASE(shadowCommand.getPipelineDescriptor().programState);
+    AX_SAFE_RELEASE(outLineCommand.getPipelineDescriptor().programState);
 }
 
 void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
@@ -216,15 +216,15 @@ void Label::BatchCommand::setProgramState(backend::ProgramState* programState)
     assert(programState);
 
     auto& programStateText = textCommand.getPipelineDescriptor().programState;
-    CC_SAFE_RELEASE(programStateText);
+    AX_SAFE_RELEASE(programStateText);
     programStateText = programState->clone();
 
     auto& programStateShadow = shadowCommand.getPipelineDescriptor().programState;
-    CC_SAFE_RELEASE(programStateShadow);
+    AX_SAFE_RELEASE(programStateShadow);
     programStateShadow = programState->clone();
 
     auto& programStateOutline = outLineCommand.getPipelineDescriptor().programState;
-    CC_SAFE_RELEASE(programStateOutline);
+    AX_SAFE_RELEASE(programStateOutline);
     programStateOutline = programState->clone();
 }
 
@@ -274,7 +274,7 @@ Label* Label::createWithTTF(std::string_view text,
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -291,7 +291,7 @@ Label* Label::createWithTTF(const TTFConfig& ttfConfig,
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -508,7 +508,7 @@ Label::Label(TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
     _hAlignment = hAlignment;
     _vAlignment = vAlignment;
 
-#if CC_LABEL_DEBUG_DRAW
+#if AX_LABEL_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
 #endif
@@ -557,7 +557,7 @@ Label::~Label()
     if (_fontAtlas)
     {
         Node::removeAllChildrenWithCleanup(true);
-        CC_SAFE_RELEASE_NULL(_reusedLetter);
+        AX_SAFE_RELEASE_NULL(_reusedLetter);
         _batchNodes.clear();
         FontAtlasCache::releaseFontAtlas(_fontAtlas);
     }
@@ -565,16 +565,16 @@ Label::~Label()
     _eventDispatcher->removeEventListener(_purgeTextureListener);
     _eventDispatcher->removeEventListener(_resetTextureListener);
 
-    CC_SAFE_RELEASE_NULL(_textSprite);
-    CC_SAFE_RELEASE_NULL(_shadowNode);
+    AX_SAFE_RELEASE_NULL(_textSprite);
+    AX_SAFE_RELEASE_NULL(_shadowNode);
 }
 
 void Label::reset()
 {
-    CC_SAFE_RELEASE_NULL(_textSprite);
-    CC_SAFE_RELEASE_NULL(_shadowNode);
+    AX_SAFE_RELEASE_NULL(_textSprite);
+    AX_SAFE_RELEASE_NULL(_shadowNode);
     Node::removeAllChildrenWithCleanup(true);
-    CC_SAFE_RELEASE_NULL(_reusedLetter);
+    AX_SAFE_RELEASE_NULL(_reusedLetter);
     _letters.clear();
     _batchNodes.clear();
     _batchCommands.clear();
@@ -604,7 +604,7 @@ void Label::reset()
 
     _systemFontDirty = false;
     _systemFont      = "Helvetica";
-    _systemFontSize  = CC_DEFAULT_FONT_LABEL_SIZE;
+    _systemFontSize  = AX_DEFAULT_FONT_LABEL_SIZE;
 
     if (_horizontalKernings)
     {
@@ -803,7 +803,7 @@ void Label::setFontAtlas(FontAtlas* atlas, bool distanceFieldEnabled /* = false 
     if (atlas == _fontAtlas)
         return;
 
-    CC_SAFE_RETAIN(atlas);
+    AX_SAFE_RETAIN(atlas);
     if (_fontAtlas)
     {
         _batchNodes.clear();
@@ -858,7 +858,7 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, float fontSize)
         if (bmFont)
         {
             float originalFontSize = bmFont->getOriginalFontSize();
-            _bmFontSize            = originalFontSize / CC_CONTENT_SCALE_FACTOR();
+            _bmFontSize            = originalFontSize / AX_CONTENT_SCALE_FACTOR();
         }
     }
 
@@ -892,7 +892,7 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, const Rect& image
         if (bmFont)
         {
             float originalFontSize = bmFont->getOriginalFontSize();
-            _bmFontSize            = originalFontSize / CC_CONTENT_SCALE_FACTOR();
+            _bmFontSize            = originalFontSize / AX_CONTENT_SCALE_FACTOR();
         }
     }
 
@@ -928,7 +928,7 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, std::string_view 
         if (bmFont)
         {
             float originalFontSize = bmFont->getOriginalFontSize();
-            _bmFontSize            = originalFontSize / CC_CONTENT_SCALE_FACTOR();
+            _bmFontSize            = originalFontSize / AX_CONTENT_SCALE_FACTOR();
         }
     }
 
@@ -1157,7 +1157,7 @@ bool Label::alignText()
 
             if (fontSize > 0 && isVerticalClamp())
             {
-                this->shrinkLabelToContentSize(CC_CALLBACK_0(Label::isVerticalClamp, this));
+                this->shrinkLabelToContentSize(AX_CALLBACK_0(Label::isVerticalClamp, this));
             }
         }
 
@@ -1166,7 +1166,7 @@ bool Label::alignText()
             ret = false;
             if (_overflow == Overflow::SHRINK)
             {
-                this->shrinkLabelToContentSize(CC_CALLBACK_0(Label::isHorizontalClamp, this));
+                this->shrinkLabelToContentSize(AX_CALLBACK_0(Label::isHorizontalClamp, this));
             }
             break;
         }
@@ -1543,7 +1543,7 @@ void Label::disableEffect(LabelEffect effect)
         if (_shadowEnabled)
         {
             _shadowEnabled = false;
-            CC_SAFE_RELEASE_NULL(_shadowNode);
+            AX_SAFE_RELEASE_NULL(_shadowNode);
             updateShaderProgram();
         }
         break;
@@ -1680,7 +1680,7 @@ void Label::updateContent()
         {
             _batchNodes.clear();
             _batchCommands.clear();
-            CC_SAFE_RELEASE_NULL(_reusedLetter);
+            AX_SAFE_RELEASE_NULL(_reusedLetter);
             FontAtlasCache::releaseFontAtlas(_fontAtlas);
             _fontAtlas = nullptr;
         }
@@ -1688,8 +1688,8 @@ void Label::updateContent()
         _systemFontDirty = false;
     }
 
-    CC_SAFE_RELEASE_NULL(_textSprite);
-    CC_SAFE_RELEASE_NULL(_shadowNode);
+    AX_SAFE_RELEASE_NULL(_textSprite);
+    AX_SAFE_RELEASE_NULL(_shadowNode);
     bool updateFinished = true;
 
     if (_fontAtlas)
@@ -1760,7 +1760,7 @@ void Label::updateContent()
         _contentDirty = false;
     }
 
-#if CC_LABEL_DEBUG_DRAW
+#if AX_LABEL_DEBUG_DRAW
     _debugDrawNode->clear();
     Vec2 vertices[4] = {Vec2::ZERO, Vec2(_contentSize.width, 0.0f), Vec2(_contentSize.width, _contentSize.height),
                         Vec2(0.0f, _contentSize.height)};
@@ -1920,7 +1920,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     }
     // Don't do calculate the culling if the transform was not updated
     bool transformUpdated = flags & FLAGS_TRANSFORM_DIRTY;
-#if CC_USE_CULLING
+#if AX_USE_CULLING
     auto visitingCamera = Camera::getVisitingCamera();
     auto defaultCamera  = Camera::getDefaultCamera();
     if (visitingCamera == defaultCamera)
@@ -2502,7 +2502,7 @@ FontDefinition Label::_getFontDefinition() const
         systemFontDef._stroke._strokeEnabled = false;
     }
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID) && (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
     if (systemFontDef._stroke._strokeEnabled)
     {
         CCLOGERROR("Stroke Currently only supported on iOS and Android!");
@@ -2530,7 +2530,7 @@ void Label::setGlobalZOrder(float globalZOrder)
         _underlineNode->setGlobalZOrder(globalZOrder);
     }
 
-#if CC_LABEL_DEBUG_DRAW
+#if AX_LABEL_DEBUG_DRAW
     _debugDrawNode->setGlobalZOrder(globalZOrder);
 #endif
 }

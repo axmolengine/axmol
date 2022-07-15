@@ -28,7 +28,7 @@
 
 #include "platform/CCPlatformMacros.h"
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
 
 #    include <string>
 #    include "CCStdC.h"
@@ -92,6 +92,6 @@ private:
 }  // namespace ui
 NS_AX_END  // namespace axis
 
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
 #endif  // __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_

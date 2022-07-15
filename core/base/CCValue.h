@@ -46,14 +46,14 @@ typedef std::vector<Value> ValueVector;
 typedef hlookup::string_map<Value> ValueMap;
 typedef std::unordered_map<int, Value> ValueMapIntKey;
 
-CC_DLL extern const ValueVector ValueVectorNull;
-CC_DLL extern const ValueMap ValueMapNull;
-CC_DLL extern const ValueMapIntKey ValueMapIntKeyNull;
+AX_DLL extern const ValueVector ValueVectorNull;
+AX_DLL extern const ValueMap ValueMapNull;
+AX_DLL extern const ValueMapIntKey ValueMapIntKeyNull;
 
 /*
  * This class is provide as a wrapper of basic types, such as int and bool.
  */
-class CC_DLL Value
+class AX_DLL Value
 {
 public:
     /** A predefined Value that has not value. */

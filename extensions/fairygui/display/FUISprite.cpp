@@ -23,14 +23,14 @@ FUISprite::FUISprite()
 
 FUISprite::~FUISprite()
 {
-    CC_SAFE_FREE(_vertexData);
-    CC_SAFE_FREE(_vertexIndex);
+    AX_SAFE_FREE(_vertexData);
+    AX_SAFE_FREE(_vertexIndex);
 }
 
 void FUISprite::clearContent()
 {
     setTexture(nullptr);
-    CC_SAFE_RELEASE_NULL(_spriteFrame);
+    AX_SAFE_RELEASE_NULL(_spriteFrame);
     setCenterRectNormalized(Rect(0, 0, 1, 1));
 
     _empty = _texture;
@@ -130,8 +130,8 @@ void FUISprite::setFillMethod(FillMethod value)
             setupFill();
         else
         {
-            CC_SAFE_FREE(_vertexData);
-            CC_SAFE_FREE(_vertexIndex);
+            AX_SAFE_FREE(_vertexData);
+            AX_SAFE_FREE(_vertexIndex);
         }
     }
 }
@@ -335,8 +335,8 @@ void FUISprite::updateRadial(void)
     if (_vertexDataCount != index + 3)
     {
         sameIndexCount = false;
-        CC_SAFE_FREE(_vertexData);
-        CC_SAFE_FREE(_vertexIndex);
+        AX_SAFE_FREE(_vertexData);
+        AX_SAFE_FREE(_vertexIndex);
         _vertexDataCount = 0;
     }
 
@@ -497,7 +497,7 @@ void FUISprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint
         setMVPMatrixUniform();
 #endif
 
-#if CC_USE_CULLING
+#if AX_USE_CULLING
         // Don't calculate the culling if the transform was not updated
         auto visitingCamera = Camera::getVisitingCamera();
         auto defaultCamera = Camera::getDefaultCamera();

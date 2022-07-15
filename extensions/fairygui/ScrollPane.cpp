@@ -79,10 +79,10 @@ ScrollPane::ScrollPane(GComponent* owner)
     _container->removeFromParent();
     _maskContainer->addChild(_container, 1);
 
-    _owner->addEventListener(UIEventType::MouseWheel, CC_CALLBACK_1(ScrollPane::onMouseWheel, this));
-    _owner->addEventListener(UIEventType::TouchBegin, CC_CALLBACK_1(ScrollPane::onTouchBegin, this));
-    _owner->addEventListener(UIEventType::TouchMove, CC_CALLBACK_1(ScrollPane::onTouchMove, this));
-    _owner->addEventListener(UIEventType::TouchEnd, CC_CALLBACK_1(ScrollPane::onTouchEnd, this));
+    _owner->addEventListener(UIEventType::MouseWheel, AX_CALLBACK_1(ScrollPane::onMouseWheel, this));
+    _owner->addEventListener(UIEventType::TouchBegin, AX_CALLBACK_1(ScrollPane::onTouchBegin, this));
+    _owner->addEventListener(UIEventType::TouchMove, AX_CALLBACK_1(ScrollPane::onTouchMove, this));
+    _owner->addEventListener(UIEventType::TouchEnd, AX_CALLBACK_1(ScrollPane::onTouchEnd, this));
     _owner->addEventListener(UIEventType::Exit, [this](EventContext*) {
         if (_draggingPane == this)
             _draggingPane = nullptr;
@@ -146,7 +146,7 @@ void ScrollPane::setup(ByteBuffer* buffer)
 
     if (scrollBarDisplay == ScrollBarDisplayType::DEFAULT)
     {
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
         scrollBarDisplay = UIConfig::defaultScrollBarDisplay;
 #else
         scrollBarDisplay = ScrollBarDisplayType::AUTO;
@@ -198,8 +198,8 @@ void ScrollPane::setup(ByteBuffer* buffer)
             if (_hzScrollBar != nullptr)
                 _hzScrollBar->setVisible(false);
 
-            _owner->addEventListener(UIEventType::RollOver, CC_CALLBACK_1(ScrollPane::onRollOver, this));
-            _owner->addEventListener(UIEventType::RollOut, CC_CALLBACK_1(ScrollPane::onRollOut, this));
+            _owner->addEventListener(UIEventType::RollOver, AX_CALLBACK_1(ScrollPane::onRollOver, this));
+            _owner->addEventListener(UIEventType::RollOut, AX_CALLBACK_1(ScrollPane::onRollOut, this));
         }
     }
     else
@@ -994,7 +994,7 @@ void ScrollPane::updateScrollBarVisible2(GScrollBar* bar)
         if (bar->isVisible())
             GTween::to(1, 0, 0.5f)
                 ->setDelay(0.5f)
-                ->onComplete1(CC_CALLBACK_1(ScrollPane::onBarTweenComplete, this))
+                ->onComplete1(AX_CALLBACK_1(ScrollPane::onBarTweenComplete, this))
                 ->setTarget(bar, TweenPropType::Alpha);
     }
     else
@@ -1221,7 +1221,7 @@ float ScrollPane::updateTargetAndDuration(float pos, int axis)
     {
         float v2 = std::abs(v) * _velocityScale;
         float ratio = 0;
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
         if (v2 > 500)
             ratio = pow((v2 - 500) / 500, 2);
 #else
@@ -1492,7 +1492,7 @@ void ScrollPane::onTouchMove(EventContext* context)
     Vec2 pt = _owner->globalToLocal(evt->getPosition());
 
     int sensitivity;
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
     sensitivity = 8;
 #else
     sensitivity = UIConfig::touchScrollSensitivity;

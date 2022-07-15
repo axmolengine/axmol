@@ -28,7 +28,7 @@
 
 #include "ui/UIEditBox/UIEditBoxImpl-android.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include <jni.h>
@@ -249,4 +249,4 @@ const char* EditBoxImplAndroid::getNativeDefaultFontName()
 
 NS_AX_END
 
-#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) */
+#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) */

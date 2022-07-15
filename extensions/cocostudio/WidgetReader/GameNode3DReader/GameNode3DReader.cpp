@@ -65,12 +65,12 @@ CameraBackgroundBrush* GameNode3DReader::getSceneBrushInstance()
 
 void GameNode3DReader::purge()
 {
-    CC_SAFE_DELETE(_instanceNode3DReader);
+    AX_SAFE_DELETE(_instanceNode3DReader);
 }
 
 void GameNode3DReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceNode3DReader);
+    AX_SAFE_DELETE(_instanceNode3DReader);
 }
 
 Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

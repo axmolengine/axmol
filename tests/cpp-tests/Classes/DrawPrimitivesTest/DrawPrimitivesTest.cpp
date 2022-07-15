@@ -69,10 +69,10 @@ DrawNodeTest::DrawNodeTest()
                    Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
 
     // draw a circle
-    draw->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, CC_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
+    draw->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
                      Color4F(1.0f, 0.0f, 0.0f, 0.5f));
 
-    draw->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, CC_DEGREES_TO_RADIANS(90), 30, false,
+    draw->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
 
     // Draw some beziers
@@ -174,7 +174,7 @@ DrawNodeTest::DrawNodeTest()
     draw->drawSolidRect(Vec2(10.0f, 10.0f), Vec2(20.0f, 20.0f), Color4F(1.0f, 1.0f, 0.0f, 1.0f));
 
     // draw a solid circle
-    draw->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, CC_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
+    draw->drawSolidCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 40, AX_DEGREES_TO_RADIANS(90), 50, 2.0f, 2.0f,
                           Color4F(0.0f, 1.0f, 0.0f, 1.0f));
 
     // Draw segment
@@ -222,10 +222,10 @@ Issue11942Test::Issue11942Test()
 
     // draw a circle
     draw->setLineWidth(1);
-    draw->drawCircle(VisibleRect::center() - Vec2(140.0f, 0.0f), 50, CC_DEGREES_TO_RADIANS(90), 30, false,
+    draw->drawCircle(VisibleRect::center() - Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
     draw->setLineWidth(10);
-    draw->drawCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 50, CC_DEGREES_TO_RADIANS(90), 30, false,
+    draw->drawCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
 }
 

@@ -30,13 +30,13 @@
 #        include <string.h>
 #    endif
 
-#    if defined(CC_STATIC)
-#        define CC_GUI_DLL
+#    if defined(AX_STATIC)
+#        define AX_GUI_DLL
 #    else
 #        if defined(_USEGUIDLL)
-#            define CC_GUI_DLL __declspec(dllexport)
+#            define AX_GUI_DLL __declspec(dllexport)
 #        else
-#            define CC_GUI_DLL __declspec(dllimport)
+#            define AX_GUI_DLL __declspec(dllimport)
 #        endif
 #    endif
 
@@ -49,9 +49,9 @@
 #        endif
 #    endif
 #elif defined(_SHARED_)
-#    define CC_GUI_DLL __attribute__((visibility("default")))
+#    define AX_GUI_DLL __attribute__((visibility("default")))
 #else
-#    define CC_GUI_DLL
+#    define AX_GUI_DLL
 #endif
 
 #endif /* __CCEXTENSIONEXPORT_H__*/

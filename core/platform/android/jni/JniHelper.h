@@ -70,7 +70,7 @@ typedef struct JniMethodInfo_
     jmethodID methodID;
 } JniMethodInfo;
 
-class CC_DLL JniHelper
+class AX_DLL JniHelper
 {
 public:
     typedef std::unordered_map<JNIEnv*, std::vector<jobject>> LocalRefMapType;

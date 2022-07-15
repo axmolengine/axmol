@@ -63,19 +63,19 @@ bool UIFocusTestBase::init()
         _dpadMenu = Menu::create();
 
         auto winSize  = Director::getInstance()->getVisibleSize();
-        auto leftItem = MenuItemFont::create("Left", CC_CALLBACK_0(UIFocusTestBase::onLeftKeyPressed, this));
+        auto leftItem = MenuItemFont::create("Left", AX_CALLBACK_0(UIFocusTestBase::onLeftKeyPressed, this));
         leftItem->setPosition(Vec2(winSize.width - 100, winSize.height / 2));
         _dpadMenu->addChild(leftItem);
 
-        auto rightItem = MenuItemFont::create("Right", CC_CALLBACK_0(UIFocusTestBase::onRightKeyPressed, this));
+        auto rightItem = MenuItemFont::create("Right", AX_CALLBACK_0(UIFocusTestBase::onRightKeyPressed, this));
         rightItem->setPosition(Vec2(winSize.width - 30, winSize.height / 2));
         _dpadMenu->addChild(rightItem);
 
-        auto upItem = MenuItemFont::create("Up", CC_CALLBACK_0(UIFocusTestBase::onUpKeyPressed, this));
+        auto upItem = MenuItemFont::create("Up", AX_CALLBACK_0(UIFocusTestBase::onUpKeyPressed, this));
         upItem->setPosition(Vec2(winSize.width - 60, winSize.height / 2 + 50));
         _dpadMenu->addChild(upItem);
 
-        auto downItem = MenuItemFont::create("Down", CC_CALLBACK_0(UIFocusTestBase::onDownKeyPressed, this));
+        auto downItem = MenuItemFont::create("Down", AX_CALLBACK_0(UIFocusTestBase::onDownKeyPressed, this));
         downItem->setPosition(Vec2(winSize.width - 60, winSize.height / 2 - 50));
         _dpadMenu->addChild(downItem);
 
@@ -86,7 +86,7 @@ bool UIFocusTestBase::init()
         Widget::enableDpadNavigation(true);
 
         _eventListener                 = EventListenerFocus::create();
-        _eventListener->onFocusChanged = CC_CALLBACK_2(UIFocusTestBase::onFocusChanged, this);
+        _eventListener->onFocusChanged = AX_CALLBACK_2(UIFocusTestBase::onFocusChanged, this);
 
         _eventDispatcher->addEventListenerWithFixedPriority(_eventListener, 1);
 
@@ -195,7 +195,7 @@ bool UIFocusTestHorizontal::init()
             ImageView* w = ImageView::create("cocosui/scrollviewbg.png");
             w->setTouchEnabled(true);
             w->setTag(i);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestHorizontal::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestHorizontal::onImageViewClicked, this));
             _horizontalLayout->addChild(w);
         }
 
@@ -204,7 +204,7 @@ bool UIFocusTestHorizontal::init()
         _loopText->setColor(Color3B::GREEN);
         this->addChild(_loopText);
 
-        _toggleButton->addTouchEventListener(CC_CALLBACK_2(UIFocusTestHorizontal::toggleFocusLoop, this));
+        _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestHorizontal::toggleFocusLoop, this));
 
         return true;
     }
@@ -255,7 +255,7 @@ bool UIFocusTestVertical::init()
             ImageView* w = ImageView::create("cocosui/scrollviewbg.png");
             w->setTouchEnabled(true);
             w->setTag(i);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestVertical::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestVertical::onImageViewClicked, this));
             _verticalLayout->addChild(w);
         }
 
@@ -264,7 +264,7 @@ bool UIFocusTestVertical::init()
         _loopText->setColor(Color3B::GREEN);
         this->addChild(_loopText);
 
-        _toggleButton->addTouchEventListener(CC_CALLBACK_2(UIFocusTestVertical::toggleFocusLoop, this));
+        _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestVertical::toggleFocusLoop, this));
 
         return true;
     }
@@ -317,7 +317,7 @@ bool UIFocusTestNestedLayout1::init()
             w->setTouchEnabled(true);
             w->setScaleX(2.5);
             w->setTag(i + count1);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout1::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout1::onImageViewClicked, this));
             _verticalLayout->addChild(w);
         }
 
@@ -335,7 +335,7 @@ bool UIFocusTestNestedLayout1::init()
             w->setScaleY(2.0);
             w->setTouchEnabled(true);
             w->setTag(i + count1 + count2);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout1::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout1::onImageViewClicked, this));
             hbox->addChild(w);
         }
 
@@ -351,7 +351,7 @@ bool UIFocusTestNestedLayout1::init()
             ImageView* w = ImageView::create("cocosui/scrollviewbg.png");
             w->setTouchEnabled(true);
             w->setTag(i + count1 + count2 + count3);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout1::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout1::onImageViewClicked, this));
             innerVBox->addChild(w);
         }
 
@@ -360,7 +360,7 @@ bool UIFocusTestNestedLayout1::init()
         _loopText->setColor(Color3B::GREEN);
         this->addChild(_loopText);
 
-        _toggleButton->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout1::toggleFocusLoop, this));
+        _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout1::toggleFocusLoop, this));
 
         return true;
     }
@@ -413,7 +413,7 @@ bool UIFocusTestNestedLayout2::init()
             w->setTouchEnabled(true);
             w->setTag(i + count1);
             w->setScaleY(2.4f);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout2::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout2::onImageViewClicked, this));
             _horizontalLayout->addChild(w);
         }
 
@@ -431,7 +431,7 @@ bool UIFocusTestNestedLayout2::init()
             w->setScaleX(2.0);
             w->setTouchEnabled(true);
             w->setTag(i + count1 + count2);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout2::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout2::onImageViewClicked, this));
             vbox->addChild(w);
         }
 
@@ -447,7 +447,7 @@ bool UIFocusTestNestedLayout2::init()
             ImageView* w = ImageView::create("cocosui/scrollviewbg.png");
             w->setTouchEnabled(true);
             w->setTag(i + count1 + count2 + count3);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout2::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout2::onImageViewClicked, this));
             innerHBox->addChild(w);
         }
 
@@ -456,7 +456,7 @@ bool UIFocusTestNestedLayout2::init()
         _loopText->setColor(Color3B::GREEN);
         this->addChild(_loopText);
 
-        _toggleButton->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout2::toggleFocusLoop, this));
+        _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout2::toggleFocusLoop, this));
 
         return true;
     }
@@ -526,7 +526,7 @@ bool UIFocusTestNestedLayout3::init()
                 ImageView* w = ImageView::create("cocosui/scrollviewbg.png");
                 w->setTouchEnabled(true);
                 w->setTag(j + firstVbox->getTag() + 1);
-                w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestBase::onImageViewClicked, this));
+                w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestBase::onImageViewClicked, this));
                 firstVbox->addChild(w);
             }
 
@@ -547,7 +547,7 @@ bool UIFocusTestNestedLayout3::init()
             w->setLayoutParameter(bottomParams);
             w->setTouchEnabled(true);
             w->setTag(i + 601);
-            w->addTouchEventListener(CC_CALLBACK_2(UIFocusTestBase::onImageViewClicked, this));
+            w->addTouchEventListener(AX_CALLBACK_2(UIFocusTestBase::onImageViewClicked, this));
             bottomHBox->addChild(w);
         }
         _verticalLayout->addChild(bottomHBox);
@@ -557,7 +557,7 @@ bool UIFocusTestNestedLayout3::init()
         _loopText->setColor(Color3B::GREEN);
         this->addChild(_loopText);
 
-        _toggleButton->addTouchEventListener(CC_CALLBACK_2(UIFocusTestNestedLayout3::toggleFocusLoop, this));
+        _toggleButton->addTouchEventListener(AX_CALLBACK_2(UIFocusTestNestedLayout3::toggleFocusLoop, this));
 
         return true;
     }

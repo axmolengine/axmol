@@ -112,7 +112,7 @@ FontAtlas* FontCharMap::newFontAtlas()
 
     tempAtlas->setLineHeight((float)_itemHeight);
 
-    auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
 
     FontLetterDefinition tempDefinition;
     tempDefinition.textureID       = 0;

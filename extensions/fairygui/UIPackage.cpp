@@ -720,7 +720,7 @@ void UIPackage::loadMovieClip(PackageItem* item)
     Vector<AnimationFrame*> frames(frameCount);
 
     Size mcSizeInPixels = Size(item->width, item->height);
-    Size mcSize = CC_SIZE_PIXELS_TO_POINTS(mcSizeInPixels);
+    Size mcSize = AX_SIZE_PIXELS_TO_POINTS(mcSizeInPixels);
 
     AtlasSprite* sprite;
     SpriteFrame* spriteFrame;
@@ -821,7 +821,7 @@ void UIPackage::loadFont(PackageItem* item)
         if (ttf)
         {
             Rect tempRect = Rect(bx + mainSprite->rect.origin.x, by + mainSprite->rect.origin.y, bw, bh);
-            tempRect = CC_RECT_PIXELS_TO_POINTS(tempRect);
+            tempRect = AX_RECT_PIXELS_TO_POINTS(tempRect);
             def.U = tempRect.origin.x;
             def.V = tempRect.origin.y;
             def.width = tempRect.size.width;
@@ -848,7 +848,7 @@ void UIPackage::loadFont(PackageItem* item)
                 getItemAsset(charImg);
 
                 Rect tempRect = charImg->spriteFrame->getRectInPixels();
-                tempRect = CC_RECT_PIXELS_TO_POINTS(tempRect);
+                tempRect = AX_RECT_PIXELS_TO_POINTS(tempRect);
                 def.U = tempRect.origin.x;
                 def.V = tempRect.origin.y;
                 def.width = tempRect.size.width;

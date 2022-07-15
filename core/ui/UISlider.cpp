@@ -99,7 +99,7 @@ Slider* Slider::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -113,7 +113,7 @@ Slider* Slider::create(std::string_view barTextureName, std::string_view normalB
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 

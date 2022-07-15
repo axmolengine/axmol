@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 #    include "JNITest.h"
 
@@ -57,28 +57,28 @@ JNITest::JNITest()
     JniHelper::callStaticVoidMethod(classPath, "voidMethod3", int(4), float(2.5), "JNI is really easy");
 
     bool b1 = JniHelper::callStaticBooleanMethod(classPath, "booleanMethod", int(5));
-    CC_ASSERT(b1 == true);
+    AX_ASSERT(b1 == true);
     bool b2 = JniHelper::callStaticBooleanMethod(classPath, "booleanMethod", int(-3));
-    CC_ASSERT(b2 == false);
+    AX_ASSERT(b2 == false);
 
     int i = JniHelper::callStaticIntMethod(classPath, "intMethod", int(10), int(10));
-    CC_ASSERT(i == 20);
+    AX_ASSERT(i == 20);
 
     float f = JniHelper::callStaticFloatMethod(classPath, "floatMethod", float(2.35), float(7.65));
-    CC_ASSERT(f == 10.0);
+    AX_ASSERT(f == 10.0);
 
     double d = JniHelper::callStaticDoubleMethod(classPath, "doubleMethod", double(2.5), int(4));
-    CC_ASSERT(d == 10.0);
+    AX_ASSERT(d == 10.0);
 
     std::string str = "ABCDEF";
     std::string s1  = JniHelper::callStaticStringMethod(classPath, "stringMethod", str, true);
-    CC_ASSERT(s1 == "FEDCBA");
+    AX_ASSERT(s1 == "FEDCBA");
     std::string s2 = JniHelper::callStaticStringMethod(classPath, "stringMethod", str, false);
-    CC_ASSERT(s2 == "ABCDEF");
+    AX_ASSERT(s2 == "ABCDEF");
 
     const char* cstr = "XYZ";
     std::string s3   = JniHelper::callStaticStringMethod(classPath, "stringMethod", cstr, true);
-    CC_ASSERT(s3 == "ZYX");
+    AX_ASSERT(s3 == "ZYX");
 
     // should not crash
     for (int i = 0; i < 10000; i++)

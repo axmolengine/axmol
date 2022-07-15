@@ -51,7 +51,7 @@ PUGeometryRotator::PUGeometryRotator()
 PUGeometryRotator::~PUGeometryRotator()
 {
     if (_dynRotationSpeed)
-        CC_SAFE_DELETE(_dynRotationSpeed);
+        AX_SAFE_DELETE(_dynRotationSpeed);
 }
 //-----------------------------------------------------------------------
 const Vec3& PUGeometryRotator::getRotationAxis() const
@@ -80,7 +80,7 @@ PUDynamicAttribute* PUGeometryRotator::getRotationSpeed() const
 void PUGeometryRotator::setRotationSpeed(PUDynamicAttribute* dynRotationSpeed)
 {
     if (_dynRotationSpeed)
-        CC_SAFE_DELETE(_dynRotationSpeed);
+        AX_SAFE_DELETE(_dynRotationSpeed);
     _dynRotationSpeed = dynRotationSpeed;
 }
 //-----------------------------------------------------------------------

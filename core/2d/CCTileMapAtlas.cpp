@@ -44,7 +44,7 @@ TileMapAtlas* TileMapAtlas::create(std::string_view tile, std::string_view mapFi
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -171,10 +171,10 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     float textureWide = (float)(_textureAtlas->getTexture()->getPixelsWide());
     float textureHigh = (float)(_textureAtlas->getTexture()->getPixelsHigh());
 
-    float itemWidthInPixels  = _itemWidth * CC_CONTENT_SCALE_FACTOR();
-    float itemHeightInPixels = _itemHeight * CC_CONTENT_SCALE_FACTOR();
+    float itemWidthInPixels  = _itemWidth * AX_CONTENT_SCALE_FACTOR();
+    float itemHeightInPixels = _itemHeight * AX_CONTENT_SCALE_FACTOR();
 
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
     float left   = (2 * row * itemWidthInPixels + 1) / (2 * textureWide);
     float right  = left + (itemWidthInPixels * 2 - 2) / (2 * textureWide);
     float top    = (2 * col * itemHeightInPixels + 1) / (2 * textureHigh);

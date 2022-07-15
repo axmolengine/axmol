@@ -24,7 +24,7 @@
  ****************************************************************************/
 #include "platform/CCPlatformConfig.h"
 #include "base/ccConfig.h"
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 #    include "scripting/lua-bindings/manual/navmesh/lua_axis_navmesh_manual.h"
 #    include "scripting/lua-bindings/auto/lua_axis_navmesh_auto.hpp"
 #    include "scripting/lua-bindings/manual/tolua_fix.h"

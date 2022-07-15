@@ -58,7 +58,7 @@ Text* Text::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -79,7 +79,7 @@ Text* Text::create(std::string_view textContent, std::string_view fontName, floa
         text->autorelease();
         return text;
     }
-    CC_SAFE_DELETE(text);
+    AX_SAFE_DELETE(text);
     return nullptr;
 }
 

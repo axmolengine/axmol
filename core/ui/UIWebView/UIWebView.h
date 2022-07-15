@@ -29,7 +29,7 @@
 #include "ui/GUIExport.h"
 #include "base/CCData.h"
 
-#if defined(_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if defined(_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 /**
  * @addtogroup ui
  * @{
@@ -48,7 +48,7 @@ class WebViewImpl;
  * It's mean WebView displays web pages above all graphical elements of cocos2d-x.
  * @js NA
  */
-class CC_GUI_DLL WebView : public axis::ui::Widget
+class AX_GUI_DLL WebView : public axis::ui::Widget
 {
 public:
     /**

@@ -38,7 +38,7 @@ THE SOFTWARE.
 NS_AX_BEGIN
 
 /**Rectangle area.*/
-class CC_DLL Rect
+class AX_DLL Rect
 {
 public:
     /**Low left point of rect.*/

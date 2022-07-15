@@ -48,9 +48,9 @@ THE SOFTWARE.
 #    include "glfw3ext.h"
 #endif
 
-#if CC_ICON_SET_SUPPORT
+#if AX_ICON_SET_SUPPORT
 #    include "platform/CCImage.h"
-#endif /* CC_ICON_SET_SUPPORT */
+#endif /* AX_ICON_SET_SUPPORT */
 
 #include "renderer/CCRenderer.h"
 
@@ -306,7 +306,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-#if defined(CC_USE_GLES) && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
+#if defined(AX_USE_GLES) && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
         glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11);  // since glfw-3.4
 #endif
 #if defined(_WIN32)
@@ -341,7 +341,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -353,7 +353,7 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, flo
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -365,7 +365,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -379,7 +379,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName,
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -389,7 +389,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
 
     _frameZoomFactor = frameZoomFactor;
 
-#if defined(CC_USE_GLES)
+#if defined(AX_USE_GLES)
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -409,7 +409,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     glfwWindowHint(GLFW_VISIBLE, _glContextAttrs.visible);
     glfwWindowHint(GLFW_DECORATED, _glContextAttrs.decorated);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     // Don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
@@ -417,7 +417,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     int neededWidth  = (int)(rect.size.width * _frameZoomFactor);
     int neededHeight = (int)(rect.size.height * _frameZoomFactor);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     glfwxSetParent((HWND)_glContextAttrs.viewParent);
 #endif
 
@@ -489,7 +489,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     }
 
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
-#if defined(CC_USE_GL)
+#if defined(AX_USE_GL)
     // Enable point size by default.
 #    if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -501,7 +501,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
 #endif
     CHECK_GL_ERROR_DEBUG();
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 #endif
 
@@ -577,7 +577,7 @@ void GLViewImpl::pollEvents()
 
 void GLViewImpl::enableRetina(bool enabled)
 {  // official v4 comment follow sources
-   // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+   // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
    //     _isRetinaEnabled = enabled;
    //     if (_isRetinaEnabled)
    //     {
@@ -593,7 +593,7 @@ void GLViewImpl::enableRetina(bool enabled)
 
 void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
 
-#if CC_ICON_SET_SUPPORT
+#if AX_ICON_SET_SUPPORT
 void GLViewImpl::setIcon(std::string_view filename) const
 {
     this->setIcon(std::vector<std::string_view>{filename});
@@ -613,7 +613,7 @@ void GLViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
         }
         else
         {
-            CC_SAFE_DELETE(icon);
+            AX_SAFE_DELETE(icon);
         }
     }
 
@@ -633,10 +633,10 @@ void GLViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
     GLFWwindow* window = this->getWindow();
     glfwSetWindowIcon(window, iconsCount, images);
 
-    CC_SAFE_DELETE_ARRAY(images);
+    AX_SAFE_DELETE_ARRAY(images);
     for (auto& icon : icons)
     {
-        CC_SAFE_DELETE(icon);
+        AX_SAFE_DELETE(icon);
     }
 }
 
@@ -645,7 +645,7 @@ void GLViewImpl::setDefaultIcon() const
     GLFWwindow* window = this->getWindow();
     glfwSetWindowIcon(window, 0, nullptr);
 }
-#endif /* CC_ICON_SET_SUPPORT */
+#endif /* AX_ICON_SET_SUPPORT */
 
 void GLViewImpl::setCursorVisible(bool isVisible)
 {
@@ -749,7 +749,7 @@ void GLViewImpl::setWindowed(int width, int height)
         ypos += (int)((videoMode->height - height) * 0.5f);
         _monitor = nullptr;
         glfwSetWindowMonitor(_mainWindow, nullptr, xpos, ypos, width, height, GLFW_DONT_CARE);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // on mac window will sometimes lose title when windowed
         glfwSetWindowTitle(_mainWindow, _viewName.c_str());
 #endif
@@ -1194,11 +1194,11 @@ static bool loadFboExtensions()
 // helper
 bool GLViewImpl::loadGL()
 {
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#    if defined(CC_USE_GL)
+#    if defined(AX_USE_GL)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");
@@ -1222,7 +1222,7 @@ bool GLViewImpl::loadGL()
 
     loadFboExtensions();
 
-#endif  // (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
+#endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
     return true;
 }

@@ -38,8 +38,8 @@ CustomCommand::CustomCommand()
 
 CustomCommand::~CustomCommand()
 {
-    CC_SAFE_RELEASE(_vertexBuffer);
-    CC_SAFE_RELEASE(_indexBuffer);
+    AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 }
 
 CustomCommand::CustomCommand(const CustomCommand& rhs)
@@ -85,8 +85,8 @@ void CustomCommand::assign(const CustomCommand& rhs)
         auto podSize   = offsetof(CustomCommand, _beforeCallback) - podOffset;
         memcpy((uint8_t*)this + podOffset, (const uint8_t*)&rhs + podOffset, podSize);
 
-        CC_SAFE_RETAIN(_vertexBuffer);
-        CC_SAFE_RETAIN(_indexBuffer);
+        AX_SAFE_RETAIN(_vertexBuffer);
+        AX_SAFE_RETAIN(_indexBuffer);
 
         _beforeCallback = rhs._beforeCallback;
         _afterCallback  = rhs._afterCallback;
@@ -136,7 +136,7 @@ void CustomCommand::init(float globalZOrder, const BlendFunc& blendFunc)
 
 void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage)
 {
-    CC_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_vertexBuffer);
 
     _vertexCapacity  = capacity;
     _vertexDrawCount = capacity;
@@ -147,7 +147,7 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
 
 void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)
 {
-    CC_SAFE_RELEASE(_indexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 
     _indexFormat    = format;
     _indexSize      = computeIndexSize();
@@ -175,9 +175,9 @@ void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
     if (_vertexBuffer == vertexBuffer)
         return;
 
-    CC_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_vertexBuffer);
     _vertexBuffer = vertexBuffer;
-    CC_SAFE_RETAIN(_vertexBuffer);
+    AX_SAFE_RETAIN(_vertexBuffer);
 }
 
 void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat format)
@@ -185,9 +185,9 @@ void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat for
     if (_indexBuffer == indexBuffer && _indexFormat == format)
         return;
 
-    CC_SAFE_RELEASE(_indexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
     _indexBuffer = indexBuffer;
-    CC_SAFE_RETAIN(_indexBuffer);
+    AX_SAFE_RETAIN(_indexBuffer);
 
     _indexFormat = format;
     _indexSize   = computeIndexSize();

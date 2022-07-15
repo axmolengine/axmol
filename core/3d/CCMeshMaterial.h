@@ -48,7 +48,7 @@ class ProgramState;
 /**
  * @brief MeshMaterial: a mesh material for MeshRenderers.
  */
-class CC_DLL MeshMaterial : public Material
+class AX_DLL MeshMaterial : public Material
 {
 public:
     /**

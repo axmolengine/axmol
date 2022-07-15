@@ -89,7 +89,7 @@ bool isColorRenderable(PixelFormat textureFormat)
 /// CLASS TextureInfoMTL
 id<MTLTexture> TextureInfoMTL::ensure(int index, int target)
 {
-    if (index < CC_META_TEXTURES)
+    if (index < AX_META_TEXTURES)
     {
         id<MTLTexture>& mtlTexture = _mtlTextures[index];
         if (mtlTexture)

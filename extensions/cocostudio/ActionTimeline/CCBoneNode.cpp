@@ -41,7 +41,7 @@ BoneNode* BoneNode::create()
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -55,7 +55,7 @@ BoneNode* BoneNode::create(int length)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -136,7 +136,7 @@ void BoneNode::addSkin(SkinNode* skin, bool display)
 void BoneNode::removeChild(Node* child, bool cleanup /* = true */)
 {
     ssize_t index = _children.getIndex(child);
-    if (index != axis::CC_INVALID_INDEX)
+    if (index != axis::AX_INVALID_INDEX)
     {
         removeFromChildrenListHelper(child);
         Node::removeChild(child, cleanup);
@@ -420,7 +420,7 @@ void BoneNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint3
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
-#ifdef CC_STUDIO_ENABLED_VIEW
+#ifdef AX_STUDIO_ENABLED_VIEW
 // TODO
 //     glVertexAttribPointer(axis::GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, _noMVPVertices);
 //     glVertexAttribPointer(axis::GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, _squareColors);
@@ -428,8 +428,8 @@ void BoneNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint3
 //     glEnable(GL_LINE_SMOOTH);
 //     glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
 //     glDrawArrays(GL_LINE_LOOP, 0, 4);
-//     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
-#endif  // CC_STUDIO_ENABLED_VIEW
+//     AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
+#endif  // AX_STUDIO_ENABLED_VIEW
 
     for (int i = 0; i < 4; ++i)
     {
@@ -564,7 +564,7 @@ SkeletonNode* BoneNode::getRootSkeletonNode() const
     return _rootSkeleton;
 }
 
-#ifdef CC_STUDIO_ENABLED_VIEW
+#ifdef AX_STUDIO_ENABLED_VIEW
 bool BoneNode::isPointOnRack(const axis::Vec2& bonePoint)
 {
 
@@ -584,7 +584,7 @@ bool BoneNode::isPointOnRack(const axis::Vec2& bonePoint)
     }
     return false;
 }
-#endif  // CC_STUDIO_ENABLED_VIEW
+#endif  // AX_STUDIO_ENABLED_VIEW
 
 void BoneNode::batchBoneDrawToSkeleton(BoneNode* bone) const
 {

@@ -45,9 +45,9 @@ bool WebViewTest::init()
         _webView->loadURL("https://www.baidu.com");
         _webView->setScalesPageToFit(true);
 
-        _webView->setOnShouldStartLoading(CC_CALLBACK_2(WebViewTest::onWebViewShouldStartLoading, this));
-        _webView->setOnDidFinishLoading(CC_CALLBACK_2(WebViewTest::onWebViewDidFinishLoading, this));
-        _webView->setOnDidFailLoading(CC_CALLBACK_2(WebViewTest::onWebViewDidFailLoading, this));
+        _webView->setOnShouldStartLoading(AX_CALLBACK_2(WebViewTest::onWebViewShouldStartLoading, this));
+        _webView->setOnDidFinishLoading(AX_CALLBACK_2(WebViewTest::onWebViewDidFinishLoading, this));
+        _webView->setOnDidFailLoading(AX_CALLBACK_2(WebViewTest::onWebViewDidFailLoading, this));
 
         this->addChild(_webView);
 

@@ -1187,13 +1187,13 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface()
 
 ////////////////////////// axis spec /////////////////////////
 
-#define CC_PTR_CAST(v, pointer_type) reinterpret_cast<pointer_type>(v)
+#define AX_PTR_CAST(v, pointer_type) reinterpret_cast<pointer_type>(v)
 
 
 // fps macro
-#define CC_IMGUI_DEFAULT_DELTA (1 / 60.f)
-#define CC_IMGUI_MIN_DELTA (1 / 1000.f)
-#define CC_IMGUI_MAX_DELTA (1 / 30.f)
+#define AX_IMGUI_DEFAULT_DELTA (1 / 60.f)
+#define AX_IMGUI_MIN_DELTA (1 / 1000.f)
+#define AX_IMGUI_MAX_DELTA (1 / 30.f)
 
 enum
 {
@@ -1396,8 +1396,8 @@ static bool ImGui_ImplAxis_CreateDeviceObjects()
 static void ImGui_ImplAxis_DestroyDeviceObjects()
 {
     auto bd = ImGui_ImplGlfw_GetBackendData();
-    CC_SAFE_RELEASE_NULL(bd->ProgramInfo.program);
-    CC_SAFE_RELEASE_NULL(bd->ProgramFontInfo.program);
+    AX_SAFE_RELEASE_NULL(bd->ProgramInfo.program);
+    AX_SAFE_RELEASE_NULL(bd->ProgramFontInfo.program);
     ImGui_ImplAxis_DestroyFontsTexture();
 }
 
@@ -1442,8 +1442,8 @@ static bool ImGui_ImplAxis_createShaderPrograms()
 
     auto bd = ImGui_ImplGlfw_GetBackendData();
 
-    CC_SAFE_RELEASE(bd->ProgramInfo.program);
-    CC_SAFE_RELEASE(bd->ProgramFontInfo.program);
+    AX_SAFE_RELEASE(bd->ProgramInfo.program);
+    AX_SAFE_RELEASE(bd->ProgramFontInfo.program);
     bd->ProgramInfo.program     = backend::Device::getInstance()->newProgram(vertex_shader, fragment_shader);
     bd->ProgramFontInfo.program = backend::Device::getInstance()->newProgram(vertex_shader, fragment_shader_font);
     IM_ASSERT(bd->ProgramInfo.program);
@@ -1486,7 +1486,7 @@ bool ImGui_ImplAxis_CreateFontsTexture()
     // consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
     io.Fonts->GetTexDataAsAlpha8(&pixels, &width, &height);
 
-    CC_SAFE_RELEASE(bd->FontTexture);
+    AX_SAFE_RELEASE(bd->FontTexture);
     bd->FontTexture = new Texture2D();
 
     bd->FontTexture->setAntiAliasTexParameters();
@@ -1501,7 +1501,7 @@ IMGUI_IMPL_API void ImGui_ImplAxis_DestroyFontsTexture()
     if (bd->FontTexture)
     {
         ImGui::GetIO().Fonts->TexID = nullptr;
-        CC_SAFE_RELEASE_NULL(bd->FontTexture);
+        AX_SAFE_RELEASE_NULL(bd->FontTexture);
     }
 }
 
@@ -1640,7 +1640,7 @@ IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data)
 
                     if (typeid(*((Ref*)pcmd->TextureId)) == typeid(Texture2D))
                     {
-                        auto tex = CC_PTR_CAST(pcmd->TextureId, Texture2D*);
+                        auto tex = AX_PTR_CAST(pcmd->TextureId, Texture2D*);
                         auto cmd = std::make_shared<CustomCommand>();
                         bd->CustomCommands.push_back(cmd);
                         cmd->init(0.f, BlendFunc::ALPHA_NON_PREMULTIPLIED);
@@ -1667,7 +1667,7 @@ IMGUI_IMPL_API void ImGui_ImplAxis_RenderDrawData(ImDrawData* draw_data)
                     }
                     else
                     {
-                        auto node     = CC_PTR_CAST(pcmd->TextureId, Node*);
+                        auto node     = AX_PTR_CAST(pcmd->TextureId, Node*);
                         const auto tr = node->getNodeToParentTransform();
                         node->setVisible(true);
                         node->setNodeToParentTransform(tr);

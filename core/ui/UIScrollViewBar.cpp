@@ -78,7 +78,7 @@ ScrollViewBar* ScrollViewBar::create(ScrollView* parent, ScrollView::Direction d
         node->autorelease();
         return node;
     }
-    CC_SAFE_DELETE(node);
+    AX_SAFE_DELETE(node);
     return nullptr;
 }
 

@@ -200,11 +200,11 @@ AssetsManagerEx::~AssetsManagerEx()
     _downloader->onTaskError       = (nullptr);
     _downloader->onFileTaskSuccess = (nullptr);
     _downloader->onTaskProgress    = (nullptr);
-    CC_SAFE_RELEASE(_localManifest);
+    AX_SAFE_RELEASE(_localManifest);
     // _tempManifest could share a ptr with _remoteManifest or _localManifest
     if (_tempManifest != _localManifest && _tempManifest != _remoteManifest)
-        CC_SAFE_RELEASE(_tempManifest);
-    CC_SAFE_RELEASE(_remoteManifest);
+        AX_SAFE_RELEASE(_tempManifest);
+    AX_SAFE_RELEASE(_remoteManifest);
 }
 
 AssetsManagerEx* AssetsManagerEx::create(std::string_view manifestUrl, std::string_view storagePath)
@@ -231,7 +231,7 @@ void AssetsManagerEx::initManifests(std::string_view manifestUrl)
         if (!_tempManifest->isLoaded())
         {
             _fileUtils->removeDirectory(_tempStoragePath);
-            CC_SAFE_RELEASE(_tempManifest);
+            AX_SAFE_RELEASE(_tempManifest);
             _tempManifest = nullptr;
         }
     }
@@ -241,9 +241,9 @@ void AssetsManagerEx::initManifests(std::string_view manifestUrl)
 
     if (!_inited)
     {
-        CC_SAFE_RELEASE(_localManifest);
-        CC_SAFE_RELEASE(_tempManifest);
-        CC_SAFE_RELEASE(_remoteManifest);
+        AX_SAFE_RELEASE(_localManifest);
+        AX_SAFE_RELEASE(_tempManifest);
+        AX_SAFE_RELEASE(_remoteManifest);
         _localManifest  = nullptr;
         _tempManifest   = nullptr;
         _remoteManifest = nullptr;
@@ -270,7 +270,7 @@ void AssetsManagerEx::loadLocalManifest(std::string_view /*manifestUrl*/)
         if (!cachedManifest->isLoaded())
         {
             _fileUtils->removeFile(_cacheManifestPath);
-            CC_SAFE_RELEASE(cachedManifest);
+            AX_SAFE_RELEASE(cachedManifest);
             cachedManifest = nullptr;
         }
     }
@@ -309,11 +309,11 @@ void AssetsManagerEx::loadLocalManifest(std::string_view /*manifestUrl*/)
                 // Recreate storage, to empty the content
                 _fileUtils->removeDirectory(_storagePath);
                 _fileUtils->createDirectory(_storagePath);
-                CC_SAFE_RELEASE(cachedManifest);
+                AX_SAFE_RELEASE(cachedManifest);
             }
             else
             {
-                CC_SAFE_RELEASE(_localManifest);
+                AX_SAFE_RELEASE(_localManifest);
                 _localManifest = cachedManifest;
             }
         }
@@ -775,7 +775,7 @@ void AssetsManagerEx::startUpdate()
         {
             // Remove all temp files
             _fileUtils->removeDirectory(_tempStoragePath);
-            CC_SAFE_RELEASE(_tempManifest);
+            AX_SAFE_RELEASE(_tempManifest);
             // Recreate temp storage path and save remote manifest
             _fileUtils->createDirectory(_tempStoragePath);
             _remoteManifest->saveToFile(_tempManifestPath);
@@ -861,7 +861,7 @@ void AssetsManagerEx::updateSucceed()
         _fileUtils->removeDirectory(_tempStoragePath);
     }
     // 3. swap the localManifest
-    CC_SAFE_RELEASE(_localManifest);
+    AX_SAFE_RELEASE(_localManifest);
     _localManifest = _remoteManifest;
     _localManifest->setManifestRoot(_storagePath);
     _remoteManifest = nullptr;

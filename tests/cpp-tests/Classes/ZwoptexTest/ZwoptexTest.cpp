@@ -70,7 +70,7 @@ void ZwoptexGenericTest::onEnter()
     sprite2->setFlippedX(false);
     sprite2->setFlippedY(false);
 
-    schedule(CC_SCHEDULE_SELECTOR(ZwoptexGenericTest::startIn05Secs), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(ZwoptexGenericTest::startIn05Secs), 1.0f);
 
     sprite1->retain();
     sprite2->retain();
@@ -80,8 +80,8 @@ void ZwoptexGenericTest::onEnter()
 
 void ZwoptexGenericTest::startIn05Secs(float dt)
 {
-    unschedule(CC_SCHEDULE_SELECTOR(ZwoptexGenericTest::startIn05Secs));
-    schedule(CC_SCHEDULE_SELECTOR(ZwoptexGenericTest::flipSprites), 0.5f);
+    unschedule(AX_SCHEDULE_SELECTOR(ZwoptexGenericTest::startIn05Secs));
+    schedule(AX_SCHEDULE_SELECTOR(ZwoptexGenericTest::flipSprites), 0.5f);
 }
 
 static int spriteFrameIndex = 0;

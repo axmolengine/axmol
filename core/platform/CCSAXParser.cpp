@@ -54,23 +54,23 @@ public:
             if (!_curEleAttrs.empty())
             {
                 _curEleAttrs.push_back(nullptr);
-                SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR*)_curEleName.c_str(),
-                                        (const CC_XML_CHAR**)&_curEleAttrs[0]);
+                SAXParser::startElement(_ccsaxParserImp, (const AX_XML_CHAR*)_curEleName.c_str(),
+                                        (const AX_XML_CHAR**)&_curEleAttrs[0]);
                 _curEleAttrs.clear();
             }
             else
             {
                 const char* attr   = nullptr;
                 const char** attrs = &attr;
-                SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR*)_curEleName.c_str(),
-                                        (const CC_XML_CHAR**)attrs);
+                SAXParser::startElement(_ccsaxParserImp, (const AX_XML_CHAR*)_curEleName.c_str(),
+                                        (const AX_XML_CHAR**)attrs);
             }
         };
         _sax3Handler.xml_end_element_cb = [=](const char* name, size_t len) {
-            SAXParser::endElement(_ccsaxParserImp, (const CC_XML_CHAR*)name);
+            SAXParser::endElement(_ccsaxParserImp, (const AX_XML_CHAR*)name);
         };
         _sax3Handler.xml_text_cb = [=](const char* s, size_t len) {
-            SAXParser::textHandler(_ccsaxParserImp, (const CC_XML_CHAR*)s, len);
+            SAXParser::textHandler(_ccsaxParserImp, (const AX_XML_CHAR*)s, len);
         };
     };
 
@@ -139,16 +139,16 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength)
     return false;
 }
 
-void SAXParser::startElement(void* ctx, const CC_XML_CHAR* name, const CC_XML_CHAR** atts)
+void SAXParser::startElement(void* ctx, const AX_XML_CHAR* name, const AX_XML_CHAR** atts)
 {
     ((SAXParser*)(ctx))->_delegator->startElement(ctx, (char*)name, (const char**)atts);
 }
 
-void SAXParser::endElement(void* ctx, const CC_XML_CHAR* name)
+void SAXParser::endElement(void* ctx, const AX_XML_CHAR* name)
 {
     ((SAXParser*)(ctx))->_delegator->endElement(ctx, (char*)name);
 }
-void SAXParser::textHandler(void* ctx, const CC_XML_CHAR* name, size_t len)
+void SAXParser::textHandler(void* ctx, const AX_XML_CHAR* name, size_t len)
 {
     ((SAXParser*)(ctx))->_delegator->textHandler(ctx, (char*)name, len);
 }

@@ -26,7 +26,7 @@
  ****************************************************************************/
 #include "ui/UIEditBox/UIEditBoxImpl-ios.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #    define kLabelZOrder 9999
 
@@ -245,4 +245,4 @@ UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 
 NS_AX_END
 
-#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
+#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */

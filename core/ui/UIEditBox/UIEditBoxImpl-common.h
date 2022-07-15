@@ -40,7 +40,7 @@ namespace ui
 
 class EditBox;
 
-class CC_GUI_DLL EditBoxImplCommon : public EditBoxImpl
+class AX_GUI_DLL EditBoxImplCommon : public EditBoxImpl
 {
 public:
     /**

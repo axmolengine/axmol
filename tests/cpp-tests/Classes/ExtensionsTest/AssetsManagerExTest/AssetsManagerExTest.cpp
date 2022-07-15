@@ -77,7 +77,7 @@ bool AssetsManagerExLoaderScene::init()
 
     auto downloadLabel = Label::createWithTTF("Start Download", "fonts/arial.ttf", 16);
     auto downloadItem =
-        MenuItemLabel::create(downloadLabel, CC_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
+        MenuItemLabel::create(downloadLabel, AX_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
     downloadItem->setPosition(Vec2(VisibleRect::center().x, VisibleRect::bottom().y + 100));
     _downloadMenu = Menu::create(downloadItem, nullptr);
     _downloadMenu->setPosition(Vec2::ZERO);

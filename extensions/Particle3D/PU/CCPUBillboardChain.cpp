@@ -91,10 +91,10 @@ PUBillboardChain::PUBillboardChain(std::string_view /*name*/,
 //-----------------------------------------------------------------------
 PUBillboardChain::~PUBillboardChain()
 {
-    // CC_SAFE_RELEASE(_texture);
-    CC_SAFE_RELEASE(_programState);
-    CC_SAFE_RELEASE(_vertexBuffer);
-    CC_SAFE_RELEASE(_indexBuffer);
+    // AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 }
 //-----------------------------------------------------------------------
 void PUBillboardChain::setupChainContainers()
@@ -153,8 +153,8 @@ void PUBillboardChain::setupBuffers()
     // setupVertexDeclaration();
     if (_buffersNeedRecreating)
     {
-        CC_SAFE_RELEASE_NULL(_vertexBuffer);
-        CC_SAFE_RELEASE_NULL(_indexBuffer);
+        AX_SAFE_RELEASE_NULL(_vertexBuffer);
+        AX_SAFE_RELEASE_NULL(_indexBuffer);
 
         size_t stride = sizeof(VertexInfo);
         _vertexBuffer = backend::Device::getInstance()->newBuffer(
@@ -629,7 +629,7 @@ void PUBillboardChain::updateIndexBuffer()
 //-----------------------------------------------------------------------
 void PUBillboardChain::init(std::string_view texFile)
 {
-    CC_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_programState);
 
     if (!texFile.empty())
     {
@@ -684,8 +684,8 @@ void PUBillboardChain::init(std::string_view texFile)
     _stateBlock.setCullFaceSide(backend::CullMode::BACK);
     _stateBlock.setCullFace(true);
 
-    _meshCommand.setBeforeCallback(CC_CALLBACK_0(PUBillboardChain::onBeforeDraw, this));
-    _meshCommand.setAfterCallback(CC_CALLBACK_0(PUBillboardChain::onAfterDraw, this));
+    _meshCommand.setBeforeCallback(AX_CALLBACK_0(PUBillboardChain::onBeforeDraw, this));
+    _meshCommand.setAfterCallback(AX_CALLBACK_0(PUBillboardChain::onAfterDraw, this));
 }
 
 void PUBillboardChain::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)

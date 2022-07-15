@@ -51,7 +51,7 @@ class HttpClient;
  * @since v2.0.2.
  * @lua NA
  */
-class CC_DLL HttpResponse : public axis::Ref
+class AX_DLL HttpResponse : public axis::Ref
 {
     friend class HttpClient;
 

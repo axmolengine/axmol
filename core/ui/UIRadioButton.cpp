@@ -48,7 +48,7 @@ RadioButton* RadioButton::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -65,7 +65,7 @@ RadioButton* RadioButton::create(std::string_view backGround,
         pWidget->autorelease();
         return pWidget;
     }
-    CC_SAFE_DELETE(pWidget);
+    AX_SAFE_DELETE(pWidget);
     return nullptr;
 }
 
@@ -77,7 +77,7 @@ RadioButton* RadioButton::create(std::string_view backGround, std::string_view c
         pWidget->autorelease();
         return pWidget;
     }
-    CC_SAFE_DELETE(pWidget);
+    AX_SAFE_DELETE(pWidget);
     return nullptr;
 }
 
@@ -158,7 +158,7 @@ RadioButtonGroup* RadioButtonGroup::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -185,7 +185,7 @@ void RadioButtonGroup::addRadioButton(RadioButton* radioButton)
 void RadioButtonGroup::removeRadioButton(RadioButton* radioButton)
 {
     ssize_t index = _radioButtons.getIndex(radioButton);
-    if (index == CC_INVALID_INDEX)
+    if (index == AX_INVALID_INDEX)
     {
         CCLOGERROR("The radio button does not belong to this group!");
         return;

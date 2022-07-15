@@ -81,7 +81,7 @@ Speed::Speed() : _speed(0.0), _innerAction(nullptr) {}
 
 Speed::~Speed()
 {
-    CC_SAFE_RELEASE(_innerAction);
+    AX_SAFE_RELEASE(_innerAction);
 }
 
 Speed* Speed::create(ActionInterval* action, float speed)
@@ -92,7 +92,7 @@ Speed* Speed::create(ActionInterval* action, float speed)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -161,9 +161,9 @@ void Speed::setInnerAction(ActionInterval* action)
 {
     if (_innerAction != action)
     {
-        CC_SAFE_RELEASE(_innerAction);
+        AX_SAFE_RELEASE(_innerAction);
         _innerAction = action;
-        CC_SAFE_RETAIN(_innerAction);
+        AX_SAFE_RETAIN(_innerAction);
     }
 }
 
@@ -172,7 +172,7 @@ void Speed::setInnerAction(ActionInterval* action)
 //
 Follow::~Follow()
 {
-    CC_SAFE_RELEASE(_followedNode);
+    AX_SAFE_RELEASE(_followedNode);
 }
 
 Follow* Follow::create(Node* followedNode, const Rect& rect /* = Rect::ZERO*/)

@@ -51,7 +51,7 @@ NS_AX_EXT_BEGIN
  */
 
 /** @class ControlButton Button control for Cocos2D. */
-class CC_EX_DLL ControlButton : public Control
+class AX_EX_DLL ControlButton : public Control
 {
 public:
     static ControlButton* create();
@@ -217,23 +217,23 @@ protected:
     std::string _currentTitle;
 
     /** The current color used to display the title. */
-    CC_SYNTHESIZE_READONLY_PASS_BY_REF(Color3B, _currentTitleColor, CurrentTitleColor);
+    AX_SYNTHESIZE_READONLY_PASS_BY_REF(Color3B, _currentTitleColor, CurrentTitleColor);
 
     /** The current title label. */
-    CC_SYNTHESIZE_RETAIN(Node*, _titleLabel, TitleLabel);
+    AX_SYNTHESIZE_RETAIN(Node*, _titleLabel, TitleLabel);
 
     /** The current background sprite. */
-    CC_SYNTHESIZE_RETAIN(axis::ui::Scale9Sprite*, _backgroundSprite, BackgroundSprite);
+    AX_SYNTHESIZE_RETAIN(axis::ui::Scale9Sprite*, _backgroundSprite, BackgroundSprite);
 
     /** The preferred size of the button, if label is larger it will be expanded. */
-    CC_PROPERTY_PASS_BY_REF(Size, _preferredSize, PreferredSize);
+    AX_PROPERTY_PASS_BY_REF(Size, _preferredSize, PreferredSize);
 
     /** Adjust the button zooming on touchdown. Default value is YES. */
-    CC_PROPERTY(bool, _zoomOnTouchDown, ZoomOnTouchDown);
+    AX_PROPERTY(bool, _zoomOnTouchDown, ZoomOnTouchDown);
     /** Scale ratio button on touchdown. Default value 1.1f */
-    CC_SYNTHESIZE(float, _scaleRatio, ScaleRatio);
+    AX_SYNTHESIZE(float, _scaleRatio, ScaleRatio);
 
-    CC_PROPERTY_PASS_BY_REF(Vec2, _labelAnchorPoint, LabelAnchorPoint);
+    AX_PROPERTY_PASS_BY_REF(Vec2, _labelAnchorPoint, LabelAnchorPoint);
 
     std::unordered_map<int, std::string> _titleDispatchTable;
     std::unordered_map<int, Color3B> _titleColorDispatchTable;
@@ -242,12 +242,12 @@ protected:
     Map<int, axis::ui::Scale9Sprite*> _backgroundSpriteDispatchTable;
 
     /* Define the button margin for Top/Bottom edge */
-    CC_SYNTHESIZE_READONLY(int, _marginV, VerticalMargin);
+    AX_SYNTHESIZE_READONLY(int, _marginV, VerticalMargin);
     /* Define the button margin for Left/Right edge */
-    CC_SYNTHESIZE_READONLY(int, _marginH, HorizontalOrigin);
+    AX_SYNTHESIZE_READONLY(int, _marginH, HorizontalOrigin);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ControlButton);
+    AX_DISALLOW_COPY_AND_ASSIGN(ControlButton);
 };
 
 // end of GUI group

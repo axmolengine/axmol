@@ -124,22 +124,22 @@ bool Box2DTestBed::initWithEntryID(int entryId)
     // Adds touch event listener
     _touchListener = EventListenerTouchOneByOne::create();
     _touchListener->setSwallowTouches(true);
-    _touchListener->onTouchBegan = CC_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
-    _touchListener->onTouchMoved = CC_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
-    _touchListener->onTouchEnded = CC_CALLBACK_2(Box2DTestBed::onTouchEnded, this);
+    _touchListener->onTouchBegan = AX_CALLBACK_2(Box2DTestBed::onTouchBegan, this);
+    _touchListener->onTouchMoved = AX_CALLBACK_2(Box2DTestBed::onTouchMoved, this);
+    _touchListener->onTouchEnded = AX_CALLBACK_2(Box2DTestBed::onTouchEnded, this);
     TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_touchListener, 10);
 
     // Adds Keyboard event listener
     _keyboardListener                = EventListenerKeyboard::create();
-    _keyboardListener->onKeyPressed  = CC_CALLBACK_2(Box2DTestBed::onKeyPressed, this);
-    _keyboardListener->onKeyReleased = CC_CALLBACK_2(Box2DTestBed::onKeyReleased, this);
+    _keyboardListener->onKeyPressed  = AX_CALLBACK_2(Box2DTestBed::onKeyPressed, this);
+    _keyboardListener->onKeyReleased = AX_CALLBACK_2(Box2DTestBed::onKeyReleased, this);
     TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_keyboardListener, 11);
 
     auto _mouseListener           = EventListenerMouse::create();
-    _mouseListener->onMouseMove   = CC_CALLBACK_1(Box2DTestBed::onMouseMove, this);
-    _mouseListener->onMouseUp     = CC_CALLBACK_1(Box2DTestBed::onMouseUp, this);
-    _mouseListener->onMouseDown   = CC_CALLBACK_1(Box2DTestBed::onMouseDown, this);
-    _mouseListener->onMouseScroll = CC_CALLBACK_1(Box2DTestBed::onMouseScroll, this);
+    _mouseListener->onMouseMove   = AX_CALLBACK_1(Box2DTestBed::onMouseMove, this);
+    _mouseListener->onMouseUp     = AX_CALLBACK_1(Box2DTestBed::onMouseUp, this);
+    _mouseListener->onMouseDown   = AX_CALLBACK_1(Box2DTestBed::onMouseDown, this);
+    _mouseListener->onMouseScroll = AX_CALLBACK_1(Box2DTestBed::onMouseScroll, this);
     TestCase::_eventDispatcher->addEventListenerWithFixedPriority(_mouseListener, 12);
 
     // Demo messageString
@@ -237,7 +237,7 @@ void Box2DTestBed::onEnter()
 {
     Scene::onEnter();
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
-    ImGuiPresenter::getInstance()->addRenderLoop("#im01", CC_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
+    ImGuiPresenter::getInstance()->addRenderLoop("#im01", AX_CALLBACK_0(Box2DTestBed::onDrawImGui, this), this);
 }
 void Box2DTestBed::onExit()
 {
