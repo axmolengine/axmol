@@ -8,7 +8,7 @@ on:
 
     paths-ignore:
       - '**.md'
-      - docs/**/*
+      - 'docs/**'
 
 jobs:
   build:
