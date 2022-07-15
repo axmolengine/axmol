@@ -4,6 +4,7 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
+      - docs/**/*
       
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)

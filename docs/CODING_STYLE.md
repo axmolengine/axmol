@@ -346,7 +346,7 @@ Namespaces wrap the entire source file after includes, gflags definitions/declar
 ```cpp
 // In the .h file
 // When using the cocos2d namespace
-NS_CC_BEGIN
+NS_AX_BEGIN
 
 // All declarations are within the namespace scope.
 // Notice the lack of indentation.
@@ -357,7 +357,7 @@ public:
     void foo();
 };
 
-NS_CC_END
+NS_AX_END
 ```
 
 
