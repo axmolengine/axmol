@@ -53,6 +53,13 @@ _G.kCCTMXTileDiagonalFlag            = cc.TMX_TILE_DIAGONAL_FLAG
 _G.kCCFlipedAll                      = cc.FLIPED_ALL
 _G.kCCFlippedMask                    = cc.FLIPPED_MASK
 
+
+cc.PLATFORM_OS_WINDOWS = cc.PLATFORM_WINDOWS
+cc.PLATFORM_OS_LINUX   = cc.PLATFORM_LINUX
+cc.PLATFORM_OS_MAC     = cc.PLATFORM_MACOS
+cc.PLATFORM_OS_ANDROID = cc.PLATFORM_ANDROID
+cc.PLATFORM_OS_IPHONE  = cc.PLATFORM_IOS
+
 _G.kLanguageEnglish  = cc.LANGUAGE_ENGLISH
 _G.kLanguageChinese  = cc.LANGUAGE_CHINESE
 _G.kLanguageFrench   = cc.LANGUAGE_FRENCH
@@ -70,7 +77,5 @@ _G.kTargetLinux        = cc.PLATFORM_OS_LINUX
 _G.kTargetMacOS        = cc.PLATFORM_OS_MAC
 _G.kTargetAndroid      = cc.PLATFORM_OS_ANDROID
 _G.kTargetIphone       = cc.PLATFORM_OS_IPHONE
-_G.kTargetIpad         = cc.PLATFORM_OS_IPAD
-_G.kTargetBlackBerry   = cc.PLATFORM_OS_BLACKBERRY
 
 cc.TEXTURE_PIXELFORMAT_DEFAULT = cc.TEXTURE_PF_RGBA8
