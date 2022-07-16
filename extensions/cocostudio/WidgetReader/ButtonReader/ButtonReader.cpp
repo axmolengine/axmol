@@ -56,12 +56,12 @@ ButtonReader* ButtonReader::getInstance()
 
 void ButtonReader::purge()
 {
-    CC_SAFE_DELETE(instanceButtonReader);
+    AX_SAFE_DELETE(instanceButtonReader);
 }
 
 void ButtonReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceButtonReader);
+    AX_SAFE_DELETE(instanceButtonReader);
 }
 
 void ButtonReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
@@ -83,9 +83,9 @@ void ButtonReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* coco
         std::string value = stChildArray[i].GetValue(cocoLoader);
 
         // read all basic properties of widget
-        CC_BASIC_PROPERTY_BINARY_READER
+        AX_BASIC_PROPERTY_BINARY_READER
         // read all color related properties of widget
-        CC_COLOR_PROPERTY_BINARY_READER
+        AX_COLOR_PROPERTY_BINARY_READER
 
         else if (key == P_Scale9Enable) { button->setScale9Enabled(valueToBool(value)); }
         else if (key == P_NormalData)

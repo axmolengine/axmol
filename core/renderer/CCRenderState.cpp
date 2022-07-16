@@ -46,7 +46,7 @@ std::string RenderState::getName() const
 
 void RenderState::bindPass(Pass* pass, MeshCommand* command)
 {
-    CC_ASSERT(pass);
+    AX_ASSERT(pass);
     assert(pass->_technique && pass->_technique->_material);
     auto* technique          = pass->_technique;
     auto* material           = technique->_material;
@@ -87,7 +87,7 @@ void RenderState::StateBlock::bind(PipelineDescriptor* pipelineDescriptor)
 
 void RenderState::StateBlock::apply(PipelineDescriptor* pipelineDescriptor)
 {
-    // CC_ASSERT(_globalState);
+    // AX_ASSERT(_globalState);
 
     auto renderer = Director::getInstance()->getRenderer();
     auto& blend   = pipelineDescriptor->blendDescriptor;
@@ -221,7 +221,7 @@ static backend::BlendFactor parseBlend(std::string_view value)
         return backend::BlendFactor::SRC_ALPHA_SATURATE;
     else
     {
-        CCLOG("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)",
+        AXLOG("Unsupported blend value (%s). (Will default to BLEND_ONE if errors are treated as warnings)",
               value.data());
         return backend::BlendFactor::ONE;
     }
@@ -250,7 +250,7 @@ static DepthFunction parseDepthFunc(std::string_view value)
         return DepthFunction::ALWAYS;
     else
     {
-        CCLOG("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)",
+        AXLOG("Unsupported depth function value (%s). Will default to DEPTH_LESS if errors are treated as warnings)",
               value.data());
         return DepthFunction::LESS;
     }
@@ -270,7 +270,7 @@ static CullFaceSide parseCullFaceSide(std::string_view value)
     //        return RenderState::CULL_FACE_SIDE_FRONT_AND_BACK;
     else
     {
-        CCLOG("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.",
+        AXLOG("Unsupported cull face side value (%s). Will default to BACK if errors are treated as warnings.",
               value.data());
         return CullFaceSide::BACK;
     }
@@ -287,7 +287,7 @@ static FrontFace parseFrontFace(std::string_view value)
         return FrontFace::CLOCK_WISE;
     else
     {
-        CCLOG("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.",
+        AXLOG("Unsupported front face side value (%s). Will default to CCW if errors are treated as warnings.",
               value.data());
         return FrontFace::COUNTER_CLOCK_WISE;
     }
@@ -333,7 +333,7 @@ void RenderState::StateBlock::setState(std::string_view name, std::string_view v
     }
     else
     {
-        CCLOG("Unsupported render state string '%s'.", name.data());
+        AXLOG("Unsupported render state string '%s'.", name.data());
     }
 }
 

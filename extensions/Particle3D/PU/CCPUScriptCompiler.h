@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_SCRIPT_COMPILER_H__
-#define __CC_PU_SCRIPT_COMPILER_H__
+#ifndef __AX_PU_SCRIPT_COMPILER_H__
+#define __AX_PU_SCRIPT_COMPILER_H__
 #include "base/CCRef.h"
 #include "extensions/Particle3D/PU/CCPUScriptParser.h"
 
@@ -45,10 +45,10 @@ enum PUAbstractNodeType
     ANT_VARIABLE_SET,
     ANT_VARIABLE_ACCESS
 };
-class CC_EX_DLL PUAbstractNode;
+class AX_EX_DLL PUAbstractNode;
 typedef std::list<PUAbstractNode*> PUAbstractNodeList;
 
-class CC_EX_DLL PUAbstractNode
+class AX_EX_DLL PUAbstractNode
 {
 public:
     std::string file;
@@ -69,7 +69,7 @@ public:
 };
 
 /** This specific abstract node represents a script object */
-class CC_EX_DLL PUObjectAbstractNode : public PUAbstractNode
+class AX_EX_DLL PUObjectAbstractNode : public PUAbstractNode
 {
 private:
     hlookup::string_map<std::string> _env;
@@ -95,7 +95,7 @@ public:
 };
 
 /** This abstract node represents a script property */
-class CC_EX_DLL PUPropertyAbstractNode : public PUAbstractNode
+class AX_EX_DLL PUPropertyAbstractNode : public PUAbstractNode
 {
 public:
     std::string name;
@@ -110,7 +110,7 @@ public:
 };
 
 /** This is an abstract node which cannot be broken down further */
-class CC_EX_DLL PUAtomAbstractNode : public PUAbstractNode
+class AX_EX_DLL PUAtomAbstractNode : public PUAbstractNode
 {
 public:
     std::string value;
@@ -125,8 +125,8 @@ private:
     void parseNumber() const;
 };
 
-class CC_EX_DLL PUParticleSystem3D;
-class CC_EX_DLL PUScriptCompiler
+class AX_EX_DLL PUParticleSystem3D;
+class AX_EX_DLL PUScriptCompiler
 {
 
 private:

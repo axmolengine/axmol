@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "ui/UIEditBox/UIEditBoxImpl-win32.h"
 
 #include "platform/CCPlatformConfig.h"
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include <tchar.h>
@@ -376,7 +376,7 @@ std::string EditBoxImplWin::getText() const
     bool conversionResult = axis::StringUtils::UTF16ToUTF8(wstrResult, utf8Result);
     if (!conversionResult)
     {
-        CCLOG("warning, editbox input text conversion error.");
+        AXLOG("warning, editbox input text conversion error.");
     }
     return std::move(utf8Result);
 }
@@ -438,4 +438,4 @@ LRESULT EditBoxImplWin::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 NS_AX_END
 
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */

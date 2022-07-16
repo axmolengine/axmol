@@ -37,7 +37,7 @@
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
 struct XXH32_state_s;
 #endif
 
@@ -54,7 +54,7 @@ class VertexLayout;
 /**
  * Store texture information.
  */
-struct CC_DLL TextureInfo
+struct AX_DLL TextureInfo
 {
     TextureInfo(std::vector<int>&& _slots, std::vector<backend::TextureBackend*>&& _textures);
     TextureInfo(std::vector<int>&& _slots,
@@ -78,7 +78,7 @@ struct CC_DLL TextureInfo
     std::vector<int> slots;
     std::vector<int> indexs;
     std::vector<backend::TextureBackend*> textures;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     int location = -1;
 #endif
 };
@@ -87,7 +87,7 @@ struct CC_DLL TextureInfo
  * A program state object can create or reuse a program.
  * Each program state object keep its own unifroms and textures data.
  */
-class CC_DLL ProgramState : public Ref
+class AX_DLL ProgramState : public Ref
 {
 public:
     using UniformCallback = std::function<void(ProgramState*, const UniformLocation&)>;
@@ -256,7 +256,7 @@ public:
      *
      * @script{ignore}
      */
-    class CC_DLL AutoBindingResolver
+    class AX_DLL AutoBindingResolver
     {
     public:
         AutoBindingResolver();
@@ -358,7 +358,7 @@ protected:
     /// Initialize.
     bool init(Program* program);
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     /**
      * float3 etc in Metal has both sizeof and alignment same as float4, convert it before fill into uniform buffer
      * @param uniformInfo Specifies the uniform information.
@@ -395,11 +395,11 @@ protected:
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
 
     uint32_t _uniformID = 0;
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     struct XXH32_state_s* _uniformHashState = nullptr;
 #endif
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 };

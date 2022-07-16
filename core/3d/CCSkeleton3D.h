@@ -41,7 +41,7 @@ NS_AX_BEGIN
  * @brief Defines a basic hierarchical structure of transformation spaces.
  * @lua NA
  */
-class CC_DLL Bone3D : public Ref
+class AX_DLL Bone3D : public Ref
 {
     friend class Skeleton3D;
     friend class MeshSkin;
@@ -177,7 +177,7 @@ protected:
  * Skeleton
  *
  */
-class CC_DLL Skeleton3D : public Ref
+class AX_DLL Skeleton3D : public Ref
 {
 public:
     /**

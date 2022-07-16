@@ -11,7 +11,7 @@ local vertDefaultSource = "\n".."\n" ..
                   "\n#endif\n" ..
                   "void main()\n" ..
                   "{\n" .. 
-                  "   gl_Position = CC_MVPMatrix * a_position;\n"..
+                  "   gl_Position = AX_MVPMatrix * a_position;\n"..
                   "   v_fragmentColor = a_color;\n"..
                   "   v_texCoord = a_texCoord;\n" ..
                   "} \n"
@@ -854,7 +854,7 @@ local function OpenGLTestMainLayer()
 
             shader:use()
 
-            local loc = gl.getUniformLocation( program, "CC_MVPMatrix")
+            local loc = gl.getUniformLocation( program, "AX_MVPMatrix")
 
             -- Save the old MVP matrix
             local oldUniformTable = gl.getUniform( program, loc )

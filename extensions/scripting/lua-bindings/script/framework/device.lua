@@ -29,13 +29,13 @@ device.model       = "unknown"
 
 local app = cc.Application:getInstance()
 local target = app:getTargetPlatform()
-if target == cc.PLATFORM_OS_WINDOWS then
+if target == cc.PLATFORM_WINDOWS then
     device.platform = "windows"
-elseif target == cc.PLATFORM_OS_MAC then
+elseif target == cc.PLATFORM_MAC then
     device.platform = "mac"
-elseif target == cc.PLATFORM_OS_ANDROID then
+elseif target == cc.PLATFORM_ANDROID then
     device.platform = "android"
-elseif target == cc.PLATFORM_OS_IPHONE or target == cc.PLATFORM_OS_IPAD then
+elseif target == cc.PLATFORM_IOS then
     device.platform = "ios"
     local director = cc.Director:getInstance()
     local view = director:getOpenGLView()
@@ -54,10 +54,6 @@ elseif target == cc.PLATFORM_OS_IPHONE or target == cc.PLATFORM_OS_IPAD then
     elseif w == 1536 and h == 2048 then
         device.model = "ipad retina"
     end
-elseif target == cc.PLATFORM_OS_WINRT then
-    device.platform = "winrt"
-elseif target == cc.PLATFORM_OS_WP8 then
-    device.platform = "wp8"
 end
 
 local language_ = app:getCurrentLanguage()

@@ -41,7 +41,7 @@ ArmatureAnimation* ArmatureAnimation::create(Armature* armature)
         pArmatureAnimation->autorelease();
         return pArmatureAnimation;
     }
-    CC_SAFE_DELETE(pArmatureAnimation);
+    AX_SAFE_DELETE(pArmatureAnimation);
     return nullptr;
 }
 
@@ -69,9 +69,9 @@ ArmatureAnimation::ArmatureAnimation()
 
 ArmatureAnimation::~ArmatureAnimation(void)
 {
-    CC_SAFE_RELEASE_NULL(_animationData);
+    AX_SAFE_RELEASE_NULL(_animationData);
 
-    CC_SAFE_RELEASE_NULL(_userObject);
+    AX_SAFE_RELEASE_NULL(_userObject);
 }
 
 bool ArmatureAnimation::init(Armature* armature)
@@ -160,18 +160,18 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
 {
     if (animationName.empty())
     {
-        CCLOG("_animationData can not be null");
+        AXLOG("_animationData can not be null");
         return;
     }
-    //    CCASSERT(_animationData, "_animationData can not be null");
+    //    AXASSERT(_animationData, "_animationData can not be null");
 
     _movementData = _animationData->getMovement(animationName);
     if (nullptr == _movementData)
     {
-        CCLOG("_movementData can not be null");
+        AXLOG("_movementData can not be null");
         return;
     }
-    //    CCASSERT(_movementData, "_movementData can not be null");
+    //    AXASSERT(_movementData, "_movementData can not be null");
 
     //! Get key frame count
     _rawDuration = _movementData->duration;
@@ -254,7 +254,7 @@ void ArmatureAnimation::playByIndex(int animationIndex, int durationTo, int loop
 void ArmatureAnimation::playWithIndex(int animationIndex, int durationTo, int loop)
 {
     std::vector<std::string>& movName = _animationData->movementNames;
-    CC_ASSERT((animationIndex > -1) && ((unsigned int)animationIndex < movName.size()));
+    AX_ASSERT((animationIndex > -1) && ((unsigned int)animationIndex < movName.size()));
 
     std::string animationName = movName.at(animationIndex);
     play(animationName, durationTo, loop);
@@ -296,7 +296,7 @@ void ArmatureAnimation::gotoAndPlay(int frameIndex)
 {
     if (!_movementData || frameIndex < 0 || frameIndex >= _movementData->duration)
     {
-        CCLOG("Please ensure you have played a movement, and the frameIndex is in the range.");
+        AXLOG("Please ensure you have played a movement, and the frameIndex is in the range.");
         return;
     }
 
@@ -366,7 +366,7 @@ void ArmatureAnimation::update(float dt)
 
         _ignoreFrameEvent = false;
 
-        CC_SAFE_DELETE(event);
+        AX_SAFE_DELETE(event);
     }
 
     while (_movementEventQueue.size() > 0)
@@ -384,7 +384,7 @@ void ArmatureAnimation::update(float dt)
             _movementEventListener(event->armature, event->movementType, event->movementID);
         }
 
-        CC_SAFE_DELETE(event);
+        AX_SAFE_DELETE(event);
     }
 }
 
@@ -482,8 +482,8 @@ void ArmatureAnimation::setFrameEventCallFunc(
 
 void ArmatureAnimation::setUserObject(Ref* pUserObject)
 {
-    CC_SAFE_RETAIN(pUserObject);
-    CC_SAFE_RELEASE(_userObject);
+    AX_SAFE_RETAIN(pUserObject);
+    AX_SAFE_RELEASE(_userObject);
     _userObject = pUserObject;
 }
 

@@ -25,7 +25,7 @@
 
 #include "scripting/lua-bindings/manual/navmesh/lua_axis_navmesh_conversions.h"
 #include "base/ccConfig.h"
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #    include "navmesh/CCNavMeshAgent.h"

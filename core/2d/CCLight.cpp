@@ -29,7 +29,7 @@ NS_AX_BEGIN
 
 void BaseLight::setIntensity(float intensity)
 {
-    CC_ASSERT(intensity >= 0);
+    AX_ASSERT(intensity >= 0);
     _intensity = intensity;
 }
 
@@ -61,8 +61,8 @@ void BaseLight::onExit()
 void BaseLight::setRotationFromDirection(const Vec3& direction)
 {
     float projLen = sqrt(direction.x * direction.x + direction.z * direction.z);
-    float rotY    = CC_RADIANS_TO_DEGREES(atan2f(-direction.x, -direction.z));
-    float rotX    = -CC_RADIANS_TO_DEGREES(atan2f(-direction.y, projLen));
+    float rotY    = AX_RADIANS_TO_DEGREES(atan2f(-direction.x, -direction.z));
+    float rotX    = -AX_RADIANS_TO_DEGREES(atan2f(-direction.y, projLen));
     setRotation3D(Vec3(rotX, rotY, 0.0f));
 }
 

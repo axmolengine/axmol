@@ -41,7 +41,7 @@ class Node;
 /** @class Event
  * @brief Base class of all kinds of events.
  */
-class CC_DLL Event : public Ref
+class AX_DLL Event : public Ref
 {
 public:
     /** Type Event type.*/

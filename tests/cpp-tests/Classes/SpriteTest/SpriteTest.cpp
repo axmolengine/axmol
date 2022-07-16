@@ -148,7 +148,7 @@ SpriteTests::SpriteTests()
 Sprite1::Sprite1()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(Sprite1::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(Sprite1::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
@@ -157,7 +157,7 @@ Sprite1::Sprite1()
 
 void Sprite1::addNewSpriteWithCoords(Vec2 p)
 {
-    int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
+    int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -167,7 +167,7 @@ void Sprite1::addNewSpriteWithCoords(Vec2 p)
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -214,7 +214,7 @@ std::string Sprite1::subtitle() const
 SpriteBatchNode1::SpriteBatchNode1()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(SpriteBatchNode1::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(SpriteBatchNode1::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto BatchNode = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 50);
@@ -228,7 +228,7 @@ void SpriteBatchNode1::addNewSpriteWithCoords(Vec2 p)
 {
     auto BatchNode = static_cast<SpriteBatchNode*>(getChildByTag(kTagSpriteBatchNode));
 
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -238,7 +238,7 @@ void SpriteBatchNode1::addNewSpriteWithCoords(Vec2 p)
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -336,7 +336,7 @@ SpriteColorOpacity::SpriteColorOpacity()
     addChild(sprite7, 0, kTagSprite7);
     addChild(sprite8, 0, kTagSprite8);
 
-    schedule(CC_CALLBACK_1(SpriteColorOpacity::removeAndAddSprite, this), 2, "remove_add_key");
+    schedule(AX_CALLBACK_1(SpriteColorOpacity::removeAndAddSprite, this), 2, "remove_add_key");
 }
 
 // this function test if remove and add works as expected:
@@ -448,7 +448,7 @@ SpriteColorOpacityHSVHSL::SpriteColorOpacityHSVHSL()
     addChild(sprite7, 0, kTagSprite7);
     addChild(sprite8, 0, kTagSprite8);
 
-    schedule(CC_CALLBACK_1(SpriteColorOpacityHSVHSL::removeAndAddSprite, this), 2, "remove_add_key");
+    schedule(AX_CALLBACK_1(SpriteColorOpacityHSVHSL::removeAndAddSprite, this), 2, "remove_add_key");
 }
 
 // this function test if remove and add works as expected:
@@ -538,7 +538,7 @@ SpriteBatchNodeColorOpacity::SpriteBatchNodeColorOpacity()
     batch->addChild(sprite7, 0, kTagSprite7);
     batch->addChild(sprite8, 0, kTagSprite8);
 
-    schedule(CC_CALLBACK_1(SpriteBatchNodeColorOpacity::removeAndAddSprite, this), 2, "remove_add_key");
+    schedule(AX_CALLBACK_1(SpriteBatchNodeColorOpacity::removeAndAddSprite, this), 2, "remove_add_key");
 }
 
 // this function test if remove and add works as expected:
@@ -599,7 +599,7 @@ SpriteZOrder::SpriteZOrder()
     sprite->setScaleX(6);
     sprite->setColor(Color3B::RED);
 
-    schedule(CC_CALLBACK_1(SpriteZOrder::reorderSprite, this), 1, "reorder_key");
+    schedule(AX_CALLBACK_1(SpriteZOrder::reorderSprite, this), 1, "reorder_key");
 }
 
 void SpriteZOrder::reorderSprite(float dt)
@@ -666,7 +666,7 @@ SpriteBatchNodeZOrder::SpriteBatchNodeZOrder()
     sprite->setScaleX(6);
     sprite->setColor(Color3B::RED);
 
-    schedule(CC_CALLBACK_1(SpriteBatchNodeZOrder::reorderSprite, this), 1, "reorder_key");
+    schedule(AX_CALLBACK_1(SpriteBatchNodeZOrder::reorderSprite, this), 1, "reorder_key");
 }
 
 void SpriteBatchNodeZOrder::reorderSprite(float dt)
@@ -722,7 +722,7 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
         }
     }
 
-    ssize_t CC_UNUSED prev = -1;
+    ssize_t AX_UNUSED prev = -1;
 
     auto& children = asmtest->getChildren();
 
@@ -731,8 +731,8 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
         auto child = static_cast<Sprite*>(obj);
 
         ssize_t currentIndex = child->getAtlasIndex();
-        CCASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----CCLOG("children %x - atlasIndex:%d", child, currentIndex);
+        AXASSERT(prev == currentIndex - 1, "Child order failed");
+        ////----AXLOG("children %x - atlasIndex:%d", child, currentIndex);
         prev = currentIndex;
     }
 
@@ -741,8 +741,8 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
     for (const auto& sprite : descendants)
     {
         ssize_t currentIndex = sprite->getAtlasIndex();
-        CCASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----CCLOG("descendant %x - atlasIndex:%d", child, currentIndex);
+        AXASSERT(prev == currentIndex - 1, "Child order failed");
+        ////----AXLOG("descendant %x - atlasIndex:%d", child, currentIndex);
         prev = currentIndex;
     }
 }
@@ -797,23 +797,23 @@ std::string SpriteBatchNodeReorderIssue744::subtitle() const
 Sprite* SpriteBatchNodeReorderIssue766::makeSpriteZ(int aZ)
 {
     Rect rcw(128, 0, 64, 64);
-    rcw         = CC_RECT_PIXELS_TO_POINTS(rcw);
+    rcw         = AX_RECT_PIXELS_TO_POINTS(rcw);
     auto sprite = Sprite::createWithTexture(batchNode->getTexture(), rcw);
-    sprite->setScale(CC_CONTENT_SCALE_FACTOR());
+    sprite->setScale(AX_CONTENT_SCALE_FACTOR());
     batchNode->addChild(sprite, aZ + 1, 0);
 
     // children
     Rect rc1(0, 0, 64, 64);
-    rc1               = CC_RECT_PIXELS_TO_POINTS(rc1);
+    rc1               = AX_RECT_PIXELS_TO_POINTS(rc1);
     auto spriteShadow = Sprite::createWithTexture(batchNode->getTexture(), rc1);
     spriteShadow->setOpacity(128);
-    sprite->setScale(CC_CONTENT_SCALE_FACTOR());
+    sprite->setScale(AX_CONTENT_SCALE_FACTOR());
     sprite->addChild(spriteShadow, aZ, 3);
 
     Rect rc2(64, 0, 64, 64);
-    rc2            = CC_RECT_PIXELS_TO_POINTS(rc2);
+    rc2            = AX_RECT_PIXELS_TO_POINTS(rc2);
     auto spriteTop = Sprite::createWithTexture(batchNode->getTexture(), rc2);
-    sprite->setScale(CC_CONTENT_SCALE_FACTOR());
+    sprite->setScale(AX_CONTENT_SCALE_FACTOR());
     sprite->addChild(spriteTop, aZ + 2, 3);
 
     return sprite;
@@ -841,7 +841,7 @@ SpriteBatchNodeReorderIssue766::SpriteBatchNodeReorderIssue766()
     sprite3 = makeSpriteZ(4);
     sprite3->setPosition(Vec2(328.0f, 160.0f));
 
-    schedule(CC_CALLBACK_1(SpriteBatchNodeReorderIssue766::reorderSprite, this), 2, "issue_766_key");
+    schedule(AX_CALLBACK_1(SpriteBatchNodeReorderIssue766::reorderSprite, this), 2, "issue_766_key");
 }
 
 std::string SpriteBatchNodeReorderIssue766::title() const
@@ -915,7 +915,7 @@ SpriteBatchNodeReorderIssue767::SpriteBatchNodeReorderIssue767()
     l3b2->setPosition(Vec2(0 + l2bSize.width / 2, +50 + l2bSize.height / 2));
     l2b->addChild(l3b2, 1);
 
-    schedule(CC_CALLBACK_1(SpriteBatchNodeReorderIssue767::reorderSprites, this), 1, "issue_767_key");
+    schedule(AX_CALLBACK_1(SpriteBatchNodeReorderIssue767::reorderSprites, this), 1, "issue_767_key");
 }
 
 std::string SpriteBatchNodeReorderIssue767::title() const
@@ -1362,7 +1362,7 @@ SpriteFlip::SpriteFlip()
     sprite2->setPosition(Vec2(s.width / 2 + 100, s.height / 2));
     addChild(sprite2, 0, kTagSprite2);
 
-    schedule(CC_CALLBACK_1(SpriteFlip::flipSprites, this), 1, "sprite_flip_key");
+    schedule(AX_CALLBACK_1(SpriteFlip::flipSprites, this), 1, "sprite_flip_key");
 }
 
 void SpriteFlip::flipSprites(float dt)
@@ -1373,10 +1373,10 @@ void SpriteFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    CCLOG("Pre: %g", sprite1->getContentSize().height);
+    AXLOG("Pre: %g", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    CCLOG("Post: %g", sprite1->getContentSize().height);
+    AXLOG("Post: %g", sprite1->getContentSize().height);
 }
 
 std::string SpriteFlip::title() const
@@ -1409,7 +1409,7 @@ SpriteBatchNodeFlip::SpriteBatchNodeFlip()
     sprite2->setPosition(Vec2(s.width / 2 + 100, s.height / 2));
     batch->addChild(sprite2, 0, kTagSprite2);
 
-    schedule(CC_CALLBACK_1(SpriteBatchNodeFlip::flipSprites, this), 1, "flip_sprites_key");
+    schedule(AX_CALLBACK_1(SpriteBatchNodeFlip::flipSprites, this), 1, "flip_sprites_key");
 }
 
 void SpriteBatchNodeFlip::flipSprites(float dt)
@@ -1421,10 +1421,10 @@ void SpriteBatchNodeFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    CCLOG("Pre: %g", sprite1->getContentSize().height);
+    AXLOG("Pre: %g", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    CCLOG("Post: %g", sprite1->getContentSize().height);
+    AXLOG("Post: %g", sprite1->getContentSize().height);
 }
 
 std::string SpriteBatchNodeFlip::title() const
@@ -1562,7 +1562,7 @@ std::string SpriteBatchNodeAliased::subtitle() const
 SpriteNewTexture::SpriteNewTexture()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(SpriteNewTexture::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(SpriteNewTexture::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto node = Node::create();
@@ -1589,9 +1589,9 @@ void SpriteNewTexture::addNewSprite()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto p = Vec2(CCRANDOM_0_1() * s.width, CCRANDOM_0_1() * s.height);
+    auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
 
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -1602,7 +1602,7 @@ void SpriteNewTexture::addNewSprite()
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -1670,7 +1670,7 @@ std::string SpriteNewTexture::subtitle() const
 SpriteBatchNodeNewTexture::SpriteBatchNodeNewTexture()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(SpriteBatchNodeNewTexture::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(SpriteBatchNodeNewTexture::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto batch = SpriteBatchNode::create("Images/grossini_dance_atlas.png", 50);
@@ -1695,11 +1695,11 @@ void SpriteBatchNodeNewTexture::addNewSprite()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto p = Vec2(CCRANDOM_0_1() * s.width, CCRANDOM_0_1() * s.height);
+    auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
 
     auto batch = static_cast<SpriteBatchNode*>(getChildByTag(kTagSpriteBatchNode));
 
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -1709,7 +1709,7 @@ void SpriteBatchNodeNewTexture::addNewSprite()
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -1825,7 +1825,7 @@ void SpriteFrameTest::onEnter()
     _sprite2->setFlippedX(false);
     _sprite2->setFlippedY(false);
 
-    schedule(CC_CALLBACK_1(SpriteFrameTest::startIn05Secs, this), 0.5f, "in_05_secs_key");
+    schedule(AX_CALLBACK_1(SpriteFrameTest::startIn05Secs, this), 0.5f, "in_05_secs_key");
     _counter = 0;
 }
 
@@ -1851,7 +1851,7 @@ std::string SpriteFrameTest::subtitle() const
 void SpriteFrameTest::startIn05Secs(float dt)
 {
     unschedule("in_05_secs_key");
-    schedule(CC_CALLBACK_1(SpriteFrameTest::flipSprites, this), 1.0f, "flip_sprites_key");
+    schedule(AX_CALLBACK_1(SpriteFrameTest::flipSprites, this), 1.0f, "flip_sprites_key");
 }
 
 void SpriteFrameTest::flipSprites(float dt)
@@ -1984,7 +1984,7 @@ void SpriteFramesFromFileContent::onEnter()
     texture->initWithImage(image);
     texture->autorelease();
 
-    CC_SAFE_RELEASE(image);
+    AX_SAFE_RELEASE(image);
 
     auto cache = SpriteFrameCache::getInstance();
     cache->addSpriteFramesWithFileContent(plist_content, texture);
@@ -2449,7 +2449,7 @@ SpriteHybrid::SpriteHybrid()
     // only show 80% of them
     for (int i = 0; i < 250; i++)
     {
-        int spriteIdx = CCRANDOM_0_1() * 14;
+        int spriteIdx = AXRANDOM_0_1() * 14;
         char str[25]  = {0};
         sprintf(str, "grossini_dance_%02d.png", (spriteIdx + 1));
         auto frame  = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
@@ -2458,10 +2458,10 @@ SpriteHybrid::SpriteHybrid()
 
         float x = -1000;
         float y = -1000;
-        if (CCRANDOM_0_1() < 0.2f)
+        if (AXRANDOM_0_1() < 0.2f)
         {
-            x = CCRANDOM_0_1() * s.width;
-            y = CCRANDOM_0_1() * s.height;
+            x = AXRANDOM_0_1() * s.width;
+            y = AXRANDOM_0_1() * s.height;
         }
         sprite->setPosition(Vec2(x, y));
 
@@ -2471,7 +2471,7 @@ SpriteHybrid::SpriteHybrid()
 
     _usingSpriteBatchNode = false;
 
-    schedule(CC_CALLBACK_1(SpriteHybrid::reparentSprite, this), 2, "reparent_sprite_key");
+    schedule(AX_CALLBACK_1(SpriteHybrid::reparentSprite, this), 2, "reparent_sprite_key");
 }
 
 void SpriteHybrid::reparentSprite(float dt)
@@ -2484,7 +2484,7 @@ void SpriteHybrid::reparentSprite(float dt)
     if (_usingSpriteBatchNode)
         std::swap(p1, p2);
 
-    ////----CCLOG("New parent is: %x", p2);
+    ////----AXLOG("New parent is: %x", p2);
 
     auto& p1Children = p1->getChildren();
     for (const auto& node : p1Children)
@@ -4285,7 +4285,7 @@ NodeSort::NodeSort()
     _sprite5->setPosition(Vec2(356.0f, 160.0f));
     _node->addChild(_sprite5, -3, 5);
 
-    schedule(CC_CALLBACK_1(NodeSort::reorderSprite, this), "reorder_sprite_key");
+    schedule(AX_CALLBACK_1(NodeSort::reorderSprite, this), "reorder_sprite_key");
 }
 
 std::string NodeSort::title() const
@@ -4348,7 +4348,7 @@ SpriteBatchNodeReorderSameIndex::SpriteBatchNodeReorderSameIndex()
     _sprite5->setPosition(Vec2(356.0f, 160.0f));
     _batchNode->addChild(_sprite5, 6, 5);
 
-    scheduleOnce(CC_CALLBACK_1(SpriteBatchNodeReorderSameIndex::reorderSprite, this), 2, "reorder_sprite_key");
+    scheduleOnce(AX_CALLBACK_1(SpriteBatchNodeReorderSameIndex::reorderSprite, this), 2, "reorder_sprite_key");
 }
 
 std::string SpriteBatchNodeReorderSameIndex::title() const
@@ -4444,7 +4444,7 @@ SpriteBatchNodeReorderOneChild::SpriteBatchNodeReorderOneChild()
     l3b2->setPosition(Vec2(0 + l2bSize.width / 2, +50 + l2bSize.height / 2));
     l2b->addChild(l3b2);
 
-    scheduleOnce(CC_CALLBACK_1(SpriteBatchNodeReorderOneChild::reorderSprite, this), 2.0f, "reorder_sprite_key");
+    scheduleOnce(AX_CALLBACK_1(SpriteBatchNodeReorderOneChild::reorderSprite, this), 2.0f, "reorder_sprite_key");
 }
 
 void SpriteBatchNodeReorderOneChild::reorderSprite(float dt)
@@ -5075,7 +5075,7 @@ SpriteGetSpriteFrameTest::SpriteGetSpriteFrameTest()
     // Create reference sprite that's rotating based on there anchor point
     auto s3 = Sprite::createWithSpriteFrameName("grossini.png");
     addChild(s3);
-    s3->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
+    s3->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
     s3->setPosition(s.width / 2 + s.width / 3, s.height / 2);
     s3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s3->setSpriteFrame(s3->getSpriteFrame());
@@ -5317,9 +5317,9 @@ SpriteSlice9Test4::SpriteSlice9Test4()
         // enable slice 9, only in the first row
         if (i == 2)
         {
-            s1->setCenterRect(CC_RECT_PIXELS_TO_POINTS(Rect(6, 14, 2, 4)));
-            s2->setCenterRect(CC_RECT_PIXELS_TO_POINTS(Rect(6, 14, 2, 4)));
-            s3->setCenterRect(CC_RECT_PIXELS_TO_POINTS(Rect(6, 14, 2, 4)));
+            s1->setCenterRect(AX_RECT_PIXELS_TO_POINTS(Rect(6, 14, 2, 4)));
+            s2->setCenterRect(AX_RECT_PIXELS_TO_POINTS(Rect(6, 14, 2, 4)));
+            s3->setCenterRect(AX_RECT_PIXELS_TO_POINTS(Rect(6, 14, 2, 4)));
         }
 
         // "anchor points"
@@ -5356,7 +5356,7 @@ SpriteSlice9Test5::SpriteSlice9Test5()
     auto s1 = Sprite::create("Images/grossinis_heads.png");
     addChild(s1);
     s1->getTexture()->setAliasTexParameters();
-    s1->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(0, 0, 64, 128)));
+    s1->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(0, 0, 64, 128)));
     s1->setPosition(s.width / 2 - s.width / 3, s.height / 2);
     s1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s1->setContentSize(Size(s.width / 3, s.height));
@@ -5366,7 +5366,7 @@ SpriteSlice9Test5::SpriteSlice9Test5()
     // Create reference sprite that's rotating based on there anchor point
     auto s2 = Sprite::create("Images/grossinis_heads.png");
     addChild(s2);
-    s2->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(64, 0, 64, 128)));
+    s2->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(64, 0, 64, 128)));
     s2->setPosition(s.width * 2 / 4, s.height / 2);
     s2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s2->setContentSize(Size(s.width / 3, s.height));
@@ -5376,7 +5376,7 @@ SpriteSlice9Test5::SpriteSlice9Test5()
     // Create reference sprite that's rotating based on there anchor point
     auto s3 = Sprite::create("Images/grossinis_heads.png");
     addChild(s3);
-    s3->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
+    s3->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
     s3->setPosition(s.width / 2 + s.width / 3, s.height / 2);
     s3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s3->setContentSize(Size(s.width / 3, s.height));
@@ -5432,7 +5432,7 @@ SpriteSlice9Test6::SpriteSlice9Test6()
     auto s1 = Sprite::create("Images/grossinis_heads.png");
     addChild(s1);
     s1->getTexture()->setAliasTexParameters();
-    s1->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(0, 0, 64, 128)));
+    s1->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(0, 0, 64, 128)));
     s1->setPosition(s.width / 2 - s.width / 3, s.height / 2);
     s1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s1->setContentSize(Size(s.width / 3, s.height));
@@ -5442,7 +5442,7 @@ SpriteSlice9Test6::SpriteSlice9Test6()
     // Create reference sprite that's rotating based on there anchor point
     auto s2 = Sprite::create("Images/grossinis_heads.png");
     addChild(s2);
-    s2->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(64, 0, 64, 128)));
+    s2->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(64, 0, 64, 128)));
     s2->setPosition(s.width * 2 / 4, s.height / 2);
     s2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s2->setContentSize(Size(s.width / 3, s.height));
@@ -5452,7 +5452,7 @@ SpriteSlice9Test6::SpriteSlice9Test6()
     // Create reference sprite that's rotating based on there anchor point
     auto s3 = Sprite::create("Images/grossinis_heads.png");
     addChild(s3);
-    s3->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
+    s3->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
     s3->setPosition(s.width / 2 + s.width / 3, s.height / 2);
     s3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s3->setContentSize(Size(s.width / 3, s.height));
@@ -5508,7 +5508,7 @@ SpriteSlice9Test7::SpriteSlice9Test7()
     auto s1 = Sprite::create("Images/grossinis_heads.png");
     addChild(s1);
     s1->getTexture()->setAliasTexParameters();
-    s1->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(0, 0, 64, 128)));
+    s1->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(0, 0, 64, 128)));
     s1->setPosition(s.width / 2 - s.width / 3, s.height / 2);
     s1->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s1->setContentSize(Size(s.width / 3, s.height));
@@ -5517,7 +5517,7 @@ SpriteSlice9Test7::SpriteSlice9Test7()
     // Create reference sprite that's rotating based on there anchor point
     auto s2 = Sprite::create("Images/grossinis_heads.png");
     addChild(s2);
-    s2->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(64, 0, 64, 128)));
+    s2->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(64, 0, 64, 128)));
     s2->setPosition(s.width * 2 / 4, s.height / 2);
     s2->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s2->setContentSize(Size(s.width / 3, s.height));
@@ -5526,7 +5526,7 @@ SpriteSlice9Test7::SpriteSlice9Test7()
     // Create reference sprite that's rotating based on there anchor point
     auto s3 = Sprite::create("Images/grossinis_heads.png");
     addChild(s3);
-    s3->setTextureRect(CC_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
+    s3->setTextureRect(AX_RECT_PIXELS_TO_POINTS(Rect(128, 0, 64, 128)));
     s3->setPosition(s.width / 2 + s.width / 3, s.height / 2);
     s3->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
     s3->setContentSize(Size(s.width / 3, s.height));

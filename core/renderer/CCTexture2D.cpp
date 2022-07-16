@@ -50,7 +50,7 @@ THE SOFTWARE.
 #include "renderer/backend/PixelFormatUtils.h"
 #include "renderer/CCRenderer.h"
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
 #    include "renderer/CCTextureCache.h"
 #endif
 
@@ -80,15 +80,15 @@ Texture2D::Texture2D()
 
 Texture2D::~Texture2D()
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     VolatileTextureMgr::removeTexture(this);
 #endif
-    CCLOGINFO("deallocing Texture2D: %p - id=%u", this, _name);
+    AXLOGINFO("deallocing Texture2D: %p - id=%u", this, _name);
 
-    CC_SAFE_DELETE(_ninePatchInfo);
+    AX_SAFE_DELETE(_ninePatchInfo);
 
-    CC_SAFE_RELEASE(_texture);
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_programState);
 }
 
 backend::PixelFormat Texture2D::getPixelFormat() const
@@ -114,8 +114,8 @@ backend::TextureBackend* Texture2D::getBackendTexture() const
 Vec2 Texture2D::getContentSize() const
 {
     Vec2 ret;
-    ret.width  = _contentSize.width / CC_CONTENT_SCALE_FACTOR();
-    ret.height = _contentSize.height / CC_CONTENT_SCALE_FACTOR();
+    ret.width  = _contentSize.width / AX_CONTENT_SCALE_FACTOR();
+    ret.height = _contentSize.height / AX_CONTENT_SCALE_FACTOR();
 
     return ret;
 }
@@ -166,7 +166,7 @@ bool Texture2D::initWithData(const void* data,
                              int pixelsHigh,
                              bool preMultipliedAlpha)
 {
-    CCASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
+    AXASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
     // if data has no mipmaps, we will consider it has only one mipmap
     MipmapInfo mipmap;
@@ -193,7 +193,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 {
     if (image == nullptr)
     {
-        CCLOG("cocos2d: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOG("cocos2d: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 
@@ -208,7 +208,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     int maxTextureSize = conf->getMaxTextureSize();
     if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
     {
-        CCLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u", imageWidth, imageHeight,
+        AXLOG("cocos2d: WARNING: Image (%u x %u) is bigger than the supported %u x %u", imageWidth, imageHeight,
               maxTextureSize, maxTextureSize);
         return false;
     }
@@ -219,11 +219,11 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     backend::PixelFormat imagePixelFormat = image->getPixelFormat();
     size_t tempDataLen                    = image->getDataLen();
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     //! override renderFormat, since some render format is not supported by metal
     switch (renderFormat)
     {
-#    if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS || TARGET_OS_SIMULATOR)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS || TARGET_OS_SIMULATOR)
     // packed 16 bits pixels only available on iOS
     case PixelFormat::RGB565:
     case PixelFormat::RGB5A1:
@@ -244,7 +244,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     {
         if (renderFormat != image->getPixelFormat())
         {
-            CCLOG("cocos2d: WARNING: This image has more than 1 mipmaps and we will not convert the data format");
+            AXLOG("cocos2d: WARNING: This image has more than 1 mipmaps and we will not convert the data format");
         }
 
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
@@ -276,7 +276,7 @@ bool Texture2D::updateWithData(const void* data,
                                bool preMultipliedAlpha,
                                int index)
 {
-    CCASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
+    AXASSERT(dataLen > 0 && pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
     // if data has no mipmaps, we will consider it has only one mipmap
     MipmapInfo mipmap;
@@ -295,21 +295,21 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
                                   int index)
 {
     // the pixelFormat must be a certain value
-    CCASSERT(pixelFormat != PixelFormat::NONE, "the \"pixelFormat\" param must be a certain value!");
-    CCASSERT(pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
+    AXASSERT(pixelFormat != PixelFormat::NONE, "the \"pixelFormat\" param must be a certain value!");
+    AXASSERT(pixelsWide > 0 && pixelsHigh > 0, "Invalid size");
 
     if (mipmapsNum <= 0)
     {
-        CCLOG("cocos2d: WARNING: mipmap number is less than 1");
+        AXLOG("cocos2d: WARNING: mipmap number is less than 1");
         return false;
     }
 
     auto& pfd = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
     if (!pfd.bpp)
     {
-        CCLOG("cocos2d: WARNING: unsupported pixelformat: %x", (uint32_t)pixelFormat);
-#ifdef CC_USE_METAL
-        CCASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
+        AXLOG("cocos2d: WARNING: unsupported pixelformat: %x", (uint32_t)pixelFormat);
+#ifdef AX_USE_METAL
+        AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 #endif
         return false;
     }
@@ -320,11 +320,11 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         !Configuration::getInstance()->supportsETC2() && !Configuration::getInstance()->supportsS3TC() &&
         !Configuration::getInstance()->supportsASTC() && !Configuration::getInstance()->supportsATITC())
     {
-        CCLOG("cocos2d: WARNING: PVRTC/ETC images are not supported");
+        AXLOG("cocos2d: WARNING: PVRTC/ETC images are not supported");
         return false;
     }
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     VolatileTextureMgr::findVolotileTexture(this);
 #endif
 
@@ -361,15 +361,15 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         {
             auto convertedFormat = backend::PixelFormatUtils::convertDataToFormat(data, dataLen, oriPixelFormat,
                                                                                   renderFormat, &outData, &outDataLen);
-#ifdef CC_USE_METAL
-            CCASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
+#ifdef AX_USE_METAL
+            AXASSERT(convertedFormat == renderFormat, "PixelFormat convert failed!");
 #endif
             if (convertedFormat == renderFormat)
                 pixelFormat = renderFormat;
         }
 
         textureDescriptor.textureFormat = pixelFormat;
-        CCASSERT(textureDescriptor.textureFormat != backend::PixelFormat::NONE, "PixelFormat should not be NONE");
+        AXASSERT(textureDescriptor.textureFormat != backend::PixelFormat::NONE, "PixelFormat should not be NONE");
 
         if (_texture->getTextureFormat() != textureDescriptor.textureFormat)
             _texture->updateTextureDescriptor(textureDescriptor, index);
@@ -392,7 +392,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
 
         if (i > 0 && (width != height || ccNextPOT(width) != width))
         {
-            CCLOG(
+            AXLOG(
                 "cocos2d: Texture2D. WARNING. Mipmap level %u is not squared. Texture won't render correctly. width=%d "
                 "!= height=%d",
                 i, width, height);
@@ -446,7 +446,7 @@ bool Texture2D::initWithImage(Image* image, backend::PixelFormat format)
 {
     if (image == nullptr)
     {
-        CCLOG("cocos2d: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOG("cocos2d: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 
@@ -487,7 +487,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
     if (!text || !(*text))
         return false;
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     // cache the texture data
     VolatileTextureMgr::addStringTexture(this, text, textDefinition);
 #endif
@@ -515,12 +515,12 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
     }
     else
     {
-        CCASSERT(false, "Not supported alignment format!");
+        AXASSERT(false, "Not supported alignment format!");
         return false;
     }
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_ANDROID) && (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
-    CCASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
+    AXASSERT(textDefinition._stroke._strokeEnabled == false, "Currently stroke only supported on iOS and Android!");
 #endif
 
     PixelFormat pixelFormat    = g_defaultAlphaPixelFormat;
@@ -530,7 +530,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
     int imageWidth;
     int imageHeight;
     auto textDef            = textDefinition;
-    auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
     textDef._fontSize *= contentScaleFactor;
     textDef._dimensions.width *= contentScaleFactor;
     textDef._dimensions.height *= contentScaleFactor;
@@ -562,7 +562,7 @@ bool Texture2D::initWithString(const char* text, const FontDefinition& textDefin
 
 bool Texture2D::updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha)
 {
-    CC_ASSERT(_texture);
+    AX_ASSERT(_texture);
 
     _texture->updateTextureDescriptor(descriptor);
     _pixelsWide = _contentSize.width = _texture->getWidth();
@@ -680,7 +680,7 @@ bool Texture2D::isContain9PatchInfo() const
 
 const Rect& Texture2D::getSpriteFrameCapInset(axis::SpriteFrame* spriteFrame) const
 {
-    CCASSERT(_ninePatchInfo != nullptr,
+    AXASSERT(_ninePatchInfo != nullptr,
              "Can't get the sprite frame capInset when the texture contains no 9-patch info.");
     if (nullptr == spriteFrame)
     {
@@ -719,7 +719,7 @@ void Texture2D::setTexParameters(const Texture2D::TexParams& desc)
 
 void Texture2D::generateMipmap()
 {
-    CCASSERT(_pixelsWide == ccNextPOT(_pixelsWide) && _pixelsHigh == ccNextPOT(_pixelsHigh),
+    AXASSERT(_pixelsWide == ccNextPOT(_pixelsWide) && _pixelsHigh == ccNextPOT(_pixelsHigh),
              "Mipmap texture only works in POT textures");
 
     _texture->generateMipmaps();

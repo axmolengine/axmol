@@ -67,7 +67,7 @@ namespace ui
  * Get current cocos GUI module version string.
  *@return A string representation of GUI module version number
  */
-CC_GUI_DLL const char* CocosGUIVersion();
+AX_GUI_DLL const char* CocosGUIVersion();
 
 }  // namespace ui
 

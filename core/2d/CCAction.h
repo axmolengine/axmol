@@ -50,7 +50,7 @@ enum
 /**
  * @brief Base class for Action objects.
  */
-class CC_DLL Action : public Ref, public Clonable
+class AX_DLL Action : public Ref, public Clonable
 {
 public:
     /** Default tag used for all the actions. */
@@ -67,7 +67,7 @@ public:
      */
     virtual Action* clone() const
     {
-        CC_ASSERT(0);
+        AX_ASSERT(0);
         return nullptr;
     }
 
@@ -78,7 +78,7 @@ public:
      */
     virtual Action* reverse() const
     {
-        CC_ASSERT(0);
+        AX_ASSERT(0);
         return nullptr;
     }
 
@@ -180,7 +180,7 @@ protected:
     unsigned int _flags;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Action);
+    AX_DISALLOW_COPY_AND_ASSIGN(Action);
 };
 
 /** @class FiniteTimeAction
@@ -191,7 +191,7 @@ private:
  * - An action with a duration of 35.5 seconds.
  * Infinite time actions are valid.
  */
-class CC_DLL FiniteTimeAction : public Action
+class AX_DLL FiniteTimeAction : public Action
 {
 public:
     /** Get duration in seconds of the action.
@@ -210,12 +210,12 @@ public:
     //
     virtual FiniteTimeAction* reverse() const override
     {
-        CC_ASSERT(0);
+        AX_ASSERT(0);
         return nullptr;
     }
     virtual FiniteTimeAction* clone() const override
     {
-        CC_ASSERT(0);
+        AX_ASSERT(0);
         return nullptr;
     }
 
@@ -227,7 +227,7 @@ protected:
     float _duration;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FiniteTimeAction);
+    AX_DISALLOW_COPY_AND_ASSIGN(FiniteTimeAction);
 };
 
 class ActionInterval;
@@ -239,7 +239,7 @@ class RepeatForever;
  * Useful to simulate 'slow motion' or 'fast forward' effect.
  * @warning This action can't be Sequenceable because it is not an IntervalAction.
  */
-class CC_DLL Speed : public Action
+class AX_DLL Speed : public Action
 {
 public:
     /** Create the action and set the speed.
@@ -297,7 +297,7 @@ protected:
     ActionInterval* _innerAction;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Speed);
+    AX_DISALLOW_COPY_AND_ASSIGN(Speed);
 };
 
 /** @class Follow
@@ -309,7 +309,7 @@ private:
  * Instead of using Camera as a "follower", use this action instead.
  * @since v0.99.2
  */
-class CC_DLL Follow : public Action
+class AX_DLL Follow : public Action
 {
 public:
     /**
@@ -439,7 +439,7 @@ protected:
     Rect _worldRect;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Follow);
+    AX_DISALLOW_COPY_AND_ASSIGN(Follow);
 };
 
 // end of actions group

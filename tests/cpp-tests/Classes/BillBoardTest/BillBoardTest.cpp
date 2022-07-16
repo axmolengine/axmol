@@ -110,7 +110,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
 {
     // Create touch listener
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = CC_CALLBACK_2(BillBoardTest::onTouchesMoved, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(BillBoardTest::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto layer3D = Layer::create();
@@ -129,14 +129,14 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     for (unsigned int i = 0; i < 4; ++i)
     {
         Layer* layer   = Layer::create();
-        auto billboard = BillBoard::create(imgs[(unsigned int)(CCRANDOM_0_1() * 1 + 0.5f)]);
+        auto billboard = BillBoard::create(imgs[(unsigned int)(AXRANDOM_0_1() * 1 + 0.5f)]);
         billboard->setScale(0.5f);
-        billboard->setPosition3D(Vec3(0.0f, 0.0f, CCRANDOM_MINUS1_1() * 150.0f));
-        billboard->setOpacity(static_cast<uint8_t>(CCRANDOM_0_1() * 128 + 128));
+        billboard->setPosition3D(Vec3(0.0f, 0.0f, rand_minus1_1() * 150.0f));
+        billboard->setOpacity(static_cast<uint8_t>(AXRANDOM_0_1() * 128 + 128));
         _billboards.push_back(billboard);
         layer->addChild(billboard);
         _layerBillBoard->addChild(layer);
-        layer->runAction(RepeatForever::create(RotateBy::create(CCRANDOM_0_1() * 10, Vec3(0.0f, 45.0f, 0.0f))));
+        layer->runAction(RepeatForever::create(RotateBy::create(AXRANDOM_0_1() * 10, Vec3(0.0f, 45.0f, 0.0f))));
     }
 
     {
@@ -174,9 +174,9 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
 
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
     auto label1    = Label::createWithTTF(ttfConfig, "rotate+");
-    auto menuItem1 = MenuItemLabel::create(label1, CC_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, 10));
+    auto menuItem1 = MenuItemLabel::create(label1, AX_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, 10));
     auto label2    = Label::createWithTTF(ttfConfig, "rotate-");
-    auto menuItem2 = MenuItemLabel::create(label2, CC_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, -10));
+    auto menuItem2 = MenuItemLabel::create(label2, AX_CALLBACK_1(BillBoardTest::rotateCameraCallback, this, -10));
     auto menu      = Menu::create(menuItem1, menuItem2, nullptr);
     menu->setPosition(Vec2::ZERO);
     menuItem1->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 160));
@@ -185,9 +185,9 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     _layerBillBoard->setCameraMask(2);
 
     label1    = Label::createWithTTF(ttfConfig, "Point Oriented");
-    menuItem1 = MenuItemLabel::create(label1, CC_CALLBACK_1(BillBoardTest::menuCallback_orientedPoint, this));
+    menuItem1 = MenuItemLabel::create(label1, AX_CALLBACK_1(BillBoardTest::menuCallback_orientedPoint, this));
     label2    = Label::createWithTTF(ttfConfig, "Plane Oriented");
-    menuItem2 = MenuItemLabel::create(label2, CC_CALLBACK_1(BillBoardTest::menuCallback_orientedPlane, this));
+    menuItem2 = MenuItemLabel::create(label2, AX_CALLBACK_1(BillBoardTest::menuCallback_orientedPlane, this));
     menuItem1->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 100));
     menuItem2->setPosition(Vec2(s.width - 80, VisibleRect::top().y - 130));
 
@@ -196,7 +196,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
     this->addChild(menu, 10);
     menuCallback_orientedPoint(nullptr);
 
-    schedule(CC_SCHEDULE_SELECTOR(BillBoardTest::update));
+    schedule(AX_SCHEDULE_SELECTOR(BillBoardTest::update));
 }
 
 void BillBoardTest::menuCallback_orientedPoint(Ref* sender)
@@ -235,10 +235,10 @@ void BillBoardTest::addNewBillBoardWithCoords(Vec3 p)
     std::string imgs[3] = {"Images/Icon.png", "Images/r2.png"};
     for (unsigned int i = 0; i < 10; ++i)
     {
-        auto billboard = BillBoard::create(imgs[(unsigned int)(CCRANDOM_0_1() * 1 + 0.5f)]);
+        auto billboard = BillBoard::create(imgs[(unsigned int)(AXRANDOM_0_1() * 1 + 0.5f)]);
         billboard->setScale(0.5f);
         billboard->setPosition3D(Vec3(p.x, p.y, -150.0f + 30 * i));
-        billboard->setOpacity(static_cast<uint8_t>(CCRANDOM_0_1() * 128 + 128));
+        billboard->setOpacity(static_cast<uint8_t>(AXRANDOM_0_1() * 128 + 128));
 
         _layerBillBoard->addChild(billboard);
         _billboards.push_back(billboard);
@@ -266,7 +266,7 @@ void BillBoardTest::addNewAniBillBoardWithCoords(Vec3 p)
 
         auto action = Animate::create(animation);
         billboardAni->runAction(RepeatForever::create(action));
-        billboardAni->setOpacity(static_cast<uint8_t>(CCRANDOM_0_1() * 128 + 128));
+        billboardAni->setOpacity(static_cast<uint8_t>(AXRANDOM_0_1() * 128 + 128));
         _billboards.push_back(billboardAni);
     }
 }

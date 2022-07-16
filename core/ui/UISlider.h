@@ -37,7 +37,7 @@ NS_AX_BEGIN
  */
 
 class Sprite;
-struct CC_DLL ResourceData;
+struct AX_DLL ResourceData;
 
 namespace ui
 {
@@ -54,7 +54,7 @@ typedef void (Ref::*SEL_SlidPercentChangedEvent)(Ref*, SliderEventType);
 /**
  * @brief UI Slider widget.
  */
-class CC_GUI_DLL Slider : public Widget
+class AX_GUI_DLL Slider : public Widget
 {
 
     DECLARE_CLASS_GUI_INFO

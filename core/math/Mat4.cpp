@@ -131,7 +131,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     float theta = MATH_DEG_TO_RAD(fieldOfView) * 0.5f;
     if (std::abs(std::fmod(theta, MATH_PIOVER2)) < MATH_EPSILON)
     {
-        CCLOGERROR("Invalid field of view value (%f) causes attempted calculation tan(%f), which is undefined.",
+        AXLOGERROR("Invalid field of view value (%f) causes attempted calculation tan(%f), which is undefined.",
                    fieldOfView, theta);
         return;
     }
@@ -149,7 +149,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     dst->m[14] = -2.0f * zFarPlane * zNearPlane * f_n;
 
 // https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     dst->m[10] = -(zFarPlane)*f_n;
     dst->m[14] = -(zFarPlane * zNearPlane) * f_n;
 #endif
@@ -186,7 +186,7 @@ void Mat4::createOrthographicOffCenter(float left,
     dst->m[15] = 1;
 
 //// https://metashapes.com/blog/opengl-metal-projection-matrix-problem/
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     dst->m[10] = 1 / (zNearPlane - zFarPlane);
     dst->m[14] = zNearPlane / (zNearPlane - zFarPlane);
 #endif

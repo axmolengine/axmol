@@ -41,7 +41,7 @@ AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnit
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -59,9 +59,9 @@ bool AnimationFrame::initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUn
 
 AnimationFrame::~AnimationFrame()
 {
-    CCLOGINFO("deallocing AnimationFrame: %p", this);
+    AXLOGINFO("deallocing AnimationFrame: %p", this);
 
-    CC_SAFE_RELEASE(_spriteFrame);
+    AX_SAFE_RELEASE(_spriteFrame);
 }
 
 AnimationFrame* AnimationFrame::clone() const
@@ -153,7 +153,7 @@ Animation::Animation()
 
 Animation::~Animation()
 {
-    CCLOGINFO("deallocing Animation: %p", this);
+    AXLOGINFO("deallocing Animation: %p", this);
 }
 
 void Animation::addSpriteFrame(SpriteFrame* spriteFrame)

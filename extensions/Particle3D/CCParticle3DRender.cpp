@@ -45,10 +45,10 @@ Particle3DQuadRender::Particle3DQuadRender()
 
 Particle3DQuadRender::~Particle3DQuadRender()
 {
-    // CC_SAFE_RELEASE(_texture);
-    CC_SAFE_RELEASE(_programState);
-    CC_SAFE_RELEASE(_vertexBuffer);
-    CC_SAFE_RELEASE(_indexBuffer);
+    // AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 }
 
 Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
@@ -61,7 +61,7 @@ Particle3DQuadRender* Particle3DQuadRender::create(std::string_view texFile)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -82,7 +82,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
-            CCLOG("Particle3DQuadRender::render create vertex buffer failed");
+            AXLOG("Particle3DQuadRender::render create vertex buffer failed");
             return;
         }
     }
@@ -94,7 +94,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
                                                       backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
-            CCLOG("Particle3DQuadRender::render create index buffer failed");
+            AXLOG("Particle3DQuadRender::render create index buffer failed");
             return;
         }
     }
@@ -167,8 +167,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     auto afterCommand = renderer->nextCallbackCommand();
     afterCommand->init(depthZ);
 
-    beforeCommand->func = [=]() { onBeforeDraw(); };  // CC_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
-    afterCommand->func  = [=]() { onAfterDraw(); };   // CC_CALLBACK_0(Particle3DQuadRender::onAfterDraw, this);
+    beforeCommand->func = [=]() { onBeforeDraw(); };  // AX_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
+    afterCommand->func  = [=]() { onAfterDraw(); };   // AX_CALLBACK_0(Particle3DQuadRender::onAfterDraw, this);
 
     _meshCommand.setVertexBuffer(_vertexBuffer);
     _meshCommand.setIndexBuffer(_indexBuffer, MeshCommand::IndexFormat::U_SHORT);
@@ -193,7 +193,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
 
 bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
 {
-    CC_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_programState);
 
     if (!texFile.empty())
     {
@@ -309,7 +309,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
             MeshRenderer* mesh = MeshRenderer::create(_modelFile);
             if (mesh == nullptr)
             {
-                CCLOG("failed to load file %s", _modelFile.c_str());
+                AXLOG("failed to load file %s", _modelFile.c_str());
                 continue;
             }
             mesh->setTexture(_texFile);

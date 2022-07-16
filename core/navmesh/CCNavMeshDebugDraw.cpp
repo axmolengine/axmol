@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/CCNavMeshDebugDraw.h"
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 #    include <stddef.h>  // offsetof
 #    include "base/ccTypes.h"
 #    include "renderer/backend/ProgramState.h"
@@ -98,8 +98,8 @@ NavMeshDebugDraw::~NavMeshDebugDraw()
     {
         delete iter;
     }
-    CC_SAFE_RELEASE_NULL(_programState);
-    CC_SAFE_RELEASE_NULL(_vertexBuffer);
+    AX_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_vertexBuffer);
 }
 
 void NavMeshDebugDraw::depthMask(bool state)
@@ -162,8 +162,8 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
     beforeCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
     afterCommand->init(0, Mat4::IDENTITY, Node::FLAGS_RENDER_AS_3D);
 
-    beforeCommand->func  = CC_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
-    afterCommand->func  = CC_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
+    beforeCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
+    afterCommand->func  = AX_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
 
     beforeCommand->set3D(true);
     beforeCommand->setTransparent(true);
@@ -201,7 +201,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
         auto& command = _commands[idx];
 
         initCustomCommand(command);
-        command.setBeforeCallback(CC_CALLBACK_0(NavMeshDebugDraw::onBeforeEachCommand, this, iter->depthMask));
+        command.setBeforeCallback(AX_CALLBACK_0(NavMeshDebugDraw::onBeforeEachCommand, this, iter->depthMask));
 
         if (iter->type == backend::PrimitiveType::LINE)
         {
@@ -214,7 +214,7 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
         renderer->addCommand(&command);
 
-        CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, iter->end - iter->start);
+        AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, iter->end - iter->start);
         idx++;
     }
 
@@ -264,4 +264,4 @@ void NavMeshDebugDraw::clear()
 
 NS_AX_END
 
-#endif  // CC_USE_NAVMESH
+#endif  // AX_USE_NAVMESH

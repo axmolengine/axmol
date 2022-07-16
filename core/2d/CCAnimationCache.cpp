@@ -48,7 +48,7 @@ AnimationCache* AnimationCache::getInstance()
 
 void AnimationCache::destroyInstance()
 {
-    CC_SAFE_RELEASE_NULL(s_sharedAnimationCache);
+    AX_SAFE_RELEASE_NULL(s_sharedAnimationCache);
 }
 
 bool AnimationCache::init()
@@ -60,7 +60,7 @@ AnimationCache::AnimationCache() {}
 
 AnimationCache::~AnimationCache()
 {
-    CCLOGINFO("deallocing AnimationCache: %p", this);
+    AXLOGINFO("deallocing AnimationCache: %p", this);
 }
 
 void AnimationCache::addAnimation(Animation* animation, std::string_view name)
@@ -94,7 +94,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
 
         if (frameNames.empty())
         {
-            CCLOG(
+            AXLOG(
                 "cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
                 "animation cache.",
                 anim.first.c_str());
@@ -110,7 +110,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
 
             if (!spriteFrame)
             {
-                CCLOG(
+                AXLOG(
                     "cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
                     "SpriteFrameCache. This frame will not be added to the animation.",
                     anim.first.c_str(), frameName.asString().c_str());
@@ -124,7 +124,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
 
         if (frames.empty())
         {
-            CCLOG(
+            AXLOG(
                 "cocos2d: AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. "
                 "Animation is not being added to the Animation Cache.",
                 anim.first.c_str());
@@ -132,7 +132,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
         }
         else if (frames.size() != frameNameSize)
         {
-            CCLOG(
+            AXLOG(
                 "cocos2d: AnimationCache: An animation in your dictionary refers to a frame which is not in the "
                 "SpriteFrameCache. Some or all of the frames for the animation '%s' may be missing.",
                 anim.first.c_str());
@@ -160,7 +160,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
 
         if (frameArray.empty())
         {
-            CCLOG(
+            AXLOG(
                 "cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
                 "animation cache.",
                 name.c_str());
@@ -178,7 +178,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
 
             if (!spriteFrame)
             {
-                CCLOG(
+                AXLOG(
                     "cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
                     "SpriteFrameCache. This frame will not be added to the animation.",
                     name.c_str(), spriteFrameName.c_str());
@@ -210,7 +210,7 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, std
     auto anisItr = dictionary.find("animations");
     if (anisItr == dictionary.end())
     {
-        CCLOG("cocos2d: AnimationCache: No animations were found in provided dictionary.");
+        AXLOG("cocos2d: AnimationCache: No animations were found in provided dictionary.");
         return;
     }
 
@@ -240,14 +240,14 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, std
         parseVersion2(animations.asValueMap());
         break;
     default:
-        CCASSERT(false, "Invalid animation format");
+        AXASSERT(false, "Invalid animation format");
     }
 }
 
 /** Read an NSDictionary from a plist file and parse it automatically for animations */
 void AnimationCache::addAnimationsWithFile(std::string_view plist)
 {
-    CCASSERT(!plist.empty(), "Invalid texture file name");
+    AXASSERT(!plist.empty(), "Invalid texture file name");
     if (plist.empty())
     {
         log("%s error:file name is empty!", __FUNCTION__);
@@ -256,7 +256,7 @@ void AnimationCache::addAnimationsWithFile(std::string_view plist)
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(plist);
 
-    CCASSERT(!dict.empty(), "CCAnimationCache: File could not be found");
+    AXASSERT(!dict.empty(), "CCAnimationCache: File could not be found");
     if (dict.empty())
     {
         log("AnimationCache::addAnimationsWithFile error:%s not exist!", plist.data());

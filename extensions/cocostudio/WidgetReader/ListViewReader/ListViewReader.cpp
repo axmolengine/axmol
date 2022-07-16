@@ -39,7 +39,7 @@ ListViewReader* ListViewReader::getInstance()
 
 void ListViewReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceListViewReader);
+    AX_SAFE_DELETE(instanceListViewReader);
 }
 
 void ListViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)

@@ -122,15 +122,15 @@ void PULineAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime*
         // PUParticle3D *particle = iter;
         (static_cast<PUParticleSystem3D*>(_particleSystem))
             ->rotationOffset(particle->originalPosition);  // Always update
-        if (_update && CCRANDOM_0_1() > 0.5f && !_first)
+        if (_update && AXRANDOM_0_1() > 0.5f && !_first)
         {
             // Generate a random vector perpendicular on the line
             Vec3 perpendicular;
-            Vec3::cross(_end, Vec3(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1()), &perpendicular);
+            Vec3::cross(_end, Vec3(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()), &perpendicular);
             perpendicular.normalize();
 
             // Determine a random point near the line.
-            Vec3 targetPosition = particle->originalPosition + _scaledMaxDeviation * CCRANDOM_0_1() * perpendicular;
+            Vec3 targetPosition = particle->originalPosition + _scaledMaxDeviation * AXRANDOM_0_1() * perpendicular;
 
             /** Set the new position.
             @remarks

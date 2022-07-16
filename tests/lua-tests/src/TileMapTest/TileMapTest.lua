@@ -765,7 +765,7 @@ local function TMXIsoZorder()
     map:addChild(m_tamara, #(map:getChildren()))
     m_tamara:retain()
     local mapWidth = map:getMapSize().width * map:getTileSize().width
-    m_tamara:setPosition(CC_POINT_PIXELS_TO_POINTS(cc.p( mapWidth/2,0)))
+    m_tamara:setPosition(AX_POINT_PIXELS_TO_POINTS(cc.p( mapWidth/2,0)))
     m_tamara:setAnchorPoint(cc.p(0.5,0))
 
     local  move = cc.MoveBy:create(10, cc.p(300,250))
@@ -775,7 +775,7 @@ local function TMXIsoZorder()
 
     local function repositionSprite(dt)
         local p = cc.p(m_tamara:getPosition())
-        p = CC_POINT_POINTS_TO_PIXELS(p)
+        p = AX_POINT_POINTS_TO_PIXELS(p)
         local map = ret:getChildByTag(kTagTileMap)
 
         -- there are only 4 layers. (grass and 3 trees layers)
@@ -833,7 +833,7 @@ local function TMXOrthoZorder()
 
     local function repositionSprite(dt)
         local p = cc.p(m_tamara:getPosition())
-        p = CC_POINT_POINTS_TO_PIXELS(p)
+        p = AX_POINT_POINTS_TO_PIXELS(p)
         local  map = ret:getChildByTag(kTagTileMap)
 
         -- there are only 4 layers. (grass and 3 trees layers)
@@ -885,7 +885,7 @@ local function TMXIsoVertexZ()
     m_tamara = layer:getTileAt( cc.p(29,29) )
     m_tamara:retain()
 
-    local  move = cc.MoveBy:create(10, cc.pMul( cc.p(300,250), 1/CC_CONTENT_SCALE_FACTOR() ) )
+    local  move = cc.MoveBy:create(10, cc.pMul( cc.p(300,250), 1/AX_CONTENT_SCALE_FACTOR() ) )
     local  back = move:reverse()
     local  seq = cc.Sequence:create(move, back)
     m_tamara:runAction( cc.RepeatForever:create(seq) )
@@ -894,7 +894,7 @@ local function TMXIsoVertexZ()
         -- tile height is 64x32
         -- map size: 30x30
         local p = cc.p(m_tamara:getPosition())
-        p = CC_POINT_POINTS_TO_PIXELS(p)
+        p = AX_POINT_POINTS_TO_PIXELS(p)
         local newZ = -(p.y+32) /16
         m_tamara:setPositionZ( newZ )
     end
@@ -944,7 +944,7 @@ local function TMXOrthoVertexZ()
     cclog("vertexZ:"..m_tamara:getPositionZ())
     m_tamara:retain()
 
-    local  move = cc.MoveBy:create(10, cc.pMul( cc.p(400,450), 1/CC_CONTENT_SCALE_FACTOR()))
+    local  move = cc.MoveBy:create(10, cc.pMul( cc.p(400,450), 1/AX_CONTENT_SCALE_FACTOR()))
     local  back = move:reverse()
     local  seq = cc.Sequence:create(move, back)
     m_tamara:runAction( cc.RepeatForever:create(seq))
@@ -953,7 +953,7 @@ local function TMXOrthoVertexZ()
         -- tile height is 101x81
         -- map size: 12x12
         local p = cc.p(m_tamara:getPosition())
-        p = CC_POINT_POINTS_TO_PIXELS(p)
+        p = AX_POINT_POINTS_TO_PIXELS(p)
         m_tamara:setPositionZ( -( (p.y+81) /81) )
     end
 

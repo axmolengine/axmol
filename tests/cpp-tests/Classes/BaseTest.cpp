@@ -113,7 +113,7 @@ protected:
     TestCustomTableView()
     {
         auto mouseListener           = EventListenerMouse::create();
-        mouseListener->onMouseScroll = CC_CALLBACK_1(TestCustomTableView::onMouseScroll, this);
+        mouseListener->onMouseScroll = AX_CALLBACK_1(TestCustomTableView::onMouseScroll, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
     }
 };
@@ -133,7 +133,7 @@ void TestList::deatchTableView()
 {
     if (_tableView)
         _tableView->setDataSource(nullptr);
-    CC_SAFE_RELEASE_NULL(_tableView);
+    AX_SAFE_RELEASE_NULL(_tableView);
 }
 
 void TestList::addTest(std::string_view testName, std::function<TestBase*()> callback)
@@ -156,7 +156,7 @@ void TestList::runThisTest()
      */
 
     GLViewImpl* glview = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
     Size resourceSize(960, 640);
     glview->setWindowed(resourceSize.width, resourceSize.height);
 #endif
@@ -421,14 +421,14 @@ bool TestCase::init()
         addChild(_subtitleLabel, 9999);
         _subtitleLabel->setPosition(VisibleRect::center().x, VisibleRect::top().y - 60);
 
-        _priorTestItem = MenuItemImage::create(s_pathB1, s_pathB2, CC_CALLBACK_1(TestCase::priorTestCallback, this));
+        _priorTestItem = MenuItemImage::create(s_pathB1, s_pathB2, AX_CALLBACK_1(TestCase::priorTestCallback, this));
         _restartTestItem =
-            MenuItemImage::create(s_pathR1, s_pathR2, CC_CALLBACK_1(TestCase::restartTestCallback, this));
-        _nextTestItem = MenuItemImage::create(s_pathF1, s_pathF2, CC_CALLBACK_1(TestCase::nextTestCallback, this));
+            MenuItemImage::create(s_pathR1, s_pathR2, AX_CALLBACK_1(TestCase::restartTestCallback, this));
+        _nextTestItem = MenuItemImage::create(s_pathF1, s_pathF2, AX_CALLBACK_1(TestCase::nextTestCallback, this));
 
         ttfConfig.fontSize = 20;
         auto backLabel     = Label::createWithTTF(ttfConfig, "Back");
-        auto backItem      = MenuItemLabel::create(backLabel, CC_CALLBACK_1(TestCase::onBackCallback, this));
+        auto backItem      = MenuItemLabel::create(backLabel, AX_CALLBACK_1(TestCase::onBackCallback, this));
 
         auto menu = Menu::create(_priorTestItem, _restartTestItem, _nextTestItem, backItem, nullptr);
 

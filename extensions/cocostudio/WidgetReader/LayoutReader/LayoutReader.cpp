@@ -62,7 +62,7 @@ LayoutReader* LayoutReader::getInstance()
 
 void LayoutReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceLayoutReader);
+    AX_SAFE_DELETE(instanceLayoutReader);
 }
 
 void LayoutReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
@@ -88,9 +88,9 @@ void LayoutReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* coco
         std::string value = stChildArray[i].GetValue(cocoLoader);
 
         // read all basic properties of widget
-        CC_BASIC_PROPERTY_BINARY_READER
+        AX_BASIC_PROPERTY_BINARY_READER
         // read all color related properties of widget
-        CC_COLOR_PROPERTY_BINARY_READER
+        AX_COLOR_PROPERTY_BINARY_READER
 
         else if (key == P_AdaptScreen) { _isAdaptScreen = valueToBool(value); }
         else if (key == P_ClipAble) { panel->setClippingEnabled(valueToBool(value)); }

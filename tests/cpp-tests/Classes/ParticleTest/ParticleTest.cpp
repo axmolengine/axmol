@@ -120,7 +120,7 @@ void DemoPause::onEnter()
     _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_fire));
 
     setEmitterPosition();
-    schedule(CC_SCHEDULE_SELECTOR(DemoPause::pauseEmitter), 2.0f);
+    schedule(AX_SCHEDULE_SELECTOR(DemoPause::pauseEmitter), 2.0f);
 }
 void DemoPause::pauseEmitter(float time)
 {
@@ -2072,7 +2072,7 @@ void Issue870::onEnter()
     _emitter->retain();
 
     _index = 0;
-    schedule(CC_SCHEDULE_SELECTOR(Issue870::updateQuads), 2.0f);
+    schedule(AX_SCHEDULE_SELECTOR(Issue870::updateQuads), 2.0f);
 }
 
 void Issue870::updateQuads(float dt)
@@ -2220,7 +2220,7 @@ ParticleTests::ParticleTests()
 
 ParticleDemo::~ParticleDemo()
 {
-    CC_SAFE_RELEASE(_emitter);
+    AX_SAFE_RELEASE(_emitter);
 }
 
 void ParticleDemo::onEnter()
@@ -2235,15 +2235,15 @@ void ParticleDemo::onEnter()
     _emitter = nullptr;
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(ParticleDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(ParticleDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(ParticleDemo::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(ParticleDemo::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(ParticleDemo::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(ParticleDemo::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
 
     auto item4 = MenuItemToggle::createWithCallback(
-        CC_CALLBACK_1(ParticleDemo::toggleCallback, this), MenuItemFont::create("Free Movement"),
+        AX_CALLBACK_1(ParticleDemo::toggleCallback, this), MenuItemFont::create("Free Movement"),
         MenuItemFont::create("Relative Movement"), MenuItemFont::create("Grouped Movement"), nullptr);
 
     auto menu = Menu::create(item4, nullptr);
@@ -2360,7 +2360,7 @@ void ParticleBatchHybrid::onEnter()
 
     addChild(batch, 10);
 
-    schedule(CC_SCHEDULE_SELECTOR(ParticleBatchHybrid::switchRender), 2.0f);
+    schedule(AX_SCHEDULE_SELECTOR(ParticleBatchHybrid::switchRender), 2.0f);
 
     auto node = Node::create();
     addChild(node);
@@ -2477,7 +2477,7 @@ void ParticleReorder::onEnter()
         addChild(parent, 10, 1000 + i);
     }
 
-    schedule(CC_SCHEDULE_SELECTOR(ParticleReorder::reorderParticles), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(ParticleReorder::reorderParticles), 1.0f);
 }
 
 std::string ParticleReorder::title() const
@@ -2780,7 +2780,7 @@ void AddAndDeleteParticleSystems::onEnter()
         _batchNode->addChild(particleSystem, randZ, -1);
     }
 
-    schedule(CC_SCHEDULE_SELECTOR(AddAndDeleteParticleSystems::removeSystem), 0.5f);
+    schedule(AX_SCHEDULE_SELECTOR(AddAndDeleteParticleSystems::removeSystem), 0.5f);
     _emitter = nullptr;
 }
 
@@ -2789,7 +2789,7 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
     ssize_t nChildrenCount = _batchNode->getChildren().size();
     if (nChildrenCount > 0)
     {
-        CCLOG("remove random system");
+        AXLOG("remove random system");
         unsigned int uRand = rand() % (nChildrenCount - 1);
         _batchNode->removeChild(_batchNode->getChildren().at(uRand), true);
 
@@ -2801,7 +2801,7 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
 
         particleSystem->setPosition(Vec2(rand() % 300, rand() % 400));
 
-        CCLOG("add a new system");
+        AXLOG("add a new system");
         unsigned int randZ = rand() % 100;
         _batchNode->addChild(particleSystem, randZ, -1);
     }
@@ -2928,7 +2928,7 @@ void ReorderParticleSystems::onEnter()
         //[pBNode addChild:particleSystem z:10 tag:0);
     }
 
-    schedule(CC_SCHEDULE_SELECTOR(ReorderParticleSystems::reorderSystem), 2.0f);
+    schedule(AX_SCHEDULE_SELECTOR(ReorderParticleSystems::reorderSystem), 2.0f);
     _emitter = nullptr;
 }
 
@@ -3010,7 +3010,7 @@ void PremultipliedAlphaTest::onEnter()
     // Cocos2d "normal" blend func for premul causes alpha to be ignored (oversaturates colors)
     _emitter->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
 
-    CCASSERT(_emitter->isOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless");
+    AXASSERT(_emitter->isOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless");
 
     // Toggle next line to see old behavior
     //	this->emitter.opacityModifyRGB = NO;
@@ -3023,7 +3023,7 @@ void PremultipliedAlphaTest::onEnter()
     this->addChild(_emitter, 10);
     _hasEmitter = true;
 
-    schedule(CC_SCHEDULE_SELECTOR(PremultipliedAlphaTest::readdParticle), 1.0f);
+    schedule(AX_SCHEDULE_SELECTOR(PremultipliedAlphaTest::readdParticle), 1.0f);
 }
 
 // PremultipliedAlphaTest2
@@ -3093,7 +3093,7 @@ void ParticleVisibleTest::onEnter()
 
     _emitter->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
 
-    schedule(CC_SCHEDULE_SELECTOR(ParticleVisibleTest::callback), 1);
+    schedule(AX_SCHEDULE_SELECTOR(ParticleVisibleTest::callback), 1);
 
     setEmitterPosition();
 }

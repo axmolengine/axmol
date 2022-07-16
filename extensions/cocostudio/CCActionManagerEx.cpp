@@ -46,7 +46,7 @@ void ActionManagerEx::destroyInstance()
     if (sharedActionManager != nullptr)
     {
         sharedActionManager->releaseActions();
-        CC_SAFE_DELETE(sharedActionManager);
+        AX_SAFE_DELETE(sharedActionManager);
     }
 }
 

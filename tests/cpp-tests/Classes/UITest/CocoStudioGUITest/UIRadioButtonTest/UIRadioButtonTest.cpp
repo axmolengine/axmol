@@ -69,7 +69,7 @@ bool UIRadioButtonTest::init()
         Button* addButton = Button::create("cocosui/backtotopnormal.png", "cocosui/backtotoppressed.png");
         addButton->setTitleText("Add");
         addButton->setPosition(Vec2(widgetSize.width / 2.0f - 100, widgetSize.height / 2.0f - 65));
-        addButton->addClickEventListener(CC_CALLBACK_1(UIRadioButtonTest::addRadioButton, this));
+        addButton->addClickEventListener(AX_CALLBACK_1(UIRadioButtonTest::addRadioButton, this));
         addButton->setScale(0.7f);
         _uiLayer->addChild(addButton);
 
@@ -77,7 +77,7 @@ bool UIRadioButtonTest::init()
         Button* deleteButton = Button::create("cocosui/backtotopnormal.png", "cocosui/backtotoppressed.png");
         deleteButton->setTitleText("Delete");
         deleteButton->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - 65));
-        deleteButton->addClickEventListener(CC_CALLBACK_1(UIRadioButtonTest::deleteRadioButton, this));
+        deleteButton->addClickEventListener(AX_CALLBACK_1(UIRadioButtonTest::deleteRadioButton, this));
         deleteButton->setScale(0.7f);
         _uiLayer->addChild(deleteButton);
 
@@ -181,7 +181,7 @@ bool UIRadioButtonTwoGroupsTest::init()
             if (type == 0)
             {
                 _radioButtonGroups[type]->addEventListener(
-                    CC_CALLBACK_3(UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1, this));
+                    AX_CALLBACK_3(UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1, this));
                 normalImage   = "cocosui/radio_button_off.png";
                 selectedImage = "cocosui/radio_button_on.png";
                 posYAdjust    = 35;
@@ -189,7 +189,7 @@ bool UIRadioButtonTwoGroupsTest::init()
             else
             {
                 _radioButtonGroups[type]->addEventListener(
-                    CC_CALLBACK_3(UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2, this));
+                    AX_CALLBACK_3(UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2, this));
                 normalImage   = "cocosui/UIEditorTest/2.1/Button/button_common_box03_003 copy 221.png";
                 selectedImage = "cocosui/UIEditorTest/2.1/Button/button_common_box03_001.png";
                 posYAdjust    = -15;
@@ -210,7 +210,7 @@ bool UIRadioButtonTwoGroupsTest::init()
                 radioButton->setPosition(Vec2(posX, posY));
 
                 radioButton->addEventListener(
-                    CC_CALLBACK_2(UIRadioButtonTwoGroupsTest::onChangedRadioButtonSelect, this));
+                    AX_CALLBACK_2(UIRadioButtonTwoGroupsTest::onChangedRadioButtonSelect, this));
                 radioButton->setTag(i);
                 _uiLayer->addChild(radioButton);
                 _radioButtonGroups[type]->addRadioButton(radioButton);
@@ -220,7 +220,7 @@ bool UIRadioButtonTwoGroupsTest::init()
         Button* clearButton = Button::create("cocosui/backtotopnormal.png", "cocosui/backtotoppressed.png");
         clearButton->setTitleText("Clear");
         clearButton->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - 65));
-        clearButton->addClickEventListener(CC_CALLBACK_1(UIRadioButtonTwoGroupsTest::clearRadioButtonGroup, this));
+        clearButton->addClickEventListener(AX_CALLBACK_1(UIRadioButtonTwoGroupsTest::clearRadioButtonGroup, this));
         clearButton->setScale(0.8f);
         _uiLayer->addChild(clearButton);
 
@@ -238,7 +238,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioBu
                                                             int index,
                                                             axis::ui::RadioButtonGroup::EventType type)
 {
-    CCASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
+    AXASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup1 : %d", index);
     _groupEventLabel->setString(text);
     addLog(text);
@@ -248,7 +248,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* radioBu
                                                             int index,
                                                             axis::ui::RadioButtonGroup::EventType type)
 {
-    CCASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
+    AXASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup2 : %d", index);
     _groupEventLabel->setString(text);
     addLog(text);

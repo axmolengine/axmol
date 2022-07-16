@@ -43,7 +43,7 @@ NS_AX_BEGIN
 /**
  * @brief static animation data, shared
  */
-class CC_DLL Animation3D : public Ref
+class AX_DLL Animation3D : public Ref
 {
     friend class Bundle3D;
 

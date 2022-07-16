@@ -47,7 +47,7 @@ ActionObject::ActionObject()
     , _fTotalTime(0.0f)
 {
     _pScheduler = Director::getInstance()->getScheduler();
-    CC_SAFE_RETAIN(_pScheduler);
+    AX_SAFE_RETAIN(_pScheduler);
 }
 
 ActionObject::~ActionObject()
@@ -55,8 +55,8 @@ ActionObject::~ActionObject()
     _loop = false;
     _pScheduler->unscheduleAllForTarget(this);
     _actionNodeList.clear();
-    CC_SAFE_RELEASE(_pScheduler);
-    CC_SAFE_RELEASE(_CallBack);
+    AX_SAFE_RELEASE(_pScheduler);
+    AX_SAFE_RELEASE(_CallBack);
 }
 
 void ActionObject::setName(const char* name)
@@ -233,12 +233,12 @@ void ActionObject::play()
     }
     if (_loop)
     {
-        _pScheduler->schedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this, 0.0f, CC_REPEAT_FOREVER,
+        _pScheduler->schedule(AX_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this, 0.0f, AX_REPEAT_FOREVER,
                               0.0f, false);
     }
     else
     {
-        _pScheduler->schedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this, 0.0f, false);
+        _pScheduler->schedule(AX_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this, 0.0f, false);
     }
 }
 
@@ -246,7 +246,7 @@ void ActionObject::play(CallFunc* func)
 {
     this->play();
     this->_CallBack = func;
-    CC_SAFE_RETAIN(_CallBack);
+    AX_SAFE_RETAIN(_CallBack);
 }
 void ActionObject::pause()
 {
@@ -261,7 +261,7 @@ void ActionObject::stop()
         e->stopAction();
     }
     _bPlaying = false;
-    _pScheduler->unschedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
+    _pScheduler->unschedule(AX_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
     _bPause = false;
 }
 
@@ -300,7 +300,7 @@ void ActionObject::simulationActionUpdate(float /*dt*/)
         else
         {
             _bPlaying = false;
-            _pScheduler->unschedule(CC_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
+            _pScheduler->unschedule(AX_SCHEDULE_SELECTOR(ActionObject::simulationActionUpdate), this);
         }
     }
 }

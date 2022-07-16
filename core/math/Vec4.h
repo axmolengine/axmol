@@ -41,7 +41,7 @@ class Mat4;
 /**
  * Defines 4-element floating point vector.
  */
-class CC_DLL Vec4
+class AX_DLL Vec4
 {
 public:
 #ifdef __SSE__

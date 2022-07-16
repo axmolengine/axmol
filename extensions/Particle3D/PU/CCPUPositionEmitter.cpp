@@ -104,7 +104,7 @@ void PUPositionEmitter::initParticlePosition(PUParticle3D* particle)
      */
     if (_randomized)
     {
-        size_t i = (size_t)(CCRANDOM_0_1() * (_positionList.size() - 1));
+        size_t i = (size_t)(AXRANDOM_0_1() * (_positionList.size() - 1));
         particle->position =
             getDerivedPosition() + Vec3(_emitterScale.x * _positionList[i].x, _emitterScale.y * _positionList[i].y,
                                         _emitterScale.z * _positionList[i].z);

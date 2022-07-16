@@ -58,12 +58,12 @@ public:
 	static SkeletonAnimation* createWithBinaryFile (const std::string& skeletonBinaryFile, const std::string& atlasFile, float scale = 1);
 
 	// Use createWithJsonFile instead
-	CC_DEPRECATED_ATTRIBUTE static SkeletonAnimation* createWithFile (const std::string& skeletonJsonFile, Atlas* atlas, float scale = 1)
+	AX_DEPRECATED_ATTRIBUTE static SkeletonAnimation* createWithFile (const std::string& skeletonJsonFile, Atlas* atlas, float scale = 1)
 	{
 		return SkeletonAnimation::createWithJsonFile(skeletonJsonFile, atlas, scale);
 	}
 	// Use createWithJsonFile instead
-	CC_DEPRECATED_ATTRIBUTE static SkeletonAnimation* createWithFile (const std::string& skeletonJsonFile, const std::string& atlasFile, float scale = 1)
+	AX_DEPRECATED_ATTRIBUTE static SkeletonAnimation* createWithFile (const std::string& skeletonJsonFile, const std::string& atlasFile, float scale = 1)
 	{
 		return SkeletonAnimation::createWithJsonFile(skeletonJsonFile, atlasFile, scale);
 	}

@@ -152,7 +152,7 @@ LuaMinXmlHttpRequest::~LuaMinXmlHttpRequest()
 {
     _httpHeader.clear();
     _requestHeader.clear();
-    CC_SAFE_RELEASE_NULL(_httpRequest);
+    AX_SAFE_RELEASE_NULL(_httpRequest);
 }
 
 /**
@@ -212,14 +212,14 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
             if (0 != strlen(response->getHttpRequest()->getTag()))
             {
-                CCLOG("%s completed", response->getHttpRequest()->getTag());
+                AXLOG("%s completed", response->getHttpRequest()->getTag());
             }
 
             int statusCode = response->getResponseCode();
 
             if (!response->isSucceed())
             {
-                CCLOG("Response failed, statusCode: %d", statusCode);
+                AXLOG("Response failed, statusCode: %d", statusCode);
                 if (statusCode == 0)
                 {
                     _errorFlag = true;
@@ -232,7 +232,7 @@ void LuaMinXmlHttpRequest::_sendRequest()
 
                 if (0 != handler)
                 {
-                    CCLOG("come in handler, handler is %d", handler);
+                    AXLOG("come in handler, handler is %d", handler);
                     axis::CommonScriptData data(handler, "");
                     axis::ScriptEvent event(axis::ScriptEventType::kCommonEvent, (void*)&data);
                     axis::ScriptEngineManager::sendEventToLua(event);
@@ -714,7 +714,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
 
         pStack->pushLuaValueArray(array);
 
-        CC_SAFE_DELETE_ARRAY(tmpData);
+        AX_SAFE_DELETE_ARRAY(tmpData);
         return 1;
     }
     else

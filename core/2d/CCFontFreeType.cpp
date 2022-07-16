@@ -164,7 +164,7 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */, float outlin
 {
     if (outline > 0.0f)
     {
-        _outlineSize = outline * CC_CONTENT_SCALE_FACTOR();
+        _outlineSize = outline * AX_CONTENT_SCALE_FACTOR();
         FT_Stroker_New(FontFreeType::getFTLibrary(), &_stroker);
         FT_Stroker_Set(_stroker,
             (int)(_outlineSize * 64),
@@ -255,7 +255,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 
         // set the requested font size
         int dpi            = 72;
-        int fontSizePoints = (int)(64.f * fontSize * CC_CONTENT_SCALE_FACTOR());
+        int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
         if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
             break;
 
@@ -388,7 +388,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 
         // @remark: glyphIndex=0 means character is missing on current font face
         auto glyphIndex = FT_Get_Char_Index(_fontFace, static_cast<FT_ULong>(charCode));
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
+#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
         if (glyphIndex == 0)
         {
             char32_t ntcs[2] = {charCode, (char32_t)0};

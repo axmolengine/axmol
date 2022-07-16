@@ -102,7 +102,7 @@ GUIReader* GUIReader::getInstance()
 
 void GUIReader::destroyInstance()
 {
-    CC_SAFE_DELETE(sharedReader);
+    AX_SAFE_DELETE(sharedReader);
 }
 
 int GUIReader::getVersionInteger(const char* str)
@@ -134,7 +134,7 @@ int GUIReader::getVersionInteger(const char* str)
     int is  = atoi(s.c_str());
 
     int iVersion = it * 1000 + ih * 100 + ite * 10 + is;
-    //    CCLOG("iversion %d",iVersion);
+    //    AXLOG("iversion %d",iVersion);
     return iVersion;
     /************************/
 }
@@ -214,7 +214,7 @@ Widget* GUIReader::widgetFromJsonFile(const char* fileName)
     jsonDict.Parse<0>(contentStr.c_str());
     if (jsonDict.HasParseError())
     {
-        CCLOG("GetParseError %d\n", jsonDict.GetParseError());
+        AXLOG("GetParseError %d\n", jsonDict.GetParseError());
     }
     Widget* widget                  = nullptr;
     const char* fileVersion         = DICTOOL->getStringValue_json(jsonDict, "version");
@@ -239,7 +239,7 @@ Widget* GUIReader::widgetFromJsonFile(const char* fileName)
         widget  = pReader->createWidget(jsonDict, this->m_strFilePath.c_str(), fileName);
     }
 
-    CC_SAFE_DELETE(pReader);
+    AX_SAFE_DELETE(pReader);
     return widget;
 }
 
@@ -402,7 +402,7 @@ Widget* GUIReader::widgetFromBinaryFile(const char* fileName)
                     int versionInteger = this->getVersionInteger(fileVersion);
                     if (versionInteger < 250)
                     {
-                        CCASSERT(
+                        AXASSERT(
                             0,
                             "You current studio doesn't support binary format, please upgrade to the latest version!");
                         pReader = new WidgetPropertiesReader0250();
@@ -420,7 +420,7 @@ Widget* GUIReader::widgetFromBinaryFile(const char* fileName)
                     widget  = pReader->createWidgetFromBinary(&tCocoLoader, tpRootCocoNode, fileName);
                 }
 
-                CC_SAFE_DELETE(pReader);
+                AX_SAFE_DELETE(pReader);
             }
         }
     }
@@ -510,7 +510,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     float fileDesignHeight = DICTOOL->getFloatValue_json(data, "designHeight");
     if (fileDesignWidth <= 0 || fileDesignHeight <= 0)
     {
-        CCLOGERROR("Read design size error!\n");
+        AXLOGERROR("Read design size error!\n");
         Size winSize = Director::getInstance()->getWinSize();
         GUIReader::getInstance()->storeFileDesignSize(fileName, winSize);
     }
@@ -534,7 +534,7 @@ Widget* WidgetPropertiesReader0250::createWidget(const rapidjson::Value& data,
     /* *********temp********* */
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
-    //    CCLOG("file name == [%s]",fileName);
+    //    AXLOG("file name == [%s]",fileName);
     Ref* rootWidget = (Ref*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
@@ -965,8 +965,8 @@ void WidgetPropertiesReader0250::setPropsForLabelAtlasFromJsonDictionary(Widget*
                                 DICTOOL->getIntValue_json(options, "itemHeight"),
                                 DICTOOL->getStringValue_json(options, "startCharMap"));
         labelAtlas->setProperty(DICTOOL->getStringValue_json(options, "stringValue"), cmf_tp,
-                                DICTOOL->getIntValue_json(options, "itemWidth") / CC_CONTENT_SCALE_FACTOR(),
-                                DICTOOL->getIntValue_json(options, "itemHeight") / CC_CONTENT_SCALE_FACTOR(),
+                                DICTOOL->getIntValue_json(options, "itemWidth") / AX_CONTENT_SCALE_FACTOR(),
+                                DICTOOL->getIntValue_json(options, "itemHeight") / AX_CONTENT_SCALE_FACTOR(),
                                 DICTOOL->getStringValue_json(options, "startCharMap"));
     }
     setColorPropsForWidgetFromJsonDictionary(widget, options);
@@ -1287,7 +1287,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     float fileDesignHeight = DICTOOL->getFloatValue_json(data, "designHeight");
     if (fileDesignWidth <= 0 || fileDesignHeight <= 0)
     {
-        CCLOGERROR("Read design size error!\n");
+        AXLOGERROR("Read design size error!\n");
         Size winSize = Director::getInstance()->getWinSize();
         GUIReader::getInstance()->storeFileDesignSize(fileName, winSize);
     }
@@ -1311,7 +1311,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data,
     /* *********temp********* */
     //    ActionManager::getInstance()->releaseActions();
     /* ********************** */
-    //    CCLOG("file name == [%s]",fileName);
+    //    AXLOG("file name == [%s]",fileName);
     Ref* rootWidget = (Ref*)widget;
     ActionManagerEx::getInstance()->initWithDictionary(fileName, actions, rootWidget);
     return widget;
@@ -1356,7 +1356,7 @@ axis::ui::Widget* WidgetPropertiesReader0300::createWidgetFromBinary(CocoLoader*
 
             if (fileDesignWidth <= 0 || fileDesignHeight <= 0)
             {
-                CCLOGERROR("Read design size error!\n");
+                AXLOGERROR("Read design size error!\n");
                 Size winSize = Director::getInstance()->getWinSize();
                 GUIReader::getInstance()->storeFileDesignSize(fileName, winSize);
             }
@@ -1421,7 +1421,7 @@ Widget* WidgetPropertiesReader0300::widgetFromBinary(CocoLoader* cocoLoader, stE
             }
             else
             {
-                CCLOG("Warning!!! classname not found!");
+                AXLOG("Warning!!! classname not found!");
             }
         }
         else if (key == "children")
@@ -1470,13 +1470,13 @@ Widget* WidgetPropertiesReader0300::widgetFromBinary(CocoLoader* cocoLoader, stE
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                CCLOG("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOG("GetParseError %d\n", customJsonDict.GetParseError());
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
         else
         {
-            CCLOG("Widget or WidgetReader doesn't exists!!!  Please check your csb file.");
+            AXLOG("Widget or WidgetReader doesn't exists!!!  Please check your csb file.");
         }
     }
 
@@ -1559,7 +1559,7 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
     const char* classname             = DICTOOL->getStringValue_json(data, "classname");
     const rapidjson::Value& uiOptions = DICTOOL->getSubDictionary_json(data, "options");
     Widget* widget                    = this->createGUI(classname);
-    //    CCLOG("classname = %s", classname);
+    //    AXLOG("classname = %s", classname);
     std::string readerName = this->getWidgetReaderClassName(classname);
 
     WidgetReaderProtocol* reader = this->createWidgetReaderProtocol(readerName);
@@ -1585,13 +1585,13 @@ Widget* WidgetPropertiesReader0300::widgetFromJsonDictionary(const rapidjson::Va
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                CCLOG("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOG("GetParseError %d\n", customJsonDict.GetParseError());
             }
             setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
         else
         {
-            CCLOG("Widget or WidgetReader doesn't exists!!!  Please check your json file.");
+            AXLOG("Widget or WidgetReader doesn't exists!!!  Please check your json file.");
         }
     }
 

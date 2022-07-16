@@ -49,10 +49,10 @@ enum
 
 SceneTestLayer1::SceneTestLayer1()
 {
-    auto item1 = MenuItemFont::create("Test pushScene", CC_CALLBACK_1(SceneTestLayer1::onPushScene, this));
+    auto item1 = MenuItemFont::create("Test pushScene", AX_CALLBACK_1(SceneTestLayer1::onPushScene, this));
     auto item2 =
-        MenuItemFont::create("Test pushScene w/transition", CC_CALLBACK_1(SceneTestLayer1::onPushSceneTran, this));
-    auto item3 = MenuItemFont::create("Quit", CC_CALLBACK_1(SceneTestLayer1::onQuit, this));
+        MenuItemFont::create("Test pushScene w/transition", AX_CALLBACK_1(SceneTestLayer1::onPushSceneTran, this));
+    auto item3 = MenuItemFont::create("Quit", AX_CALLBACK_1(SceneTestLayer1::onQuit, this));
 
     auto menu = Menu::create(item1, item2, item3, nullptr);
     menu->alignItemsVertically();
@@ -67,23 +67,23 @@ SceneTestLayer1::SceneTestLayer1()
     auto repeat = RepeatForever::create(rotate);
     sprite->runAction(repeat);
 
-    schedule(CC_SCHEDULE_SELECTOR(SceneTestLayer1::testDealloc));
+    schedule(AX_SCHEDULE_SELECTOR(SceneTestLayer1::testDealloc));
 }
 
 void SceneTestLayer1::testDealloc(float dt)
 {
-    // CCLOG("SceneTestLayer1:testDealloc");
+    // AXLOG("SceneTestLayer1:testDealloc");
 }
 
 void SceneTestLayer1::onEnter()
 {
-    CCLOG("SceneTestLayer1#onEnter");
+    AXLOG("SceneTestLayer1#onEnter");
     Layer::onEnter();
 }
 
 void SceneTestLayer1::onEnterTransitionDidFinish()
 {
-    CCLOG("SceneTestLayer1#onEnterTransitionDidFinish");
+    AXLOG("SceneTestLayer1#onEnterTransitionDidFinish");
     Layer::onEnterTransitionDidFinish();
 }
 
@@ -125,10 +125,10 @@ SceneTestLayer2::SceneTestLayer2()
 {
     _timeCounter = 0;
 
-    auto item1 = MenuItemFont::create("replaceScene", CC_CALLBACK_1(SceneTestLayer2::onReplaceScene, this));
+    auto item1 = MenuItemFont::create("replaceScene", AX_CALLBACK_1(SceneTestLayer2::onReplaceScene, this));
     auto item2 =
-        MenuItemFont::create("replaceScene w/transition", CC_CALLBACK_1(SceneTestLayer2::onReplaceSceneTran, this));
-    auto item3 = MenuItemFont::create("Go Back", CC_CALLBACK_1(SceneTestLayer2::onGoBack, this));
+        MenuItemFont::create("replaceScene w/transition", AX_CALLBACK_1(SceneTestLayer2::onReplaceSceneTran, this));
+    auto item3 = MenuItemFont::create("Go Back", AX_CALLBACK_1(SceneTestLayer2::onGoBack, this));
 
     auto menu = Menu::create(item1, item2, item3, nullptr);
     menu->alignItemsVertically();
@@ -143,7 +143,7 @@ SceneTestLayer2::SceneTestLayer2()
     auto repeat = RepeatForever::create(rotate);
     sprite->runAction(repeat);
 
-    schedule(CC_SCHEDULE_SELECTOR(SceneTestLayer2::testDealloc));
+    schedule(AX_SCHEDULE_SELECTOR(SceneTestLayer2::testDealloc));
 }
 
 void SceneTestLayer2::testDealloc(float dt)
@@ -185,18 +185,18 @@ bool SceneTestLayer3::init()
         auto s = Director::getInstance()->getWinSize();
 
         auto item0 =
-            MenuItemFont::create("Touch to pushScene (self)", CC_CALLBACK_1(SceneTestLayer3::item0Clicked, this));
-        auto item1 = MenuItemFont::create("Touch to popScene", CC_CALLBACK_1(SceneTestLayer3::item1Clicked, this));
+            MenuItemFont::create("Touch to pushScene (self)", AX_CALLBACK_1(SceneTestLayer3::item0Clicked, this));
+        auto item1 = MenuItemFont::create("Touch to popScene", AX_CALLBACK_1(SceneTestLayer3::item1Clicked, this));
         auto item2 =
-            MenuItemFont::create("Touch to popToRootScene", CC_CALLBACK_1(SceneTestLayer3::item2Clicked, this));
+            MenuItemFont::create("Touch to popToRootScene", AX_CALLBACK_1(SceneTestLayer3::item2Clicked, this));
         auto item3 = MenuItemFont::create("Touch to popToSceneStackLevel(2)",
-                                          CC_CALLBACK_1(SceneTestLayer3::item3Clicked, this));
+                                          AX_CALLBACK_1(SceneTestLayer3::item3Clicked, this));
 
         auto menu = Menu::create(item0, item1, item2, item3, nullptr);
         this->addChild(menu);
         menu->alignItemsVertically();
 
-        this->schedule(CC_SCHEDULE_SELECTOR(SceneTestLayer3::testDealloc));
+        this->schedule(AX_SCHEDULE_SELECTOR(SceneTestLayer3::testDealloc));
 
         auto sprite = Sprite::create(s_pathGrossini);
         addChild(sprite);

@@ -143,7 +143,7 @@ public:
         SIZE tRet = {0};
         do
         {
-            CC_BREAK_IF(!pszText || nLen <= 0);
+            AX_BREAK_IF(!pszText || nLen <= 0);
 
             RECT rc         = {0, 0, 0, 0};
             DWORD dwCalcFmt = DT_CALCRECT;
@@ -232,7 +232,7 @@ public:
         wchar_t* fixedText  = nullptr;
         do
         {
-            CC_BREAK_IF(!pszText);
+            AX_BREAK_IF(!pszText);
 
             DWORD dwFmt = DT_WORDBREAK;
             if (!enableWrap)
@@ -259,7 +259,7 @@ public:
             // utf-8 to utf-16
             int nBufLen = nLen + 1;
             pwszBuffer  = new wchar_t[nBufLen];
-            CC_BREAK_IF(!pwszBuffer);
+            AX_BREAK_IF(!pwszBuffer);
 
             memset(pwszBuffer, 0, sizeof(wchar_t) * nBufLen);
             nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
@@ -353,7 +353,7 @@ public:
                 }
             }
 
-            CC_BREAK_IF(!prepareBitmap(tSize.cx, tSize.cy));
+            AX_BREAK_IF(!prepareBitmap(tSize.cx, tSize.cy));
 
             // draw text
             HGDIOBJ hOldFont = SelectObject(_DC, _font);
@@ -375,14 +375,14 @@ public:
             SelectObject(_DC, hOldBmp);
             SelectObject(_DC, hOldFont);
         } while (0);
-        CC_SAFE_DELETE_ARRAY(pwszBuffer);
+        AX_SAFE_DELETE_ARRAY(pwszBuffer);
         delete[] fixedText;
 
         return nRet;
     }
 
-    CC_SYNTHESIZE_READONLY(HDC, _DC, DC);
-    CC_SYNTHESIZE_READONLY(HBITMAP, _bmp, Bitmap);
+    AX_SYNTHESIZE_READONLY(HDC, _DC, DC);
+    AX_SYNTHESIZE_READONLY(HBITMAP, _bmp, Bitmap);
 
 private:
     friend class Image;
@@ -426,12 +426,12 @@ Data Device::getTextureDataForText(const char* text,
         // draw text
         // does changing to SIZE here affects the font size by rounding from float?
         SIZE size = {(LONG)textDefinition._dimensions.width, (LONG)textDefinition._dimensions.height};
-        CC_BREAK_IF(!dc.drawText(text, size, align, textDefinition._fontName.c_str(), (int)textDefinition._fontSize,
+        AX_BREAK_IF(!dc.drawText(text, size, align, textDefinition._fontName.c_str(), (int)textDefinition._fontSize,
                                  textDefinition._enableWrap, textDefinition._overflow));
 
         int dataLen            = size.cx * size.cy * 4;
         unsigned char* dataBuf = (unsigned char*)malloc(sizeof(unsigned char) * dataLen);
-        CC_BREAK_IF(!dataBuf);
+        AX_BREAK_IF(!dataBuf);
 
         struct
         {
@@ -439,7 +439,7 @@ Data Device::getTextureDataForText(const char* text,
             int mask[4];
         } bi                = {0};
         bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
-        CC_BREAK_IF(!GetDIBits(dc.getDC(), dc.getBitmap(), 0, 0, nullptr, (LPBITMAPINFO)&bi, DIB_RGB_COLORS));
+        AX_BREAK_IF(!GetDIBits(dc.getDC(), dc.getBitmap(), 0, 0, nullptr, (LPBITMAPINFO)&bi, DIB_RGB_COLORS));
 
         width  = (short)size.cx;
         height = (short)size.cy;
@@ -473,12 +473,12 @@ Data Device::getTextureDataForText(const char* text,
 
 void Device::setKeepScreenOn(bool value)
 {
-    CC_UNUSED_PARAM(value);
+    AX_UNUSED_PARAM(value);
 }
 
 void Device::vibrate(float duration)
 {
-    CC_UNUSED_PARAM(duration);
+    AX_UNUSED_PARAM(duration);
 }
 
 NS_AX_END

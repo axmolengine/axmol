@@ -305,7 +305,7 @@ void PUBeamRender::updateRender(PUParticle3D* particle, float deltaTime, bool /*
         float divide = (float)_numberOfSegments + 1.0f;
         for (size_t numDev = 0; numDev < _numberOfSegments; ++numDev)
         {
-            Vec3::cross(end, Vec3(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1()), &perpendicular);
+            Vec3::cross(end, Vec3(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()), &perpendicular);
             perpendicular.normalize();
             beamRendererVisualData->destinationHalf[numDev] =
                 (((float)numDev + 1.0f) / divide) * end + Vec3(_rendererScale.x * _deviation * perpendicular.x,
@@ -340,7 +340,7 @@ void PUBeamRender::destroyAll()
     static_cast<PUParticleSystem3D*>(_particleSystem)->removeListener(this);
 
     // Delete the BillboardChain
-    CC_SAFE_DELETE(_billboardChain);
+    AX_SAFE_DELETE(_billboardChain);
 
     // Delete the visual data
     std::vector<PUParticle3DBeamVisualData*>::const_iterator it;

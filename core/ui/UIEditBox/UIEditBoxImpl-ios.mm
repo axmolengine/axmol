@@ -26,7 +26,7 @@
  ****************************************************************************/
 #include "ui/UIEditBox/UIEditBoxImpl-ios.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #    define kLabelZOrder 9999
 
@@ -207,7 +207,7 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
-    CCASSERT(fontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(fontName != nullptr, "fontName can't be nullptr");
     CCEAGLView* eaglview = static_cast<CCEAGLView*>(axis::Director::getInstance()->getOpenGLView()->getEAGLView());
     float retinaFactor   = eaglview.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
@@ -245,4 +245,4 @@ UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 
 NS_AX_END
 
-#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
+#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) */

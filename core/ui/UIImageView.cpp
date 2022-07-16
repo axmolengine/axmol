@@ -58,7 +58,7 @@ ImageView* ImageView::create(std::string_view imageFileName, TextureResType texT
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -70,7 +70,7 @@ ImageView* ImageView::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -170,7 +170,7 @@ void ImageView::setTextureRect(const Rect& rect)
         }
         else
         {
-            CCLOG("Warning!! you should load texture before set the texture's rect!");
+            AXLOG("Warning!! you should load texture before set the texture's rect!");
         }
     }
 }

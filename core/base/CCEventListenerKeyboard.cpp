@@ -35,7 +35,7 @@ bool EventListenerKeyboard::checkAvailable()
 {
     if (onKeyPressed == nullptr && onKeyReleased == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerKeyboard!");
+        AXASSERT(false, "Invalid EventListenerKeyboard!");
         return false;
     }
 
@@ -51,7 +51,7 @@ EventListenerKeyboard* EventListenerKeyboard::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -67,7 +67,7 @@ EventListenerKeyboard* EventListenerKeyboard::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

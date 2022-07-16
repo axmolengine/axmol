@@ -87,7 +87,7 @@ bool SpriteBatchNode::initWithTexture(Texture2D* tex, ssize_t capacity /* = DEFA
         return false;
     }
 
-    CCASSERT(capacity >= 0, "Capacity must be >= 0");
+    AXASSERT(capacity >= 0, "Capacity must be >= 0");
 
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
     if (!tex->hasPremultipliedAlpha())
@@ -116,14 +116,14 @@ bool SpriteBatchNode::initWithTexture(Texture2D* tex, ssize_t capacity /* = DEFA
 
 void SpriteBatchNode::setUniformLocation()
 {
-    CCASSERT(_programState, "programState should not be nullptr");
+    AXASSERT(_programState, "programState should not be nullptr");
     _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
     _textureLocation   = _programState->getUniformLocation("u_tex0");
 }
 
 void SpriteBatchNode::setVertexLayout()
 {
-    CCASSERT(_programState, "programState should not be nullptr");
+    AXASSERT(_programState, "programState should not be nullptr");
     // set vertexLayout according to V3F_C4B_T2F structure
     auto vertexLayout = _programState->getVertexLayout();
     /// a_position
@@ -144,7 +144,7 @@ void SpriteBatchNode::setVertexLayout()
 
 bool SpriteBatchNode::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    CCASSERT(programState, "programState should not be nullptr");
+    AXASSERT(programState, "programState should not be nullptr");
     if (Node::setProgramState(programState, needsRetain))
     {
         auto& pipelineDescriptor        = _quadCommand.getPipelineDescriptor();
@@ -178,14 +178,14 @@ SpriteBatchNode::SpriteBatchNode() {}
 
 SpriteBatchNode::~SpriteBatchNode()
 {
-    CC_SAFE_RELEASE(_textureAtlas);
+    AX_SAFE_RELEASE(_textureAtlas);
 }
 
 // override visit
 // don't call visit on it's children
 void SpriteBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
-    CC_PROFILER_START_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
+    AX_PROFILER_START_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
 
     // CAREFUL:
     // This visit is almost identical to CocosNode#visit
@@ -218,17 +218,17 @@ void SpriteBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, uin
         // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
         //    setOrderOfArrival(0);
 
-        CC_PROFILER_STOP_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
+        AX_PROFILER_STOP_CATEGORY(kProfilerCategoryBatchSprite, "CCSpriteBatchNode - visit");
     }
 }
 
 void SpriteBatchNode::addChild(Node* child, int zOrder, int tag)
 {
-    CCASSERT(child != nullptr, "child should not be null");
-    CCASSERT(dynamic_cast<Sprite*>(child) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
+    AXASSERT(child != nullptr, "child should not be null");
+    AXASSERT(dynamic_cast<Sprite*>(child) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
     Sprite* sprite = static_cast<Sprite*>(child);
     // check Sprite is using the same texture id
-    CCASSERT(sprite->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
+    AXASSERT(sprite->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
              "CCSprite is not using the same texture id");
 
     Node::addChild(child, zOrder, tag);
@@ -238,11 +238,11 @@ void SpriteBatchNode::addChild(Node* child, int zOrder, int tag)
 
 void SpriteBatchNode::addChild(Node* child, int zOrder, std::string_view name)
 {
-    CCASSERT(child != nullptr, "child should not be null");
-    CCASSERT(dynamic_cast<Sprite*>(child) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
+    AXASSERT(child != nullptr, "child should not be null");
+    AXASSERT(dynamic_cast<Sprite*>(child) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
     Sprite* sprite = static_cast<Sprite*>(child);
     // check Sprite is using the same texture id
-    CCASSERT(sprite->getTexture() == _textureAtlas->getTexture(), "CCSprite is not using the same texture id");
+    AXASSERT(sprite->getTexture() == _textureAtlas->getTexture(), "CCSprite is not using the same texture id");
 
     Node::addChild(child, zOrder, name);
 
@@ -252,8 +252,8 @@ void SpriteBatchNode::addChild(Node* child, int zOrder, std::string_view name)
 // override reorderChild
 void SpriteBatchNode::reorderChild(Node* child, int zOrder)
 {
-    CCASSERT(child != nullptr, "the child should not be null");
-    CCASSERT(_children.contains(child), "Child doesn't belong to Sprite");
+    AXASSERT(child != nullptr, "the child should not be null");
+    AXASSERT(_children.contains(child), "Child doesn't belong to Sprite");
 
     if (zOrder == child->getLocalZOrder())
     {
@@ -275,7 +275,7 @@ void SpriteBatchNode::removeChild(Node* child, bool cleanup)
         return;
     }
 
-    CCASSERT(_children.contains(sprite), "sprite batch node should contain the child");
+    AXASSERT(_children.contains(sprite), "sprite batch node should contain the child");
 
     // cleanup before removing
     removeSpriteFromAtlas(sprite);
@@ -285,7 +285,7 @@ void SpriteBatchNode::removeChild(Node* child, bool cleanup)
 
 void SpriteBatchNode::removeChildAtIndex(ssize_t index, bool doCleanup)
 {
-    CCASSERT(index >= 0 && index < _children.size(), "Invalid index");
+    AXASSERT(index >= 0 && index < _children.size(), "Invalid index");
     removeChild(_children.at(index), doCleanup);
 }
 
@@ -407,7 +407,7 @@ void SpriteBatchNode::updateAtlasIndex(Sprite* sprite, ssize_t* curIndex)
 
 void SpriteBatchNode::swap(ssize_t oldIndex, ssize_t newIndex)
 {
-    CCASSERT(
+    AXASSERT(
         oldIndex >= 0 && oldIndex < (int)_descendants.size() && newIndex >= 0 && newIndex < (int)_descendants.size(),
         "Invalid index");
 
@@ -458,14 +458,14 @@ void SpriteBatchNode::increaseAtlasCapacity()
     // this is likely computationally expensive
     ssize_t quantity = (_textureAtlas->getCapacity() + 1) * 4 / 3;
 
-    CCLOG("cocos2d: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOG("cocos2d: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
           static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        CCLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
-        CCASSERT(false, "Not enough memory to resize the atlas");
+        AXLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
+        AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }
 
@@ -477,14 +477,14 @@ void SpriteBatchNode::reserveCapacity(ssize_t newCapacity)
     if (!_textureAtlas->resizeCapacity(newCapacity))
     {
         // serious problems
-        CCLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
-        CCASSERT(false, "Not enough memory to resize the atlas");
+        AXLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
+        AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }
 
 ssize_t SpriteBatchNode::rebuildIndexInOrder(Sprite* parent, ssize_t index)
 {
-    CCASSERT(index >= 0 && index < _children.size(), "Invalid index");
+    AXASSERT(index >= 0 && index < _children.size(), "Invalid index");
 
     auto& children = parent->getChildren();
     for (const auto& child : children)
@@ -598,7 +598,7 @@ ssize_t SpriteBatchNode::atlasIndexForChild(Sprite* sprite, int nZ)
     }
 
     // Should not happen. Error calculating Z on SpriteSheet
-    CCASSERT(0, "should not run here");
+    AXASSERT(0, "should not run here");
     return 0;
 }
 
@@ -629,8 +629,8 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
     for (auto iter = children.begin(); iter != children.end();)
     {
         auto child = *iter;
-#if CC_SPRITE_DEBUG_DRAW
-        // when using CC_SPRITE_DEBUG_DRAW, a DrawNode is appended to sprites. remove it since only Sprites can be used
+#if AX_SPRITE_DEBUG_DRAW
+        // when using AX_SPRITE_DEBUG_DRAW, a DrawNode is appended to sprites. remove it since only Sprites can be used
         // as children in SpriteBatchNode
         // Github issue #14730
         if (dynamic_cast<DrawNode*>(child))
@@ -640,7 +640,7 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
             continue;
         }
 #endif
-        CCASSERT(dynamic_cast<Sprite*>(child) != nullptr,
+        AXASSERT(dynamic_cast<Sprite*>(child) != nullptr,
                  "You can only add Sprites (or subclass of Sprite) to SpriteBatchNode");
         appendChild(static_cast<Sprite*>(child));
         ++iter;
@@ -724,8 +724,8 @@ void SpriteBatchNode::setTexture(Texture2D* texture)
 
 void SpriteBatchNode::insertQuadFromSprite(Sprite* sprite, ssize_t index)
 {
-    CCASSERT(sprite != nullptr, "Argument must be non-nullptr");
-    CCASSERT(dynamic_cast<Sprite*>(sprite), "CCSpriteBatchNode only supports Sprites as children");
+    AXASSERT(sprite != nullptr, "Argument must be non-nullptr");
+    AXASSERT(dynamic_cast<Sprite*>(sprite), "CCSpriteBatchNode only supports Sprites as children");
 
     // make needed room
     while (index >= _textureAtlas->getCapacity() || _textureAtlas->getCapacity() == _textureAtlas->getTotalQuads())
@@ -749,8 +749,8 @@ void SpriteBatchNode::insertQuadFromSprite(Sprite* sprite, ssize_t index)
 
 void SpriteBatchNode::updateQuadFromSprite(Sprite* sprite, ssize_t index)
 {
-    CCASSERT(sprite != nullptr, "Argument must be non-nil");
-    CCASSERT(dynamic_cast<Sprite*>(sprite) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
+    AXASSERT(sprite != nullptr, "Argument must be non-nil");
+    AXASSERT(dynamic_cast<Sprite*>(sprite) != nullptr, "CCSpriteBatchNode only supports Sprites as children");
 
     // make needed room
     while (index >= _textureAtlas->getCapacity() || _textureAtlas->getCapacity() == _textureAtlas->getTotalQuads())
@@ -772,8 +772,8 @@ void SpriteBatchNode::updateQuadFromSprite(Sprite* sprite, ssize_t index)
 
 SpriteBatchNode* SpriteBatchNode::addSpriteWithoutQuad(Sprite* child, int z, int aTag)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nullptr");
-    CCASSERT(dynamic_cast<Sprite*>(child), "CCSpriteBatchNode only supports Sprites as children");
+    AXASSERT(child != nullptr, "Argument must be non-nullptr");
+    AXASSERT(dynamic_cast<Sprite*>(child), "CCSpriteBatchNode only supports Sprites as children");
 
     // quad index is Z
     child->setAtlasIndex(z);

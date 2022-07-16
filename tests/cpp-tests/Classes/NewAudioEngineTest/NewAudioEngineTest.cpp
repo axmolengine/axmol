@@ -103,9 +103,9 @@ private:
         auto listener = EventListenerTouchOneByOne::create();
         listener->setSwallowTouches(true);
 
-        listener->onTouchBegan     = CC_CALLBACK_2(TextButton::onTouchBegan, this);
-        listener->onTouchEnded     = CC_CALLBACK_2(TextButton::onTouchEnded, this);
-        listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
+        listener->onTouchBegan     = AX_CALLBACK_2(TextButton::onTouchBegan, this);
+        listener->onTouchEnded     = AX_CALLBACK_2(TextButton::onTouchEnded, this);
+        listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     }
@@ -176,7 +176,7 @@ public:
 
             return ret;
         }
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return ret;
     }
 
@@ -374,7 +374,7 @@ bool AudioControlTest::init()
     timeLabel->setPosition(timeSliderPos.x - sliderSize.width / 2, timeSliderPos.y);
     addChild(timeLabel);
 
-    this->schedule(CC_CALLBACK_1(AudioControlTest::update, this), 0.1f, "update_key");
+    this->schedule(AX_CALLBACK_1(AudioControlTest::update, this), 0.1f, "update_key");
 
     return ret;
 }
@@ -422,7 +422,7 @@ bool AudioLoadTest::init()
             AudioEngine::preload("audio/SoundEffectsFX009/FX082.mp3", [isDestroyed, stateLabel](bool isSuccess) {
                 if (*isDestroyed)
                 {
-                    CCLOG("AudioLoadTest scene was destroyed, no need to set the label text.");
+                    AXLOG("AudioLoadTest scene was destroyed, no need to set the label text.");
                     return;
                 }
 
@@ -583,7 +583,7 @@ bool AudioProfileTest::init()
 
     char text[30];
     _files[0] = "background.mp3";
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
     _files[1] = "background.caf";
 #else
     _files[1] = "background.ogg";
@@ -648,7 +648,7 @@ bool AudioProfileTest::init()
     addChild(timeSlider);
     _timeSlider = timeSlider;
 
-    this->schedule(CC_CALLBACK_1(AudioProfileTest::update, this), 0.05f, "update_key");
+    this->schedule(AX_CALLBACK_1(AudioProfileTest::update, this), 0.05f, "update_key");
 
     return ret;
 }
@@ -680,9 +680,9 @@ bool InvalidAudioFileTest::init()
     auto ret = AudioEngineTestDemo::init();
 
     auto playItem = TextButton::create("play unsupported media type", [&](TextButton* button) {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
         AudioEngine::play2d("background.ogg");
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
         AudioEngine::play2d("background.caf");
 #endif
     });
@@ -738,7 +738,7 @@ bool AudioIssue18597Test::init()
         // test case for https://github.com/cocos2d/cocos2d-x/issues/18597
         this->schedule(
             [=](float dt) {
-                CCLOG("issues 18597 audio crash test");
+                AXLOG("issues 18597 audio crash test");
                 for (int i = 0; i < 2; ++i)
                 {
                     auto id = AudioEngine::play2d("audio/MUS_BGM_Battle_Round1_v1.caf", true, 1.0f);
@@ -819,54 +819,54 @@ std::string AudioIssue11143Test::subtitle() const
 }
 
 // Enable profiles for this file
-#undef CC_PROFILER_DISPLAY_TIMERS
-#define CC_PROFILER_DISPLAY_TIMERS() Profiler::getInstance()->displayTimers()
-#undef CC_PROFILER_PURGE_ALL
-#define CC_PROFILER_PURGE_ALL() Profiler::getInstance()->releaseAllTimers()
+#undef AX_PROFILER_DISPLAY_TIMERS
+#define AX_PROFILER_DISPLAY_TIMERS() Profiler::getInstance()->displayTimers()
+#undef AX_PROFILER_PURGE_ALL
+#define AX_PROFILER_PURGE_ALL() Profiler::getInstance()->releaseAllTimers()
 
-#undef CC_PROFILER_START
-#define CC_PROFILER_START(__name__) ProfilingBeginTimingBlock(__name__)
-#undef CC_PROFILER_STOP
-#define CC_PROFILER_STOP(__name__) ProfilingEndTimingBlock(__name__)
-#undef CC_PROFILER_RESET
-#define CC_PROFILER_RESET(__name__) ProfilingResetTimingBlock(__name__)
+#undef AX_PROFILER_START
+#define AX_PROFILER_START(__name__) ProfilingBeginTimingBlock(__name__)
+#undef AX_PROFILER_STOP
+#define AX_PROFILER_STOP(__name__) ProfilingEndTimingBlock(__name__)
+#undef AX_PROFILER_RESET
+#define AX_PROFILER_RESET(__name__) ProfilingResetTimingBlock(__name__)
 
-#undef CC_PROFILER_START_CATEGORY
-#define CC_PROFILER_START_CATEGORY(__cat__, __name__) \
+#undef AX_PROFILER_START_CATEGORY
+#define AX_PROFILER_START_CATEGORY(__cat__, __name__) \
     do                                                \
     {                                                 \
         if (__cat__)                                  \
             ProfilingBeginTimingBlock(__name__);      \
     } while (0)
-#undef CC_PROFILER_STOP_CATEGORY
-#define CC_PROFILER_STOP_CATEGORY(__cat__, __name__) \
+#undef AX_PROFILER_STOP_CATEGORY
+#define AX_PROFILER_STOP_CATEGORY(__cat__, __name__) \
     do                                               \
     {                                                \
         if (__cat__)                                 \
             ProfilingEndTimingBlock(__name__);       \
     } while (0)
-#undef CC_PROFILER_RESET_CATEGORY
-#define CC_PROFILER_RESET_CATEGORY(__cat__, __name__) \
+#undef AX_PROFILER_RESET_CATEGORY
+#define AX_PROFILER_RESET_CATEGORY(__cat__, __name__) \
     do                                                \
     {                                                 \
         if (__cat__)                                  \
             ProfilingResetTimingBlock(__name__);      \
     } while (0)
 
-#undef CC_PROFILER_START_INSTANCE
-#define CC_PROFILER_START_INSTANCE(__id__, __name__)                                                      \
+#undef AX_PROFILER_START_INSTANCE
+#define AX_PROFILER_START_INSTANCE(__id__, __name__)                                                      \
     do                                                                                                    \
     {                                                                                                     \
         ProfilingBeginTimingBlock(String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
     } while (0)
-#undef CC_PROFILER_STOP_INSTANCE
-#define CC_PROFILER_STOP_INSTANCE(__id__, __name__)                                                     \
+#undef AX_PROFILER_STOP_INSTANCE
+#define AX_PROFILER_STOP_INSTANCE(__id__, __name__)                                                     \
     do                                                                                                  \
     {                                                                                                   \
         ProfilingEndTimingBlock(String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
     } while (0)
-#undef CC_PROFILER_RESET_INSTANCE
-#define CC_PROFILER_RESET_INSTANCE(__id__, __name__)                                                      \
+#undef AX_PROFILER_RESET_INSTANCE
+#define AX_PROFILER_RESET_INSTANCE(__id__, __name__)                                                      \
     do                                                                                                    \
     {                                                                                                     \
         ProfilingResetTimingBlock(String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
@@ -898,9 +898,9 @@ bool AudioPerformanceTest::init()
             schedule(
                 [audioFiles](float dt) {
                     int index = axis::random(0, (int)(audioFiles.size() - 1));
-                    CC_PROFILER_START("play2d");
+                    AX_PROFILER_START("play2d");
                     AudioEngine::play2d(audioFiles[index]);
-                    CC_PROFILER_STOP("play2d");
+                    AX_PROFILER_STOP("play2d");
                 },
                 0.25f, "test");
         });
@@ -911,7 +911,7 @@ bool AudioPerformanceTest::init()
         auto displayItem = TextButton::create("Display Result", [this, playItem](TextButton* button) {
             unschedule("test");
             AudioEngine::stopAll();
-            CC_PROFILER_DISPLAY_TIMERS();
+            AX_PROFILER_DISPLAY_TIMERS();
             playItem->setEnabled(true);
             button->setEnabled(false);
         });

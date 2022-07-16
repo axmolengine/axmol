@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "base/ccUTF8.h"
 #include "renderer/CCTextureCache.h"
 
-#if CC_LABELATLAS_DEBUG_DRAW
+#if AX_LABELATLAS_DEBUG_DRAW
 #    include "renderer/CCRenderer.h"
 #endif
 
@@ -52,7 +52,7 @@ LabelAtlas* LabelAtlas::create(std::string_view string,
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -91,7 +91,7 @@ LabelAtlas* LabelAtlas::create(std::string_view string, std::string_view fntFile
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -111,7 +111,7 @@ LabelAtlas* LabelAtlas::create(std::string_view string,
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -124,12 +124,12 @@ bool LabelAtlas::initWithString(std::string_view theString, std::string_view fnt
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
-    CCASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
+    AXASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
-    unsigned int width     = static_cast<unsigned int>(dict["itemWidth"].asInt() / CC_CONTENT_SCALE_FACTOR());
-    unsigned int height    = static_cast<unsigned int>(dict["itemHeight"].asInt() / CC_CONTENT_SCALE_FACTOR());
+    unsigned int width     = static_cast<unsigned int>(dict["itemWidth"].asInt() / AX_CONTENT_SCALE_FACTOR());
+    unsigned int height    = static_cast<unsigned int>(dict["itemHeight"].asInt() / AX_CONTENT_SCALE_FACTOR());
     unsigned int startChar = dict["firstChar"].asInt();
 
     this->initWithString(theString, textureFilename, width, height, startChar);
@@ -152,15 +152,15 @@ void LabelAtlas::updateAtlasValues()
     Texture2D* texture       = _textureAtlas->getTexture();
     float textureWide        = (float)texture->getPixelsWide();
     float textureHigh        = (float)texture->getPixelsHigh();
-    float itemWidthInPixels  = _itemWidth * CC_CONTENT_SCALE_FACTOR();
-    float itemHeightInPixels = _itemHeight * CC_CONTENT_SCALE_FACTOR();
+    float itemWidthInPixels  = _itemWidth * AX_CONTENT_SCALE_FACTOR();
+    float itemHeightInPixels = _itemHeight * AX_CONTENT_SCALE_FACTOR();
     if (_ignoreContentScaleFactor)
     {
         itemWidthInPixels  = static_cast<float>(_itemWidth);
         itemHeightInPixels = static_cast<float>(_itemHeight);
     }
 
-    CCASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
+    AXASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
     V3F_C4B_T2F_Quad* quads = _textureAtlas->getQuads();
     for (ssize_t i = 0; i < n; i++)
     {
@@ -169,7 +169,7 @@ void LabelAtlas::updateAtlasValues()
         float row       = (float)(a % _itemsPerRow);
         float col       = (float)(a / _itemsPerRow);
 
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
         // Issue #938. Don't use texStepX & texStepY
         float left   = (2 * row * itemWidthInPixels + 1) / (2 * textureWide);
         float right  = left + (itemWidthInPixels * 2 - 2) / (2 * textureWide);
@@ -180,7 +180,7 @@ void LabelAtlas::updateAtlasValues()
         float right  = left + itemWidthInPixels / textureWide;
         float top    = col * itemHeightInPixels / textureHigh;
         float bottom = top + itemHeightInPixels / textureHigh;
-#endif  // ! CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#endif  // ! AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
 
         quads[i].tl.texCoords.u = left;
         quads[i].tl.texCoords.v = top;
@@ -269,7 +269,7 @@ void LabelAtlas::updateColor()
 }
 
 // CCLabelAtlas - draw
-#if CC_LABELATLAS_DEBUG_DRAW
+#if AX_LABELATLAS_DEBUG_DRAW
 void LabelAtlas::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     AtlasNode::draw(renderer, transform, _transformUpdated);

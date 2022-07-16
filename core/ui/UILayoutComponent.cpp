@@ -71,7 +71,7 @@ LayoutComponent* LayoutComponent::bindLayoutComponent(Node* node)
         node->addComponent(layout);
         return layout;
     }
-    CC_SAFE_DELETE(layout);
+    AX_SAFE_DELETE(layout);
     return nullptr;
 }
 

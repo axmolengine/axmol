@@ -281,16 +281,16 @@ static bool _initWithString(const char* text,
 {
     bool ret = false;
 
-    CCASSERT(text, "Invalid text");
-    CCASSERT(info, "Invalid info");
+    AXASSERT(text, "Invalid text");
+    AXASSERT(info, "Invalid info");
 
     do
     {
         NSString* string = [NSString stringWithUTF8String:text];
-        CC_BREAK_IF(!string);
+        AX_BREAK_IF(!string);
 
         id font = _createSystemFont(fontName, size);
-        CC_BREAK_IF(!font);
+        AX_BREAK_IF(!font);
 
         // color
         NSColor* foregroundColor;
@@ -328,7 +328,7 @@ static bool _initWithString(const char* text,
             realDimensions = _calculateStringSize(stringWithAttributes, font, &dimensions, enableWrap, overflow);
 
         // Mac crashes if the width or height is 0
-        CC_BREAK_IF(realDimensions.width <= 0 || realDimensions.height <= 0);
+        AX_BREAK_IF(realDimensions.width <= 0 || realDimensions.height <= 0);
 
         if (dimensions.width <= 0.f)
             dimensions.width = realDimensions.width;

@@ -25,7 +25,7 @@ public:
     {
         if (_fontAtlas != fontAtlas)
         {
-            CC_SAFE_RELEASE(_fontAtlas);
+            AX_SAFE_RELEASE(_fontAtlas);
             _fontAtlas = fontAtlas;
         }
         return _fontAtlas;

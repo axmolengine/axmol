@@ -68,19 +68,19 @@ bool Configuration::init()
 {
     _valueDict["axis.version"] = Value(axisVersion());
 
-#if CC_ENABLE_PROFILERS
+#if AX_ENABLE_PROFILERS
     _valueDict["axis.compiled_with_profiler"] = Value(true);
 #else
     _valueDict["axis.compiled_with_profiler"]       = Value(false);
 #endif
 
-#if CC_ENABLE_GL_STATE_CACHE == 0
+#if AX_ENABLE_GL_STATE_CACHE == 0
     _valueDict["axis.compiled_with_gl_state_cache"] = Value(false);
 #else
     _valueDict["axis.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
-#if COCOS2D_DEBUG
+#if AXIS_DEBUG
     _valueDict["axis.build_type"] = Value("DEBUG");
 #else
     _valueDict["axis.build_type"]                   = Value("RELEASE");
@@ -91,21 +91,21 @@ bool Configuration::init()
 
 Configuration::~Configuration()
 {
-    CC_SAFE_DELETE(_loadedEvent);
+    AX_SAFE_DELETE(_loadedEvent);
 }
 
 std::string Configuration::getInfo() const
 {
     // And Dump some warnings as well
-#if CC_ENABLE_PROFILERS
-    CCLOG(
-        "cocos2d: **** WARNING **** CC_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
+#if AX_ENABLE_PROFILERS
+    AXLOG(
+        "cocos2d: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
         "ccConfig.h)\n");
 #endif
 
-#if CC_ENABLE_GL_STATE_CACHE == 0
-    CCLOG(
-        "cocos2d: **** WARNING **** CC_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
+#if AX_ENABLE_GL_STATE_CACHE == 0
+    AXLOG(
+        "cocos2d: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
         "ccConfig.h)\n");
 #endif
 
@@ -117,7 +117,7 @@ std::string Configuration::getInfo() const
 void Configuration::gatherGPUInfo()
 {
     auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    CCLOG("Supported extensions: %s", _deviceInfo->getExtension());
+    AXLOG("Supported extensions: %s", _deviceInfo->getExtension());
 
     _valueDict["vendor"]   = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
@@ -183,7 +183,7 @@ Configuration* Configuration::getInstance()
 
 void Configuration::destroyInstance()
 {
-    CC_SAFE_RELEASE_NULL(s_sharedConfiguration);
+    AX_SAFE_RELEASE_NULL(s_sharedConfiguration);
 }
 
 bool Configuration::checkForGLExtension(std::string_view searchName) const
@@ -259,7 +259,7 @@ bool Configuration::supportsDiscardFramebuffer() const
 
 bool Configuration::supportsShareableVAO() const
 {
-#if CC_TEXTURE_ATLAS_USE_VAO
+#if AX_TEXTURE_ATLAS_USE_VAO
     return _supportsShareableVAO;
 #else
     return false;
@@ -276,7 +276,7 @@ bool Configuration::supportsMapBuffer() const
     // is always implemented in OpenGL.
 
     // XXX: Warning. On iOS this is always `true`. Avoiding the comparison.
-#if defined(CC_USE_GLES) && !defined(__APPLE__)
+#if defined(AX_USE_GLES) && !defined(__APPLE__)
     return _supportsOESMapBuffer;
 #else
     return true;
@@ -335,7 +335,7 @@ void Configuration::setValue(std::string_view key, const Value& value)
 void Configuration::loadConfigFile(std::string_view filename)
 {
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(filename);
-    CCASSERT(!dict.empty(), "cannot create dictionary");
+    AXASSERT(!dict.empty(), "cannot create dictionary");
 
     // search for metadata
     bool validMetadata = false;
@@ -360,14 +360,14 @@ void Configuration::loadConfigFile(std::string_view filename)
 
     if (!validMetadata)
     {
-        CCLOG("Invalid config format for file: %s", filename.data());
+        AXLOG("Invalid config format for file: %s", filename.data());
         return;
     }
 
     auto dataIter = dict.find("data");
     if (dataIter == dict.cend() || dataIter->second.getType() != Value::Type::MAP)
     {
-        CCLOG("Expected 'data' dict, but not found. Config file: %s", filename.data());
+        AXLOG("Expected 'data' dict, but not found. Config file: %s", filename.data());
         return;
     }
 
@@ -379,7 +379,7 @@ void Configuration::loadConfigFile(std::string_view filename)
         if (_valueDict.find(dataMapIter.first) == _valueDict.cend())
             _valueDict[dataMapIter.first] = dataMapIter.second;
         else
-            CCLOG("Key already present. Ignoring '%s'", dataMapIter.first.c_str());
+            AXLOG("Key already present. Ignoring '%s'", dataMapIter.first.c_str());
     }
 
     // light info

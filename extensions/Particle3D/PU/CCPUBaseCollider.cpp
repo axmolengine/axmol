@@ -104,7 +104,7 @@ void PUBaseCollider::calculateRotationSpeedAfterCollision(PUParticle3D* particle
     if (particle->particleType != PUParticle3D::PT_VISUAL)
         return;
 
-    float signedFriction = CCRANDOM_0_1() > 0.5f ? -(_friction - 1) : (_friction - 1);
+    float signedFriction = AXRANDOM_0_1() > 0.5f ? -(_friction - 1) : (_friction - 1);
 
     particle->rotationSpeed *= signedFriction;
     particle->zRotationSpeed *= signedFriction;

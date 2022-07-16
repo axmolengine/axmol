@@ -41,7 +41,7 @@ FastTMXTiledMap* FastTMXTiledMap::create(std::string_view tmxFile)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -53,13 +53,13 @@ FastTMXTiledMap* FastTMXTiledMap::createWithXML(std::string_view tmxString, std:
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
 bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile)
 {
-    CCASSERT(tmxFile.size() > 0, "FastTMXTiledMap: tmx file should not be empty");
+    AXASSERT(tmxFile.size() > 0, "FastTMXTiledMap: tmx file should not be empty");
 
     setContentSize(Vec2::ZERO);
 
@@ -69,7 +69,7 @@ bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile)
     {
         return false;
     }
-    CCASSERT(!mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
+    AXASSERT(!mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
     buildWithMapInfo(mapInfo);
 
     _tmxFile = tmxFile;
@@ -83,7 +83,7 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
 
     TMXMapInfo* mapInfo = TMXMapInfo::createWithXML(tmxString, resourcePath);
 
-    CCASSERT(!mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
+    AXASSERT(!mapInfo->getTilesets().empty(), "FastTMXTiledMap: Map not found. Please check the filename.");
     buildWithMapInfo(mapInfo);
 
     return true;
@@ -148,7 +148,7 @@ TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMap
     }
 
     // If all the tiles are 0, return empty tileset
-    CCLOG("cocos2d: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
+    AXLOG("cocos2d: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
     return nullptr;
 }
 
@@ -196,7 +196,7 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
 // public
 FastTMXLayer* FastTMXTiledMap::getLayer(std::string_view layerName) const
 {
-    CCASSERT(!layerName.empty(), "Invalid layer name!");
+    AXASSERT(!layerName.empty(), "Invalid layer name!");
 
     for (auto& child : _children)
     {
@@ -216,7 +216,7 @@ FastTMXLayer* FastTMXTiledMap::getLayer(std::string_view layerName) const
 
 TMXObjectGroup* FastTMXTiledMap::getObjectGroup(std::string_view groupName) const
 {
-    CCASSERT(!groupName.empty(), "Invalid group name!");
+    AXASSERT(!groupName.empty(), "Invalid group name!");
 
     if (_objectGroups.size() > 0)
     {

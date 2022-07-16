@@ -56,19 +56,19 @@ RenderTextureSave::RenderTextureSave()
     this->addChild(_target, -1);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = CC_CALLBACK_2(RenderTextureSave::onTouchesMoved, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(RenderTextureSave::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // Save Image menu
     MenuItemFont::setFontSize(16);
     auto item1 =
-        MenuItemFont::create("Save Image PMA", CC_CALLBACK_1(RenderTextureSave::saveImageWithPremultipliedAlpha, this));
+        MenuItemFont::create("Save Image PMA", AX_CALLBACK_1(RenderTextureSave::saveImageWithPremultipliedAlpha, this));
     auto item2 = MenuItemFont::create("Save Image Non-PMA",
-                                      CC_CALLBACK_1(RenderTextureSave::saveImageWithNonPremultipliedAlpha, this));
-    auto item3 = MenuItemFont::create("Add Image", CC_CALLBACK_1(RenderTextureSave::addImage, this));
-    auto item4 = MenuItemFont::create("Clear to Random", CC_CALLBACK_1(RenderTextureSave::clearImage, this));
+                                      AX_CALLBACK_1(RenderTextureSave::saveImageWithNonPremultipliedAlpha, this));
+    auto item3 = MenuItemFont::create("Add Image", AX_CALLBACK_1(RenderTextureSave::addImage, this));
+    auto item4 = MenuItemFont::create("Clear to Random", AX_CALLBACK_1(RenderTextureSave::clearImage, this));
     auto item5 =
-        MenuItemFont::create("Clear to Transparent", CC_CALLBACK_1(RenderTextureSave::clearImageTransparent, this));
+        MenuItemFont::create("Clear to Transparent", AX_CALLBACK_1(RenderTextureSave::clearImageTransparent, this));
     auto menu = Menu::create(item1, item2, item3, item4, item5, nullptr);
     this->addChild(menu);
     menu->alignItemsVertically();
@@ -87,7 +87,7 @@ std::string RenderTextureSave::subtitle() const
 
 void RenderTextureSave::clearImage(axis::Ref* sender)
 {
-    _target->clear(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1());
+    _target->clear(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
 }
 
 void RenderTextureSave::clearImageTransparent(axis::Ref* sender)
@@ -115,7 +115,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(axis::Ref* sender)
     _target->saveToFile(png, Image::Format::PNG, true, callback);
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    CCLOG("Image saved %s", png);
+    AXLOG("Image saved %s", png);
 
     counter++;
 }
@@ -141,7 +141,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(axis::Ref* sender)
 
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    CCLOG("Image saved %s", png);
+    AXLOG("Image saved %s", png);
 
     counter++;
 }
@@ -155,8 +155,8 @@ void RenderTextureSave::addImage(axis::Ref* sender)
 
     Sprite* sprite = Sprite::create("Images/test-rgba1.png");
     sprite->setPosition(
-        sprite->getContentSize().width + CCRANDOM_0_1() * (s.width - sprite->getContentSize().width),
-        sprite->getContentSize().height + CCRANDOM_0_1() * (s.height - sprite->getContentSize().height));
+        sprite->getContentSize().width + AXRANDOM_0_1() * (s.width - sprite->getContentSize().width),
+        sprite->getContentSize().height + AXRANDOM_0_1() * (s.height - sprite->getContentSize().height));
     sprite->visit();
 
     // finish drawing and return context back to the screen
@@ -201,8 +201,8 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
             _brushs.at(i)->setRotation(rand() % 360);
             float r = (float)(rand() % 50 / 50.f) + 0.25f;
             _brushs.at(i)->setScale(r);
-            /*_brush->setColor(Color3B(CCRANDOM_0_1() * 127 + 128, 255, 255));*/
-            // Use CCRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
+            /*_brush->setColor(Color3B(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
+            // Use AXRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
             _brushs.at(i)->setColor(Color3B(rand() % 127 + 128, 255, 255));
             // Call visit to draw the brush, don't call draw..
             _brushs.at(i)->visit();
@@ -286,9 +286,9 @@ std::string RenderTextureIssue937::subtitle() const
 RenderTextureZbuffer::RenderTextureZbuffer()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(RenderTextureZbuffer::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(RenderTextureZbuffer::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(RenderTextureZbuffer::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(RenderTextureZbuffer::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto size  = Director::getInstance()->getWinSize();
@@ -467,7 +467,7 @@ RenderTexturePartTest::RenderTexturePartTest()
 
 RenderTexturePartTest::~RenderTexturePartTest()
 {
-    CC_SAFE_RELEASE(_rend);
+    AX_SAFE_RELEASE(_rend);
 }
 
 std::string RenderTexturePartTest::title() const
@@ -514,8 +514,8 @@ RenderTextureTestDepthStencil::RenderTextureTestDepthStencil()
 
 RenderTextureTestDepthStencil::~RenderTextureTestDepthStencil()
 {
-    CC_SAFE_RELEASE(_spriteDraw);
-    CC_SAFE_RELEASE(_spriteDS);
+    AX_SAFE_RELEASE(_spriteDraw);
+    AX_SAFE_RELEASE(_spriteDS);
 
     // restore depth stencil desc
     _renderer->setDepthStencilDesc(_dsDesc);
@@ -527,24 +527,24 @@ void RenderTextureTestDepthStencil::draw(Renderer* renderer, const Mat4& transfo
     _rtx->beginWithClear(0, 0, 0, 0, 0, 0);
 
 //    _renderCmds[0].init(_globalZOrder);
-//    _renderCmds[0].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
-    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
+//    _renderCmds[0].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this);
+    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeClear, this), _globalZOrder);
 
 //    _renderCmds[1].init(_globalZOrder);
-//    _renderCmds[1].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
-    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this), _globalZOrder);
+//    _renderCmds[1].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this);
+    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeStencil, this), _globalZOrder);
 
     _spriteDS->visit();
 
 //    _renderCmds[2].init(_globalZOrder);
-//    _renderCmds[2].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
-    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
+//    _renderCmds[2].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this);
+    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onBeforeDraw, this), _globalZOrder);
 
     _spriteDraw->visit();
 
 //    _renderCmds[3].init(_globalZOrder);
-//    _renderCmds[3].func = CC_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
-    renderer->addCallbackCommand(CC_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
+//    _renderCmds[3].func = AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this);
+    renderer->addCallbackCommand(AX_CALLBACK_0(RenderTextureTestDepthStencil::onAfterDraw, this), _globalZOrder);
 
     /// !!!end will set current render target to default renderTarget
     /// !!!all render target share one depthStencilDesc, TODO: optimize me?
@@ -632,7 +632,7 @@ RenderTextureTargetNode::RenderTextureTargetNode()
     scheduleUpdate();
 
     // Toggle clear on / off
-    auto item = MenuItemFont::create("Clear On/Off", CC_CALLBACK_1(RenderTextureTargetNode::touched, this));
+    auto item = MenuItemFont::create("Clear On/Off", AX_CALLBACK_1(RenderTextureTargetNode::touched, this));
     auto menu = Menu::create(item, nullptr);
     addChild(menu);
 
@@ -649,7 +649,7 @@ void RenderTextureTargetNode::touched(Ref* sender)
     else
     {
         renderTexture->setClearFlags(ClearFlag::NONE);
-        renderTexture->setClearColor(Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+        renderTexture->setClearColor(Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
     }
 }
 
@@ -678,7 +678,7 @@ std::string RenderTextureTargetNode::subtitle() const
 SpriteRenderTextureBug::SimpleSprite::SimpleSprite() : _rt(nullptr) {}
 SpriteRenderTextureBug::SimpleSprite::~SimpleSprite()
 {
-    CC_SAFE_RELEASE(_rt);
+    AX_SAFE_RELEASE(_rt);
 }
 
 SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::SimpleSprite::create(const char* filename,
@@ -691,7 +691,7 @@ SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::SimpleSprite::crea
     }
     else
     {
-        CC_SAFE_DELETE(sprite);
+        AX_SAFE_DELETE(sprite);
     }
 
     return sprite;
@@ -714,7 +714,7 @@ void SpriteRenderTextureBug::SimpleSprite::draw(Renderer* renderer, const Mat4& 
 SpriteRenderTextureBug::SpriteRenderTextureBug()
 {
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(SpriteRenderTextureBug::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(SpriteRenderTextureBug::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     auto s = Director::getInstance()->getWinSize();
@@ -723,7 +723,7 @@ SpriteRenderTextureBug::SpriteRenderTextureBug()
 
 SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCoords(const Vec2& p)
 {
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -733,7 +733,7 @@ SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCo
     sprite->setPosition(p);
 
     FiniteTimeAction* action = nullptr;
-    float rd                 = CCRANDOM_0_1();
+    float rd                 = AXRANDOM_0_1();
 
     if (rd < 0.20)
         action = ScaleBy::create(3, 2);

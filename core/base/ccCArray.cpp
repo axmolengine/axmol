@@ -64,7 +64,7 @@ void ccArrayDoubleCapacity(ccArray* arr)
     arr->max *= 2;
     Ref** newArr = (Ref**)realloc(arr->arr, arr->max * sizeof(Ref*));
     // will fail when there's not enough memory
-    CCASSERT(newArr != 0, "ccArrayDoubleCapacity failed. Not enough memory");
+    AXASSERT(newArr != 0, "ccArrayDoubleCapacity failed. Not enough memory");
     arr->arr = newArr;
 }
 
@@ -72,7 +72,7 @@ void ccArrayEnsureExtraCapacity(ccArray* arr, ssize_t extra)
 {
     while (arr->max < arr->num + extra)
     {
-        CCLOGINFO("cocos2d: ccCArray: resizing ccArray capacity from [%zd] to [%zd].", arr->max, arr->max * 2);
+        AXLOGINFO("cocos2d: ccCArray: resizing ccArray capacity from [%zd] to [%zd].", arr->max, arr->max * 2);
 
         ccArrayDoubleCapacity(arr);
     }
@@ -97,11 +97,11 @@ void ccArrayShrink(ccArray* arr)
         }
 
         arr->arr = (Ref**)realloc(arr->arr, newSize * sizeof(Ref*));
-        CCASSERT(arr->arr != nullptr, "could not reallocate the memory");
+        AXASSERT(arr->arr != nullptr, "could not reallocate the memory");
     }
 }
 
-/** Returns index of first occurrence of object, CC_INVALID_INDEX if object not found. */
+/** Returns index of first occurrence of object, AX_INVALID_INDEX if object not found. */
 ssize_t ccArrayGetIndexOfObject(ccArray* arr, Ref* object)
 {
     const auto arrNum = arr->num;
@@ -112,19 +112,19 @@ ssize_t ccArrayGetIndexOfObject(ccArray* arr, Ref* object)
             return i;
     }
 
-    return CC_INVALID_INDEX;
+    return AX_INVALID_INDEX;
 }
 
 /** Returns a Boolean value that indicates whether object is present in array. */
 bool ccArrayContainsObject(ccArray* arr, Ref* object)
 {
-    return ccArrayGetIndexOfObject(arr, object) != CC_INVALID_INDEX;
+    return ccArrayGetIndexOfObject(arr, object) != AX_INVALID_INDEX;
 }
 
 /** Appends an object. Behavior undefined if array doesn't have enough capacity. */
 void ccArrayAppendObject(ccArray* arr, Ref* object)
 {
-    CCASSERT(object != nullptr, "Invalid parameter!");
+    AXASSERT(object != nullptr, "Invalid parameter!");
     object->retain();
     arr->arr[arr->num] = object;
     arr->num++;
@@ -157,8 +157,8 @@ void ccArrayAppendArrayWithResize(ccArray* arr, ccArray* plusArr)
 /** Inserts an object at index */
 void ccArrayInsertObjectAtIndex(ccArray* arr, Ref* object, ssize_t index)
 {
-    CCASSERT(index <= arr->num, "Invalid index. Out of bounds");
-    CCASSERT(object != nullptr, "Invalid parameter!");
+    AXASSERT(index <= arr->num, "Invalid index. Out of bounds");
+    AXASSERT(object != nullptr, "Invalid parameter!");
 
     ccArrayEnsureExtraCapacity(arr, 1);
 
@@ -176,8 +176,8 @@ void ccArrayInsertObjectAtIndex(ccArray* arr, Ref* object, ssize_t index)
 /** Swaps two objects */
 void ccArraySwapObjectsAtIndexes(ccArray* arr, ssize_t index1, ssize_t index2)
 {
-    CCASSERT(index1 >= 0 && index1 < arr->num, "(1) Invalid index. Out of bounds");
-    CCASSERT(index2 >= 0 && index2 < arr->num, "(2) Invalid index. Out of bounds");
+    AXASSERT(index1 >= 0 && index1 < arr->num, "(1) Invalid index. Out of bounds");
+    AXASSERT(index2 >= 0 && index2 < arr->num, "(2) Invalid index. Out of bounds");
 
     Ref* object1 = arr->arr[index1];
 
@@ -198,10 +198,10 @@ void ccArrayRemoveAllObjects(ccArray* arr)
  Behavior undefined if index outside [0, num-1]. */
 void ccArrayRemoveObjectAtIndex(ccArray* arr, ssize_t index, bool releaseObj /* = true*/)
 {
-    CCASSERT(arr && arr->num > 0 && index >= 0 && index < arr->num, "Invalid index. Out of bounds");
+    AXASSERT(arr && arr->num > 0 && index >= 0 && index < arr->num, "Invalid index. Out of bounds");
     if (releaseObj)
     {
-        CC_SAFE_RELEASE(arr->arr[index]);
+        AX_SAFE_RELEASE(arr->arr[index]);
     }
 
     arr->num--;
@@ -218,7 +218,7 @@ void ccArrayRemoveObjectAtIndex(ccArray* arr, ssize_t index, bool releaseObj /* 
  Behavior undefined if index outside [0, num-1]. */
 void ccArrayFastRemoveObjectAtIndex(ccArray* arr, ssize_t index)
 {
-    CC_SAFE_RELEASE(arr->arr[index]);
+    AX_SAFE_RELEASE(arr->arr[index]);
     auto last       = --arr->num;
     arr->arr[index] = arr->arr[last];
 }
@@ -226,7 +226,7 @@ void ccArrayFastRemoveObjectAtIndex(ccArray* arr, ssize_t index)
 void ccArrayFastRemoveObject(ccArray* arr, Ref* object)
 {
     auto index = ccArrayGetIndexOfObject(arr, object);
-    if (index != CC_INVALID_INDEX)
+    if (index != AX_INVALID_INDEX)
     {
         ccArrayFastRemoveObjectAtIndex(arr, index);
     }
@@ -237,7 +237,7 @@ void ccArrayFastRemoveObject(ccArray* arr, Ref* object)
 void ccArrayRemoveObject(ccArray* arr, Ref* object, bool releaseObj /* = true*/)
 {
     auto index = ccArrayGetIndexOfObject(arr, object);
-    if (index != CC_INVALID_INDEX)
+    if (index != AX_INVALID_INDEX)
     {
         ccArrayRemoveObjectAtIndex(arr, index, releaseObj);
     }
@@ -263,7 +263,7 @@ void ccArrayFullRemoveArray(ccArray* arr, ccArray* minusArr)
     {
         if (ccArrayContainsObject(minusArr, arr->arr[i]))
         {
-            CC_SAFE_RELEASE(arr->arr[i]);
+            AX_SAFE_RELEASE(arr->arr[i]);
             back++;
         }
         else
@@ -319,7 +319,7 @@ void ccCArrayEnsureExtraCapacity(ccCArray* arr, ssize_t extra)
     ccArrayEnsureExtraCapacity((ccArray*)arr, extra);
 }
 
-/** Returns index of first occurrence of value, CC_INVALID_INDEX if value not found. */
+/** Returns index of first occurrence of value, AX_INVALID_INDEX if value not found. */
 ssize_t ccCArrayGetIndexOfValue(ccCArray* arr, void* value)
 {
     for (ssize_t i = 0; i < arr->num; i++)
@@ -327,19 +327,19 @@ ssize_t ccCArrayGetIndexOfValue(ccCArray* arr, void* value)
         if (arr->arr[i] == value)
             return i;
     }
-    return CC_INVALID_INDEX;
+    return AX_INVALID_INDEX;
 }
 
 /** Returns a Boolean value that indicates whether value is present in the C array. */
 bool ccCArrayContainsValue(ccCArray* arr, void* value)
 {
-    return ccCArrayGetIndexOfValue(arr, value) != CC_INVALID_INDEX;
+    return ccCArrayGetIndexOfValue(arr, value) != AX_INVALID_INDEX;
 }
 
 /** Inserts a value at a certain position. Behavior undefined if array doesn't have enough capacity */
 void ccCArrayInsertValueAtIndex(ccCArray* arr, void* value, ssize_t index)
 {
-    CCASSERT(index < arr->max, "ccCArrayInsertValueAtIndex: invalid index");
+    AXASSERT(index < arr->max, "ccCArrayInsertValueAtIndex: invalid index");
 
     auto remaining = arr->num - index;
     // make sure it has enough capacity
@@ -430,7 +430,7 @@ void ccCArrayFastRemoveValueAtIndex(ccCArray* arr, ssize_t index)
 void ccCArrayRemoveValue(ccCArray* arr, void* value)
 {
     auto index = ccCArrayGetIndexOfValue(arr, value);
-    if (index != CC_INVALID_INDEX)
+    if (index != AX_INVALID_INDEX)
     {
         ccCArrayRemoveValueAtIndex(arr, index);
     }

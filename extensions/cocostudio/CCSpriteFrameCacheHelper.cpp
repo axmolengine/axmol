@@ -67,7 +67,7 @@ void SpriteFrameCacheHelper::retainSpriteFrames(std::string_view plistPath)
         auto& spriteFrameName    = iter->first;
         SpriteFrame* spriteFrame = spriteFramesCache->getSpriteFrameByName(spriteFrameName);
         vec.push_back(spriteFrame);
-        CC_SAFE_RETAIN(spriteFrame);
+        AX_SAFE_RETAIN(spriteFrame);
     }
     _usingSpriteFrames[plistPath] = vec;
 }
@@ -82,7 +82,7 @@ void SpriteFrameCacheHelper::releaseSpriteFrames(std::string_view plistPath)
     auto itFrame = vec.begin();
     while (itFrame != vec.end())
     {
-        CC_SAFE_RELEASE(*itFrame);
+        AX_SAFE_RELEASE(*itFrame);
         ++itFrame;
     }
     vec.clear();

@@ -9,7 +9,7 @@ end
 
 ----------------
 -- run
-CC_USE_DEPRECATED_API = true
+AX_USE_DEPRECATED_API = true
 require "cocos.init"
 
 local director = cc.Director:getInstance()

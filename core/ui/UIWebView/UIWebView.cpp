@@ -24,12 +24,12 @@
  ****************************************************************************/
 #include "platform/CCPlatformConfig.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 #    include "ui/UIWebView/UIWebViewImpl-android.h"
 #    include "ui/UIWebView/UIWebView-inl.h"
 
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
 #    include "ui/UIWebView/UIWebViewImpl-win32.h"
 #    include "ui/UIWebView/UIWebView-inl.h"

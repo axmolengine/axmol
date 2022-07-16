@@ -37,7 +37,7 @@ NS_AX_END
 
 DEFINE_TEST_SUITE(Physics3DTests);
 
-#if CC_USE_3D_PHYSICS == 0
+#if AX_USE_3D_PHYSICS == 0
 class Physics3DDemoDisabled : public TestCase
 {
 public:

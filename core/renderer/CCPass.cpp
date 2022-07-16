@@ -70,7 +70,7 @@ Pass* Pass::create(Technique* technique)
         pass->autorelease();
         return pass;
     }
-    CC_SAFE_DELETE(pass);
+    AX_SAFE_DELETE(pass);
     return nullptr;
 }
 
@@ -82,7 +82,7 @@ Pass* Pass::createWithProgramState(Technique* technique, backend::ProgramState* 
         pass->autorelease();
         return pass;
     }
-    CC_SAFE_DELETE(pass);
+    AX_SAFE_DELETE(pass);
     return nullptr;
 }
 
@@ -103,8 +103,8 @@ Pass::Pass() {}
 
 Pass::~Pass()
 {
-    CC_SAFE_RELEASE(_vertexAttribBinding);
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_vertexAttribBinding);
+    AX_SAFE_RELEASE(_programState);
 }
 
 Pass* Pass::clone() const
@@ -115,7 +115,7 @@ Pass* Pass::clone() const
     pass->setProgramState(_programState->clone());
 
     pass->_vertexAttribBinding = _vertexAttribBinding;
-    CC_SAFE_RETAIN(pass->_vertexAttribBinding);
+    AX_SAFE_RETAIN(pass->_vertexAttribBinding);
 
     pass->setTechnique(_technique);
 
@@ -133,9 +133,9 @@ void Pass::setProgramState(backend::ProgramState* programState)
 {
     if (_programState != programState)
     {
-        CC_SAFE_RELEASE(_programState);
+        AX_SAFE_RELEASE(_programState);
         _programState = programState;
-        CC_SAFE_RETAIN(_programState);
+        AX_SAFE_RETAIN(_programState);
         initUniformLocations();
         _hashDirty = true;
     }
@@ -183,8 +183,8 @@ void Pass::draw(MeshCommand* meshCommand,
                 const Mat4& modelView)
 {
 
-    meshCommand->setBeforeCallback(CC_CALLBACK_0(Pass::onBeforeVisitCmd, this, meshCommand));
-    meshCommand->setAfterCallback(CC_CALLBACK_0(Pass::onAfterVisitCmd, this, meshCommand));
+    meshCommand->setBeforeCallback(AX_CALLBACK_0(Pass::onBeforeVisitCmd, this, meshCommand));
+    meshCommand->setAfterCallback(AX_CALLBACK_0(Pass::onAfterVisitCmd, this, meshCommand));
     meshCommand->init(globalZOrder, modelView);
     meshCommand->setPrimitiveType(primitive);
     meshCommand->setIndexBuffer(indexBuffer, indexFormat);
@@ -248,7 +248,7 @@ void Pass::onAfterVisitCmd(MeshCommand* command)
 
 Node* Pass::getTarget() const
 {
-    CCASSERT(_technique && _technique->_material, "Pass must have a Technique and Material");
+    AXASSERT(_technique && _technique->_material, "Pass must have a Technique and Material");
 
     Material* material = _technique->_material;
     return material->_target;
@@ -263,9 +263,9 @@ void Pass::setVertexAttribBinding(VertexAttribBinding* binding)
 {
     if (_vertexAttribBinding != binding)
     {
-        CC_SAFE_RELEASE(_vertexAttribBinding);
+        AX_SAFE_RELEASE(_vertexAttribBinding);
         _vertexAttribBinding = binding;
-        CC_SAFE_RETAIN(_vertexAttribBinding);
+        AX_SAFE_RETAIN(_vertexAttribBinding);
     }
 }
 

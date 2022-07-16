@@ -60,18 +60,18 @@ ControlStepper::~ControlStepper()
 {
     unscheduleAllCallbacks();
 
-    CC_SAFE_RELEASE(_minusSprite);
-    CC_SAFE_RELEASE(_plusSprite);
-    CC_SAFE_RELEASE(_minusLabel);
-    CC_SAFE_RELEASE(_plusLabel);
+    AX_SAFE_RELEASE(_minusSprite);
+    AX_SAFE_RELEASE(_plusSprite);
+    AX_SAFE_RELEASE(_minusLabel);
+    AX_SAFE_RELEASE(_plusLabel);
 }
 
 bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprite* plusSprite)
 {
     if (Control::init())
     {
-        CCASSERT(minusSprite, "Minus sprite must be not nil");
-        CCASSERT(plusSprite, "Plus sprite must be not nil");
+        AXASSERT(minusSprite, "Minus sprite must be not nil");
+        AXASSERT(plusSprite, "Plus sprite must be not nil");
 
         // Set the default values
         _autorepeat   = true;
@@ -124,7 +124,7 @@ ControlStepper* ControlStepper::create(Sprite* minusSprite, Sprite* plusSprite)
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -148,7 +148,7 @@ void ControlStepper::setMinimumValue(double minimumValue)
 {
     if (minimumValue >= _maximumValue)
     {
-        CCASSERT(0, "Must be numerically less than maximumValue.");
+        AXASSERT(0, "Must be numerically less than maximumValue.");
     }
 
     _minimumValue = minimumValue;
@@ -159,7 +159,7 @@ void ControlStepper::setMaximumValue(double maximumValue)
 {
     if (maximumValue <= _minimumValue)
     {
-        CCASSERT(0, "Must be numerically greater than minimumValue.");
+        AXASSERT(0, "Must be numerically greater than minimumValue.");
     }
 
     _maximumValue = maximumValue;
@@ -180,7 +180,7 @@ void ControlStepper::setStepValue(double stepValue)
 {
     if (stepValue <= 0)
     {
-        CCASSERT(0, "Must be numerically greater than 0.");
+        AXASSERT(0, "Must be numerically greater than 0.");
     }
 
     _stepValue = stepValue;
@@ -224,14 +224,14 @@ void ControlStepper::startAutorepeat()
 {
     _autorepeatCount = -1;
 
-    this->schedule(CC_SCHEDULE_SELECTOR(ControlStepper::update), kAutorepeatDeltaTime, CC_REPEAT_FOREVER,
+    this->schedule(AX_SCHEDULE_SELECTOR(ControlStepper::update), kAutorepeatDeltaTime, AX_REPEAT_FOREVER,
                    kAutorepeatDeltaTime * 3);
 }
 
 /** Stop the autorepeat. */
 void ControlStepper::stopAutorepeat()
 {
-    this->unschedule(CC_SCHEDULE_SELECTOR(ControlStepper::update));
+    this->unschedule(AX_SCHEDULE_SELECTOR(ControlStepper::update));
 }
 
 void ControlStepper::update(float /*dt*/)

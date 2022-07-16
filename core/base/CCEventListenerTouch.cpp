@@ -44,7 +44,7 @@ EventListenerTouchOneByOne::EventListenerTouchOneByOne()
 
 EventListenerTouchOneByOne::~EventListenerTouchOneByOne()
 {
-    CCLOGINFO("In the destructor of EventListenerTouchOneByOne, %p", this);
+    AXLOGINFO("In the destructor of EventListenerTouchOneByOne, %p", this);
 }
 
 bool EventListenerTouchOneByOne::init()
@@ -76,7 +76,7 @@ EventListenerTouchOneByOne* EventListenerTouchOneByOne::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -87,7 +87,7 @@ bool EventListenerTouchOneByOne::checkAvailable()
     // message to 'EventListenerTouchOneByOne' or not. So 'onTouchBegan' needs to be set.
     if (onTouchBegan == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerTouchOneByOne!");
+        AXASSERT(false, "Invalid EventListenerTouchOneByOne!");
         return false;
     }
 
@@ -111,7 +111,7 @@ EventListenerTouchOneByOne* EventListenerTouchOneByOne::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -126,7 +126,7 @@ EventListenerTouchAllAtOnce::EventListenerTouchAllAtOnce()
 
 EventListenerTouchAllAtOnce::~EventListenerTouchAllAtOnce()
 {
-    CCLOGINFO("In the destructor of EventListenerTouchAllAtOnce, %p", this);
+    AXLOGINFO("In the destructor of EventListenerTouchAllAtOnce, %p", this);
 }
 
 bool EventListenerTouchAllAtOnce::init()
@@ -148,7 +148,7 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -158,7 +158,7 @@ bool EventListenerTouchAllAtOnce::checkAvailable()
     if (onTouchesBegan == nullptr && onTouchesMoved == nullptr && onTouchesEnded == nullptr &&
         onTouchesCancelled == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerTouchAllAtOnce!");
+        AXASSERT(false, "Invalid EventListenerTouchAllAtOnce!");
         return false;
     }
 
@@ -179,7 +179,7 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

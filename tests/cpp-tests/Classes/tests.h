@@ -29,27 +29,27 @@
 #include "Box2DTestBed/Box2DTestBed.h"
 
 #include "ChipmunkTest/ChipmunkTest.h"
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
 #    include "ChipmunkTestBed/ChipmunkTestBed.h"
 #endif
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MARMALADE)
 #    include "ClippingNodeTest/ClippingNodeTest.h"
 #endif
 #include "NewAudioEngineTest/NewAudioEngineTest.h"
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_EMSCRIPEN)
-#    if (CC_TARGET_PLATFORM != CC_PLATFORM_MARMALADE)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_EMSCRIPEN)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MARMALADE)
 // bada don't support libcurl
-#        if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
+#        if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
 #            include "CurlTest/CurlTest.h"
 #        endif
 #    endif
 #endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "JNITest/JNITest.h"
 #endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || \
-     CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
+     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "WindowTest/WindowTest.h"
 #endif
 
@@ -119,7 +119,7 @@
 #include "ZwoptexTest/ZwoptexTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
 #    include "ImGuiTest/ImGuiTest.h"
 #endif
 #endif

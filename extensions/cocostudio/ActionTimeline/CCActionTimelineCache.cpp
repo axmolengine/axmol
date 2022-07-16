@@ -99,7 +99,7 @@ ActionTimelineCache* ActionTimelineCache::getInstance()
 
 void ActionTimelineCache::destroyInstance()
 {
-    CC_SAFE_DELETE(_sharedActionCache);
+    AX_SAFE_DELETE(_sharedActionCache);
 }
 
 void ActionTimelineCache::purge()
@@ -194,7 +194,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(std::string_
     doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
-        CCLOG("GetParseError %d\n", doc.GetParseError());
+        AXLOG("GetParseError %d\n", doc.GetParseError());
     }
 
     const rapidjson::Value& json = DICTOOL->getSubDictionary_json(doc, ACTION);
@@ -443,7 +443,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std:
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
-    CC_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
+    AX_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
 
     Data buf = FileUtils::getInstance()->getDataFromFile(fullPath);
     action   = createActionWithDataBuffer(buf);
@@ -461,7 +461,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const axis::Dat
 
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
 
-    CC_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
+    AX_ASSERT(FileUtils::getInstance()->isFileExist(fullPath));
 
     action = createActionWithDataBuffer(data);
     _animationActions.insert(fileName, action);
@@ -599,7 +599,7 @@ Timeline* ActionTimelineCache::loadTimelineWithFlatBuffers(const flatbuffers::Ti
 
             if (!frame)
             {
-                CCLOG("frame is invalid.");
+                AXLOG("frame is invalid.");
                 continue;
             }
             timeline->addFrame(frame);

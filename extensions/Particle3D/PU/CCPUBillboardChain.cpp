@@ -91,10 +91,10 @@ PUBillboardChain::PUBillboardChain(std::string_view /*name*/,
 //-----------------------------------------------------------------------
 PUBillboardChain::~PUBillboardChain()
 {
-    // CC_SAFE_RELEASE(_texture);
-    CC_SAFE_RELEASE(_programState);
-    CC_SAFE_RELEASE(_vertexBuffer);
-    CC_SAFE_RELEASE(_indexBuffer);
+    // AX_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_vertexBuffer);
+    AX_SAFE_RELEASE(_indexBuffer);
 }
 //-----------------------------------------------------------------------
 void PUBillboardChain::setupChainContainers()
@@ -153,8 +153,8 @@ void PUBillboardChain::setupBuffers()
     // setupVertexDeclaration();
     if (_buffersNeedRecreating)
     {
-        CC_SAFE_RELEASE_NULL(_vertexBuffer);
-        CC_SAFE_RELEASE_NULL(_indexBuffer);
+        AX_SAFE_RELEASE_NULL(_vertexBuffer);
+        AX_SAFE_RELEASE_NULL(_indexBuffer);
 
         size_t stride = sizeof(VertexInfo);
         _vertexBuffer = backend::Device::getInstance()->newBuffer(
@@ -240,7 +240,7 @@ void PUBillboardChain::setDynamic(bool dyn)
 //-----------------------------------------------------------------------
 void PUBillboardChain::addChainElement(size_t chainIndex, const PUBillboardChain::Element& dtls)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
     if (seg.head == SEGMENT_EMPTY)
     {
@@ -285,7 +285,7 @@ void PUBillboardChain::addChainElement(size_t chainIndex, const PUBillboardChain
 //-----------------------------------------------------------------------
 void PUBillboardChain::removeChainElement(size_t chainIndex)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
     if (seg.head == SEGMENT_EMPTY)
         return;  // do nothing, nothing to remove
@@ -315,7 +315,7 @@ void PUBillboardChain::removeChainElement(size_t chainIndex)
 //-----------------------------------------------------------------------
 void PUBillboardChain::clearChain(size_t chainIndex)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
 
     // Just reset head & tail
@@ -348,9 +348,9 @@ void PUBillboardChain::setFaceCamera(bool faceCamera, const Vec3& normalVector)
 //-----------------------------------------------------------------------
 void PUBillboardChain::updateChainElement(size_t chainIndex, size_t elementIndex, const PUBillboardChain::Element& dtls)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
-    CCASSERT(seg.head != SEGMENT_EMPTY, "Chain segment is empty");
+    AXASSERT(seg.head != SEGMENT_EMPTY, "Chain segment is empty");
 
     size_t idx = seg.head + elementIndex;
     // adjust for the edge and start
@@ -368,7 +368,7 @@ void PUBillboardChain::updateChainElement(size_t chainIndex, size_t elementIndex
 //-----------------------------------------------------------------------
 const PUBillboardChain::Element& PUBillboardChain::getChainElement(size_t chainIndex, size_t elementIndex) const
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     const ChainSegment& seg = _chainSegmentList[chainIndex];
 
     size_t idx = seg.head + elementIndex;
@@ -380,7 +380,7 @@ const PUBillboardChain::Element& PUBillboardChain::getChainElement(size_t chainI
 //-----------------------------------------------------------------------
 size_t PUBillboardChain::getNumChainElements(size_t chainIndex) const
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     const ChainSegment& seg = _chainSegmentList[chainIndex];
 
     if (seg.tail < seg.head)
@@ -431,7 +431,7 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
                     e = 0;
 
                 Element& elem = _chainElementList[e + seg.start];
-                CCASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
+                AXASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
                 unsigned short vertexIndex = static_cast<unsigned short>((e + seg.start) * 2);
                 //// Determine base pointer to vertex #1
                 // void* pBase = static_cast<void*>(
@@ -594,7 +594,7 @@ void PUBillboardChain::updateIndexBuffer()
                         e = 0;
                     // indexes of this element are (e * 2) and (e * 2) + 1
                     // indexes of the last element are the same, -2
-                    CCASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
+                    AXASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
                     unsigned short baseIdx     = static_cast<unsigned short>((e + seg.start) * 2);
                     unsigned short lastBaseIdx = static_cast<unsigned short>((laste + seg.start) * 2);
 
@@ -629,7 +629,7 @@ void PUBillboardChain::updateIndexBuffer()
 //-----------------------------------------------------------------------
 void PUBillboardChain::init(std::string_view texFile)
 {
-    CC_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_programState);
 
     if (!texFile.empty())
     {
@@ -684,8 +684,8 @@ void PUBillboardChain::init(std::string_view texFile)
     _stateBlock.setCullFaceSide(backend::CullMode::BACK);
     _stateBlock.setCullFace(true);
 
-    _meshCommand.setBeforeCallback(CC_CALLBACK_0(PUBillboardChain::onBeforeDraw, this));
-    _meshCommand.setAfterCallback(CC_CALLBACK_0(PUBillboardChain::onAfterDraw, this));
+    _meshCommand.setBeforeCallback(AX_CALLBACK_0(PUBillboardChain::onBeforeDraw, this));
+    _meshCommand.setAfterCallback(AX_CALLBACK_0(PUBillboardChain::onAfterDraw, this));
 }
 
 void PUBillboardChain::render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem)

@@ -85,8 +85,8 @@ void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB  = 8 * 1024;
     const double memorySize  = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-#ifndef CC_USE_METAL
-    CC_ASSERT(texture->getPixelFormat() == expectedFormat);
+#ifndef AX_USE_METAL
+    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
     const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
                                                         texture->getStringForFormat(), memorySize);
@@ -113,7 +113,7 @@ void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
     Texture2D* texture       = spriteFrame->getTexture();
-    CC_ASSERT(texture->getPixelFormat() == expectedFormat);
+    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
 
     SpriteFrameCache::getInstance()->removeSpriteFrameByName("sprite_frames_test/grossini.png");
     Director::getInstance()->getTextureCache()->removeTexture(texture);
@@ -130,19 +130,19 @@ void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, axis::ba
 {
     auto cache = SpriteFrameCache::getInstance();
 
-    CCASSERT(cache->isSpriteFramesWithFileLoaded("plist which not exists") == false, "Plist not exists");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded("plist which not exists") == false, "Plist not exists");
 
     cache->addSpriteFramesWithFile(file);
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after loaded");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after loaded");
 
     cache->removeSpriteFrameByName("not_exists_grossinis_sister.png");
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should not be still full");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should not be still full");
 
     cache->removeSpriteFrameByName("grossinis_sister1.png");
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == false, "Plist should not be full after remove any sprite");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == false, "Plist should not be full after remove any sprite");
 
     cache->addSpriteFramesWithFile(file);
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after reloaded");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after reloaded");
 }
 
 class GenericJsonArraySpriteSheetLoader : public SpriteSheetLoader
@@ -154,13 +154,13 @@ public:
 
     void load(std::string_view filePath, SpriteFrameCache& cache) override
     {
-        CCASSERT(!filePath.empty(), "atlas filename should not be nullptr");
+        AXASSERT(!filePath.empty(), "atlas filename should not be nullptr");
 
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
         if (fullPath.empty())
         {
             // return if plist file doesn't exist
-            CCLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
+            AXLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
             return;
         }
 
@@ -197,7 +197,7 @@ public:
             // append .png
             texturePath = texturePath.append(".png");
 
-            CCLOG("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
+            AXLOG("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
         }
 
         addSpriteFramesWithJson(jDoc, texturePath, filePath, cache);
@@ -215,7 +215,7 @@ public:
 
     void load(std::string_view filePath, std::string_view textureFileName, SpriteFrameCache& cache) override
     {
-        CCASSERT(!textureFileName.empty(), "texture name should not be null");
+        AXASSERT(!textureFileName.empty(), "texture name should not be null");
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
         rapidjson::Document jDoc;
         const auto data = FileUtils::getInstance()->getStringFromFile(fullPath);
@@ -284,7 +284,7 @@ public:
         }
         else
         {
-            CCLOG("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
+            AXLOG("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
         }
     }
 
@@ -337,7 +337,7 @@ protected:
         }
         else
         {
-            CCLOG("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
+            AXLOG("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
         }
     }
 
@@ -411,7 +411,7 @@ protected:
 
         spriteSheet->full = true;
 
-        CC_SAFE_DELETE(image);
+        AX_SAFE_DELETE(image);
     }
 
     void reloadSpriteFramesWithDictionary(const rapidjson::Document& doc,
@@ -500,8 +500,8 @@ void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
     const ssize_t bitsPerKB = 8 * 1024;
     const double memorySize = 1.0 * texture->getBitsPerPixelForFormat() * texture->getContentSizeInPixels().width *
                               texture->getContentSizeInPixels().height / bitsPerKB;
-#ifndef CC_USE_METAL
-    CC_ASSERT(texture->getPixelFormat() == expectedFormat);
+#ifndef AX_USE_METAL
+    AX_ASSERT(texture->getPixelFormat() == expectedFormat);
 #endif
     const std::string textureInfo = StringUtils::format("%s%s: %.2f KB\r\n", infoLabel->getString().data(),
                                                         texture->getStringForFormat(), memorySize);

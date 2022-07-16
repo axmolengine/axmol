@@ -90,8 +90,8 @@ const Vec3 PUTriangle::getRandomTrianglePosition()
     // in triangle ABC: the reflection step a=1-a; b=1-b gives a point (a,b) uniformly distributed in the
     // triangle (0,0)(1,0)(0,1), which is then mapped affinely to ABC. Now you have barycentric coordinates
     // a,b,c. Compute your point P = aA + bB + cC.
-    float a = CCRANDOM_0_1();
-    float b = CCRANDOM_0_1();
+    float a = AXRANDOM_0_1();
+    float b = AXRANDOM_0_1();
     if (a + b > 1)
     {
         a = 1 - a;
@@ -103,8 +103,8 @@ const Vec3 PUTriangle::getRandomTrianglePosition()
 //-----------------------------------------------------------------------
 const PUTriangle::PositionAndNormal PUTriangle::getRandomEdgePositionAndNormal()
 {
-    float mult      = CCRANDOM_0_1();
-    float randomVal = CCRANDOM_0_1() * 3.0f;
+    float mult      = AXRANDOM_0_1();
+    float randomVal = AXRANDOM_0_1() * 3.0f;
     PositionAndNormal pAndN;
     pAndN.position.setZero();
     pAndN.normal.setZero();
@@ -133,7 +133,7 @@ const PUTriangle::PositionAndNormal PUTriangle::getRandomEdgePositionAndNormal()
 //-----------------------------------------------------------------------
 const PUTriangle::PositionAndNormal PUTriangle::getRandomVertexAndNormal()
 {
-    float randomVal = CCRANDOM_0_1() * 3.0f;
+    float randomVal = AXRANDOM_0_1() * 3.0f;
     PositionAndNormal pAndN;
     pAndN.position.setZero();
     pAndN.normal.setZero();
@@ -188,8 +188,8 @@ inline float MeshInfo::getGaussianRandom(float high, float cutoff)
     unsigned int max = 0;
     do
     {
-        x1 = CCRANDOM_0_1();
-        x2 = CCRANDOM_0_1();
+        x1 = AXRANDOM_0_1();
+        x2 = AXRANDOM_0_1();
         w  = x1 * x1 + x2 * x2;
 
         // Prevent infinite loop
@@ -220,7 +220,7 @@ size_t MeshInfo::getRandomTriangleIndex()
         index = (size_t)getGaussianRandom((float)_triangles.size() - 1);
     }
     else
-        index = (size_t)(CCRANDOM_0_1() * (float)(_triangles.size() - 1));
+        index = (size_t)(AXRANDOM_0_1() * (float)(_triangles.size() - 1));
 
     return index;
 }
@@ -418,7 +418,7 @@ PUMeshSurfaceEmitter::~PUMeshSurfaceEmitter()
 {
     if (_meshInfo)
     {
-        CC_SAFE_DELETE(_meshInfo);
+        AX_SAFE_DELETE(_meshInfo);
     }
 }
 //-----------------------------------------------------------------------
@@ -569,7 +569,7 @@ void PUMeshSurfaceEmitter::build()
     // Delete the mesh info if already existing
     if (_meshInfo)
     {
-        CC_SAFE_DELETE(_meshInfo);
+        AX_SAFE_DELETE(_meshInfo);
     }
 
     // Generate meshinfo.

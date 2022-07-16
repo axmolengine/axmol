@@ -58,7 +58,7 @@ class EventCustom;
  * There are also functions for saving the render texture to disk in PNG or JPG format.
  * @since v0.8.1
  */
-class CC_DLL RenderTexture : public Node
+class AX_DLL RenderTexture : public Node
 {
 public:
     using SaveFileCallbackType = std::function<void(RenderTexture*, std::string_view)>;
@@ -430,7 +430,7 @@ protected:
     Mat4 _transformMatrix, _projectionMatrix;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(RenderTexture);
+    AX_DISALLOW_COPY_AND_ASSIGN(RenderTexture);
 };
 
 // end of textures group

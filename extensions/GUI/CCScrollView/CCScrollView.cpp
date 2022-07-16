@@ -78,7 +78,7 @@ ScrollView* ScrollView::create(Size size, Node* container /* = nullptr*/)
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -92,7 +92,7 @@ ScrollView* ScrollView::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -186,10 +186,10 @@ void ScrollView::setTouchEnabled(bool enabled)
     {
         _touchListener = EventListenerTouchOneByOne::create();
         _touchListener->setSwallowTouches(true);
-        _touchListener->onTouchBegan     = CC_CALLBACK_2(ScrollView::onTouchBegan, this);
-        _touchListener->onTouchMoved     = CC_CALLBACK_2(ScrollView::onTouchMoved, this);
-        _touchListener->onTouchEnded     = CC_CALLBACK_2(ScrollView::onTouchEnded, this);
-        _touchListener->onTouchCancelled = CC_CALLBACK_2(ScrollView::onTouchCancelled, this);
+        _touchListener->onTouchBegan     = AX_CALLBACK_2(ScrollView::onTouchBegan, this);
+        _touchListener->onTouchMoved     = AX_CALLBACK_2(ScrollView::onTouchMoved, this);
+        _touchListener->onTouchEnded     = AX_CALLBACK_2(ScrollView::onTouchEnded, this);
+        _touchListener->onTouchCancelled = AX_CALLBACK_2(ScrollView::onTouchCancelled, this);
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
     }
@@ -244,10 +244,10 @@ void ScrollView::setContentOffsetInDuration(Vec2 offset, float dt)
         stopAnimatedContentOffset();
     }
     scroll                = MoveTo::create(dt, offset);
-    expire                = CallFuncN::create(CC_CALLBACK_1(ScrollView::stoppedAnimatedScroll, this));
+    expire                = CallFuncN::create(AX_CALLBACK_1(ScrollView::stoppedAnimatedScroll, this));
     _animatedScrollAction = _container->runAction(Sequence::create(scroll, expire, nullptr));
     _animatedScrollAction->retain();
-    this->schedule(CC_SCHEDULE_SELECTOR(ScrollView::performedAnimatedScroll));
+    this->schedule(AX_SCHEDULE_SELECTOR(ScrollView::performedAnimatedScroll));
 }
 
 void ScrollView::stopAnimatedContentOffset()
@@ -426,7 +426,7 @@ void ScrollView::deaccelerateScrolling(float /*dt*/)
 {
     if (_dragging)
     {
-        this->unschedule(CC_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
+        this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
         return;
     }
 
@@ -458,14 +458,14 @@ void ScrollView::deaccelerateScrolling(float /*dt*/)
         ((_direction == Direction::BOTH || _direction == Direction::HORIZONTAL) &&
          (newX >= maxInset.x || newX <= minInset.x)))
     {
-        this->unschedule(CC_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
+        this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
         this->relocateContainer(true);
     }
 }
 
 void ScrollView::stoppedAnimatedScroll(Node* /*node*/)
 {
-    this->unschedule(CC_SCHEDULE_SELECTOR(ScrollView::performedAnimatedScroll));
+    this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::performedAnimatedScroll));
     // After the animation stopped, "scrollViewDidScroll" should be invoked, this could fix the bug of lack of tableview
     // cells.
     if (_delegate != nullptr)
@@ -478,7 +478,7 @@ void ScrollView::performedAnimatedScroll(float /*dt*/)
 {
     if (_dragging)
     {
-        this->unschedule(CC_SCHEDULE_SELECTOR(ScrollView::performedAnimatedScroll));
+        this->unschedule(AX_SCHEDULE_SELECTOR(ScrollView::performedAnimatedScroll));
         return;
     }
 
@@ -568,7 +568,7 @@ void ScrollView::beforeDraw()
     // TODO: minggo
     // ScrollView don't support drawing in 3D space
     //     _beforeDrawCommand.init(_globalZOrder);
-    //     _beforeDrawCommand.func = CC_CALLBACK_0(ScrollView::onBeforeDraw, this);
+    //     _beforeDrawCommand.func = AX_CALLBACK_0(ScrollView::onBeforeDraw, this);
     //     Director::getInstance()->getRenderer()->addCommand(&_beforeDrawCommand);
 }
 
@@ -610,7 +610,7 @@ void ScrollView::afterDraw()
 {
     // TODO: minggo
     //  _afterDrawCommand.init(_globalZOrder);
-    //  _afterDrawCommand.func = CC_CALLBACK_0(ScrollView::onAfterDraw, this);
+    //  _afterDrawCommand.func = AX_CALLBACK_0(ScrollView::onAfterDraw, this);
     //  Director::getInstance()->getRenderer()->addCommand(&_afterDrawCommand);
 }
 
@@ -650,7 +650,7 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
     Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
@@ -795,7 +795,7 @@ void ScrollView::onTouchMoved(Touch* touch, Event* /*event*/)
 
             if (!_touchMoved && fabs(convertDistanceFromPointToInch(dis)) < MOVE_INCH)
             {
-                // CCLOG("Invalid movement, distance = [%f, %f], disInch = %f", moveDistance.x, moveDistance.y);
+                // AXLOG("Invalid movement, distance = [%f, %f], disInch = %f", moveDistance.x, moveDistance.y);
                 return;
             }
 
@@ -850,7 +850,7 @@ void ScrollView::onTouchEnded(Touch* touch, Event* /*event*/)
     {
         if (_touches.size() == 1 && _touchMoved)
         {
-            this->schedule(CC_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
+            this->schedule(AX_SCHEDULE_SELECTOR(ScrollView::deaccelerateScrolling));
         }
         _touches.erase(touchIter);
     }

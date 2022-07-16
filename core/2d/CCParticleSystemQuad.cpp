@@ -83,11 +83,11 @@ ParticleSystemQuad::~ParticleSystemQuad()
 {
     if (nullptr == _batchNode)
     {
-        CC_SAFE_FREE(_quads);
-        CC_SAFE_FREE(_indices);
+        AX_SAFE_FREE(_quads);
+        AX_SAFE_FREE(_indices);
     }
 
-    CC_SAFE_RELEASE_NULL(_quadCommand.getPipelineDescriptor().programState);
+    AX_SAFE_RELEASE_NULL(_quadCommand.getPipelineDescriptor().programState);
 }
 
 // implementation ParticleSystemQuad
@@ -100,13 +100,13 @@ ParticleSystemQuad* ParticleSystemQuad::create(std::string_view filename)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
 ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfParticles)
 {
-    CCASSERT(numberOfParticles <= 10000,
+    AXASSERT(numberOfParticles <= 10000,
              "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of "
              "U_SHORT (uint16_t)");
 
@@ -116,7 +116,7 @@ ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfPar
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -128,7 +128,7 @@ ParticleSystemQuad* ParticleSystemQuad::create(ValueMap& dictionary)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return ret;
 }
 
@@ -149,10 +149,10 @@ bool ParticleSystemQuad::initWithTotalParticles(int numberOfParticles)
         initIndices();
         //        setupVBO();
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         // Need to listen the event only when not use batchnode, because it will use VBO
         auto listener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
-                                                    CC_CALLBACK_1(ParticleSystemQuad::listenRendererRecreated, this));
+                                                    AX_CALLBACK_1(ParticleSystemQuad::listenRendererRecreated, this));
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
 
@@ -167,8 +167,8 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
     // convert to Tex coords
 
     Rect rect =
-        Rect(pointRect.origin.x * CC_CONTENT_SCALE_FACTOR(), pointRect.origin.y * CC_CONTENT_SCALE_FACTOR(),
-             pointRect.size.width * CC_CONTENT_SCALE_FACTOR(), pointRect.size.height * CC_CONTENT_SCALE_FACTOR());
+        Rect(pointRect.origin.x * AX_CONTENT_SCALE_FACTOR(), pointRect.origin.y * AX_CONTENT_SCALE_FACTOR(),
+             pointRect.size.width * AX_CONTENT_SCALE_FACTOR(), pointRect.size.height * AX_CONTENT_SCALE_FACTOR());
 
     float wide = (float)pointRect.size.width;
     float high = (float)pointRect.size.height;
@@ -179,7 +179,7 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
         high = (float)_texture->getPixelsHigh();
     }
 
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
     float left   = (rect.origin.x * 2 + 1) / (wide * 2);
     float bottom = (rect.origin.y * 2 + 1) / (high * 2);
     float right  = left + (rect.size.width * 2 - 2) / (wide * 2);
@@ -189,7 +189,7 @@ void ParticleSystemQuad::initTexCoordsWithRect(const Rect& pointRect)
     float bottom = rect.origin.y / high;
     float right  = left + rect.size.width / wide;
     float top    = bottom + rect.size.height / high;
-#endif  // ! CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#endif  // ! AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
 
     // Important. Texture in cocos2d are inverted, so the Y component should be inverted
     std::swap(top, bottom);
@@ -257,7 +257,7 @@ void ParticleSystemQuad::setTexture(Texture2D* texture)
 
 void ParticleSystemQuad::setDisplayFrame(SpriteFrame* spriteFrame)
 {
-    CCASSERT(spriteFrame->getOffsetInPixels().isZero(), "QuadParticle only supports SpriteFrames with no offsets");
+    AXASSERT(spriteFrame->getOffsetInPixels().isZero(), "QuadParticle only supports SpriteFrames with no offsets");
 
     this->setTextureWithRect(spriteFrame->getTexture(), spriteFrame->getRect());
 }
@@ -295,7 +295,7 @@ inline void updatePosWithParticle(V3F_C4B_T2F_Quad* quad,
     float x  = newPosition.x;
     float y  = newPosition.y;
 
-    float r  = (float)-CC_DEGREES_TO_RADIANS(rotation + staticRotation);
+    float r  = (float)-AX_DEGREES_TO_RADIANS(rotation + staticRotation);
     float cr = cosf(r);
     float sr = sinf(r);
     float ax = x1 * cr - y1 * sr + x;
@@ -731,7 +731,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         _particleData.release();
         if (!_particleData.init(tp))
         {
-            CCLOG("Particle system: not enough memory");
+            AXLOG("Particle system: not enough memory");
             return;
         }
         V3F_C4B_T2F_Quad* quadsNew = (V3F_C4B_T2F_Quad*)realloc(_quads, quadsSize);
@@ -757,7 +757,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
             if (indicesNew)
                 _indices = indicesNew;
 
-            CCLOG("Particle system: out of memory");
+            AXLOG("Particle system: out of memory");
             return;
         }
 
@@ -809,19 +809,19 @@ void ParticleSystemQuad::listenRendererRecreated(EventCustom* /*event*/)
 
 bool ParticleSystemQuad::allocMemory()
 {
-    CCASSERT(!_batchNode, "Memory should not be alloced when not using batchNode");
+    AXASSERT(!_batchNode, "Memory should not be alloced when not using batchNode");
 
-    CC_SAFE_FREE(_quads);
-    CC_SAFE_FREE(_indices);
+    AX_SAFE_FREE(_quads);
+    AX_SAFE_FREE(_indices);
 
     _quads   = (V3F_C4B_T2F_Quad*)malloc(_totalParticles * sizeof(V3F_C4B_T2F_Quad));
     _indices = (unsigned short*)malloc(_totalParticles * 6 * sizeof(unsigned short));
 
     if (!_quads || !_indices)
     {
-        CCLOG("cocos2d: Particle system: not enough memory");
-        CC_SAFE_FREE(_quads);
-        CC_SAFE_FREE(_indices);
+        AXLOG("cocos2d: Particle system: not enough memory");
+        AX_SAFE_FREE(_quads);
+        AX_SAFE_FREE(_indices);
 
         return false;
     }
@@ -856,8 +856,8 @@ void ParticleSystemQuad::setBatchNode(ParticleBatchNode* batchNode)
             V3F_C4B_T2F_Quad* quad       = &(batchQuads[_atlasIndex]);
             memcpy(quad, _quads, _totalParticles * sizeof(_quads[0]));
 
-            CC_SAFE_FREE(_quads);
-            CC_SAFE_FREE(_indices);
+            AX_SAFE_FREE(_quads);
+            AX_SAFE_FREE(_indices);
         }
     }
 }
@@ -870,7 +870,7 @@ ParticleSystemQuad* ParticleSystemQuad::create()
         particleSystemQuad->autorelease();
         return particleSystemQuad;
     }
-    CC_SAFE_DELETE(particleSystemQuad);
+    AX_SAFE_DELETE(particleSystemQuad);
     return nullptr;
 }
 

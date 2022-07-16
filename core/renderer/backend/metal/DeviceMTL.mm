@@ -104,7 +104,7 @@ TextureBackend* DeviceMTL::newTexture(const TextureDescriptor& descriptor)
     case TextureType::TEXTURE_CUBE:
         return new TextureCubeMTL(_mtlDevice, descriptor);
     default:
-        CCASSERT(false, "invalidate texture type");
+        AXASSERT(false, "invalidate texture type");
         return nullptr;
     }
 }

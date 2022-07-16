@@ -49,7 +49,7 @@ void PUSphereSurfaceEmitter::initParticlePosition(PUParticle3D* particle)
 {
     // Generate a random unit vector to calculate a point on the sphere. This unit vector is
     // also used as direction vector if mAutoDirection has been set.
-    _randomVector.set(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1());
+    _randomVector.set(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1());
     _randomVector.normalize();
     // ParticleSystem* sys = mParentTechnique->getParentSystem();
     // if (sys)

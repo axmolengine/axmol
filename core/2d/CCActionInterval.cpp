@@ -126,13 +126,13 @@ void ActionInterval::step(float dt)
 void ActionInterval::setAmplitudeRate(float /*amp*/)
 {
     // Abstract class needs implementation
-    CCASSERT(0, "Subclass should implement this method!");
+    AXASSERT(0, "Subclass should implement this method!");
 }
 
 float ActionInterval::getAmplitudeRate()
 {
     // Abstract class needs implementation
-    CCASSERT(0, "Subclass should implement this method!");
+    AXASSERT(0, "Subclass should implement this method!");
 
     return 0;
 }
@@ -237,8 +237,8 @@ bool Sequence::init(const Vector<FiniteTimeAction*>& arrayOfActions)
 
 bool Sequence::initWithTwoActions(FiniteTimeAction* actionOne, FiniteTimeAction* actionTwo)
 {
-    CCASSERT(actionOne != nullptr, "actionOne can't be nullptr!");
-    CCASSERT(actionTwo != nullptr, "actionTwo can't be nullptr!");
+    AXASSERT(actionOne != nullptr, "actionOne can't be nullptr!");
+    AXASSERT(actionTwo != nullptr, "actionTwo can't be nullptr!");
     if (actionOne == nullptr || actionTwo == nullptr)
     {
         log("Sequence::initWithTwoActions error: action is nullptr!!");
@@ -287,8 +287,8 @@ Sequence::Sequence() : _split(0)
 
 Sequence::~Sequence()
 {
-    CC_SAFE_RELEASE(_actions[0]);
-    CC_SAFE_RELEASE(_actions[1]);
+    AX_SAFE_RELEASE(_actions[0]);
+    AX_SAFE_RELEASE(_actions[1]);
 }
 
 void Sequence::startWithTarget(Node* target)
@@ -448,7 +448,7 @@ Repeat* Repeat::clone() const
 
 Repeat::~Repeat()
 {
-    CC_SAFE_RELEASE(_innerAction);
+    AX_SAFE_RELEASE(_innerAction);
 }
 
 void Repeat::startWithTarget(Node* target)
@@ -531,7 +531,7 @@ Repeat* Repeat::reverse() const
 //
 RepeatForever::~RepeatForever()
 {
-    CC_SAFE_RELEASE(_innerAction);
+    AX_SAFE_RELEASE(_innerAction);
 }
 
 RepeatForever* RepeatForever::create(ActionInterval* action)
@@ -549,7 +549,7 @@ RepeatForever* RepeatForever::create(ActionInterval* action)
 
 bool RepeatForever::initWithAction(ActionInterval* action)
 {
-    CCASSERT(action != nullptr, "action can't be nullptr!");
+    AXASSERT(action != nullptr, "action can't be nullptr!");
     if (action == nullptr)
     {
         log("RepeatForever::initWithAction error:action is nullptr!");
@@ -693,8 +693,8 @@ bool Spawn::init(const Vector<FiniteTimeAction*>& arrayOfActions)
 
 bool Spawn::initWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* action2)
 {
-    CCASSERT(action1 != nullptr, "action1 can't be nullptr!");
-    CCASSERT(action2 != nullptr, "action2 can't be nullptr!");
+    AXASSERT(action1 != nullptr, "action1 can't be nullptr!");
+    AXASSERT(action2 != nullptr, "action2 can't be nullptr!");
     if (action1 == nullptr || action2 == nullptr)
     {
         log("Spawn::initWithTwoActions error: action is nullptr!");
@@ -742,8 +742,8 @@ Spawn::Spawn() : _one(nullptr), _two(nullptr) {}
 
 Spawn::~Spawn()
 {
-    CC_SAFE_RELEASE(_one);
-    CC_SAFE_RELEASE(_two);
+    AX_SAFE_RELEASE(_one);
+    AX_SAFE_RELEASE(_two);
 }
 
 void Spawn::startWithTarget(Node* target)
@@ -932,7 +932,7 @@ void RotateTo::update(float time)
         }
         else
         {
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
             if (_startAngle.x == _startAngle.y && _diffAngle.x == _diffAngle.y)
             {
                 _target->setRotation(_startAngle.x + _diffAngle.x * time);
@@ -945,14 +945,14 @@ void RotateTo::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _diffAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _diffAngle.y * time);
-#endif  // CC_USE_PHYSICS
+#endif  // AX_USE_PHYSICS
         }
     }
 }
 
 RotateTo* RotateTo::reverse() const
 {
-    CCASSERT(false, "RotateTo doesn't support the 'reverse' method");
+    AXASSERT(false, "RotateTo doesn't support the 'reverse' method");
     return nullptr;
 }
 
@@ -1077,7 +1077,7 @@ void RotateBy::update(float time)
         }
         else
         {
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
             if (_startAngle.x == _startAngle.y && _deltaAngle.x == _deltaAngle.y)
             {
                 _target->setRotation(_startAngle.x + _deltaAngle.x * time);
@@ -1090,7 +1090,7 @@ void RotateBy::update(float time)
 #else
             _target->setRotationSkewX(_startAngle.x + _deltaAngle.x * time);
             _target->setRotationSkewY(_startAngle.y + _deltaAngle.y * time);
-#endif  // CC_USE_PHYSICS
+#endif  // AX_USE_PHYSICS
         }
     }
 }
@@ -1174,7 +1174,7 @@ void MoveBy::update(float t)
 {
     if (_target)
     {
-#if CC_ENABLE_STACKABLE_ACTIONS
+#if AX_ENABLE_STACKABLE_ACTIONS
         Vec3 currentPos = _target->getPosition3D();
         Vec3 diff       = currentPos - _previousPosition;
         _startPosition  = _startPosition + diff;
@@ -1183,7 +1183,7 @@ void MoveBy::update(float t)
         _previousPosition = newPos;
 #else
         _target->setPosition3D(_startPosition + _positionDelta * t);
-#endif  // CC_ENABLE_STACKABLE_ACTIONS
+#endif  // AX_ENABLE_STACKABLE_ACTIONS
     }
 }
 
@@ -1242,7 +1242,7 @@ void MoveTo::startWithTarget(Node* target)
 
 MoveTo* MoveTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in MoveTo");
+    AXASSERT(false, "reverse() not supported in MoveTo");
     return nullptr;
 }
 
@@ -1285,7 +1285,7 @@ SkewTo* SkewTo::clone() const
 
 SkewTo* SkewTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in SkewTo");
+    AXASSERT(false, "reverse() not supported in SkewTo");
     return nullptr;
 }
 
@@ -1542,7 +1542,7 @@ JumpBy* JumpBy::create(float duration, const Vec2& position, float height, int j
 
 bool JumpBy::initWithDuration(float duration, const Vec2& position, float height, int jumps)
 {
-    CCASSERT(jumps >= 0, "Number of jumps must be >= 0");
+    AXASSERT(jumps >= 0, "Number of jumps must be >= 0");
     if (jumps < 0)
     {
         log("JumpBy::initWithDuration error: Number of jumps must be >= 0");
@@ -1583,7 +1583,7 @@ void JumpBy::update(float t)
         y += _delta.y * t;
 
         float x = _delta.x * t;
-#if CC_ENABLE_STACKABLE_ACTIONS
+#if AX_ENABLE_STACKABLE_ACTIONS
         Vec2 currentPos = _target->getPosition();
 
         Vec2 diff      = currentPos - _previousPos;
@@ -1595,7 +1595,7 @@ void JumpBy::update(float t)
         _previousPos = newPos;
 #else
         _target->setPosition(_startPosition + Vec2(x, y));
-#endif  // !CC_ENABLE_STACKABLE_ACTIONS
+#endif  // !AX_ENABLE_STACKABLE_ACTIONS
     }
 }
 
@@ -1623,7 +1623,7 @@ JumpTo* JumpTo::create(float duration, const Vec2& position, float height, int j
 
 bool JumpTo::initWithDuration(float duration, const Vec2& position, float height, int jumps)
 {
-    CCASSERT(jumps >= 0, "Number of jumps must be >= 0");
+    AXASSERT(jumps >= 0, "Number of jumps must be >= 0");
     if (jumps < 0)
     {
         log("JumpTo::initWithDuration error:Number of jumps must be >= 0");
@@ -1650,7 +1650,7 @@ JumpTo* JumpTo::clone() const
 
 JumpTo* JumpTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in JumpTo");
+    AXASSERT(false, "reverse() not supported in JumpTo");
     return nullptr;
 }
 
@@ -1726,7 +1726,7 @@ void BezierBy::update(float time)
         float x = bezierat(xa, xb, xc, xd, time);
         float y = bezierat(ya, yb, yc, yd, time);
 
-#if CC_ENABLE_STACKABLE_ACTIONS
+#if AX_ENABLE_STACKABLE_ACTIONS
         Vec2 currentPos = _target->getPosition();
         Vec2 diff       = currentPos - _previousPosition;
         _startPosition  = _startPosition + diff;
@@ -1737,7 +1737,7 @@ void BezierBy::update(float time)
         _previousPosition = newPos;
 #else
         _target->setPosition(_startPosition + Vec2(x, y));
-#endif  // !CC_ENABLE_STACKABLE_ACTIONS
+#endif  // !AX_ENABLE_STACKABLE_ACTIONS
     }
 }
 
@@ -1797,7 +1797,7 @@ void BezierTo::startWithTarget(Node* target)
 
 BezierTo* BezierTo::reverse() const
 {
-    CCASSERT(false, "CCBezierTo doesn't support the 'reverse' method");
+    AXASSERT(false, "CCBezierTo doesn't support the 'reverse' method");
     return nullptr;
 }
 
@@ -1893,7 +1893,7 @@ ScaleTo* ScaleTo::clone() const
 
 ScaleTo* ScaleTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in ScaleTo");
+    AXASSERT(false, "reverse() not supported in ScaleTo");
     return nullptr;
 }
 
@@ -1999,7 +1999,7 @@ Blink* Blink::create(float duration, int blinks)
 
 bool Blink::initWithDuration(float duration, int blinks)
 {
-    CCASSERT(blinks >= 0, "blinks should be >= 0");
+    AXASSERT(blinks >= 0, "blinks should be >= 0");
     if (blinks < 0)
     {
         log("Blink::initWithDuration error:blinks should be >= 0");
@@ -2181,7 +2181,7 @@ FadeTo* FadeTo::clone() const
 
 FadeTo* FadeTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in FadeTo");
+    AXASSERT(false, "reverse() not supported in FadeTo");
     return nullptr;
 }
 
@@ -2243,7 +2243,7 @@ TintTo* TintTo::clone() const
 
 TintTo* TintTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in TintTo");
+    AXASSERT(false, "reverse() not supported in TintTo");
     return nullptr;
 }
 
@@ -2382,8 +2382,8 @@ ReverseTime* ReverseTime::create(FiniteTimeAction* action)
 
 bool ReverseTime::initWithAction(FiniteTimeAction* action)
 {
-    CCASSERT(action != nullptr, "action can't be nullptr!");
-    CCASSERT(action != _other, "action doesn't equal to _other!");
+    AXASSERT(action != nullptr, "action can't be nullptr!");
+    AXASSERT(action != _other, "action doesn't equal to _other!");
     if (action == nullptr || action == _other)
     {
         log("ReverseTime::initWithAction error: action is null or action equal to _other");
@@ -2393,7 +2393,7 @@ bool ReverseTime::initWithAction(FiniteTimeAction* action)
     if (ActionInterval::initWithDuration(action->getDuration()))
     {
         // Don't leak if action is reused
-        CC_SAFE_RELEASE(_other);
+        AX_SAFE_RELEASE(_other);
 
         _other = action;
         action->retain();
@@ -2414,7 +2414,7 @@ ReverseTime::ReverseTime() : _other(nullptr) {}
 
 ReverseTime::~ReverseTime()
 {
-    CC_SAFE_RELEASE(_other);
+    AX_SAFE_RELEASE(_other);
 }
 
 void ReverseTime::startWithTarget(Node* target)
@@ -2464,15 +2464,15 @@ Animate::Animate() {}
 
 Animate::~Animate()
 {
-    CC_SAFE_RELEASE(_animation);
-    CC_SAFE_RELEASE(_origFrame);
-    CC_SAFE_DELETE(_splitTimes);
-    CC_SAFE_RELEASE(_frameDisplayedEvent);
+    AX_SAFE_RELEASE(_animation);
+    AX_SAFE_RELEASE(_origFrame);
+    AX_SAFE_DELETE(_splitTimes);
+    AX_SAFE_RELEASE(_frameDisplayedEvent);
 }
 
 bool Animate::initWithAnimation(Animation* animation)
 {
-    CCASSERT(animation != nullptr, "Animate: argument Animation must be non-nullptr");
+    AXASSERT(animation != nullptr, "Animate: argument Animation must be non-nullptr");
     if (animation == nullptr)
     {
         log("Animate::initWithAnimation: argument Animation must be non-nullptr");
@@ -2510,8 +2510,8 @@ void Animate::setAnimation(axis::Animation* animation)
 {
     if (_animation != animation)
     {
-        CC_SAFE_RETAIN(animation);
-        CC_SAFE_RELEASE(_animation);
+        AX_SAFE_RETAIN(animation);
+        AX_SAFE_RELEASE(_animation);
         _animation = animation;
     }
 }
@@ -2527,7 +2527,7 @@ void Animate::startWithTarget(Node* target)
     ActionInterval::startWithTarget(target);
     Sprite* sprite = static_cast<Sprite*>(target);
 
-    CC_SAFE_RELEASE(_origFrame);
+    AX_SAFE_RELEASE(_origFrame);
 
     if (_animation->getRestoreOriginalFrame())
     {
@@ -2637,8 +2637,8 @@ TargetedAction::TargetedAction() : _action(nullptr), _forcedTarget(nullptr) {}
 
 TargetedAction::~TargetedAction()
 {
-    CC_SAFE_RELEASE(_forcedTarget);
-    CC_SAFE_RELEASE(_action);
+    AX_SAFE_RELEASE(_forcedTarget);
+    AX_SAFE_RELEASE(_action);
 }
 
 TargetedAction* TargetedAction::create(Node* target, FiniteTimeAction* action)
@@ -2658,9 +2658,9 @@ bool TargetedAction::initWithTarget(Node* target, FiniteTimeAction* action)
 {
     if (ActionInterval::initWithDuration(action->getDuration()))
     {
-        CC_SAFE_RETAIN(target);
+        AX_SAFE_RETAIN(target);
         _forcedTarget = target;
-        CC_SAFE_RETAIN(action);
+        AX_SAFE_RETAIN(action);
         _action = action;
         return true;
     }
@@ -2704,8 +2704,8 @@ void TargetedAction::setForcedTarget(Node* forcedTarget)
 {
     if (_forcedTarget != forcedTarget)
     {
-        CC_SAFE_RETAIN(forcedTarget);
-        CC_SAFE_RELEASE(_forcedTarget);
+        AX_SAFE_RETAIN(forcedTarget);
+        AX_SAFE_RELEASE(_forcedTarget);
         _forcedTarget = forcedTarget;
     }
 }

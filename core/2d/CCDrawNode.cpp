@@ -49,7 +49,7 @@ static inline Tex2F v2ToTex2F(const Vec2& v)
 DrawNode::DrawNode(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(lineWidth)
 {
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     // TODO new-renderer: interface setupBuffer removal
 
     // Need to listen the event only when not use batchnode, because it will use VBO
@@ -64,9 +64,9 @@ DrawNode::DrawNode(float lineWidth) : _lineWidth(lineWidth), _defaultLineWidth(l
 
 DrawNode::~DrawNode()
 {
-    CC_SAFE_FREE(_bufferTriangle);
-    CC_SAFE_FREE(_bufferPoint);
-    CC_SAFE_FREE(_bufferLine);
+    AX_SAFE_FREE(_bufferTriangle);
+    AX_SAFE_FREE(_bufferPoint);
+    AX_SAFE_FREE(_bufferLine);
 
     freeShaderInternal(_customCommandTriangle);
     freeShaderInternal(_customCommandPoint);
@@ -82,7 +82,7 @@ DrawNode* DrawNode::create(float defaultLineWidth)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -90,7 +90,7 @@ DrawNode* DrawNode::create(float defaultLineWidth)
 
 void DrawNode::ensureCapacity(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_bufferCountTriangle + count > _bufferCapacityTriangle)
     {
@@ -105,7 +105,7 @@ void DrawNode::ensureCapacity(int count)
 
 void DrawNode::ensureCapacityGLPoint(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_bufferCountPoint + count > _bufferCapacityPoint)
     {
@@ -120,7 +120,7 @@ void DrawNode::ensureCapacityGLPoint(int count)
 
 void DrawNode::ensureCapacityGLLine(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_bufferCountLine + count > _bufferCapacityLine)
     {
@@ -166,7 +166,7 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
                                     CustomCommand::PrimitiveType primitiveType)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
-    CC_SAFE_RELEASE(pipelinePS);
+    AX_SAFE_RELEASE(pipelinePS);
 
     auto program = backend::Program::getBuiltinProgram(programType);
     pipelinePS   = new backend::ProgramState(program);
@@ -178,7 +178,7 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 void DrawNode::freeShaderInternal(CustomCommand& cmd)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
-    CC_SAFE_RELEASE_NULL(pipelinePS);
+    AX_SAFE_RELEASE_NULL(pipelinePS);
 }
 
 void DrawNode::setVertexLayout(CustomCommand& cmd)
@@ -605,7 +605,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
                            float borderWidth,
                            const Color4B& borderColor)
 {
-    CCASSERT(count >= 0, "invalid count value");
+    AXASSERT(count >= 0, "invalid count value");
 
     bool outline = (borderColor.a > 0.0f && borderWidth > 0.0f);
 

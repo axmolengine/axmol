@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_MESH_RENDERER_H__
-#define __CC_MESH_RENDERER_H__
+#ifndef __AX_MESH_RENDERER_H__
+#define __AX_MESH_RENDERER_H__
 
 #include <unordered_map>
 
@@ -53,7 +53,7 @@ struct NodeData;
 /** @brief MeshRenderer: A mesh can be loaded from model files, .obj, .c3t, .c3b
  *and a mesh renderer renders a list of these loaded meshes with specified materials
  */
-class CC_DLL MeshRenderer : public Node, public BlendProtocol
+class AX_DLL MeshRenderer : public Node, public BlendProtocol
 {
 public:
     /**
@@ -286,7 +286,7 @@ protected:
 /**
  * @brief MeshRendererCache: the cache data of MeshRenderer, used to speed up the creation process of MeshRenderer
  */
-class CC_DLL MeshRendererCache
+class AX_DLL MeshRendererCache
 {
 public:
     struct MeshRenderData
@@ -341,4 +341,4 @@ protected:
 /// @}
 
 NS_AX_END
-#endif  // __CC_MESH_RENDERER_H__
+#endif  // __AX_MESH_RENDERER_H__

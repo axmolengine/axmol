@@ -36,7 +36,7 @@ RichTextReader* RichTextReader::getInstance()
 
 void RichTextReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceTextBMFontReader);
+    AX_SAFE_DELETE(instanceTextBMFontReader);
 }
 
 Offset<Table> RichTextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

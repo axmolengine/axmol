@@ -83,7 +83,7 @@ int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int 
     int len          = 0;
     auto nextLetterX = 0;
     FontLetterDefinition letterDef;
-    auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
 
     for (int index = startIndex; index < textLen; ++index)
     {
@@ -141,7 +141,7 @@ void Label::updateBMFontScale()
     {
         FontFNT* bmFont       = (FontFNT*)font;
         auto originalFontSize = bmFont->getOriginalFontSize();
-        _bmfontScale          = _bmFontSize * CC_CONTENT_SCALE_FACTOR() / originalFontSize;
+        _bmfontScale          = _bmFontSize * AX_CONTENT_SCALE_FACTOR() / originalFontSize;
     }
     else
     {
@@ -159,7 +159,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
     float letterRight         = 0.f;
     float nextWhitespaceWidth = 0.f;
 
-    auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
     float lineSpacing       = _lineSpacing * contentScaleFactor;
     float highestY          = 0.f;
     float lowestY           = 0.f;
@@ -212,7 +212,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             if (!getFontLetterDef(character, letterDef))
             {
                 recordPlaceholderInfo(letterIndex, character);
-                CCLOG("LabelTextFormatter error: can't find letter definition in font file for letter: 0x%x",
+                AXLOG("LabelTextFormatter error: can't find letter definition in font file for letter: 0x%x",
                       character);
                 continue;
             }
@@ -318,12 +318,12 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
 
 bool Label::multilineTextWrapByWord()
 {
-    return multilineTextWrap(CC_CALLBACK_3(Label::getFirstWordLen, this));
+    return multilineTextWrap(AX_CALLBACK_3(Label::getFirstWordLen, this));
 }
 
 bool Label::multilineTextWrapByChar()
 {
-    return multilineTextWrap(CC_CALLBACK_3(Label::getFirstCharLen, this));
+    return multilineTextWrap(AX_CALLBACK_3(Label::getFirstCharLen, this));
 }
 
 bool Label::isVerticalClamp()

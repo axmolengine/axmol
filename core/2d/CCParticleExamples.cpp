@@ -44,16 +44,16 @@ static Texture2D* getDefaultTexture()
     {
         const std::string key = "/__firePngData";
         texture               = Director::getInstance()->getTextureCache()->getTextureForKey(key);
-        CC_BREAK_IF(texture != nullptr);
+        AX_BREAK_IF(texture != nullptr);
 
         image    = new Image();
         bool ret = image->initWithImageData(__firePngData, sizeof(__firePngData));
-        CC_BREAK_IF(!ret);
+        AX_BREAK_IF(!ret);
 
         texture = Director::getInstance()->getTextureCache()->addImage(image, key);
     } while (0);
 
-    CC_SAFE_RELEASE(image);
+    AX_SAFE_RELEASE(image);
 
     return texture;
 }
@@ -67,7 +67,7 @@ ParticleFire* ParticleFire::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -81,7 +81,7 @@ ParticleFire* ParticleFire::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -171,7 +171,7 @@ ParticleFireworks* ParticleFireworks::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -185,7 +185,7 @@ ParticleFireworks* ParticleFireworks::createWithTotalParticles(int numberOfParti
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -272,7 +272,7 @@ ParticleSun* ParticleSun::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -286,7 +286,7 @@ ParticleSun* ParticleSun::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -378,7 +378,7 @@ ParticleGalaxy* ParticleGalaxy::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -392,7 +392,7 @@ ParticleGalaxy* ParticleGalaxy::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -487,7 +487,7 @@ ParticleFlower* ParticleFlower::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -501,7 +501,7 @@ ParticleFlower* ParticleFlower::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -595,7 +595,7 @@ ParticleMeteor* ParticleMeteor::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -609,7 +609,7 @@ ParticleMeteor* ParticleMeteor::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -704,7 +704,7 @@ ParticleSpiral* ParticleSpiral::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -718,7 +718,7 @@ ParticleSpiral* ParticleSpiral::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -813,7 +813,7 @@ ParticleExplosion* ParticleExplosion::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -827,7 +827,7 @@ ParticleExplosion* ParticleExplosion::createWithTotalParticles(int numberOfParti
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -921,7 +921,7 @@ ParticleSmoke* ParticleSmoke::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -935,7 +935,7 @@ ParticleSmoke* ParticleSmoke::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -1026,7 +1026,7 @@ ParticleSnow* ParticleSnow::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -1040,7 +1040,7 @@ ParticleSnow* ParticleSnow::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -1134,7 +1134,7 @@ ParticleRain* ParticleRain::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -1148,7 +1148,7 @@ ParticleRain* ParticleRain::createWithTotalParticles(int numberOfParticles)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

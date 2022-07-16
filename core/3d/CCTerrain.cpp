@@ -61,7 +61,7 @@ Terrain* Terrain::create(TerrainData& parameter, CrackFixedType fixedType)
         terrain->autorelease();
         return terrain;
     }
-    CC_SAFE_DELETE(terrain);
+    AX_SAFE_DELETE(terrain);
     return terrain;
 }
 bool Terrain::initWithTerrainData(TerrainData& parameter, CrackFixedType fixedType)
@@ -85,7 +85,7 @@ bool Terrain::initWithTerrainData(TerrainData& parameter, CrackFixedType fixedTy
 
 void axis::Terrain::setLightMap(std::string_view fileName)
 {
-    CC_SAFE_RELEASE(_lightMap);
+    AX_SAFE_RELEASE(_lightMap);
     auto image = new Image();
     image->initWithImageFile(fileName);
     _lightMap = new Texture2D();
@@ -162,7 +162,7 @@ void Terrain::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32
     {
         int hasLightMap = 0;
         _programState->setUniform(_lightMapCheckLocation, &hasLightMap, sizeof(hasLightMap));
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
         _programState->setTexture(_lightMapLocation, 5, _dummyTexture->getBackendTexture());
 #endif
     }
@@ -246,7 +246,7 @@ bool Terrain::initHeightMap(std::string_view heightMap)
     }
     else
     {
-        CCLOG("warning: the height map size is not POT or POT + 1");
+        AXLOG("warning: the height map size is not POT or POT + 1");
         return false;
     }
 }
@@ -255,22 +255,22 @@ Terrain::Terrain()
     : _alphaMap(nullptr)
     , _lightMap(nullptr)
     , _lightDir(-1.f, -1.f, 0.f)
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     , _backToForegroundListener(nullptr)
 #endif
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { reload(); });
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, 1);
 #endif
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     auto image          = new Image();
-    bool CC_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
-    CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
+    bool AX_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
+    AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
     _dummyTexture = new Texture2D();
     _dummyTexture->initWithImage(image);
-    CC_SAFE_RELEASE(image);
+    AX_SAFE_RELEASE(image);
 #endif
 }
 
@@ -465,10 +465,10 @@ void Terrain::setIsEnableFrustumCull(bool bool_value)
 
 Terrain::~Terrain()
 {
-    CC_SAFE_RELEASE(_alphaMap);
-    CC_SAFE_RELEASE(_lightMap);
-    CC_SAFE_RELEASE(_heightMapImage);
-    CC_SAFE_RELEASE(_dummyTexture);
+    AX_SAFE_RELEASE(_alphaMap);
+    AX_SAFE_RELEASE(_lightMap);
+    AX_SAFE_RELEASE(_heightMapImage);
+    AX_SAFE_RELEASE(_dummyTexture);
     delete _quadRoot;
     for (int i = 0; i < 4; ++i)
     {
@@ -488,7 +488,7 @@ Terrain::~Terrain()
         }
     }
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     _director->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }
@@ -674,8 +674,8 @@ Terrain::Chunk* axis::Terrain::getChunkByIndex(int x, int y) const
 
 void Terrain::setAlphaMap(axis::Texture2D* newAlphaMapTexture)
 {
-    CC_SAFE_RETAIN(newAlphaMapTexture);
-    CC_SAFE_RELEASE(_alphaMap);
+    AX_SAFE_RETAIN(newAlphaMapTexture);
+    AX_SAFE_RELEASE(_alphaMap);
     _alphaMap = newAlphaMapTexture;
 }
 
@@ -683,7 +683,7 @@ void Terrain::setDetailMap(unsigned int index, DetailMap detailMap)
 {
     if (index > 4)
     {
-        CCLOG("invalid DetailMap index %d\n", index);
+        AXLOG("invalid DetailMap index %d\n", index);
     }
     _terrainData._detailMaps[index] = detailMap;
     if (_detailMapTextures[index])
@@ -738,7 +738,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
                                                             backend::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
-    CC_SAFE_RELEASE_NULL(lodIndices._chunkIndices._indexBuffer);
+    AX_SAFE_RELEASE_NULL(lodIndices._chunkIndices._indexBuffer);
     lodIndices._chunkIndices._indexBuffer = buffer;
     this->_chunkLodIndicesSet.push_back(lodIndices);
     return lodIndices._chunkIndices;
@@ -776,7 +776,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indi
                                                             backend::BufferUsage::STATIC);
     buffer->updateData(indices, sizeof(uint16_t) * size);
 
-    CC_SAFE_RELEASE_NULL(skirtIndices._chunkIndices._indexBuffer);
+    AX_SAFE_RELEASE_NULL(skirtIndices._chunkIndices._indexBuffer);
     skirtIndices._chunkIndices._indexBuffer = buffer;
     this->_chunkLodIndicesSkirtSet.push_back(skirtIndices);
     return skirtIndices._chunkIndices;
@@ -931,7 +931,7 @@ void Terrain::Chunk::finish()
     // the second vbo for the indices, because we use level of detail technique to each chunk, so we will modified
     // frequently
 
-    CC_SAFE_RELEASE_NULL(_buffer);
+    AX_SAFE_RELEASE_NULL(_buffer);
     _buffer = backend::Device::getInstance()->newBuffer(sizeof(TerrainVertexData) * _originalVertices.size(),
                                                         backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
@@ -971,13 +971,13 @@ void Terrain::Chunk::bindAndDraw()
     }
 
     auto* renderer = Director::getInstance()->getRenderer();
-    CCASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
+    AXASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
     _command.setIndexBuffer(_chunkIndices._indexBuffer, backend::IndexFormat::U_SHORT);
     _command.setVertexBuffer(_buffer);
     _command.getPipelineDescriptor().programState = _terrain->_programState;
     _command.setIndexDrawInfo(0, _chunkIndices._size);
     renderer->addCommand(&_command);
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _chunkIndices._size);
+    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, _chunkIndices._size);
 }
 
 void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const unsigned char* /*data*/)
@@ -1099,8 +1099,8 @@ Terrain::Chunk::Chunk(Terrain* terrain)
     _command.setPrimitiveType(MeshCommand::PrimitiveType::TRIANGLE);
     _command.setDrawType(MeshCommand::DrawType::ELEMENT);
 
-    _command.setBeforeCallback(CC_CALLBACK_0(Terrain::onBeforeDraw, terrain));
-    _command.setAfterCallback(CC_CALLBACK_0(Terrain::onAfterDraw, terrain));
+    _command.setBeforeCallback(AX_CALLBACK_0(Terrain::onBeforeDraw, terrain));
+    _command.setAfterCallback(AX_CALLBACK_0(Terrain::onAfterDraw, terrain));
 
     auto& pipelineDescriptor                        = _command.getPipelineDescriptor();
     pipelineDescriptor.blendDescriptor.blendEnabled = false;
@@ -1438,7 +1438,7 @@ void Terrain::Chunk::updateVerticesForLOD()
 
 Terrain::Chunk::~Chunk()
 {
-    CC_SAFE_RELEASE_NULL(_buffer);
+    AX_SAFE_RELEASE_NULL(_buffer);
 }
 
 void Terrain::Chunk::updateIndicesLODSkirt()
@@ -1708,7 +1708,7 @@ Terrain::TerrainData::TerrainData() {}
 Terrain::ChunkIndices::ChunkIndices(const Terrain::ChunkIndices& other)
 {
     _indexBuffer = other._indexBuffer;
-    CC_SAFE_RETAIN(_indexBuffer);
+    AX_SAFE_RETAIN(_indexBuffer);
     _size = other._size;
 }
 
@@ -1716,9 +1716,9 @@ Terrain::ChunkIndices& Terrain::ChunkIndices::operator=(const Terrain::ChunkIndi
 {
     if (other._indexBuffer != _indexBuffer)
     {
-        CC_SAFE_RELEASE_NULL(_indexBuffer);
+        AX_SAFE_RELEASE_NULL(_indexBuffer);
         _indexBuffer = other._indexBuffer;
-        CC_SAFE_RETAIN(_indexBuffer);
+        AX_SAFE_RETAIN(_indexBuffer);
     }
     _size = other._size;
     return *this;
@@ -1726,7 +1726,7 @@ Terrain::ChunkIndices& Terrain::ChunkIndices::operator=(const Terrain::ChunkIndi
 
 Terrain::ChunkIndices::~ChunkIndices()
 {
-    CC_SAFE_RELEASE_NULL(_indexBuffer);
+    AX_SAFE_RELEASE_NULL(_indexBuffer);
 }
 
 Terrain::DetailMap::DetailMap(std::string_view detailMapPath, float size /*= 35*/)

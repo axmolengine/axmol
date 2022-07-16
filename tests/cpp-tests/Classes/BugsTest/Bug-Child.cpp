@@ -41,7 +41,7 @@ bool BugChild::init()
         auto size = Director::getInstance()->getWinSize();
 
         // create and initialize a Label
-        auto item1 = MenuItemFont::create("Switch Child", CC_CALLBACK_1(BugChild::switchChild, this));
+        auto item1 = MenuItemFont::create("Switch Child", AX_CALLBACK_1(BugChild::switchChild, this));
 
         menu = Menu::create(item1, nullptr);
 
@@ -73,13 +73,13 @@ void BugChild::switchChild(Ref* sender)
     {
         parent1->removeChild(child, false);
         parent2->addChild(child);
-        CCLOG("Child attached to parent2");
+        AXLOG("Child attached to parent2");
     }
     else
     {
         parent2->removeChild(child, false);
         parent1->addChild(child);
-        CCLOG("Child attached to parent1");
+        AXLOG("Child attached to parent1");
     }
 }
 
@@ -104,7 +104,7 @@ bool BugCameraMask::init()
     camera->setCameraFlag(CameraFlag::USER1);
     addChild(camera);
 
-    auto item1 = MenuItemFont::create("Switch Child", CC_CALLBACK_1(BugCameraMask::switchSpriteFlag, this));
+    auto item1 = MenuItemFont::create("Switch Child", AX_CALLBACK_1(BugCameraMask::switchSpriteFlag, this));
 
     auto menu = Menu::create(item1, nullptr);
 

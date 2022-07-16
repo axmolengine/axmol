@@ -71,9 +71,9 @@ namespace {
             auto listener = EventListenerTouchOneByOne::create();
             listener->setSwallowTouches(true);
 
-            listener->onTouchBegan = CC_CALLBACK_2(TextButton::onTouchBegan, this);
-            listener->onTouchEnded = CC_CALLBACK_2(TextButton::onTouchEnded, this);
-            listener->onTouchCancelled = CC_CALLBACK_2(TextButton::onTouchCancelled, this);
+            listener->onTouchBegan = AX_CALLBACK_2(TextButton::onTouchBegan, this);
+            listener->onTouchEnded = AX_CALLBACK_2(TextButton::onTouchEnded, this);
+            listener->onTouchCancelled = AX_CALLBACK_2(TextButton::onTouchCancelled, this);
 
             _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
         }
@@ -266,7 +266,7 @@ public:
         }
         else
         {
-            CC_SAFE_DELETE(ret);
+            AX_SAFE_DELETE(ret);
         }
         return ret;
     }
@@ -483,7 +483,7 @@ void CustomEventTest::onEnter()
         EventCustom event("game_custom_event1");
         event.setUserData(buf);
         _eventDispatcher->dispatchEvent(&event);
-        CC_SAFE_DELETE_ARRAY(buf);
+        AX_SAFE_DELETE_ARRAY(buf);
     });
     sendItem->setPosition(origin + Vec2(size.width / 2, size.height / 2));
 
@@ -509,7 +509,7 @@ void CustomEventTest::onEnter()
         EventCustom event("game_custom_event2");
         event.setUserData(buf);
         _eventDispatcher->dispatchEvent(&event);
-        CC_SAFE_DELETE_ARRAY(buf);
+        AX_SAFE_DELETE_ARRAY(buf);
     });
     sendItem2->setPosition(origin + Vec2(size.width / 2, size.height / 2 - 40));
 
@@ -544,7 +544,7 @@ void LabelKeyboardEventTest::onEnter()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
     auto statusLabel = Label::createWithSystemFont("No keyboard event received!", "", 20);
     statusLabel->setPosition(origin + Vec2(size.width / 2, size.height / 2));
     addChild(statusLabel);
@@ -632,7 +632,7 @@ std::string LabelKeyboardEventTest::title() const
 
 std::string LabelKeyboardEventTest::subtitle() const
 {
-#ifdef CC_PLATFORM_PC
+#ifdef AX_PLATFORM_PC
     return "Press keys 1 through 9 to change the stats anchor on the screen.";
 #else
     return "Change the stats anchor [1-9]";
@@ -782,7 +782,7 @@ void RemoveListenerAfterAddingTest::onEnter()
     auto item1 = MenuItemFont::create("Click Me 1", [this](Ref* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCASSERT(false, "Should not come here!");
+            AXASSERT(false, "Should not come here!");
             return true;
         };
 
@@ -806,7 +806,7 @@ void RemoveListenerAfterAddingTest::onEnter()
     auto item2 = MenuItemFont::create("Click Me 2", [=](Ref* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCASSERT(false, "Should not come here!");
+            AXASSERT(false, "Should not come here!");
             return true;
         };
 
@@ -821,7 +821,7 @@ void RemoveListenerAfterAddingTest::onEnter()
     auto item3 = MenuItemFont::create("Click Me 3", [=](Ref* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCASSERT(false, "Should not come here!");
+            AXASSERT(false, "Should not come here!");
             return true;
         };
 
@@ -1066,7 +1066,7 @@ StopPropagationTest::StopPropagationTest()
             return false;
 
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE, "Yellow blocks shouldn't response event.");
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE, "Yellow blocks shouldn't response event.");
 
         if (this->isPointInNode(touch->getLocation(), target))
         {
@@ -1091,7 +1091,7 @@ StopPropagationTest::StopPropagationTest()
             return;
 
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
 
         if (this->isPointInNode(touches[0]->getLocation(), target))
         {
@@ -1107,7 +1107,7 @@ StopPropagationTest::StopPropagationTest()
             return;
 
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
 
         if (this->isPointInNode(touches[0]->getLocation(), target))
         {
@@ -1120,8 +1120,8 @@ StopPropagationTest::StopPropagationTest()
     auto keyboardEventListener          = EventListenerKeyboard::create();
     keyboardEventListener->onKeyPressed = [](EventKeyboard::KeyCode /*key*/, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CC_UNUSED_PARAM(target);
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE || target->getTag() == TAG_BLUE_SPRITE2,
+        AX_UNUSED_PARAM(target);
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE || target->getTag() == TAG_BLUE_SPRITE2,
                  "Yellow blocks shouldn't response event.");
         // Stop propagation, so yellow blocks will not be able to receive event.
         event->stopPropagation();
@@ -1434,7 +1434,7 @@ Issue4129::Issue4129() : _bugFixed(false)
         _eventDispatcher->removeAllEventListeners();
 
         auto nextItem = MenuItemFont::create("Reset", [=](Ref* sender) {
-            CCASSERT(_bugFixed, "This issue was not fixed!");
+            AXASSERT(_bugFixed, "This issue was not fixed!");
             getTestSuite()->restartCurrTest();
         });
 
@@ -1528,7 +1528,7 @@ public:
             return ret;
         }
 
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 
@@ -1571,20 +1571,20 @@ private:
 
 DanglingNodePointersTest::DanglingNodePointersTest()
 {
-#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
     auto callback2 = [](DanglingNodePointersTestSprite* sprite2) {
-        CCASSERT(false, "This should never be called because the sprite gets removed from it's parent and destroyed!");
+        AXASSERT(false, "This should never be called because the sprite gets removed from it's parent and destroyed!");
         exit(1);
     };
 
     auto callback1 = [callback2, origin, size](DanglingNodePointersTestSprite* sprite1) {
         DanglingNodePointersTestSprite* sprite2 =
             dynamic_cast<DanglingNodePointersTestSprite*>(sprite1->getChildren().at(0));
-        CCASSERT(sprite2, "The first child of sprite 1 should be sprite 2!");
-        CCASSERT(
+        AXASSERT(sprite2, "The first child of sprite 1 should be sprite 2!");
+        AXASSERT(
             sprite2->getReferenceCount() == 1,
             "There should only be 1 reference to sprite 1, from it's parent node. Hence removing it will destroy it!");
         sprite1->removeAllChildren();  // This call should cause sprite 2 to be destroyed
@@ -1619,11 +1619,11 @@ std::string DanglingNodePointersTest::title() const
 
 std::string DanglingNodePointersTest::subtitle() const
 {
-#if CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
     return "Tap the square - should not crash!";
 #else
     return "For test to work, must be compiled with:\n"
-           "CC_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& COCOS2D_DEBUG > 0";
+           "AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& COCOS2D_DEBUG > 0";
 #endif
 }
 
@@ -1634,7 +1634,7 @@ RegisterAndUnregisterWhileEventHanldingTest::RegisterAndUnregisterWhileEventHanl
 
     auto callback1 = [=](DanglingNodePointersTestSprite* sprite) {
         auto callback2 = [](DanglingNodePointersTestSprite* sprite) {
-            CCASSERT(false, "This should never get called!");
+            AXASSERT(false, "This should never get called!");
         };
 
         {
@@ -1668,8 +1668,8 @@ std::string RegisterAndUnregisterWhileEventHanldingTest::subtitle() const
 //
 WindowEventsTest::WindowEventsTest()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     dispatcher->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
         // TODO: need to create resizeable window
@@ -1689,8 +1689,8 @@ std::string WindowEventsTest::title() const
 
 std::string WindowEventsTest::subtitle() const
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) || \
-    (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) || \
+    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     return "Resize and Switch to another window and back. Read Logs.";
 #else
     return "Unsupported platform.";
@@ -1710,7 +1710,7 @@ Issue8194::Issue8194()
         getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](axis::EventCustom* event) {
             if (nodesAdded)
             {
-                // CCLOG("Fire Issue8194 Event");
+                // AXLOG("Fire Issue8194 Event");
                 getEventDispatcher()->dispatchCustomEvent("Issue8194");
 
                 // clear test nodes and listeners

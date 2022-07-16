@@ -34,9 +34,9 @@
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/Types.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 #        include "bullet/LinearMath/btIDebugDraw.h"
 
 NS_AX_BEGIN
@@ -102,8 +102,8 @@ private:
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_VIEWER_H__

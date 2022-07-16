@@ -30,9 +30,9 @@
 #include "base/CCRef.h"
 #include "base/ccConfig.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 class btDynamicsWorld;
 class btDefaultCollisionConfiguration;
@@ -59,7 +59,7 @@ class Renderer;
 /**
  * @brief The description of Physics3DWorld.
  */
-struct CC_DLL Physics3DWorldDes
+struct AX_DLL Physics3DWorldDes
 {
     bool isDebugDrawEnabled;  // using physics debug draw?, false by default
     axis::Vec3 gravity;    // gravity, (0, -9.8, 0)
@@ -74,7 +74,7 @@ struct CC_DLL Physics3DWorldDes
  * @brief The physics information container, include Physics3DObjects, Physics3DConstraints, collision information and
  * so on.
  */
-class CC_DLL Physics3DWorld : public Ref
+class AX_DLL Physics3DWorld : public Ref
 {
     friend class Physics3DComponent;
 
@@ -167,7 +167,7 @@ protected:
     bool _collisionCheckingFlag;
     bool _needGhostPairCallbackChecking;
 
-#        if (CC_ENABLE_BULLET_INTEGRATION)
+#        if (AX_ENABLE_BULLET_INTEGRATION)
     btDynamicsWorld* _btPhyiscsWorld;
     btDefaultCollisionConfiguration* _collisionConfiguration;
     btCollisionDispatcher* _dispatcher;
@@ -175,7 +175,7 @@ protected:
     btSequentialImpulseConstraintSolver* _solver;
     btGhostPairCallback* _ghostCallback;
     Physics3DDebugDrawer* _debugDrawer;
-#        endif  // CC_ENABLE_BULLET_INTEGRATION
+#        endif  // AX_ENABLE_BULLET_INTEGRATION
 };
 
 // end of 3d group
@@ -184,6 +184,6 @@ NS_AX_END
 
 #    endif
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_WORLD_H__

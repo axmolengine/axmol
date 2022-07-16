@@ -45,7 +45,7 @@ extern Vec2 physicsDebugNodeOffset;
  * @lua NA
  */
 
-class CC_EX_DLL PhysicsDebugNodeChipmunk2D : public DrawNode
+class AX_EX_DLL PhysicsDebugNodeChipmunk2D : public DrawNode
 {
 
 public:

@@ -1660,20 +1660,20 @@ int cstmrId;               // Deletes internal letters.
 
 ## File Names
 
-Filenames should be all in CamelCasel, and for cocos2d specific files, they should start with the `CC` prefix as well.
+Filenames should be all in CamelCasel
 
 Examples of acceptable file names:
 
 
-	CCSprite.cpp
-	CCTextureCache.cpp
-	CCTexture2D.cpp
+	Sprite.cpp
+	TextureCache.cpp
+	Texture2D.cpp
 
 C++ files should end in `.cpp` and header files should end in `.h`.
 
 Do not use filenames that already exist in /usr/include, such as db.h.
 
-In general, make your filenames very specific. For example, use `CCTexture2D.h` rather than `Texture.h`. A very common case is to have a pair of files called, e.g., `FooBar.h` and `FooBar.cpp` , defining a class called `FooBar` .
+A very common case is to have a pair of files called, e.g., `FooBar.h` and `FooBar.cpp` , defining a class called `FooBar` .
 
 Inline functions must be in a `.h` file. If your inline functions are very short, they should go directly into your .h file. However, if your inline functions include a lot of code, they may go into a third file that ends in `-inl.h` . In a class with a lot of inline code, your class could have three files:
 
@@ -1828,14 +1828,14 @@ enum class UrlTableErrors {
 
 ## Macro Names
 
-You're not really going to define a macro, are you? If you do, they're like this: CC_MY_MACRO_THAT_SCARES_SMALL_CHILDREN.
+You're not really going to define a macro, are you? If you do, they're like this: AX_MY_MACRO_THAT_SCARES_SMALL_CHILDREN.
 
-Please see the description of macros; in general macros should not be used. However, if they are absolutely needed, then they should be named with all capitals and underscores, and they should be prefixed with `CC_` or `CC`
+Please see the description of macros; in general macros should not be used. However, if they are absolutely needed, then they should be named with all capitals and underscores, and they should be prefixed with `AX_` or `AX`
 
 ```cpp
-#define CC_ROUND(x) ...
-#define CC_PI_ROUNDED 3.0
-#define CCLOG(x) ...
+#define AX_ROUND(x) ...
+#define AX_PI_ROUNDED 3.0
+#define AXLOG(x) ...
 ```
 
 ## Exceptions to Naming Rules
@@ -2150,7 +2150,7 @@ If your TODO is of the form "At a future date do something" make sure that you e
 
 ## Deprecation Comments
 
-Use the `CC_DEPRECATED_ATTRIBUTE` macro to mark an methods as deprecated.
+Use the `AX_DEPRECATED_ATTRIBUTE` macro to mark an methods as deprecated.
 
 Also use the ` ``deprecated ` doxygen docstring to mark it as deprecated in the documentation.
 
@@ -2825,7 +2825,7 @@ It is worth reiterating a few of the guidelines that you might forget if you are
 * Windows defines many of its own synonyms for primitive types, such as DWORD, HANDLE, etc. It is perfectly acceptable, and encouraged, that you use these types when calling Windows API functions. Even so, keep as close as you can to the underlying C++ types. For example, use const TCHAR * instead of LPCTSTR.
 * When compiling with Microsoft Visual C++, set the compiler to warning level 3 or higher, and treat all warnings as errors.
 * Do not use #pragma once; instead use the standard Google include guards. The path in the include guards should be relative to the top of your project tree.
-* In fact, do not use any nonstandard extensions, like #pragma and __declspec, unless you absolutely must. Using `__declspec(dllimport)` and `__declspec(dllexport)` is allowed; however, you must use them through macros such as `DLLIMPORT` and `DLLEXPORT` or `CC_DLL`, so that someone can easily disable the extensions if they share the code.
+* In fact, do not use any nonstandard extensions, like #pragma and __declspec, unless you absolutely must. Using `__declspec(dllimport)` and `__declspec(dllexport)` is allowed; however, you must use them through macros such as `DLLIMPORT` and `DLLEXPORT` or `AX_DLL`, so that someone can easily disable the extensions if they share the code.
 
 However, there are just a few rules that we occasionally need to break on Windows:
 

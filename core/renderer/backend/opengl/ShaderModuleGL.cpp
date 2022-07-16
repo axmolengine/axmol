@@ -72,7 +72,7 @@ void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
         }
 
         deleteShader();
-        CCASSERT(false, "Shader compile failed!");
+        AXASSERT(false, "Shader compile failed!");
     }
 }
 

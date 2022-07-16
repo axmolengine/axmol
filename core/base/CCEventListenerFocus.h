@@ -44,7 +44,7 @@ class Widget;
 /** @class EventListenerFocus
  * @brief Focus event listener.
  */
-class CC_DLL EventListenerFocus : public EventListener
+class AX_DLL EventListenerFocus : public EventListener
 {
 public:
     static const std::string LISTENER_ID;

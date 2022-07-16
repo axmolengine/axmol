@@ -44,7 +44,7 @@ CheckBox* CheckBox::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -61,7 +61,7 @@ CheckBox* CheckBox::create(std::string_view backGround,
         pWidget->autorelease();
         return pWidget;
     }
-    CC_SAFE_DELETE(pWidget);
+    AX_SAFE_DELETE(pWidget);
     return nullptr;
 }
 
@@ -73,7 +73,7 @@ CheckBox* CheckBox::create(std::string_view backGround, std::string_view cross, 
         pWidget->autorelease();
         return pWidget;
     }
-    CC_SAFE_DELETE(pWidget);
+    AX_SAFE_DELETE(pWidget);
     return nullptr;
 }
 

@@ -58,7 +58,7 @@ Control* Control::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
         return nullptr;
     }
 }
@@ -76,10 +76,10 @@ bool Control::init()
         auto dispatcher    = Director::getInstance()->getEventDispatcher();
         auto touchListener = EventListenerTouchOneByOne::create();
         touchListener->setSwallowTouches(true);
-        touchListener->onTouchBegan     = CC_CALLBACK_2(Control::onTouchBegan, this);
-        touchListener->onTouchMoved     = CC_CALLBACK_2(Control::onTouchMoved, this);
-        touchListener->onTouchEnded     = CC_CALLBACK_2(Control::onTouchEnded, this);
-        touchListener->onTouchCancelled = CC_CALLBACK_2(Control::onTouchCancelled, this);
+        touchListener->onTouchBegan     = AX_CALLBACK_2(Control::onTouchBegan, this);
+        touchListener->onTouchMoved     = AX_CALLBACK_2(Control::onTouchMoved, this);
+        touchListener->onTouchEnded     = AX_CALLBACK_2(Control::onTouchEnded, this);
+        touchListener->onTouchCancelled = AX_CALLBACK_2(Control::onTouchCancelled, this);
 
         dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
@@ -117,7 +117,7 @@ void Control::sendActionsForControlEvents(EventType controlEvents)
             {
                 invocation->invoke(this);
             }
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
             axis::BasicScriptData data(this, (void*)&controlEvents);
             axis::ScriptEvent event(axis::kControlEvent, (void*)&data);
             auto scriptEngine = axis::ScriptEngineManager::getInstance()->getScriptEngine();

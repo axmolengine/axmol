@@ -38,7 +38,7 @@ DecorativeDisplay* DecorativeDisplay::create()
         pDisplay->autorelease();
         return pDisplay;
     }
-    CC_SAFE_DELETE(pDisplay);
+    AX_SAFE_DELETE(pDisplay);
     return nullptr;
 }
 
@@ -52,11 +52,11 @@ DecorativeDisplay::DecorativeDisplay() : _display(nullptr), _displayData(nullptr
 
 DecorativeDisplay::~DecorativeDisplay(void)
 {
-    CC_SAFE_RELEASE_NULL(_displayData);
-    CC_SAFE_RELEASE_NULL(_display);
+    AX_SAFE_RELEASE_NULL(_displayData);
+    AX_SAFE_RELEASE_NULL(_display);
 
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    CC_SAFE_RELEASE_NULL(_colliderDetector);
+    AX_SAFE_RELEASE_NULL(_colliderDetector);
 #endif
 }
 
@@ -69,8 +69,8 @@ void DecorativeDisplay::setDisplay(axis::Node* display)
 {
     if (_display != display)
     {
-        CC_SAFE_RETAIN(display);
-        CC_SAFE_RELEASE(_display);
+        AX_SAFE_RETAIN(display);
+        AX_SAFE_RELEASE(_display);
         _display = display;
     }
 }

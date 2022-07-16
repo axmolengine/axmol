@@ -32,7 +32,7 @@ PopupMenu::PopupMenu() :
 
 PopupMenu::~PopupMenu()
 {
-    CC_SAFE_RELEASE(_contentPane);
+    AX_SAFE_RELEASE(_contentPane);
 }
 
 bool PopupMenu::init(const std::string & resourceURL)
@@ -43,14 +43,14 @@ bool PopupMenu::init(const std::string & resourceURL)
         url = UIConfig::popupMenu;
         if (url.empty())
         {
-            CCLOGWARN("FairyGUI: UIConfig.popupMenu not defined");
+            AXLOGWARN("FairyGUI: UIConfig.popupMenu not defined");
             return false;
         }
     }
 
     _contentPane = UIPackage::createObjectFromURL(url)->as<GComponent>();
     _contentPane->retain();
-    _contentPane->addEventListener(UIEventType::Enter, CC_CALLBACK_1(PopupMenu::onEnter, this));
+    _contentPane->addEventListener(UIEventType::Enter, AX_CALLBACK_1(PopupMenu::onEnter, this));
 
     _list = _contentPane->getChild("list")->as<GList>();
     _list->removeChildrenToPool();
@@ -59,7 +59,7 @@ bool PopupMenu::init(const std::string & resourceURL)
     _list->removeRelation(_contentPane, RelationType::Height);
     _contentPane->addRelation(_list, RelationType::Height);
 
-    _list->addEventListener(UIEventType::ClickItem, CC_CALLBACK_1(PopupMenu::onClickItem, this));
+    _list->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(PopupMenu::onClickItem, this));
 
     return true;
 }
@@ -100,7 +100,7 @@ void PopupMenu::addSeperator()
 {
     if (UIConfig::popupMenu_seperator.empty())
     {
-        CCLOGWARN("FairyGUI: UIConfig.popupMenu_seperator not defined");
+        AXLOGWARN("FairyGUI: UIConfig.popupMenu_seperator not defined");
         return;
     }
 

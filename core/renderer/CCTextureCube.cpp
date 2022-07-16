@@ -149,7 +149,7 @@ TextureCube::TextureCube()
 
 TextureCube::~TextureCube()
 {
-    CC_SAFE_RELEASE_NULL(_texture);
+    AX_SAFE_RELEASE_NULL(_texture);
 }
 
 TextureCube* TextureCube::create(std::string_view positive_x,
@@ -165,7 +165,7 @@ TextureCube* TextureCube::create(std::string_view positive_x,
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -198,12 +198,12 @@ bool TextureCube::init(std::string_view positive_x,
         Image* img = images[i];
         if (img->getWidth() != img->getHeight())
         {
-            CCASSERT(false, "TextureCubemap: width should be equal to height!");
+            AXASSERT(false, "TextureCubemap: width should be equal to height!");
             return false;
         }
         if (imageSize != img->getWidth())
         {
-            CCASSERT(imageSize == img->getWidth(), "TextureCubmap: texture of each face should have same dimension");
+            AXASSERT(imageSize == img->getWidth(), "TextureCubmap: texture of each face should have same dimension");
             return false;
         }
     }
@@ -217,7 +217,7 @@ bool TextureCube::init(std::string_view positive_x,
     textureDescriptor.samplerDescriptor.tAddressMode   = backend::SamplerAddressMode::CLAMP_TO_EDGE;
     _texture =
         static_cast<backend::TextureCubemapBackend*>(backend::Device::getInstance()->newTexture(textureDescriptor));
-    CCASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
+    AXASSERT(_texture != nullptr, "TextureCubemap: texture can not be nullptr");
 
     for (int i = 0; i < 6; i++)
     {
@@ -240,7 +240,7 @@ bool TextureCube::init(std::string_view positive_x,
             }
             else
             {
-                CCASSERT(false,
+                AXASSERT(false,
                          "error: CubeMap texture may be incorrect, failed to convert pixel format data to RGBA8888");
             }
         }
@@ -256,7 +256,7 @@ bool TextureCube::init(std::string_view positive_x,
 
     for (auto img : images)
     {
-        CC_SAFE_RELEASE(img);
+        AX_SAFE_RELEASE(img);
     }
 
     return true;

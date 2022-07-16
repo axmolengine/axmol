@@ -151,7 +151,7 @@ void SkeletonAnimation::draw(axis::Renderer *renderer, const axis::Mat4 &transfo
 }
 
 void SkeletonAnimation::setAnimationStateData (AnimationStateData* stateData) {
-	CCASSERT(stateData, "stateData cannot be null.");
+	AXASSERT(stateData, "stateData cannot be null.");
 
 	if (_ownsAnimationStateData) delete _state->getData();
 	delete _state;

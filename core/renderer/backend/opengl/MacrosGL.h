@@ -26,7 +26,7 @@
 
 #include "base/ccMacros.h"
 
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+#if !defined(AXIS_DEBUG) || AXIS_DEBUG == 0
 #    define CHECK_GL_ERROR_DEBUG()
 #else
 #    define CHECK_GL_ERROR_DEBUG()                                                                            \
@@ -59,13 +59,13 @@
  * function calls.
  */
 #if defined(NDEBUG) || (defined(__APPLE__) && !defined(DEBUG))
-#    define CC_GL_ASSERT(gl_code) gl_code
+#    define AX_GL_ASSERT(gl_code) gl_code
 #else
-#    define CC_GL_ASSERT(gl_code)                               \
+#    define AX_GL_ASSERT(gl_code)                               \
         do                                                      \
         {                                                       \
             gl_code;                                            \
             __gl_error_code = glGetError();                     \
-            CC_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
+            AX_ASSERT(__gl_error_code == GL_NO_ERROR, "Error"); \
         } while (0)
 #endif

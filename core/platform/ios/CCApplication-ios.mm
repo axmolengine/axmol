@@ -37,13 +37,13 @@ Application* Application::sm_pSharedApplication = nullptr;
 
 Application::Application()
 {
-    CC_ASSERT(!sm_pSharedApplication);
+    AX_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
 Application::~Application()
 {
-    CC_ASSERT(this == sm_pSharedApplication);
+    AX_ASSERT(this == sm_pSharedApplication);
     sm_pSharedApplication = 0;
 }
 
@@ -67,7 +67,7 @@ void Application::setAnimationInterval(float interval)
 
 Application* Application::getInstance()
 {
-    CC_ASSERT(sm_pSharedApplication);
+    AX_ASSERT(sm_pSharedApplication);
     return sm_pSharedApplication;
 }
 

@@ -62,7 +62,7 @@ void GridAction::startWithTarget(Node* target)
         }
         else
         {
-            CCASSERT(0, "Invalid grid parameters!");
+            AXASSERT(0, "Invalid grid parameters!");
         }
     }
     else
@@ -81,7 +81,7 @@ void GridAction::startWithTarget(Node* target)
 void GridAction::cacheTargetAsGridNode()
 {
     _gridNodeTarget = dynamic_cast<NodeGrid*>(_target);
-    CCASSERT(_gridNodeTarget, "GridActions can only used on NodeGrid");
+    AXASSERT(_gridNodeTarget, "GridActions can only used on NodeGrid");
 }
 
 GridAction* GridAction::reverse() const
@@ -93,7 +93,7 @@ GridAction* GridAction::reverse() const
 GridBase* GridAction::getGrid()
 {
     // Abstract class needs implementation
-    CCASSERT(0, "Subclass should implement this method!");
+    AXASSERT(0, "Subclass should implement this method!");
 
     return nullptr;
 }
@@ -206,7 +206,7 @@ AccelDeccelAmplitude* AccelDeccelAmplitude::clone() const
 
 AccelDeccelAmplitude::~AccelDeccelAmplitude()
 {
-    CC_SAFE_RELEASE(_other);
+    AX_SAFE_RELEASE(_other);
 }
 
 void AccelDeccelAmplitude::startWithTarget(Node* target)
@@ -276,7 +276,7 @@ AccelAmplitude* AccelAmplitude::clone() const
 
 AccelAmplitude::~AccelAmplitude()
 {
-    CC_SAFE_DELETE(_other);
+    AX_SAFE_DELETE(_other);
 }
 
 void AccelAmplitude::startWithTarget(Node* target)
@@ -330,7 +330,7 @@ bool DeccelAmplitude::initWithAction(Action* action, float duration)
 
 DeccelAmplitude::~DeccelAmplitude()
 {
-    CC_SAFE_RELEASE(_other);
+    AX_SAFE_RELEASE(_other);
 }
 
 void DeccelAmplitude::startWithTarget(Node* target)
@@ -375,7 +375,7 @@ void StopGrid::startWithTarget(Node* target)
 void StopGrid::cacheTargetAsGridNode()
 {
     _gridNodeTarget = dynamic_cast<NodeGrid*>(_target);
-    CCASSERT(_gridNodeTarget, "GridActions can only used on NodeGrid");
+    AXASSERT(_gridNodeTarget, "GridActions can only used on NodeGrid");
 }
 
 StopGrid* StopGrid::create()
@@ -432,7 +432,7 @@ void ReuseGrid::startWithTarget(Node* target)
 void ReuseGrid::cacheTargetAsGridNode()
 {
     _gridNodeTarget = dynamic_cast<NodeGrid*>(_target);
-    CCASSERT(_gridNodeTarget, "GridActions can only used on NodeGrid");
+    AXASSERT(_gridNodeTarget, "GridActions can only used on NodeGrid");
 }
 
 ReuseGrid* ReuseGrid::clone() const

@@ -38,7 +38,7 @@ ComExtensionData::ComExtensionData() : _customProperty(""), _timelineData(nullpt
 
 ComExtensionData::~ComExtensionData()
 {
-    CC_SAFE_RELEASE(_timelineData);
+    AX_SAFE_RELEASE(_timelineData);
 }
 
 ComExtensionData* ComExtensionData::create()
@@ -50,7 +50,7 @@ ComExtensionData* ComExtensionData::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -58,7 +58,7 @@ ComExtensionData* ComExtensionData::create()
 bool ComExtensionData::init()
 {
     _timelineData = cocostudio::timeline::ActionTimelineData::create(0);
-    CC_SAFE_RETAIN(_timelineData);
+    AX_SAFE_RETAIN(_timelineData);
 
     return true;
 }

@@ -90,13 +90,13 @@ static GPUTextureFormatInfo s_textureFormats[] =
     { GL_LUMINANCE_ALPHA,                          GL_SLUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_LUMINANCE_ALPHA,                          GL_UNSIGNED_BYTE, }, // LA8
     
     /* depth stencil internalFormat | internalFormatSrgb | format | formatSrgb | type */
-#if defined(CC_USE_GLES)
+#if defined(AX_USE_GLES)
     { GL_DEPTH_STENCIL_OES,                        GL_ZERO,                                      GL_DEPTH_STENCIL_OES,                       GL_DEPTH_STENCIL_OES,                        GL_UNSIGNED_INT_24_8_OES, }, // D24S8
 #else
     { GL_DEPTH24_STENCIL8,                         GL_ZERO,                                      GL_DEPTH_STENCIL,                            GL_DEPTH_STENCIL,                            GL_UNSIGNED_INT_24_8, }, // D24S8
 #endif
 };
-static_assert(CC_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");
+static_assert(AX_ARRAYSIZE(s_textureFormats) == (int)PixelFormat::COUNT, "The OpenGL GPU texture format info table incomplete!");
 // clang-format on
 
 /*
@@ -230,7 +230,7 @@ GLint UtilsGL::toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPo
 {
     if (hasMipmaps && !isPow2)
     {
-        CCLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d",
+        AXLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d",
               __FILE__, __FUNCTION__, __LINE__);
         if (SamplerFilter::LINEAR == minFilter)
             return GL_LINEAR;
@@ -264,7 +264,7 @@ GLint UtilsGL::toGLAddressMode(SamplerAddressMode addressMode, bool isPow2)
     GLint ret = GL_REPEAT;
     if (!isPow2 && (addressMode != SamplerAddressMode::CLAMP_TO_EDGE))
     {
-        CCLOG("Change texture wrap mode to CLAMP_TO_EDGE since non-power-of-two texture occur in %s %s %d", __FILE__,
+        AXLOG("Change texture wrap mode to CLAMP_TO_EDGE since non-power-of-two texture occur in %s %s %d", __FILE__,
               __FUNCTION__, __LINE__);
         return GL_CLAMP_TO_EDGE;
     }

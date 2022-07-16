@@ -25,8 +25,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CC_UTILS_H__
-#define __CC_UTILS_H__
+#ifndef __AX_UTILS_H__
+#define __AX_UTILS_H__
 
 #include <vector>
 #include <string>
@@ -73,7 +73,7 @@ namespace utils
  * etc.).
  * @since v4.0 with axis
  */
-CC_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
+AX_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
 
 /** Capture a specific Node.
  * @param startNode specify the snapshot Node. It should be axis::Scene
@@ -81,7 +81,7 @@ CC_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
  * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
  * @since v4.0 with axis
  */
-CC_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale = 1.0f);
+AX_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale = 1.0f);
 
 /** Capture the entire screen. V4-copmatiable only, [DEPRECATED]
  * To ensure the snapshot is applied after everything is updated and rendered in the current frame,
@@ -92,7 +92,7 @@ CC_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imag
  * etc.).
  * @since v4.0
  */
-CC_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::string_view filename);
+AX_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::string_view filename);
 
 /** Find children by name, it will return all child that has the same name.
  * It supports c++ 11 regular expression. It is  a helper function of `Node::enumerateChildren()`.
@@ -103,7 +103,7 @@ CC_DLL void captureScreen(std::function<void(bool, std::string_view)> afterCap, 
  * @return Array of Nodes that matches the name
  * @since v3.2
  */
-CC_DLL std::vector<Node*> findChildren(const Node& node, std::string_view name);
+AX_DLL std::vector<Node*> findChildren(const Node& node, std::string_view name);
 
 /** Same to ::atof, but strip the string, remain 7 numbers after '.' before call atof.
  * Why we need this? Because in android c++_static, atof ( and std::atof ) is unsupported for numbers have long decimal
@@ -112,53 +112,53 @@ CC_DLL std::vector<Node*> findChildren(const Node& node, std::string_view name);
  * @param str The string be to converted to double.
  * @return Returns converted value of a string.
  */
-CC_DLL double atof(const char* str);
+AX_DLL double atof(const char* str);
 
 /** Get current exact time, accurate to nanoseconds.
  * @return Returns the time in seconds since the Epoch.
  */
-CC_DLL double gettime();
+AX_DLL double gettime();
 
 /**
  * Get current time in milliseconds, accurate to nanoseconds
  *
  * @return  Returns the time in milliseconds since the Epoch.
  */
-CC_DLL long long getTimeInMilliseconds();
+AX_DLL long long getTimeInMilliseconds();
 
 /**
  * Calculate unionof bounding box of a node and its children.
  * @return Returns unionof bounding box of a node and its children.
  */
-CC_DLL Rect getCascadeBoundingBox(Node* node);
+AX_DLL Rect getCascadeBoundingBox(Node* node);
 
 /**
  * Create a sprite instance from base64 encoded image and adds the texture to the Texture Cache.
 
  * @return Returns an instance of sprite
  */
-CC_DLL Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key);
+AX_DLL Sprite* createSpriteFromBase64Cached(const char* base64String, const char* key);
 
 /**
 * Create a sprite instance from base64 encoded image.
 
 * @return Returns an instance of sprite
 */
-CC_DLL Sprite* createSpriteFromBase64(const char* base64String);
+AX_DLL Sprite* createSpriteFromBase64(const char* base64String);
 
 /**
  * Find a child by name recursively
 
  * @return  Returns found node or nullptr
  */
-CC_DLL Node* findChild(Node* levelRoot, std::string_view name);
+AX_DLL Node* findChild(Node* levelRoot, std::string_view name);
 
 /**
  * Find a child by tag recursively
 
  * @return Returns found node or nullptr
  */
-CC_DLL Node* findChild(Node* levelRoot, int tag);
+AX_DLL Node* findChild(Node* levelRoot, int tag);
 
 /**
  * Find a child by name recursively
@@ -187,14 +187,14 @@ inline T findChild(Node* levelRoot, int tag)
  *  @param filename The file to calculate md5 hash.
  *  @return The md5 hash for the file
  */
-CC_DLL std::string getFileMD5Hash(std::string_view filename);
+AX_DLL std::string getFileMD5Hash(std::string_view filename);
 
 /**
  *  Gets the md5 hash for the given buffer.
  *  @param data The buffer to calculate md5 hash.
  *  @return The md5 hash for the data
  */
-CC_DLL std::string getDataMD5Hash(const Data& data);
+AX_DLL std::string getDataMD5Hash(const Data& data);
 
 /**
  *  Gets the hash for the given buffer with specific algorithm.
@@ -202,7 +202,7 @@ CC_DLL std::string getDataMD5Hash(const Data& data);
  *  @param algorithm The hash algorithm, support "md5", "sha1", "sha256", "sha512" and more
  *  @return The hash for the data
  */
-CC_DLL std::string computeDigest(std::string_view data, std::string_view algorithm);
+AX_DLL std::string computeDigest(std::string_view data, std::string_view algorithm);
 
 /**
 @brief Converts language iso 639-1 code to LanguageType enum.
@@ -210,23 +210,23 @@ CC_DLL std::string computeDigest(std::string_view data, std::string_view algorit
 * @js NA
 * @lua NA
 */
-CC_DLL LanguageType getLanguageTypeByISO2(const char* code);
+AX_DLL LanguageType getLanguageTypeByISO2(const char* code);
 
-CC_DLL backend::BlendFactor toBackendBlendFactor(int factor);
+AX_DLL backend::BlendFactor toBackendBlendFactor(int factor);
 
-CC_DLL int toGLBlendFactor(backend::BlendFactor blendFactor);
+AX_DLL int toGLBlendFactor(backend::BlendFactor blendFactor);
 
-CC_DLL backend::SamplerFilter toBackendSamplerFilter(int mode);
+AX_DLL backend::SamplerFilter toBackendSamplerFilter(int mode);
 
-CC_DLL backend::SamplerAddressMode toBackendAddressMode(int mode);
+AX_DLL backend::SamplerAddressMode toBackendAddressMode(int mode);
 
 // Adjust matrix for metal.
-CC_DLL const Mat4& getAdjustMatrix();
+AX_DLL const Mat4& getAdjustMatrix();
 
 /**
 Get the Normal Matrix of matrixMV
 */
-CC_DLL std::vector<float> getNormalMat3OfMat4(const Mat4& mat);
+AX_DLL std::vector<float> getNormalMat3OfMat4(const Mat4& mat);
 
 /**
 @brief Parses a list of space-separated integers.
@@ -234,7 +234,7 @@ CC_DLL std::vector<float> getNormalMat3OfMat4(const Mat4& mat);
 * @js NA
 * @lua NA
 */
-CC_DLL std::vector<int> parseIntegerList(std::string_view intsString);
+AX_DLL std::vector<int> parseIntegerList(std::string_view intsString);
 
 /**
 @brief translate charstring/binarystream to hexstring.
@@ -242,7 +242,7 @@ CC_DLL std::vector<int> parseIntegerList(std::string_view intsString);
 * @js NA
 * @lua NA
 */
-CC_DLL std::string bin2hex(std::string_view binary /*charstring also regard as binary in C/C++*/,
+AX_DLL std::string bin2hex(std::string_view binary /*charstring also regard as binary in C/C++*/,
                            int delim   = -1,
                            bool prefix = false);
 
@@ -252,7 +252,7 @@ CC_DLL std::string bin2hex(std::string_view binary /*charstring also regard as b
 * @js NA
 * @lua NA
 */
-CC_DLL void killCurrentProcess();
+AX_DLL void killCurrentProcess();
 
 /**
 * Create a Game Object, like CREATE_FUNC, but more powerful
@@ -401,13 +401,13 @@ inline char* char2hex(char* p, unsigned char c, unsigned char a = 'a')
     return p;
 }
 
-CC_DLL std::string urlEncode(std::string_view s);
+AX_DLL std::string urlEncode(std::string_view s);
 
-CC_DLL std::string urlDecode(std::string_view st);
+AX_DLL std::string urlDecode(std::string_view st);
 
-CC_DLL uint32_t fourccValue(std::string_view str);
+AX_DLL uint32_t fourccValue(std::string_view str);
 }  // namespace utils
 
 NS_AX_END
 
-#endif  // __SUPPORT_CC_UTILS_H__
+#endif  // __SUPPORT_AX_UTILS_H__

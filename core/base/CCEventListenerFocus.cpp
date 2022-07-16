@@ -36,7 +36,7 @@ EventListenerFocus::EventListenerFocus() : onFocusChanged(nullptr) {}
 
 EventListenerFocus::~EventListenerFocus()
 {
-    CCLOGINFO("In the destructor of EventListenerFocus, %p", this);
+    AXLOGINFO("In the destructor of EventListenerFocus, %p", this);
 }
 
 EventListenerFocus* EventListenerFocus::create()
@@ -47,7 +47,7 @@ EventListenerFocus* EventListenerFocus::create()
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -62,7 +62,7 @@ EventListenerFocus* EventListenerFocus::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -84,7 +84,7 @@ bool EventListenerFocus::checkAvailable()
 {
     if (onFocusChanged == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerFocus!");
+        AXASSERT(false, "Invalid EventListenerFocus!");
         return false;
     }
 

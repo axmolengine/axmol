@@ -27,7 +27,7 @@
 #define __CCPHYSICS_CONTACT_H__
 
 #include "base/ccConfig.h"
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 
 #    include "base/CCRef.h"
 #    include "math/CCMath.h"
@@ -41,7 +41,7 @@ class PhysicsShape;
 class PhysicsBody;
 class PhysicsWorld;
 
-typedef struct CC_DLL PhysicsContactData
+typedef struct AX_DLL PhysicsContactData
 {
     static const int POINT_MAX = 4;
     Vec2 points[POINT_MAX];
@@ -64,7 +64,7 @@ typedef struct CC_DLL PhysicsContactData
  * It will created automatically when two shape contact with each other. And it will destroyed automatically when two
  shape separated.
  */
-class CC_DLL PhysicsContact : public EventCustom
+class AX_DLL PhysicsContact : public EventCustom
 {
 public:
     enum class EventCode
@@ -151,7 +151,7 @@ private:
 /**
  * @brief Presolve value generated when onContactPreSolve called.
  */
-class CC_DLL PhysicsContactPreSolve
+class AX_DLL PhysicsContactPreSolve
 {
 public:
     /** Get restitution between two bodies.*/
@@ -182,7 +182,7 @@ private:
 /**
  * @brief Postsolve value generated when onContactPostSolve called.
  */
-class CC_DLL PhysicsContactPostSolve
+class AX_DLL PhysicsContactPostSolve
 {
 public:
     /** Get restitution between two bodies.*/
@@ -203,7 +203,7 @@ private:
 };
 
 /** Contact listener. It will receive all the contact callbacks. */
-class CC_DLL EventListenerPhysicsContact : public EventListenerCustom
+class AX_DLL EventListenerPhysicsContact : public EventListenerCustom
 {
 public:
     /** Create the listener. */
@@ -260,7 +260,7 @@ protected:
 };
 
 /** This event listener only be called when bodyA and bodyB have contacts. */
-class CC_DLL EventListenerPhysicsContactWithBodies : public EventListenerPhysicsContact
+class AX_DLL EventListenerPhysicsContactWithBodies : public EventListenerPhysicsContact
 {
 public:
     /** Create the listener. */
@@ -280,7 +280,7 @@ protected:
 };
 
 /** This event listener only be called when shapeA and shapeB have contacts. */
-class CC_DLL EventListenerPhysicsContactWithShapes : public EventListenerPhysicsContact
+class AX_DLL EventListenerPhysicsContactWithShapes : public EventListenerPhysicsContact
 {
 public:
     /** Create the listener. */
@@ -299,7 +299,7 @@ protected:
 };
 
 /** This event listener only be called when shapeA or shapeB is in the group your specified */
-class CC_DLL EventListenerPhysicsContactWithGroup : public EventListenerPhysicsContact
+class AX_DLL EventListenerPhysicsContactWithGroup : public EventListenerPhysicsContact
 {
 public:
     /** Create the listener. */
@@ -321,5 +321,5 @@ protected:
 
 NS_AX_END
 
-#endif  // CC_USE_PHYSICS
+#endif  // AX_USE_PHYSICS
 #endif  //__CCPHYSICS_CONTACT_H__

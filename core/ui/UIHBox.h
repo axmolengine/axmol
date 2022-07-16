@@ -42,7 +42,7 @@ namespace ui
  * HBox is just a convenient wrapper class for horizontal layout type.
  * HBox lays out its children in a single horizontal row.
  */
-class CC_GUI_DLL HBox : public Layout
+class AX_GUI_DLL HBox : public Layout
 {
 public:
     /**

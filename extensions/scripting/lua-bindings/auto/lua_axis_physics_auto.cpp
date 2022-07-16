@@ -1,5 +1,5 @@
 #include "scripting/lua-bindings/auto/lua_axis_physics_auto.hpp"
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 #include "cocos2d.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"

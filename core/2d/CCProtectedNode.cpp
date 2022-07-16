@@ -38,7 +38,7 @@ ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false) {}
 
 ProtectedNode::~ProtectedNode()
 {
-    CCLOGINFO("deallocing ProtectedNode: %p - tag: %i", this, _tag);
+    AXLOGINFO("deallocing ProtectedNode: %p - tag: %i", this, _tag);
     removeAllProtectedChildren();
 }
 
@@ -51,7 +51,7 @@ ProtectedNode* ProtectedNode::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -80,8 +80,8 @@ void ProtectedNode::addProtectedChild(axis::Node* child, int localZOrder)
  */
 void ProtectedNode::addProtectedChild(Node* child, int zOrder, int tag)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
-    CCASSERT(child->getParent() == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->getParent() == nullptr, "child already added. It can't be added again");
 
     if (_protectedChildren.empty())
     {
@@ -118,7 +118,7 @@ void ProtectedNode::addProtectedChild(Node* child, int zOrder, int tag)
 
 Node* ProtectedNode::getProtectedChildByTag(int tag)
 {
-    CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
     for (auto& child : _protectedChildren)
     {
@@ -141,7 +141,7 @@ void ProtectedNode::removeProtectedChild(axis::Node* child, bool cleanup)
     }
 
     ssize_t index = _protectedChildren.getIndex(child);
-    if (index != CC_INVALID_INDEX)
+    if (index != AX_INVALID_INDEX)
     {
 
         // IMPORTANT:
@@ -163,13 +163,13 @@ void ProtectedNode::removeProtectedChild(axis::Node* child, bool cleanup)
         // set parent nil at the end
         child->setParent(nullptr);
 
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
             sEngine->releaseScriptObject(this, child);
         }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         _protectedChildren.erase(index);
     }
 }
@@ -197,13 +197,13 @@ void ProtectedNode::removeAllProtectedChildrenWithCleanup(bool cleanup)
         {
             child->cleanup();
         }
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
             sEngine->releaseScriptObject(this, child);
         }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         // set parent nil at the end
         child->setParent(nullptr);
     }
@@ -213,13 +213,13 @@ void ProtectedNode::removeAllProtectedChildrenWithCleanup(bool cleanup)
 
 void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 {
-    CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
     Node* child = this->getProtectedChildByTag(tag);
 
     if (child == nullptr)
     {
-        CCLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
     }
     else
     {
@@ -230,13 +230,13 @@ void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 // helper used by reorderChild & add
 void ProtectedNode::insertProtectedChild(axis::Node* child, int z)
 {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, child);
     }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     _reorderProtectedChildDirty = true;
     _protectedChildren.pushBack(child);
     child->setLocalZOrder(z);
@@ -253,7 +253,7 @@ void ProtectedNode::sortAllProtectedChildren()
 
 void ProtectedNode::reorderProtectedChild(axis::Node* child, int localZOrder)
 {
-    CCASSERT(child != nullptr, "Child must be non-nil");
+    AXASSERT(child != nullptr, "Child must be non-nil");
     _reorderProtectedChildDirty = true;
     child->updateOrderOfArrival();
     child->setLocalZOrder(localZOrder);

@@ -43,7 +43,7 @@ NS_AX_BEGIN
 class AudioCache;
 class AudioEngineImpl;
 
-class CC_DLL AudioPlayer
+class AX_DLL AudioPlayer
 {
     friend class AudioEngineImpl;
 

@@ -131,7 +131,7 @@ bool FUILabel::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& im
     if (std::abs(fontSize) < FLT_EPSILON)
     {
         float originalFontSize = bmFont->getOriginalFontSize();
-        _bmFontSize = originalFontSize / CC_CONTENT_SCALE_FACTOR();
+        _bmFontSize = originalFontSize / AX_CONTENT_SCALE_FACTOR();
     }
 
     if (fontSize > 0.0f && bmFont->isResizable())
@@ -174,7 +174,7 @@ void FUILabel::updateBMFontScale()
     {
         BitmapFont* bmFont = (BitmapFont*)font;
         float originalFontSize = bmFont->getOriginalFontSize();
-        _bmfontScale = _bmFontSize * CC_CONTENT_SCALE_FACTOR() / originalFontSize;
+        _bmfontScale = _bmFontSize * AX_CONTENT_SCALE_FACTOR() / originalFontSize;
     }
     else
     {

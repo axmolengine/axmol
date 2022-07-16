@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "platform/CCPlatformConfig.h"
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 #    include "ui/UIEditBox/UIEditBoxImpl-mac.h"
 #    include "base/CCDirector.h"
@@ -117,7 +117,7 @@ void EditBoxImplMac::setNativePlaceholderFont(const char* pFontName, int fontSiz
 
     if (!textFont)
     {
-        CCLOGWARN("Font not found: %s", pFontName);
+        AXLOGWARN("Font not found: %s", pFontName);
         return;
     }
     [_sysEdit setPlaceholderFont:textFont];
@@ -221,4 +221,4 @@ void EditBoxImplMac::nativeCloseKeyboard()
 
 NS_AX_END
 
-#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)

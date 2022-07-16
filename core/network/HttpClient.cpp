@@ -75,15 +75,15 @@ void HttpClient::destroyInstance()
 {
     if (nullptr == _httpClient)
     {
-        CCLOG("HttpClient singleton is nullptr");
+        AXLOG("HttpClient singleton is nullptr");
         return;
     }
 
-    CCLOG("HttpClient::destroyInstance begin");
+    AXLOG("HttpClient::destroyInstance begin");
     delete _httpClient;
     _httpClient = nullptr;
 
-    CCLOG("HttpClient::destroyInstance() finished!");
+    AXLOG("HttpClient::destroyInstance() finished!");
 }
 
 void HttpClient::enableCookies(const char* cookieFile)
@@ -119,7 +119,7 @@ HttpClient::HttpClient()
     , _cookie(nullptr)
     , _clearResponsePredicate(nullptr)
 {
-    CCLOG("In the constructor of HttpClient!");
+    AXLOG("In the constructor of HttpClient!");
     _scheduler = Director::getInstance()->getScheduler();
 
     _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
@@ -151,7 +151,7 @@ HttpClient::~HttpClient()
         delete _cookie;
     }
 
-    CCLOG("HttpClient destructor");
+    AXLOG("HttpClient destructor");
 }
 
 void HttpClient::setDispatchOnWorkThread(bool bVal)
@@ -408,7 +408,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
             {
                 if (responseCode == 302)
                     response->getHttpRequest()->setRequestType(HttpRequest::Type::GET);
-                CCLOG("Process url redirect (%d): %s", responseCode, iter->second.c_str());
+                AXLOG("Process url redirect (%d): %s", responseCode, iter->second.c_str());
                 _availChannelQueue.push_front(channel->index());
                 processResponse(response, iter->second);
                 response->release();
@@ -442,7 +442,7 @@ void HttpClient::dispatchResponseCallbacks()
     if (_finishedResponseQueue.unsafe_empty())
         return;
 
-    auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
+    auto AX_UNUSED lck = _finishedResponseQueue.get_lock();
     if (!_finishedResponseQueue.unsafe_empty())
     {
         HttpResponse* response = _finishedResponseQueue.front();
@@ -495,13 +495,13 @@ void HttpClient::clearResponseQueue()
 
 void HttpClient::clearPendingResponseQueue()
 {
-    auto CC_UNUSED lck = _pendingResponseQueue.get_lock();
+    auto AX_UNUSED lck = _pendingResponseQueue.get_lock();
     __clearQueueUnsafe(_pendingResponseQueue, ClearResponsePredicate{});
 }
 
 void HttpClient::clearFinishedResponseQueue()
 {
-    auto CC_UNUSED lck = _finishedResponseQueue.get_lock();
+    auto AX_UNUSED lck = _finishedResponseQueue.get_lock();
     __clearQueueUnsafe(_finishedResponseQueue, ClearResponsePredicate{});
 }
 

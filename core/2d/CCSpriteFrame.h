@@ -56,7 +56,7 @@ class Texture2D;
     sprite->setSpriteFrame(frame);
  @endcode
  */
-class CC_DLL SpriteFrame : public Ref, public Clonable
+class AX_DLL SpriteFrame : public Ref, public Clonable
 {
 public:
     /** Create a SpriteFrame with a texture filename, rect in points.

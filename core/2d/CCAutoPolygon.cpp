@@ -62,7 +62,7 @@ PolygonInfo::PolygonInfo(const PolygonInfo& other) : triangles(), _isVertsOwner(
     _rect             = other._rect;
     triangles.verts   = new V3F_C4B_T2F[other.triangles.vertCount];
     triangles.indices = new unsigned short[other.triangles.indexCount];
-    CCASSERT(triangles.verts && triangles.indices, "not enough memory");
+    AXASSERT(triangles.verts && triangles.indices, "not enough memory");
     triangles.vertCount  = other.triangles.vertCount;
     triangles.indexCount = other.triangles.indexCount;
     memcpy(triangles.verts, other.triangles.verts, other.triangles.vertCount * sizeof(other.triangles.verts[0]));
@@ -79,7 +79,7 @@ PolygonInfo& PolygonInfo::operator=(const PolygonInfo& other)
         _rect             = other._rect;
         triangles.verts   = new V3F_C4B_T2F[other.triangles.vertCount];
         triangles.indices = new unsigned short[other.triangles.indexCount];
-        CCASSERT(triangles.verts && triangles.indices, "not enough memory");
+        AXASSERT(triangles.verts && triangles.indices, "not enough memory");
         triangles.vertCount  = other.triangles.vertCount;
         triangles.indexCount = other.triangles.indexCount;
         memcpy(triangles.verts, other.triangles.verts, other.triangles.vertCount * sizeof(other.triangles.verts[0]));
@@ -106,7 +106,7 @@ void PolygonInfo::setQuad(V3F_C4B_T2F_Quad* quad)
 
 void PolygonInfo::setQuads(V3F_C4B_T2F_Quad* quad, int numberOfQuads)
 {
-    CCASSERT(numberOfQuads >= 1 && numberOfQuads <= 9, "Invalid number of Quads");
+    AXASSERT(numberOfQuads >= 1 && numberOfQuads <= 9, "Invalid number of Quads");
 
     releaseVertsAndIndices();
     _isVertsOwner        = false;
@@ -133,12 +133,12 @@ void PolygonInfo::releaseVertsAndIndices()
     {
         if (nullptr != triangles.verts)
         {
-            CC_SAFE_DELETE_ARRAY(triangles.verts);
+            AX_SAFE_DELETE_ARRAY(triangles.verts);
         }
 
         if (nullptr != triangles.indices)
         {
-            CC_SAFE_DELETE_ARRAY(triangles.indices);
+            AX_SAFE_DELETE_ARRAY(triangles.indices);
         }
     }
 }
@@ -174,7 +174,7 @@ AutoPolygon::AutoPolygon(std::string_view filename)
     _filename = filename;
     _image    = new Image();
     _image->initWithImageFile(filename);
-    CCASSERT(_image->getPixelFormat() == backend::PixelFormat::RGBA8,
+    AXASSERT(_image->getPixelFormat() == backend::PixelFormat::RGBA8,
              "unsupported format, currently only supports rgba8888");
     _data        = _image->getData();
     _width       = _image->getWidth();
@@ -184,7 +184,7 @@ AutoPolygon::AutoPolygon(std::string_view filename)
 
 AutoPolygon::~AutoPolygon()
 {
-    CC_SAFE_DELETE(_image);
+    AX_SAFE_DELETE(_image);
 }
 
 std::vector<Vec2> AutoPolygon::trace(const Rect& rect, float threshold)
@@ -211,7 +211,7 @@ Vec2 AutoPolygon::findFirstNoneTransparentPixel(const Rect& rect, float threshol
             }
         }
     }
-    CCASSERT(found, "image is all transparent!");
+    AXASSERT(found, "image is all transparent!");
     return i;
 }
 
@@ -246,7 +246,7 @@ unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const R
     sv += (fixedRect.containsPoint(bl) && getAlphaByPos(bl) > threshold) ? 4 : 0;
     Vec2 br = Vec2(x - 0.0f, y - 0.0f);
     sv += (fixedRect.containsPoint(br) && getAlphaByPos(br) > threshold) ? 8 : 0;
-    CCASSERT(sv != 0 && sv != 15, "square value should not be 0, or 15");
+    AXASSERT(sv != 0 && sv != 15, "square value should not be 0, or 15");
     return sv;
 }
 
@@ -386,7 +386,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
             }
             break;
         default:
-            CCLOG("this shouldn't happen.");
+            AXLOG("this shouldn't happen.");
         }
         // little optimization
         //  if previous direction is same as current direction,
@@ -408,9 +408,9 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
         prevx = stepx;
         prevy = stepy;
 
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
         const auto totalPixel = _width * _height;
-        CCASSERT(count <= totalPixel, "oh no, marching square cannot find starting position");
+        AXASSERT(count <= totalPixel, "oh no, marching square cannot find starting position");
 #endif
     } while (curx != startx || cury != starty);
     return _points;
@@ -666,7 +666,7 @@ void AutoPolygon::calculateUV(const Rect& rect, V3F_C4B_T2F* verts, ssize_t coun
      0,1                  1,1
      */
 
-    CCASSERT(_width && _height, "please specify width and height for this AutoPolygon instance");
+    AXASSERT(_width && _height, "please specify width and height for this AutoPolygon instance");
     auto texWidth  = _width;
     auto texHeight = _height;
 
@@ -688,13 +688,13 @@ Rect AutoPolygon::getRealRect(const Rect& rect)
     if (realRect.equals(Rect::ZERO))
     {
         // if the instance doesn't have width and height, then the whole operation is kaput
-        CCASSERT(_height && _width, "Please specify a width and height for this instance before using its functions");
+        AXASSERT(_height && _width, "Please specify a width and height for this instance before using its functions");
         realRect = Rect(0, 0, (float)_width, (float)_height);
     }
     else
     {
         // rect is specified, so convert to real rect
-        realRect = CC_RECT_POINTS_TO_PIXELS(rect);
+        realRect = AX_RECT_POINTS_TO_PIXELS(rect);
     }
     return realRect;
 }

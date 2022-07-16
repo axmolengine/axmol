@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
-#define __CC_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
+#ifndef __AX_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
+#define __AX_PU_PARTICLE_3D_TRANSLATE_MANAGER_H__
 
 #include "base/CCRef.h"
 #include "extensions/Particle3D/PU/CCPUParticleSystem3DTranslator.h"

@@ -58,7 +58,7 @@ bool Box2DTest::init()
     auto dispatcher = Director::getInstance()->getEventDispatcher();
 
     auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = CC_CALLBACK_2(Box2DTest::onTouchesEnded, this);
+    touchListener->onTouchesEnded = AX_CALLBACK_2(Box2DTest::onTouchesEnded, this);
     dispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     // init physics
@@ -88,7 +88,7 @@ bool Box2DTest::init()
 
     // menu for debug layer
     MenuItemFont::setFontSize(18);
-    auto item = MenuItemFont::create("Toggle debug", CC_CALLBACK_1(Box2DTest::toggleDebugCallback, this));
+    auto item = MenuItemFont::create("Toggle debug", AX_CALLBACK_1(Box2DTest::toggleDebugCallback, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -107,7 +107,7 @@ Box2DTest::Box2DTest() : _spriteTexture(nullptr), world(nullptr) {}
 
 Box2DTest::~Box2DTest()
 {
-    CC_SAFE_DELETE(world);
+    AX_SAFE_DELETE(world);
 }
 
 void Box2DTest::toggleDebugCallback(Ref* sender)
@@ -257,7 +257,7 @@ void Box2DTest::createResetButton()
 
 void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 {
-    CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+    AXLOG("Add sprite %0.2f x %02.f", p.x, p.y);
 
     // Define the dynamic body.
     // Set up a 1m squared box in the physics world
@@ -265,7 +265,7 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(p.x / PTM_RATIO, p.y / PTM_RATIO);
 
-    CCLOG("Add PTM_RATIO sprite %0.2f x %0.2f", p.x / PTM_RATIO, p.y / PTM_RATIO);
+    AXLOG("Add PTM_RATIO sprite %0.2f x %0.2f", p.x / PTM_RATIO, p.y / PTM_RATIO);
 
     b2Body* body = world->CreateBody(&bodyDef);
 
@@ -284,8 +284,8 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 
     // We have a 64x64 sprite sheet with 4 different 32x32 images.  The following code is
     // just randomly picking one of the images
-    int idx     = (CCRANDOM_0_1() > .5 ? 0 : 1);
-    int idy     = (CCRANDOM_0_1() > .5 ? 0 : 1);
+    int idx     = (AXRANDOM_0_1() > .5 ? 0 : 1);
+    int idy     = (AXRANDOM_0_1() > .5 ? 0 : 1);
     auto sprite = PhysicsSpriteBox2D::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
     parent->addChild(sprite);
     sprite->setB2Body(body);

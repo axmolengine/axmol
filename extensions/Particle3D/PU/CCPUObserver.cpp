@@ -164,7 +164,7 @@ void PUObserver::removeEventHandler(PUEventHandler* eventHandler)
 //-----------------------------------------------------------------------
 PUEventHandler* PUObserver::getEventHandler(size_t index) const
 {
-    CCASSERT(index < _eventHandlers.size(), "EventHandler index out of bounds!");
+    AXASSERT(index < _eventHandlers.size(), "EventHandler index out of bounds!");
     return _eventHandlers[index];
 }
 //-----------------------------------------------------------------------
@@ -193,7 +193,7 @@ size_t PUObserver::getNumEventHandlers() const
 //-----------------------------------------------------------------------
 void PUObserver::destroyEventHandler(PUEventHandler* eventHandler)
 {
-    CCASSERT(eventHandler, "EventHandler is null!");
+    AXASSERT(eventHandler, "EventHandler is null!");
     ParticleEventHandlerIterator it;
     for (it = _eventHandlers.begin(); it != _eventHandlers.end(); ++it)
     {

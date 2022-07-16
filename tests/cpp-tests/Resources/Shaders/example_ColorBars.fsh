@@ -37,8 +37,8 @@ vec4 getColorByCoord(int y){
 
 void main(void) {
 	// inline to prevent "float" loss and keep using lowp
-    //int y = int( mod(( (gl_FragCoord.y+gl_FragCoord.x)*mod(CC_Time[0],5.0)) / 10.0, 10.0 ) );
-	//int y = int( mod( CC_Time[3] + (gl_FragCoord.y + gl_FragCoord.x) / 10.0, 10.0 ) );
+    //int y = int( mod(( (gl_FragCoord.y+gl_FragCoord.x)*mod(AX_Time[0],5.0)) / 10.0, 10.0 ) );
+	//int y = int( mod( AX_Time[3] + (gl_FragCoord.y + gl_FragCoord.x) / 10.0, 10.0 ) );
 	int y = int( mod(gl_FragCoord.y / 10.0, 10.0 ) );
 	gl_FragColor = getColorByCoord(y) * texture2D(u_tex0, v_texCoord);
 }

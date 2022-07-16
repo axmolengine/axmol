@@ -25,7 +25,7 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/controller/lua_axis_controller_manual.hpp"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
@@ -138,7 +138,7 @@ static int tolua_axis_EventListenerController_clone(lua_State* tolua_S)
         return 1;
     }
 
-    CCLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
+    AXLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
     return 0;
 
 #    if COCOS2D_DEBUG >= 1
@@ -280,7 +280,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         return 0;
     }
 
-    CCLOG("'registerScriptHandler' has wrong number of arguments: %d, was expecting %d\n", argc, 2);
+    AXLOG("'registerScriptHandler' has wrong number of arguments: %d, was expecting %d\n", argc, 2);
     return 0;
 
 #    if COCOS2D_DEBUG >= 1
@@ -349,7 +349,7 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
         return 1;
     }
 
-    CCLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
+    AXLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
     return 0;
 
 #    if COCOS2D_DEBUG >= 1
@@ -381,4 +381,4 @@ int register_all_axis_controller_manual(lua_State* L)
     return 0;
 }
 
-#endif  //#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif  //#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)

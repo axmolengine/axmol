@@ -18,7 +18,7 @@ void BasicsScene::continueInit()
 
     _backBtn = _view->getChild("btn_Back");
     _backBtn->setVisible(false);
-    _backBtn->addClickListener(CC_CALLBACK_1(BasicsScene::onClickBack, this));
+    _backBtn->addClickListener(AX_CALLBACK_1(BasicsScene::onClickBack, this));
 
     _demoContainer = _view->getChild("container")->as<GComponent>();
     _cc = _view->getController("c1");
@@ -28,7 +28,7 @@ void BasicsScene::continueInit()
     {
         GObject* obj = _view->getChildAt(i);
         if (obj->getGroup() != nullptr && obj->getGroup()->name.compare("btns") == 0)
-            obj->addClickListener(CC_CALLBACK_1(BasicsScene::runDemo, this));
+            obj->addClickListener(AX_CALLBACK_1(BasicsScene::runDemo, this));
     }
 }
 
@@ -42,10 +42,10 @@ BasicsScene::BasicsScene()
 
 BasicsScene::~BasicsScene()
 {
-    CC_SAFE_RELEASE(_winA);
-    CC_SAFE_RELEASE(_winB);
-    CC_SAFE_RELEASE(_pm);
-    CC_SAFE_RELEASE(_popupCom);
+    AX_SAFE_RELEASE(_winA);
+    AX_SAFE_RELEASE(_winB);
+    AX_SAFE_RELEASE(_pm);
+    AX_SAFE_RELEASE(_popupCom);
 }
 
 void BasicsScene::onClickBack(EventContext* context)
@@ -104,10 +104,10 @@ void BasicsScene::playPopup()
     {
         _pm = PopupMenu::create();
         _pm->retain();
-        _pm->addItem("Item 1", CC_CALLBACK_1(BasicsScene::onClickMenu, this));
-        _pm->addItem("Item 2", CC_CALLBACK_1(BasicsScene::onClickMenu, this));
-        _pm->addItem("Item 3", CC_CALLBACK_1(BasicsScene::onClickMenu, this));
-        _pm->addItem("Item 4", CC_CALLBACK_1(BasicsScene::onClickMenu, this));
+        _pm->addItem("Item 1", AX_CALLBACK_1(BasicsScene::onClickMenu, this));
+        _pm->addItem("Item 2", AX_CALLBACK_1(BasicsScene::onClickMenu, this));
+        _pm->addItem("Item 3", AX_CALLBACK_1(BasicsScene::onClickMenu, this));
+        _pm->addItem("Item 4", AX_CALLBACK_1(BasicsScene::onClickMenu, this));
     }
 
     if (_popupCom == nullptr)
@@ -133,7 +133,7 @@ void BasicsScene::playPopup()
 void BasicsScene::onClickMenu(EventContext* context)
 {
     GObject* itemObject = (GObject*)context->getData();
-    CCLOG("click %s", itemObject->getText().c_str());
+    AXLOG("click %s", itemObject->getText().c_str());
 }
 
 void BasicsScene::playWindow()
@@ -239,9 +239,9 @@ void BasicsScene::playProgress()
 {
     GComponent* obj = _demoObjects.at("ProgressBar");
     axis::Director::getInstance()->getScheduler()->schedule(
-        CC_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this, 0.02f, false);
+        AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this, 0.02f, false);
     obj->addEventListener(UIEventType::Exit, [this](EventContext*) {
-        axis::Director::getInstance()->getScheduler()->unschedule(CC_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
+        axis::Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
     });
 }
 

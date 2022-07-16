@@ -14,7 +14,7 @@ GTextField::GTextField()
 
 GTextField::~GTextField()
 {
-    CC_SAFE_DELETE(_templateVars);
+    AX_SAFE_DELETE(_templateVars);
 }
 
 void GTextField::setText(const std::string& value)
@@ -71,7 +71,7 @@ void GTextField::setTemplateVars(axis::ValueMap* value)
         return;
 
     if (value == nullptr)
-        CC_SAFE_DELETE(_templateVars);
+        AX_SAFE_DELETE(_templateVars);
     else
     {
         if (_templateVars == nullptr)

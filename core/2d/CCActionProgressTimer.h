@@ -42,7 +42,7 @@ NS_AX_BEGIN
         You should specify the destination percentage when creating the action.
 @since v0.99.1
 */
-class CC_DLL ProgressTo : public ActionInterval
+class AX_DLL ProgressTo : public ActionInterval
 {
 public:
     /**
@@ -77,14 +77,14 @@ protected:
     float _from;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
 };
 
 /**
 @brief Progress from a percentage to another percentage.
 @since v0.99.1
 */
-class CC_DLL ProgressFromTo : public ActionInterval
+class AX_DLL ProgressFromTo : public ActionInterval
 {
 public:
     /**
@@ -121,7 +121,7 @@ protected:
     float _from;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProgressFromTo);
+    AX_DISALLOW_COPY_AND_ASSIGN(ProgressFromTo);
 };
 
 // end of actions group

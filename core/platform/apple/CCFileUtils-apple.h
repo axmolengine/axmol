@@ -24,8 +24,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __CC_FILEUTILS_APPLE_H__
-#define __CC_FILEUTILS_APPLE_H__
+#ifndef __AX_FILEUTILS_APPLE_H__
+#define __AX_FILEUTILS_APPLE_H__
 
 #include <memory>
 #include <string>
@@ -43,7 +43,7 @@ NS_AX_BEGIN
  */
 
 //! @brief  Helper class to handle file operations
-class CC_DLL FileUtilsApple : public FileUtils
+class AX_DLL FileUtilsApple : public FileUtils
 {
 public:
     FileUtilsApple();
@@ -54,7 +54,7 @@ public:
     virtual std::string getFullPathForFilenameWithinDirectory(std::string_view directory,
                                                               std::string_view filename) const override;
 
-#if CC_FILEUTILS_APPLE_ENABLE_OBJC
+#if AX_FILEUTILS_APPLE_ENABLE_OBJC
     void setBundle(NSBundle* bundle);
 #endif
 
@@ -76,4 +76,4 @@ private:
 
 NS_AX_END
 
-#endif  // __CC_FILEUTILS_APPLE_H__
+#endif  // __AX_FILEUTILS_APPLE_H__

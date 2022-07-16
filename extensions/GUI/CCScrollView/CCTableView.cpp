@@ -71,7 +71,7 @@ bool TableView::initWithViewSize(Size size, Node* container /* = nullptr*/)
 {
     if (ScrollView::initWithViewSize(size, container))
     {
-        CC_SAFE_DELETE(_indices);
+        AX_SAFE_DELETE(_indices);
         _indices   = new std::set<ssize_t>();
         _vordering = VerticalFillOrder::BOTTOM_UP;
         this->setDirection(Direction::VERTICAL);
@@ -93,7 +93,7 @@ TableView::TableView()
 
 TableView::~TableView()
 {
-    CC_SAFE_DELETE(_indices);
+    AX_SAFE_DELETE(_indices);
 }
 
 void TableView::setVerticalFillOrder(VerticalFillOrder fillOrder)
@@ -162,7 +162,7 @@ TableViewCell* TableView::cellAtIndex(ssize_t idx)
 
 void TableView::updateCellAtIndex(ssize_t idx)
 {
-    if (idx == CC_INVALID_INDEX)
+    if (idx == AX_INVALID_INDEX)
     {
         return;
     }
@@ -184,7 +184,7 @@ void TableView::updateCellAtIndex(ssize_t idx)
 
 void TableView::insertCellAtIndex(ssize_t idx)
 {
-    if (idx == CC_INVALID_INDEX)
+    if (idx == AX_INVALID_INDEX)
     {
         return;
     }
@@ -220,7 +220,7 @@ void TableView::insertCellAtIndex(ssize_t idx)
 
 void TableView::removeCellAtIndex(ssize_t idx)
 {
-    if (idx == CC_INVALID_INDEX)
+    if (idx == AX_INVALID_INDEX)
     {
         return;
     }
@@ -364,7 +364,7 @@ long TableView::_indexFromOffset(Vec2 offset)
         index = MAX(0, index);
         if (index > maxIdx)
         {
-            index = CC_INVALID_INDEX;
+            index = AX_INVALID_INDEX;
         }
     }
 
@@ -494,7 +494,7 @@ void TableView::scrollViewDidScroll(ScrollView* /*view*/)
         offset.y = offset.y + _viewSize.height / this->getContainer()->getScaleY();
     }
     startIdx = this->_indexFromOffset(offset);
-    if (startIdx == CC_INVALID_INDEX)
+    if (startIdx == AX_INVALID_INDEX)
     {
         startIdx = countOfItems - 1;
     }
@@ -510,7 +510,7 @@ void TableView::scrollViewDidScroll(ScrollView* /*view*/)
     offset.x += _viewSize.width / this->getContainer()->getScaleX();
 
     endIdx = this->_indexFromOffset(offset);
-    if (endIdx == CC_INVALID_INDEX)
+    if (endIdx == AX_INVALID_INDEX)
     {
         endIdx = countOfItems - 1;
     }
@@ -633,7 +633,7 @@ bool TableView::onTouchBegan(Touch* pTouch, Event* pEvent)
         point = this->getContainer()->convertTouchToNodeSpace(pTouch);
 
         index = this->_indexFromOffset(point);
-        if (index == CC_INVALID_INDEX)
+        if (index == AX_INVALID_INDEX)
         {
             _touchedCell = nullptr;
         }

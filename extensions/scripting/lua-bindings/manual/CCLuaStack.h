@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_LUA_STACK_H_
-#define __CC_LUA_STACK_H_
+#ifndef __AX_LUA_STACK_H_
+#define __AX_LUA_STACK_H_
 
 extern "C" {
 #include "lua.h"
@@ -332,4 +332,4 @@ NS_AX_END
 
 // end group
 /// @}
-#endif  // __CC_LUA_STACK_H_
+#endif  // __AX_LUA_STACK_H_

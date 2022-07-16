@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_EXTENTIONS_CCCOMRENDER_H__
-#define __CC_EXTENTIONS_CCCOMRENDER_H__
+#ifndef __AX_EXTENTIONS_CCCOMRENDER_H__
+#define __AX_EXTENTIONS_CCCOMRENDER_H__
 
 #include "CCComBase.h"
 #include "2d/CCComponent.h"
@@ -83,4 +83,4 @@ private:
 };
 
 }  // namespace cocostudio
-#endif  // __CC_EXTENTIONS_CCCOMRENDER_H__
+#endif  // __AX_EXTENTIONS_CCCOMRENDER_H__

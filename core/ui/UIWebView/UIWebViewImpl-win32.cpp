@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
 
 #    include "UIWebViewImpl-win32.h"
 #    include "UIWebView.h"
@@ -918,7 +918,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
 
         if (!embed(m_window, false, cb))
         {
-            CCLOG("Cannot create edge chromium webview");
+            AXLOG("Cannot create edge chromium webview");
             ret = false;
             break;
         }
@@ -1082,4 +1082,4 @@ void Win32WebControl::setBackgroundTransparent()
     }
 }
 
-#endif  // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32

@@ -280,7 +280,7 @@ void PURibbonTrailRender::prepare()
             _visualData.push_back(visualData);     // Used to assign to a particle
             if (_randomInitialColor)
             {
-                _trail->setInitialColour(i, CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1());
+                _trail->setInitialColour(i, AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
             }
             else
             {
@@ -332,7 +332,7 @@ void PURibbonTrailRender::destroyAll()
     }
 
     // Delete the Ribbontrail
-    CC_SAFE_DELETE(_trail);
+    AX_SAFE_DELETE(_trail);
 
     // Delete the visual data
     std::vector<PURibbonTrailVisualData*>::const_iterator it;

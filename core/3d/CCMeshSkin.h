@@ -48,7 +48,7 @@ class Skeleton3D;
  * @js NA
  * @lua NA
  */
-class CC_DLL MeshSkin : public Ref
+class AX_DLL MeshSkin : public Ref
 {
     friend class Mesh;
 

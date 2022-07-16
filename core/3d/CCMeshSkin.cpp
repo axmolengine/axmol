@@ -36,7 +36,7 @@ MeshSkin::MeshSkin() : _rootBone(nullptr), _skeleton(nullptr) {}
 MeshSkin::~MeshSkin()
 {
     removeAllBones();
-    CC_SAFE_RELEASE(_skeleton);
+    AX_SAFE_RELEASE(_skeleton);
 }
 
 MeshSkin* MeshSkin::create(Skeleton3D* skeleton,
@@ -47,7 +47,7 @@ MeshSkin* MeshSkin::create(Skeleton3D* skeleton,
     skin->_skeleton = skeleton;
     skeleton->retain();
 
-    CCASSERT(boneNames.size() == invBindPose.size(), "bone names' num should equals to invBindPose's num");
+    AXASSERT(boneNames.size() == invBindPose.size(), "bone names' num should equals to invBindPose's num");
     for (const auto& it : boneNames)
     {
         auto bone = skeleton->getBoneByName(it);
@@ -127,7 +127,7 @@ ssize_t MeshSkin::getMatrixPaletteSizeInBytes() const
 void MeshSkin::removeAllBones()
 {
     _skinBones.clear();
-    CC_SAFE_RELEASE(_rootBone);
+    AX_SAFE_RELEASE(_rootBone);
 }
 
 void MeshSkin::addSkinBone(Bone3D* bone)

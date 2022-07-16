@@ -6,7 +6,7 @@
 USING_NS_AX;
 USING_NS_AX_EXT;
 
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
 
 static bool show_test_window    = true;
 static bool show_another_window = true;
@@ -28,7 +28,7 @@ void ImGuiTest::onEnter()
     TestCase::onEnter();
 
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
-    ImGuiPresenter::getInstance()->addRenderLoop("#test", CC_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
+    ImGuiPresenter::getInstance()->addRenderLoop("#test", AX_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
 }
 
 void ImGuiTest::onExit()

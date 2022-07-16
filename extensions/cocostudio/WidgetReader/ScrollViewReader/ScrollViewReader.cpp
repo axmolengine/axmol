@@ -41,7 +41,7 @@ ScrollViewReader* ScrollViewReader::getInstance()
 
 void ScrollViewReader::destroyInstance()
 {
-    CC_SAFE_DELETE(instanceScrollViewReader);
+    AX_SAFE_DELETE(instanceScrollViewReader);
 }
 
 void ScrollViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)

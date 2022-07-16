@@ -99,7 +99,7 @@ protected:
     backend::UniformLocation _locMVPMatrix;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
+    AX_DISALLOW_COPY_AND_ASSIGN(DrawNode3D);
 
     bool _rendererDepthTestEnabled = false;
 
@@ -111,7 +111,7 @@ DrawNode3D::DrawNode3D() {}
 
 DrawNode3D::~DrawNode3D()
 {
-    CC_SAFE_RELEASE_NULL(_programState);
+    AX_SAFE_RELEASE_NULL(_programState);
 }
 
 DrawNode3D* DrawNode3D::create()
@@ -123,7 +123,7 @@ DrawNode3D* DrawNode3D::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -131,7 +131,7 @@ DrawNode3D* DrawNode3D::create()
 
 void DrawNode3D::ensureCapacity(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_buffer.size() + count > _buffer.capacity())
     {
@@ -176,10 +176,10 @@ bool DrawNode3D::init()
 
     _dirty = true;
 
-    _customCommand.setBeforeCallback(CC_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
-    _customCommand.setAfterCallback(CC_CALLBACK_0(DrawNode3D::onAfterDraw, this));
+    _customCommand.setBeforeCallback(AX_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
+    _customCommand.setAfterCallback(AX_CALLBACK_0(DrawNode3D::onAfterDraw, this));
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     // Need to listen the event only when not use batchnode, because it will use VBO
     auto listener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom* event) {
         /** listen the event that coming to foreground on Android */
@@ -316,12 +316,12 @@ ValueTypeJudgeInTable* ValueTypeJudgeInTable::create(ValueMap valueMap)
         Value::Type type = iter.second.getTypeFamily();
         if (type == Value::Type::STRING)
         {
-            CCLOG("The type of index %d is string", index);
+            AXLOG("The type of index %d is string", index);
         }
 
         if (type == Value::Type::INTEGER || type == Value::Type::DOUBLE || type == Value::Type::FLOAT)
         {
-            CCLOG("The type of index %d is number", index);
+            AXLOG("The type of index %d is number", index);
         }
 
         ++index;
@@ -365,7 +365,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
         blendfunc_to_luaval(L, ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:getBlendFunc", argc, 0);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:getBlendFunc", argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -416,7 +416,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
         return 0;
     }
 
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:setBlendFunc", argc, 1);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:setBlendFunc", argc, 1);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -469,7 +469,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
         cobj->drawLine(arg0, arg1, arg2);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawLine", argc, 3);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawLine", argc, 3);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -513,7 +513,7 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
         cobj->clear();
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:clear", argc, 0);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:clear", argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -591,7 +591,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
         cobj->drawCube(&arg0[0], arg1);
         return 0;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawCube", argc, 2);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawCube", argc, 2);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -626,7 +626,7 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
         object_to_luaval<axis::DrawNode3D>(L, "ax.DrawNode3D", (axis::DrawNode3D*)ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.DrawNode3D:create", argc, 0);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.DrawNode3D:create", argc, 0);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:
@@ -680,7 +680,7 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
                                                          (axis::ValueTypeJudgeInTable*)ret);
         return 1;
     }
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);
     return 0;
 #if COCOS2D_DEBUG >= 1
 tolua_lerror:

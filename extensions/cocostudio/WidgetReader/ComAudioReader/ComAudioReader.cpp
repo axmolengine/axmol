@@ -53,12 +53,12 @@ ComAudioReader* ComAudioReader::getInstance()
 
 void ComAudioReader::purge()
 {
-    CC_SAFE_DELETE(_instanceComAudioReader);
+    AX_SAFE_DELETE(_instanceComAudioReader);
 }
 
 void ComAudioReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceComAudioReader);
+    AX_SAFE_DELETE(_instanceComAudioReader);
 }
 
 Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

@@ -43,21 +43,21 @@ VertexAttribBinding::~VertexAttribBinding()
         __vertexAttribBindingCache.erase(itr);
     }
 
-    CC_SAFE_RELEASE(_meshIndexData);
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_meshIndexData);
+    AX_SAFE_RELEASE(_programState);
     _attributes.clear();
 }
 
 VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
 {
-    CCASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid MeshIndexData and/or programState");
+    AXASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid MeshIndexData and/or programState");
 
     // Search for an existing vertex attribute binding that can be used.
     VertexAttribBinding* b;
     for (size_t i = 0, count = __vertexAttribBindingCache.size(); i < count; ++i)
     {
         b = __vertexAttribBindingCache[i];
-        CC_ASSERT(b);
+        AX_ASSERT(b);
         if (b->_meshIndexData == meshIndexData && b->_programState == pass->getProgramState())
         {
             // Found a match!
@@ -78,7 +78,7 @@ VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, P
 bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
 {
 
-    CCASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid arguments");
+    AXASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid arguments");
 
     auto programState = pass->getProgramState();
 
@@ -105,7 +105,7 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
 
     _vertexLayout->setLayout(offset);
 
-    CCASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
+    AXASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
 
     return true;
 }
@@ -117,7 +117,7 @@ uint32_t VertexAttribBinding::getVertexAttribsFlags() const
 
 void VertexAttribBinding::parseAttributes()
 {
-    CCASSERT(_programState, "invalid glprogram");
+    AXASSERT(_programState, "invalid glprogram");
 
     _attributes.clear();
     _vertexAttribsFlags = 0;
@@ -149,13 +149,13 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     auto v = getVertexAttribValue(name);
     if (v)
     {
-        // CCLOG("cocos2d: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
+        // AXLOG("cocos2d: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
         _vertexLayout->setAttribute(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else
     {
-        // CCLOG("cocos2d: warning: Attribute not found: %s", name.c_str());
+        // AXLOG("cocos2d: warning: Attribute not found: %s", name.c_str());
     }
 }
 
