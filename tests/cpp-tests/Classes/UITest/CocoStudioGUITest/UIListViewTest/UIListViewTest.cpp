@@ -93,8 +93,8 @@ bool UIListViewTest_Vertical::init()
         _listView->setContentSize(Size(240.0f, 130.0f));
         _listView->setPosition(Vec2((widgetSize - _listView->getContentSize()) / 2.0f));
         _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)CC_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
-        _listView->addEventListener((ui::ListView::ccScrollViewCallback)CC_CALLBACK_2(
+            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Vertical::selectedItemEvent, this));
+        _listView->addEventListener((ui::ListView::ccScrollViewCallback)AX_CALLBACK_2(
             UIListViewTest_Vertical::selectedItemEventScrollView, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
@@ -234,7 +234,7 @@ void UIListViewTest_Vertical::update(float dt)
             {
                 int itemID = item->getTag() - (int)items.size();
                 item->setPositionY(item->getPositionY() + _reuseItemOffset);
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -245,7 +245,7 @@ void UIListViewTest_Vertical::update(float dt)
 
                 item->setPositionY(item->getPositionY() - _reuseItemOffset);
                 int itemID = item->getTag() + (int)items.size();
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -282,10 +282,10 @@ void UIListViewTest_Vertical::selectedItemEventScrollView(Ref* pSender, ui::Scro
     switch (type)
     {
     case ui::ScrollView::EventType::SCROLL_TO_BOTTOM:
-        CCLOG("SCROLL_TO_BOTTOM");
+        AXLOG("SCROLL_TO_BOTTOM");
         break;
     case ui::ScrollView::EventType::SCROLL_TO_TOP:
-        CCLOG("SCROLL_TO_TOP");
+        AXLOG("SCROLL_TO_TOP");
         break;
     default:
         break;
@@ -346,7 +346,7 @@ bool UIListViewTest_Horizontal::init()
                                     (widgetSize.height - backgroundSize.height) / 2.0f +
                                         (backgroundSize.height - _listView->getContentSize().height) / 2.0f));
         _listView->addEventListener(
-            (ui::ListView::ccListViewCallback)CC_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
+            (ui::ListView::ccListViewCallback)AX_CALLBACK_2(UIListViewTest_Horizontal::selectedItemEvent, this));
         _listView->setScrollBarPositionFromCorner(Vec2(7, 7));
         _uiLayer->addChild(_listView);
 
@@ -438,7 +438,7 @@ void UIListViewTest_Horizontal::update(float dt)
             {
                 int itemID = item->getTag() + (int)items.size();
                 item->setPositionX(item->getPositionX() + _reuseItemOffset);
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -450,7 +450,7 @@ void UIListViewTest_Horizontal::update(float dt)
 
                 item->setPositionX(item->getPositionX() - _reuseItemOffset);
                 int itemID = item->getTag() - (int)items.size();
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -937,7 +937,7 @@ bool UIListViewTest_Padding::init()
             slider->setCapInsets(Rect(0.0f, 0.0f, 0.0f, 0.0f));
             slider->setContentSize(Size(30.0f, 10.0f));
             slider->setPosition(Vec2(60.0f, 150.0f - (25 * i)));
-            slider->addEventListener(CC_CALLBACK_2(UIListViewTest_Padding::sliderEvent, this));
+            slider->addEventListener(AX_CALLBACK_2(UIListViewTest_Padding::sliderEvent, this));
             slider->setTag(i);
             _uiLayer->addChild(slider);
 
@@ -1028,7 +1028,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 0)
         {
             int left = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Left Padding: %d", left);
+            AXLOG("Left Padding: %d", left);
             _listView->setLeftPadding(left);
             _paddingLabels[0]->setString(StringUtils::format("Left\nPadding=%d", left));
         }
@@ -1036,7 +1036,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 1)
         {
             int top = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Top Padding: %d", top);
+            AXLOG("Top Padding: %d", top);
             _listView->setTopPadding(top);
             _paddingLabels[1]->setString(StringUtils::format("Top\nPadding=%d", top));
         }
@@ -1044,7 +1044,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 2)
         {
             int right = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Right Padding: %d", right);
+            AXLOG("Right Padding: %d", right);
             _listView->setRightPadding(right);
             _paddingLabels[2]->setString(StringUtils::format("Right\nPadding=%d", right));
         }
@@ -1052,7 +1052,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 3)
         {
             int bottom = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Bottom Padding: %d", bottom);
+            AXLOG("Bottom Padding: %d", bottom);
             _listView->setBottomPadding(bottom);
             _paddingLabels[3]->setString(StringUtils::format("Bottom\nPadding=%d", bottom));
         }

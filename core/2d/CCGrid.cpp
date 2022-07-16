@@ -84,10 +84,10 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     _gridSize  = gridSize;
 
     _texture = texture;
-    CC_SAFE_RETAIN(_texture);
+    AX_SAFE_RETAIN(_texture);
     _isTextureFlipped = flipped;
 
-#ifdef CC_USE_METAL
+#ifdef AX_USE_METAL
     _isTextureFlipped = !flipped;
 #endif
 
@@ -104,7 +104,7 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     _step.y = _gridRect.size.height / _gridSize.height;
 
     auto& pipelineDescriptor = _drawCommand.getPipelineDescriptor();
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_programState);
     auto* program                   = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
     _programState                   = new backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
@@ -149,14 +149,14 @@ void GridBase::updateBlendState()
 
 GridBase::~GridBase()
 {
-    CCLOGINFO("deallocing GridBase: %p", this);
+    AXLOGINFO("deallocing GridBase: %p", this);
 
-    CC_SAFE_RELEASE(_renderTarget);
+    AX_SAFE_RELEASE(_renderTarget);
 
     // TODO: ? why 2.0 comments this line:        setActive(false);
-    CC_SAFE_RELEASE(_texture);
+    AX_SAFE_RELEASE(_texture);
 
-    CC_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(_programState);
 }
 
 // properties
@@ -216,7 +216,7 @@ void GridBase::beforeDraw()
         renderer->setViewPort(0, 0, (unsigned int)size.width, (unsigned int)size.height);
 
         _oldRenderTarget = renderer->getRenderTarget();
-        CC_SAFE_RELEASE(_renderTarget);
+        AX_SAFE_RELEASE(_renderTarget);
         _renderTarget =
             backend::Device::getInstance()->newRenderTarget(TargetBufferFlags::COLOR, _texture->getBackendTexture());
         renderer->setRenderTarget(_renderTarget);
@@ -344,11 +344,11 @@ Grid3D::Grid3D() {}
 
 Grid3D::~Grid3D()
 {
-    CC_SAFE_FREE(_texCoordinates);
-    CC_SAFE_FREE(_vertices);
-    CC_SAFE_FREE(_indices);
-    CC_SAFE_FREE(_originalVertices);
-    CC_SAFE_FREE(_vertexBuffer);
+    AX_SAFE_FREE(_texCoordinates);
+    AX_SAFE_FREE(_vertices);
+    AX_SAFE_FREE(_indices);
+    AX_SAFE_FREE(_originalVertices);
+    AX_SAFE_FREE(_vertexBuffer);
 }
 
 void Grid3D::beforeBlit()
@@ -392,11 +392,11 @@ void Grid3D::calculateVertexPoints()
     float height = (float)_texture->getPixelsHigh();
     float imageH = _texture->getContentSizeInPixels().height;
 
-    CC_SAFE_FREE(_vertices);
-    CC_SAFE_FREE(_originalVertices);
-    CC_SAFE_FREE(_texCoordinates);
-    CC_SAFE_FREE(_vertexBuffer);
-    CC_SAFE_FREE(_indices);
+    AX_SAFE_FREE(_vertices);
+    AX_SAFE_FREE(_originalVertices);
+    AX_SAFE_FREE(_texCoordinates);
+    AX_SAFE_FREE(_vertexBuffer);
+    AX_SAFE_FREE(_indices);
 
     size_t numOfPoints = static_cast<size_t>((_gridSize.width + 1) * (_gridSize.height + 1));
 
@@ -470,7 +470,7 @@ void Grid3D::calculateVertexPoints()
 
 Vec3 Grid3D::getVertex(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
 
     int index        = (int)(pos.x * (_gridSize.height + 1) + pos.y) * 3;
     float* vertArray = (float*)_vertices;
@@ -482,7 +482,7 @@ Vec3 Grid3D::getVertex(const Vec2& pos) const
 
 Vec3 Grid3D::getOriginalVertex(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
 
     int index        = (int)(pos.x * (_gridSize.height + 1) + pos.y) * 3;
     float* vertArray = (float*)_originalVertices;
@@ -494,7 +494,7 @@ Vec3 Grid3D::getOriginalVertex(const Vec2& pos) const
 
 void Grid3D::setVertex(const Vec2& pos, const Vec3& vertex)
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int index            = (int)(pos.x * (_gridSize.height + 1) + pos.y) * 3;
     float* vertArray     = (float*)_vertices;
     vertArray[index]     = vertex.x;
@@ -552,10 +552,10 @@ void Grid3D::updateVertexAndTexCoordinate()
 
 TiledGrid3D::~TiledGrid3D()
 {
-    CC_SAFE_FREE(_texCoordinates);
-    CC_SAFE_FREE(_vertices);
-    CC_SAFE_FREE(_originalVertices);
-    CC_SAFE_FREE(_indices);
+    AX_SAFE_FREE(_texCoordinates);
+    AX_SAFE_FREE(_vertices);
+    AX_SAFE_FREE(_originalVertices);
+    AX_SAFE_FREE(_indices);
 }
 
 TiledGrid3D* TiledGrid3D::create(const Vec2& gridSize)
@@ -643,11 +643,11 @@ void TiledGrid3D::calculateVertexPoints()
     float imageH = _texture->getContentSizeInPixels().height;
 
     int numQuads = (int)(_gridSize.width * _gridSize.height);
-    CC_SAFE_FREE(_vertices);
-    CC_SAFE_FREE(_originalVertices);
-    CC_SAFE_FREE(_texCoordinates);
-    CC_SAFE_FREE(_indices);
-    CC_SAFE_FREE(_vertexBuffer);
+    AX_SAFE_FREE(_vertices);
+    AX_SAFE_FREE(_originalVertices);
+    AX_SAFE_FREE(_texCoordinates);
+    AX_SAFE_FREE(_indices);
+    AX_SAFE_FREE(_vertexBuffer);
 
     _vertices         = malloc(numQuads * 4 * sizeof(Vec3));
     _originalVertices = malloc(numQuads * 4 * sizeof(Vec3));
@@ -718,7 +718,7 @@ void TiledGrid3D::calculateVertexPoints()
 
 void TiledGrid3D::setTile(const Vec2& pos, const Quad3& coords)
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int idx          = (int)(_gridSize.height * pos.x + pos.y) * 4 * 3;
     float* vertArray = (float*)_vertices;
     memcpy(&vertArray[idx], &coords, sizeof(Quad3));
@@ -726,7 +726,7 @@ void TiledGrid3D::setTile(const Vec2& pos, const Quad3& coords)
 
 Quad3 TiledGrid3D::getOriginalTile(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int idx          = (int)(_gridSize.height * pos.x + pos.y) * 4 * 3;
     float* vertArray = (float*)_originalVertices;
 
@@ -738,7 +738,7 @@ Quad3 TiledGrid3D::getOriginalTile(const Vec2& pos) const
 
 Quad3 TiledGrid3D::getTile(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int idx          = (int)(_gridSize.height * pos.x + pos.y) * 4 * 3;
     float* vertArray = (float*)_vertices;
 

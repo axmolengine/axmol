@@ -63,7 +63,7 @@ axis::Node* SceneReader::createNodeWithSceneFile(
         rapidjson::Document jsonDict;
         do
         {
-            CC_BREAK_IF(!readJson(fileName, jsonDict));
+            AX_BREAK_IF(!readJson(fileName, jsonDict));
             _node = createObject(jsonDict, nullptr, attachComponent);
             TriggerMng::getInstance()->parse(jsonDict);
         } while (0);
@@ -77,7 +77,7 @@ axis::Node* SceneReader::createNodeWithSceneFile(
             std::string binaryFilePath = FileUtils::getInstance()->fullPathForFilename(fileName);
             auto fileData              = FileUtils::getInstance()->getDataFromFile(binaryFilePath);
             auto fileDataBytes         = fileData.getBytes();
-            CC_BREAK_IF(fileData.isNull());
+            AX_BREAK_IF(fileData.isNull());
             CocoLoader tCocoLoader;
             if (tCocoLoader.ReadCocoBinBuff((char*)fileDataBytes))
             {
@@ -86,7 +86,7 @@ axis::Node* SceneReader::createNodeWithSceneFile(
                 if (rapidjson::kObjectType == tType)
                 {
                     stExpCocoNode* tpChildArray = tpRootCocoNode->GetChildArray(&tCocoLoader);
-                    CC_BREAK_IF(tpRootCocoNode->GetChildNum() == 0);
+                    AX_BREAK_IF(tpRootCocoNode->GetChildNum() == 0);
                     _node      = Node::create();
                     int nCount = 0;
                     std::vector<Component*> _vecComs;
@@ -131,7 +131,7 @@ axis::Node* SceneReader::createNodeWithSceneFile(
                             }
                             else
                             {
-                                CC_SAFE_RELEASE_NULL(pCom);
+                                AX_SAFE_RELEASE_NULL(pCom);
                             }
                         }
                         if (_fnSelector != nullptr)
@@ -173,7 +173,7 @@ bool SceneReader::readJson(std::string_view fileName, rapidjson::Document& doc)
         std::string jsonpath   = FileUtils::getInstance()->fullPathForFilename(fileName);
         std::string contentStr = FileUtils::getInstance()->getStringFromFile(jsonpath);
         doc.Parse<0>(contentStr.c_str());
-        CC_BREAK_IF(doc.HasParseError());
+        AX_BREAK_IF(doc.HasParseError());
         ret = true;
     } while (0);
     return ret;
@@ -242,7 +242,7 @@ std::string SceneReader::getComponentClassName(std::string_view name)
     }
     else
     {
-        CCASSERT(false, "Unregistered Component!");
+        AXASSERT(false, "Unregistered Component!");
     }
 
     return comName;
@@ -292,7 +292,7 @@ Node* SceneReader::createObject(const rapidjson::Value& dict,
                     }
                 }
             }
-            CC_SAFE_DELETE(data);
+            AX_SAFE_DELETE(data);
             if (_fnSelector != nullptr)
             {
                 _fnSelector(com, data);
@@ -406,7 +406,7 @@ axis::Node* SceneReader::createObject(CocoLoader* cocoLoader,
                 }
                 else
                 {
-                    CC_SAFE_RELEASE_NULL(pCom);
+                    AX_SAFE_RELEASE_NULL(pCom);
                 }
             }
             if (_fnSelector != nullptr)
@@ -414,7 +414,7 @@ axis::Node* SceneReader::createObject(CocoLoader* cocoLoader,
                 _fnSelector(pCom, (void*)(data));
             }
         }
-        CC_SAFE_DELETE(data);
+        AX_SAFE_DELETE(data);
 
         if (parent != nullptr)
         {
@@ -431,7 +431,7 @@ axis::Node* SceneReader::createObject(CocoLoader* cocoLoader,
                 gb = pRender->getNode();
                 gb->retain();
                 pRender->setNode(nullptr);
-                CC_SAFE_RELEASE_NULL(pRender);
+                AX_SAFE_RELEASE_NULL(pRender);
             }
             parent->addChild(gb);
         }
@@ -562,7 +562,7 @@ void SceneReader::destroyInstance()
     DictionaryHelper::destroyInstance();
     TriggerMng::destroyInstance();
     // CocosDenshion::SimpleAudioEngine::end();
-    CC_SAFE_DELETE(s_sharedReader);
+    AX_SAFE_DELETE(s_sharedReader);
 }
 
 }  // namespace cocostudio

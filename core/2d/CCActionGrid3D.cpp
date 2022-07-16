@@ -74,7 +74,7 @@ void Waves3D::update(float time)
             Vec2 pos((float)i, (float)j);
             Vec3 v = getOriginalVertex(pos);
             v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y + v.x) * 0.01f) * _amplitude * _amplitudeRate);
-            // CCLOG("v.z offset is %f\n", (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude *
+            // AXLOG("v.z offset is %f\n", (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude *
             // _amplitudeRate));
             setVertex(pos, v);
         }
@@ -107,7 +107,7 @@ bool FlipX3D::initWithSize(const Vec2& gridSize, float duration)
     if (gridSize.width != 1 || gridSize.height != 1)
     {
         // Grid size must be (1,1)
-        CCASSERT(0, "Grid size must be (1,1)");
+        AXASSERT(0, "Grid size must be (1,1)");
 
         return false;
     }
@@ -209,7 +209,7 @@ FlipY3D* FlipY3D::create(float duration)
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
 
     return action;
@@ -291,7 +291,7 @@ Lens3D* Lens3D::create(float duration, const Vec2& gridSize, const Vec2& positio
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
 
     return action;
@@ -392,7 +392,7 @@ Ripple3D* Ripple3D::create(float duration,
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
 
     return action;
@@ -470,7 +470,7 @@ Shaky3D* Shaky3D::create(float duration, const Vec2& gridSize, int range, bool s
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
     return action;
 }
@@ -531,7 +531,7 @@ Liquid* Liquid::create(float duration, const Vec2& gridSize, unsigned int waves,
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
 
     return action;
@@ -594,7 +594,7 @@ Waves* Waves::create(float duration,
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
 
     return action;
@@ -668,7 +668,7 @@ Twirl* Twirl::create(float duration, const Vec2& gridSize, const Vec2& position,
     }
     else
     {
-        CC_SAFE_DELETE(action);
+        AX_SAFE_DELETE(action);
     }
 
     return action;

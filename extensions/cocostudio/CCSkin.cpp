@@ -37,7 +37,7 @@ USING_NS_AX;
 namespace cocostudio
 {
 
-#if CC_SPRITEBATCHNODE_RENDER_SUBPIXEL
+#if AX_SPRITEBATCHNODE_RENDER_SUBPIXEL
 #    define RENDER_IN_SUBPIXEL
 #else
 #    define RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
@@ -51,7 +51,7 @@ Skin* Skin::create()
         skin->autorelease();
         return skin;
     }
-    CC_SAFE_DELETE(skin);
+    AX_SAFE_DELETE(skin);
     return nullptr;
 }
 
@@ -63,7 +63,7 @@ Skin* Skin::createWithSpriteFrameName(std::string_view pszSpriteFrameName)
         skin->autorelease();
         return skin;
     }
-    CC_SAFE_DELETE(skin);
+    AX_SAFE_DELETE(skin);
     return nullptr;
 }
 
@@ -75,7 +75,7 @@ Skin* Skin::create(std::string_view pszFileName)
         skin->autorelease();
         return skin;
     }
-    CC_SAFE_DELETE(skin);
+    AX_SAFE_DELETE(skin);
     return nullptr;
 }
 
@@ -94,7 +94,7 @@ bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
     }
     else
     {
-        CCLOG("Can't find CCSpriteFrame with %s. Please check your .plist file", spriteFrameName.data());
+        AXLOG("Can't find CCSpriteFrame with %s. Please check your .plist file", spriteFrameName.data());
         ret = false;
     }
 
@@ -118,8 +118,8 @@ void Skin::setSkinData(const BaseData& var)
 
     setScaleX(_skinData.scaleX);
     setScaleY(_skinData.scaleY);
-    setRotationSkewX(CC_RADIANS_TO_DEGREES(_skinData.skewX));
-    setRotationSkewY(CC_RADIANS_TO_DEGREES(-_skinData.skewY));
+    setRotationSkewX(AX_RADIANS_TO_DEGREES(_skinData.skewX));
+    setRotationSkewY(AX_RADIANS_TO_DEGREES(-_skinData.skewY));
     setPosition(_skinData.x, _skinData.y);
 
     _skinTransform = getNodeToParentTransform();

@@ -114,7 +114,7 @@ static void DrawShape(cpShape* shape, DrawNode* renderer)
             renderer->drawPolygon(pPoints, num, color, 1.0, line);
         }
 
-        CC_SAFE_DELETE_ARRAY(pPoints);
+        AX_SAFE_DELETE_ARRAY(pPoints);
     }
     break;
     default:
@@ -205,7 +205,7 @@ static void DrawConstraint(cpConstraint* constraint, DrawNode* renderer)
     }
     else
     {
-        CCLOG("Cannot draw constraint");
+        AXLOG("Cannot draw constraint");
     }
 }
 

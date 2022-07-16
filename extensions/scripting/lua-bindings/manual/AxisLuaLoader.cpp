@@ -93,7 +93,7 @@ int axis_lua_loader(lua_State* L)
                              resolvedPath.c_str());
     }
     else
-        CCLOG("can not get file data of %s", resolvedPath.c_str());
+        AXLOG("can not get file data of %s", resolvedPath.c_str());
     return nret;
 }
 }

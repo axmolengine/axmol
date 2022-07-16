@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_COMMON_H__
-#define __CC_COMMON_H__
+#ifndef __AX_COMMON_H__
+#define __AX_COMMON_H__
 /// @cond DO_NOT_SHOW
 
 #include "platform/CCPlatformMacros.h"
@@ -40,12 +40,12 @@ NS_AX_BEGIN
 /**
  * lua can not deal with ...
  */
-void CC_DLL LuaLog(const char* format);
+void AX_DLL LuaLog(const char* format);
 
 /**
 @brief Pop out a message box
 */
-void CC_DLL ccMessageBox(const char* msg, const char* title);
+void AX_DLL ccMessageBox(const char* msg, const char* title);
 
 /**
 @brief Enum the language type supported now
@@ -80,4 +80,4 @@ enum class LanguageType
 NS_AX_END
 
 /// @endcond
-#endif  // __CC_COMMON_H__
+#endif  // __AX_COMMON_H__

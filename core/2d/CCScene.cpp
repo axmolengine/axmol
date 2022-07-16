@@ -34,16 +34,16 @@ THE SOFTWARE.
 #include "base/ccUTF8.h"
 #include "renderer/CCRenderer.h"
 
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 #    include "physics/CCPhysicsWorld.h"
 #endif
 
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 #    include "physics3d/CCPhysics3DWorld.h"
 #    include "physics3d/CCPhysics3DComponent.h"
 #endif
 
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 #    include "navmesh/CCNavMesh.h"
 #endif
 
@@ -64,36 +64,36 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
-    CC_SAFE_RELEASE(_physics3DWorld);
-    CC_SAFE_RELEASE(_physics3dDebugCamera);
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
+    AX_SAFE_RELEASE(_physics3DWorld);
+    AX_SAFE_RELEASE(_physics3dDebugCamera);
 #endif
-#if CC_USE_NAVMESH
-    CC_SAFE_RELEASE(_navMesh);
+#if AX_USE_NAVMESH
+    AX_SAFE_RELEASE(_navMesh);
 #endif
     _director->getEventDispatcher()->removeEventListener(_event);
-    CC_SAFE_RELEASE(_event);
+    AX_SAFE_RELEASE(_event);
 
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
     delete _physicsWorld;
 #endif
 
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->releaseAllChildrenRecursive(this);
     }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
 }
 
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 void Scene::setNavMesh(NavMesh* navMesh)
 {
     if (_navMesh != navMesh)
     {
-        CC_SAFE_RETAIN(navMesh);
-        CC_SAFE_RELEASE(_navMesh);
+        AX_SAFE_RETAIN(navMesh);
+        AX_SAFE_RELEASE(_navMesh);
         _navMesh = navMesh;
     }
 }
@@ -131,7 +131,7 @@ Scene* Scene::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 }
@@ -146,7 +146,7 @@ Scene* Scene::createWithSize(const Vec2& size)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 }
@@ -215,7 +215,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         camera->clearBackground();
         // visit the scene
         visit(renderer, transform, 0);
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
         if (_navMesh && _navMeshDebugCamera == camera)
         {
             _navMesh->debugDraw(renderer);
@@ -231,7 +231,7 @@ void Scene::render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eye
         //        camera->setNodeToParentTransform(eyeCopy);
     }
 
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
     if (_physics3DWorld && _physics3DWorld->isDebugDrawEnabled())
     {
         Camera* physics3dDebugCamera = _physics3dDebugCamera != nullptr ? _physics3dDebugCamera : defaultCamera;
@@ -272,26 +272,26 @@ void Scene::removeAllChildren()
     }
 }
 
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 void Scene::setPhysics3DDebugCamera(Camera* camera)
 {
-    CC_SAFE_RETAIN(camera);
-    CC_SAFE_RELEASE(_physics3dDebugCamera);
+    AX_SAFE_RETAIN(camera);
+    AX_SAFE_RELEASE(_physics3dDebugCamera);
     _physics3dDebugCamera = camera;
 }
 #endif
 
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 void Scene::setNavMeshDebugCamera(Camera* camera)
 {
-    CC_SAFE_RETAIN(camera);
-    CC_SAFE_RELEASE(_navMeshDebugCamera);
+    AX_SAFE_RETAIN(camera);
+    AX_SAFE_RELEASE(_navMeshDebugCamera);
     _navMeshDebugCamera = camera;
 }
 
 #endif
 
-#if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION))
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION))
 
 Scene* Scene::createWithPhysics()
 {
@@ -303,7 +303,7 @@ Scene* Scene::createWithPhysics()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
         return nullptr;
     }
 }
@@ -316,7 +316,7 @@ bool Scene::initWithPhysics()
 
 bool Scene::initPhysicsWorld()
 {
-#    if CC_USE_PHYSICS
+#    if AX_USE_PHYSICS
     _physicsWorld = PhysicsWorld::construct(this);
 #    endif
 
@@ -325,9 +325,9 @@ bool Scene::initPhysicsWorld()
     {
         this->setContentSize(_director->getWinSize());
 
-#    if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
         Physics3DWorldDes info;
-        CC_BREAK_IF(!(_physics3DWorld = Physics3DWorld::create(&info)));
+        AX_BREAK_IF(!(_physics3DWorld = Physics3DWorld::create(&info)));
         _physics3DWorld->retain();
 #    endif
 
@@ -339,21 +339,21 @@ bool Scene::initPhysicsWorld()
 
 #endif
 
-#if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION) || CC_USE_NAVMESH)
+#if (AX_USE_PHYSICS || (AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION) || AX_USE_NAVMESH)
 void Scene::stepPhysicsAndNavigation(float deltaTime)
 {
-#    if CC_USE_PHYSICS
+#    if AX_USE_PHYSICS
     if (_physicsWorld && _physicsWorld->isAutoStep())
         _physicsWorld->update(deltaTime);
 #    endif
 
-#    if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+#    if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
     if (_physics3DWorld)
     {
         _physics3DWorld->stepSimulate(deltaTime);
     }
 #    endif
-#    if CC_USE_NAVMESH
+#    if AX_USE_NAVMESH
     if (_navMesh)
     {
         _navMesh->update(deltaTime);

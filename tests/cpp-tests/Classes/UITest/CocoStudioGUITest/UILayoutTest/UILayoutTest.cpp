@@ -282,7 +282,7 @@ bool UILayoutTest_BackGroundImage::init()
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
         auto item1 =
-            MenuItemLabel::create(label1, CC_CALLBACK_1(UILayoutTest_BackGroundImage::printWidgetResources, this));
+            MenuItemLabel::create(label1, AX_CALLBACK_1(UILayoutTest_BackGroundImage::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);
@@ -297,7 +297,7 @@ bool UILayoutTest_BackGroundImage::init()
 void UILayoutTest_BackGroundImage::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData textureFile = _layout->getRenderFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
 // UILayoutTest_BackGroundImage_Scale9
@@ -767,10 +767,10 @@ bool UILayoutComponentTest::init()
         _uiLayer->addChild(_baseLayer);
 
         Button* button = Button::create("cocosui/animationbuttonnormal.png");
-        CCLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        button->addTouchEventListener(CC_CALLBACK_2(UILayoutComponentTest::touchEvent, this));
+        button->addTouchEventListener(AX_CALLBACK_2(UILayoutComponentTest::touchEvent, this));
         button->setZoomScale(0.4f);
         button->setPressedActionEnabled(true);
         _uiLayer->addChild(button);

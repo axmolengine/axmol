@@ -23,7 +23,7 @@ int MeshVertexAttrib::getAttribSizeBytes() const
     case backend::VertexFormat::USHORT2:
         return 4;
     default:
-        CCASSERT(false, "VertexFormat convert to size error");
+        AXASSERT(false, "VertexFormat convert to size error");
     }
     return ret;
 }

@@ -77,9 +77,9 @@ void LAppView::onEnter()
     EventListenerTouchAllAtOnce* listener = EventListenerTouchAllAtOnce::create();
 
     // タッチメソッド設定
-    listener->onTouchesBegan = CC_CALLBACK_2(LAppView::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(LAppView::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(LAppView::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(LAppView::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(LAppView::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(LAppView::onTouchesEnded, this);
 
     // 優先度100でディスパッチャーに登録
     this->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 100);
@@ -261,6 +261,6 @@ LAppView* LAppView::createDrawNode()
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }

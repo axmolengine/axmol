@@ -46,7 +46,7 @@ RadioButtonGroupReader* RadioButtonGroupReader::getInstance()
 
 void RadioButtonGroupReader::destroyInstance()
 {
-    CC_SAFE_DELETE(s_readerInstance);
+    AX_SAFE_DELETE(s_readerInstance);
 }
 
 Offset<Table> RadioButtonGroupReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

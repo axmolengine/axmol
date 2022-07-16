@@ -40,14 +40,14 @@ ProgramMTL::ProgramMTL(std::string_view vertexShader, std::string_view fragmentS
     combinedSource += fragmentShader;
     _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(std::move(combinedSource)));
 
-    CC_SAFE_RETAIN(_vertexShader);
-    CC_SAFE_RETAIN(_fragmentShader);
+    AX_SAFE_RETAIN(_vertexShader);
+    AX_SAFE_RETAIN(_fragmentShader);
 }
 
 ProgramMTL::~ProgramMTL()
 {
-    CC_SAFE_RELEASE(_vertexShader);
-    CC_SAFE_RELEASE(_fragmentShader);
+    AX_SAFE_RELEASE(_vertexShader);
+    AX_SAFE_RELEASE(_fragmentShader);
 }
 
 int ProgramMTL::getAttributeLocation(Attribute name) const
@@ -132,7 +132,7 @@ const hlookup::string_map<AttributeBindInfo> ProgramMTL::getActiveAttributes() c
 //         case ShaderStage::FRAGMENT:
 //             return _fragmentShader->cloneUniformBuffer();
 //         default:
-//             CCASSERT(false, "Invalid shader stage.");
+//             AXASSERT(false, "Invalid shader stage.");
 //             break;
 //     }
 // }
@@ -146,7 +146,7 @@ const UniformInfo& ProgramMTL::getActiveUniformInfo(ShaderStage stage, int locat
     case ShaderStage::FRAGMENT:
         return _fragmentShader->getActiveUniform(location);
     default:
-        CCASSERT(false, "Invalid shader stage.");
+        AXASSERT(false, "Invalid shader stage.");
         break;
     }
 }
@@ -160,7 +160,7 @@ std::size_t ProgramMTL::getUniformBufferSize(ShaderStage stage) const
     case ShaderStage::FRAGMENT:
         return _fragmentShader->getUniformBufferSize();
     default:
-        CCASSERT(false, "Invalid shader stage.");
+        AXASSERT(false, "Invalid shader stage.");
         break;
     }
     return 0;
@@ -175,7 +175,7 @@ const hlookup::string_map<UniformInfo>& ProgramMTL::getAllActiveUniformInfo(Shad
     case ShaderStage::FRAGMENT:
         return _fragmentShader->getAllActiveUniformInfo();
     default:
-        CCASSERT(false, "Invalid shader stage.");
+        AXASSERT(false, "Invalid shader stage.");
     }
 }
 

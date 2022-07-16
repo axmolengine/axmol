@@ -51,7 +51,7 @@ class NodeGrid;
 @since v0.8.2
 @js NA
 */
-class CC_DLL TransitionEaseScene  // : public Ref
+class AX_DLL TransitionEaseScene  // : public Ref
 {
 public:
     /** Constructor.
@@ -70,7 +70,7 @@ public:
 /** @class TransitionScene
  * @brief Base class for Transition scenes.
  */
-class CC_DLL TransitionScene : public Scene
+class AX_DLL TransitionScene : public Scene
 {
 public:
     /** Orientation Type used by some transitions.
@@ -130,14 +130,14 @@ protected:
     bool _isSendCleanupToScene;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionScene);
 };
 
 /** @class TransitionSceneOriented
  * @brief A Transition that supports orientation like.
  * Possible orientation: LeftOver, RightOver, UpOver, DownOver
  */
-class CC_DLL TransitionSceneOriented : public TransitionScene
+class AX_DLL TransitionSceneOriented : public TransitionScene
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -159,14 +159,14 @@ protected:
     Orientation _orientation;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSceneOriented);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSceneOriented);
 };
 
 /** @class TransitionRotoZoom
  * @brief TransitionRotoZoom:
 Rotate and zoom out the outgoing scene, and then rotate and zoom in the incoming
 */
-class CC_DLL TransitionRotoZoom : public TransitionScene
+class AX_DLL TransitionRotoZoom : public TransitionScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -186,14 +186,14 @@ public:
     virtual ~TransitionRotoZoom();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionRotoZoom);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionRotoZoom);
 };
 
 /** @class TransitionJumpZoom
  * @brief TransitionJumpZoom:
 Zoom out and jump the outgoing scene, and then jump and zoom in the incoming
 */
-class CC_DLL TransitionJumpZoom : public TransitionScene
+class AX_DLL TransitionJumpZoom : public TransitionScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -213,14 +213,14 @@ public:
     virtual ~TransitionJumpZoom();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionJumpZoom);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionJumpZoom);
 };
 
 /** @class TransitionMoveInL
  * @brief TransitionMoveInL:
 Move in from to the left the incoming scene.
 */
-class CC_DLL TransitionMoveInL : public TransitionScene, public TransitionEaseScene
+class AX_DLL TransitionMoveInL : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -252,14 +252,14 @@ protected:
     virtual void initScenes();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInL);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInL);
 };
 
 /** @class TransitionMoveInR
  * @brief TransitionMoveInR:
 Move in from to the right the incoming scene.
 */
-class CC_DLL TransitionMoveInR : public TransitionMoveInL
+class AX_DLL TransitionMoveInR : public TransitionMoveInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -277,14 +277,14 @@ protected:
     virtual void initScenes();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInR);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInR);
 };
 
 /** @class TransitionMoveInT
  * @brief TransitionMoveInT:
 Move in from to the top the incoming scene.
 */
-class CC_DLL TransitionMoveInT : public TransitionMoveInL
+class AX_DLL TransitionMoveInT : public TransitionMoveInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -302,14 +302,14 @@ protected:
     virtual void initScenes();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInT);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInT);
 };
 
 /** @class TransitionMoveInB
  * @brief TransitionMoveInB:
 Move in from to the bottom the incoming scene.
 */
-class CC_DLL TransitionMoveInB : public TransitionMoveInL
+class AX_DLL TransitionMoveInB : public TransitionMoveInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -327,14 +327,14 @@ protected:
     virtual void initScenes();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInB);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInB);
 };
 
 /** @class TransitionSlideInL
  * @brief TransitionSlideInL:
 Slide in the incoming scene from the left border.
 */
-class CC_DLL TransitionSlideInL : public TransitionScene, public TransitionEaseScene
+class AX_DLL TransitionSlideInL : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -368,14 +368,14 @@ protected:
     virtual void sceneOrder() override;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInL);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInL);
 };
 
 /** @class TransitionSlideInR
  *@brief TransitionSlideInR:
 Slide in the incoming scene from the right border.
 */
-class CC_DLL TransitionSlideInR : public TransitionSlideInL
+class AX_DLL TransitionSlideInR : public TransitionSlideInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -399,14 +399,14 @@ protected:
     virtual void sceneOrder() override;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInR);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInR);
 };
 
 /** @class TransitionSlideInB
  * @brief TransitionSlideInB:
 Slide in the incoming scene from the bottom border.
 */
-class CC_DLL TransitionSlideInB : public TransitionSlideInL
+class AX_DLL TransitionSlideInB : public TransitionSlideInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -430,14 +430,14 @@ protected:
     virtual void sceneOrder() override;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInB);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInB);
 };
 
 /** @class TransitionSlideInT
  * @brief TransitionSlideInT:
 Slide in the incoming scene from the top border.
 */
-class CC_DLL TransitionSlideInT : public TransitionSlideInL
+class AX_DLL TransitionSlideInT : public TransitionSlideInL
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -461,13 +461,13 @@ protected:
     virtual void sceneOrder() override;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInT);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInT);
 };
 
 /** @class TransitionShrinkGrow
  * @brief Shrink the outgoing scene while grow the incoming scene
  */
-class CC_DLL TransitionShrinkGrow : public TransitionScene, public TransitionEaseScene
+class AX_DLL TransitionShrinkGrow : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -491,7 +491,7 @@ public:
     virtual ~TransitionShrinkGrow();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionShrinkGrow);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionShrinkGrow);
 };
 
 /** @class TransitionFlipX
@@ -499,7 +499,7 @@ private:
 Flips the screen horizontally.
 The front face is the outgoing scene and the back face is the incoming scene.
 */
-class CC_DLL TransitionFlipX : public TransitionSceneOriented
+class AX_DLL TransitionFlipX : public TransitionSceneOriented
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -530,7 +530,7 @@ public:
     virtual ~TransitionFlipX();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFlipX);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFlipX);
 };
 
 /** @class TransitionFlipY
@@ -538,7 +538,7 @@ private:
 Flips the screen vertically.
 The front face is the outgoing scene and the back face is the incoming scene.
 */
-class CC_DLL TransitionFlipY : public TransitionSceneOriented
+class AX_DLL TransitionFlipY : public TransitionSceneOriented
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -569,7 +569,7 @@ public:
     virtual ~TransitionFlipY();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFlipY);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFlipY);
 };
 
 /** @class TransitionFlipAngular
@@ -577,7 +577,7 @@ private:
 Flips the screen half horizontally and half vertically.
 The front face is the outgoing scene and the back face is the incoming scene.
 */
-class CC_DLL TransitionFlipAngular : public TransitionSceneOriented
+class AX_DLL TransitionFlipAngular : public TransitionSceneOriented
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -608,7 +608,7 @@ public:
     virtual ~TransitionFlipAngular();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFlipAngular);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFlipAngular);
 };
 
 /** @class TransitionZoomFlipX
@@ -616,7 +616,7 @@ private:
 Flips the screen horizontally doing a zoom out/in
 The front face is the outgoing scene and the back face is the incoming scene.
 */
-class CC_DLL TransitionZoomFlipX : public TransitionSceneOriented
+class AX_DLL TransitionZoomFlipX : public TransitionSceneOriented
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -647,7 +647,7 @@ public:
     virtual ~TransitionZoomFlipX();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionZoomFlipX);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionZoomFlipX);
 };
 
 /** @class TransitionZoomFlipY
@@ -655,7 +655,7 @@ private:
 Flips the screen vertically doing a little zooming out/in
 The front face is the outgoing scene and the back face is the incoming scene.
 */
-class CC_DLL TransitionZoomFlipY : public TransitionSceneOriented
+class AX_DLL TransitionZoomFlipY : public TransitionSceneOriented
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -686,7 +686,7 @@ public:
     virtual ~TransitionZoomFlipY();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionZoomFlipY);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionZoomFlipY);
 };
 
 /** @class TransitionZoomFlipAngular
@@ -694,7 +694,7 @@ private:
 Flips the screen half horizontally and half vertically doing a little zooming out/in.
 The front face is the outgoing scene and the back face is the incoming scene.
 */
-class CC_DLL TransitionZoomFlipAngular : public TransitionSceneOriented
+class AX_DLL TransitionZoomFlipAngular : public TransitionSceneOriented
 {
 public:
     /** Creates a transition with duration, incoming scene and orientation.
@@ -725,14 +725,14 @@ public:
     virtual ~TransitionZoomFlipAngular();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionZoomFlipAngular);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionZoomFlipAngular);
 };
 
 /** @class TransitionFade
  * @brief TransitionFade:
 Fade out the outgoing scene and then fade in the incoming scene.'''
 */
-class CC_DLL TransitionFade : public TransitionScene
+class AX_DLL TransitionFade : public TransitionScene
 {
 public:
     /** Creates the transition with a duration and with an RGB color
@@ -772,7 +772,7 @@ protected:
     Color4B _color;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFade);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFade);
 };
 
 class RenderTexture;
@@ -780,7 +780,7 @@ class RenderTexture;
 @brief TransitionCrossFade:
 Cross fades two scenes using the RenderTexture object.
 */
-class CC_DLL TransitionCrossFade : public TransitionScene
+class AX_DLL TransitionCrossFade : public TransitionScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -811,14 +811,14 @@ public:
     virtual ~TransitionCrossFade();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionCrossFade);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionCrossFade);
 };
 
 /** @class TransitionTurnOffTiles
  * @brief TransitionTurnOffTiles:
 Turn off the tiles of the outgoing scene in random order
 */
-class CC_DLL TransitionTurnOffTiles : public TransitionScene, public TransitionEaseScene
+class AX_DLL TransitionTurnOffTiles : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -854,14 +854,14 @@ protected:
     NodeGrid* _outSceneProxy;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionTurnOffTiles);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionTurnOffTiles);
 };
 
 /** @class TransitionSplitCols
  * @brief TransitionSplitCols:
 The odd columns goes upwards while the even columns goes downwards.
 */
-class CC_DLL TransitionSplitCols : public TransitionScene, public TransitionEaseScene
+class AX_DLL TransitionSplitCols : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -897,14 +897,14 @@ protected:
     NodeGrid* _gridProxy;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSplitCols);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSplitCols);
 };
 
 /** @class TransitionSplitRows
  * @brief TransitionSplitRows:
 The odd rows goes to the left while the even rows goes to the right.
 */
-class CC_DLL TransitionSplitRows : public TransitionSplitCols
+class AX_DLL TransitionSplitRows : public TransitionSplitCols
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -924,14 +924,14 @@ public:
     virtual ~TransitionSplitRows();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionSplitRows);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionSplitRows);
 };
 
 /** @class TransitionFadeTR
  * @brief TransitionFadeTR:
 Fade the tiles of the outgoing scene from the left-bottom corner the to top-right corner.
 */
-class CC_DLL TransitionFadeTR : public TransitionScene, public TransitionEaseScene
+class AX_DLL TransitionFadeTR : public TransitionScene, public TransitionEaseScene
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -970,14 +970,14 @@ protected:
     NodeGrid* _outSceneProxy;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFadeTR);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFadeTR);
 };
 
 /** @class TransitionFadeBL
  * @brief TransitionFadeBL:
 Fade the tiles of the outgoing scene from the top-right corner to the bottom-left corner.
 */
-class CC_DLL TransitionFadeBL : public TransitionFadeTR
+class AX_DLL TransitionFadeBL : public TransitionFadeTR
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -997,14 +997,14 @@ public:
     virtual ~TransitionFadeBL();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFadeBL);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFadeBL);
 };
 
 /** @class TransitionFadeUp
  * @brief TransitionFadeUp:
  * Fade the tiles of the outgoing scene from the bottom to the top.
  */
-class CC_DLL TransitionFadeUp : public TransitionFadeTR
+class AX_DLL TransitionFadeUp : public TransitionFadeTR
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -1024,14 +1024,14 @@ public:
     virtual ~TransitionFadeUp();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFadeUp);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFadeUp);
 };
 
 /** @class TransitionFadeDown
  * @brief TransitionFadeDown:
  * Fade the tiles of the outgoing scene from the top to the bottom.
  */
-class CC_DLL TransitionFadeDown : public TransitionFadeTR
+class AX_DLL TransitionFadeDown : public TransitionFadeTR
 {
 public:
     /** Creates a transition with duration and incoming scene.
@@ -1051,7 +1051,7 @@ public:
     virtual ~TransitionFadeDown();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TransitionFadeDown);
+    AX_DISALLOW_COPY_AND_ASSIGN(TransitionFadeDown);
 };
 
 // end of _2d group

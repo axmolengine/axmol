@@ -32,7 +32,7 @@
 
 #include "base/CCConsole.h"
 
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
 #    define MINIMP3_IMPLEMENTATION
 #    include "minimp3/minimp3_ex.h"
 #else
@@ -41,12 +41,12 @@
 #    include "mpg123.h"
 #endif
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <unistd.h>
 #    include <errno.h>
 #endif
 
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
 struct mp3dec_impl
 {
     mp3dec_ex_t _dec;
@@ -56,7 +56,7 @@ struct mp3dec_impl
 
 NS_AX_BEGIN
 
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
 static size_t minimp3_read_r(void* buf, size_t size, void* user_data)
 {
     return ((FileStream*)user_data)->read(buf, size);
@@ -87,7 +87,7 @@ void mpg123_close_r(void* handle)
 bool AudioDecoderMp3::lazyInit()
 {
     bool ret = true;
-#if CC_USE_MPG123
+#if AX_USE_MPG123
     if (!__mp3Inited)
     {
         int error = mpg123_init();
@@ -107,7 +107,7 @@ bool AudioDecoderMp3::lazyInit()
 
 void AudioDecoderMp3::destroy()
 {
-#if CC_USE_MPG123
+#if AX_USE_MPG123
     if (__mp3Inited)
     {
         mpg123_exit();
@@ -128,7 +128,7 @@ AudioDecoderMp3::~AudioDecoderMp3()
 
 bool AudioDecoderMp3::open(std::string_view fullPath)
 {
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
     do
     {
         _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
@@ -245,7 +245,7 @@ void AudioDecoderMp3::close()
 {
     if (isOpened())
     {
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
         if (_handle)
         {
             mp3dec_ex_close(&_handle->_dec);
@@ -270,7 +270,7 @@ void AudioDecoderMp3::close()
 
 uint32_t AudioDecoderMp3::read(uint32_t framesToRead, char* pcmBuf)
 {
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
     auto sampelsToRead = framesToRead * _channelCount;
     auto samplesRead   = mp3dec_ex_read(&_handle->_dec, (mp3d_sample_t*)pcmBuf, sampelsToRead);
     return static_cast<uint32_t>(samplesRead / _channelCount);
@@ -290,7 +290,7 @@ uint32_t AudioDecoderMp3::read(uint32_t framesToRead, char* pcmBuf)
 
 bool AudioDecoderMp3::seek(uint32_t frameOffset)
 {
-#if !CC_USE_MPG123
+#if !AX_USE_MPG123
     return 0 == mp3dec_ex_seek(&_handle->_dec, frameOffset);
 #else
     off_t offset = mpg123_seek(_handle, frameOffset, SEEK_SET);

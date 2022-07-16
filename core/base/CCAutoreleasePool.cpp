@@ -30,7 +30,7 @@ NS_AX_BEGIN
 
 AutoreleasePool::AutoreleasePool()
     : _name("")
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
     , _isClearing(false)
 #endif
 {
@@ -40,7 +40,7 @@ AutoreleasePool::AutoreleasePool()
 
 AutoreleasePool::AutoreleasePool(std::string_view name)
     : _name(name)
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
     , _isClearing(false)
 #endif
 {
@@ -50,7 +50,7 @@ AutoreleasePool::AutoreleasePool(std::string_view name)
 
 AutoreleasePool::~AutoreleasePool()
 {
-    CCLOGINFO("deallocing AutoreleasePool: %p", this);
+    AXLOGINFO("deallocing AutoreleasePool: %p", this);
     clear();
 
     PoolManager::getInstance()->pop();
@@ -63,7 +63,7 @@ void AutoreleasePool::addObject(Ref* object)
 
 void AutoreleasePool::clear()
 {
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
     _isClearing = true;
 #endif
     std::vector<Ref*> releasings;
@@ -72,7 +72,7 @@ void AutoreleasePool::clear()
     {
         obj->release();
     }
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
     _isClearing = false;
 #endif
 }
@@ -89,12 +89,12 @@ bool AutoreleasePool::contains(Ref* object) const
 
 void AutoreleasePool::dump()
 {
-    CCLOG("autorelease pool: %s, number of managed object %d\n", _name.c_str(),
+    AXLOG("autorelease pool: %s, number of managed object %d\n", _name.c_str(),
           static_cast<int>(_managedObjectArray.size()));
-    CCLOG("%20s%20s%20s", "Object pointer", "Object id", "reference count");
+    AXLOG("%20s%20s%20s", "Object pointer", "Object id", "reference count");
     for (const auto& obj : _managedObjectArray)
     {
-        CCLOG("%20p%20u\n", obj, obj->getReferenceCount());
+        AXLOG("%20p%20u\n", obj, obj->getReferenceCount());
     }
 }
 
@@ -130,7 +130,7 @@ PoolManager::PoolManager()
 
 PoolManager::~PoolManager()
 {
-    CCLOGINFO("deallocing PoolManager: %p", this);
+    AXLOGINFO("deallocing PoolManager: %p", this);
 
     while (!_releasePoolStack.empty())
     {
@@ -162,7 +162,7 @@ void PoolManager::push(AutoreleasePool* pool)
 
 void PoolManager::pop()
 {
-    CC_ASSERT(!_releasePoolStack.empty());
+    AX_ASSERT(!_releasePoolStack.empty());
     _releasePoolStack.pop_back();
 }
 

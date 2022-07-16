@@ -40,7 +40,7 @@ NS_AX_BEGIN
 /** @class ParticleFire
  * @brief A fire particle system.
  */
-class CC_DLL ParticleFire : public ParticleSystemQuad
+class AX_DLL ParticleFire : public ParticleSystemQuad
 {
 public:
     /** Create a fire particle system.
@@ -70,13 +70,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles) override;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleFire);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleFire);
 };
 
 /** @class ParticleFireworks
  * @brief A fireworks particle system.
  */
-class CC_DLL ParticleFireworks : public ParticleSystemQuad
+class AX_DLL ParticleFireworks : public ParticleSystemQuad
 {
 public:
     /** Create a fireworks particle system.
@@ -106,13 +106,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleFireworks);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleFireworks);
 };
 
 /** @class ParticleSun
  * @brief A sun particle system.
  */
-class CC_DLL ParticleSun : public ParticleSystemQuad
+class AX_DLL ParticleSun : public ParticleSystemQuad
 {
 public:
     /** Create a sun particle system.
@@ -142,13 +142,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSun);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleSun);
 };
 
 /** @class ParticleGalaxy
  * @brief A galaxy particle system.
  */
-class CC_DLL ParticleGalaxy : public ParticleSystemQuad
+class AX_DLL ParticleGalaxy : public ParticleSystemQuad
 {
 public:
     /** Create a galaxy particle system.
@@ -178,13 +178,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleGalaxy);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleGalaxy);
 };
 
 /** @class ParticleFlower
  * @brief A flower particle system.
  */
-class CC_DLL ParticleFlower : public ParticleSystemQuad
+class AX_DLL ParticleFlower : public ParticleSystemQuad
 {
 public:
     /** Create a flower particle system.
@@ -214,13 +214,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleFlower);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleFlower);
 };
 
 /** @class ParticleMeteor
  * @brief A meteor particle system.
  */
-class CC_DLL ParticleMeteor : public ParticleSystemQuad
+class AX_DLL ParticleMeteor : public ParticleSystemQuad
 {
 public:
     /** Create a meteor particle system.
@@ -250,13 +250,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleMeteor);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleMeteor);
 };
 
 /** @class ParticleSpiral
  * @brief An spiral particle system.
  */
-class CC_DLL ParticleSpiral : public ParticleSystemQuad
+class AX_DLL ParticleSpiral : public ParticleSystemQuad
 {
 public:
     /** Create a spiral particle system.
@@ -286,13 +286,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSpiral);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleSpiral);
 };
 
 /** @class ParticleExplosion
  * @brief An explosion particle system.
  */
-class CC_DLL ParticleExplosion : public ParticleSystemQuad
+class AX_DLL ParticleExplosion : public ParticleSystemQuad
 {
 public:
     /** Create a explosion particle system.
@@ -322,13 +322,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleExplosion);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleExplosion);
 };
 
 /** @class ParticleSmoke
  * @brief An smoke particle system.
  */
-class CC_DLL ParticleSmoke : public ParticleSystemQuad
+class AX_DLL ParticleSmoke : public ParticleSystemQuad
 {
 public:
     /** Create a smoke particle system.
@@ -358,13 +358,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSmoke);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleSmoke);
 };
 
 /** @class ParticleSnow
  * @brief An snow particle system.
  */
-class CC_DLL ParticleSnow : public ParticleSystemQuad
+class AX_DLL ParticleSnow : public ParticleSystemQuad
 {
 public:
     /** Create a snow particle system.
@@ -394,13 +394,13 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSnow);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleSnow);
 };
 
 /** @class ParticleRain
  * @brief A rain particle system.
  */
-class CC_DLL ParticleRain : public ParticleSystemQuad
+class AX_DLL ParticleRain : public ParticleSystemQuad
 {
 public:
     /** Create a rain particle system.
@@ -430,7 +430,7 @@ public:
     virtual bool initWithTotalParticles(int numberOfParticles);
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleRain);
+    AX_DISALLOW_COPY_AND_ASSIGN(ParticleRain);
 };
 
 // end of _2d group

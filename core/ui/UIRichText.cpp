@@ -66,7 +66,7 @@ public:
         setName(ListenerComponent::COMPONENT_NAME);
 
         _touchListener                 = axis::EventListenerTouchAllAtOnce::create();
-        _touchListener->onTouchesEnded = CC_CALLBACK_2(ListenerComponent::onTouchesEnded, this);
+        _touchListener->onTouchesEnded = AX_CALLBACK_2(ListenerComponent::onTouchesEnded, this);
 
         Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_touchListener, _parent);
         _touchListener->retain();
@@ -144,7 +144,7 @@ RichElementText* RichElementText::create(int tag,
         element->autorelease();
         return element;
     }
-    CC_SAFE_DELETE(element);
+    AX_SAFE_DELETE(element);
     return nullptr;
 }
 
@@ -194,7 +194,7 @@ RichElementImage* RichElementImage::create(int tag,
         element->autorelease();
         return element;
     }
-    CC_SAFE_DELETE(element);
+    AX_SAFE_DELETE(element);
     return nullptr;
 }
 
@@ -243,7 +243,7 @@ RichElementCustomNode* RichElementCustomNode::create(int tag,
         element->autorelease();
         return element;
     }
-    CC_SAFE_DELETE(element);
+    AX_SAFE_DELETE(element);
     return nullptr;
 }
 
@@ -266,7 +266,7 @@ RichElementNewLine* RichElementNewLine::create(int tag, const Color3B& color, ui
         element->autorelease();
         return element;
     }
-    CC_SAFE_DELETE(element);
+    AX_SAFE_DELETE(element);
     return nullptr;
 }
 
@@ -1006,7 +1006,7 @@ RichText* RichText::create()
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -1018,7 +1018,7 @@ RichText* RichText::createWithXML(std::string_view xml, const ValueMap& defaults
         widget->autorelease();
         return widget;
     }
-    CC_SAFE_DELETE(widget);
+    AX_SAFE_DELETE(widget);
     return nullptr;
 }
 
@@ -2042,7 +2042,7 @@ float getPaddingAmount(const RichText::HorizontalAlignment alignment, const floa
     case RichText::HorizontalAlignment::RIGHT:
         return leftOver;
     default:
-        CCASSERT(false, "invalid horizontal alignment!");
+        AXASSERT(false, "invalid horizontal alignment!");
         return 0.f;
     }
 }

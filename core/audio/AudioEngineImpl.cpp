@@ -31,7 +31,7 @@
 #include "audio/AudioEngineImpl.h"
 #include "audio/AudioDecoderManager.h"
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 #    import <AVFoundation/AVFoundation.h>
 #endif
 
@@ -41,7 +41,7 @@
 #include "base/CCScheduler.h"
 #include "base/ccUtils.h"
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    import <UIKit/UIKit.h>
 #endif
 
@@ -100,7 +100,7 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
     return AL_INVALID_VALUE;
 }
 
-#    if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 @interface AudioEngineSessionHandler : NSObject {
 }
 
@@ -269,7 +269,7 @@ AudioEngineImpl::~AudioEngineImpl()
 {
     if (_scheduled && _scheduler != nullptr)
     {
-        _scheduler->unschedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
+        _scheduler->unschedule(AX_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
     }
 
     if (s_ALContext)
@@ -291,7 +291,7 @@ AudioEngineImpl::~AudioEngineImpl()
 
     AudioDecoderManager::destroy();
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
     [s_AudioEngineSessionHandler release];
 #endif
     s_instance = nullptr;
@@ -302,7 +302,7 @@ bool AudioEngineImpl::init()
     bool ret = false;
     do
     {
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
         s_AudioEngineSessionHandler = [[AudioEngineSessionHandler alloc] init];
 #endif
 
@@ -476,7 +476,7 @@ AUDIO_ID AudioEngineImpl::play2d(std::string_view filePath, bool loop, float vol
     if (!_scheduled)
     {
         _scheduled = true;
-        _scheduler->schedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this, 0.05f, false);
+        _scheduler->schedule(AX_SCHEDULE_SELECTOR(AudioEngineImpl::update), this, 0.05f, false);
     }
 
     return _currentAudioID;
@@ -852,7 +852,7 @@ void AudioEngineImpl::_unscheduleUpdate()
     if (_scheduled)
     {
         _scheduled = false;
-        _scheduler->unschedule(CC_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
+        _scheduler->unschedule(AX_SCHEDULE_SELECTOR(AudioEngineImpl::update), this);
     }
 }
 

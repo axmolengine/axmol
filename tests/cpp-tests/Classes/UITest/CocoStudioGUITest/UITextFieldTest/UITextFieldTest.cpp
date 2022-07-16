@@ -67,7 +67,7 @@ bool UITextFieldTest::init()
         TextField* textField = TextField::create("input words here", "Arial", 30);
 
         textField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest::textFieldEvent, this));
         _uiLayer->addChild(textField);
 
         return true;
@@ -142,7 +142,7 @@ bool UITextFieldTest_MaxLength::init()
         textField->setMaxLengthEnabled(true);
         textField->setMaxLength(3);
         textField->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_MaxLength::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_MaxLength::textFieldEvent, this));
         _uiLayer->addChild(textField);
 
         return true;
@@ -223,7 +223,7 @@ bool UITextFieldTest_Password::init()
         textField->setPasswordEnabled(true);
         textField->setPasswordStyleText("*");
         textField->setPosition(Vec2(screenSize.width / 2.0f, screenSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_Password::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_Password::textFieldEvent, this));
         _uiLayer->addChild(textField);
 
         return true;
@@ -302,7 +302,7 @@ bool UITextFieldTest_LineWrap::init()
         textField->setTextHorizontalAlignment(TextHAlignment::CENTER);
         textField->setTextVerticalAlignment(TextVAlignment::CENTER);
         textField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_LineWrap::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_LineWrap::textFieldEvent, this));
         _uiLayer->addChild(textField);
 
         return true;
@@ -376,7 +376,7 @@ bool UITextFieldTest_TrueTypeFont::init()
         TextField* textField = TextField::create("input words here", "fonts/A Damn Mess.ttf", 30);
 
         textField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_TrueTypeFont::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_TrueTypeFont::textFieldEvent, this));
         _uiLayer->addChild(textField);
 
         return true;
@@ -449,7 +449,7 @@ bool UITextFieldTest_BMFont::init()
         TextField* textField = TextField::create("BMFont Text", "fonts/bitmapFontTest3.fnt", 30);
         textField->setCursorEnabled(true);
         textField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_BMFont::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_BMFont::textFieldEvent, this));
         _uiLayer->addChild(textField);
 
         return true;
@@ -526,7 +526,7 @@ bool UITextFieldTest_PlaceHolderColor::init()
         textField->setPlaceHolderColor(Color4B::GREEN);
         textField->setTextColor(Color4B::RED);
         textField->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
-        textField->addEventListener(CC_CALLBACK_2(UITextFieldTest_PlaceHolderColor::textFieldEvent, this));
+        textField->addEventListener(AX_CALLBACK_2(UITextFieldTest_PlaceHolderColor::textFieldEvent, this));
         _uiLayer->addChild(textField);
         return true;
     }
@@ -560,7 +560,7 @@ void UITextFieldTest_PlaceHolderColor::textFieldEvent(Ref* pSender, TextField::E
     case TextField::EventType::INSERT_TEXT:
     {
         _displayValueLabel->setString(StringUtils::format("insert words"));
-        CCLOG("%f, %f", dynamic_cast<TextField*>(pSender)->getContentSize().width,
+        AXLOG("%f, %f", dynamic_cast<TextField*>(pSender)->getContentSize().width,
               dynamic_cast<TextField*>(pSender)->getContentSize().height);
     }
     break;

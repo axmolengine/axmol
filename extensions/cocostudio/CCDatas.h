@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "2d/CCTweenFunction.h"
 #include "CocosStudioExport.h"
 
-#define CC_CREATE_NO_PARAM_NO_INIT(varType) \
+#define AX_CREATE_NO_PARAM_NO_INIT(varType) \
 public:                                     \
     static inline varType* create(void)     \
     {                                       \
@@ -44,7 +44,7 @@ public:                                     \
         return var;                         \
     }
 
-#define CC_CREATE_NO_PARAM(varType)     \
+#define AX_CREATE_NO_PARAM(varType)     \
 public:                                 \
     static inline varType* create(void) \
     {                                   \
@@ -54,7 +54,7 @@ public:                                 \
             var->autorelease();         \
             return var;                 \
         }                               \
-        CC_SAFE_DELETE(var);            \
+        AX_SAFE_DELETE(var);            \
         return nullptr;                 \
     }
 
@@ -69,7 +69,7 @@ namespace cocostudio
 class CCS_DLL BaseData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(BaseData)
+    AX_CREATE_NO_PARAM_NO_INIT(BaseData)
 public:
     /**
      * @js ctor
@@ -138,7 +138,7 @@ enum DisplayType
 class CCS_DLL DisplayData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(DisplayData)
+    AX_CREATE_NO_PARAM_NO_INIT(DisplayData)
 
     static std::string changeDisplayToTexture(std::string_view displayName);
 
@@ -166,7 +166,7 @@ public:
 class CCS_DLL SpriteDisplayData : public DisplayData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(SpriteDisplayData)
+    AX_CREATE_NO_PARAM_NO_INIT(SpriteDisplayData)
 public:
     /**
      * @js ctor
@@ -191,7 +191,7 @@ public:
 class CCS_DLL ArmatureDisplayData : public DisplayData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(ArmatureDisplayData)
+    AX_CREATE_NO_PARAM_NO_INIT(ArmatureDisplayData)
 public:
     /**
      * @js ctor
@@ -211,7 +211,7 @@ public:
 class CCS_DLL ParticleDisplayData : public DisplayData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(ParticleDisplayData)
+    AX_CREATE_NO_PARAM_NO_INIT(ParticleDisplayData)
 public:
     /**
      * @js ctor
@@ -234,7 +234,7 @@ public:
 class CCS_DLL BoneData : public BaseData
 {
 public:
-    CC_CREATE_NO_PARAM(BoneData)
+    AX_CREATE_NO_PARAM(BoneData)
 public:
     /**
      * @js ctor
@@ -268,7 +268,7 @@ public:
 class CCS_DLL ArmatureData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(ArmatureData)
+    AX_CREATE_NO_PARAM(ArmatureData)
 public:
     /**
      * @js ctor
@@ -315,7 +315,7 @@ enum BlendType
 class CCS_DLL FrameData : public BaseData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(FrameData)
+    AX_CREATE_NO_PARAM_NO_INIT(FrameData)
 public:
     /**
      * @js ctor
@@ -363,7 +363,7 @@ public:
 class CCS_DLL MovementBoneData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(MovementBoneData)
+    AX_CREATE_NO_PARAM(MovementBoneData)
 public:
     /**
      * @js ctor
@@ -396,7 +396,7 @@ public:
 class CCS_DLL MovementData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(MovementData)
+    AX_CREATE_NO_PARAM_NO_INIT(MovementData)
 public:
     /**
      * @js ctor
@@ -459,7 +459,7 @@ public:
 class CCS_DLL AnimationData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(AnimationData)
+    AX_CREATE_NO_PARAM_NO_INIT(AnimationData)
 public:
     /**
      * @js ctor
@@ -489,7 +489,7 @@ public:
 class CCS_DLL ContourData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(ContourData)
+    AX_CREATE_NO_PARAM(ContourData)
 public:
     /**
      * @js ctor
@@ -516,7 +516,7 @@ public:
 class CCS_DLL TextureData : public axis::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(TextureData)
+    AX_CREATE_NO_PARAM(TextureData)
 public:
     /**
      * @js ctor

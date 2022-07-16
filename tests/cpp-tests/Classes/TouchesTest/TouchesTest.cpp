@@ -110,7 +110,7 @@ PongLayer::PongLayer()
         addChild(paddle);
     }
 
-    schedule(CC_SCHEDULE_SELECTOR(PongLayer::doStep));
+    schedule(AX_SCHEDULE_SELECTOR(PongLayer::doStep));
 }
 
 PongLayer::~PongLayer() {}
@@ -154,9 +154,9 @@ ForceTouchTest::ForceTouchTest()
     addChild(_infoLabel);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(ForceTouchTest::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(ForceTouchTest::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(ForceTouchTest::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(ForceTouchTest::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(ForceTouchTest::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(ForceTouchTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 

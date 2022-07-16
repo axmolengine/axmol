@@ -110,7 +110,7 @@ std::string MultiSceneTest::subtitle() const
 NewSpriteTest::NewSpriteTest()
 {
     auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = CC_CALLBACK_2(NewSpriteTest::onTouchesEnded, this);
+    touchListener->onTouchesEnded = AX_CALLBACK_2(NewSpriteTest::onTouchesEnded, this);
 
     createSpriteTest();
     createNewSpriteTest();
@@ -213,7 +213,7 @@ SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
 
 void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    CCASSERT(renderer, "Render is null");
+    AXASSERT(renderer, "Render is null");
     _spriteWrapperCommand.init(_globalZOrder);
     renderer->addCommand(&_spriteWrapperCommand);
     renderer->pushGroup(_spriteWrapperCommand.getRenderQueueID());
@@ -281,9 +281,9 @@ NewClippingNodeTest::NewClippingNodeTest()
     _scrolling = false;
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(NewClippingNodeTest::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(NewClippingNodeTest::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(NewClippingNodeTest::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(NewClippingNodeTest::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(NewClippingNodeTest::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(NewClippingNodeTest::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -382,8 +382,8 @@ NewCullingTest::NewCullingTest()
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
 
-    listener->onTouchBegan = CC_CALLBACK_2(NewCullingTest::onTouchBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(NewCullingTest::onTouchMoved, this);
+    listener->onTouchBegan = AX_CALLBACK_2(NewCullingTest::onTouchBegan, this);
+    listener->onTouchMoved = AX_CALLBACK_2(NewCullingTest::onTouchMoved, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
@@ -436,9 +436,9 @@ SpriteCreation::SpriteCreation()
 
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(65);
-    auto decrease = MenuItemFont::create(" - ", CC_CALLBACK_1(SpriteCreation::delSpritesCallback, this));
+    auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(SpriteCreation::delSpritesCallback, this));
     decrease->setColor(Color3B(0, 200, 20));
-    auto increase = MenuItemFont::create(" + ", CC_CALLBACK_1(SpriteCreation::addSpritesCallback, this));
+    auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(SpriteCreation::addSpritesCallback, this));
     increase->setColor(Color3B(0, 200, 20));
 
     auto menu = Menu::create(decrease, increase, nullptr);
@@ -630,7 +630,7 @@ CaptureScreenTest::CaptureScreenTest()
     sp2->runAction(seq2);
 
     auto label1 = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "capture all");
-    auto mi1    = MenuItemLabel::create(label1, CC_CALLBACK_1(CaptureScreenTest::onCaptured, this));
+    auto mi1    = MenuItemLabel::create(label1, AX_CALLBACK_1(CaptureScreenTest::onCaptured, this));
     auto menu   = Menu::create(mi1, nullptr);
     addChild(menu);
     menu->setPosition(s.width / 2, s.height / 4);
@@ -660,7 +660,7 @@ void CaptureScreenTest::onCaptured(Ref*)
     _filename = "CaptureScreenTest.png";
     // retain it to avoid crash caused by invoking afterCaptured
     this->retain();
-    utils::captureScreen(CC_CALLBACK_2(CaptureScreenTest::afterCaptured, this), _filename);
+    utils::captureScreen(AX_CALLBACK_2(CaptureScreenTest::afterCaptured, this), _filename);
 }
 
 void CaptureScreenTest::afterCaptured(bool succeed, std::string_view outputFile)
@@ -703,7 +703,7 @@ CaptureNodeTest::CaptureNodeTest()
     sp2->runAction(seq2);
 
     auto label1 = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "capture this scene");
-    auto mi1    = MenuItemLabel::create(label1, CC_CALLBACK_1(CaptureNodeTest::onCaptured, this));
+    auto mi1    = MenuItemLabel::create(label1, AX_CALLBACK_1(CaptureNodeTest::onCaptured, this));
     auto menu   = Menu::create(mi1, nullptr);
     addChild(menu);
     menu->setPosition(s.width / 2, s.height / 4);
@@ -792,8 +792,8 @@ RendererBatchQuadTri::RendererBatchQuadTri()
 
     for (int i = 0; i < 250; i++)
     {
-        int x = CCRANDOM_0_1() * s.width;
-        int y = CCRANDOM_0_1() * s.height;
+        int x = AXRANDOM_0_1() * s.width;
+        int y = AXRANDOM_0_1() * s.height;
 
         auto label = LabelAtlas::create("This is a label", "fonts/tuffy_bold_italic-charmap.plist");
         label->setColor(Color3B::RED);
@@ -919,7 +919,7 @@ RendererUniformBatch2::RendererUniformBatch2()
             sprite->setScale(0.4);
             addChild(sprite);
 
-            auto r = CCRANDOM_0_1();
+            auto r = AXRANDOM_0_1();
             if (r < 0.33)
                 sprite->setProgramState(sepiaState);
             else if (r < 0.66)

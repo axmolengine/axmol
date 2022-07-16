@@ -46,42 +46,42 @@ bool VideoPlayerTest::init()
     MenuItemFont::setFontSize(16);
 
     auto fullSwitch =
-        MenuItemFont::create("FullScreenSwitch", CC_CALLBACK_1(VideoPlayerTest::menuFullScreenCallback, this));
+        MenuItemFont::create("FullScreenSwitch", AX_CALLBACK_1(VideoPlayerTest::menuFullScreenCallback, this));
     fullSwitch->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     fullSwitch->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
-    auto pauseItem = MenuItemFont::create("Pause", CC_CALLBACK_1(VideoPlayerTest::menuPauseCallback, this));
+    auto pauseItem = MenuItemFont::create("Pause", AX_CALLBACK_1(VideoPlayerTest::menuPauseCallback, this));
     pauseItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     pauseItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 
-    auto resumeItem = MenuItemFont::create("Resume", CC_CALLBACK_1(VideoPlayerTest::menuResumeCallback, this));
+    auto resumeItem = MenuItemFont::create("Resume", AX_CALLBACK_1(VideoPlayerTest::menuResumeCallback, this));
     resumeItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     resumeItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 150));
 
-    auto stopItem = MenuItemFont::create("Stop", CC_CALLBACK_1(VideoPlayerTest::menuStopCallback, this));
+    auto stopItem = MenuItemFont::create("Stop", AX_CALLBACK_1(VideoPlayerTest::menuStopCallback, this));
     stopItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     stopItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 200));
 
-    auto hintItem = MenuItemFont::create("Hint", CC_CALLBACK_1(VideoPlayerTest::menuHintCallback, this));
+    auto hintItem = MenuItemFont::create("Hint", AX_CALLBACK_1(VideoPlayerTest::menuHintCallback, this));
     hintItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     hintItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 250));
 
     //-------------------------------------------------------------------------------------------------------------------
     auto resourceVideo =
-        MenuItemFont::create("Play resource video", CC_CALLBACK_1(VideoPlayerTest::menuResourceVideoCallback, this));
+        MenuItemFont::create("Play resource video", AX_CALLBACK_1(VideoPlayerTest::menuResourceVideoCallback, this));
     resourceVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     resourceVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 50));
 
     auto onlineVideo =
-        MenuItemFont::create("Play online video", CC_CALLBACK_1(VideoPlayerTest::menuOnlineVideoCallback, this));
+        MenuItemFont::create("Play online video", AX_CALLBACK_1(VideoPlayerTest::menuOnlineVideoCallback, this));
     onlineVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     onlineVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 100));
 
-    auto ratioSwitch = MenuItemFont::create("KeepRatioSwitch", CC_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
+    auto ratioSwitch = MenuItemFont::create("KeepRatioSwitch", AX_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
     ratioSwitch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     ratioSwitch->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 150));
 
-    auto loopToggle = MenuItemFont::create("LoopToogle", CC_CALLBACK_1(VideoPlayerTest::menuLoopCallback, this));
+    auto loopToggle = MenuItemFont::create("LoopToogle", AX_CALLBACK_1(VideoPlayerTest::menuLoopCallback, this));
     loopToggle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     loopToggle->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 170));
 
@@ -215,7 +215,7 @@ void VideoPlayerTest::createVideo()
     _videoPlayer->setContentSize(Size(widgetSize.width * 0.4f, widgetSize.height * 0.4f));
     _uiLayer->addChild(_videoPlayer);
 
-    _videoPlayer->addEventListener(CC_CALLBACK_2(VideoPlayerTest::videoEventCallback, this));
+    _videoPlayer->addEventListener(AX_CALLBACK_2(VideoPlayerTest::videoEventCallback, this));
 }
 
 void VideoPlayerTest::createSlider()
@@ -230,7 +230,7 @@ void VideoPlayerTest::createSlider()
     hSlider->loadProgressBarTexture("cocosui/sliderProgress.png");
     hSlider->setPosition(Vec2(centerPos.x, _visibleRect.origin.y + _visibleRect.size.height * 0.15f));
     hSlider->setPercent(50);
-    hSlider->addEventListener(CC_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
+    hSlider->addEventListener(AX_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
     _uiLayer->addChild(hSlider, 0, 1);
 
     auto vSlider = ui::Slider::create();
@@ -241,7 +241,7 @@ void VideoPlayerTest::createSlider()
     vSlider->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width * 0.15f, centerPos.y));
     vSlider->setRotation(90);
     vSlider->setPercent(50);
-    vSlider->addEventListener(CC_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
+    vSlider->addEventListener(AX_CALLBACK_2(VideoPlayerTest::sliderCallback, this));
     _uiLayer->addChild(vSlider, 0, 2);
 }
 
@@ -335,12 +335,12 @@ bool SimpleVideoPlayerTest::init()
     MenuItemFont::setFontSize(16);
 
     _switchStyle =
-        MenuItemFont::create("Switch Style", CC_CALLBACK_1(SimpleVideoPlayerTest::switchStyleCallback, this));
+        MenuItemFont::create("Switch Style", AX_CALLBACK_1(SimpleVideoPlayerTest::switchStyleCallback, this));
     _switchStyle->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _switchStyle->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
     _switchUserInputEnabled =
-        MenuItemFont::create("Enable User Input", CC_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
+        MenuItemFont::create("Enable User Input", AX_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
     _switchUserInputEnabled->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _switchUserInputEnabled->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 
@@ -372,7 +372,7 @@ void SimpleVideoPlayerTest::menuCloseCallback(Ref* sender)
 {
     Director::getInstance()->end();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
     exit(0);
 #endif
 }
@@ -433,7 +433,7 @@ void SimpleVideoPlayerTest::createVideo()
 
     _uiLayer->addChild(_videoPlayer);
 
-    // _videoPlayer->addEventListener(CC_CALLBACK_2(SimpleVideoPlayerTest::videoEventCallback, this));
+    // _videoPlayer->addEventListener(AX_CALLBACK_2(SimpleVideoPlayerTest::videoEventCallback, this));
 
     _videoPlayer->setFileName("cocosvideo.mp4");
     _videoPlayer->play();

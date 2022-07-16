@@ -147,7 +147,7 @@ CameraRotationTest::CameraRotationTest()
 
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_lis, this);
 
-    schedule(CC_SCHEDULE_SELECTOR(CameraRotationTest::update));
+    schedule(AX_SCHEDULE_SELECTOR(CameraRotationTest::update));
 }
 
 CameraRotationTest::~CameraRotationTest()
@@ -264,9 +264,9 @@ void Camera3DTestDemo::onEnter()
     _mesh                    = nullptr;
     auto s                   = Director::getInstance()->getWinSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(Camera3DTestDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(Camera3DTestDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(Camera3DTestDemo::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(Camera3DTestDemo::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(Camera3DTestDemo::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     auto layer3D = Layer::create();
     addChild(layer3D, 0);
@@ -284,8 +284,8 @@ void Camera3DTestDemo::onEnter()
     auto listener1 = EventListenerTouchOneByOne::create();
     listener1->setSwallowTouches(true);
 
-    listener1->onTouchBegan = CC_CALLBACK_2(Camera3DTestDemo::onTouchesZoomOut, this);
-    listener1->onTouchEnded = CC_CALLBACK_2(Camera3DTestDemo::onTouchesZoomOutEnd, this);
+    listener1->onTouchBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesZoomOut, this);
+    listener1->onTouchEnded = AX_CALLBACK_2(Camera3DTestDemo::onTouchesZoomOutEnd, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, _ZoomOutlabel);
 
@@ -298,8 +298,8 @@ void Camera3DTestDemo::onEnter()
     auto listener2 = EventListenerTouchOneByOne::create();
     listener2->setSwallowTouches(true);
 
-    listener2->onTouchBegan = CC_CALLBACK_2(Camera3DTestDemo::onTouchesZoomIn, this);
-    listener2->onTouchEnded = CC_CALLBACK_2(Camera3DTestDemo::onTouchesZoomInEnd, this);
+    listener2->onTouchBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesZoomIn, this);
+    listener2->onTouchEnded = AX_CALLBACK_2(Camera3DTestDemo::onTouchesZoomInEnd, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, _ZoomInlabel);
 
@@ -312,8 +312,8 @@ void Camera3DTestDemo::onEnter()
     auto listener3 = EventListenerTouchOneByOne::create();
     listener3->setSwallowTouches(true);
 
-    listener3->onTouchBegan = CC_CALLBACK_2(Camera3DTestDemo::onTouchesRotateLeft, this);
-    listener3->onTouchEnded = CC_CALLBACK_2(Camera3DTestDemo::onTouchesRotateLeftEnd, this);
+    listener3->onTouchBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesRotateLeft, this);
+    listener3->onTouchEnded = AX_CALLBACK_2(Camera3DTestDemo::onTouchesRotateLeftEnd, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener3, _RotateLeftlabel);
 
@@ -326,20 +326,20 @@ void Camera3DTestDemo::onEnter()
     auto listener4 = EventListenerTouchOneByOne::create();
     listener4->setSwallowTouches(true);
 
-    listener4->onTouchBegan = CC_CALLBACK_2(Camera3DTestDemo::onTouchesRotateRight, this);
-    listener4->onTouchEnded = CC_CALLBACK_2(Camera3DTestDemo::onTouchesRotateRightEnd, this);
+    listener4->onTouchBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesRotateRight, this);
+    listener4->onTouchEnded = AX_CALLBACK_2(Camera3DTestDemo::onTouchesRotateRightEnd, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener4, _RotateRightlabel);
 
     auto label1 = Label::createWithTTF(ttfConfig, "free ");
     auto menuItem1 =
-        MenuItemLabel::create(label1, CC_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::Free));
+        MenuItemLabel::create(label1, AX_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::Free));
     auto label2    = Label::createWithTTF(ttfConfig, "third person");
     auto menuItem2 = MenuItemLabel::create(
-        label2, CC_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::ThirdPerson));
+        label2, AX_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::ThirdPerson));
     auto label3    = Label::createWithTTF(ttfConfig, "first person");
     auto menuItem3 = MenuItemLabel::create(
-        label3, CC_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::FirstPerson));
+        label3, AX_CALLBACK_1(Camera3DTestDemo::SwitchViewCallback, this, CameraType::FirstPerson));
     auto menu = Menu::create(menuItem1, menuItem2, menuItem3, nullptr);
 
     menu->setPosition(Vec2::ZERO);
@@ -348,7 +348,7 @@ void Camera3DTestDemo::onEnter()
     menuItem2->setPosition(VisibleRect::left().x + 100, VisibleRect::top().y - 100);
     menuItem3->setPosition(VisibleRect::left().x + 100, VisibleRect::top().y - 150);
     addChild(menu, 0);
-    schedule(CC_SCHEDULE_SELECTOR(Camera3DTestDemo::updateCamera), 0.0f);
+    schedule(AX_SCHEDULE_SELECTOR(Camera3DTestDemo::updateCamera), 0.0f);
     if (_camera == nullptr)
     {
         _camera = Camera::createPerspective(60, (float)s.width / s.height, 1, 1000);
@@ -722,13 +722,13 @@ void CameraCullingDemo::onEnter()
 {
     CameraBaseTest::onEnter();
 
-    schedule(CC_SCHEDULE_SELECTOR(CameraCullingDemo::update), 0.0f);
+    schedule(AX_SCHEDULE_SELECTOR(CameraCullingDemo::update), 0.0f);
 
     auto s = Director::getInstance()->getWinSize();
     /*auto listener = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(Camera3DTestDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(Camera3DTestDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(Camera3DTestDemo::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(Camera3DTestDemo::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(Camera3DTestDemo::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(Camera3DTestDemo::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);*/
     auto layer3D = Layer::create();
     addChild(layer3D, 0);
@@ -738,7 +738,7 @@ void CameraCullingDemo::onEnter()
     MenuItemFont::setFontName("fonts/arial.ttf");
     MenuItemFont::setFontSize(20);
 
-    auto menuItem1 = MenuItemFont::create("Switch Camera", CC_CALLBACK_1(CameraCullingDemo::switchViewCallback, this));
+    auto menuItem1 = MenuItemFont::create("Switch Camera", AX_CALLBACK_1(CameraCullingDemo::switchViewCallback, this));
     menuItem1->setColor(Color3B(0, 200, 20));
     auto menu = Menu::create(menuItem1, NULL);
     menu->setPosition(Vec2::ZERO);
@@ -747,9 +747,9 @@ void CameraCullingDemo::onEnter()
 
     // + -
     MenuItemFont::setFontSize(40);
-    auto decrease = MenuItemFont::create(" - ", CC_CALLBACK_1(CameraCullingDemo::delMeshCallback, this));
+    auto decrease = MenuItemFont::create(" - ", AX_CALLBACK_1(CameraCullingDemo::delMeshCallback, this));
     decrease->setColor(Color3B(0, 200, 20));
-    auto increase = MenuItemFont::create(" + ", CC_CALLBACK_1(CameraCullingDemo::addMeshCallback, this));
+    auto increase = MenuItemFont::create(" + ", AX_CALLBACK_1(CameraCullingDemo::addMeshCallback, this));
     increase->setColor(Color3B(0, 200, 20));
 
     menu = Menu::create(decrease, increase, nullptr);
@@ -824,7 +824,7 @@ void CameraCullingDemo::reachEndCallBack()
     _moveAction = inverse;
     auto rot    = RotateBy::create(1.f, Vec3(0.f, 180.f, 0.f));
     auto seq    = Sequence::create(rot, _moveAction,
-                                   CallFunc::create(CC_CALLBACK_0(CameraCullingDemo::reachEndCallBack, this)), nullptr);
+                                   CallFunc::create(AX_CALLBACK_0(CameraCullingDemo::reachEndCallBack, this)), nullptr);
     seq->setTag(100);
     _cameraFirst->runAction(seq);
 }
@@ -842,7 +842,7 @@ void CameraCullingDemo::switchViewCallback(Ref* sender)
         _moveAction = MoveTo::create(4.f, Vec2(-_cameraFirst->getPositionX(), 0.0f));
         _moveAction->retain();
         auto seq = Sequence::create(
-            _moveAction, CallFunc::create(CC_CALLBACK_0(CameraCullingDemo::reachEndCallBack, this)), nullptr);
+            _moveAction, CallFunc::create(AX_CALLBACK_0(CameraCullingDemo::reachEndCallBack, this)), nullptr);
         seq->setTag(100);
         _cameraFirst->runAction(seq);
         addChild(_cameraFirst);
@@ -1007,10 +1007,10 @@ void CameraArcBallDemo::onEnter()
 {
     CameraBaseTest::onEnter();
     _rotationQuat.set(0.0f, 0.0f, 0.0f, 1.0f);
-    schedule(CC_SCHEDULE_SELECTOR(CameraArcBallDemo::update), 0.0f);
+    schedule(AX_SCHEDULE_SELECTOR(CameraArcBallDemo::update), 0.0f);
     auto s                   = Director::getInstance()->getWinSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = CC_CALLBACK_2(CameraArcBallDemo::onTouchsMoved, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(CameraArcBallDemo::onTouchsMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // switch camera
@@ -1018,10 +1018,10 @@ void CameraArcBallDemo::onEnter()
     MenuItemFont::setFontSize(20);
 
     auto menuItem1 =
-        MenuItemFont::create("Switch Operation", CC_CALLBACK_1(CameraArcBallDemo::switchOperateCallback, this));
+        MenuItemFont::create("Switch Operation", AX_CALLBACK_1(CameraArcBallDemo::switchOperateCallback, this));
     menuItem1->setColor(Color3B(0, 200, 20));
     auto menuItem2 =
-        MenuItemFont::create("Switch Target", CC_CALLBACK_1(CameraArcBallDemo::switchTargetCallback, this));
+        MenuItemFont::create("Switch Target", AX_CALLBACK_1(CameraArcBallDemo::switchTargetCallback, this));
     menuItem2->setColor(Color3B(0, 200, 20));
     auto menu = Menu::create(menuItem1, menuItem2, NULL);
     menu->setPosition(Vec2::ZERO);
@@ -1208,8 +1208,8 @@ void CameraArcBallDemo::update(float dt)
 FogTestDemo::FogTestDemo() : CameraBaseTest() {}
 FogTestDemo::~FogTestDemo()
 {
-    CC_SAFE_RELEASE_NULL(_programState1);
-    CC_SAFE_RELEASE_NULL(_programState2);
+    AX_SAFE_RELEASE_NULL(_programState1);
+    AX_SAFE_RELEASE_NULL(_programState2);
 }
 
 std::string FogTestDemo::title() const
@@ -1220,23 +1220,23 @@ std::string FogTestDemo::title() const
 void FogTestDemo::onEnter()
 {
     CameraBaseTest::onEnter();
-    schedule(CC_SCHEDULE_SELECTOR(FogTestDemo::update), 0.0f);
+    schedule(AX_SCHEDULE_SELECTOR(FogTestDemo::update), 0.0f);
     Director::getInstance()->setClearColor(Color4F(0.5, 0.5, 0.5, 1));
 
     auto s                   = Director::getInstance()->getWinSize();
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesMoved = CC_CALLBACK_2(FogTestDemo::onTouchesMoved, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(FogTestDemo::onTouchesMoved, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // switch fog type
     TTFConfig ttfConfig("fonts/arial.ttf", 20);
 
     auto label1    = Label::createWithTTF(ttfConfig, "Linear ");
-    auto menuItem1 = MenuItemLabel::create(label1, CC_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 0));
+    auto menuItem1 = MenuItemLabel::create(label1, AX_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 0));
     auto label2    = Label::createWithTTF(ttfConfig, "Exp");
-    auto menuItem2 = MenuItemLabel::create(label2, CC_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 1));
+    auto menuItem2 = MenuItemLabel::create(label2, AX_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 1));
     auto label3    = Label::createWithTTF(ttfConfig, "Exp2");
-    auto menuItem3 = MenuItemLabel::create(label3, CC_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 2));
+    auto menuItem3 = MenuItemLabel::create(label3, AX_CALLBACK_1(FogTestDemo::switchTypeCallback, this, 2));
     auto menu      = Menu::create(menuItem1, menuItem2, menuItem3, nullptr);
 
     menu->setPosition(Vec2::ZERO);
@@ -1250,15 +1250,15 @@ void FogTestDemo::onEnter()
     addChild(layer3D, 0);
     _layer3D = layer3D;
 
-    CC_SAFE_RELEASE_NULL(_programState1);
-    CC_SAFE_RELEASE_NULL(_programState2);
+    AX_SAFE_RELEASE_NULL(_programState1);
+    AX_SAFE_RELEASE_NULL(_programState2);
 
     auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
     auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
     auto program      = backend::Device::getInstance()->newProgram(vertexSource, fragSource);
     _programState1    = new backend::ProgramState(program);
     _programState2    = new backend::ProgramState(program);
-    CC_SAFE_RELEASE(program);
+    AX_SAFE_RELEASE(program);
 
     _mesh1 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
     _mesh2 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
@@ -1297,11 +1297,11 @@ void FogTestDemo::onEnter()
     }
     _layer3D->setCameraMask(2);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) {
         Director::getInstance()->setClearColor(Color4F(0.5, 0.5, 0.5, 1));
-        CC_SAFE_RELEASE_NULL(_programState1);
-        CC_SAFE_RELEASE_NULL(_programState2);
+        AX_SAFE_RELEASE_NULL(_programState1);
+        AX_SAFE_RELEASE_NULL(_programState2);
 
         auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
         auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
@@ -1311,7 +1311,7 @@ void FogTestDemo::onEnter()
 
         _mesh1->setProgramState(_programState1);
         _mesh2->setProgramState(_programState2);
-        CC_SAFE_RELEASE(program);
+        AX_SAFE_RELEASE(program);
 
         auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
         float fogStart  = 10;
@@ -1372,7 +1372,7 @@ void FogTestDemo::onExit()
         _camera = nullptr;
     }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
 }

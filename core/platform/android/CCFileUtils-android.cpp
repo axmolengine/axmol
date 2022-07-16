@@ -73,7 +73,7 @@ FileUtils* FileUtils::getInstance()
         {
             delete s_sharedFileUtils;
             s_sharedFileUtils = nullptr;
-            CCLOG("ERROR: Could not init CCFileUtilsAndroid");
+            AXLOG("ERROR: Could not init CCFileUtilsAndroid");
         }
     }
     return s_sharedFileUtils;
@@ -140,7 +140,7 @@ bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
             }
             else
             {
-                // CCLOG("[AssetManager] ... in APK %s, found = false!", strFilePath.c_str());
+                // AXLOG("[AssetManager] ... in APK %s, found = false!", strFilePath.c_str());
             }
         }
     }
@@ -175,7 +175,7 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
     // find absolute path in flash memory
     if (s[0] == '/')
     {
-        CCLOG("find in flash memory dirPath(%s)", s);
+        AXLOG("find in flash memory dirPath(%s)", s);
         struct stat st;
         if (stat(s, &st) == 0)
         {
@@ -187,7 +187,7 @@ bool FileUtilsAndroid::isDirectoryExistInternal(std::string_view dirPath) const
 
         // find it in apk's assets dir
         // Found "assets/" at the beginning of the path and we don't want it
-        CCLOG("find in apk dirPath(%s)", s);
+        AXLOG("find in apk dirPath(%s)", s);
         if (dirPath.find(ASSETS_FOLDER_NAME) == 0)
         {
             s += ASSETS_FOLDER_NAME_LENGTH;

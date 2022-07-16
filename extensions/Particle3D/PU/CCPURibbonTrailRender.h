@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
-#define __CC_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
+#ifndef __AX_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
+#define __AX_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -71,7 +71,7 @@ public:
 };
 
 // particle render for quad
-class CC_EX_DLL PURibbonTrailRender : public PURender, public PUListener
+class AX_EX_DLL PURibbonTrailRender : public PURender, public PUListener
 {
 public:
     // Constants

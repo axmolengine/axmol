@@ -94,7 +94,7 @@ class FastTMXLayer;
  * @since v3.2
  * @js NA
  */
-class CC_DLL FastTMXTiledMap : public Node
+class AX_DLL FastTMXTiledMap : public Node
 {
 public:
     /** Creates a TMX Tiled Map with a TMX file.
@@ -203,7 +203,7 @@ public:
      */
     void setTileAnimEnabled(bool enabled);
 
-    CC_DEPRECATED_ATTRIBUTE int getLayerNum() const { return getLayerCount(); }
+    AX_DEPRECATED_ATTRIBUTE int getLayerNum() const { return getLayerCount(); }
 
     int getLayerCount() const { return _layerCount; }
 
@@ -249,7 +249,7 @@ protected:
     std::string _tmxFile;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FastTMXTiledMap);
+    AX_DISALLOW_COPY_AND_ASSIGN(FastTMXTiledMap);
 };
 
 // end of tilemap_parallax_nodes group

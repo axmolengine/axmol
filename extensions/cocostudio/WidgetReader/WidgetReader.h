@@ -47,7 +47,7 @@ public:
 
     static WidgetReader* getInstance();
     /** @deprecated Use method destroyInstance() instead */
-    CC_DEPRECATED_ATTRIBUTE static void purge();
+    AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
     virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);
@@ -141,7 +141,7 @@ extern const char* P_AnchorPointY;
 extern const char* P_ResourceType;
 extern const char* P_Path;
 
-#define CC_BASIC_PROPERTY_BINARY_READER                                                             \
+#define AX_BASIC_PROPERTY_BINARY_READER                                                             \
     if (key == P_IgnoreSize)                                                                        \
     {                                                                                               \
         widget->ignoreContentAdaptWithSize(valueToBool(value));                                     \
@@ -287,7 +287,7 @@ extern const char* P_Path;
         }                                                                                           \
     }
 
-#define CC_COLOR_PROPERTY_BINARY_READER                                               \
+#define AX_COLOR_PROPERTY_BINARY_READER                                               \
     else if (key == P_Opacity) { _opacity = valueToInt(value); }                      \
     else if (key == P_ColorR) { _color.r = valueToInt(value); }                       \
     else if (key == P_ColorG) { _color.g = valueToInt(value); }                       \

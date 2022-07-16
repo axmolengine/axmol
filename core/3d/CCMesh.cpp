@@ -124,11 +124,11 @@ Mesh::~Mesh()
 {
     for (auto& tex : _textures)
     {
-        CC_SAFE_RELEASE(tex.second);
+        AX_SAFE_RELEASE(tex.second);
     }
-    CC_SAFE_RELEASE(_skin);
-    CC_SAFE_RELEASE(_meshIndexData);
-    CC_SAFE_RELEASE(_material);
+    AX_SAFE_RELEASE(_skin);
+    AX_SAFE_RELEASE(_meshIndexData);
+    AX_SAFE_RELEASE(_material);
 }
 
 backend::Buffer* Mesh::getVertexBuffer() const
@@ -279,8 +279,8 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
     if (tex == nullptr)
         tex = getDummyTexture();
 
-    CC_SAFE_RETAIN(tex);
-    CC_SAFE_RELEASE(_textures[usage]);
+    AX_SAFE_RETAIN(tex);
+    AX_SAFE_RELEASE(_textures[usage]);
     _textures[usage] = tex;
 
     if (usage == NTextureData::Usage::Diffuse)
@@ -331,9 +331,9 @@ void Mesh::setMaterial(Material* material)
 {
     if (_material != material)
     {
-        CC_SAFE_RELEASE(_material);
+        AX_SAFE_RELEASE(_material);
         _material = material;
-        CC_SAFE_RETAIN(_material);
+        AX_SAFE_RETAIN(_material);
     }
     _meshCommands.clear();
 
@@ -349,7 +349,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto pass : technique->getPasses())
             {
-#ifdef COCOS2D_DEBUG
+#ifdef AXIS_DEBUG
                 // make it crashed when missing attribute data
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
@@ -357,7 +357,7 @@ void Mesh::setMaterial(Material* material)
                     auto attributes     = program->getActiveAttributes();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    CCASSERT(attributes.size() <= attributeCount, "missing attribute data");
+                    AXASSERT(attributes.size() <= attributeCount, "missing attribute data");
                 }
 #endif
                 // TODO
@@ -450,8 +450,8 @@ void Mesh::setSkin(MeshSkin* skin)
 {
     if (_skin != skin)
     {
-        CC_SAFE_RETAIN(skin);
-        CC_SAFE_RELEASE(_skin);
+        AX_SAFE_RETAIN(skin);
+        AX_SAFE_RELEASE(_skin);
         _skin = skin;
         calculateAABB();
     }
@@ -461,8 +461,8 @@ void Mesh::setMeshIndexData(MeshIndexData* subMesh)
 {
     if (_meshIndexData != subMesh)
     {
-        CC_SAFE_RETAIN(subMesh);
-        CC_SAFE_RELEASE(_meshIndexData);
+        AX_SAFE_RETAIN(subMesh);
+        AX_SAFE_RELEASE(_meshIndexData);
         _meshIndexData = subMesh;
         calculateAABB();
         bindMeshCommand();
@@ -534,8 +534,8 @@ void Mesh::bindMeshCommand()
 
 void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask)
 {
-    CCASSERT(pass, "Invalid Pass");
-    CCASSERT(scene, "Invalid scene");
+    AXASSERT(pass, "Invalid Pass");
+    AXASSERT(scene, "Invalid scene");
 
     const auto& conf  = Configuration::getInstance();
     int maxDirLight   = conf->getMaxSupportDirLightInShader();

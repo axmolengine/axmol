@@ -505,7 +505,7 @@ void InnerActionFrame::onEnter(Frame* /*nextFrame*/, int /*currentFrameIndex*/)
         }
         else
         {
-            CCLOG("Animation %s not exists!", _animationName.c_str());
+            AXLOG("Animation %s not exists!", _animationName.c_str());
         }
     }
 
@@ -530,7 +530,7 @@ void InnerActionFrame::setStartFrameIndex(int frameIndex)
 {
     if (_enterWithName)
     {
-        CCLOG(" cannot set start when enter frame with name. setEnterWithName false firstly!");
+        AXLOG(" cannot set start when enter frame with name. setEnterWithName false firstly!");
         return;
     }
 
@@ -541,7 +541,7 @@ void InnerActionFrame::setEndFrameIndex(int frameIndex)
 {
     if (_enterWithName)
     {
-        CCLOG(" cannot set end when enter frame with name. setEnterWithName false firstly!");
+        AXLOG(" cannot set end when enter frame with name. setEnterWithName false firstly!");
         return;
     }
 
@@ -552,7 +552,7 @@ void InnerActionFrame::setAnimationName(std::string_view animationName)
 {
     if (!_enterWithName)
     {
-        CCLOG(" cannot set aniamtioname when enter frame with index. setEnterWithName true firstly!");
+        AXLOG(" cannot set aniamtioname when enter frame with index. setEnterWithName true firstly!");
         return;
     }
 

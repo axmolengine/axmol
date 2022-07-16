@@ -156,7 +156,7 @@ public:
     // set localzorder, and recalculate debugdraw
     virtual void setAnchorPoint(const axis::Vec2& anchorPoint) override;
 
-#ifdef CC_STUDIO_ENABLED_VIEW
+#ifdef AX_STUDIO_ENABLED_VIEW
     // hit test , bonePoint is in self coordinate
     virtual bool isPointOnRack(const axis::Vec2& bonePoint);
 #endif
@@ -235,7 +235,7 @@ private:
     axis::Vec2 _squareVertices[4];
     VertexData _vertexData[4];
 
-    CC_DISALLOW_COPY_AND_ASSIGN(BoneNode);
+    AX_DISALLOW_COPY_AND_ASSIGN(BoneNode);
 };
 
 NS_TIMELINE_END

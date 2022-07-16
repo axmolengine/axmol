@@ -62,8 +62,8 @@ public:
     {
         if (_displayData != data)
         {
-            CC_SAFE_RETAIN(data);
-            CC_SAFE_RELEASE(_displayData);
+            AX_SAFE_RETAIN(data);
+            AX_SAFE_RELEASE(_displayData);
             _displayData = data;
         }
     }
@@ -74,8 +74,8 @@ public:
     {
         if (_colliderDetector != detector)
         {
-            CC_SAFE_RETAIN(detector);
-            CC_SAFE_RELEASE(_colliderDetector);
+            AX_SAFE_RETAIN(detector);
+            AX_SAFE_RELEASE(_colliderDetector);
             _colliderDetector = detector;
         }
     }

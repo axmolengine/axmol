@@ -41,13 +41,13 @@ Application* Application::sm_pSharedApplication = nullptr;
 
 Application::Application() : _animationInterval(16666667)
 {
-    CCASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
+    AXASSERT(!sm_pSharedApplication, "sm_pSharedApplication already exist");
     sm_pSharedApplication = this;
 }
 
 Application::~Application()
 {
-    CCASSERT(this == sm_pSharedApplication, "sm_pSharedApplication != this");
+    AXASSERT(this == sm_pSharedApplication, "sm_pSharedApplication != this");
     sm_pSharedApplication = 0;
 }
 
@@ -127,7 +127,7 @@ std::string Application::getVersion()
 
 Application* Application::getInstance()
 {
-    CCASSERT(sm_pSharedApplication, "sm_pSharedApplication not set");
+    AXASSERT(sm_pSharedApplication, "sm_pSharedApplication not set");
     return sm_pSharedApplication;
 }
 

@@ -27,7 +27,7 @@
 #include "../testResource.h"
 #include <stdio.h>
 #include <stdlib.h>
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
 #    include <unistd.h>
 #    include <sys/types.h>
 #    include <sys/socket.h>
@@ -128,7 +128,7 @@ void ConsoleUploadFile::uploadFile()
     Data srcFileData = FileUtils::getInstance()->getDataFromFile(s_pathGrossini);
     if (srcFileData.isNull())
     {
-        CCLOGERROR("ConsoleUploadFile: could not open file %s", s_pathGrossini);
+        AXLOGERROR("ConsoleUploadFile: could not open file %s", s_pathGrossini);
     }
 
     std::string targetFileName = _targetFileName;
@@ -145,7 +145,7 @@ void ConsoleUploadFile::uploadFile()
     hints.ai_flags    = 0;
     hints.ai_protocol = 0; /* Any protocol */
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 #endif
@@ -159,7 +159,7 @@ void ConsoleUploadFile::uploadFile()
     s = getaddrinfo(nodeName.c_str(), "5678", &hints, &result);
     if (s != 0)
     {
-        CCLOG("ConsoleUploadFile: getaddrinfo error");
+        AXLOG("ConsoleUploadFile: getaddrinfo error");
         return;
     }
 
@@ -177,7 +177,7 @@ void ConsoleUploadFile::uploadFile()
         if (connect(sfd, rp->ai_addr, rp->ai_addrlen) != -1)
             break; /* Success */
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
         closesocket(sfd);
 #else
         close(sfd);
@@ -186,7 +186,7 @@ void ConsoleUploadFile::uploadFile()
 
     if (rp == nullptr)
     { /* No address succeeded */
-        CCLOG("ConsoleUploadFile: could not connect!");
+        AXLOG("ConsoleUploadFile: could not connect!");
         return;
     }
 
@@ -246,7 +246,7 @@ void ConsoleUploadFile::uploadFile()
     // Sleep 1s to wait server to receive all data.
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     closesocket(sfd);
     WSACleanup();
 #else

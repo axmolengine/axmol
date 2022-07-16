@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "base/ccMacros.h"
 #include "base/CCScriptSupport.h"
 
-#if CC_REF_LEAK_DETECTION
+#if AX_REF_LEAK_DETECTION
 #    include <algorithm>  // std::find
 #    include <thread>
 #    include <mutex>
@@ -38,41 +38,41 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-#if CC_REF_LEAK_DETECTION
+#if AX_REF_LEAK_DETECTION
 static void trackRef(Ref* ref);
 static void untrackRef(Ref* ref);
 #endif
 
 Ref::Ref()
     : _referenceCount(1)  // when the Ref is created, the reference count of it is 1
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     , _luaID(0)
     , _scriptObject(nullptr)
     , _rooted(false)
 #endif
 {
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     static unsigned int uObjectCount = 0;
     _ID                              = ++uObjectCount;
 #endif
 
-#if CC_REF_LEAK_DETECTION
+#if AX_REF_LEAK_DETECTION
     trackRef(this);
 #endif
 }
 
 Ref::~Ref()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (pEngine != nullptr && _luaID)
     {
         // if the object is referenced by Lua engine, remove it
         pEngine->removeScriptObjectByObject(this);
     }
-#endif  // CC_ENABLE_SCRIPT_BINDING
+#endif  // AX_ENABLE_SCRIPT_BINDING
 
-#if CC_REF_LEAK_DETECTION
+#if AX_REF_LEAK_DETECTION
     if (_referenceCount != 0)
         untrackRef(this);
 #endif
@@ -80,18 +80,18 @@ Ref::~Ref()
 
 void Ref::retain()
 {
-    CCASSERT(_referenceCount > 0, "reference count should be greater than 0");
+    AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
     ++_referenceCount;
 }
 
 void Ref::release()
 {
-    CCASSERT(_referenceCount > 0, "reference count should be greater than 0");
+    AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
     --_referenceCount;
 
     if (_referenceCount == 0)
     {
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
         auto poolManager = PoolManager::getInstance();
         if (!poolManager->getCurrentPool()->isClearing() && poolManager->isObjectInPools(this))
         {
@@ -123,11 +123,11 @@ void Ref::release()
             // auto obj = Node::create();
             // obj->retain();
             // obj->release();   // This `release` is the pair of `retain` of previous line.
-            CCASSERT(false, "The reference shouldn't be 0 because it is still in autorelease pool.");
+            AXASSERT(false, "The reference shouldn't be 0 because it is still in autorelease pool.");
         }
 #endif
 
-#if CC_REF_LEAK_DETECTION
+#if AX_REF_LEAK_DETECTION
         untrackRef(this);
 #endif
         delete this;
@@ -145,7 +145,7 @@ unsigned int Ref::getReferenceCount() const
     return _referenceCount;
 }
 
-#if CC_REF_LEAK_DETECTION
+#if AX_REF_LEAK_DETECTION
 
 static std::vector<Ref*> __refAllocationList;
 static std::mutex __refMutex;
@@ -164,7 +164,7 @@ void Ref::printLeaks()
 
         for (const auto& ref : __refAllocationList)
         {
-            CC_ASSERT(ref);
+            AX_ASSERT(ref);
             const char* type = typeid(*ref).name();
             log("[memory] LEAK: Ref object '%s' still active with reference count %d.\n", (type ? type : ""),
                 ref->getReferenceCount());
@@ -175,7 +175,7 @@ void Ref::printLeaks()
 static void trackRef(Ref* ref)
 {
     std::lock_guard<std::mutex> refLockGuard(__refMutex);
-    CCASSERT(ref, "Invalid parameter, ref should not be null!");
+    AXASSERT(ref, "Invalid parameter, ref should not be null!");
 
     // Create memory allocation record.
     __refAllocationList.push_back(ref);
@@ -194,6 +194,6 @@ static void untrackRef(Ref* ref)
     __refAllocationList.erase(iter);
 }
 
-#endif  // #if CC_REF_LEAK_DETECTION
+#endif  // #if AX_REF_LEAK_DETECTION
 
 NS_AX_END

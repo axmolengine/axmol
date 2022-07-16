@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class CC_DLL GLViewImpl : public GLView
+class AX_DLL GLViewImpl : public GLView
 {
 public:
     // static function

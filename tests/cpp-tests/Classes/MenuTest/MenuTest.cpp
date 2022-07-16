@@ -60,10 +60,10 @@ MenuLayerMainMenu::MenuLayerMainMenu()
 {
     _touchListener = EventListenerTouchOneByOne::create();
     _touchListener->setSwallowTouches(true);
-    _touchListener->onTouchBegan     = CC_CALLBACK_2(MenuLayerMainMenu::touchBegan, this);
-    _touchListener->onTouchMoved     = CC_CALLBACK_2(MenuLayerMainMenu::touchMoved, this);
-    _touchListener->onTouchEnded     = CC_CALLBACK_2(MenuLayerMainMenu::touchEnded, this);
-    _touchListener->onTouchCancelled = CC_CALLBACK_2(MenuLayerMainMenu::touchCancelled, this);
+    _touchListener->onTouchBegan     = AX_CALLBACK_2(MenuLayerMainMenu::touchBegan, this);
+    _touchListener->onTouchMoved     = AX_CALLBACK_2(MenuLayerMainMenu::touchMoved, this);
+    _touchListener->onTouchEnded     = AX_CALLBACK_2(MenuLayerMainMenu::touchEnded, this);
+    _touchListener->onTouchCancelled = AX_CALLBACK_2(MenuLayerMainMenu::touchCancelled, this);
     _eventDispatcher->addEventListenerWithFixedPriority(_touchListener, 1);
 
     // Font Item
@@ -72,18 +72,18 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     auto spriteDisabled = Sprite::create(s_MenuItem, Rect(0, 23 * 0, 115, 23));
 
     auto item1 = MenuItemSprite::create(spriteNormal, spriteSelected, spriteDisabled,
-                                        CC_CALLBACK_1(MenuLayerMainMenu::menuCallback, this));
+                                        AX_CALLBACK_1(MenuLayerMainMenu::menuCallback, this));
 
     // Image Item
     auto item2 =
-        MenuItemImage::create(s_SendScore, s_PressSendScore, CC_CALLBACK_1(MenuLayerMainMenu::menuCallback2, this));
+        MenuItemImage::create(s_SendScore, s_PressSendScore, AX_CALLBACK_1(MenuLayerMainMenu::menuCallback2, this));
 
     // Label Item (LabelAtlas)
     auto labelAtlas = LabelAtlas::create("0123456789", "fonts/labelatlas.png", 16, 24, '.');
-    auto item3      = MenuItemLabel::create(labelAtlas, CC_CALLBACK_1(MenuLayerMainMenu::menuCallbackDisabled, this));
+    auto item3      = MenuItemLabel::create(labelAtlas, AX_CALLBACK_1(MenuLayerMainMenu::menuCallbackDisabled, this));
     item3->setDisabledColor(Color3B(32, 32, 64));
     item3->setColor(Color3B(200, 200, 255));
-    CCLOG("test MenuItem Label getString: %s", item3->getString().data());
+    AXLOG("test MenuItem Label getString: %s", item3->getString().data());
     // Font Item
     auto item4 = MenuItemFont::create("I toggle enable items",
                                       [&](Ref* sender) { _disabledItem->setEnabled(!_disabledItem->isEnabled()); });
@@ -93,7 +93,7 @@ MenuLayerMainMenu::MenuLayerMainMenu()
 
     // Label Item (LabelBMFont)
     auto label = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "configuration");
-    auto item5 = MenuItemLabel::create(label, CC_CALLBACK_1(MenuLayerMainMenu::menuCallbackConfig, this));
+    auto item5 = MenuItemLabel::create(label, AX_CALLBACK_1(MenuLayerMainMenu::menuCallbackConfig, this));
 
     // Testing issue #500
     item5->setScale(0.8f);
@@ -101,13 +101,13 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     // Events
     MenuItemFont::setFontName("fonts/Marker Felt.ttf");
     // Bugs Item
-    auto item6 = MenuItemFont::create("Bugs", CC_CALLBACK_1(MenuLayerMainMenu::menuCallbackBugsTest, this));
+    auto item6 = MenuItemFont::create("Bugs", AX_CALLBACK_1(MenuLayerMainMenu::menuCallbackBugsTest, this));
 
     // Font Item
-    auto item7 = MenuItemFont::create("Quit", CC_CALLBACK_1(MenuLayerMainMenu::onQuit, this));
+    auto item7 = MenuItemFont::create("Quit", AX_CALLBACK_1(MenuLayerMainMenu::onQuit, this));
 
     auto item8 = MenuItemFont::create("Remove menu item when moving",
-                                      CC_CALLBACK_1(MenuLayerMainMenu::menuMovingCallback, this));
+                                      AX_CALLBACK_1(MenuLayerMainMenu::menuMovingCallback, this));
 
     auto color_action = TintBy::create(0.5f, 0, -255, -255);
     auto color_back   = color_action->reverse();
@@ -182,7 +182,7 @@ void MenuLayerMainMenu::menuCallbackDisabled(Ref* sender)
 {
     // hijack all touch events for 5 seconds
     _eventDispatcher->setPriority(_touchListener, -1);
-    schedule(CC_SCHEDULE_SELECTOR(MenuLayerMainMenu::allowTouches), 5.0f);
+    schedule(AX_SCHEDULE_SELECTOR(MenuLayerMainMenu::allowTouches), 5.0f);
     log("TOUCHES DISABLED FOR 5 SECONDS");
 }
 
@@ -216,11 +216,11 @@ MenuLayer2::MenuLayer2()
 {
     for (int i = 0; i < 2; i++)
     {
-        auto item1 = MenuItemImage::create(s_PlayNormal, s_PlaySelect, CC_CALLBACK_1(MenuLayer2::menuCallback, this));
+        auto item1 = MenuItemImage::create(s_PlayNormal, s_PlaySelect, AX_CALLBACK_1(MenuLayer2::menuCallback, this));
         auto item2 =
-            MenuItemImage::create(s_HighNormal, s_HighSelect, CC_CALLBACK_1(MenuLayer2::menuCallbackOpacity, this));
+            MenuItemImage::create(s_HighNormal, s_HighSelect, AX_CALLBACK_1(MenuLayer2::menuCallbackOpacity, this));
         auto item3 =
-            MenuItemImage::create(s_AboutNormal, s_AboutSelect, CC_CALLBACK_1(MenuLayer2::menuCallbackAlign, this));
+            MenuItemImage::create(s_AboutNormal, s_AboutSelect, AX_CALLBACK_1(MenuLayer2::menuCallbackAlign, this));
 
         item1->setScaleX(1.5f);
         item2->setScaleX(0.5f);
@@ -327,7 +327,7 @@ MenuLayer3::MenuLayer3()
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Enable AtlasItem");
     auto item1 = MenuItemLabel::create(label, [&](Ref* sender) {
-        // CCLOG("Label clicked. Toggling AtlasSprite");
+        // AXLOG("Label clicked. Toggling AtlasSprite");
         _disabledItem->setEnabled(!_disabledItem->isEnabled());
         _disabledItem->stopAllActions();
     });
@@ -387,7 +387,7 @@ MenuLayer4::MenuLayer4()
     title1->setEnabled(false);
     MenuItemFont::setFontName("fonts/Marker Felt.ttf");
     MenuItemFont::setFontSize(34);
-    auto item1 = MenuItemToggle::createWithCallback(CC_CALLBACK_1(MenuLayer4::menuCallback, this),
+    auto item1 = MenuItemToggle::createWithCallback(AX_CALLBACK_1(MenuLayer4::menuCallback, this),
                                                     MenuItemFont::create("On"), MenuItemFont::create("Off"), nullptr);
 
     MenuItemFont::setFontName("American Typewriter");
@@ -396,7 +396,7 @@ MenuLayer4::MenuLayer4()
     title2->setEnabled(false);
     MenuItemFont::setFontName("fonts/Marker Felt.ttf");
     MenuItemFont::setFontSize(34);
-    auto item2 = MenuItemToggle::createWithCallback(CC_CALLBACK_1(MenuLayer4::menuCallback, this),
+    auto item2 = MenuItemToggle::createWithCallback(AX_CALLBACK_1(MenuLayer4::menuCallback, this),
                                                     MenuItemFont::create("On"), MenuItemFont::create("Off"), nullptr);
 
     MenuItemFont::setFontName("American Typewriter");
@@ -405,7 +405,7 @@ MenuLayer4::MenuLayer4()
     title3->setEnabled(false);
     MenuItemFont::setFontName("fonts/Marker Felt.ttf");
     MenuItemFont::setFontSize(34);
-    auto item3 = MenuItemToggle::createWithCallback(CC_CALLBACK_1(MenuLayer4::menuCallback, this),
+    auto item3 = MenuItemToggle::createWithCallback(AX_CALLBACK_1(MenuLayer4::menuCallback, this),
                                                     MenuItemFont::create("High"), MenuItemFont::create("Low"), nullptr);
 
     MenuItemFont::setFontName("American Typewriter");
@@ -414,7 +414,7 @@ MenuLayer4::MenuLayer4()
     title4->setEnabled(false);
     MenuItemFont::setFontName("fonts/Marker Felt.ttf");
     MenuItemFont::setFontSize(34);
-    auto item4 = MenuItemToggle::createWithCallback(CC_CALLBACK_1(MenuLayer4::menuCallback, this),
+    auto item4 = MenuItemToggle::createWithCallback(AX_CALLBACK_1(MenuLayer4::menuCallback, this),
                                                     MenuItemFont::create("Off"), nullptr);
 
     // TIP: you can manipulate the items like any other MutableArray
@@ -429,7 +429,7 @@ MenuLayer4::MenuLayer4()
     MenuItemFont::setFontSize(34);
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "go back");
-    auto back  = MenuItemLabel::create(label, CC_CALLBACK_1(MenuLayer4::backCallback, this));
+    auto back  = MenuItemLabel::create(label, AX_CALLBACK_1(MenuLayer4::backCallback, this));
 
     auto menu = Menu::create(title1, title2, item1, item2, title3, title4, item3, item4, back, nullptr);  // 9 items.
 
@@ -445,7 +445,7 @@ MenuLayer4::~MenuLayer4() {}
 
 void MenuLayer4::menuCallback(Ref* sender)
 {
-    // CCLOG("selected item: %x index:%d", dynamic_cast<MenuItemToggle*>(sender)->selectedItem(),
+    // AXLOG("selected item: %x index:%d", dynamic_cast<MenuItemToggle*>(sender)->selectedItem(),
     // dynamic_cast<MenuItemToggle*>(sender)->selectedIndex() );
 }
 
@@ -457,9 +457,9 @@ void MenuLayer4::backCallback(Ref* sender)
 // BugsTest
 BugsTest::BugsTest()
 {
-    auto issue1410   = MenuItemFont::create("Issue 1410", CC_CALLBACK_1(BugsTest::issue1410MenuCallback, this));
-    auto issue1410_2 = MenuItemFont::create("Issue 1410 #2", CC_CALLBACK_1(BugsTest::issue1410v2MenuCallback, this));
-    auto back        = MenuItemFont::create("Back", CC_CALLBACK_1(BugsTest::backMenuCallback, this));
+    auto issue1410   = MenuItemFont::create("Issue 1410", AX_CALLBACK_1(BugsTest::issue1410MenuCallback, this));
+    auto issue1410_2 = MenuItemFont::create("Issue 1410 #2", AX_CALLBACK_1(BugsTest::issue1410v2MenuCallback, this));
+    auto back        = MenuItemFont::create("Back", AX_CALLBACK_1(BugsTest::backMenuCallback, this));
 
     auto menu = Menu::create(issue1410, issue1410_2, back, nullptr);
     addChild(menu);
@@ -503,7 +503,7 @@ RemoveMenuItemWhenMove::RemoveMenuItemWhenMove()
     item = MenuItemFont::create("item 1");
     item->retain();
 
-    auto back = MenuItemFont::create("go back", CC_CALLBACK_1(RemoveMenuItemWhenMove::goBack, this));
+    auto back = MenuItemFont::create("go back", AX_CALLBACK_1(RemoveMenuItemWhenMove::goBack, this));
 
     auto menu = Menu::create(item, back, nullptr);
     addChild(menu);
@@ -515,8 +515,8 @@ RemoveMenuItemWhenMove::RemoveMenuItemWhenMove()
     _touchListener = EventListenerTouchOneByOne::create();
     _touchListener->setSwallowTouches(false);
 
-    _touchListener->onTouchBegan = CC_CALLBACK_2(RemoveMenuItemWhenMove::onTouchBegan, this);
-    _touchListener->onTouchMoved = CC_CALLBACK_2(RemoveMenuItemWhenMove::onTouchMoved, this);
+    _touchListener->onTouchBegan = AX_CALLBACK_2(RemoveMenuItemWhenMove::onTouchBegan, this);
+    _touchListener->onTouchMoved = AX_CALLBACK_2(RemoveMenuItemWhenMove::onTouchMoved, this);
 
     _eventDispatcher->addEventListenerWithFixedPriority(_touchListener, -129);
 }
@@ -529,7 +529,7 @@ void RemoveMenuItemWhenMove::goBack(Ref* pSender)
 RemoveMenuItemWhenMove::~RemoveMenuItemWhenMove()
 {
     _eventDispatcher->removeEventListener(_touchListener);
-    CC_SAFE_RELEASE(item);
+    AX_SAFE_RELEASE(item);
 }
 
 bool RemoveMenuItemWhenMove::onTouchBegan(Touch* touch, Event* event)

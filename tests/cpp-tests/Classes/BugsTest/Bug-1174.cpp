@@ -78,26 +78,26 @@ bool Bug1174Layer::init()
             // A | b
             // -----
             // c | d
-            float ax = CCRANDOM_0_1() * -5000;
-            float ay = CCRANDOM_0_1() * 5000;
+            float ax = AXRANDOM_0_1() * -5000;
+            float ay = AXRANDOM_0_1() * 5000;
 
             // a | b
             // -----
             // c | D
-            float dx = CCRANDOM_0_1() * 5000;
-            float dy = CCRANDOM_0_1() * -5000;
+            float dx = AXRANDOM_0_1() * 5000;
+            float dy = AXRANDOM_0_1() * -5000;
 
             // a | B
             // -----
             // c | d
-            float bx = CCRANDOM_0_1() * 5000;
-            float by = CCRANDOM_0_1() * 5000;
+            float bx = AXRANDOM_0_1() * 5000;
+            float by = AXRANDOM_0_1() * 5000;
 
             // a | b
             // -----
             // C | d
-            float cx = CCRANDOM_0_1() * -5000;
-            float cy = CCRANDOM_0_1() * -5000;
+            float cx = AXRANDOM_0_1() * -5000;
+            float cy = AXRANDOM_0_1() * -5000;
 
             A = Vec2(ax, ay);
             B = Vec2(bx, by);
@@ -141,15 +141,15 @@ bool Bug1174Layer::init()
             // A | b
             // -----
             // c | d
-            float ax = CCRANDOM_0_1() * -500;
-            float ay = CCRANDOM_0_1() * 500;
+            float ax = AXRANDOM_0_1() * -500;
+            float ay = AXRANDOM_0_1() * 500;
             p1       = Vec2(ax, ay);
 
             // a | b
             // -----
             // c | D
-            float dx = CCRANDOM_0_1() * 500;
-            float dy = CCRANDOM_0_1() * -500;
+            float dx = AXRANDOM_0_1() * 500;
+            float dy = AXRANDOM_0_1() * -500;
             p2       = Vec2(dx, dy);
 
             //////
@@ -159,13 +159,13 @@ bool Bug1174Layer::init()
             // a | b
             // -----
             // C | d
-            float cx = CCRANDOM_0_1() * -500;
+            float cx = AXRANDOM_0_1() * -500;
             p3       = Vec2(cx, y);
 
             // a | B
             // -----
             // c | d
-            float bx = CCRANDOM_0_1() * 500;
+            float bx = AXRANDOM_0_1() * 500;
             p4       = Vec2(bx, y);
 
             s = 0.0f;

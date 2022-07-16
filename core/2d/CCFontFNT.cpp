@@ -92,7 +92,7 @@ BMFontConfiguration* BMFontConfiguration::create(std::string_view FNTfile)
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -117,17 +117,17 @@ BMFontConfiguration::BMFontConfiguration() : _commonHeight(0), _characterSet(nul
 
 BMFontConfiguration::~BMFontConfiguration()
 {
-    CCLOGINFO("deallocing BMFontConfiguration: %p", this);
+    AXLOGINFO("deallocing BMFontConfiguration: %p", this);
     this->purgeFontDefDictionary();
     this->purgeKerningDictionary();
     _atlasName.clear();
-    CC_SAFE_DELETE(_characterSet);
+    AX_SAFE_DELETE(_characterSet);
 }
 
 std::string BMFontConfiguration::description() const
 {
     return StringUtils::format(
-        "<BMFontConfiguration = " CC_FORMAT_PRINTF_SIZE_T " | Glphys:%d Kernings:%d | Image = %s>", (size_t)this,
+        "<BMFontConfiguration = " AX_FORMAT_PRINTF_SIZE_T " | Glphys:%d Kernings:%d | Image = %s>", (size_t)this,
         static_cast<int>(_fontDefDictionary.size()), static_cast<int>(_kerningDictionary.size()), _atlasName.c_str());
 }
 
@@ -156,7 +156,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
     }
     if (data[0] == 0)
     {
-        CCLOG("cocos2d: Error parsing FNTfile %s", controlFile.data());
+        AXLOG("cocos2d: Error parsing FNTfile %s", controlFile.data());
         return nullptr;
     }
     auto contents = data.c_str();
@@ -231,7 +231,7 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
 
     uint32_t remains = size;
 
-    CCASSERT(pData[3] == 3, "Only version 3 is supported");
+    AXASSERT(pData[3] == 3, "Only version 3 is supported");
 
     pData += 4;
     remains -= 4;
@@ -293,13 +293,13 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
             uint16_t scaleH = 0;
             memcpy(&scaleH, pData + 6, 2);
 
-            CCASSERT(scaleW <= Configuration::getInstance()->getMaxTextureSize() &&
+            AXASSERT(scaleW <= Configuration::getInstance()->getMaxTextureSize() &&
                          scaleH <= Configuration::getInstance()->getMaxTextureSize(),
                      "CCLabelBMFont: page can't be larger than supported");
 
             uint16_t pages = 0;
             memcpy(&pages, pData + 8, 2);
-            CCASSERT(pages == 1, "CCBitfontAtlas: only supports 1 page");
+            AXASSERT(pages == 1, "CCBitfontAtlas: only supports 1 page");
         }
         else if (blockId == 3)
         {
@@ -308,7 +308,7 @@ std::set<unsigned int>* BMFontConfiguration::parseBinaryConfigFile(unsigned char
              */
 
             const char* value = (const char*)pData;
-            CCASSERT(strlen(value) < blockSize, "Block size should be less then string");
+            AXASSERT(strlen(value) < blockSize, "Block size should be less then string");
 
             _atlasName = FileUtils::getInstance()->fullPathFromRelativeFile(value, controlFile);
         }
@@ -409,7 +409,7 @@ void BMFontConfiguration::parseImageFileName(const char* line, std::string_view 
     // page ID. Sanity check
     int pageId;
     sscanf(line, "page id=%d", &pageId);
-    CCASSERT(pageId == 0, "LabelBMFont file could not be found");
+    AXASSERT(pageId == 0, "LabelBMFont file could not be found");
 
     // file
     char fileName[255];
@@ -429,7 +429,7 @@ void BMFontConfiguration::parseInfoArguments(const char* line)
     // padding
     sscanf(strstr(line, "padding=") + 8, "%d,%d,%d,%d", &_padding.top, &_padding.right, &_padding.bottom,
            &_padding.left);
-    // CCLOG("cocos2d: padding: %d,%d,%d,%d", _padding.left, _padding.top, _padding.right, _padding.bottom);
+    // AXLOG("cocos2d: padding: %d,%d,%d,%d", _padding.left, _padding.top, _padding.right, _padding.bottom);
 }
 
 void BMFontConfiguration::parseCommonArguments(const char* line)
@@ -443,24 +443,24 @@ void BMFontConfiguration::parseCommonArguments(const char* line)
     auto tmp = strstr(line, "lineHeight=") + 11;
     sscanf(tmp, "%d", &_commonHeight);
 
-#if COCOS2D_DEBUG > 0
+#if AXIS_DEBUG > 0
     // scaleW. sanity check
     int value;
     tmp = strstr(tmp, "scaleW=") + 7;
     sscanf(tmp, "%d", &value);
 
     int maxTextureSize = Configuration::getInstance()->getMaxTextureSize();
-    CCASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
+    AXASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
 
     // scaleH. sanity check
     tmp = strstr(tmp, "scaleH=") + 7;
     sscanf(tmp, "%d", &value);
-    CCASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
+    AXASSERT(value <= maxTextureSize, "CCLabelBMFont: page can't be larger than supported");
 
     // pages. sanity check
     tmp = strstr(tmp, "pages=") + 6;
     sscanf(tmp, "%d", &value);
-    CCASSERT(value == 1, "CCBitfontAtlas: only supports 1 page");
+    AXASSERT(value == 1, "CCBitfontAtlas: only supports 1 page");
 #endif
     // packed (ignore) What does this mean ??
 }
@@ -596,7 +596,7 @@ FontFNT* FontFNT::create(std::string_view fntFilePath, const Vec2& imageOffset)
 }
 
 FontFNT::FontFNT(BMFontConfiguration* theContfig, const Rect& imageRect, bool imageRotated)
-    : _configuration(theContfig), _imageRectInPoints(CC_RECT_PIXELS_TO_POINTS(imageRect)), _imageRotated(imageRotated)
+    : _configuration(theContfig), _imageRectInPoints(AX_RECT_PIXELS_TO_POINTS(imageRect)), _imageRotated(imageRotated)
 {
     _configuration->retain();
 }
@@ -615,7 +615,7 @@ void FontFNT::purgeCachedData()
     if (s_configurations)
     {
         s_configurations->clear();
-        CC_SAFE_DELETE(s_configurations);
+        AX_SAFE_DELETE(s_configurations);
     }
 }
 
@@ -709,7 +709,7 @@ FontAtlas* FontFNT::newFontAtlas()
 
         FontLetterDefinition tempDefinition;
 
-        const auto tempRect = CC_RECT_PIXELS_TO_POINTS(fontDef.rect);
+        const auto tempRect = AX_RECT_PIXELS_TO_POINTS(fontDef.rect);
 
         tempDefinition.offsetX = fontDef.xOffset;
         tempDefinition.offsetY = fontDef.yOffset;
@@ -738,7 +738,7 @@ FontAtlas* FontFNT::newFontAtlas()
         // add the new definition
         if (65535 < fontDef.charID)
         {
-            CCLOGWARN("Warning: 65535 < fontDef.charID (%u), ignored", fontDef.charID);
+            AXLOGWARN("Warning: 65535 < fontDef.charID (%u), ignored", fontDef.charID);
         }
         else
         {
@@ -751,7 +751,7 @@ FontAtlas* FontFNT::newFontAtlas()
     Texture2D* tempTexture = Director::getInstance()->getTextureCache()->addImage(_configuration->getAtlasName());
     if (!tempTexture)
     {
-        CC_SAFE_RELEASE(tempAtlas);
+        AX_SAFE_RELEASE(tempAtlas);
         return nullptr;
     }
 

@@ -240,7 +240,7 @@ float DataReaderHelper::getPositionReadScale()
 void DataReaderHelper::purge()
 {
     _configFileList.clear();
-    CC_SAFE_RELEASE_NULL(_dataReaderHelper);
+    AX_SAFE_RELEASE_NULL(_dataReaderHelper);
 }
 
 DataReaderHelper::DataReaderHelper()
@@ -260,7 +260,7 @@ DataReaderHelper::~DataReaderHelper()
     if (_loadingThread)
         _loadingThread->join();
 
-    CC_SAFE_DELETE(_loadingThread);
+    AX_SAFE_DELETE(_loadingThread);
     _dataReaderHelper = nullptr;
 }
 
@@ -367,7 +367,7 @@ void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
 
     if (0 == _asyncRefCount)
     {
-        Director::getInstance()->getScheduler()->schedule(CC_SCHEDULE_SELECTOR(DataReaderHelper::addDataAsyncCallBack),
+        Director::getInstance()->getScheduler()->schedule(AX_SCHEDULE_SELECTOR(DataReaderHelper::addDataAsyncCallBack),
                                                           this, 0, false);
     }
 
@@ -477,7 +477,7 @@ void DataReaderHelper::addDataAsyncCallBack(float /*dt*/)
         {
             _asyncRefTotalCount = 0;
             Director::getInstance()->getScheduler()->unschedule(
-                CC_SCHEDULE_SELECTOR(DataReaderHelper::addDataAsyncCallBack), this);
+                AX_SCHEDULE_SELECTOR(DataReaderHelper::addDataAsyncCallBack), this);
         }
     }
 }
@@ -928,7 +928,7 @@ FrameData* DataReaderHelper::decodeFrame(pugi::xml_node& frameXML,
         }
     }
 
-    auto degrees2radius = [](float v) { return CC_DEGREES_TO_RADIANS(v); };
+    auto degrees2radius = [](float v) { return AX_DEGREES_TO_RADIANS(v); };
 
     pugiext::query_attribute(frameXML, A_SCALE_X, &frameData->scaleX);
     pugiext::query_attribute(frameXML, A_SCALE_Y, &frameData->scaleY);
@@ -968,8 +968,8 @@ FrameData* DataReaderHelper::decodeFrame(pugi::xml_node& frameXML,
         break;
         default:
         {
-            frameData->blendFunc.src = CC_BLEND_SRC;
-            frameData->blendFunc.dst = CC_BLEND_DST;
+            frameData->blendFunc.src = AX_BLEND_SRC;
+            frameData->blendFunc.dst = AX_BLEND_DST;
         }
         break;
         }
@@ -1035,8 +1035,8 @@ FrameData* DataReaderHelper::decodeFrame(pugi::xml_node& frameXML,
         pugiext::query_attribute(parentFrameXml, A_SKEW_Y, &helpNode.skewY);
 
         helpNode.y     = -helpNode.y;
-        helpNode.skewX = CC_DEGREES_TO_RADIANS(helpNode.skewX);
-        helpNode.skewY = CC_DEGREES_TO_RADIANS(-helpNode.skewY);
+        helpNode.skewX = AX_DEGREES_TO_RADIANS(helpNode.skewX);
+        helpNode.skewY = AX_DEGREES_TO_RADIANS(-helpNode.skewY);
 
         TransformHelp::transformFromParent(*frameData, helpNode);
     }
@@ -1131,7 +1131,7 @@ void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataIn
     json.ParseStream<0>(stream);
     if (json.HasParseError())
     {
-        CCLOG("GetParseError %d\n", json.GetParseError());
+        AXLOG("GetParseError %d\n", json.GetParseError());
     }
 
     dataInfo->contentScale = DICTOOL->getFloatValue_json(json, CONTENT_SCALE, 1.0f);
@@ -1208,7 +1208,7 @@ void DataReaderHelper::addDataFromJsonCache(std::string_view fileContent, DataIn
                 i);  // json[CONFIG_FILE_PATH][i].IsNull() ? nullptr : json[CONFIG_FILE_PATH][i].GetString();
             if (path == nullptr)
             {
-                CCLOG("load CONFIG_FILE_PATH error.");
+                AXLOG("load CONFIG_FILE_PATH error.");
                 return;
             }
 
@@ -1753,7 +1753,7 @@ void DataReaderHelper::addDataFromBinaryCache(const char* fileContent, DataInfo*
                         const char* path = pConfigFilePath[ii].GetValue(&tCocoLoader);
                         if (path == nullptr)
                         {
-                            CCLOG("load CONFIG_FILE_PATH error.");
+                            AXLOG("load CONFIG_FILE_PATH error.");
                             return;
                         }
 

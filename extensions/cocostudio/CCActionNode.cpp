@@ -58,20 +58,20 @@ ActionNode::~ActionNode()
 {
     if (_action == nullptr)
     {
-        CC_SAFE_RELEASE_NULL(_actionSpawn);
+        AX_SAFE_RELEASE_NULL(_actionSpawn);
     }
     else
     {
-        CC_SAFE_RELEASE_NULL(_action);
-        CC_SAFE_RELEASE_NULL(_actionSpawn);
+        AX_SAFE_RELEASE_NULL(_action);
+        AX_SAFE_RELEASE_NULL(_actionSpawn);
     }
 
-    CC_SAFE_RELEASE(_object);
+    AX_SAFE_RELEASE(_object);
 
     for (auto object : _frameArray)
     {
         object->clear();
-        CC_SAFE_DELETE(object);
+        AX_SAFE_DELETE(object);
     }
     _frameArray.clear();
 }
@@ -395,9 +395,9 @@ int ActionNode::getActionTag()
 
 void ActionNode::setObject(Ref* node)
 {
-    CC_SAFE_RELEASE(_object);
+    AX_SAFE_RELEASE(_object);
     _object = node;
-    CC_SAFE_RETAIN(_object);
+    AX_SAFE_RETAIN(_object);
 }
 
 Ref* ActionNode::getObject()
@@ -527,16 +527,16 @@ Spawn* ActionNode::refreshActionProperty()
 
     if (_action == nullptr)
     {
-        CC_SAFE_RELEASE_NULL(_actionSpawn);
+        AX_SAFE_RELEASE_NULL(_actionSpawn);
     }
     else
     {
-        CC_SAFE_RELEASE_NULL(_action);
-        CC_SAFE_RELEASE_NULL(_actionSpawn);
+        AX_SAFE_RELEASE_NULL(_action);
+        AX_SAFE_RELEASE_NULL(_actionSpawn);
     }
 
     _actionSpawn = Spawn::create(cSpawnArray);
-    CC_SAFE_RETAIN(_actionSpawn);
+    AX_SAFE_RETAIN(_actionSpawn);
     return _actionSpawn;
 }
 

@@ -37,7 +37,7 @@ USING_NS_AX;
 //     return Vec2(left.width * right.x, left.height * right.y);
 // }
 
-struct CC_DLL LayoutHelper
+struct AX_DLL LayoutHelper
 {
 
     static Vec2 s_designSize;
@@ -222,7 +222,7 @@ struct CC_DLL LayoutHelper
     // @version 2
     static void centerNodeX(axis::Node* pNode, const Vec2& parentSize)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
@@ -235,7 +235,7 @@ struct CC_DLL LayoutHelper
 
     static void centerNodeY(axis::Node* pNode, const Vec2& parentSize)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
@@ -248,7 +248,7 @@ struct CC_DLL LayoutHelper
 
     static void centerNode(axis::Node* pNode, const Vec2& parentSize)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size            = pNode->getContentSize() * getScale2D(pNode);
         axis::Point achor = axis::Vec2::ZERO;
@@ -375,7 +375,7 @@ struct CC_DLL LayoutHelper
     // @version 2 used as internal interfaces
     static void setNodeLeft(axis::Node* pNode, const Vec2& parentSize, float left, float anchor = 0.0f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
@@ -387,7 +387,7 @@ struct CC_DLL LayoutHelper
     }
     static float getNodeLeft(axis::Node* pNode, const Vec2& parentSize, float anchor = 0.0f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
@@ -400,7 +400,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeTop(axis::Node* pNode, const Vec2& parentSize, float top, float anchor = 0.0f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
@@ -412,7 +412,7 @@ struct CC_DLL LayoutHelper
     }
     static float getNodeTop(axis::Node* pNode, const Vec2& parentSize, float anchor = 0.0f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
@@ -425,7 +425,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeRight(axis::Node* pNode, const Vec2& parentSize, float right)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
@@ -438,7 +438,7 @@ struct CC_DLL LayoutHelper
 
     static float getNodeRight(axis::Node* pNode, const Vec2& parentSize, float anchor = 0.0f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorX = 0.0f;
@@ -451,7 +451,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeBottom(axis::Node* pNode, const Vec2& parentSize, float bottom, float anchor = 0.0f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
@@ -464,7 +464,7 @@ struct CC_DLL LayoutHelper
 
     static float getNodeBottom(axis::Node* pNode, const Vec2& parentSize, float anchor = 0.f)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size    = pNode->getContentSize() * getScale2D(pNode);
         float achorY = 0.0f;
@@ -477,7 +477,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeLB(axis::Node* pNode, const Vec2& parentSize, const axis::Point& p)
     {  // left bottom
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
         axis::Point achorPoint = axis::Vec2::ZERO;
@@ -491,7 +491,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeRB(axis::Node* pNode, const Vec2& parentSize, const axis::Point& p)
     {  // right bottom
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
         axis::Point achorPoint = axis::Vec2::ZERO;
@@ -505,7 +505,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeLT(axis::Node* pNode, const Vec2& parentSize, const axis::Point& p)
     {  // left top
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
         axis::Point achorPoint = axis::Vec2::ZERO;
@@ -519,7 +519,7 @@ struct CC_DLL LayoutHelper
 
     static void setNodeRT(axis::Node* pNode, const Vec2& parentSize, const axis::Point& p)
     {  // right top
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         Vec2 size                 = pNode->getContentSize() * getScale2D(pNode);
         axis::Point achorPoint = axis::Vec2::ZERO;
@@ -561,20 +561,20 @@ struct CC_DLL LayoutHelper
     /* set node position as normalized: @version 2 */
     static void setNodeNormalizedPositionX(axis::Node* pNode, const Vec2& parentSize, float ratio)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         pNode->setPositionX(parentSize.width * ratio);
     }
 
     static void setNodeNormalizedPositionY(axis::Node* pNode, const Vec2& parentSize, float ratio)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         pNode->setPositionY(parentSize.height * ratio);
     }
     static void setNodeNormalizedPosition(axis::Node* pNode, const Vec2& parentSize, const axis::Point& ratio)
     {
-        CC_ASSERT(pNode);
+        AX_ASSERT(pNode);
 
         pNode->setPosition(axis::Point(parentSize.width * ratio.x, parentSize.height * ratio.y));
     }
@@ -773,7 +773,7 @@ struct CC_DLL LayoutHelper
     /// <summary>
     /// CLASS VisibleRect
     /// </summary>
-    class CC_DLL VisibleRect
+    class AX_DLL VisibleRect
     {
     public:
         static void refresh(void);

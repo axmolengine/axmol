@@ -24,7 +24,7 @@
 
 #include "PhysicsTest.h"
 
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 
 #    include <cmath>
 #    include "ui/CocosGUI.h"
@@ -62,7 +62,7 @@ const int DRAG_BODYS_TAG = 0x80;
 
 void PhysicsDemo::toggleDebug()
 {
-#    if CC_USE_PHYSICS
+#    if AX_USE_PHYSICS
     _debugDraw = !_debugDraw;
     _physicsWorld->setDebugDrawMask(_debugDraw ? PhysicsWorld::DEBUGDRAW_ALL : PhysicsWorld::DEBUGDRAW_NONE);
 #    endif
@@ -91,7 +91,7 @@ void PhysicsDemo::onEnter()
 
     // menu for debug layer
     MenuItemFont::setFontSize(18);
-    auto item = MenuItemFont::create("Toggle debug", CC_CALLBACK_1(PhysicsDemo::toggleDebugCallback, this));
+    auto item = MenuItemFont::create("Toggle debug", AX_CALLBACK_1(PhysicsDemo::toggleDebugCallback, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -101,12 +101,12 @@ void PhysicsDemo::onEnter()
 
 Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/)
 {
-    CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+    AXLOG("Add sprite %0.2f x %02.f", p.x, p.y);
 
     int posx, posy;
 
-    posx = CCRANDOM_0_1() * 200.0f;
-    posy = CCRANDOM_0_1() * 200.0f;
+    posx = AXRANDOM_0_1() * 200.0f;
+    posy = AXRANDOM_0_1() * 200.0f;
 
     posx = (posx % 4) * 85;
     posy = (posy % 3) * 121;
@@ -205,7 +205,7 @@ Sprite* PhysicsDemo::makeBox(Vec2 point, Size size, int color, PhysicsMaterial m
     bool yellow = false;
     if (color == 0)
     {
-        yellow = CCRANDOM_0_1() > 0.5f;
+        yellow = AXRANDOM_0_1() > 0.5f;
     }
     else
     {
@@ -228,7 +228,7 @@ Sprite* PhysicsDemo::makeTriangle(Vec2 point, Size size, int color, PhysicsMater
     bool yellow = false;
     if (color == 0)
     {
-        yellow = CCRANDOM_0_1() > 0.5f;
+        yellow = AXRANDOM_0_1() > 0.5f;
     }
     else
     {
@@ -372,11 +372,11 @@ void PhysicsDemoClickAdd::onEnter()
     PhysicsDemo::onEnter();
 
     auto touchListener            = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesEnded = CC_CALLBACK_2(PhysicsDemoClickAdd::onTouchesEnded, this);
+    touchListener->onTouchesEnded = AX_CALLBACK_2(PhysicsDemoClickAdd::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     Device::setAccelerometerEnabled(true);
-    auto accListener = EventListenerAcceleration::create(CC_CALLBACK_2(PhysicsDemoClickAdd::onAcceleration, this));
+    auto accListener = EventListenerAcceleration::create(AX_CALLBACK_2(PhysicsDemoClickAdd::onAcceleration, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(accListener, this);
 
     auto node = Node::create();
@@ -427,9 +427,9 @@ void PhysicsDemoPyramidStack::onEnter()
     PhysicsDemo::onEnter();
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemoPyramidStack::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemoPyramidStack::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemoPyramidStack::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPyramidStack::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto node = Node::create();
@@ -446,7 +446,7 @@ void PhysicsDemoPyramidStack::onEnter()
     ball->setPosition(VisibleRect::bottom() + Vec2(0.0f, 60.0f));
     this->addChild(ball);
 
-    scheduleOnce(CC_SCHEDULE_SELECTOR(PhysicsDemoPyramidStack::updateOnce), 3.0);
+    scheduleOnce(AX_SCHEDULE_SELECTOR(PhysicsDemoPyramidStack::updateOnce), 3.0);
 
     for (int i = 0; i < 14; i++)
     {
@@ -477,7 +477,7 @@ void PhysicsDemoRayCast::onEnter()
     PhysicsDemo::onEnter();
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesEnded = CC_CALLBACK_2(PhysicsDemoRayCast::onTouchesEnded, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(PhysicsDemoRayCast::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     _physicsWorld->setGravity(Point::ZERO);
@@ -489,7 +489,7 @@ void PhysicsDemoRayCast::onEnter()
     this->addChild(node);
 
     MenuItemFont::setFontSize(18);
-    auto item = MenuItemFont::create("Change Mode(any)", CC_CALLBACK_1(PhysicsDemoRayCast::changeModeCallback, this));
+    auto item = MenuItemFont::create("Change Mode(any)", AX_CALLBACK_1(PhysicsDemoRayCast::changeModeCallback, this));
 
     auto menu = Menu::create(item, nullptr);
     this->addChild(menu);
@@ -539,7 +539,7 @@ void PhysicsDemoRayCast::update(float /*delta*/)
     case 0:
     {
         Vec2 point3 = point2;
-        auto func   = CC_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
+        auto func   = AX_CALLBACK_3(PhysicsDemoRayCast::anyRay, this);
 
         _physicsWorld->rayCast(func, point1, point2, &point3);
         _node->drawSegment(point1, point3, 0.5f, STATIC_COLOR);
@@ -623,19 +623,19 @@ void PhysicsDemoRayCast::onTouchesEnded(const std::vector<Touch*>& touches, Even
     {
         auto location = touch->getLocation();
 
-        float r = CCRANDOM_0_1();
+        float r = AXRANDOM_0_1();
 
         if (r < 1.0f / 3.0f)
         {
-            addChild(makeBall(location, 5 + CCRANDOM_0_1() * 10));
+            addChild(makeBall(location, 5 + AXRANDOM_0_1() * 10));
         }
         else if (r < 2.0f / 3.0f)
         {
-            addChild(makeBox(location, Size(10 + CCRANDOM_0_1() * 15, 10 + CCRANDOM_0_1() * 15)));
+            addChild(makeBox(location, Size(10 + AXRANDOM_0_1() * 15, 10 + AXRANDOM_0_1() * 15)));
         }
         else
         {
-            addChild(makeTriangle(location, Size(10 + CCRANDOM_0_1() * 20, 10 + CCRANDOM_0_1() * 20)));
+            addChild(makeTriangle(location, Size(10 + AXRANDOM_0_1() * 20, 10 + AXRANDOM_0_1() * 20)));
         }
     }
 }
@@ -651,9 +651,9 @@ void PhysicsDemoActions::onEnter()
     _physicsWorld->setGravity(Vec2::ZERO);
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemoActions::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemoActions::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemoActions::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoActions::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoActions::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoActions::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto node = Node::create();
@@ -698,9 +698,9 @@ void PhysicsDemoJoints::onEnter()
     toggleDebug();
 
     auto listener          = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    listener->onTouchEnded = CC_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
+    listener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
+    listener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
+    listener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     float width  = (VisibleRect::getVisibleRect().size.width - 10) / 4;
@@ -949,9 +949,9 @@ void PhysicsDemoPump::onEnter()
     _distance                   = 0.0f;
     _rotationV                  = 0.0f;
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemoPump::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemoPump::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemoPump::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoPump::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoPump::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoPump::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
     scheduleUpdate();
 
@@ -983,7 +983,7 @@ void PhysicsDemoPump::onEnter()
     // balls
     for (int i = 0; i < 6; ++i)
     {
-        auto ball = makeBall(VisibleRect::leftTop() + Vec2(75 + CCRANDOM_0_1() * 90, 0.0f), 22,
+        auto ball = makeBall(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f), 22,
                              PhysicsMaterial(0.05f, 0.0f, 0.1f));
         ball->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
         addChild(ball);
@@ -1056,7 +1056,7 @@ void PhysicsDemoPump::update(float delta)
         {
             if (body->getNode() != nullptr)
             {
-                body->getNode()->setPosition(VisibleRect::leftTop() + Vec2(75 + CCRANDOM_0_1() * 90, 0.0f));
+                body->getNode()->setPosition(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f));
             }
 
             body->setVelocity(Vec2(0.0f, 0.0f));
@@ -1120,9 +1120,9 @@ void PhysicsDemoOneWayPlatform::onEnter()
     PhysicsDemo::onEnter();
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoOneWayPlatform::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto ground = Node::create();
@@ -1145,7 +1145,7 @@ void PhysicsDemoOneWayPlatform::onEnter()
     this->addChild(ball);
 
     auto contactListener            = EventListenerPhysicsContactWithBodies::create(platformBody, ballBody);
-    contactListener->onContactBegin = CC_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactBegin, this);
+    contactListener->onContactBegin = AX_CALLBACK_1(PhysicsDemoOneWayPlatform::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 }
 
@@ -1168,7 +1168,7 @@ void PhysicsDemoSlice::onEnter()
 
     auto touchListener          = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = [](Touch* /*touch*/, Event* /*event*/) -> bool { return true; };
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemoSlice::onTouchEnded, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemoSlice::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto ground = Node::create();
@@ -1250,7 +1250,7 @@ void PhysicsDemoSlice::clipPoly(PhysicsShapePolygon* shape, Vec2 normal, float d
 
 void PhysicsDemoSlice::onTouchEnded(Touch* touch, Event* /*event*/)
 {
-    auto func = CC_CALLBACK_3(PhysicsDemoSlice::slice, this);
+    auto func = AX_CALLBACK_3(PhysicsDemoSlice::slice, this);
     getPhysicsWorld()->rayCast(func, touch->getStartLocation(), touch->getLocation(), nullptr);
 }
 
@@ -1302,9 +1302,9 @@ void PhysicsContactTest::onEnter()
     _blueTriangleNum   = 50;
 
     MenuItemFont::setFontSize(65);
-    auto decrease1 = MenuItemFont::create(" - ", CC_CALLBACK_1(PhysicsContactTest::onDecrease, this));
+    auto decrease1 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
     decrease1->setColor(Color3B(0, 200, 20));
-    auto increase1 = MenuItemFont::create(" + ", CC_CALLBACK_1(PhysicsContactTest::onIncrease, this));
+    auto increase1 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
     increase1->setColor(Color3B(0, 200, 20));
     decrease1->setTag(1);
     increase1->setTag(1);
@@ -1320,9 +1320,9 @@ void PhysicsContactTest::onEnter()
     addChild(label, 1);
     label->setPosition(Vec2(s.width / 2 - 150, prevMenuPos));
 
-    auto decrease2 = MenuItemFont::create(" - ", CC_CALLBACK_1(PhysicsContactTest::onDecrease, this));
+    auto decrease2 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
     decrease2->setColor(Color3B(0, 200, 20));
-    auto increase2 = MenuItemFont::create(" + ", CC_CALLBACK_1(PhysicsContactTest::onIncrease, this));
+    auto increase2 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
     increase2->setColor(Color3B(0, 200, 20));
     decrease2->setTag(2);
     increase2->setTag(2);
@@ -1336,9 +1336,9 @@ void PhysicsContactTest::onEnter()
     addChild(label, 1);
     label->setPosition(Vec2(s.width / 2 - 150, prevMenuPos));
 
-    auto decrease3 = MenuItemFont::create(" - ", CC_CALLBACK_1(PhysicsContactTest::onDecrease, this));
+    auto decrease3 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
     decrease3->setColor(Color3B(0, 200, 20));
-    auto increase3 = MenuItemFont::create(" + ", CC_CALLBACK_1(PhysicsContactTest::onIncrease, this));
+    auto increase3 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
     increase3->setColor(Color3B(0, 200, 20));
     decrease3->setTag(3);
     increase3->setTag(3);
@@ -1352,9 +1352,9 @@ void PhysicsContactTest::onEnter()
     addChild(label, 1);
     label->setPosition(Vec2(s.width / 2 - 150, prevMenuPos));
 
-    auto decrease4 = MenuItemFont::create(" - ", CC_CALLBACK_1(PhysicsContactTest::onDecrease, this));
+    auto decrease4 = MenuItemFont::create(" - ", AX_CALLBACK_1(PhysicsContactTest::onDecrease, this));
     decrease4->setColor(Color3B(0, 200, 20));
-    auto increase4 = MenuItemFont::create(" + ", CC_CALLBACK_1(PhysicsContactTest::onIncrease, this));
+    auto increase4 = MenuItemFont::create(" + ", AX_CALLBACK_1(PhysicsContactTest::onIncrease, this));
     increase4->setColor(Color3B(0, 200, 20));
     decrease4->setTag(4);
     increase4->setTag(4);
@@ -1462,19 +1462,19 @@ void PhysicsContactTest::resetTest()
     root->addChild(wall);
 
     auto contactListener            = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(PhysicsContactTest::onContactBegin, this);
+    contactListener->onContactBegin = AX_CALLBACK_1(PhysicsContactTest::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     // yellow box, will collide with itself and blue box.
     for (int i = 0; i < _yellowBoxNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 200, (float)(CCRANDOM_0_1() - 0.5) * 200);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
         auto box     = makeBox(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
         boxBody->setVelocity(velocity);
@@ -1487,13 +1487,13 @@ void PhysicsContactTest::resetTest()
     // blue box, will collide with blue box.
     for (int i = 0; i < _blueBoxNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 200, (float)(CCRANDOM_0_1() - 0.5) * 200);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
         auto box     = makeBox(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
         boxBody->setVelocity(velocity);
@@ -1506,13 +1506,13 @@ void PhysicsContactTest::resetTest()
     // yellow triangle, will collide with itself and blue box.
     for (int i = 0; i < _yellowTriangleNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 300, (float)(CCRANDOM_0_1() - 0.5) * 300);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
         auto triangle     = makeTriangle(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
         triangleBody->setVelocity(velocity);
@@ -1525,13 +1525,13 @@ void PhysicsContactTest::resetTest()
     // blue triangle, will collide with yellow box.
     for (int i = 0; i < _blueTriangleNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 300, (float)(CCRANDOM_0_1() - 0.5) * 300);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
         auto triangle     = makeTriangle(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
         triangleBody->setVelocity(velocity);
@@ -1547,7 +1547,7 @@ bool PhysicsContactTest::onContactBegin(PhysicsContact& contact)
     PhysicsBody* a    = contact.getShapeA()->getBody();
     PhysicsBody* b    = contact.getShapeB()->getBody();
     PhysicsBody* body = (a->getCategoryBitmask() == 0x04 || a->getCategoryBitmask() == 0x08) ? a : b;
-    CC_ASSERT(body->getCategoryBitmask() == 0x04 || body->getCategoryBitmask() == 0x08);
+    AX_ASSERT(body->getCategoryBitmask() == 0x04 || body->getCategoryBitmask() == 0x08);
 
     return true;
 }
@@ -1569,9 +1569,9 @@ void PhysicsPositionRotationTest::onEnter()
     _physicsWorld->setGravity(Point::ZERO);
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     auto wall = Node::create();
@@ -1632,9 +1632,9 @@ void PhysicsSetGravityEnableTest::onEnter()
     PhysicsDemo::onEnter();
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     // wall
@@ -1665,7 +1665,7 @@ void PhysicsSetGravityEnableTest::onEnter()
     ballBody->setMass(50);
     addChild(ball);
 
-    scheduleOnce(CC_SCHEDULE_SELECTOR(PhysicsSetGravityEnableTest::onScheduleOnce), 1.0);
+    scheduleOnce(AX_SCHEDULE_SELECTOR(PhysicsSetGravityEnableTest::onScheduleOnce), 1.0);
 }
 
 void PhysicsSetGravityEnableTest::onScheduleOnce(float /*delta*/)
@@ -1693,9 +1693,9 @@ void PhysicsDemoBug5482::onEnter()
     toggleDebug();
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
-    touchListener->onTouchMoved = CC_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
-    touchListener->onTouchEnded = CC_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsDemo::onTouchBegan, this);
+    touchListener->onTouchMoved = AX_CALLBACK_2(PhysicsDemo::onTouchMoved, this);
+    touchListener->onTouchEnded = AX_CALLBACK_2(PhysicsDemo::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     _bodyInA = false;
@@ -1709,7 +1709,7 @@ void PhysicsDemoBug5482::onEnter()
 
     // button
     MenuItemFont::setFontSize(18);
-    _button = MenuItemFont::create("Set Body To A", CC_CALLBACK_1(PhysicsDemoBug5482::changeBodyCallback, this));
+    _button = MenuItemFont::create("Set Body To A", AX_CALLBACK_1(PhysicsDemoBug5482::changeBodyCallback, this));
 
     auto menu = Menu::create(_button, nullptr);
     this->addChild(menu);
@@ -1783,7 +1783,7 @@ void PhysicsFixedUpdate::onEnter()
 
     addBall();
 
-    scheduleOnce(CC_SCHEDULE_SELECTOR(PhysicsFixedUpdate::updateStart), 2);
+    scheduleOnce(AX_SCHEDULE_SELECTOR(PhysicsFixedUpdate::updateStart), 2);
 }
 
 void PhysicsFixedUpdate::addBall()
@@ -1837,7 +1837,7 @@ void PhysicsTransformTest::onEnter()
     _physicsWorld->setGravity(Point::ZERO);
 
     auto touchListener          = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(PhysicsTransformTest::onTouchBegan, this);
+    touchListener->onTouchBegan = AX_CALLBACK_2(PhysicsTransformTest::onTouchBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     _rootLayer = Layer::create();

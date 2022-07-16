@@ -41,7 +41,7 @@ ActionTimelineData* ActionTimelineData::create(int actionTag)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }
@@ -67,7 +67,7 @@ ActionTimeline* ActionTimeline::create()
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -95,7 +95,7 @@ void ActionTimeline::play(std::string name, bool loop)
 {
     if (_animationInfos.find(name) == _animationInfos.end())
     {
-        CCLOG("Can't find animation info for %s", name.c_str());
+        AXLOG("Can't find animation info for %s", name.c_str());
         return;
     }
 
@@ -163,7 +163,7 @@ void ActionTimeline::setCurrentFrame(int frameIndex)
     }
     else
     {
-        CCLOG("frame index is not between start frame and end frame");
+        AXLOG("frame index is not between start frame and end frame");
     }
 }
 
@@ -298,7 +298,7 @@ void ActionTimeline::addAnimationInfo(const AnimationInfo& animationInfo)
 {
     if (_animationInfos.find(animationInfo.name) != _animationInfos.end())
     {
-        CCLOG("Animation (%s) already exists.", animationInfo.name.c_str());
+        AXLOG("Animation (%s) already exists.", animationInfo.name.c_str());
         return;
     }
 
@@ -311,7 +311,7 @@ void ActionTimeline::removeAnimationInfo(std::string animationName)
     auto clipIter = _animationInfos.find(animationName);
     if (clipIter == _animationInfos.end())
     {
-        CCLOG("AnimationInfo (%s) not exists.", animationName.c_str());
+        AXLOG("AnimationInfo (%s) not exists.", animationName.c_str());
         return;
     }
 
@@ -334,7 +334,7 @@ void ActionTimeline::setAnimationEndCallFunc(const std::string animationName, st
     auto clipIter = _animationInfos.find(animationName);
     if (clipIter == _animationInfos.end())
     {
-        CCLOG("AnimationInfo (%s) not exists.", animationName.c_str());
+        AXLOG("AnimationInfo (%s) not exists.", animationName.c_str());
         return;
     }
     clipIter->second.clipEndCallBack = func;

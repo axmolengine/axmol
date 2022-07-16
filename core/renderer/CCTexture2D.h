@@ -71,7 +71,7 @@ class ProgramState;
  * texture dimensions i.e. "contentSize" != (pixelsWide, pixelsHigh) and (maxS, maxT) != (1.0, 1.0). Be aware that the
  * content of the generated textures will be upside-down!
  */
-class CC_DLL Texture2D : public Ref
+class AX_DLL Texture2D : public Ref
 {
 public:
     struct PixelFormatInfo

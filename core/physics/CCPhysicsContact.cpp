@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "physics/CCPhysicsContact.h"
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
 #    include "chipmunk/chipmunk.h"
 
 #    include "physics/CCPhysicsBody.h"
@@ -50,8 +50,8 @@ PhysicsContact::PhysicsContact()
 
 PhysicsContact::~PhysicsContact()
 {
-    CC_SAFE_DELETE(_contactData);
-    CC_SAFE_DELETE(_preContactData);
+    AX_SAFE_DELETE(_contactData);
+    AX_SAFE_DELETE(_preContactData);
 }
 
 PhysicsContact* PhysicsContact::construct(PhysicsShape* a, PhysicsShape* b)
@@ -62,7 +62,7 @@ PhysicsContact* PhysicsContact::construct(PhysicsShape* a, PhysicsShape* b)
         return contact;
     }
 
-    CC_SAFE_DELETE(contact);
+    AX_SAFE_DELETE(contact);
     return nullptr;
 }
 
@@ -70,7 +70,7 @@ bool PhysicsContact::init(PhysicsShape* a, PhysicsShape* b)
 {
     do
     {
-        CC_BREAK_IF(a == nullptr || b == nullptr);
+        AX_BREAK_IF(a == nullptr || b == nullptr);
 
         _shapeA = a;
         _shapeB = b;
@@ -89,7 +89,7 @@ void PhysicsContact::generateContactData()
     }
 
     cpArbiter* arb = static_cast<cpArbiter*>(_contactInfo);
-    CC_SAFE_DELETE(_preContactData);
+    AX_SAFE_DELETE(_preContactData);
     _preContactData     = _contactData;
     _contactData        = new PhysicsContactData();
     _contactData->count = cpArbiterGetCount(arb);
@@ -245,7 +245,7 @@ EventListenerPhysicsContact* EventListenerPhysicsContact::create()
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -259,7 +259,7 @@ bool EventListenerPhysicsContact::checkAvailable()
     if (onContactBegin == nullptr && onContactPreSolve == nullptr && onContactPostSolve == nullptr &&
         onContactSeparate == nullptr)
     {
-        CCASSERT(false, "Invalid PhysicsContactListener.");
+        AXASSERT(false, "Invalid PhysicsContactListener.");
         return false;
     }
 
@@ -280,7 +280,7 @@ EventListenerPhysicsContact* EventListenerPhysicsContact::clone()
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -297,7 +297,7 @@ EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::cr
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -329,7 +329,7 @@ EventListenerPhysicsContactWithBodies* EventListenerPhysicsContactWithBodies::cl
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -350,7 +350,7 @@ EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::cr
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -378,7 +378,7 @@ EventListenerPhysicsContactWithShapes* EventListenerPhysicsContactWithShapes::cl
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -397,7 +397,7 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::crea
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
@@ -425,9 +425,9 @@ EventListenerPhysicsContactWithGroup* EventListenerPhysicsContactWithGroup::clon
         return obj;
     }
 
-    CC_SAFE_DELETE(obj);
+    AX_SAFE_DELETE(obj);
     return nullptr;
 }
 
 NS_AX_END
-#endif  // CC_USE_PHYSICS
+#endif  // AX_USE_PHYSICS

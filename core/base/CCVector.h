@@ -120,7 +120,7 @@ public:
     explicit Vector<T>(ssize_t capacity) : _data()
     {
         static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
-        CCLOGINFO("In the default constructor with capacity of Vector.");
+        AXLOGINFO("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
 
@@ -136,7 +136,7 @@ public:
     /** Destructor. */
     ~Vector<T>()
     {
-        CCLOGINFO("In the destructor of Vector.");
+        AXLOGINFO("In the destructor of Vector.");
         clear();
     }
 
@@ -144,7 +144,7 @@ public:
     Vector<T>(const Vector<T>& other)
     {
         static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
-        CCLOGINFO("In the copy constructor!");
+        AXLOGINFO("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
     }
@@ -153,7 +153,7 @@ public:
     Vector<T>(Vector<T>&& other)
     {
         static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
-        CCLOGINFO("In the move constructor of Vector!");
+        AXLOGINFO("In the move constructor of Vector!");
         _data = std::move(other._data);
     }
 
@@ -162,7 +162,7 @@ public:
     {
         if (this != &other)
         {
-            CCLOGINFO("In the copy assignment operator!");
+            AXLOGINFO("In the copy assignment operator!");
             clear();
             _data = other._data;
             addRefForAllObjects();
@@ -175,7 +175,7 @@ public:
     {
         if (this != &other)
         {
-            CCLOGINFO("In the move assignment operator!");
+            AXLOGINFO("In the move assignment operator!");
             clear();
             _data = std::move(other._data);
         }
@@ -251,7 +251,7 @@ public:
     /** Returns the element at position 'index' in the Vector. */
     T at(ssize_t index) const
     {
-        CCASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
+        AXASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
         return _data[index];
     }
 
@@ -305,7 +305,7 @@ public:
     /** Adds a new element at the end of the Vector. */
     void pushBack(T object)
     {
-        CCASSERT(object != nullptr, "The object should not be nullptr");
+        AXASSERT(object != nullptr, "The object should not be nullptr");
         _data.push_back(object);
         object->retain();
     }
@@ -327,8 +327,8 @@ public:
      */
     void insert(ssize_t index, T object)
     {
-        CCASSERT(index >= 0 && index <= size(), "Invalid index!");
-        CCASSERT(object != nullptr, "The object should not be nullptr");
+        AXASSERT(index >= 0 && index <= size(), "Invalid index!");
+        AXASSERT(object != nullptr, "The object should not be nullptr");
         _data.insert((std::begin(_data) + index), object);
         object->retain();
     }
@@ -338,7 +338,7 @@ public:
     /** Removes the last element in the Vector. */
     void popBack()
     {
-        CCASSERT(!_data.empty(), "no objects added");
+        AXASSERT(!_data.empty(), "no objects added");
         auto last = _data.back();
         _data.pop_back();
         last->release();
@@ -351,7 +351,7 @@ public:
      */
     void eraseObject(T object, bool removeAll = false)
     {
-        CCASSERT(object != nullptr, "The object should not be nullptr");
+        AXASSERT(object != nullptr, "The object should not be nullptr");
 
         if (removeAll)
         {
@@ -386,7 +386,7 @@ public:
      */
     iterator erase(iterator position)
     {
-        CCASSERT(position >= _data.begin() && position < _data.end(), "Invalid position!");
+        AXASSERT(position >= _data.begin() && position < _data.end(), "Invalid position!");
         (*position)->release();
         return _data.erase(position);
     }
@@ -413,7 +413,7 @@ public:
      */
     iterator erase(ssize_t index)
     {
-        CCASSERT(!_data.empty() && index >= 0 && index < size(), "Invalid index!");
+        AXASSERT(!_data.empty() && index >= 0 && index < size(), "Invalid index!");
         auto it = std::next(begin(), index);
         (*it)->release();
         return _data.erase(it);
@@ -439,7 +439,7 @@ public:
         ssize_t idx1 = getIndex(object1);
         ssize_t idx2 = getIndex(object2);
 
-        CCASSERT(idx1 >= 0 && idx2 >= 0, "invalid object index");
+        AXASSERT(idx1 >= 0 && idx2 >= 0, "invalid object index");
 
         std::swap(_data[idx1], _data[idx2]);
     }
@@ -447,7 +447,7 @@ public:
     /** Swap two elements by indexes. */
     void swap(ssize_t index1, ssize_t index2)
     {
-        CCASSERT(index1 >= 0 && index1 < size() && index2 >= 0 && index2 < size(), "Invalid indices");
+        AXASSERT(index1 >= 0 && index1 < size() && index2 >= 0 && index2 < size(), "Invalid indices");
 
         std::swap(_data[index1], _data[index2]);
     }
@@ -455,8 +455,8 @@ public:
     /** Replace value at index with given object. */
     void replace(ssize_t index, T object)
     {
-        CCASSERT(index >= 0 && index < size(), "Invalid index!");
-        CCASSERT(object != nullptr, "The object should not be nullptr");
+        AXASSERT(index >= 0 && index < size(), "Invalid index!");
+        AXASSERT(object != nullptr, "The object should not be nullptr");
 
         _data[index]->release();
         _data[index] = object;

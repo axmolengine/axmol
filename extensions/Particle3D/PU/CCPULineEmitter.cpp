@@ -150,7 +150,7 @@ void PULineEmitter::initParticlePosition(PUParticle3D* particle)
     if (_autoDirection || (_scaledMaxDeviation > 0.0f && !_first))
     {
         // Generate a random vector perpendicular on the line if this is required
-        Vec3::cross(_end, Vec3(CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1(), CCRANDOM_MINUS1_1()), &_perpendicular);
+        Vec3::cross(_end, Vec3(AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1(), AXRANDOM_MINUS1_1()), &_perpendicular);
         _perpendicular.normalize();
     }
 
@@ -160,7 +160,7 @@ void PULineEmitter::initParticlePosition(PUParticle3D* particle)
     {
         if (!_first)
         {
-            _increment += (_scaledMinIncrement + CCRANDOM_0_1() * _scaledMaxIncrement);
+            _increment += (_scaledMinIncrement + AXRANDOM_0_1() * _scaledMaxIncrement);
             if (_increment >= _scaledLength)
             {
                 _incrementsLeft = false;
@@ -170,7 +170,7 @@ void PULineEmitter::initParticlePosition(PUParticle3D* particle)
     }
     else
     {
-        fraction = CCRANDOM_0_1();
+        fraction = AXRANDOM_0_1();
     }
 
     // If the deviation has been set, generate a position with a certain distance from the line
@@ -180,7 +180,7 @@ void PULineEmitter::initParticlePosition(PUParticle3D* particle)
         if (!_first)
         {
             Vec3 basePosition          = _derivedPosition + fraction * _scaledEnd;
-            particle->position         = basePosition + _scaledMaxDeviation * CCRANDOM_0_1() * _perpendicular;
+            particle->position         = basePosition + _scaledMaxDeviation * AXRANDOM_0_1() * _perpendicular;
             particle->originalPosition = basePosition;  // Position is without deviation from the line,
             // to make affectors a bit faster/easier.
         }

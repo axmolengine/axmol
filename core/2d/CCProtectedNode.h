@@ -43,7 +43,7 @@ NS_AX_BEGIN
  *@brief A inner node type mainly used for UI module.
  * It is useful for composing complex node type and it's children are protected.
  */
-class CC_DLL ProtectedNode : public Node
+class AX_DLL ProtectedNode : public Node
 {
 public:
     /**
@@ -199,7 +199,7 @@ protected:
     bool _reorderProtectedChildDirty;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProtectedNode);
+    AX_DISALLOW_COPY_AND_ASSIGN(ProtectedNode);
 };
 
 // end of 2d group

@@ -26,7 +26,7 @@
 
 #include "base/CCController.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <functional>
 #    include "base/ccMacros.h"
 #    include "base/CCDirector.h"
@@ -53,7 +53,7 @@ public:
     static void onConnected(std::string_view deviceName, int deviceId)
     {
         // Check whether the controller is already connected.
-        CCLOG("onConnected %s,%d", deviceName.data(), deviceId);
+        AXLOG("onConnected %s,%d", deviceName.data(), deviceId);
 
         auto iter = findController(deviceName, deviceId);
         if (iter != Controller::s_allController.end())
@@ -70,12 +70,12 @@ public:
 
     static void onDisconnected(std::string_view deviceName, int deviceId)
     {
-        CCLOG("onDisconnected %s,%d", deviceName.data(), deviceId);
+        AXLOG("onDisconnected %s,%d", deviceName.data(), deviceId);
 
         auto iter = findController(deviceName, deviceId);
         if (iter == Controller::s_allController.end())
         {
-            CCLOGERROR("Could not find the controller!");
+            AXLOGERROR("Could not find the controller!");
             return;
         }
 
@@ -93,7 +93,7 @@ public:
         auto iter = findController(deviceName, deviceId);
         if (iter == Controller::s_allController.end())
         {
-            CCLOG("onButtonEvent:connect new controller.");
+            AXLOG("onButtonEvent:connect new controller.");
             onConnected(deviceName, deviceId);
             iter = findController(deviceName, deviceId);
         }
@@ -106,7 +106,7 @@ public:
         auto iter = findController(deviceName, deviceId);
         if (iter == Controller::s_allController.end())
         {
-            CCLOG("onAxisEvent:connect new controller.");
+            AXLOG("onAxisEvent:connect new controller.");
             onConnected(deviceName, deviceId);
             iter = findController(deviceName, deviceId);
         }
@@ -172,7 +172,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                                                                              jstring deviceName,
                                                                                              jint controllerID)
 {
-    CCLOG("controller id: %d connected!", controllerID);
+    AXLOG("controller id: %d connected!", controllerID);
     axis::ControllerImpl::onConnected(axis::JniHelper::jstring2string(deviceName), controllerID);
 }
 
@@ -181,7 +181,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                                                                                 jstring deviceName,
                                                                                                 jint controllerID)
 {
-    CCLOG("controller id: %d disconnected!", controllerID);
+    AXLOG("controller id: %d disconnected!", controllerID);
     axis::ControllerImpl::onDisconnected(axis::JniHelper::jstring2string(deviceName), controllerID);
 }
 
@@ -212,4 +212,4 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
 
 }  // extern "C" {
 
-#endif  // #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)

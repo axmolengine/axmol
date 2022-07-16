@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PLANE_H_
-#define __CC_PLANE_H_
+#ifndef __AX_PLANE_H_
+#define __AX_PLANE_H_
 
 #include "base/ccMacros.h"
 #include "math/CCMath.h"
@@ -43,7 +43,7 @@ enum class PointSide
  * @js NA
  * @lua NA
  **/
-class CC_DLL Plane
+class AX_DLL Plane
 {
 public:
     /**

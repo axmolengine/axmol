@@ -24,8 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_EMITTER_H__
-#define __CC_PU_PARTICLE_3D_EMITTER_H__
+#ifndef __AX_PU_PARTICLE_3D_EMITTER_H__
+#define __AX_PU_PARTICLE_3D_EMITTER_H__
 
 #include "base/CCRef.h"
 #include "math/CCMath.h"
@@ -41,7 +41,7 @@ class PUParticleSystem3D;
 /**
  * 3d particle emitter
  */
-class CC_EX_DLL PUEmitter : public Particle3DEmitter
+class AX_EX_DLL PUEmitter : public Particle3DEmitter
 {
     friend class PUParticleSystem3D;
 

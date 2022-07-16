@@ -45,7 +45,7 @@ class Touch;
  *  - You can add MenuItem objects in runtime using addChild.
  *  - But the only accepted children are MenuItem objects.
  */
-class CC_DLL Menu : public Node
+class AX_DLL Menu : public Node
 {
 public:
     /**
@@ -63,7 +63,7 @@ public:
     static Menu* create();
 
     /** Creates a Menu with MenuItem objects. */
-    static Menu* create(MenuItem* item, ...) CC_REQUIRES_NULL_TERMINATION;
+    static Menu* create(MenuItem* item, ...) AX_REQUIRES_NULL_TERMINATION;
 
     /**
      * Creates a Menu with a Array of MenuItem objects.
@@ -101,7 +101,7 @@ public:
     void alignItemsHorizontallyWithPadding(float padding);
 
     /** Align items in rows of columns. */
-    void alignItemsInColumns(int columns, ...) CC_REQUIRES_NULL_TERMINATION;
+    void alignItemsInColumns(int columns, ...) AX_REQUIRES_NULL_TERMINATION;
 
     /** Align items in rows of columns. */
     void alignItemsInColumns(int columns, va_list args);
@@ -112,7 +112,7 @@ public:
     void alignItemsInColumnsWithArray(const ValueVector& rows);
 
     /** Align items in columns of rows. */
-    void alignItemsInRows(int rows, ...) CC_REQUIRES_NULL_TERMINATION;
+    void alignItemsInRows(int rows, ...) AX_REQUIRES_NULL_TERMINATION;
 
     /** Align items in columns of rows. */
     void alignItemsInRows(int rows, va_list args);
@@ -179,7 +179,7 @@ protected:
     const Camera* _selectedWithCamera;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Menu);
+    AX_DISALLOW_COPY_AND_ASSIGN(Menu);
 };
 
 // end of _2d group

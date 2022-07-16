@@ -50,7 +50,7 @@
 //   https://curl.se/libcurl/c/curl_easy_getinfo.html
 //   https://curl.se/libcurl/c/curl_easy_setopt.html
 
-#define CC_CURL_POLL_TIMEOUT_MS 50  // wait until DNS query done
+#define AX_CURL_POLL_TIMEOUT_MS 50  // wait until DNS query done
 
 enum
 {
@@ -700,7 +700,7 @@ private:
                 // do wait action
                 if (maxfd == -1)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(CC_CURL_POLL_TIMEOUT_MS));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(AX_CURL_POLL_TIMEOUT_MS));
                     rc = 0;
                 }
                 else

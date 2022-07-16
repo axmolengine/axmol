@@ -41,7 +41,7 @@ NS_AX_BEGIN
  */
 
 //! @brief  Helper class to handle file operations
-class CC_DLL FileUtilsWin32 : public FileUtils
+class AX_DLL FileUtilsWin32 : public FileUtils
 {
     friend class FileUtils;
 

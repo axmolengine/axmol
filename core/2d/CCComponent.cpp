@@ -61,7 +61,7 @@ Component* Component::create()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;

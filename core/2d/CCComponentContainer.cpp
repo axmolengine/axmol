@@ -49,15 +49,15 @@ Component* ComponentContainer::get(std::string_view name) const
 bool ComponentContainer::add(Component* com)
 {
     bool ret = false;
-    CCASSERT(com != nullptr, "Component must be non-nil");
-    CCASSERT(com->getOwner() == nullptr, "Component already added. It can't be added again");
+    AXASSERT(com != nullptr, "Component must be non-nil");
+    AXASSERT(com->getOwner() == nullptr, "Component already added. It can't be added again");
     do
     {
         auto componentName = com->getName();
 
         if (_componentMap.find(componentName) != _componentMap.end())
         {
-            CCASSERT(false, "ComponentContainer already have this kind of component");
+            AXASSERT(false, "ComponentContainer already have this kind of component");
             break;
         }
         hlookup::set_item(_componentMap, componentName, com);  //_componentMap[componentName] = com;
@@ -76,7 +76,7 @@ bool ComponentContainer::remove(std::string_view componentName)
     do
     {
         auto iter = _componentMap.find(componentName);
-        CC_BREAK_IF(iter == _componentMap.end());
+        AX_BREAK_IF(iter == _componentMap.end());
 
         auto component = iter->second;
         _componentMap.erase(componentName);
@@ -116,12 +116,12 @@ void ComponentContainer::visit(float delta)
 {
     if (!_componentMap.empty())
     {
-        CC_SAFE_RETAIN(_owner);
+        AX_SAFE_RETAIN(_owner);
         for (auto& iter : _componentMap)
         {
             iter.second->update(delta);
         }
-        CC_SAFE_RELEASE(_owner);
+        AX_SAFE_RELEASE(_owner);
     }
 }
 

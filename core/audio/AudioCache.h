@@ -43,7 +43,7 @@ NS_AX_BEGIN
 class AudioEngineImpl;
 class AudioPlayer;
 
-class CC_DLL AudioCache
+class AX_DLL AudioCache
 {
 public:
     enum class State

@@ -55,8 +55,8 @@ ControlButton::ControlButton()
 
 ControlButton::~ControlButton()
 {
-    CC_SAFE_RELEASE(_titleLabel);
-    CC_SAFE_RELEASE(_backgroundSprite);
+    AX_SAFE_RELEASE(_titleLabel);
+    AX_SAFE_RELEASE(_backgroundSprite);
 }
 
 // initialisers
@@ -73,10 +73,10 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
 {
     if (Control::init())
     {
-        CCASSERT(node != nullptr, "node must not be nil.");
+        AXASSERT(node != nullptr, "node must not be nil.");
         LabelProtocol* label = dynamic_cast<LabelProtocol*>(node);
-        CCASSERT(backgroundSprite != nullptr, "Background sprite must not be nil.");
-        CCASSERT(label != nullptr, "label must not be nil.");
+        AXASSERT(backgroundSprite != nullptr, "Background sprite must not be nil.");
+        AXASSERT(label != nullptr, "label must not be nil.");
 
         _parentInited = true;
 
@@ -740,7 +740,7 @@ ControlButton* ControlButton::create()
         pControlButton->autorelease();
         return pControlButton;
     }
-    CC_SAFE_DELETE(pControlButton);
+    AX_SAFE_DELETE(pControlButton);
     return nullptr;
 }
 

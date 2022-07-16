@@ -41,7 +41,7 @@ NS_AX_MATH_BEGIN
  *
  * This is primarily used for optimized internal math operations.
  */
-class CC_DLL MathUtil
+class AX_DLL MathUtil
 {
     friend class Mat4;
     friend class Vec3;

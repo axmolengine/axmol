@@ -27,7 +27,7 @@
 
 #include "BugsTest.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 

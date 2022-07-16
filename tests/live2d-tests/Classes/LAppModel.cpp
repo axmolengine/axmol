@@ -762,7 +762,7 @@ void LAppModel::MakeRenderingTarget()
         float aspectFactor = 1.0f;
         int frameW = Director::getInstance()->getOpenGLView()->getFrameSize().width, frameH = Director::getInstance()->getOpenGLView()->getFrameSize().height;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
         GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getOpenGLView();
         int renderW = frameW;

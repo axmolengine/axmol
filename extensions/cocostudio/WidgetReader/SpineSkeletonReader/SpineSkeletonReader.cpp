@@ -24,7 +24,7 @@
 
 #include "WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
 
-#if defined(CC_BUILD_WITH_SPINE)
+#if defined(AX_BUILD_WITH_SPINE)
 #    include "SpineSkeletonDataCache.h"
 
 #    include "2d/CCSprite.h"
@@ -62,12 +62,12 @@ SpineSkeletonReader* SpineSkeletonReader::getInstance()
 
 void SpineSkeletonReader::purge()
 {
-    CC_SAFE_DELETE(_instanceSpriteReader);
+    AX_SAFE_DELETE(_instanceSpriteReader);
 }
 
 void SpineSkeletonReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceSpriteReader);
+    AX_SAFE_DELETE(_instanceSpriteReader);
 }
 
 Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

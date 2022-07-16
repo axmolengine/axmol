@@ -12,7 +12,7 @@ USING_NS_AX;
 
 using namespace std;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #define strcasecmp _stricmp
 #endif
 

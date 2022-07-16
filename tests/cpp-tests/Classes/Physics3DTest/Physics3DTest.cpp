@@ -52,7 +52,7 @@ static axis::Scene* physicsScene = nullptr;
 
 Physics3DTests::Physics3DTests()
 {
-#if CC_USE_3D_PHYSICS == 0
+#if AX_USE_3D_PHYSICS == 0
     ADD_TEST_CASE(Physics3DDemoDisabled);
 #else
     ADD_TEST_CASE(BasicPhysics3DDemo);
@@ -64,11 +64,11 @@ Physics3DTests::Physics3DTests()
 #endif
 };
 
-#if CC_USE_3D_PHYSICS == 0
+#if AX_USE_3D_PHYSICS == 0
 void Physics3DDemoDisabled::onEnter()
 {
     TTFConfig ttfConfig("fonts/arial.ttf", 16);
-    auto label = Label::createWithTTF(ttfConfig, "Should define CC_USE_3D_PHYSICS\n to run this test case");
+    auto label = Label::createWithTTF(ttfConfig, "Should define AX_USE_3D_PHYSICS\n to run this test case");
 
     auto size = Director::getInstance()->getWinSize();
     label->setPosition(Vec2(size.width / 2, size.height / 2));
@@ -106,9 +106,9 @@ bool Physics3DTestDemo::init()
         this->addChild(_camera);
 
         auto listener = EventListenerTouchAllAtOnce::create();
-        listener->onTouchesBegan = CC_CALLBACK_2(Physics3DTestDemo::onTouchesBegan, this);
-        listener->onTouchesMoved = CC_CALLBACK_2(Physics3DTestDemo::onTouchesMoved, this);
-        listener->onTouchesEnded = CC_CALLBACK_2(Physics3DTestDemo::onTouchesEnded, this);
+        listener->onTouchesBegan = AX_CALLBACK_2(Physics3DTestDemo::onTouchesBegan, this);
+        listener->onTouchesMoved = AX_CALLBACK_2(Physics3DTestDemo::onTouchesMoved, this);
+        listener->onTouchesEnded = AX_CALLBACK_2(Physics3DTestDemo::onTouchesEnded, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
         TTFConfig ttfConfig("fonts/arial.ttf", 10);
@@ -152,7 +152,7 @@ void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis:
         auto touch = touches[0];
         auto delta = touch->getDelta();
 
-        _angle -= CC_DEGREES_TO_RADIANS(delta.x);
+        _angle -= AX_DEGREES_TO_RADIANS(delta.x);
         _camera->setPosition3D(Vec3(100.0f * sinf(_angle), 50.0f, 100.0f * cosf(_angle)));
         _camera->lookAt(Vec3(0.0f, 0.0f, 0.0f), Vec3(0.0f, 1.0f, 0.0f));
 
@@ -379,7 +379,7 @@ bool Physics3DConstraintDemo::init()
     rbDes.shape = Physics3DShape::createBox(Vec3(5.0f, 5.0f, 5.0f));
     auto rigidBody = Physics3DRigidBody::create(&rbDes);
     Quaternion quat;
-    Quaternion::createFromAxisAngle(Vec3(0.f, 1.f, 0.f), CC_DEGREES_TO_RADIANS(180), &quat);
+    Quaternion::createFromAxisAngle(Vec3(0.f, 1.f, 0.f), AX_DEGREES_TO_RADIANS(180), &quat);
     auto component = Physics3DComponent::create(rigidBody, Vec3(0.f, -3.f, 0.f), quat);
 
     mesh->addComponent(component);
@@ -446,7 +446,7 @@ bool Physics3DConstraintDemo::init()
     component->syncNodeToPhysics();
 
     Mat4 frameInA, frameInB;
-    Mat4::createRotationZ(CC_DEGREES_TO_RADIANS(90), &frameInA);
+    Mat4::createRotationZ(AX_DEGREES_TO_RADIANS(90), &frameInA);
     frameInB = frameInA;
     frameInA.m[13] = -5.f;
     frameInB.m[13] = 5.f;
@@ -469,14 +469,14 @@ bool Physics3DConstraintDemo::init()
     this->addChild(mesh);
     component->syncNodeToPhysics();
 
-    Mat4::createRotationZ(CC_DEGREES_TO_RADIANS(90), &frameInA);
+    Mat4::createRotationZ(AX_DEGREES_TO_RADIANS(90), &frameInA);
     frameInA.m[12] = 0.f;
     frameInA.m[13] = -10.f;
     frameInA.m[14] = 0.f;
     constraint = Physics3DConeTwistConstraint::create(rigidBody, frameInA);
     physicsScene->getPhysics3DWorld()->addPhysics3DConstraint(constraint, true);
     ((Physics3DConeTwistConstraint*)constraint)
-        ->setLimit(CC_DEGREES_TO_RADIANS(10), CC_DEGREES_TO_RADIANS(10), CC_DEGREES_TO_RADIANS(40));
+        ->setLimit(AX_DEGREES_TO_RADIANS(10), AX_DEGREES_TO_RADIANS(10), AX_DEGREES_TO_RADIANS(40));
 
     // create 6 dof constraint
     rbDes.mass = 1.0f;
@@ -652,13 +652,13 @@ bool Physics3DTerrainDemo::init()
         Mat4::createTranslation(0.6f, 5.0f, -1.5f, &localTrans);
         shapeList.push_back(std::make_pair(headshape, localTrans));
         auto lhandshape = Physics3DShape::createBox(Vec3(1.0f, 3.0f, 1.0f));
-        Mat4::createRotation(Vec3(1.0f, 0.0f, 0.0f), CC_DEGREES_TO_RADIANS(15.0f), &localTrans);
+        Mat4::createRotation(Vec3(1.0f, 0.0f, 0.0f), AX_DEGREES_TO_RADIANS(15.0f), &localTrans);
         localTrans.m[12] = -1.5f;
         localTrans.m[13] = 2.5f;
         localTrans.m[14] = -2.5f;
         shapeList.push_back(std::make_pair(lhandshape, localTrans));
         auto rhandshape = Physics3DShape::createBox(Vec3(1.0f, 3.0f, 1.0f));
-        Mat4::createRotation(Vec3(1.0f, 0.0f, 0.0f), CC_DEGREES_TO_RADIANS(-15.0f), &localTrans);
+        Mat4::createRotation(Vec3(1.0f, 0.0f, 0.0f), AX_DEGREES_TO_RADIANS(-15.0f), &localTrans);
         localTrans.m[12] = 2.0f;
         localTrans.m[13] = 2.5f;
         localTrans.m[14] = 1.f;
@@ -734,15 +734,15 @@ bool Physics3DCollisionCallbackDemo::init()
                     ci.objA->setMask(0);
                 }
             }
-            // CCLOG("------------BoxB Collision Info------------");
-            // CCLOG("Collision Point Num: %d", ci.collisionPointList.size());
+            // AXLOG("------------BoxB Collision Info------------");
+            // AXLOG("Collision Point Num: %d", ci.collisionPointList.size());
             // for (auto &iter : ci.collisionPointList){
-            //	CCLOG("Collision Position On A: (%.2f, %.2f, %.2f)", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
-            // iter.worldPositionOnA.z); 	CCLOG("Collision Position On B: (%.2f, %.2f, %.2f)",
-            // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); 	CCLOG("Collision Normal
+            //	AXLOG("Collision Position On A: (%.2f, %.2f, %.2f)", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
+            // iter.worldPositionOnA.z); 	AXLOG("Collision Position On B: (%.2f, %.2f, %.2f)",
+            // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); 	AXLOG("Collision Normal
             // On B: (%.2f, %.2f, %.2f)", iter.worldNormalOnB.x, iter.worldNormalOnB.y, iter.worldNormalOnB.z);
             // }
-            // CCLOG("------------BoxB Collision Info------------");
+            // AXLOG("------------BoxB Collision Info------------");
         });
     }
 

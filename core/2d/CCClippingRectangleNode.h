@@ -43,7 +43,7 @@ NS_AX_BEGIN
  The region of ClippingRectangleNode doesn't support any transform except scale.
 @js NA
 */
-class CC_DLL ClippingRectangleNode : public Node
+class AX_DLL ClippingRectangleNode : public Node
 {
 public:
     /**

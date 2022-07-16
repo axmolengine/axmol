@@ -72,14 +72,14 @@ static const PixelFormatDescriptor s_pixelFormatDescriptors[] = {
     {8, 1, 1, 1, 1, 1, true, "A8"},          // A8
     {8, 1, 1, 1, 1, 1, false, "L8"},         // L8
     {16, 1, 1, 2, 1, 1, true, "LA8"},        // LA8
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
     {32, 1, 1, 4, 1, 1, false, "D24S8"},  // D24S8
 #else
     {64, 1, 1, 8, 1, 1, false, "D32FS8"},  // D32FS8 iOS
 #endif
 };
 
-static_assert(CC_ARRAYSIZE(s_pixelFormatDescriptors) == (int)PixelFormat::COUNT,
+static_assert(AX_ARRAYSIZE(s_pixelFormatDescriptors) == (int)PixelFormat::COUNT,
               "The pixel format descriptor table incomplete!");
 
 //////////////////////////////////////////////////////////////////////////
@@ -542,7 +542,7 @@ axis::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::L8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::L8 to format ID:%d, we will use it's origin format "
                 "PixelFormat::L8",
                 static_cast<int>(format));
@@ -603,7 +603,7 @@ axis::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::LA8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::LA8 to format ID:%d, we will use it's origin format "
                 "PixelFormat::LA8",
                 static_cast<int>(format));
@@ -664,7 +664,7 @@ axis::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::RGB8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::RGB8 to format ID:%d, we will use it's origin format "
                 "PixelFormat::RGB8",
                 static_cast<int>(format));
@@ -725,7 +725,7 @@ axis::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::RGBA8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::RGBA8 to format ID:%d, we will use it's origin format "
                 "PixelFormat::RGBA8",
                 static_cast<int>(format));
@@ -760,7 +760,7 @@ axis::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::RGBA8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::RGB5A1 to format ID:%d, we will use it's origin format "
                 "PixelFormat::RGB51A",
                 static_cast<int>(format));
@@ -794,7 +794,7 @@ axis::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::RGBA8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::RGB565 to format ID:%d, we will use it's origin format "
                 "PixelFormat::RGB565",
                 static_cast<int>(format));
@@ -824,7 +824,7 @@ axis::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::RGBA8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::A8 to format ID:%d, we will use it's origin format "
                 "PixelFormat::A8",
                 static_cast<int>(format));
@@ -858,7 +858,7 @@ axis::backend::PixelFormat convertRGBA4ToFormat(const unsigned char* data,
         // unsupported conversion or don't need to convert
         if (format != PixelFormat::RGBA8)
         {
-            CCLOG(
+            AXLOG(
                 "Can not convert image format PixelFormat::RGBA444 to format ID:%d, we will use it's origin format "
                 "PixelFormat::RGBA4",
                 static_cast<int>(format));
@@ -944,7 +944,7 @@ axis::backend::PixelFormat convertDataToFormat(const unsigned char* data,
     case PixelFormat::BGRA8:
         return convertBGRA8ToFormat(data, dataLen, format, outData, outDataLen);
     default:
-        CCLOG("unsupported conversion from format %d to format %d", static_cast<int>(originFormat),
+        AXLOG("unsupported conversion from format %d to format %d", static_cast<int>(originFormat),
               static_cast<int>(format));
         *outData    = (unsigned char*)data;
         *outDataLen = dataLen;

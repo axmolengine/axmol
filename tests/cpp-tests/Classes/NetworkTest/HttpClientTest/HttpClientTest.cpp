@@ -48,7 +48,7 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
     auto cafile = FileUtils::getInstance()->fullPathForFilename("cacert.pem");
     httpClient->setSSLVerification(cafile);
     httpClient->enableCookies(nullptr);
-    CCLOG("The http cookie will store to: %s", httpClient->getCookieFilename().data());
+    AXLOG("The http cookie will store to: %s", httpClient->getCookieFilename().data());
 
     const int MARGIN = 40;
     const int SPACE  = 35;
@@ -62,32 +62,32 @@ HttpClientTest::HttpClientTest() : _labelStatusCode(nullptr)
 
     // Get
     auto labelGet = Label::createWithTTF("Test Get", "fonts/arial.ttf", 22);
-    auto itemGet  = MenuItemLabel::create(labelGet, CC_CALLBACK_1(HttpClientTest::onMenuGetTestClicked, this));
+    auto itemGet  = MenuItemLabel::create(labelGet, AX_CALLBACK_1(HttpClientTest::onMenuGetTestClicked, this));
     itemGet->setPosition(LEFT, winSize.height - MARGIN - SPACE);
     menuRequest->addChild(itemGet);
 
     // Post
     auto labelPost = Label::createWithTTF("Test Post", "fonts/arial.ttf", 22);
-    auto itemPost  = MenuItemLabel::create(labelPost, CC_CALLBACK_1(HttpClientTest::onMenuPostTestClicked, this));
+    auto itemPost  = MenuItemLabel::create(labelPost, AX_CALLBACK_1(HttpClientTest::onMenuPostTestClicked, this));
     itemPost->setPosition(LEFT, winSize.height - MARGIN - 2 * SPACE);
     menuRequest->addChild(itemPost);
 
     // Post Binary
     auto labelPostBinary = Label::createWithTTF("Test Post Binary", "fonts/arial.ttf", 22);
     auto itemPostBinary =
-        MenuItemLabel::create(labelPostBinary, CC_CALLBACK_1(HttpClientTest::onMenuPostBinaryTestClicked, this));
+        MenuItemLabel::create(labelPostBinary, AX_CALLBACK_1(HttpClientTest::onMenuPostBinaryTestClicked, this));
     itemPostBinary->setPosition(LEFT, winSize.height - MARGIN - 3 * SPACE);
     menuRequest->addChild(itemPostBinary);
 
     // Put
     auto labelPut = Label::createWithTTF("Test Put", "fonts/arial.ttf", 22);
-    auto itemPut  = MenuItemLabel::create(labelPut, CC_CALLBACK_1(HttpClientTest::onMenuPutTestClicked, this));
+    auto itemPut  = MenuItemLabel::create(labelPut, AX_CALLBACK_1(HttpClientTest::onMenuPutTestClicked, this));
     itemPut->setPosition(LEFT, winSize.height - MARGIN - 4 * SPACE);
     menuRequest->addChild(itemPut);
 
     // Delete
     auto labelDelete = Label::createWithTTF("Test Delete", "fonts/arial.ttf", 22);
-    auto itemDelete  = MenuItemLabel::create(labelDelete, CC_CALLBACK_1(HttpClientTest::onMenuDeleteTestClicked, this));
+    auto itemDelete  = MenuItemLabel::create(labelDelete, AX_CALLBACK_1(HttpClientTest::onMenuDeleteTestClicked, this));
     itemDelete->setPosition(LEFT, winSize.height - MARGIN - 5 * SPACE);
     menuRequest->addChild(itemDelete);
 
@@ -110,7 +110,7 @@ void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
         request->setUrl("https://tool.chinaz.com");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        // request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        // request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test1");
         HttpResponse* response = HttpClient::getInstance()->sendSync(request);
         if (response)
@@ -127,7 +127,7 @@ void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test2");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -140,7 +140,7 @@ void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
         request->setUrl("https://httpbin.org/ip");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test3");
         HttpClient::getInstance()->send(request);
         // don't forget to release it, pair to new
@@ -153,7 +153,7 @@ void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
         request->setUrl("https://httpbin.org/get");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test4");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -165,7 +165,7 @@ void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
         request->setUrl("https://github.com/yasio/yasio");
         request->setRequestType(HttpRequest::Type::GET);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("GET test5");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -183,7 +183,7 @@ void HttpClientTest::onMenuPostTestClicked(axis::Ref* sender)
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
         request->setHeaders(std::vector<std::string>{CHROME_UA});
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
@@ -199,7 +199,7 @@ void HttpClientTest::onMenuPostTestClicked(axis::Ref* sender)
         request->setUrl("https://httpbin.org/post");
         request->setRequestType(HttpRequest::Type::POST);
         request->setHeaders(std::vector<std::string>{CHROME_UA, "Content-Type: application/json; charset=utf-8"});
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
@@ -218,7 +218,7 @@ void HttpClientTest::onMenuPostBinaryTestClicked(axis::Ref* sender)
     HttpRequest* request = new HttpRequest();
     request->setUrl("https://httpbin.org/post");
     request->setRequestType(HttpRequest::Type::POST);
-    request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+    request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
     // write the post data
     char postData[22] = "binary=hello\0\0cocos2d";  // including \0, the strings after \0 should not be cut in response
@@ -238,7 +238,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/put");
         request->setRequestType(HttpRequest::Type::PUT);
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
@@ -256,7 +256,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref* sender)
         std::vector<std::string> headers;
         headers.push_back("Content-Type: application/json; charset=utf-8");
         request->setHeaders(headers);
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 
         // write the post data
         const char* postData = "visitor=cocos2d&TestSuite=Extensions Test/NetworkTest";
@@ -277,7 +277,7 @@ void HttpClientTest::onMenuDeleteTestClicked(Ref* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
         request->setRequestType(HttpRequest::Type::DELETE);
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("DELETE test1");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -288,7 +288,7 @@ void HttpClientTest::onMenuDeleteTestClicked(Ref* sender)
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/delete");
         request->setRequestType(HttpRequest::Type::DELETE);
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
         request->setTag("DELETE test2");
         HttpClient::getInstance()->send(request);
         request->release();
@@ -351,14 +351,14 @@ HttpClientClearRequestsTest::HttpClientClearRequestsTest() : _labelStatusCode(nu
     // Get
     auto labelGet = Label::createWithTTF("Test Clear all Get", "fonts/arial.ttf", 22);
     auto itemGet =
-        MenuItemLabel::create(labelGet, CC_CALLBACK_1(HttpClientClearRequestsTest::onMenuCancelAllClicked, this));
+        MenuItemLabel::create(labelGet, AX_CALLBACK_1(HttpClientClearRequestsTest::onMenuCancelAllClicked, this));
     itemGet->setPosition(CENTER, winSize.height - MARGIN - SPACE);
     menuRequest->addChild(itemGet);
 
     // Post
     auto labelPost = Label::createWithTTF("Test Clear but only with the tag DELETE", "fonts/arial.ttf", 22);
     auto itemPost =
-        MenuItemLabel::create(labelPost, CC_CALLBACK_1(HttpClientClearRequestsTest::onMenuCancelSomeClicked, this));
+        MenuItemLabel::create(labelPost, AX_CALLBACK_1(HttpClientClearRequestsTest::onMenuCancelSomeClicked, this));
     itemPost->setPosition(CENTER, winSize.height - MARGIN - 2 * SPACE);
     menuRequest->addChild(itemPost);
 
@@ -390,7 +390,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(axis::Ref* sender)
         url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
         request->setRequestType(HttpRequest::Type::GET);
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
 
         url.str("");
         url << "TEST_" << std::to_string(i);
@@ -419,7 +419,7 @@ void HttpClientClearRequestsTest::onMenuCancelSomeClicked(axis::Ref* sender)
         url << "https://cocos2d-x.org/images/logo.png?id=" << std::to_string(i);
         request->setUrl(url.str());
         request->setRequestType(HttpRequest::Type::GET);
-        request->setResponseCallback(CC_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
+        request->setResponseCallback(AX_CALLBACK_2(HttpClientClearRequestsTest::onHttpRequestCompleted, this));
 
         url.str("");
         if (i < 5)

@@ -24,15 +24,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PU_PARTICLE_3D_GEOMETRY_ROTATOR_H__
-#define __CC_PU_PARTICLE_3D_GEOMETRY_ROTATOR_H__
+#ifndef __AX_PU_PARTICLE_3D_GEOMETRY_ROTATOR_H__
+#define __AX_PU_PARTICLE_3D_GEOMETRY_ROTATOR_H__
 
 #include "extensions/Particle3D/PU/CCPUAffector.h"
 #include "extensions/Particle3D/PU/CCPUDynamicAttribute.h"
 
 NS_AX_BEGIN
 struct PUParticle3D;
-class CC_EX_DLL PUGeometryRotator : public PUAffector
+class AX_EX_DLL PUGeometryRotator : public PUAffector
 {
 public:
     // Constants

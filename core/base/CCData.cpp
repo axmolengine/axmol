@@ -33,18 +33,18 @@ const Data Data::Null;
 
 Data::Data() : _bytes(nullptr), _size(0)
 {
-    CCLOGINFO("In the empty constructor of Data.");
+    AXLOGINFO("In the empty constructor of Data.");
 }
 
 Data::Data(Data&& other) : _bytes(nullptr), _size(0)
 {
-    CCLOGINFO("In the move constructor of Data.");
+    AXLOGINFO("In the move constructor of Data.");
     move(other);
 }
 
 Data::Data(const Data& other) : _bytes(nullptr), _size(0)
 {
-    CCLOGINFO("In the copy constructor of Data.");
+    AXLOGINFO("In the copy constructor of Data.");
     if (other._bytes && other._size)
     {
         copy(other._bytes, other._size);
@@ -53,7 +53,7 @@ Data::Data(const Data& other) : _bytes(nullptr), _size(0)
 
 Data::~Data()
 {
-    CCLOGINFO("deallocing Data: %p", this);
+    AXLOGINFO("deallocing Data: %p", this);
     clear();
 }
 
@@ -61,7 +61,7 @@ Data& Data::operator=(const Data& other)
 {
     if (this != &other)
     {
-        CCLOGINFO("In the copy assignment of Data.");
+        AXLOGINFO("In the copy assignment of Data.");
         copy(other._bytes, other._size);
     }
     return *this;
@@ -71,7 +71,7 @@ Data& Data::operator=(Data&& other)
 {
     if (this != &other)
     {
-        CCLOGINFO("In the move assignment of Data.");
+        AXLOGINFO("In the move assignment of Data.");
         move(other);
     }
     return *this;
@@ -106,8 +106,8 @@ ssize_t Data::getSize() const
 
 ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
 {
-    CCASSERT(size >= 0, "copy size should be non-negative");
-    CCASSERT(bytes, "bytes should not be nullptr");
+    AXASSERT(size >= 0, "copy size should be non-negative");
+    AXASSERT(bytes, "bytes should not be nullptr");
 
     if (size <= 0)
         return 0;
@@ -138,8 +138,8 @@ uint8_t* Data::resize(ssize_t size)
 
 void Data::fastSet(uint8_t* bytes, const ssize_t size)
 {
-    CCASSERT(size >= 0, "fastSet size should be non-negative");
-    // CCASSERT(bytes, "bytes should not be nullptr");
+    AXASSERT(size >= 0, "fastSet size should be non-negative");
+    // AXASSERT(bytes, "bytes should not be nullptr");
     _bytes = bytes;
     _size  = size;
 }

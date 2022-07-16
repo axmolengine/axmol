@@ -86,7 +86,7 @@ void CrashTest::onEnter()
 
     // After 1.5 second, self will be removed.
     child->runAction(Sequence::create(DelayTime::create(1.4f),
-                                      CallFunc::create(CC_CALLBACK_0(CrashTest::removeThis, this)), nullptr));
+                                      CallFunc::create(AX_CALLBACK_0(CrashTest::removeThis, this)), nullptr));
 }
 
 void CrashTest::removeThis()
@@ -116,7 +116,7 @@ void LogicTest::onEnter()
     grossini->setPosition(VisibleRect::center());
 
     grossini->runAction(Sequence::create(MoveBy::create(1, Vec2(150.0f, 0.0f)),
-                                         CallFuncN::create(CC_CALLBACK_1(LogicTest::bugMe, this)), nullptr));
+                                         CallFuncN::create(AX_CALLBACK_1(LogicTest::bugMe, this)), nullptr));
 }
 
 void LogicTest::bugMe(Node* node)
@@ -160,12 +160,12 @@ void PauseTest::onEnter()
     auto director = Director::getInstance();
     director->getActionManager()->addAction(action, grossini, true);
 
-    schedule(CC_SCHEDULE_SELECTOR(PauseTest::unpause), 3);
+    schedule(AX_SCHEDULE_SELECTOR(PauseTest::unpause), 3);
 }
 
 void PauseTest::unpause(float dt)
 {
-    unschedule(CC_SCHEDULE_SELECTOR(PauseTest::unpause));
+    unschedule(AX_SCHEDULE_SELECTOR(PauseTest::unpause));
     auto node     = getChildByTag(kTagGrossini);
     auto director = Director::getInstance();
     director->getActionManager()->resumeTarget(node);
@@ -190,7 +190,7 @@ void StopActionTest::onEnter()
     l->setPosition(VisibleRect::center().x, VisibleRect::top().y - 75);
 
     auto pMove     = MoveBy::create(2, Vec2(200.0f, 0.0f));
-    auto pCallback = CallFunc::create(CC_CALLBACK_0(StopActionTest::stopAction, this));
+    auto pCallback = CallFunc::create(AX_CALLBACK_0(StopActionTest::stopAction, this));
     auto pSequence = Sequence::create(pMove, pCallback, nullptr);
     pSequence->setTag(kTagSequence);
 
@@ -290,12 +290,12 @@ void ResumeTest::onEnter()
     director->getActionManager()->pauseTarget(pGrossini);
     pGrossini->runAction(RotateBy::create(2, 360));
 
-    this->schedule(CC_SCHEDULE_SELECTOR(ResumeTest::resumeGrossini), 3.0f);
+    this->schedule(AX_SCHEDULE_SELECTOR(ResumeTest::resumeGrossini), 3.0f);
 }
 
 void ResumeTest::resumeGrossini(float time)
 {
-    this->unschedule(CC_SCHEDULE_SELECTOR(ResumeTest::resumeGrossini));
+    this->unschedule(AX_SCHEDULE_SELECTOR(ResumeTest::resumeGrossini));
 
     auto pGrossini = getChildByTag(kTagGrossini);
     auto director  = Director::getInstance();

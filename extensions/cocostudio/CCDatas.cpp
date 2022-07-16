@@ -99,20 +99,20 @@ void BaseData::subtract(BaseData* from, BaseData* to, bool limit)
     {
         if (skewX > M_PI)
         {
-            skewX -= (float)CC_DOUBLE_PI;
+            skewX -= (float)AX_DOUBLE_PI;
         }
         if (skewX < -M_PI)
         {
-            skewX += (float)CC_DOUBLE_PI;
+            skewX += (float)AX_DOUBLE_PI;
         }
 
         if (skewY > M_PI)
         {
-            skewY -= (float)CC_DOUBLE_PI;
+            skewY -= (float)AX_DOUBLE_PI;
         }
         if (skewY < -M_PI)
         {
-            skewY += (float)CC_DOUBLE_PI;
+            skewY += (float)AX_DOUBLE_PI;
         }
     }
 
@@ -241,7 +241,7 @@ FrameData::FrameData(void)
 
 FrameData::~FrameData(void)
 {
-    CC_SAFE_DELETE(easingParams);
+    AX_SAFE_DELETE(easingParams);
 }
 
 void FrameData::copy(const BaseData* baseData)
@@ -256,7 +256,7 @@ void FrameData::copy(const BaseData* baseData)
         tweenEasing       = frameData->tweenEasing;
         easingParamNumber = frameData->easingParamNumber;
 
-        CC_SAFE_DELETE(easingParams);
+        AX_SAFE_DELETE(easingParams);
         if (easingParamNumber != 0)
         {
             easingParams = new float[easingParamNumber];

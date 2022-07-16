@@ -71,14 +71,14 @@ bool UISliderTest::init()
         slider->setMaxPercent(10000);
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 2.0f*/));
-        slider->addEventListener(CC_CALLBACK_2(UISliderTest::sliderEvent, this));
+        slider->addEventListener(AX_CALLBACK_2(UISliderTest::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         _slider = slider;
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
-        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UISliderTest::printWidgetResources, this));
+        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UISliderTest::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);
@@ -103,18 +103,18 @@ void UISliderTest::sliderEvent(Ref* pSender, Slider::EventType type)
 void UISliderTest::printWidgetResources(axis::Ref* /*sender*/)
 {
     axis::ResourceData textureFile = _slider->getBackFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
     axis::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
-    CCLOG("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
+    AXLOG("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
           progressBarTextureFile.type);
     axis::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
-    CCLOG("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
+    AXLOG("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
           slidBallNormalTextureFile.type);
     axis::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
-    CCLOG("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
+    AXLOG("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
           slidBallPressedTextureFile.type);
     axis::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
-    CCLOG("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
+    AXLOG("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
           slidBallDisabledTextureFile.type);
 }
 
@@ -153,7 +153,7 @@ bool UISliderTest_Scale9::init()
         slider->setContentSize(Size(250.0f, 19.0f));
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 3.0f*/));
-        slider->addEventListener(CC_CALLBACK_2(UISliderTest_Scale9::sliderEvent, this));
+        slider->addEventListener(AX_CALLBACK_2(UISliderTest_Scale9::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         return true;
@@ -362,18 +362,18 @@ bool UISliderNewEventCallbackTest::init()
         slider->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 50));
         slider->addEventListener([=](Ref* widget, Slider::EventType type) {
             Slider* slider = (Slider*)widget;
-            CC_UNUSED_PARAM(slider);
+            AX_UNUSED_PARAM(slider);
             if (type == Slider::EventType::ON_SLIDEBALL_DOWN)
             {
-                CCLOG("slider button pressed!");
+                AXLOG("slider button pressed!");
             }
             else if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
             {
-                CCLOG("slider is moving! percent = %f", 100.0f * slider->getPercent() / slider->getMaxPercent());
+                AXLOG("slider is moving! percent = %f", 100.0f * slider->getPercent() / slider->getMaxPercent());
             }
             else if (type == Slider::EventType::ON_SLIDEBALL_UP)
             {
-                CCLOG("slider button is released.");
+                AXLOG("slider button is released.");
             }
         });
         _uiLayer->addChild(slider);
@@ -411,7 +411,7 @@ bool UISliderIssue12249Test::init()
         slider->setMaxPercent(10000);
         slider->setPosition(
             Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f /* + slider->getSize().height * 2.0f*/));
-        slider->addEventListener(CC_CALLBACK_2(UISliderIssue12249Test::sliderEvent, this));
+        slider->addEventListener(AX_CALLBACK_2(UISliderIssue12249Test::sliderEvent, this));
         _uiLayer->addChild(slider);
 
         return true;

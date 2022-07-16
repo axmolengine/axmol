@@ -25,9 +25,9 @@
 
 #include "physics3d/CCPhysics3D.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 #        include "bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
 NS_AX_BEGIN
@@ -39,19 +39,19 @@ Physics3DShape::ShapeType Physics3DShape::getShapeType() const
 
 Physics3DShape::Physics3DShape() : _shapeType(ShapeType::UNKNOWN)
 {
-#        if (CC_ENABLE_BULLET_INTEGRATION)
+#        if (AX_ENABLE_BULLET_INTEGRATION)
     _btShape         = nullptr;
     _heightfieldData = nullptr;
 #        endif
 }
 Physics3DShape::~Physics3DShape()
 {
-#        if (CC_ENABLE_BULLET_INTEGRATION)
-    CC_SAFE_DELETE(_btShape);
-    CC_SAFE_DELETE_ARRAY(_heightfieldData);
+#        if (AX_ENABLE_BULLET_INTEGRATION)
+    AX_SAFE_DELETE(_btShape);
+    AX_SAFE_DELETE_ARRAY(_heightfieldData);
     for (auto iter : _compoundChildShapes)
     {
-        CC_SAFE_RELEASE(iter);
+        AX_SAFE_RELEASE(iter);
     }
     _compoundChildShapes.clear();
 #        endif
@@ -209,7 +209,7 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
     for (auto iter : shapes)
     {
         compound->addChildShape(convertMat4TobtTransform(iter.second), iter.first->getbtShape());
-        CC_SAFE_RETAIN(iter.first);
+        AX_SAFE_RETAIN(iter.first);
         _compoundChildShapes.push_back(iter.first);
     }
     _btShape = compound;
@@ -218,6 +218,6 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS

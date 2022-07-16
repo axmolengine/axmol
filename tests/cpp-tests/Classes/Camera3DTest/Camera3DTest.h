@@ -263,7 +263,7 @@ protected:
     axis::backend::ProgramState* _programState1 = nullptr;
     axis::backend::ProgramState* _programState2 = nullptr;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     axis::EventListenerCustom* _backToForegroundListener;
 #endif
 };

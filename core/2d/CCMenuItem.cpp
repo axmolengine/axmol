@@ -88,7 +88,7 @@ void MenuItem::activate()
         {
             _callback(this);
         }
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
         BasicScriptData data(this);
         ScriptEvent scriptEvent(kMenuClickedEvent, &data);
         ScriptEngineManager::sendEventToLua(scriptEvent);
@@ -289,7 +289,7 @@ bool MenuItemAtlasFont::initWithString(std::string_view value,
                                        char startCharMap,
                                        const ccMenuCallback& callback)
 {
-    CCASSERT(value.size() != 0, "value length must be greater than 0");
+    AXASSERT(value.size() != 0, "value length must be greater than 0");
     LabelAtlas* label = LabelAtlas::create(value, charMapFile, itemWidth, itemHeight, startCharMap);
     if (MenuItemLabel::initWithLabel(label, callback))
     {
@@ -347,12 +347,12 @@ MenuItemFont::MenuItemFont() : _fontSize(0), _fontName("") {}
 
 MenuItemFont::~MenuItemFont()
 {
-    CCLOGINFO("In the destructor of MenuItemFont (%p).", this);
+    AXLOGINFO("In the destructor of MenuItemFont (%p).", this);
 }
 
 bool MenuItemFont::initWithString(std::string_view value, const ccMenuCallback& callback)
 {
-    CCASSERT(!value.empty(), "Value length must be greater than 0");
+    AXASSERT(!value.empty(), "Value length must be greater than 0");
 
     _fontName = _globalFontName;
     _fontSize = _globalFontSize;
@@ -591,7 +591,7 @@ MenuItemImage* MenuItemImage::create()
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -623,7 +623,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -637,7 +637,7 @@ MenuItemImage* MenuItemImage::create(std::string_view normalImage,
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -694,7 +694,7 @@ MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callbac
     MenuItemToggle* ret = new MenuItemToggle();
     ret->MenuItem::initWithCallback(callback);
     ret->autorelease();
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -706,7 +706,7 @@ MenuItemToggle* MenuItemToggle::createWithCallback(const ccMenuCallback& callbac
             }
         }
     }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     ret->_subItems      = menuItems;
     ret->_selectedIndex = UINT_MAX;
     ret->setSelectedIndex(0);
@@ -739,19 +739,19 @@ bool MenuItemToggle::initWithCallback(const ccMenuCallback& callback, MenuItem* 
     int z       = 0;
     MenuItem* i = item;
 
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
 
     while (i)
     {
         z++;
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         if (sEngine)
         {
             sEngine->retainScriptObject(this, i);
         }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
         _subItems.pushBack(i);
         i = va_arg(args, MenuItem*);
     }
@@ -787,13 +787,13 @@ bool MenuItemToggle::initWithItem(MenuItem* item)
 
 void MenuItemToggle::addSubItem(MenuItem* item)
 {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, item);
     }
-#endif  // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+#endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     _subItems.pushBack(item);
 }
 
@@ -801,7 +801,7 @@ void MenuItemToggle::cleanup()
 {
     for (const auto& item : _subItems)
     {
-#if defined(CC_NATIVE_CONTROL_SCRIPT) && !CC_NATIVE_CONTROL_SCRIPT
+#if defined(AX_NATIVE_CONTROL_SCRIPT) && !AX_NATIVE_CONTROL_SCRIPT
         ScriptEngineManager::getInstance()->getScriptEngine()->releaseScriptObject(this, item);
 #endif
         item->cleanup();

@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_PARTICLE_3D_EMITTER_H__
-#define __CC_PARTICLE_3D_EMITTER_H__
+#ifndef __AX_PARTICLE_3D_EMITTER_H__
+#define __AX_PARTICLE_3D_EMITTER_H__
 
 #include "base/CCRef.h"
 #include <vector>
@@ -37,7 +37,7 @@ struct Particle3D;
 /**
  * 3d particle emitter
  */
-class CC_EX_DLL Particle3DEmitter : public Ref
+class AX_EX_DLL Particle3DEmitter : public Ref
 {
     friend class ParticleSystem3D;
 

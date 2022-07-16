@@ -79,7 +79,7 @@ PointArray* PointArray::clone() const
 
 PointArray::~PointArray()
 {
-    CCLOGINFO("deallocing PointArray: %p", this);
+    AXLOGINFO("deallocing PointArray: %p", this);
 }
 
 PointArray::PointArray() {}
@@ -197,7 +197,7 @@ CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray* points, f
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -205,7 +205,7 @@ CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray* points, f
 
 bool CardinalSplineTo::initWithDuration(float duration, PointArray* points, float tension)
 {
-    CCASSERT(points->count() > 0, "Invalid configuration. It must at least have one control point");
+    AXASSERT(points->count() > 0, "Invalid configuration. It must at least have one control point");
 
     if (ActionInterval::initWithDuration(duration))
     {
@@ -220,7 +220,7 @@ bool CardinalSplineTo::initWithDuration(float duration, PointArray* points, floa
 
 CardinalSplineTo::~CardinalSplineTo()
 {
-    CC_SAFE_RELEASE_NULL(_points);
+    AX_SAFE_RELEASE_NULL(_points);
 }
 
 CardinalSplineTo::CardinalSplineTo() : _points(nullptr), _deltaT(0.f), _tension(0.f) {}
@@ -275,7 +275,7 @@ void CardinalSplineTo::update(float time)
 
     Vec2 newPos = ccCardinalSplineAt(pp0, pp1, pp2, pp3, _tension, lt);
 
-#if CC_ENABLE_STACKABLE_ACTIONS
+#if AX_ENABLE_STACKABLE_ACTIONS
     // Support for stacked actions
     Node* node = _target;
     Vec2 diff  = node->getPosition() - _previousPosition;
@@ -314,7 +314,7 @@ CardinalSplineBy* CardinalSplineBy::create(float duration, PointArray* points, f
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -398,7 +398,7 @@ CatmullRomTo* CatmullRomTo::create(float dt, PointArray* points)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -441,7 +441,7 @@ CatmullRomBy* CatmullRomBy::create(float dt, PointArray* points)
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
     return ret;
 }

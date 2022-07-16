@@ -43,7 +43,7 @@ QuadCommand::~QuadCommand()
 {
     for (auto& indices : _ownedIndices)
     {
-        CC_SAFE_DELETE_ARRAY(indices);
+        AX_SAFE_DELETE_ARRAY(indices);
     }
 }
 
@@ -61,7 +61,7 @@ void QuadCommand::reIndex(int indicesCount)
         indicesCount *= 1.25;
         indicesCount = std::min(indicesCount, 65536);
 
-        CCLOG("cocos2d: QuadCommand: resizing index size from [%d] to [%d]", __indexCapacity, indicesCount);
+        AXLOG("cocos2d: QuadCommand: resizing index size from [%d] to [%d]", __indexCapacity, indicesCount);
 
         _ownedIndices.push_back(__indices);
         __indices       = new uint16_t[indicesCount];

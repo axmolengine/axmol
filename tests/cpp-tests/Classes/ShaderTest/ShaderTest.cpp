@@ -113,7 +113,7 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     /*
      * TODO: the Y-coordinate of subclasses are flipped in metal
      *
-     * keywords: CC_USE_METAL , CC_USE_GL
+     * keywords: AX_USE_METAL , AX_USE_GL
      */
 
     _customCommand.createVertexBuffer(sizeof(Vec2), 6, CustomCommand::BufferUsage::STATIC);
@@ -146,8 +146,8 @@ void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
     auto program      = backend::Device::getInstance()->newProgram(vertSource.c_str(), fragSource.c_str());
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
-    CC_SAFE_RELEASE(programState);
-    CC_SAFE_RELEASE(program);
+    AX_SAFE_RELEASE(programState);
+    AX_SAFE_RELEASE(program);
 }
 
 void ShaderNode::update(float dt)
@@ -188,7 +188,7 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     _programState->setUniform(_locCosTime, &cosTime, sizeof(cosTime));
 
     renderer->addCommand(&_customCommand);
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 6);
+    AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 6);
 }
 
 void ShaderNode::updateUniforms()
@@ -421,7 +421,7 @@ SpriteBlur* SpriteBlur::create(const char* pszFileName)
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -432,7 +432,7 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
     _blurRadius = 0;
     if (Sprite::initWithTexture(texture, rect))
     {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         auto listener =
             EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom* event) { initProgram(); });
 
@@ -455,8 +455,8 @@ void SpriteBlur::initProgram()
     auto program      = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.data());
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
-    CC_SAFE_RELEASE(programState);
-    CC_SAFE_RELEASE(program);
+    AX_SAFE_RELEASE(programState);
+    AX_SAFE_RELEASE(program);
 
     auto size = getTexture()->getContentSizeInPixels();
 
@@ -599,14 +599,14 @@ bool ShaderRetroEffect::init()
         _label = Label::createWithBMFont("fonts/west_england-64.fnt", "RETRO EFFECT");
         _label->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
         _label->setProgramState(p);
-        CC_SAFE_RELEASE(p);
+        AX_SAFE_RELEASE(p);
 
         _label->setPosition(Vec2(s.width / 2, s.height / 2));
 
         addChild(_label);
 
         scheduleUpdate();
-        CC_SAFE_RELEASE(program);
+        AX_SAFE_RELEASE(program);
         return true;
     }
 
@@ -780,13 +780,13 @@ bool ShaderMultiTexture::init()
 
         // menu
         auto label = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "change");
-        auto mi    = MenuItemLabel::create(label, CC_CALLBACK_1(ShaderMultiTexture::changeTexture, this));
+        auto mi    = MenuItemLabel::create(label, AX_CALLBACK_1(ShaderMultiTexture::changeTexture, this));
         auto menu  = Menu::create(mi, nullptr);
         addChild(menu);
         menu->setPosition(s.width * 7 / 8, s.height / 2);
 
-        CC_SAFE_RELEASE(programState);
-        CC_SAFE_RELEASE(program);
+        AX_SAFE_RELEASE(programState);
+        AX_SAFE_RELEASE(program);
         return true;
     }
 

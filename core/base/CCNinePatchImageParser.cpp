@@ -35,14 +35,14 @@ NinePatchImageParser::NinePatchImageParser() : _image(nullptr), _imageFrame(Rect
 NinePatchImageParser::NinePatchImageParser(Image* image) : _image(image), _imageFrame(Rect::ZERO), _isRotated(false)
 {
     this->_imageFrame = Rect(0, 0, image->getWidth(), image->getHeight());
-    CCASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
+    AXASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
              "unsupported format, currently only supports rgba8888");
 }
 
 NinePatchImageParser::NinePatchImageParser(Image* image, const Rect& frame, bool rotated)
     : _image(image), _imageFrame(frame), _isRotated(rotated)
 {
-    CCASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
+    AXASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
              "unsupported format, currently only supports rgba8888");
 }
 
@@ -166,14 +166,14 @@ Rect NinePatchImageParser::parseCapInset() const
                          verticalLine.y - verticalLine.x);
     }
 
-    capInsets = CC_RECT_PIXELS_TO_POINTS(capInsets);
+    capInsets = AX_RECT_PIXELS_TO_POINTS(capInsets);
     return capInsets;
 }
 
 void NinePatchImageParser::setSpriteFrameInfo(Image* image, const axis::Rect& frameRect, bool rotated)
 {
     this->_image = image;
-    CCASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
+    AXASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,
              "unsupported format, currently only supports rgba8888");
     this->_imageFrame = frameRect;
     this->_isRotated  = rotated;

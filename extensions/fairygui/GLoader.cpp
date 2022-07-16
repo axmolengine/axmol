@@ -28,9 +28,9 @@ GLoader::GLoader()
 
 GLoader::~GLoader()
 {
-    CC_SAFE_RELEASE(_playAction);
-    CC_SAFE_RELEASE(_content);
-    CC_SAFE_RELEASE(_content2);
+    AX_SAFE_RELEASE(_playAction);
+    AX_SAFE_RELEASE(_content);
+    AX_SAFE_RELEASE(_content2);
 }
 
 void GLoader::handleInit()
@@ -321,7 +321,7 @@ void GLoader::clearContent()
     if (_content2 != nullptr)
     {
         _displayObject->removeChild(_content2->displayObject());
-        CC_SAFE_RELEASE_NULL(_content2);
+        AX_SAFE_RELEASE_NULL(_content2);
     }
     ((FUISprite*)_content)->clearContent();
 

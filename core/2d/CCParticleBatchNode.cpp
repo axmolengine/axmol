@@ -85,8 +85,8 @@ ParticleBatchNode::ParticleBatchNode()
 
 ParticleBatchNode::~ParticleBatchNode()
 {
-    CC_SAFE_RELEASE(_textureAtlas);
-    CC_SAFE_RELEASE(_customCommand.getPipelineDescriptor().programState);
+    AX_SAFE_RELEASE(_textureAtlas);
+    AX_SAFE_RELEASE(_customCommand.getPipelineDescriptor().programState);
 }
 /*
  * creation with Texture2D
@@ -100,7 +100,7 @@ ParticleBatchNode* ParticleBatchNode::createWithTexture(Texture2D* tex, int capa
         p->autorelease();
         return p;
     }
-    CC_SAFE_DELETE(p);
+    AX_SAFE_DELETE(p);
     return nullptr;
 }
 
@@ -116,7 +116,7 @@ ParticleBatchNode* ParticleBatchNode::create(std::string_view imageFile, int cap
         p->autorelease();
         return p;
     }
-    CC_SAFE_DELETE(p);
+    AX_SAFE_DELETE(p);
     return nullptr;
 }
 
@@ -183,11 +183,11 @@ void ParticleBatchNode::visit(Renderer* renderer, const Mat4& parentTransform, u
 // override addChild:
 void ParticleBatchNode::addChild(Node* aChild, int zOrder, int tag)
 {
-    CCASSERT(aChild != nullptr, "Argument must be non-nullptr");
-    CCASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
+    AXASSERT(aChild != nullptr, "Argument must be non-nullptr");
+    AXASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
              "CCParticleBatchNode only supports QuadParticleSystems as children");
     ParticleSystem* child = static_cast<ParticleSystem*>(aChild);
-    CCASSERT(child->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
+    AXASSERT(child->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
              "CCParticleSystem is not using the same texture id");
 
     addChildByTagOrName(child, zOrder, tag, "", true);
@@ -195,11 +195,11 @@ void ParticleBatchNode::addChild(Node* aChild, int zOrder, int tag)
 
 void ParticleBatchNode::addChild(Node* aChild, int zOrder, std::string_view name)
 {
-    CCASSERT(aChild != nullptr, "Argument must be non-nullptr");
-    CCASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
+    AXASSERT(aChild != nullptr, "Argument must be non-nullptr");
+    AXASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
              "CCParticleBatchNode only supports QuadParticleSystems as children");
     ParticleSystem* child = static_cast<ParticleSystem*>(aChild);
-    CCASSERT(child->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
+    AXASSERT(child->getTexture()->getBackendTexture() == _textureAtlas->getTexture()->getBackendTexture(),
              "CCParticleSystem is not using the same texture id");
 
     addChildByTagOrName(child, zOrder, 0, name, false);
@@ -217,7 +217,7 @@ void ParticleBatchNode::addChildByTagOrName(ParticleSystem* child,
         setBlendFunc(child->getBlendFunc());
     }
 
-    CCASSERT(_blendFunc.src == child->getBlendFunc().src && _blendFunc.dst == child->getBlendFunc().dst,
+    AXASSERT(_blendFunc.src == child->getBlendFunc().src && _blendFunc.dst == child->getBlendFunc().dst,
              "Can't add a ParticleSystem that uses a different blending function");
 
     // no lazy sorting, so don't call super addChild, call helper instead
@@ -253,8 +253,8 @@ void ParticleBatchNode::addChildByTagOrName(ParticleSystem* child,
 // this helper is almost equivalent to Node's addChild, but doesn't make use of the lazy sorting
 int ParticleBatchNode::addChildHelper(ParticleSystem* child, int z, int aTag, std::string_view name, bool setTag)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
-    CCASSERT(child->getParent() == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->getParent() == nullptr, "child already added. It can't be added again");
 
     _children.reserve(4);
 
@@ -283,10 +283,10 @@ int ParticleBatchNode::addChildHelper(ParticleSystem* child, int z, int aTag, st
 // Reorder will be done in this function, no "lazy" reorder to particles
 void ParticleBatchNode::reorderChild(Node* aChild, int zOrder)
 {
-    CCASSERT(aChild != nullptr, "Child must be non-nullptr");
-    CCASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
+    AXASSERT(aChild != nullptr, "Child must be non-nullptr");
+    AXASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
              "CCParticleBatchNode only supports QuadParticleSystems as children");
-    CCASSERT(_children.contains(aChild), "Child doesn't belong to batch");
+    AXASSERT(_children.contains(aChild), "Child doesn't belong to batch");
 
     ParticleSystem* child = static_cast<ParticleSystem*>(aChild);
 
@@ -411,9 +411,9 @@ void ParticleBatchNode::removeChild(Node* aChild, bool cleanup)
     if (aChild == nullptr)
         return;
 
-    CCASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
+    AXASSERT(dynamic_cast<ParticleSystem*>(aChild) != nullptr,
              "CCParticleBatchNode only supports QuadParticleSystems as children");
-    CCASSERT(_children.contains(aChild), "CCParticleBatchNode doesn't contain the sprite. Can't remove it");
+    AXASSERT(_children.contains(aChild), "CCParticleBatchNode doesn't contain the sprite. Can't remove it");
 
     ParticleSystem* child = static_cast<ParticleSystem*>(aChild);
 
@@ -447,7 +447,7 @@ void ParticleBatchNode::removeAllChildrenWithCleanup(bool doCleanup)
 
 void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    CC_PROFILER_START("CCParticleBatchNode - draw");
+    AX_PROFILER_START("CCParticleBatchNode - draw");
 
     if (_textureAtlas->getTotalQuads() == 0)
         return;
@@ -476,19 +476,19 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
 
     renderer->addCommand(&_customCommand);
 
-    CC_PROFILER_STOP("CCParticleBatchNode - draw");
+    AX_PROFILER_STOP("CCParticleBatchNode - draw");
 }
 
 void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 {
-    CCLOG("cocos2d: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOG("cocos2d: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
           (int)_textureAtlas->getCapacity(), (int)quantity);
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        CCLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
-        CCASSERT(false, "XXX: ParticleBatchNode #increaseAtlasCapacity SHALL handle this assert");
+        AXLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
+        AXASSERT(false, "XXX: ParticleBatchNode #increaseAtlasCapacity SHALL handle this assert");
     }
 }
 
@@ -564,7 +564,7 @@ void ParticleBatchNode::updateProgramStateTexture()
     auto programState = _customCommand.getPipelineDescriptor().programState;
     programState->setTexture(texture->getBackendTexture());
     // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
-    if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == CC_BLEND_SRC && _blendFunc.dst == CC_BLEND_DST))
+    if (!texture->hasPremultipliedAlpha() && (_blendFunc.src == AX_BLEND_SRC && _blendFunc.dst == AX_BLEND_DST))
         _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
 }
 

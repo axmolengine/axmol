@@ -77,11 +77,11 @@ SkeletonBatch::~SkeletonBatch () {
 	Director::getInstance()->getEventDispatcher()->removeCustomEventListeners(EVENT_AFTER_DRAW_RESET_POSITION);
 
 	for (unsigned int i = 0; i < _commandsPool.size(); i++) {
-        CC_SAFE_RELEASE(_commandsPool[i]->getPipelineDescriptor().programState);
+        AX_SAFE_RELEASE(_commandsPool[i]->getPipelineDescriptor().programState);
 		delete _commandsPool[i];
 		_commandsPool[i] = nullptr;
 	}
-	CC_SAFE_RELEASE(_programState);
+	AX_SAFE_RELEASE(_programState);
 }
 
 backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, backend::ProgramState* programState)
@@ -92,7 +92,7 @@ backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* c
 #else
 	if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {
 #endif
-		CC_SAFE_RELEASE(currentState);
+		AX_SAFE_RELEASE(currentState);
 		currentState = programState->clone();
 		
 		auto vertexLayout = currentState->getVertexLayout();
@@ -169,7 +169,7 @@ axis::TrianglesCommand* SkeletonBatch::addCommand(axis::Renderer* renderer, floa
 	if (programState == nullptr)
 		programState = _programState;
 
-	CCASSERT(programState, "programState should not be null");
+	AXASSERT(programState, "programState should not be null");
 
 	auto pipelinePS = updateCommandPipelinePS(command, programState);
 	

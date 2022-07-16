@@ -76,7 +76,7 @@ int _base64Decode(const unsigned char* input, unsigned int input_len, unsigned c
         switch (char_count)
         {
         case 1:
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
             fprintf(stderr, "base64Decode: encoding incomplete: at least 2 bits missing");
 #endif
             errors++;
@@ -94,7 +94,7 @@ int _base64Decode(const unsigned char* input, unsigned int input_len, unsigned c
     {
         if (char_count)
         {
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
             fprintf(stderr, "base64 encoding incomplete: at least %d bits truncated", ((4 - char_count) * 6));
 #endif
             errors++;
@@ -169,7 +169,7 @@ int base64Decode(const unsigned char* in, unsigned int inLength, unsigned char**
 
         if (ret > 0)
         {
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
             printf("Base64Utils: error decoding");
 #endif
             free(*out);

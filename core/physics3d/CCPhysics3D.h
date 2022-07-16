@@ -29,7 +29,7 @@
 #include "base/ccConfig.h"
 #include "math/CCMath.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
 #    include "physics3d/CCPhysics3DShape.h"
 #    include "physics3d/CCPhysicsMeshRenderer.h"
@@ -41,11 +41,11 @@
 
 NS_AX_BEGIN
 
-CC_DLL const char* physics3dVersion();
+AX_DLL const char* physics3dVersion();
 
 NS_AX_END
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 // include bullet header files
 #        include "bullet/LinearMath/btTransform.h"
@@ -64,8 +64,8 @@ btTransform convertMat4TobtTransform(const axis::Mat4& mat4);
 axis::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
 btQuaternion convertQuatTobtQuat(const axis::Quaternion& quat);
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_H__

@@ -43,7 +43,7 @@ class Bone3D;
  *        auto attachNode = mesh->getAttachNode("left hand");
  *        attachNode->addChild(weapon);
  */
-class CC_DLL AttachNode : public Node
+class AX_DLL AttachNode : public Node
 {
 public:
     /**

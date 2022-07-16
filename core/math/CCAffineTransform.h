@@ -49,7 +49,7 @@ NS_AX_BEGIN
  0   1    0
  0   0    1
  */
-struct CC_DLL AffineTransform
+struct AX_DLL AffineTransform
 {
     float a, b, c, d;
     float tx, ty;
@@ -60,25 +60,25 @@ struct CC_DLL AffineTransform
 /**@}*/
 
 /**Make affine transform.*/
-CC_DLL AffineTransform __CCAffineTransformMake(float a, float b, float c, float d, float tx, float ty);
+AX_DLL AffineTransform __CCAffineTransformMake(float a, float b, float c, float d, float tx, float ty);
 #define AffineTransformMake __CCAffineTransformMake
 
 /**Multiply point (x,y,1) by a  affine transform.*/
-CC_DLL Vec2 __CCPointApplyAffineTransform(const Vec2& point, const AffineTransform& t);
+AX_DLL Vec2 __CCPointApplyAffineTransform(const Vec2& point, const AffineTransform& t);
 #define PointApplyAffineTransform __CCPointApplyAffineTransform
 
 /**Multiply size (width,height,0) by a  affine transform.*/
-CC_DLL Vec2 __CCSizeApplyAffineTransform(const Vec2& size, const AffineTransform& t);
+AX_DLL Vec2 __CCSizeApplyAffineTransform(const Vec2& size, const AffineTransform& t);
 #define SizeApplyAffineTransform __CCSizeApplyAffineTransform
 /**Make identity affine transform.*/
-CC_DLL AffineTransform AffineTransformMakeIdentity();
+AX_DLL AffineTransform AffineTransformMakeIdentity();
 /**Transform Rect, which will transform the four vertices of the point.*/
-CC_DLL Rect RectApplyAffineTransform(const Rect& rect, const AffineTransform& anAffineTransform);
+AX_DLL Rect RectApplyAffineTransform(const Rect& rect, const AffineTransform& anAffineTransform);
 /**@{
  Transform vec2 and Rect by Mat4.
  */
-CC_DLL Rect RectApplyTransform(const Rect& rect, const Mat4& transform);
-CC_DLL Vec2 PointApplyTransform(const Vec2& point, const Mat4& transform);
+AX_DLL Rect RectApplyTransform(const Rect& rect, const Mat4& transform);
+AX_DLL Vec2 PointApplyTransform(const Vec2& point, const Mat4& transform);
 /**@}*/
 /**
  Translation, equals
@@ -86,31 +86,31 @@ CC_DLL Vec2 PointApplyTransform(const Vec2& point, const Mat4& transform);
  0  1  0   * affine transform
  tx ty 1
  */
-CC_DLL AffineTransform AffineTransformTranslate(const AffineTransform& t, float tx, float ty);
+AX_DLL AffineTransform AffineTransformTranslate(const AffineTransform& t, float tx, float ty);
 /**
  Rotation, equals
  cos(angle)   sin(angle)   0
  -sin(angle)  cos(angle)   0  * AffineTransform
  0            0            1
  */
-CC_DLL AffineTransform AffineTransformRotate(const AffineTransform& aTransform, float anAngle);
+AX_DLL AffineTransform AffineTransformRotate(const AffineTransform& aTransform, float anAngle);
 /**
  Scale, equals
  sx   0   0
  0    sy  0  * affineTransform
  0    0   1
  */
-CC_DLL AffineTransform AffineTransformScale(const AffineTransform& t, float sx, float sy);
+AX_DLL AffineTransform AffineTransformScale(const AffineTransform& t, float sx, float sy);
 /**Concat two affine transform, t1 * t2*/
-CC_DLL AffineTransform AffineTransformConcat(const AffineTransform& t1, const AffineTransform& t2);
+AX_DLL AffineTransform AffineTransformConcat(const AffineTransform& t1, const AffineTransform& t2);
 /**Compare affine transform.*/
-CC_DLL bool AffineTransformEqualToTransform(const AffineTransform& t1, const AffineTransform& t2);
+AX_DLL bool AffineTransformEqualToTransform(const AffineTransform& t1, const AffineTransform& t2);
 /**Get the inverse of affine transform.*/
-CC_DLL AffineTransform AffineTransformInvert(const AffineTransform& t);
+AX_DLL AffineTransform AffineTransformInvert(const AffineTransform& t);
 /**Concat Mat4, return t1 * t2.*/
-CC_DLL Mat4 TransformConcat(const Mat4& t1, const Mat4& t2);
+AX_DLL Mat4 TransformConcat(const Mat4& t1, const Mat4& t2);
 
-extern CC_DLL const AffineTransform AffineTransformIdentity;
+extern AX_DLL const AffineTransform AffineTransformIdentity;
 
 NS_AX_END
 

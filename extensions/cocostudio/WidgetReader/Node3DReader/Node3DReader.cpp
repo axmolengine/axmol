@@ -57,12 +57,12 @@ Node3DReader* Node3DReader::getInstance()
 
 void Node3DReader::purge()
 {
-    CC_SAFE_DELETE(_instanceNode3DReader);
+    AX_SAFE_DELETE(_instanceNode3DReader);
 }
 
 void Node3DReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceNode3DReader);
+    AX_SAFE_DELETE(_instanceNode3DReader);
 }
 
 Vec3 Node3DReader::getVec3Attribute(pugi::xml_attribute attribute) const

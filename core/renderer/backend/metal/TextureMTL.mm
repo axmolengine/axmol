@@ -48,7 +48,7 @@ MTLSamplerAddressMode toMTLSamplerAddressMode(SamplerAddressMode mode)
         ret = MTLSamplerAddressModeClampToEdge;
         break;
     default:
-        CCASSERT(false, "Not supported sampler address mode!");
+        AXASSERT(false, "Not supported sampler address mode!");
         break;
     }
     return ret;
@@ -89,7 +89,7 @@ bool isColorRenderable(PixelFormat textureFormat)
 /// CLASS TextureInfoMTL
 id<MTLTexture> TextureInfoMTL::ensure(int index, int target)
 {
-    if (index < CC_META_TEXTURES)
+    if (index < AX_META_TEXTURES)
     {
         id<MTLTexture>& mtlTexture = _mtlTextures[index];
         if (mtlTexture)

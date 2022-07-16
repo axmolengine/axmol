@@ -58,7 +58,7 @@ ProgramCache* ProgramCache::getInstance()
         _sharedProgramCache = new ProgramCache();
         if (!_sharedProgramCache->init())
         {
-            CC_SAFE_DELETE(_sharedProgramCache);
+            AX_SAFE_DELETE(_sharedProgramCache);
         }
     }
     return _sharedProgramCache;
@@ -66,16 +66,16 @@ ProgramCache* ProgramCache::getInstance()
 
 void ProgramCache::destroyInstance()
 {
-    CC_SAFE_RELEASE_NULL(_sharedProgramCache);
+    AX_SAFE_RELEASE_NULL(_sharedProgramCache);
 }
 
 ProgramCache::~ProgramCache()
 {
     for (auto& program : _cachedPrograms)
     {
-        CC_SAFE_RELEASE(program.second);
+        AX_SAFE_RELEASE(program.second);
     }
-    CCLOGINFO("deallocing ProgramCache: %p", this);
+    AXLOGINFO("deallocing ProgramCache: %p", this);
     ShaderCache::destroyInstance();
 }
 
@@ -241,7 +241,7 @@ void ProgramCache::removeUnusedProgram()
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-            //            CCLOG("cocos2d: TextureCache: removing unused program");
+            //            AXLOG("cocos2d: TextureCache: removing unused program");
             program->release();
             iter = _cachedPrograms.erase(iter);
         }

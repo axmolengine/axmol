@@ -45,7 +45,7 @@ namespace ui
  * @js NA
  * @lua NA
  */
-class CC_GUI_DLL UICCTextField : public TextFieldTTF, public TextFieldDelegate
+class AX_GUI_DLL UICCTextField : public TextFieldTTF, public TextFieldDelegate
 {
 public:
     /**
@@ -223,7 +223,7 @@ protected:
  * @js NA
  * @lua NA
  */
-class CC_GUI_DLL TextField : public Widget
+class AX_GUI_DLL TextField : public Widget
 {
 
     DECLARE_CLASS_GUI_INFO

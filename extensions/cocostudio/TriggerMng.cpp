@@ -49,9 +49,9 @@ TriggerMng::~TriggerMng(void)
     _triggerObjs.clear();
 
     removeAllArmatureMovementCallBack();
-    CC_SAFE_DELETE(_movementDispatches);
+    AX_SAFE_DELETE(_movementDispatches);
 
-    CC_SAFE_RELEASE(_eventDispatcher);
+    AX_SAFE_RELEASE(_eventDispatcher);
 }
 
 const char* TriggerMng::triggerMngVersion()
@@ -70,15 +70,15 @@ TriggerMng* TriggerMng::getInstance()
 
 void TriggerMng::destroyInstance()
 {
-    CC_SAFE_DELETE(_sharedTriggerMng);
+    AX_SAFE_DELETE(_sharedTriggerMng);
 }
 
 void TriggerMng::parse(const rapidjson::Value& root)
 {
-    CCLOG("%s", triggerMngVersion());
+    AXLOG("%s", triggerMngVersion());
     int count = DICTOOL->getArrayCount_json(root, "Triggers");
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* engine = ScriptEngineManager::getInstance()->getScriptEngine();
     bool useBindings             = engine != nullptr;
 
@@ -95,7 +95,7 @@ void TriggerMng::parse(const rapidjson::Value& root)
         }
     }
     else
-#endif  // #if CC_ENABLE_SCRIPT_BINDING
+#endif  // #if AX_ENABLE_SCRIPT_BINDING
     {
         for (int i = 0; i < count; ++i)
         {
@@ -110,12 +110,12 @@ void TriggerMng::parse(const rapidjson::Value& root)
 
 void TriggerMng::parse(cocostudio::CocoLoader* pCocoLoader, cocostudio::stExpCocoNode* pCocoNode)
 {
-    CCLOG("%s", triggerMngVersion());
+    AXLOG("%s", triggerMngVersion());
 
     int count                     = pCocoNode[13].GetChildNum();
     stExpCocoNode* pTriggersArray = pCocoNode[13].GetChildArray(pCocoLoader);
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* engine = ScriptEngineManager::getInstance()->getScriptEngine();
     bool useBindings             = engine != nullptr;
 
@@ -133,7 +133,7 @@ void TriggerMng::parse(cocostudio::CocoLoader* pCocoLoader, cocostudio::stExpCoc
         }
     }
     else
-#endif  // #if CC_ENABLE_SCRIPT_BINDING
+#endif  // #if AX_ENABLE_SCRIPT_BINDING
     {
         for (int i = 0; i < count; ++i)
         {
@@ -161,7 +161,7 @@ void TriggerMng::removeAll(void)
     for (; etIter != _triggerObjs.end(); ++etIter)
     {
         etIter->second->removeAll();
-        CC_SAFE_DELETE(etIter->second);
+        AX_SAFE_DELETE(etIter->second);
     }
     _triggerObjs.clear();
 }
@@ -415,7 +415,7 @@ void TriggerMng::addArmatureMovementCallBack(Armature* pAr, Ref* pTarget, SEL_Mo
     if (iter == _movementDispatches->end())
     {
         amd = new ArmatureMovementDispatcher();
-        pAr->getAnimation()->setMovementEventCallFunc(CC_CALLBACK_0(ArmatureMovementDispatcher::animationEvent, amd,
+        pAr->getAnimation()->setMovementEventCallFunc(AX_CALLBACK_0(ArmatureMovementDispatcher::animationEvent, amd,
                                                                     std::placeholders::_1, std::placeholders::_2,
                                                                     std::placeholders::_3));
         amd->addAnimationEventCallBack(pTarget, mecf);
@@ -462,7 +462,7 @@ void TriggerMng::removeArmatureAllMovementCallBack(Armature* pAr)
     }
     else
     {
-        CC_SAFE_DELETE(iter->second);
+        AX_SAFE_DELETE(iter->second);
         _movementDispatches->erase(iter);
     }
 }
@@ -500,7 +500,7 @@ ArmatureMovementDispatcher::ArmatureMovementDispatcher(void) : _mapEventAnimatio
 ArmatureMovementDispatcher::~ArmatureMovementDispatcher(void)
 {
     _mapEventAnimation->clear();
-    CC_SAFE_DELETE(_mapEventAnimation);
+    AX_SAFE_DELETE(_mapEventAnimation);
 }
 
 void ArmatureMovementDispatcher::animationEvent(Armature* armature,

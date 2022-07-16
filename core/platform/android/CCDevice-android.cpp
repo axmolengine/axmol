@@ -82,7 +82,7 @@ public:
                                             "createTextBitmapShadowStroke",
                                             "([BLjava/lang/String;IIIIIIIIZFFFFZIIIIFZI)Z"))
         {
-            CCLOG("%s %d: error to get methodInfo", __FILE__, __LINE__);
+            AXLOG("%s %d: error to get methodInfo", __FILE__, __LINE__);
             return false;
         }
 

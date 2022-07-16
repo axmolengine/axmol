@@ -118,7 +118,7 @@ void ChipmunkDebugDrawCircle(cpVect pos,
                              cpSpaceDebugColor fillColor)
 {
 
-    drawCP->drawCircle(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 100, CC_DEGREES_TO_RADIANS(90), 50, true, 1.0f,
+    drawCP->drawCircle(Vec2(pos.x, pos.y) + physicsDebugNodeOffset, 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f,
                        2.0f, Color4F(fillColor.r, fillColor.g, fillColor.b, fillColor.a));
 }
 
@@ -339,9 +339,9 @@ ChipmunkTestBed::ChipmunkTestBed()
 
     // creating a mouse event listener
     _mouseListener              = EventListenerMouse::create();
-    _mouseListener->onMouseMove = CC_CALLBACK_1(ChipmunkTestBed::onMouseMove, this);
-    _mouseListener->onMouseUp   = CC_CALLBACK_1(ChipmunkTestBed::onMouseUp, this);
-    _mouseListener->onMouseDown = CC_CALLBACK_1(ChipmunkTestBed::onMouseDown, this);
+    _mouseListener->onMouseMove = AX_CALLBACK_1(ChipmunkTestBed::onMouseMove, this);
+    _mouseListener->onMouseUp   = AX_CALLBACK_1(ChipmunkTestBed::onMouseUp, this);
+    _mouseListener->onMouseDown = AX_CALLBACK_1(ChipmunkTestBed::onMouseDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_mouseListener, this);
 
     // Some info text
@@ -394,7 +394,7 @@ void ChipmunkTestBed::initPhysics()
 
 void ChipmunkTestBed::update(float delta)
 {
-    //#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+    //#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     //    cpSpaceStep(_space, delta);
     //#else
     //    cpHastySpaceStep(_space, delta);
@@ -403,7 +403,7 @@ void ChipmunkTestBed::update(float delta)
 
 void ChipmunkTestBed::createResetButton()
 {
-    auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png", CC_CALLBACK_1(ChipmunkTestBed::reset, this));
+    auto reset = MenuItemImage::create("Images/r1.png", "Images/r2.png", AX_CALLBACK_1(ChipmunkTestBed::reset, this));
     auto menu  = Menu::create(reset, nullptr);
     menu->setPosition(VisibleRect::center().x, VisibleRect::bottom().y);
     this->addChild(menu, -1);

@@ -30,9 +30,9 @@
 #include "base/ccConfig.h"
 #include "math/CCMath.h"
 
-#if CC_USE_3D_PHYSICS
+#if AX_USE_3D_PHYSICS
 
-#    if (CC_ENABLE_BULLET_INTEGRATION)
+#    if (AX_ENABLE_BULLET_INTEGRATION)
 
 class btCollisionShape;
 
@@ -45,7 +45,7 @@ NS_AX_BEGIN
 /**
  * @brief Create a physical shape(box, sphere, cylinder, capsule, convexhull, mesh and heightfield)
  */
-class CC_DLL Physics3DShape : public Ref
+class AX_DLL Physics3DShape : public Ref
 {
 public:
     enum class ShapeType
@@ -131,7 +131,7 @@ public:
      */
     static Physics3DShape* createCompoundShape(const std::vector<std::pair<Physics3DShape*, Mat4>>& shapes);
 
-#        if CC_ENABLE_BULLET_INTEGRATION
+#        if AX_ENABLE_BULLET_INTEGRATION
     btCollisionShape* getbtShape() const { return _btShape; }
 #        endif
 
@@ -158,7 +158,7 @@ public:
 protected:
     ShapeType _shapeType;  // shape type
 
-#        if (CC_ENABLE_BULLET_INTEGRATION)
+#        if (AX_ENABLE_BULLET_INTEGRATION)
     btCollisionShape* _btShape;
     unsigned char* _heightfieldData;
     std::vector<Physics3DShape*> _compoundChildShapes;
@@ -170,8 +170,8 @@ protected:
 
 NS_AX_END
 
-#    endif  // CC_ENABLE_BULLET_INTEGRATION
+#    endif  // AX_ENABLE_BULLET_INTEGRATION
 
-#endif  // CC_USE_3D_PHYSICS
+#endif  // AX_USE_3D_PHYSICS
 
 #endif  // __PHYSICS_3D_SHAPE_H__

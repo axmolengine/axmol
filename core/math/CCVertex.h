@@ -39,11 +39,11 @@ NS_AX_BEGIN
 /** @file CCVertex.h */
 
 /** converts a line to a polygon */
-void CC_DLL
+void AX_DLL
 ccVertexLineToPolygon(Vec2* points, float stroke, Vec2* vertices, unsigned int offset, unsigned int nuPoints);
 
 /** returns whether or not the line intersects */
-bool CC_DLL
+bool AX_DLL
 ccVertexLineIntersect(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Dx, float Dy, float* T);
 
 NS_AX_END

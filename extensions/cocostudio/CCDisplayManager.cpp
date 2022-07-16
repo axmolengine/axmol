@@ -42,7 +42,7 @@ DisplayManager* DisplayManager::create(Bone* bone)
         pDisplayManager->autorelease();
         return pDisplayManager;
     }
-    CC_SAFE_DELETE(pDisplayManager);
+    AX_SAFE_DELETE(pDisplayManager);
     return nullptr;
 }
 
@@ -64,7 +64,7 @@ DisplayManager::~DisplayManager()
     {
         _displayRenderNode->removeFromParentAndCleanup(true);
         if (_displayRenderNode->getReferenceCount() > 0)
-            CC_SAFE_RELEASE_NULL(_displayRenderNode);
+            AX_SAFE_RELEASE_NULL(_displayRenderNode);
     }
 }
 
@@ -213,7 +213,7 @@ const axis::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList
 
 void DisplayManager::changeDisplayWithIndex(int index, bool force)
 {
-    CCASSERT(index < (int)_decoDisplayList.size(), "the _index value is out of range");
+    AXASSERT(index < (int)_decoDisplayList.size(), "the _index value is out of range");
 
     _forceChangeDisplay = force;
 

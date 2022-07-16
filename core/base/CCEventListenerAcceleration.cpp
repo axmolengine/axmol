@@ -35,7 +35,7 @@ EventListenerAcceleration::EventListenerAcceleration() {}
 
 EventListenerAcceleration::~EventListenerAcceleration()
 {
-    CCLOGINFO("In the destructor of AccelerationEventListener. %p", this);
+    AXLOGINFO("In the destructor of AccelerationEventListener. %p", this);
 }
 
 EventListenerAcceleration* EventListenerAcceleration::create(const std::function<void(Acceleration*, Event*)>& callback)
@@ -47,7 +47,7 @@ EventListenerAcceleration* EventListenerAcceleration::create(const std::function
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -79,7 +79,7 @@ EventListenerAcceleration* EventListenerAcceleration::clone()
     }
     else
     {
-        CC_SAFE_DELETE(ret);
+        AX_SAFE_DELETE(ret);
     }
 
     return ret;
@@ -87,7 +87,7 @@ EventListenerAcceleration* EventListenerAcceleration::clone()
 
 bool EventListenerAcceleration::checkAvailable()
 {
-    CCASSERT(onAccelerationEvent, "onAccelerationEvent can't be nullptr!");
+    AXASSERT(onAccelerationEvent, "onAccelerationEvent can't be nullptr!");
 
     return true;
 }

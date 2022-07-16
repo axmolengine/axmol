@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_RENDERCOMMANDPOOL_H__
-#define __CC_RENDERCOMMANDPOOL_H__
+#ifndef __AX_RENDERCOMMANDPOOL_H__
+#define __AX_RENDERCOMMANDPOOL_H__
 /// @cond DO_NOT_SHOW
 
 #include <list>
@@ -42,7 +42,7 @@ public:
     {
         //        if( 0 != _usedPool.size())
         //        {
-        //            CCLOG("All RenderCommand should not be used when Pool is released!");
+        //            AXLOG("All RenderCommand should not be used when Pool is released!");
         //        }
         _freePool.clear();
         for (auto& allocatedPoolBlock : _allocatedPoolBlocks)
@@ -70,7 +70,7 @@ public:
     {
         //        if(_usedPool.find(ptr) == _usedPool.end())
         //        {
-        //            CCLOG("push Back Wrong command!");
+        //            AXLOG("push Back Wrong command!");
         //            return;
         //        }
 

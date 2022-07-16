@@ -44,12 +44,12 @@ MotionStreak::MotionStreak()
 
 MotionStreak::~MotionStreak()
 {
-    CC_SAFE_RELEASE(_texture);
-    CC_SAFE_FREE(_pointState);
-    CC_SAFE_FREE(_pointVertexes);
-    CC_SAFE_FREE(_vertices);
-    CC_SAFE_FREE(_colorPointer);
-    CC_SAFE_FREE(_texCoords);
+    AX_SAFE_RELEASE(_texture);
+    AX_SAFE_FREE(_pointState);
+    AX_SAFE_FREE(_pointVertexes);
+    AX_SAFE_FREE(_vertices);
+    AX_SAFE_FREE(_colorPointer);
+    AX_SAFE_FREE(_texCoords);
 }
 
 MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
@@ -61,7 +61,7 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -74,13 +74,13 @@ MotionStreak* MotionStreak::create(float fade, float minSeg, float stroke, const
         return ret;
     }
 
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
 bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
 {
-    CCASSERT(!path.empty(), "Invalid filename");
+    AXASSERT(!path.empty(), "Invalid filename");
 
     Texture2D* texture = _director->getTextureCache()->addImage(path);
     return initWithFade(fade, minSeg, stroke, color, texture);
@@ -215,8 +215,8 @@ void MotionStreak::setTexture(Texture2D* texture)
 {
     if (_texture != texture)
     {
-        CC_SAFE_RETAIN(texture);
-        CC_SAFE_RELEASE(_texture);
+        AX_SAFE_RETAIN(texture);
+        AX_SAFE_RELEASE(_texture);
         _texture = texture;
 
         setProgramStateWithRegistry(backend::ProgramType::POSITION_TEXTURE_COLOR, _texture);
@@ -227,7 +227,7 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool nee
 {
     if (Node::setProgramState(programState, needsRetain))
     {
-        CCASSERT(programState, "argument should not be nullptr");
+        AXASSERT(programState, "argument should not be nullptr");
         auto& pipelineDescriptor        = _customCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;
 
@@ -273,12 +273,12 @@ const BlendFunc& MotionStreak::getBlendFunc() const
 
 void MotionStreak::setOpacity(uint8_t /*opacity*/)
 {
-    CCASSERT(false, "Set opacity no supported");
+    AXASSERT(false, "Set opacity no supported");
 }
 
 uint8_t MotionStreak::getOpacity() const
 {
-    CCASSERT(false, "Opacity no supported");
+    AXASSERT(false, "Opacity no supported");
     return 0;
 }
 

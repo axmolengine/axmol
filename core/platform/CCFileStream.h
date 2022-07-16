@@ -9,7 +9,7 @@
 
 NS_AX_BEGIN
 
-class CC_DLL FileStream
+class AX_DLL FileStream
 {
 public:
     virtual ~FileStream() = default;

@@ -40,7 +40,7 @@
 
 #include <sstream>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    define strcasecmp _stricmp
 #endif
 
@@ -103,7 +103,7 @@ Material* Material::createWithProperties(Properties* materialProperties)
 
 Material* Material::createWithProgramState(backend::ProgramState* programState)
 {
-    CCASSERT(programState, "Invalid Program State");
+    AXASSERT(programState, "Invalid Program State");
 
     auto mat = new Material();
     if (mat->initWithProgramState(programState))
@@ -138,7 +138,7 @@ bool Material::initWithFile(std::string_view validfilename)
     // get the first material
     parseProperties((strlen(properties->getNamespace()) > 0) ? properties : properties->getNextNamespace());
 
-    CC_SAFE_DELETE(properties);
+    AX_SAFE_DELETE(properties);
     return true;
 }
 
@@ -249,7 +249,7 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
         }
         else
         {
-            CCASSERT(false, "Invalid namespace");
+            AXASSERT(false, "Invalid namespace");
             return false;
         }
 
@@ -262,7 +262,7 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
 // cocos2d-x doesn't support Samplers yet. But will be added soon
 bool Material::parseSampler(backend::ProgramState* programState, Properties* samplerProperties)
 {
-    CCASSERT(samplerProperties->getId(), "Sampler must have an id. The id is the uniform name");
+    AXASSERT(samplerProperties->getId(), "Sampler must have an id. The id is the uniform name");
 
     // required
     auto filename = samplerProperties->getString("path");
@@ -270,7 +270,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
     auto texture = Director::getInstance()->getTextureCache()->addImage(filename);
     if (!texture)
     {
-        CCLOG("Invalid filepath");
+        AXLOG("Invalid filepath");
         return false;
     }
 
@@ -294,7 +294,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
         else if (strcasecmp(wrapS, "CLAMP_TO_EDGE") == 0)
             texParams.sAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         else
-            CCLOG("Invalid wrapS: %s", wrapS);
+            AXLOG("Invalid wrapS: %s", wrapS);
 
         // valid options: REPEAT, CLAMP
         const char* wrapT = getOptionalString(samplerProperties, "wrapT", "CLAMP_TO_EDGE");
@@ -303,7 +303,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
         else if (strcasecmp(wrapT, "CLAMP_TO_EDGE") == 0)
             texParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         else
-            CCLOG("Invalid wrapT: %s", wrapT);
+            AXLOG("Invalid wrapT: %s", wrapT);
 
         // valid options: NEAREST, LINEAR, NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR,
         // LINEAR_MIPMAP_LINEAR
@@ -322,7 +322,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
         else if (strcasecmp(minFilter, "LINEAR_MIPMAP_LINEAR") == 0)
             texParams.minFilter = backend::SamplerFilter::LINEAR;
         else
-            CCLOG("Invalid minFilter: %s", minFilter);
+            AXLOG("Invalid minFilter: %s", minFilter);
 
         // valid options: NEAREST, LINEAR
         const char* magFilter = getOptionalString(samplerProperties, "magFilter", "LINEAR");
@@ -331,7 +331,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
         else if (strcasecmp(magFilter, "LINEAR") == 0)
             texParams.magFilter = backend::SamplerFilter::LINEAR;
         else
-            CCLOG("Invalid magFilter: %s", magFilter);
+            AXLOG("Invalid magFilter: %s", magFilter);
 
         texture->setTexParameters(texParams);
     }
@@ -341,7 +341,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
 
     if (!location)
     {
-        CCLOG("warning: failed to find texture uniform location %s when parsing material", textureName);
+        AXLOG("warning: failed to find texture uniform location %s when parsing material", textureName);
         return false;
     }
 
@@ -408,8 +408,8 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
             }
             space = shaderProperties->getNextNamespace();
         }
-        CC_SAFE_RELEASE(program);
-        CC_SAFE_RELEASE(programState);
+        AX_SAFE_RELEASE(program);
+        AX_SAFE_RELEASE(programState);
     }
 
     return true;
@@ -554,7 +554,7 @@ Technique* Material::getTechniqueByName(std::string_view name)
 
 Technique* Material::getTechniqueByIndex(ssize_t index)
 {
-    CC_ASSERT(index >= 0 && index < _techniques.size() && "Invalid size");
+    AX_ASSERT(index >= 0 && index < _techniques.size() && "Invalid size");
 
     return _techniques.at(index);
 }

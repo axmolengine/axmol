@@ -12,7 +12,7 @@ CCArmatureDisplay* CCArmatureDisplay::create()
     }
     else
     {
-        CC_SAFE_DELETE(displayContainer);
+        AX_SAFE_DELETE(displayContainer);
     }
 
     return displayContainer;
@@ -28,7 +28,7 @@ void CCArmatureDisplay::dbClear()
     setEventDispatcher(axis::Director::getInstance()->getEventDispatcher());
 
     _armature = nullptr;
-    CC_SAFE_RELEASE(_dispatcher);
+    AX_SAFE_RELEASE(_dispatcher);
     release();
 }
 
@@ -124,7 +124,7 @@ DBCCSprite* DBCCSprite::create()
     }
     else
     {
-        CC_SAFE_DELETE(sprite);
+        AX_SAFE_DELETE(sprite);
     }
 
     return sprite;
@@ -168,7 +168,7 @@ bool DBCCSprite::_checkVisibility(const axis::Mat4& transform, const axis::Size&
 
 void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
 {
-#if CC_USE_CULLING
+#if AX_USE_CULLING
 #    if COCOS2D_VERSION >= 0x00031400
     const auto& rect = _polyInfo.getRect();
 #    else
@@ -200,7 +200,7 @@ void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uin
 #endif
         renderer->addCommand(&_trianglesCommand);
 
-#if CC_SPRITE_DEBUG_DRAW
+#if AX_SPRITE_DEBUG_DRAW
         _debugDrawNode->clear();
         auto count   = _polyInfo.triangles.indexCount / 3;
         auto indices = _polyInfo.triangles.indices;
@@ -220,7 +220,7 @@ void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uin
             to   = verts[indices[i * 3]].vertices;
             _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
         }
-#endif  // CC_SPRITE_DEBUG_DRAW
+#endif  // AX_SPRITE_DEBUG_DRAW
     }
 }
 

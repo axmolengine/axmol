@@ -36,141 +36,141 @@ THE SOFTWARE.
 #include "base/CCConsole.h"
 #include "platform/CCStdC.h"
 
-#ifndef CCASSERT
-#    if COCOS2D_DEBUG > 0
-#        if CC_ENABLE_SCRIPT_BINDING
-extern bool CC_DLL cc_assert_script_compatible(const char* msg);
-#            define CCASSERT(cond, msg)                                       \
+#ifndef AXASSERT
+#    if AXIS_DEBUG > 0
+#        if AX_ENABLE_SCRIPT_BINDING
+extern bool AX_DLL cc_assert_script_compatible(const char* msg);
+#            define AXASSERT(cond, msg)                                       \
                 do                                                            \
                 {                                                             \
                     if (!(cond))                                              \
                     {                                                         \
                         if (msg && *msg && !cc_assert_script_compatible(msg)) \
                             axis::log("Assert failed: %s", msg);           \
-                        CC_ASSERT(cond);                                      \
+                        AX_ASSERT(cond);                                      \
                     }                                                         \
                 } while (0)
 #        else
-#            define CCASSERT(cond, msg) CC_ASSERT(cond)
+#            define AXASSERT(cond, msg) AX_ASSERT(cond)
 #        endif
 #    else
-#        define CCASSERT(cond, msg)
+#        define AXASSERT(cond, msg)
 #    endif
 
-#    define GP_ASSERT(cond) CCASSERT(cond, "")
+#    define GP_ASSERT(cond) AXASSERT(cond, "")
 
 // FIXME:: Backward compatible
-#    define CCAssert CCASSERT
-#endif  // CCASSERT
+#    define CCAssert AXASSERT
+#endif  // AXASSERT
 
 #include "base/ccConfig.h"
 
 #include "base/ccRandom.h"
 
-#define CC_HALF_PI (M_PI * 0.5f)
+#define AX_HALF_PI (M_PI * 0.5f)
 
-#define CC_DOUBLE_PI (M_PI * 2)
+#define AX_DOUBLE_PI (M_PI * 2)
 
-/** @def CCRANDOM_MINUS1_1
+/** @def AXRANDOM_MINUS1_1
  returns a random float between -1 and 1
  */
-#define CCRANDOM_MINUS1_1() axis::rand_minus1_1()
+#define AXRANDOM_MINUS1_1() axis::rand_minus1_1()
 
-/** @def CCRANDOM_0_1
+/** @def AXRANDOM_0_1
  returns a random float between 0 and 1
  */
-#define CCRANDOM_0_1() axis::rand_0_1()
+#define AXRANDOM_0_1() axis::rand_0_1()
 
-/** @def CC_DEGREES_TO_RADIANS
+/** @def AX_DEGREES_TO_RADIANS
  converts degrees to radians
  */
-#define CC_DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__)*0.01745329252f)  // PI / 180
+#define AX_DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__)*0.01745329252f)  // PI / 180
 
-/** @def CC_RADIANS_TO_DEGREES
+/** @def AX_RADIANS_TO_DEGREES
  converts radians to degrees
  */
-#define CC_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__)*57.29577951f)  // PI * 180
+#define AX_RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__)*57.29577951f)  // PI * 180
 
-#define CC_REPEAT_FOREVER (UINT_MAX - 1)
-#define kRepeatForever CC_REPEAT_FOREVER
+#define AX_REPEAT_FOREVER (UINT_MAX - 1)
+#define kRepeatForever AX_REPEAT_FOREVER
 
-/** @def CC_BLEND_SRC
+/** @def AX_BLEND_SRC
 default gl blend src function. Compatible with premultiplied alpha images.
 */
-#define CC_BLEND_SRC axis::backend::BlendFactor::ONE
-#define CC_BLEND_DST axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
+#define AX_BLEND_SRC axis::backend::BlendFactor::ONE
+#define AX_BLEND_DST axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
 
-/** @def CC_NODE_DRAW_SETUP [DEPRECATED]
+/** @def AX_NODE_DRAW_SETUP [DEPRECATED]
  Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix
  @since v2.0
  */
-#define CC_NODE_DRAW_SETUP()
+#define AX_NODE_DRAW_SETUP()
 
-/** @def CC_DIRECTOR_END
+/** @def AX_DIRECTOR_END
  Stops and removes the director from memory.
  Removes the GLView from its parent
 
  @since v0.99.4
  */
-#define CC_DIRECTOR_END()                                        \
+#define AX_DIRECTOR_END()                                        \
     do                                                           \
     {                                                            \
         Director* __director = axis::Director::getInstance(); \
         __director->end();                                       \
     } while (0)
 
-/** @def CC_CONTENT_SCALE_FACTOR
+/** @def AX_CONTENT_SCALE_FACTOR
 On Mac it returns 1;
 On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
 */
-#define CC_CONTENT_SCALE_FACTOR() axis::Director::getInstance()->getContentScaleFactor()
+#define AX_CONTENT_SCALE_FACTOR() axis::Director::getInstance()->getContentScaleFactor()
 
 /****************************/
 /** RETINA DISPLAY ENABLED **/
 /****************************/
 
-/** @def CC_RECT_PIXELS_TO_POINTS
+/** @def AX_RECT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
  */
-#define CC_RECT_PIXELS_TO_POINTS(__rect_in_pixels__)                           \
-    axis::Rect((__rect_in_pixels__).origin.x / CC_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_pixels__).origin.y / CC_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_pixels__).size.width / CC_CONTENT_SCALE_FACTOR(), \
-                  (__rect_in_pixels__).size.height / CC_CONTENT_SCALE_FACTOR())
+#define AX_RECT_PIXELS_TO_POINTS(__rect_in_pixels__)                           \
+    axis::Rect((__rect_in_pixels__).origin.x / AX_CONTENT_SCALE_FACTOR(),   \
+                  (__rect_in_pixels__).origin.y / AX_CONTENT_SCALE_FACTOR(),   \
+                  (__rect_in_pixels__).size.width / AX_CONTENT_SCALE_FACTOR(), \
+                  (__rect_in_pixels__).size.height / AX_CONTENT_SCALE_FACTOR())
 
-/** @def CC_RECT_POINTS_TO_PIXELS
+/** @def AX_RECT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
-#define CC_RECT_POINTS_TO_PIXELS(__rect_in_points_points__)                          \
-    axis::Rect((__rect_in_points_points__).origin.x* CC_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_points_points__).origin.y* CC_CONTENT_SCALE_FACTOR(),   \
-                  (__rect_in_points_points__).size.width* CC_CONTENT_SCALE_FACTOR(), \
-                  (__rect_in_points_points__).size.height* CC_CONTENT_SCALE_FACTOR())
+#define AX_RECT_POINTS_TO_PIXELS(__rect_in_points_points__)                          \
+    axis::Rect((__rect_in_points_points__).origin.x* AX_CONTENT_SCALE_FACTOR(),   \
+                  (__rect_in_points_points__).origin.y* AX_CONTENT_SCALE_FACTOR(),   \
+                  (__rect_in_points_points__).size.width* AX_CONTENT_SCALE_FACTOR(), \
+                  (__rect_in_points_points__).size.height* AX_CONTENT_SCALE_FACTOR())
 
-/** @def CC_POINT_PIXELS_TO_POINTS
+/** @def AX_POINT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
  */
-#define CC_POINT_PIXELS_TO_POINTS(__pixels__) \
-    axis::Vec2((__pixels__).x / CC_CONTENT_SCALE_FACTOR(), (__pixels__).y / CC_CONTENT_SCALE_FACTOR())
+#define AX_POINT_PIXELS_TO_POINTS(__pixels__) \
+    axis::Vec2((__pixels__).x / AX_CONTENT_SCALE_FACTOR(), (__pixels__).y / AX_CONTENT_SCALE_FACTOR())
 
-/** @def CC_POINT_POINTS_TO_PIXELS
+/** @def AX_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
-#define CC_POINT_POINTS_TO_PIXELS(__points__) \
-    axis::Vec2((__points__).x* CC_CONTENT_SCALE_FACTOR(), (__points__).y* CC_CONTENT_SCALE_FACTOR())
+#define AX_POINT_POINTS_TO_PIXELS(__points__) \
+    axis::Vec2((__points__).x* AX_CONTENT_SCALE_FACTOR(), (__points__).y* AX_CONTENT_SCALE_FACTOR())
 
-/** @def CC_POINT_PIXELS_TO_POINTS
+/** @def AX_POINT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
  */
-#define CC_SIZE_PIXELS_TO_POINTS(__size_in_pixels__)             \
-    Vec2((__size_in_pixels__).width / CC_CONTENT_SCALE_FACTOR(), \
-         (__size_in_pixels__).height / CC_CONTENT_SCALE_FACTOR())
+#define AX_SIZE_PIXELS_TO_POINTS(__size_in_pixels__)             \
+    Vec2((__size_in_pixels__).width / AX_CONTENT_SCALE_FACTOR(), \
+         (__size_in_pixels__).height / AX_CONTENT_SCALE_FACTOR())
 
-/** @def CC_POINT_POINTS_TO_PIXELS
+/** @def AX_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
-#define CC_SIZE_POINTS_TO_PIXELS(__size_in_points__) \
-    Vec2((__size_in_points__).width* CC_CONTENT_SCALE_FACTOR(), (__size_in_points__).height* CC_CONTENT_SCALE_FACTOR())
+#define AX_SIZE_POINTS_TO_PIXELS(__size_in_points__) \
+    Vec2((__size_in_points__).width* AX_CONTENT_SCALE_FACTOR(), (__size_in_points__).height* AX_CONTENT_SCALE_FACTOR())
 
 #ifndef FLT_EPSILON
 #    define FLT_EPSILON 1.192092896e-07F
@@ -188,58 +188,58 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 */
 
 /// when define returns true it means that our architecture uses big endian
-#define CC_HOST_IS_BIG_ENDIAN (bool)(*(unsigned short*)"\0\xff" < 0x100)
-#define CC_SWAP32(i) ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
-#define CC_SWAP16(i) ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
-#define CC_SWAP_INT32_LITTLE_TO_HOST(i) ((CC_HOST_IS_BIG_ENDIAN == true) ? CC_SWAP32(i) : (i))
-#define CC_SWAP_INT16_LITTLE_TO_HOST(i) ((CC_HOST_IS_BIG_ENDIAN == true) ? CC_SWAP16(i) : (i))
-#define CC_SWAP_INT32_BIG_TO_HOST(i) ((CC_HOST_IS_BIG_ENDIAN == true) ? (i) : CC_SWAP32(i))
-#define CC_SWAP_INT16_BIG_TO_HOST(i) ((CC_HOST_IS_BIG_ENDIAN == true) ? (i) : CC_SWAP16(i))
+#define AX_HOST_IS_BIG_ENDIAN (bool)(*(unsigned short*)"\0\xff" < 0x100)
+#define AX_SWAP32(i) ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
+#define AX_SWAP16(i) ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
+#define AX_SWAP_INT32_LITTLE_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? AX_SWAP32(i) : (i))
+#define AX_SWAP_INT16_LITTLE_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? AX_SWAP16(i) : (i))
+#define AX_SWAP_INT32_BIG_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? (i) : AX_SWAP32(i))
+#define AX_SWAP_INT16_BIG_TO_HOST(i) ((AX_HOST_IS_BIG_ENDIAN == true) ? (i) : AX_SWAP16(i))
 
 /**********************/
 /** Profiling Macros **/
 /**********************/
-#if CC_ENABLE_PROFILERS
+#if AX_ENABLE_PROFILERS
 
-#    define CC_PROFILER_DISPLAY_TIMERS() NS_AX::Profiler::getInstance()->displayTimers()
-#    define CC_PROFILER_PURGE_ALL() NS_AX::Profiler::getInstance()->releaseAllTimers()
+#    define AX_PROFILER_DISPLAY_TIMERS() NS_AX::Profiler::getInstance()->displayTimers()
+#    define AX_PROFILER_PURGE_ALL() NS_AX::Profiler::getInstance()->releaseAllTimers()
 
-#    define CC_PROFILER_START(__name__) NS_AX::ProfilingBeginTimingBlock(__name__)
-#    define CC_PROFILER_STOP(__name__) NS_AX::ProfilingEndTimingBlock(__name__)
-#    define CC_PROFILER_RESET(__name__) NS_AX::ProfilingResetTimingBlock(__name__)
+#    define AX_PROFILER_START(__name__) NS_AX::ProfilingBeginTimingBlock(__name__)
+#    define AX_PROFILER_STOP(__name__) NS_AX::ProfilingEndTimingBlock(__name__)
+#    define AX_PROFILER_RESET(__name__) NS_AX::ProfilingResetTimingBlock(__name__)
 
-#    define CC_PROFILER_START_CATEGORY(__cat__, __name__)   \
+#    define AX_PROFILER_START_CATEGORY(__cat__, __name__)   \
         do                                                  \
         {                                                   \
             if (__cat__)                                    \
                 NS_AX::ProfilingBeginTimingBlock(__name__); \
         } while (0)
-#    define CC_PROFILER_STOP_CATEGORY(__cat__, __name__)  \
+#    define AX_PROFILER_STOP_CATEGORY(__cat__, __name__)  \
         do                                                \
         {                                                 \
             if (__cat__)                                  \
                 NS_AX::ProfilingEndTimingBlock(__name__); \
         } while (0)
-#    define CC_PROFILER_RESET_CATEGORY(__cat__, __name__)   \
+#    define AX_PROFILER_RESET_CATEGORY(__cat__, __name__)   \
         do                                                  \
         {                                                   \
             if (__cat__)                                    \
                 NS_AX::ProfilingResetTimingBlock(__name__); \
         } while (0)
 
-#    define CC_PROFILER_START_INSTANCE(__id__, __name__)                                       \
+#    define AX_PROFILER_START_INSTANCE(__id__, __name__)                                       \
         do                                                                                     \
         {                                                                                      \
             NS_AX::ProfilingBeginTimingBlock(                                                  \
                 NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
-#    define CC_PROFILER_STOP_INSTANCE(__id__, __name__)                                        \
+#    define AX_PROFILER_STOP_INSTANCE(__id__, __name__)                                        \
         do                                                                                     \
         {                                                                                      \
             NS_AX::ProfilingEndTimingBlock(                                                    \
                 NS_AX::String::createWithFormat("%08X - %s", __id__, __name__)->getCString()); \
         } while (0)
-#    define CC_PROFILER_RESET_INSTANCE(__id__, __name__)                                       \
+#    define AX_PROFILER_RESET_INSTANCE(__id__, __name__)                                       \
         do                                                                                     \
         {                                                                                      \
             NS_AX::ProfilingResetTimingBlock(                                                  \
@@ -248,50 +248,50 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 
 #else
 
-#    define CC_PROFILER_DISPLAY_TIMERS() \
+#    define AX_PROFILER_DISPLAY_TIMERS() \
         do                               \
         {                                \
         } while (0)
-#    define CC_PROFILER_PURGE_ALL() \
+#    define AX_PROFILER_PURGE_ALL() \
         do                          \
         {                           \
         } while (0)
 
-#    define CC_PROFILER_START(__name__) \
+#    define AX_PROFILER_START(__name__) \
         do                              \
         {                               \
         } while (0)
-#    define CC_PROFILER_STOP(__name__) \
+#    define AX_PROFILER_STOP(__name__) \
         do                             \
         {                              \
         } while (0)
-#    define CC_PROFILER_RESET(__name__) \
+#    define AX_PROFILER_RESET(__name__) \
         do                              \
         {                               \
         } while (0)
 
-#    define CC_PROFILER_START_CATEGORY(__cat__, __name__) \
+#    define AX_PROFILER_START_CATEGORY(__cat__, __name__) \
         do                                                \
         {                                                 \
         } while (0)
-#    define CC_PROFILER_STOP_CATEGORY(__cat__, __name__) \
+#    define AX_PROFILER_STOP_CATEGORY(__cat__, __name__) \
         do                                               \
         {                                                \
         } while (0)
-#    define CC_PROFILER_RESET_CATEGORY(__cat__, __name__) \
+#    define AX_PROFILER_RESET_CATEGORY(__cat__, __name__) \
         do                                                \
         {                                                 \
         } while (0)
 
-#    define CC_PROFILER_START_INSTANCE(__id__, __name__) \
+#    define AX_PROFILER_START_INSTANCE(__id__, __name__) \
         do                                               \
         {                                                \
         } while (0)
-#    define CC_PROFILER_STOP_INSTANCE(__id__, __name__) \
+#    define AX_PROFILER_STOP_INSTANCE(__id__, __name__) \
         do                                              \
         {                                               \
         } while (0)
-#    define CC_PROFILER_RESET_INSTANCE(__id__, __name__) \
+#    define AX_PROFILER_RESET_INSTANCE(__id__, __name__) \
         do                                               \
         {                                                \
         } while (0)
@@ -303,9 +303,9 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 /*********************************/
 #if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(__x86_64) || \
     defined(__arm64__) || defined(__aarch64__)
-#    define CC_64BITS 1
+#    define AX_64BITS 1
 #else
-#    define CC_64BITS 0
+#    define AX_64BITS 0
 #endif
 
 /******************************************************************************************/
@@ -314,8 +314,8 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 /******************************************************************************************/
 #ifdef _WIN32
 // Assuming windows is always little-endian.
-#    if !defined(CC_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
-#        define CC_LITTLE_ENDIAN 1
+#    if !defined(AX_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
+#        define AX_LITTLE_ENDIAN 1
 #    endif
 #    if defined(_MSC_VER) && _MSC_VER >= 1300 && !defined(__INTEL_COMPILER)
 // If MSVC has "/RTCc" set, it will complain about truncating casts at
@@ -334,17 +334,17 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #    endif
 #    if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) ||    \
          (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) && \
-        !defined(CC_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
-#        define CC_LITTLE_ENDIAN 1
+        !defined(AX_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
+#        define AX_LITTLE_ENDIAN 1
 #    endif
 #endif
 
-/** @def CC_INCREMENT_GL_DRAWS_BY_ONE
+/** @def AX_INCREMENT_GL_DRAWS_BY_ONE
  Increments the GL Draws counts by one.
  The number of calls per frame are displayed on the screen when the Director's stats are enabled.
  */
-#define CC_INCREMENT_GL_DRAWS(__n__) axis::Director::getInstance()->getRenderer()->addDrawnBatches(__n__)
-#define CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(__drawcalls__, __vertices__) \
+#define AX_INCREMENT_GL_DRAWS(__n__) axis::Director::getInstance()->getRenderer()->addDrawnBatches(__n__)
+#define AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(__drawcalls__, __vertices__) \
     do                                                                          \
     {                                                                           \
         auto __renderer__ = axis::Director::getInstance()->getRenderer();    \
@@ -369,12 +369,12 @@ It should work same as apples CFSwapInt32LittleToHost(..)
 #define Animate3DDisplayedNotification "CCAnimate3DDisplayedNotification"
 
 // new callbacks based on C++11
-#define CC_CALLBACK_0(__selector__, __target__, ...) std::bind(&__selector__, __target__, ##__VA_ARGS__)
-#define CC_CALLBACK_1(__selector__, __target__, ...) \
+#define AX_CALLBACK_0(__selector__, __target__, ...) std::bind(&__selector__, __target__, ##__VA_ARGS__)
+#define AX_CALLBACK_1(__selector__, __target__, ...) \
     std::bind(&__selector__, __target__, std::placeholders::_1, ##__VA_ARGS__)
-#define CC_CALLBACK_2(__selector__, __target__, ...) \
+#define AX_CALLBACK_2(__selector__, __target__, ...) \
     std::bind(&__selector__, __target__, std::placeholders::_1, std::placeholders::_2, ##__VA_ARGS__)
-#define CC_CALLBACK_3(__selector__, __target__, ...)                                                          \
+#define AX_CALLBACK_3(__selector__, __target__, ...)                                                          \
     std::bind(&__selector__, __target__, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, \
               ##__VA_ARGS__)
 

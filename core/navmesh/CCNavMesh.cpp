@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/CCNavMesh.h"
-#if CC_USE_NAVMESH
+#if AX_USE_NAVMESH
 
 #    include "platform/CCFileUtils.h"
 #    include "renderer/CCRenderer.h"
@@ -98,7 +98,7 @@ NavMesh* NavMesh::create(std::string_view navFilePath, std::string_view geomFile
         ref->autorelease();
         return ref;
     }
-    CC_SAFE_DELETE(ref);
+    AX_SAFE_DELETE(ref);
     return nullptr;
 }
 
@@ -120,20 +120,20 @@ NavMesh::~NavMesh()
     dtFreeCrowd(_crowed);
     dtFreeNavMesh(_navMesh);
     dtFreeNavMeshQuery(_navMeshQuery);
-    CC_SAFE_DELETE(_allocator);
-    CC_SAFE_DELETE(_compressor);
-    CC_SAFE_DELETE(_meshProcess);
-    CC_SAFE_DELETE(_geomData);
+    AX_SAFE_DELETE(_allocator);
+    AX_SAFE_DELETE(_compressor);
+    AX_SAFE_DELETE(_meshProcess);
+    AX_SAFE_DELETE(_geomData);
 
     for (auto iter : _agentList)
     {
-        CC_SAFE_RELEASE(iter);
+        AX_SAFE_RELEASE(iter);
     }
     _agentList.clear();
 
     for (auto iter : _obstacleList)
     {
-        CC_SAFE_RELEASE(iter);
+        AX_SAFE_RELEASE(iter);
     }
     _obstacleList.clear();
 }
@@ -662,4 +662,4 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
 
 NS_AX_END
 
-#endif  // CC_USE_NAVMESH
+#endif  // AX_USE_NAVMESH

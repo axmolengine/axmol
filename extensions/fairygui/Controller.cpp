@@ -25,7 +25,7 @@ void GController::setSelectedIndex(int value, bool triggerEvent)
 {
     if (_selectedIndex != value)
     {
-        CCASSERT(value < (int)_pageIds.size(), "Invalid selected index");
+        AXASSERT(value < (int)_pageIds.size(), "Invalid selected index");
 
         changing = true;
 

@@ -16,7 +16,7 @@
 
 - **Outdated/Abandom/Cocos2d-x**:
   - class PhysicsSprite: Be only part of the axis for backwards compatibility with Cocos2d-x.
-Use CC_ENABLE_BOX2D_INTEGRATION 1 (using Box2D) or CC_ENABLE_CHIPMUNK_INTEGRATION 1 (using Chipmunk2D)
+Use AX_ENABLE_BOX2D_INTEGRATION 1 (using Box2D) or AX_ENABLE_CHIPMUNK_INTEGRATION 1 (using Chipmunk2D)
 
 ## Chipmunk2D-/Box2D - Testbeds:
 The goals where: 

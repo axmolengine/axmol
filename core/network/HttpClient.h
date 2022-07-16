@@ -56,7 +56,7 @@ namespace network
  *
  * @lua NA
  */
-class CC_DLL HttpClient
+class AX_DLL HttpClient
 {
 public:
     /**

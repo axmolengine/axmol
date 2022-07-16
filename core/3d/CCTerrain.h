@@ -89,7 +89,7 @@ NS_AX_BEGIN
  * We can use ray-terrain intersection to pick a point of the terrain;
  * Also we can get an arbitrary point of the terrain's height and normal vector for convenience .
  **/
-class CC_DLL Terrain : public Node
+class AX_DLL Terrain : public Node
 {
 public:
     /**the crack fix type. use to fix the gaps between different LOD chunks */
@@ -104,7 +104,7 @@ public:
      *this struct maintain a detail map data ,including source file ,detail size.
      *the DetailMap can use for terrain splatting
      **/
-    struct CC_DLL DetailMap
+    struct AX_DLL DetailMap
     {
         /*Constructors*/
         DetailMap();
@@ -131,7 +131,7 @@ public:
      *TerrainData
      *This TerrainData struct warp all parameter that Terrain need to create
      */
-    struct CC_DLL TerrainData
+    struct AX_DLL TerrainData
     {
         /**empty constructor*/
         TerrainData();
@@ -205,7 +205,7 @@ private:
     /*
      *terrain vertices internal data format
      **/
-    struct CC_DLL TerrainVertexData
+    struct AX_DLL TerrainVertexData
     {
         /*constructor*/
         TerrainVertexData(){};
@@ -220,7 +220,7 @@ private:
         axis::Vec3 _normal;
     };
 
-    struct CC_DLL QuadTree;
+    struct AX_DLL QuadTree;
     /*
      *the terminal node of quad, use to subdivision terrain mesh and LOD
      **/
@@ -298,7 +298,7 @@ private:
      *QuadTree
      * @brief use to hierarchically frustum culling and set LOD
      **/
-    struct CC_DLL QuadTree
+    struct AX_DLL QuadTree
     {
         /**constructor*/
         QuadTree(int x, int y, int width, int height, Terrain* terrain);
@@ -569,7 +569,7 @@ private:
     backend::UniformLocation _lightDirLocation;
 
     backend::UniformLocation _mvpMatrixLocation;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+#if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
 #endif
 };

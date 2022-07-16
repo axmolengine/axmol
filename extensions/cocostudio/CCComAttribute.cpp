@@ -141,7 +141,7 @@ ComAttribute* ComAttribute::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -151,7 +151,7 @@ bool ComAttribute::serialize(void* r)
     bool ret = false;
     do
     {
-        CC_BREAK_IF(r == nullptr);
+        AX_BREAK_IF(r == nullptr);
         SerData* serData          = (SerData*)(r);
         const rapidjson::Value* v = serData->_rData;
         stExpCocoNode* cocoNode   = serData->_cocoNode;
@@ -164,26 +164,26 @@ bool ComAttribute::serialize(void* r)
         if (v != nullptr)
         {
             className = DICTOOL->getStringValue_json(*v, "classname");
-            CC_BREAK_IF(className == nullptr);
+            AX_BREAK_IF(className == nullptr);
             comName                          = DICTOOL->getStringValue_json(*v, "name");
             const rapidjson::Value& fileData = DICTOOL->getSubDictionary_json(*v, "fileData");
-            CC_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
+            AX_BREAK_IF(!DICTOOL->checkObjectExist_json(fileData));
             file = DICTOOL->getStringValue_json(fileData, "path");
-            CC_BREAK_IF(file == nullptr);
+            AX_BREAK_IF(file == nullptr);
             resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
-            CC_BREAK_IF(resType != 0);
+            AX_BREAK_IF(resType != 0);
         }
         else if (cocoNode != nullptr)
         {
             className = cocoNode[1].GetValue(cocoLoader);
-            CC_BREAK_IF(className == nullptr);
+            AX_BREAK_IF(className == nullptr);
             comName                 = cocoNode[2].GetValue(cocoLoader);
             stExpCocoNode* fileData = cocoNode[3].GetChildArray(cocoLoader);
-            CC_BREAK_IF(!fileData);
+            AX_BREAK_IF(!fileData);
             file = fileData[0].GetValue(cocoLoader);
-            CC_BREAK_IF(file == nullptr);
+            AX_BREAK_IF(file == nullptr);
             resType = atoi(fileData[2].GetValue(cocoLoader));
-            CC_BREAK_IF(resType != 0);
+            AX_BREAK_IF(resType != 0);
         }
         if (comName != nullptr)
         {
@@ -213,7 +213,7 @@ bool ComAttribute::parse(std::string_view jsonFile)
     {
         std::string contentStr = FileUtils::getInstance()->getStringFromFile(jsonFile);
         _doc.Parse<0>(contentStr.c_str());
-        CC_BREAK_IF(_doc.HasParseError());
+        AX_BREAK_IF(_doc.HasParseError());
         ret = true;
     } while (0);
     return ret;

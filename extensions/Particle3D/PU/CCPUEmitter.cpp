@@ -205,7 +205,7 @@ void PUEmitter::initParticleOrientation(PUParticle3D* particle)
     if (_particleOrientationRangeSet)
     {
         // Generate random orientation 'between' start en end.
-        Quaternion::lerp(_particleOrientationRangeStart, _particleOrientationRangeEnd, CCRANDOM_0_1(),
+        Quaternion::lerp(_particleOrientationRangeStart, _particleOrientationRangeEnd, AXRANDOM_0_1(),
                          &particle->orientation);
     }
     else
@@ -236,13 +236,13 @@ void PUEmitter::initParticleDirection(PUParticle3D* particle)
 
 void PUEmitter::generateAngle(float& angle)
 {
-    float a = CC_DEGREES_TO_RADIANS(_dynamicAttributeHelper.calculate(
+    float a = AX_DEGREES_TO_RADIANS(_dynamicAttributeHelper.calculate(
         _dynAngle, (static_cast<PUParticleSystem3D*>(_particleSystem))->getTimeElapsedSinceStart()));
     angle   = a;
     if (_dynAngle->getType() == PUDynamicAttribute::DAT_FIXED)
     {
         // Make an exception here and don't use the fixed angle.
-        angle = CCRANDOM_0_1() * angle;
+        angle = AXRANDOM_0_1() * angle;
     }
 }
 

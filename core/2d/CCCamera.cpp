@@ -81,7 +81,7 @@ Camera* Camera::getDefaultCamera()
 
     auto scene = Director::getInstance()->getRunningScene();
 
-    CCASSERT(scene, "Scene is not done initializing, please use this->_defaultCamera instead.");
+    AXASSERT(scene, "Scene is not done initializing, please use this->_defaultCamera instead.");
 
     return scene->getDefaultCamera();
 
@@ -119,7 +119,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-    CC_SAFE_RELEASE(_clearBrush);
+    AX_SAFE_RELEASE(_clearBrush);
 }
 
 const Mat4& Camera::getProjectionMatrix() const
@@ -233,7 +233,7 @@ bool Camera::initDefault()
         break;
     }
     default:
-        CCLOG("unrecognized projection");
+        AXLOG("unrecognized projection");
         break;
     }
     if (_zoomFactor != 1.0F)
@@ -283,7 +283,7 @@ Vec2 Camera::project(const Vec3& src) const
     Vec4 clipPos;
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
-    CCASSERT(clipPos.w != 0.0f, "clipPos.w can't be 0.0f!");
+    AXASSERT(clipPos.w != 0.0f, "clipPos.w can't be 0.0f!");
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
 
@@ -301,7 +301,7 @@ Vec2 Camera::projectGL(const Vec3& src) const
     getViewProjectionMatrix().transformVector(Vec4(src.x, src.y, src.z, 1.0f), &clipPos);
 
     if (clipPos.w == 0.0f)
-        CCLOG("WARNING: Camera's clip position w is 0.0! a black screen should be expected.");
+        AXLOG("WARNING: Camera's clip position w is 0.0! a black screen should be expected.");
 
     float ndcX = clipPos.x / clipPos.w;
     float ndcY = clipPos.y / clipPos.w;
@@ -327,7 +327,7 @@ Vec3 Camera::unprojectGL(const Vec3& src) const
 
 void Camera::unproject(const Vec2& viewport, const Vec3* src, Vec3* dst) const
 {
-    CCASSERT(src && dst, "vec3 can not be null");
+    AXASSERT(src && dst, "vec3 can not be null");
 
     Vec4 screen(src->x / viewport.width, ((viewport.height - src->y)) / viewport.height, src->z, 1.0f);
     screen.x = screen.x * 2.0f - 1.0f;
@@ -347,7 +347,7 @@ void Camera::unproject(const Vec2& viewport, const Vec3* src, Vec3* dst) const
 
 void Camera::unprojectGL(const Vec2& viewport, const Vec3* src, Vec3* dst) const
 {
-    CCASSERT(src && dst, "vec3 can not be null");
+    AXASSERT(src && dst, "vec3 can not be null");
 
     Vec4 screen(src->x / viewport.width, src->y / viewport.height, src->z, 1.0f);
     screen.x = screen.x * 2.0f - 1.0f;
@@ -572,8 +572,8 @@ void Camera::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t par
 
 void Camera::setBackgroundBrush(CameraBackgroundBrush* clearBrush)
 {
-    CC_SAFE_RETAIN(clearBrush);
-    CC_SAFE_RELEASE(_clearBrush);
+    AX_SAFE_RETAIN(clearBrush);
+    AX_SAFE_RELEASE(_clearBrush);
     _clearBrush = clearBrush;
 }
 

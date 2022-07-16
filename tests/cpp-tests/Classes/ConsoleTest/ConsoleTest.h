@@ -55,7 +55,7 @@ protected:
     axis::Console* _console;
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ConsoleCustomCommand);
+    AX_DISALLOW_COPY_AND_ASSIGN(ConsoleCustomCommand);
 };
 
 class ConsoleUploadFile : public BaseTestConsole
@@ -74,7 +74,7 @@ protected:
     void uploadFile();
 
 private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ConsoleUploadFile);
+    AX_DISALLOW_COPY_AND_ASSIGN(ConsoleUploadFile);
 
     std::string _targetFileName;
 };

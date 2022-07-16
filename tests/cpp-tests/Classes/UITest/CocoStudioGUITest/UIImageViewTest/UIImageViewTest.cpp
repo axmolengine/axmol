@@ -62,7 +62,7 @@ bool UIImageViewTest::init()
 
         TTFConfig ttfConfig("fonts/arial.ttf", 15);
         auto label1 = Label::createWithTTF(ttfConfig, "Print Resources");
-        auto item1  = MenuItemLabel::create(label1, CC_CALLBACK_1(UIImageViewTest::printWidgetResources, this));
+        auto item1  = MenuItemLabel::create(label1, AX_CALLBACK_1(UIImageViewTest::printWidgetResources, this));
         item1->setPosition(
             Vec2(VisibleRect::left().x + 60, VisibleRect::bottom().y + item1->getContentSize().height * 3));
         auto pMenu1 = Menu::create(item1, nullptr);
@@ -77,7 +77,7 @@ bool UIImageViewTest::init()
 void UIImageViewTest::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData textureFile = _image->getRenderFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
 // UIImageViewTest_Scale9
@@ -203,11 +203,11 @@ bool UIImageViewTest_ContentSize::init()
         imageView->addTouchEventListener([=](Ref* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::ENDED)
             {
-                float width  = CCRANDOM_0_1() * 200 + 50;
-                float height = CCRANDOM_0_1() * 80 + 30;
+                float width  = AXRANDOM_0_1() * 200 + 50;
+                float height = AXRANDOM_0_1() * 80 + 30;
                 imageView->setContentSize(Size(width, height));
 
-                imageViewChild->setPositionPercent(Vec2(CCRANDOM_0_1(), CCRANDOM_0_1()));
+                imageViewChild->setPositionPercent(Vec2(AXRANDOM_0_1(), AXRANDOM_0_1()));
                 status->setString(StringUtils::format("child ImageView position percent: %f, %f",
                                                       imageViewChild->getPositionPercent().x,
                                                       imageViewChild->getPositionPercent().y));

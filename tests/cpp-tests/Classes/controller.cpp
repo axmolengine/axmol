@@ -44,7 +44,7 @@ public:
     RootTests()
     {
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
@@ -55,11 +55,11 @@ public:
         addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if defined(CC_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC)
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
@@ -76,7 +76,7 @@ public:
         addTest("FileUtils", []() { return new FileUtilsTests(); });
         addTest("Fonts", []() { return new FontTests(); });
         addTest("Interval", []() { return new IntervalTests(); });
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("JNIHelper", []() { return new JNITests(); });
 #endif
         addTest("Material System", []() { return new MaterialSystemTest(); });
@@ -94,7 +94,7 @@ public:
         addTest("Node: Parallax", []() { return new ParallaxTests(); });
         addTest("Node: Particles", []() { return new ParticleTests(); });
         addTest("Node: Particle3D (PU)", []() { return new Particle3DTests(); });
-#if CC_USE_PHYSICS
+#if AX_USE_PHYSICS
         addTest("Node: Physics", []() { return new PhysicsTests(); });
 #endif
         addTest("Node: Physics3D", []() { return new Physics3DTests(); });
@@ -124,13 +124,13 @@ public:
         addTest("Unzip Test", []() { return new ZipTests(); });
         addTest("URL Open Test", []() { return new OpenURLTests(); });
         addTest("UserDefault", []() { return new UserDefaultTests(); });
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("Vibrate", []() { return new VibrateTests(); });
 #endif
         addTest("Zwoptex", []() { return new ZwoptexTests(); });
         addTest("SpriteFrameCache", []() { return new SpriteFrameCacheTests(); });  // TODO
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || \
-     CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || \
+     AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
         addTest("Window Test", []() { return new WindowTests(); });  // TODO wrong effect
 #endif
     }
@@ -143,7 +143,7 @@ TestController::TestController() : _stopAutoTest(true), _isRunInBackground(false
     _director = Director::getInstance();
 
     _touchListener               = EventListenerTouchOneByOne::create();
-    _touchListener->onTouchBegan = CC_CALLBACK_2(TestController::blockTouchBegan, this);
+    _touchListener->onTouchBegan = AX_CALLBACK_2(TestController::blockTouchBegan, this);
     _touchListener->setSwallowTouches(true);
 
     _director->getEventDispatcher()->addEventListenerWithFixedPriority(_touchListener, -200);
@@ -441,10 +441,10 @@ void TestController::logEx(const char* format, ...)
     vsnprintf(buff, 1020, format, args);
     strcat(buff, "\n");
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buff);
 
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     WCHAR wszBuf[1024] = {0};
     MultiByteToWideChar(CP_UTF8, 0, buff, -1, wszBuf, sizeof(wszBuf));
     OutputDebugStringW(wszBuf);
@@ -489,7 +489,7 @@ bool TestController::blockTouchBegan(Touch* touch, Event* event)
 }
 
 //==================================================================================================
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include <windows.h>
 
 static long __stdcall windowExceptionFilter(_EXCEPTION_POINTERS* excp)
@@ -511,10 +511,10 @@ static void disableCrashCatch()
     SetUnhandledExceptionFilter(UnhandledExceptionFilter);
 }
 
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || \
-    CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
+    AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 
-#    if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 static int s_fatal_signals[] = {
     SIGILL, SIGABRT, SIGBUS, SIGFPE, SIGSEGV, SIGSTKFLT, SIGPIPE,
 };

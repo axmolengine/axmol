@@ -31,7 +31,7 @@ void UIObjectFactory::setPackageItemExtension(const string& url, GComponentCreat
 {
     if (url.size() == 0)
     {
-        CCLOG("Invaild url: %s", url.c_str());
+        AXLOG("Invaild url: %s", url.c_str());
         return;
     }
     PackageItem* pi = UIPackage::getItemByURL(url);

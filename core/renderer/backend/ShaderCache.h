@@ -40,7 +40,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * Create and reuse shader module.
  */
-class CC_DLL ShaderCache : public Ref
+class AX_DLL ShaderCache : public Ref
 {
 public:
     /** returns the shared instance */

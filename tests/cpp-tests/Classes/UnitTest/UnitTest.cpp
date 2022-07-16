@@ -32,7 +32,7 @@
 USING_NS_AX;
 using namespace axis::network;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    if defined(__arm64__)
 #        define USE_NEON64
 #        define INCLUDE_NEON64
@@ -41,7 +41,7 @@ using namespace axis::network;
 #        define INCLUDE_NEON32
 #    else
 #    endif
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    if defined(__arm64__) || defined(__aarch64__)
 #        define USE_NEON64
 #        define INCLUDE_NEON64
@@ -96,51 +96,51 @@ void TemplateVectorTest::onEnter()
     UnitTestDemo::onEnter();
 
     Vector<Node*> vec;
-    CCASSERT(vec.empty(), "vec should be empty.");
-    CCASSERT(vec.capacity() == 0, "vec.capacity should be 0.");
-    CCASSERT(vec.size() == 0, "vec.size should be 0.");
-    CCASSERT(vec.max_size() > 0, "vec.max_size should > 0.");
+    AXASSERT(vec.empty(), "vec should be empty.");
+    AXASSERT(vec.capacity() == 0, "vec.capacity should be 0.");
+    AXASSERT(vec.size() == 0, "vec.size should be 0.");
+    AXASSERT(vec.max_size() > 0, "vec.max_size should > 0.");
 
     auto node1 = Node::create();
     node1->setTag(1);
     vec.pushBack(node1);
-    CCASSERT(node1->getReferenceCount() == 2, "node1->getReferenceCount should be 2.");
+    AXASSERT(node1->getReferenceCount() == 2, "node1->getReferenceCount should be 2.");
 
     auto node2 = Node::create();
     node2->setTag(2);
     vec.pushBack(node2);
-    CCASSERT(vec.getIndex(node1) == 0, "node1 should at index 0 in vec.");
-    CCASSERT(vec.getIndex(node2) == 1, "node2 should at index 1 in vec.");
+    AXASSERT(vec.getIndex(node1) == 0, "node1 should at index 0 in vec.");
+    AXASSERT(vec.getIndex(node2) == 1, "node2 should at index 1 in vec.");
 
     auto node3 = Node::create();
     node3->setTag(3);
     vec.insert(1, node3);
-    CCASSERT(vec.at(0)->getTag() == 1, "The element at 0, tag should be 1.");
-    CCASSERT(vec.at(1)->getTag() == 3, "The element at 1, tag should be 3.");
-    CCASSERT(vec.at(2)->getTag() == 2, "The element at 2, tag should be 2.");
+    AXASSERT(vec.at(0)->getTag() == 1, "The element at 0, tag should be 1.");
+    AXASSERT(vec.at(1)->getTag() == 3, "The element at 1, tag should be 3.");
+    AXASSERT(vec.at(2)->getTag() == 2, "The element at 2, tag should be 2.");
 
     // Test copy constructor
     Vector<Node*> vec2(vec);
-    CCASSERT(vec2.size() == vec.size(), "vec2 and vec should have equal size.");
+    AXASSERT(vec2.size() == vec.size(), "vec2 and vec should have equal size.");
     ssize_t size = vec.size();
     for (ssize_t i = 0; i < size; ++i)
     {
-        CCASSERT(vec2.at(i) == vec.at(i), "The element at the same index in vec2 and vec2 should be equal.");
-        CCASSERT(vec.at(i)->getReferenceCount() == 3, "The reference count of element in vec is 3. ");
-        CCASSERT(vec2.at(i)->getReferenceCount() == 3, "The reference count of element in vec2 is 3. ");
+        AXASSERT(vec2.at(i) == vec.at(i), "The element at the same index in vec2 and vec2 should be equal.");
+        AXASSERT(vec.at(i)->getReferenceCount() == 3, "The reference count of element in vec is 3. ");
+        AXASSERT(vec2.at(i)->getReferenceCount() == 3, "The reference count of element in vec2 is 3. ");
     }
 
     // Test copy assignment operator
     Vector<Node*> vec3;
     vec3 = vec2;
-    CCASSERT(vec3.size() == vec2.size(), "vec3 and vec2 should have equal size.");
+    AXASSERT(vec3.size() == vec2.size(), "vec3 and vec2 should have equal size.");
     size = vec3.size();
     for (ssize_t i = 0; i < size; ++i)
     {
-        CCASSERT(vec3.at(i) == vec2.at(i), "The element at the same index in vec3 and vec2 should be equal.");
-        CCASSERT(vec3.at(i)->getReferenceCount() == 4, "The reference count of element in vec3 is 4. ");
-        CCASSERT(vec2.at(i)->getReferenceCount() == 4, "The reference count of element in vec2 is 4. ");
-        CCASSERT(vec.at(i)->getReferenceCount() == 4, "The reference count of element in vec is 4. ");
+        AXASSERT(vec3.at(i) == vec2.at(i), "The element at the same index in vec3 and vec2 should be equal.");
+        AXASSERT(vec3.at(i)->getReferenceCount() == 4, "The reference count of element in vec3 is 4. ");
+        AXASSERT(vec2.at(i)->getReferenceCount() == 4, "The reference count of element in vec2 is 4. ");
+        AXASSERT(vec.at(i)->getReferenceCount() == 4, "The reference count of element in vec is 4. ");
     }
 
     // Test move constructor
@@ -165,76 +165,76 @@ void TemplateVectorTest::onEnter()
     Vector<Node*> vec4(createVector());
     for (const auto& child : vec4)
     {
-        CC_UNUSED_PARAM(child);
-        CCASSERT(child->getReferenceCount() == 2, "child's reference count should be 2.");
+        AX_UNUSED_PARAM(child);
+        AXASSERT(child->getReferenceCount() == 2, "child's reference count should be 2.");
     }
 
     // Test init Vector<T> with capacity
     Vector<Node*> vec5(10);
-    CCASSERT(vec5.capacity() == 10, "vec5's capacity should be 10.");
+    AXASSERT(vec5.capacity() == 10, "vec5's capacity should be 10.");
     vec5.reserve(20);
-    CCASSERT(vec5.capacity() == 20, "vec5's capacity should be 20.");
+    AXASSERT(vec5.capacity() == 20, "vec5's capacity should be 20.");
 
-    CCASSERT(vec5.size() == 0, "vec5's size should be 0.");
-    CCASSERT(vec5.empty(), "vec5 is empty now.");
+    AXASSERT(vec5.size() == 0, "vec5's size should be 0.");
+    AXASSERT(vec5.empty(), "vec5 is empty now.");
 
     auto toRemovedNode = Node::create();
     vec5.pushBack(toRemovedNode);
-    CCASSERT(toRemovedNode->getReferenceCount() == 2, "toRemovedNode's reference count is 2.");
+    AXASSERT(toRemovedNode->getReferenceCount() == 2, "toRemovedNode's reference count is 2.");
 
     // Test move assignment operator
     vec5 = createVector();
-    CCASSERT(toRemovedNode->getReferenceCount() == 1, "toRemovedNode's reference count is 1.");
-    CCASSERT(vec5.size() == 20, "size should be 20");
+    AXASSERT(toRemovedNode->getReferenceCount() == 1, "toRemovedNode's reference count is 1.");
+    AXASSERT(vec5.size() == 20, "size should be 20");
 
     for (const auto& child : vec5)
     {
-        CC_UNUSED_PARAM(child);
-        CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
+        AX_UNUSED_PARAM(child);
+        AXASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
     // Test Vector<T>::find
-    CCASSERT(vec.find(node3) == (vec.begin() + 1), "node3 is the 2nd element in vec.");
-    CCASSERT(std::find(std::begin(vec), std::end(vec), node2) == (vec.begin() + 2), "node2 is the 3rd element in vec.");
+    AXASSERT(vec.find(node3) == (vec.begin() + 1), "node3 is the 2nd element in vec.");
+    AXASSERT(std::find(std::begin(vec), std::end(vec), node2) == (vec.begin() + 2), "node2 is the 3rd element in vec.");
 
-    CCASSERT(vec.front()->getTag() == 1, "vec's front element's tag is 1.");
-    CCASSERT(vec.back()->getTag() == 2, "vec's back element's tag is 2.");
+    AXASSERT(vec.front()->getTag() == 1, "vec's front element's tag is 1.");
+    AXASSERT(vec.back()->getTag() == 2, "vec's back element's tag is 2.");
 
-    CCASSERT(vec.getRandomObject(), "vec getRandomObject should return true.");
-    CCASSERT(!vec.contains(Node::create()), "vec doesn't contain a empty Node instance.");
-    CCASSERT(vec.contains(node1), "vec contains node1.");
-    CCASSERT(vec.contains(node2), "vec contains node2.");
-    CCASSERT(vec.contains(node3), "vec contains node3.");
-    CCASSERT(vec.equals(vec2), "vec is equal to vec2.");
-    CCASSERT(vec.equals(vec3), "vec is equal to vec3.");
+    AXASSERT(vec.getRandomObject(), "vec getRandomObject should return true.");
+    AXASSERT(!vec.contains(Node::create()), "vec doesn't contain a empty Node instance.");
+    AXASSERT(vec.contains(node1), "vec contains node1.");
+    AXASSERT(vec.contains(node2), "vec contains node2.");
+    AXASSERT(vec.contains(node3), "vec contains node3.");
+    AXASSERT(vec.equals(vec2), "vec is equal to vec2.");
+    AXASSERT(vec.equals(vec3), "vec is equal to vec3.");
 
     // Insert
     vec5.insert(2, node1);
-    CCASSERT(vec5.at(2)->getTag() == 1, "vec5's 3rd element's tag is 1.");
-    CCASSERT(vec5.size() == 21, "vec5's size is 21.");
+    AXASSERT(vec5.at(2)->getTag() == 1, "vec5's 3rd element's tag is 1.");
+    AXASSERT(vec5.size() == 21, "vec5's size is 21.");
     vec5.back()->setTag(100);
     vec5.popBack();
-    CCASSERT(vec5.size() == 20, "vec5's size is 20.");
-    CCASSERT(vec5.back()->getTag() != 100, "the back element of vec5's tag is 100.");
+    AXASSERT(vec5.size() == 20, "vec5's size is 20.");
+    AXASSERT(vec5.back()->getTag() != 100, "the back element of vec5's tag is 100.");
 
     // Erase and clear
     Vector<Node*> vec6 = createVector();
     Vector<Node*> vec7 = vec6;  // Copy for check
 
-    CCASSERT(vec6.size() == 20, "vec6's size is 20.");
+    AXASSERT(vec6.size() == 20, "vec6's size is 20.");
     vec6.erase(vec6.begin() + 1);  //
-    CCASSERT(vec6.size() == 19, "vec6's size is 19.");
-    CCASSERT((*(vec6.begin() + 1))->getTag() == 1002, "The 2rd element in vec6's tag is 1002.");
+    AXASSERT(vec6.size() == 19, "vec6's size is 19.");
+    AXASSERT((*(vec6.begin() + 1))->getTag() == 1002, "The 2rd element in vec6's tag is 1002.");
     vec6.erase(vec6.begin() + 2, vec6.begin() + 10);
-    CCASSERT(vec6.size() == 11, "vec6's size is 11.");
-    CCASSERT(vec6.at(0)->getTag() == 1000, "vec6's first element's tag is 1000.");
-    CCASSERT(vec6.at(1)->getTag() == 1002, "vec6's second element's tag is 1002.");
-    CCASSERT(vec6.at(2)->getTag() == 1011, "vec6's third element's tag is 1011.");
-    CCASSERT(vec6.at(3)->getTag() == 1012, "vec6's fouth element's tag is 1012.");
+    AXASSERT(vec6.size() == 11, "vec6's size is 11.");
+    AXASSERT(vec6.at(0)->getTag() == 1000, "vec6's first element's tag is 1000.");
+    AXASSERT(vec6.at(1)->getTag() == 1002, "vec6's second element's tag is 1002.");
+    AXASSERT(vec6.at(2)->getTag() == 1011, "vec6's third element's tag is 1011.");
+    AXASSERT(vec6.at(3)->getTag() == 1012, "vec6's fouth element's tag is 1012.");
     vec6.erase(3);
-    CCASSERT(vec6.at(3)->getTag() == 1013, "vec6's 4th element's tag is 1013.");
+    AXASSERT(vec6.at(3)->getTag() == 1013, "vec6's 4th element's tag is 1013.");
     vec6.eraseObject(vec6.at(2));
-    CCASSERT(vec6.at(2)->getTag() == 1013, "vec6's 3rd element's tag is 1013.");
+    AXASSERT(vec6.at(2)->getTag() == 1013, "vec6's 3rd element's tag is 1013.");
     vec6.clear();
 
     auto objA = Node::create();  // retain count is 1
@@ -257,9 +257,9 @@ void TemplateVectorTest::onEnter()
         {
             array2.eraseObject(obj);
         }
-        CCASSERT(objA->getReferenceCount() == 4, "objA's reference count is 4.");
+        AXASSERT(objA->getReferenceCount() == 4, "objA's reference count is 4.");
     }
-    CCASSERT(objA->getReferenceCount() == 1, "objA's reference count is 1.");
+    AXASSERT(objA->getReferenceCount() == 1, "objA's reference count is 1.");
 
     {
         Vector<Node*> array1;
@@ -267,25 +267,25 @@ void TemplateVectorTest::onEnter()
         array1.pushBack(objA);  // retain count is 2
         array1.pushBack(objA);  // retain count is 3
         array1.pushBack(objA);  // retain count is 4
-        CCASSERT(objA->getReferenceCount() == 4, "objA's reference count is 4.");
+        AXASSERT(objA->getReferenceCount() == 4, "objA's reference count is 4.");
         array1.eraseObject(objA, true);  // Remove all occurrences in the Vector.
-        CCASSERT(objA->getReferenceCount() == 1, "objA's reference count is 1.");
+        AXASSERT(objA->getReferenceCount() == 1, "objA's reference count is 1.");
 
         array1.pushBack(objA);  // retain count is 2
         array1.pushBack(objA);  // retain count is 3
         array1.pushBack(objA);  // retain count is 4
 
         array1.eraseObject(objA, false);
-        CCASSERT(objA->getReferenceCount() == 3,
+        AXASSERT(objA->getReferenceCount() == 3,
                  "objA's reference count is 3.");  // Only remove the first occurrence in the Vector.
     }
 
     // Check the retain count in vec7
-    CCASSERT(vec7.size() == 20, "vec7's size is 20.");
+    AXASSERT(vec7.size() == 20, "vec7's size is 20.");
     for (const auto& child : vec7)
     {
-        CC_UNUSED_PARAM(child);
-        CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
+        AX_UNUSED_PARAM(child);
+        AXASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
     // Sort
@@ -294,32 +294,32 @@ void TemplateVectorTest::onEnter()
 
     for (int i = 0; i < 20; ++i)
     {
-        CCASSERT(vecForSort.at(i)->getTag() - 1000 == (19 - i), "vecForSort's element's tag is invalid.");
+        AXASSERT(vecForSort.at(i)->getTag() - 1000 == (19 - i), "vecForSort's element's tag is invalid.");
     }
 
     // Reverse
     vecForSort.reverse();
     for (int i = 0; i < 20; ++i)
     {
-        CCASSERT(vecForSort.at(i)->getTag() - 1000 == i, "vecForSort's element's tag is invalid.");
+        AXASSERT(vecForSort.at(i)->getTag() - 1000 == i, "vecForSort's element's tag is invalid.");
     }
 
     // Swap
     Vector<Node*> vecForSwap = createVector();
     vecForSwap.swap(2, 4);
-    CCASSERT(vecForSwap.at(2)->getTag() == 1004, "vecForSwap's 3nd element's tag is 1004.");
-    CCASSERT(vecForSwap.at(4)->getTag() == 1002, "vecForSwap's 5rd element's tag is 1002.");
+    AXASSERT(vecForSwap.at(2)->getTag() == 1004, "vecForSwap's 3nd element's tag is 1004.");
+    AXASSERT(vecForSwap.at(4)->getTag() == 1002, "vecForSwap's 5rd element's tag is 1002.");
     vecForSwap.swap(vecForSwap.at(2), vecForSwap.at(4));
-    CCASSERT(vecForSwap.at(2)->getTag() == 1002, "vecForSwap's 3rd element's tag is 1002.");
-    CCASSERT(vecForSwap.at(4)->getTag() == 1004, "vecForSwap's 5rd element's tag is 1004.");
+    AXASSERT(vecForSwap.at(2)->getTag() == 1002, "vecForSwap's 3rd element's tag is 1002.");
+    AXASSERT(vecForSwap.at(4)->getTag() == 1004, "vecForSwap's 5rd element's tag is 1004.");
 
     // shrinkToFit
     Vector<Node*> vecForShrink = createVector();
     vecForShrink.reserve(100);
-    CCASSERT(vecForShrink.capacity() == 100, "vecForShrink's capacity is 100.");
+    AXASSERT(vecForShrink.capacity() == 100, "vecForShrink's capacity is 100.");
     vecForShrink.pushBack(Node::create());
     vecForShrink.shrinkToFit();
-    CCASSERT(vecForShrink.capacity() == 21, "vecForShrink's capacity is 21.");
+    AXASSERT(vecForShrink.capacity() == 21, "vecForShrink's capacity is 21.");
 
     // get random object
     // Set the seed by time
@@ -335,21 +335,21 @@ void TemplateVectorTest::onEnter()
     // Self assignment
     Vector<Node*> vecSelfAssign = createVector();
     vecSelfAssign               = vecSelfAssign;
-    CCASSERT(vecSelfAssign.size() == 20, "vecSelfAssign's size is 20.");
+    AXASSERT(vecSelfAssign.size() == 20, "vecSelfAssign's size is 20.");
 
     for (const auto& child : vecSelfAssign)
     {
-        CC_UNUSED_PARAM(child);
-        CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
+        AX_UNUSED_PARAM(child);
+        AXASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
     vecSelfAssign = std::move(vecSelfAssign);
-    CCASSERT(vecSelfAssign.size() == 20, "vecSelfAssign's size is 20.");
+    AXASSERT(vecSelfAssign.size() == 20, "vecSelfAssign's size is 20.");
 
     for (const auto& child : vecSelfAssign)
     {
-        CC_UNUSED_PARAM(child);
-        CCASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
+        AX_UNUSED_PARAM(child);
+        AXASSERT(child->getReferenceCount() == 2, "child's reference count is 2.");
     }
 
     // const at
@@ -387,25 +387,25 @@ void TemplateMapTest::onEnter()
 
     // Default constructor
     Map<std::string, Node*> map1;
-    CCASSERT(map1.empty(), "map1 is empty.");
-    CCASSERT(map1.size() == 0, "map1's size is 0.");
-    CCASSERT(map1.keys().empty(), "map1's keys are empty.");
-    CCASSERT(map1.keys(Node::create()).empty(), "map1's keys don't contain a empty Node.");
+    AXASSERT(map1.empty(), "map1 is empty.");
+    AXASSERT(map1.size() == 0, "map1's size is 0.");
+    AXASSERT(map1.keys().empty(), "map1's keys are empty.");
+    AXASSERT(map1.keys(Node::create()).empty(), "map1's keys don't contain a empty Node.");
 
     // Move constructor
     auto map2 = createMap();
     for (const auto& e : map2)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 2, "e.second element's reference count is 2.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 2, "e.second element's reference count is 2.");
     }
 
     // Copy constructor
     auto map3(map2);
     for (const auto& e : map3)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 3, "e.second's reference count is 3.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 3, "e.second's reference count is 3.");
     }
 
     // Move assignment operator
@@ -413,11 +413,11 @@ void TemplateMapTest::onEnter()
     auto unusedNode = Node::create();
     map4.insert("unused", unusedNode);
     map4 = createMap();
-    CCASSERT(unusedNode->getReferenceCount() == 1, "unusedNode's reference count is 1.");
+    AXASSERT(unusedNode->getReferenceCount() == 1, "unusedNode's reference count is 1.");
     for (const auto& e : map4)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
     }
 
     // Copy assignment operator
@@ -425,17 +425,17 @@ void TemplateMapTest::onEnter()
     map5 = map4;
     for (const auto& e : map5)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 3, "e.second's reference count is 3.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 3, "e.second's reference count is 3.");
     }
 
     // Check size
-    CCASSERT(map4.size() == map5.size(), "map4's size is equal to map5.size.");
+    AXASSERT(map4.size() == map5.size(), "map4's size is equal to map5.size.");
 
     for (const auto& e : map4)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second == map5.find(e.first)->second, "e.second can't be found in map5.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second == map5.find(e.first)->second, "e.second can't be found in map5.");
     }
 
     // bucket_count, bucket_size(n), bucket
@@ -478,8 +478,8 @@ void TemplateMapTest::onEnter()
 
     // find
     auto nodeToFind = map4.find("10");
-    CC_UNUSED_PARAM(nodeToFind);
-    CCASSERT(nodeToFind->second->getTag() == 1010, "nodeToFind's tag value is 1010.");
+    AX_UNUSED_PARAM(nodeToFind);
+    AXASSERT(nodeToFind->second->getTag() == 1010, "nodeToFind's tag value is 1010.");
 
     // insert
     Map<std::string, Node*> map6;
@@ -493,29 +493,29 @@ void TemplateMapTest::onEnter()
     map6.insert("insert02", node2);
     map6.insert("insert03", node3);
 
-    CCASSERT(node1->getReferenceCount() == 2, "node1's reference count is 2.");
-    CCASSERT(node2->getReferenceCount() == 2, "node2's reference count is 2.");
-    CCASSERT(node3->getReferenceCount() == 2, "node3's reference count is 2.");
-    CCASSERT(map6.at("insert01") == node1, "The element at insert01 is equal to node1.");
-    CCASSERT(map6.at("insert02") == node2, "The element at insert02 is equal to node2.");
-    CCASSERT(map6.at("insert03") == node3, "The element at insert03 is equal to node3.");
+    AXASSERT(node1->getReferenceCount() == 2, "node1's reference count is 2.");
+    AXASSERT(node2->getReferenceCount() == 2, "node2's reference count is 2.");
+    AXASSERT(node3->getReferenceCount() == 2, "node3's reference count is 2.");
+    AXASSERT(map6.at("insert01") == node1, "The element at insert01 is equal to node1.");
+    AXASSERT(map6.at("insert02") == node2, "The element at insert02 is equal to node2.");
+    AXASSERT(map6.at("insert03") == node3, "The element at insert03 is equal to node3.");
 
     // erase
     StringMap<Node*> mapForErase = createMap();
     mapForErase.erase(mapForErase.find("9"));
-    CCASSERT(mapForErase.find("9") == mapForErase.end(), "9 is already removed.");
-    CCASSERT(mapForErase.size() == 19, "mapForErase's size is 19.");
+    AXASSERT(mapForErase.find("9") == mapForErase.end(), "9 is already removed.");
+    AXASSERT(mapForErase.size() == 19, "mapForErase's size is 19.");
 
     mapForErase.erase("7");
-    CCASSERT(mapForErase.find("7") == mapForErase.end(), "7 is already removed.");
-    CCASSERT(mapForErase.size() == 18, "mapForErase's size is 18.");
+    AXASSERT(mapForErase.find("7") == mapForErase.end(), "7 is already removed.");
+    AXASSERT(mapForErase.size() == 18, "mapForErase's size is 18.");
 
     std::vector<std::string> itemsToRemove;
     itemsToRemove.push_back("2");
     itemsToRemove.push_back("3");
     itemsToRemove.push_back("4");
     mapForErase.erase(itemsToRemove);
-    CCASSERT(mapForErase.size() == 15, "mapForErase's size is 15.");
+    AXASSERT(mapForErase.size() == 15, "mapForErase's size is 15.");
 
     // clear
     StringMap<Node*> mapForClear = createMap();
@@ -524,8 +524,8 @@ void TemplateMapTest::onEnter()
 
     for (const auto& e : mapForClearCopy)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
     }
 
     // get random object
@@ -542,21 +542,21 @@ void TemplateMapTest::onEnter()
     // Self assignment
     StringMap<Node*> mapForSelfAssign = createMap();
     mapForSelfAssign                  = mapForSelfAssign;
-    CCASSERT(mapForSelfAssign.size() == 20, "mapForSelfAssign's size is 20.");
+    AXASSERT(mapForSelfAssign.size() == 20, "mapForSelfAssign's size is 20.");
 
     for (const auto& e : mapForSelfAssign)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 2, "e.second's reference count is 2.");
     }
 
     mapForSelfAssign = std::move(mapForSelfAssign);
-    CCASSERT(mapForSelfAssign.size() == 20, "mapForSelfAssign's size is 20.");
+    AXASSERT(mapForSelfAssign.size() == 20, "mapForSelfAssign's size is 20.");
 
     for (const auto& e : mapForSelfAssign)
     {
-        CC_UNUSED_PARAM(e);
-        CCASSERT(e.second->getReferenceCount() == 2, "e.second's reference's count is 2.");
+        AX_UNUSED_PARAM(e);
+        AXASSERT(e.second->getReferenceCount() == 2, "e.second's reference's count is 2.");
     }
 }
 
@@ -578,37 +578,37 @@ void ValueTest::onEnter()
     UnitTestDemo::onEnter();
 
     Value v1;
-    CCASSERT(v1.getType() == Value::Type::NONE, "v1's value type should be VALUE::Type::NONE.");
-    CCASSERT(v1.isNull(), "v1 is null.");
+    AXASSERT(v1.getType() == Value::Type::NONE, "v1's value type should be VALUE::Type::NONE.");
+    AXASSERT(v1.isNull(), "v1 is null.");
 
     Value v2(100);
-    CCASSERT(v2.getType() == Value::Type::INTEGER, "v2's value type should be VALUE::Type::INTEGER.");
-    CCASSERT(!v2.isNull(), "v2 is not null.");
+    AXASSERT(v2.getType() == Value::Type::INTEGER, "v2's value type should be VALUE::Type::INTEGER.");
+    AXASSERT(!v2.isNull(), "v2 is not null.");
 
     Value v3(101.4f);
-    CCASSERT(v3.getType() == Value::Type::FLOAT, "v3's value type should be VALUE::Type::FLOAT.");
-    CCASSERT(!v3.isNull(), "v3 is not null.");
+    AXASSERT(v3.getType() == Value::Type::FLOAT, "v3's value type should be VALUE::Type::FLOAT.");
+    AXASSERT(!v3.isNull(), "v3 is not null.");
 
     Value v4(106.1);
-    CCASSERT(v4.getType() == Value::Type::DOUBLE, "v4's value type should be VALUE::Type::DOUBLE.");
-    CCASSERT(!v4.isNull(), "v4 is not null.");
+    AXASSERT(v4.getType() == Value::Type::DOUBLE, "v4's value type should be VALUE::Type::DOUBLE.");
+    AXASSERT(!v4.isNull(), "v4 is not null.");
 
     unsigned char byte = 50;
     Value v5(byte);
-    CCASSERT(v5.getType() == Value::Type::INT_UI32, "v5's value type should be Value::Type::INT_UI32.");
-    CCASSERT(!v5.isNull(), "v5 is not null.");
+    AXASSERT(v5.getType() == Value::Type::INT_UI32, "v5's value type should be Value::Type::INT_UI32.");
+    AXASSERT(!v5.isNull(), "v5 is not null.");
 
     Value v6(true);
-    CCASSERT(v6.getType() == Value::Type::BOOLEAN, "v6's value type is Value::Type::BOOLEAN.");
-    CCASSERT(!v6.isNull(), "v6 is not null.");
+    AXASSERT(v6.getType() == Value::Type::BOOLEAN, "v6's value type is Value::Type::BOOLEAN.");
+    AXASSERT(!v6.isNull(), "v6 is not null.");
 
     Value v7("string");
-    CCASSERT(v7.getType() == Value::Type::STRING, "v7's value type is Value::type::STRING.");
-    CCASSERT(!v7.isNull(), "v7 is not null.");
+    AXASSERT(v7.getType() == Value::Type::STRING, "v7's value type is Value::type::STRING.");
+    AXASSERT(!v7.isNull(), "v7 is not null.");
 
     Value v8(std::string("string2"));
-    CCASSERT(v8.getType() == Value::Type::STRING, "v8's value type is Value::Type::STRING.");
-    CCASSERT(!v8.isNull(), "v8 is not null.");
+    AXASSERT(v8.getType() == Value::Type::STRING, "v8's value type is Value::Type::STRING.");
+    AXASSERT(!v8.isNull(), "v8 is not null.");
 
     auto createValueVector = [&]() {
         ValueVector ret;
@@ -619,8 +619,8 @@ void ValueTest::onEnter()
     };
 
     Value v9(createValueVector());
-    CCASSERT(v9.getType() == Value::Type::VECTOR, "v9's value type is Value::Type::VECTOR.");
-    CCASSERT(!v9.isNull(), "v9 is not null.");
+    AXASSERT(v9.getType() == Value::Type::VECTOR, "v9's value type is Value::Type::VECTOR.");
+    AXASSERT(!v9.isNull(), "v9 is not null.");
 
     auto createValueMap = [&]() {
         ValueMap ret;
@@ -631,8 +631,8 @@ void ValueTest::onEnter()
     };
 
     Value v10(createValueMap());
-    CCASSERT(v10.getType() == Value::Type::MAP, "v10's value type is Value::Type::MAP.");
-    CCASSERT(!v10.isNull(), "v10 is not null.");
+    AXASSERT(v10.getType() == Value::Type::MAP, "v10's value type is Value::Type::MAP.");
+    AXASSERT(!v10.isNull(), "v10 is not null.");
 
     auto createValueMapIntKey = [&]() {
         ValueMapIntKey ret;
@@ -643,8 +643,8 @@ void ValueTest::onEnter()
     };
 
     Value v11(createValueMapIntKey());
-    CCASSERT(v11.getType() == Value::Type::INT_KEY_MAP, "v11's value type is Value::Type::INT_KEY_MAP.");
-    CCASSERT(!v11.isNull(), "v11 is not null.");
+    AXASSERT(v11.getType() == Value::Type::INT_KEY_MAP, "v11's value type is Value::Type::INT_KEY_MAP.");
+    AXASSERT(!v11.isNull(), "v11 is not null.");
 }
 
 std::string ValueTest::subtitle() const
@@ -690,7 +690,7 @@ static void doUTFConversion()
         isSuccess = memcmp(utf8Str.data(), originalUTF8.data(), originalUTF8.length() + 1) == 0;
     }
 
-    CCASSERT(isSuccess, "StringUtils::UTF16ToUTF8 failed");
+    AXASSERT(isSuccess, "StringUtils::UTF16ToUTF8 failed");
 
     //---------------------------
     std::u16string utf16Str;
@@ -701,12 +701,12 @@ static void doUTFConversion()
         isSuccess = memcmp(utf16Str.data(), originalUTF16.data(), originalUTF16.length() + 1) == 0;
     }
 
-    CCASSERT(isSuccess && (utf16Str.length() == TEST_CODE_NUM), "StringUtils::UTF8ToUTF16 failed");
+    AXASSERT(isSuccess && (utf16Str.length() == TEST_CODE_NUM), "StringUtils::UTF8ToUTF16 failed");
 
     //---------------------------
     auto vec1 = StringUtils::getChar16VectorFromUTF16String(originalUTF16);
 
-    CCASSERT(vec1.size() == originalUTF16.length(), "StringUtils::getChar16VectorFromUTF16String failed");
+    AXASSERT(vec1.size() == originalUTF16.length(), "StringUtils::getChar16VectorFromUTF16String failed");
 
     //---------------------------
     std::vector<char16_t> vec2(vec1);
@@ -718,35 +718,35 @@ static void doUTFConversion()
     std::vector<char16_t> vec3(vec2);
     StringUtils::trimUTF16Vector(vec2);
 
-    CCASSERT(vec1.size() == vec2.size(), "StringUtils::trimUTF16Vector failed");
+    AXASSERT(vec1.size() == vec2.size(), "StringUtils::trimUTF16Vector failed");
 
     for (size_t i = 0; i < vec2.size(); i++)
     {
-        CCASSERT(vec1.at(i) == vec2.at(i), "StringUtils::trimUTF16Vector failed");
+        AXASSERT(vec1.at(i) == vec2.at(i), "StringUtils::trimUTF16Vector failed");
     }
 
     //---------------------------
-    CCASSERT(StringUtils::getCharacterCountInUTF8String(originalUTF8) == TEST_CODE_NUM,
+    AXASSERT(StringUtils::getCharacterCountInUTF8String(originalUTF8) == TEST_CODE_NUM,
              "StringUtils::getCharacterCountInUTF8String failed");
 
     //---------------------------
-    CCASSERT(StringUtils::getIndexOfLastNotChar16(vec3, 0x2009) == (vec1.size() - 1),
+    AXASSERT(StringUtils::getIndexOfLastNotChar16(vec3, 0x2009) == (vec1.size() - 1),
              "StringUtils::getIndexOfLastNotChar16 failed");
 
     //---------------------------
-    CCASSERT(originalUTF16.length() == TEST_CODE_NUM,
+    AXASSERT(originalUTF16.length() == TEST_CODE_NUM,
              "The length of the original utf16 string isn't equal to TEST_CODE_NUM");
 
     //---------------------------
     size_t whiteCodeNum = sizeof(WHITE_SPACE_CODE) / sizeof(WHITE_SPACE_CODE[0]);
     for (size_t i = 0; i < whiteCodeNum; i++)
     {
-        CCASSERT(StringUtils::isUnicodeSpace(WHITE_SPACE_CODE[i]), "StringUtils::isUnicodeSpace failed");
+        AXASSERT(StringUtils::isUnicodeSpace(WHITE_SPACE_CODE[i]), "StringUtils::isUnicodeSpace failed");
     }
 
-    CCASSERT(!StringUtils::isUnicodeSpace(0xFFFF), "StringUtils::isUnicodeSpace failed");
+    AXASSERT(!StringUtils::isUnicodeSpace(0xFFFF), "StringUtils::isUnicodeSpace failed");
 
-    CCASSERT(!StringUtils::isCJKUnicode(0xFFFF) && StringUtils::isCJKUnicode(0x3100),
+    AXASSERT(!StringUtils::isCJKUnicode(0xFFFF) && StringUtils::isCJKUnicode(0x3100),
              "StringUtils::isCJKUnicode failed");
 }
 
@@ -775,101 +775,101 @@ void UIHelperSubStringTest::onEnter()
     {
         // Trivial case
         std::string source = "abcdefghij";
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "ab");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "cd");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 2) == "ef");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "ab");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "cd");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 2) == "ef");
     }
     {
         // Empty string
         std::string source = "";
 
         // OK
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
 
         // Error: These cases cause "out of range" error
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
     }
     {
         // Ascii
         std::string source = "abc";
 
         // OK
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "abc");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "abc");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 2) == "bc");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 3) == "bc");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 1) == "c");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "c");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 2) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "abc");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "abc");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 2) == "bc");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 3) == "bc");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 1) == "c");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 2) == "c");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 3, 2) == "");
 
         // Error: These cases cause "out of range" error
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 4, 1) == "");
     }
     {
         // CJK characters
         std::string source = "这里是中文测试例";
 
         // OK
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 7, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "\xe8\xbf\x99");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 8) ==
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 7, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 8, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "\xe8\xbf\x99");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 8) ==
                   "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 100) ==
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 100) ==
                   "\xe8\xbf\x99\xe9\x87\x8c\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95\xe4\xbe\x8b");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 5) ==
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 2, 5) ==
                   "\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87\xe6\xb5\x8b\xe8\xaf\x95");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 2) == "\xe8\xaf\x95\xe4\xbe\x8b");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 100) == "\xe8\xaf\x95\xe4\xbe\x8b");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 2) == "\xe8\xaf\x95\xe4\xbe\x8b");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 6, 100) == "\xe8\xaf\x95\xe4\xbe\x8b");
 
         // Error: These cases cause "out of range" error
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 9, 1) == "");
     }
     {
         // Redundant UTF-8 sequence for Directory traversal attack (1)
         std::string source = "\xC0\xAF";
 
         // Error: Can't convert string to correct encoding such as UTF-32
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 2) == "");
     }
     {
         // Redundant UTF-8 sequence for Directory traversal attack (2)
         std::string source = "\xE0\x80\xAF";
 
         // Error: Can't convert string to correct encoding such as UTF-32
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 3) == "");
     }
     {
         // Redundant UTF-8 sequence for Directory traversal attack (3)
         std::string source = "\xF0\x80\x80\xAF";
 
         // Error: Can't convert string to correct encoding such as UTF-32
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
-        CC_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 0) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 1, 1) == "");
+        AX_ASSERT(Helper::getSubStringOfUTF8String(source, 0, 4) == "");
     }
 }
 
@@ -1449,7 +1449,7 @@ static void __checkMathUtilResult(const char* description, const float* a1, cons
         {
             log("Wrong: a1[%d]=%f, a2[%d]=%f", i, a1[i], i, a2[i]);
         }
-        CCASSERT(r, "The optimized instruction is implemented in a wrong way, please check it!");
+        AXASSERT(r, "The optimized instruction is implemented in a wrong way, please check it!");
     }
 }
 

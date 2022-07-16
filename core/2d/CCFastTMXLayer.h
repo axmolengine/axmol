@@ -81,7 +81,7 @@ class Buffer;
  * @js NA
  */
 
-class CC_DLL FastTMXLayer : public Node
+class AX_DLL FastTMXLayer : public Node
 {
 public:
     /** Possible orientations of the TMX map */
@@ -222,8 +222,8 @@ public:
      */
     void setTileSet(TMXTilesetInfo* info)
     {
-        CC_SAFE_RETAIN(info);
-        CC_SAFE_RELEASE(_tileSet);
+        AX_SAFE_RETAIN(info);
+        AX_SAFE_RELEASE(_tileSet);
         _tileSet = info;
     }
 
@@ -363,7 +363,7 @@ protected:
     bool _quadsDirty = true;
     std::vector<int> _tileToQuadIndex;
     std::vector<V3F_C4B_T2F_Quad> _totalQuads;
-#ifdef CC_FAST_TILEMAP_32_BIT_INDICES
+#ifdef AX_FAST_TILEMAP_32_BIT_INDICES
     std::vector<unsigned int> _indices;
 #else
     std::vector<unsigned short> _indices;
@@ -386,7 +386,7 @@ protected:
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.
  * It is a assistant class for TMXTileAnimTicker.
  */
-class CC_DLL TMXTileAnimTask : public Ref
+class AX_DLL TMXTileAnimTask : public Ref
 {
 public:
     TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos);
@@ -418,7 +418,7 @@ protected:
 
 /** @brief TMXTileAnimManager controls all tile animation of a layer.
  */
-class CC_DLL TMXTileAnimManager : public Ref
+class AX_DLL TMXTileAnimManager : public Ref
 {
 public:
     static TMXTileAnimManager* create(FastTMXLayer* layer);

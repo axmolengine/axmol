@@ -342,9 +342,9 @@ void NestedTest::setup()
 
 HoleDemo::~HoleDemo()
 {
-    CC_SAFE_RELEASE(_outerClipper);
-    CC_SAFE_RELEASE(_holes);
-    CC_SAFE_RELEASE(_holesStencil);
+    AX_SAFE_RELEASE(_outerClipper);
+    AX_SAFE_RELEASE(_holes);
+    AX_SAFE_RELEASE(_holesStencil);
 }
 
 std::string HoleDemo::title() const
@@ -396,14 +396,14 @@ void HoleDemo::setup()
     this->addChild(_outerClipper);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(HoleDemo::onTouchesBegan, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(HoleDemo::onTouchesBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
 void HoleDemo::pokeHoleAtPoint(Vec2 point)
 {
-    float scale    = CCRANDOM_0_1() * 0.2 + 0.9;
-    float rotation = CCRANDOM_0_1() * 360;
+    float scale    = AXRANDOM_0_1() * 0.2 + 0.9;
+    float rotation = AXRANDOM_0_1() * 360;
 
     auto hole = Sprite::create("Images/hole_effect.png");
     hole->setPosition(point);
@@ -474,9 +474,9 @@ void ScrollViewDemo::setup()
     _scrolling = false;
 
     auto listener            = EventListenerTouchAllAtOnce::create();
-    listener->onTouchesBegan = CC_CALLBACK_2(ScrollViewDemo::onTouchesBegan, this);
-    listener->onTouchesMoved = CC_CALLBACK_2(ScrollViewDemo::onTouchesMoved, this);
-    listener->onTouchesEnded = CC_CALLBACK_2(ScrollViewDemo::onTouchesEnded, this);
+    listener->onTouchesBegan = AX_CALLBACK_2(ScrollViewDemo::onTouchesBegan, this);
+    listener->onTouchesMoved = AX_CALLBACK_2(ScrollViewDemo::onTouchesMoved, this);
+    listener->onTouchesEnded = AX_CALLBACK_2(ScrollViewDemo::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
@@ -583,7 +583,7 @@ void RawStencilBufferTest::initCommands()
         auto& cmd = _renderCmds[cmdIndex];
         cmdIndex++;
         cmd.init(_globalZOrder, blend);
-        cmd.setBeforeCallback(CC_CALLBACK_0(RawStencilBufferTest::onBeforeDrawClip, this, i));
+        cmd.setBeforeCallback(AX_CALLBACK_0(RawStencilBufferTest::onBeforeDrawClip, this, i));
         Vec2 vertices[]          = {Vec2::ZERO, Vec2(stencilPoint.x, 0.0f), stencilPoint, Vec2(0.0f, stencilPoint.y)};
         unsigned short indices[] = {0, 2, 1, 0, 3, 2};
         cmd.createVertexBuffer(sizeof(Vec2), 4, backend::BufferUsage::STATIC);
@@ -601,7 +601,7 @@ void RawStencilBufferTest::initCommands()
         auto& cmd2 = _renderCmds[cmdIndex];
         cmdIndex++;
         cmd2.init(_globalZOrder, blend);
-        cmd2.setBeforeCallback(CC_CALLBACK_0(RawStencilBufferTest::onBeforeDrawSprite, this, i));
+        cmd2.setBeforeCallback(AX_CALLBACK_0(RawStencilBufferTest::onBeforeDrawSprite, this, i));
         Vec2 vertices2[] = {Vec2::ZERO, Vec2(winPoint.x, 0.0f), winPoint, Vec2(0.0f, winPoint.y)};
         cmd2.createVertexBuffer(sizeof(Vec2), 4, backend::BufferUsage::STATIC);
         cmd2.updateVertexBuffer(vertices2, sizeof(vertices2));
@@ -632,7 +632,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         cmdIndex++;
 
         Director* director = Director::getInstance();
-        CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+        AXASSERT(nullptr != director, "Director is null when setting matrix stack");
         director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
         _modelViewTransform = this->transform(transform);

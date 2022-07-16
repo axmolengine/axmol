@@ -44,7 +44,7 @@ static Label* createLabel(std::string_view text,
 
 static bool engine_inj_checkVisibility(Node* theNode)
 {
-    // CC_ASSERT(theNode != NULL);
+    // AX_ASSERT(theNode != NULL);
     bool visible = false;
     for (Node* ptr = theNode; (ptr != nullptr && (visible = ptr->isVisible())); ptr = ptr->getParent())
         ;
@@ -63,7 +63,7 @@ static bool engine_inj_containsTouchPoint(axis::Node* target, axis::Touch* touch
 
     bool contains = (rc.containsPoint(pt));
 
-    // CCLOG("check %#x coordinate:(%f, %f), contains:%d", target, pt.x, pt.y, contains);
+    // AXLOG("check %#x coordinate:(%f, %f), contains:%d", target, pt.x, pt.y, contains);
     return contains;
 }
 
@@ -77,7 +77,7 @@ static bool engine_inj_containsPoint(axis::Node* target, const axis::Vec2& world
 
     bool contains = (rc.containsPoint(pt));
 
-    // CCLOG("check %#x coordinate:(%f, %f), contains:%d", target, pt.x, pt.y, contains);
+    // AXLOG("check %#x coordinate:(%f, %f), contains:%d", target, pt.x, pt.y, contains);
     return contains;
 }
 
@@ -126,7 +126,7 @@ static int _calcCharCount(const char* text)
     char ch = 0;
     while ((ch = *text) != 0x0)
     {
-        CC_BREAK_IF(!ch);
+        AX_BREAK_IF(!ch);
 
         if (0x80 != (0xC0 & ch))
         {
@@ -145,7 +145,7 @@ static int _truncateUTF8String(const char* text, int limit, int& nb)
     nb      = 0;
     while ((ch = *text) != 0x0)
     {
-        CC_BREAK_IF(!ch || n > limit);
+        AX_BREAK_IF(!ch || n > limit);
 
         if (0x80 != (0xC0 & ch))
         {
@@ -281,7 +281,7 @@ TextFieldEx* TextFieldEx::create(std::string_view placeholder,
         }
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -515,7 +515,7 @@ void TextFieldEx::keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/)
 
 void TextFieldEx::openIME(void)
 {
-    CCLOG("TextFieldEx:: openIME");
+    AXLOG("TextFieldEx:: openIME");
     this->attachWithIME();
     __updateCursorPosition();
     __showCursor();
@@ -526,7 +526,7 @@ void TextFieldEx::openIME(void)
 
 void TextFieldEx::closeIME(void)
 {
-    CCLOG("TextFieldEx:: closeIME");
+    AXLOG("TextFieldEx:: closeIME");
     __hideCursor();
     this->detachWithIME();
 

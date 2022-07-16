@@ -62,7 +62,7 @@ ActionTween* ActionTween::clone() const
 
 void ActionTween::startWithTarget(Node* target)
 {
-    CCASSERT(dynamic_cast<ActionTweenDelegate*>(target), "target must implement ActionTweenDelegate");
+    AXASSERT(dynamic_cast<ActionTweenDelegate*>(target), "target must implement ActionTweenDelegate");
     ActionInterval::startWithTarget(target);
     _delta = _to - _from;
 }

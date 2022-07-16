@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_FRUSTUM_H_
-#define __CC_FRUSTUM_H_
+#ifndef __AX_FRUSTUM_H_
+#define __AX_FRUSTUM_H_
 
 #include "base/ccMacros.h"
 #include "math/CCMath.h"
@@ -42,7 +42,7 @@ class Camera;
  * @js NA
  * @lua NA
  */
-class CC_DLL Frustum
+class AX_DLL Frustum
 {
     friend class Camera;
 
@@ -86,4 +86,4 @@ protected:
 
 NS_AX_END
 
-#endif  //__CC_FRUSTUM_H_
+#endif  //__AX_FRUSTUM_H_

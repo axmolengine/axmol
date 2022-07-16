@@ -23,8 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CC_BUNDLE_READER_H__
-#define __CC_BUNDLE_READER_H__
+#ifndef __AX_BUNDLE_READER_H__
+#define __AX_BUNDLE_READER_H__
 
 #include <string>
 #include <vector>
@@ -188,7 +188,7 @@ inline bool BundleReader::read<char>(char* ptr)
 template <>
 inline bool BundleReader::read<std::string>(std::string* /*ptr*/)
 {
-    CCLOG("can not read std::string, use readString() instead");
+    AXLOG("can not read std::string, use readString() instead");
     return false;
 }
 

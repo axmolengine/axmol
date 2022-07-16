@@ -32,7 +32,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 NS_AX_BEGIN
 
 const std::string STD_STRING_EMPTY("");
-const ssize_t CC_INVALID_INDEX = -1;
+const ssize_t AX_INVALID_INDEX = -1;
 
 /**
  * Color3B

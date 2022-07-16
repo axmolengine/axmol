@@ -55,7 +55,7 @@ BoneNodeReader* BoneNodeReader::getInstance()
 
 void BoneNodeReader::destroyInstance()
 {
-    CC_SAFE_DELETE(_instanceBoneNodeReader);
+    AX_SAFE_DELETE(_instanceBoneNodeReader);
 }
 
 Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData,

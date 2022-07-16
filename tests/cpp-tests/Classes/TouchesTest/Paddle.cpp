@@ -63,9 +63,9 @@ void Paddle::onEnter()
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
 
-    listener->onTouchBegan = CC_CALLBACK_2(Paddle::onTouchBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(Paddle::onTouchMoved, this);
-    listener->onTouchEnded = CC_CALLBACK_2(Paddle::onTouchEnded, this);
+    listener->onTouchBegan = AX_CALLBACK_2(Paddle::onTouchBegan, this);
+    listener->onTouchMoved = AX_CALLBACK_2(Paddle::onTouchMoved, this);
+    listener->onTouchEnded = AX_CALLBACK_2(Paddle::onTouchEnded, this);
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
@@ -84,7 +84,7 @@ bool Paddle::containsTouchLocation(Touch* touch)
 
 bool Paddle::onTouchBegan(Touch* touch, Event* event)
 {
-    CCLOG("Paddle::onTouchBegan id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
+    AXLOG("Paddle::onTouchBegan id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
           touch->getLocation().y);
 
     if (_state != kPaddleStateUngrabbed)
@@ -93,7 +93,7 @@ bool Paddle::onTouchBegan(Touch* touch, Event* event)
         return false;
 
     _state = kPaddleStateGrabbed;
-    CCLOG("return true");
+    AXLOG("return true");
     return true;
 }
 
@@ -106,10 +106,10 @@ void Paddle::onTouchMoved(Touch* touch, Event* event)
     // you get Sets instead of 1 UITouch, so you'd need to loop through the set
     // in each touchXXX method.
 
-    CCLOG("Paddle::onTouchMoved id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
+    AXLOG("Paddle::onTouchMoved id = %d, x = %f, y = %f", touch->getID(), touch->getLocation().x,
           touch->getLocation().y);
 
-    CCASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
+    AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
 
     auto touchPoint = touch->getLocation();
 
@@ -127,7 +127,7 @@ Paddle* Paddle::clone() const
 
 void Paddle::onTouchEnded(Touch* touch, Event* event)
 {
-    CCASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
+    AXASSERT(_state == kPaddleStateGrabbed, "Paddle - Unexpected state!");
 
     _state = kPaddleStateUngrabbed;
 }

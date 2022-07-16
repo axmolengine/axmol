@@ -44,7 +44,7 @@ TileMapAtlas* TileMapAtlas::create(std::string_view tile, std::string_view mapFi
         ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE(ret);
+    AX_SAFE_DELETE(ret);
     return nullptr;
 }
 
@@ -83,7 +83,7 @@ void TileMapAtlas::releaseMap()
 
 void TileMapAtlas::calculateItemsToRender()
 {
-    CCASSERT(_TGAInfo != nullptr, "tgaInfo must be non-nil");
+    AXASSERT(_TGAInfo != nullptr, "tgaInfo must be non-nil");
 
     _itemsToRender = 0;
     for (int x = 0; x < _TGAInfo->width; x++)
@@ -113,7 +113,7 @@ void TileMapAtlas::loadTGAfile(std::string_view file)
 #if 1
     if (_TGAInfo->status != TGA_OK)
     {
-        CCASSERT(0, "TileMapAtlasLoadTGA : TileMapAtlas cannot load TGA file");
+        AXASSERT(0, "TileMapAtlasLoadTGA : TileMapAtlas cannot load TGA file");
     }
 #endif
 }
@@ -121,16 +121,16 @@ void TileMapAtlas::loadTGAfile(std::string_view file)
 // TileMapAtlas - Atlas generation / updates
 void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
 {
-    CCASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
-    CCASSERT(position.x < _TGAInfo->width, "Invalid position.x");
-    CCASSERT(position.y < _TGAInfo->height, "Invalid position.x");
-    CCASSERT(tile.r != 0, "R component must be non 0");
+    AXASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
+    AXASSERT(position.x < _TGAInfo->width, "Invalid position.x");
+    AXASSERT(position.y < _TGAInfo->height, "Invalid position.x");
+    AXASSERT(tile.r != 0, "R component must be non 0");
 
     Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
     Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
     if (value.r == 0)
     {
-        CCLOG("cocos2d: Value.r must be non 0.");
+        AXLOG("cocos2d: Value.r must be non 0.");
     }
     else
     {
@@ -147,9 +147,9 @@ void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
 
 Color3B TileMapAtlas::getTileAt(const Vec2& position) const
 {
-    CCASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
-    CCASSERT(position.x < _TGAInfo->width, "Invalid position.x");
-    CCASSERT(position.y < _TGAInfo->height, "Invalid position.y");
+    AXASSERT(_TGAInfo != nullptr, "tgaInfo must not be nil");
+    AXASSERT(position.x < _TGAInfo->width, "Invalid position.x");
+    AXASSERT(position.y < _TGAInfo->height, "Invalid position.y");
 
     Color3B* ptr  = (Color3B*)_TGAInfo->imageData;
     Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
@@ -159,7 +159,7 @@ Color3B TileMapAtlas::getTileAt(const Vec2& position) const
 
 void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index)
 {
-    CCASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
+    AXASSERT(index >= 0 && index < _textureAtlas->getCapacity(), "updateAtlasValueAt: Invalid index");
 
     V3F_C4B_T2F_Quad* quad = &((_textureAtlas->getQuads())[index]);
 
@@ -171,10 +171,10 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
     float textureWide = (float)(_textureAtlas->getTexture()->getPixelsWide());
     float textureHigh = (float)(_textureAtlas->getTexture()->getPixelsHigh());
 
-    float itemWidthInPixels  = _itemWidth * CC_CONTENT_SCALE_FACTOR();
-    float itemHeightInPixels = _itemHeight * CC_CONTENT_SCALE_FACTOR();
+    float itemWidthInPixels  = _itemWidth * AX_CONTENT_SCALE_FACTOR();
+    float itemHeightInPixels = _itemHeight * AX_CONTENT_SCALE_FACTOR();
 
-#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+#if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
     float left   = (2 * row * itemWidthInPixels + 1) / (2 * textureWide);
     float right  = left + (itemWidthInPixels * 2 - 2) / (2 * textureWide);
     float top    = (2 * col * itemHeightInPixels + 1) / (2 * textureHigh);
@@ -224,7 +224,7 @@ void TileMapAtlas::updateAtlasValueAt(const Vec2& pos, const Color3B& value, int
 
 void TileMapAtlas::updateAtlasValues()
 {
-    CCASSERT(_TGAInfo != nullptr, "tgaInfo must be non-nil");
+    AXASSERT(_TGAInfo != nullptr, "tgaInfo must be non-nil");
 
     int total = 0;
 

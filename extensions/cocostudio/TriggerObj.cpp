@@ -84,7 +84,7 @@ TriggerObj* TriggerObj::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
     return pRet;
 }
@@ -157,11 +157,11 @@ void TriggerObj::serialize(const rapidjson::Value& val)
             dynamic_cast<BaseTriggerCondition*>(ObjectFactory::getInstance()->createObject(classname));
         if (con == nullptr)
         {
-            CCLOG("class %s can not be implemented!", classname);
-            CCASSERT(con != nullptr, "con can't be nullptr!");
+            AXLOG("class %s can not be implemented!", classname);
+            AXASSERT(con != nullptr, "con can't be nullptr!");
         }
 
-        CCASSERT(con != nullptr, "con can't be nullptr!");
+        AXASSERT(con != nullptr, "con can't be nullptr!");
         con->serialize(subDict);
         con->init();
         _cons.pushBack(con);
@@ -180,8 +180,8 @@ void TriggerObj::serialize(const rapidjson::Value& val)
             dynamic_cast<BaseTriggerAction*>(ObjectFactory::getInstance()->createObject(classname));
         if (act == nullptr)
         {
-            CCLOG("class %s can not be implemented!", classname);
-            CCASSERT(act != nullptr, "act can't be nullptr!");
+            AXLOG("class %s can not be implemented!", classname);
+            AXASSERT(act != nullptr, "act can't be nullptr!");
         }
         act->serialize(subDict);
         act->init();

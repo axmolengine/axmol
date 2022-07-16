@@ -140,7 +140,7 @@ bool BatchingExample::init()
     _title = "Batching";
 
     _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", &textureLoader, true);
-    CCASSERT(_atlas, "Error reading atlas file.");
+    AXASSERT(_atlas, "Error reading atlas file.");
 
     // This attachment loader configures attachments with data needed for cocos2d-x rendering.
     // Do not dispose the attachment loader until the skeleton data is disposed!
@@ -150,7 +150,7 @@ bool BatchingExample::init()
     SkeletonJson* json = new (__FILE__, __LINE__) SkeletonJson(_attachmentLoader);
     json->setScale(0.6f);  // Resizes skeleton data to 60% of the size it was in Spine.
     _skeletonData = json->readSkeletonDataFile("spineboy-pro.json");
-    CCASSERT(_skeletonData,
+    AXASSERT(_skeletonData,
              (json->getError().isEmpty() ? json->getError().buffer() : "Error reading skeleton data file."));
     delete json;
 

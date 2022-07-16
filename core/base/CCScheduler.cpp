@@ -89,7 +89,7 @@ void Timer::setupTimerWithInterval(float seconds, unsigned int repeat, float del
     _delay         = delay;
     _useDelay      = (_delay > 0.0f) ? true : false;
     _repeat        = repeat;
-    _runForever    = (_repeat == CC_REPEAT_FOREVER) ? true : false;
+    _runForever    = (_repeat == AX_REPEAT_FOREVER) ? true : false;
     _timesExecuted = 0;
 }
 
@@ -214,7 +214,7 @@ void TimerTargetCallback::cancel()
     _scheduler->unschedule(_key, _target);
 }
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
 
 // TimerScriptHandler
 
@@ -259,7 +259,7 @@ Scheduler::Scheduler()
     , _currentTarget(nullptr)
     , _currentTargetSalvaged(false)
     , _updateHashLocked(false)
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     , _scriptHandlerEntries(20)
 #endif
 {
@@ -285,7 +285,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
                          bool paused,
                          std::string_view key)
 {
-    this->schedule(callback, target, interval, CC_REPEAT_FOREVER, 0.0f, paused, key);
+    this->schedule(callback, target, interval, AX_REPEAT_FOREVER, 0.0f, paused, key);
 }
 
 void Scheduler::schedule(const ccSchedulerFunc& callback,
@@ -296,8 +296,8 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
                          bool paused,
                          std::string_view key)
 {
-    CCASSERT(target, "Argument target must be non-nullptr");
-    CCASSERT(!key.empty(), "key should not be empty!");
+    AXASSERT(target, "Argument target must be non-nullptr");
+    AXASSERT(!key.empty(), "key should not be empty!");
 
     tHashTimerEntry* element = nullptr;
     HASH_FIND_PTR(_hashForTimers, &target, element);
@@ -314,7 +314,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
     }
     else
     {
-        CCASSERT(element->paused == paused, "element's paused should be paused!");
+        AXASSERT(element->paused == paused, "element's paused should be paused!");
     }
 
     if (element->timers == nullptr)
@@ -329,7 +329,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
 
             if (timer && !timer->isExhausted() && key == timer->getKey())
             {
-                CCLOG("CCScheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval,
+                AXLOG("CCScheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval,
                       repeat, delay);
                 timer->setupTimerWithInterval(interval, repeat, delay);
                 return;
@@ -352,8 +352,8 @@ void Scheduler::unschedule(std::string_view key, void* target)
         return;
     }
 
-    // CCASSERT(target);
-    // CCASSERT(selector);
+    // AXASSERT(target);
+    // AXASSERT(selector);
 
     tHashTimerEntry* element = nullptr;
     HASH_FIND_PTR(_hashForTimers, &target, element);
@@ -514,8 +514,8 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, 
 
 bool Scheduler::isScheduled(std::string_view key, const void* target) const
 {
-    CCASSERT(!key.empty(), "Argument key must not be empty");
-    CCASSERT(target, "Argument target must be non-nullptr");
+    AXASSERT(!key.empty(), "Argument key must not be empty");
+    AXASSERT(target, "Argument target must be non-nullptr");
 
     tHashTimerEntry* element = nullptr;
     HASH_FIND_PTR(_hashForTimers, &target, element);
@@ -553,7 +553,7 @@ void Scheduler::removeUpdateFromHash(struct _listEntry* entry)
         // list entry
         DL_DELETE(*element->list, element->entry);
         if (!_updateHashLocked)
-            CC_SAFE_DELETE(element->entry);
+            AX_SAFE_DELETE(element->entry);
         else
         {
             element->entry->markedForDeletion = true;
@@ -623,7 +623,7 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
             unscheduleUpdate(entry->target);
         }
     }
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     _scriptHandlerEntries.clear();
 #endif
 }
@@ -663,7 +663,7 @@ void Scheduler::unscheduleAllForTarget(void* target)
     unscheduleUpdate(target);
 }
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
 unsigned int Scheduler::scheduleScriptFunc(unsigned int handler, float interval, bool paused)
 {
     SchedulerScriptHandlerEntry* entry = SchedulerScriptHandlerEntry::create(handler, interval, paused);
@@ -688,7 +688,7 @@ void Scheduler::unscheduleScriptEntry(unsigned int scheduleScriptEntryID)
 
 void Scheduler::resumeTarget(void* target)
 {
-    CCASSERT(target != nullptr, "target can't be nullptr!");
+    AXASSERT(target != nullptr, "target can't be nullptr!");
 
     // custom selectors
     tHashTimerEntry* element = nullptr;
@@ -703,14 +703,14 @@ void Scheduler::resumeTarget(void* target)
     HASH_FIND_PTR(_hashForUpdates, &target, elementUpdate);
     if (elementUpdate)
     {
-        CCASSERT(elementUpdate->entry != nullptr, "elementUpdate's entry can't be nullptr!");
+        AXASSERT(elementUpdate->entry != nullptr, "elementUpdate's entry can't be nullptr!");
         elementUpdate->entry->paused = false;
     }
 }
 
 void Scheduler::pauseTarget(void* target)
 {
-    CCASSERT(target != nullptr, "target can't be nullptr!");
+    AXASSERT(target != nullptr, "target can't be nullptr!");
 
     // custom selectors
     tHashTimerEntry* element = nullptr;
@@ -725,14 +725,14 @@ void Scheduler::pauseTarget(void* target)
     HASH_FIND_PTR(_hashForUpdates, &target, elementUpdate);
     if (elementUpdate)
     {
-        CCASSERT(elementUpdate->entry != nullptr, "elementUpdate's entry can't be nullptr!");
+        AXASSERT(elementUpdate->entry != nullptr, "elementUpdate's entry can't be nullptr!");
         elementUpdate->entry->paused = true;
     }
 }
 
 bool Scheduler::isTargetPaused(void* target)
 {
-    CCASSERT(target != nullptr, "target must be non nil");
+    AXASSERT(target != nullptr, "target must be non nil");
 
     // Custom selectors
     tHashTimerEntry* element = nullptr;
@@ -880,7 +880,7 @@ void Scheduler::update(float dt)
             for (elt->timerIndex = 0; elt->timerIndex < elt->timers->num; ++(elt->timerIndex))
             {
                 elt->currentTimer = (Timer*)(elt->timers->arr[elt->timerIndex]);
-                CCASSERT(!elt->currentTimer->isAborted(), "An aborted timer should not be updated");
+                AXASSERT(!elt->currentTimer->isAborted(), "An aborted timer should not be updated");
 
                 elt->currentTimer->update(dt);
 
@@ -916,7 +916,7 @@ void Scheduler::update(float dt)
     _updateHashLocked = false;
     _currentTarget    = nullptr;
 
-#if CC_ENABLE_SCRIPT_BINDING
+#if AX_ENABLE_SCRIPT_BINDING
     //
     // Script callbacks
     //
@@ -966,7 +966,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
                          float delay,
                          bool paused)
 {
-    CCASSERT(target, "Argument target must be non-nullptr");
+    AXASSERT(target, "Argument target must be non-nullptr");
 
     tHashTimerEntry* element = nullptr;
     HASH_FIND_PTR(_hashForTimers, &target, element);
@@ -983,7 +983,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
     }
     else
     {
-        CCASSERT(element->paused == paused, "element's paused should be paused.");
+        AXASSERT(element->paused == paused, "element's paused should be paused.");
     }
 
     if (element->timers == nullptr)
@@ -998,7 +998,7 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
 
             if (timer && !timer->isExhausted() && selector == timer->getSelector())
             {
-                CCLOG("CCScheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval,
+                AXLOG("CCScheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval,
                       repeat, delay);
                 timer->setupTimerWithInterval(interval, repeat, delay);
                 return;
@@ -1015,13 +1015,13 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
 
 void Scheduler::schedule(SEL_SCHEDULE selector, Ref* target, float interval, bool paused)
 {
-    this->schedule(selector, target, interval, CC_REPEAT_FOREVER, 0.0f, paused);
+    this->schedule(selector, target, interval, AX_REPEAT_FOREVER, 0.0f, paused);
 }
 
 bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const
 {
-    CCASSERT(selector, "Argument selector must be non-nullptr");
-    CCASSERT(target, "Argument target must be non-nullptr");
+    AXASSERT(selector, "Argument selector must be non-nullptr");
+    AXASSERT(target, "Argument target must be non-nullptr");
 
     tHashTimerEntry* element = nullptr;
     HASH_FIND_PTR(_hashForTimers, &target, element);

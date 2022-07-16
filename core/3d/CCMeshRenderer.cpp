@@ -58,13 +58,13 @@ MeshRenderer* MeshRenderer::create()
         mesh->autorelease();
         return mesh;
     }
-    CC_SAFE_DELETE(mesh);
+    AX_SAFE_DELETE(mesh);
     return nullptr;
 }
 
 MeshRenderer* MeshRenderer::create(std::string_view modelPath)
 {
-    CCASSERT(modelPath.length() >= 4, "Invalid filename.");
+    AXASSERT(modelPath.length() >= 4, "Invalid filename.");
 
     auto mesh = new MeshRenderer();
     if (mesh->initWithFile(modelPath))
@@ -73,7 +73,7 @@ MeshRenderer* MeshRenderer::create(std::string_view modelPath)
         mesh->autorelease();
         return mesh;
     }
-    CC_SAFE_DELETE(mesh);
+    AX_SAFE_DELETE(mesh);
     return nullptr;
 }
 MeshRenderer* MeshRenderer::create(std::string_view modelPath, std::string_view texturePath)
@@ -118,7 +118,7 @@ void MeshRenderer::createAsync(std::string_view modelPath,
     mesh->_asyncLoadParam.meshdatas           = new MeshDatas();
     mesh->_asyncLoadParam.nodeDatas           = new NodeDatas();
     AsyncTaskPool::getInstance()->enqueue(
-        AsyncTaskPool::TaskType::TASK_IO, CC_CALLBACK_1(MeshRenderer::afterAsyncLoad, mesh),
+        AsyncTaskPool::TaskType::TASK_IO, AX_CALLBACK_1(MeshRenderer::afterAsyncLoad, mesh),
         (void*)(&mesh->_asyncLoadParam), [mesh]() {
             mesh->_asyncLoadParam.result =
                 mesh->loadFromFile(mesh->_asyncLoadParam.modelFullPath, mesh->_asyncLoadParam.nodeDatas,
@@ -136,7 +136,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
         {
             _meshes.clear();
             _meshVertexDatas.clear();
-            CC_SAFE_RELEASE_NULL(_skeleton);
+            AX_SAFE_RELEASE_NULL(_skeleton);
             removeAllAttachNode();
 
             // create in the main thread
@@ -160,14 +160,14 @@ void MeshRenderer::afterAsyncLoad(void* param)
 
                     MeshRendererCache::getInstance()->addMeshRenderData(asyncParam->modelPath, data);
 
-                    CC_SAFE_DELETE(meshdatas);
+                    AX_SAFE_DELETE(meshdatas);
                     materialdatas = nullptr;
                     nodeDatas     = nullptr;
                 }
             }
-            CC_SAFE_DELETE(meshdatas);
-            CC_SAFE_DELETE(materialdatas);
-            CC_SAFE_DELETE(nodeDatas);
+            AX_SAFE_DELETE(meshdatas);
+            AX_SAFE_DELETE(materialdatas);
+            AX_SAFE_DELETE(nodeDatas);
 
             if (asyncParam->texPath != "")
             {
@@ -176,7 +176,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
         }
         else
         {
-            CCLOG("file load failed: %s\n", asyncParam->modelPath.c_str());
+            AXLOG("file load failed: %s\n", asyncParam->modelPath.c_str());
         }
         asyncParam->afterLoadCallback(this, asyncParam->callbackParam);
     }
@@ -207,7 +207,7 @@ bool MeshRenderer::loadFromCache(std::string_view path)
             _meshVertexDatas.pushBack(it);
         }
         _skeleton = Skeleton3D::create(meshdata->nodedatas->skeleton);
-        CC_SAFE_RETAIN(_skeleton);
+        AX_SAFE_RETAIN(_skeleton);
 
         const bool singleMesh = (meshdata->nodedatas->nodes.size() == 1);
         for (const auto& it : meshdata->nodedatas->nodes)
@@ -283,7 +283,7 @@ MeshRenderer::~MeshRenderer()
 {
     _meshes.clear();
     _meshVertexDatas.clear();
-    CC_SAFE_RELEASE_NULL(_skeleton);
+    AX_SAFE_RELEASE_NULL(_skeleton);
     removeAllAttachNode();
 }
 
@@ -301,7 +301,7 @@ bool MeshRenderer::initWithFile(std::string_view path)
     _aabbDirty = true;
     _meshes.clear();
     _meshVertexDatas.clear();
-    CC_SAFE_RELEASE_NULL(_skeleton);
+    AX_SAFE_RELEASE_NULL(_skeleton);
     removeAllAttachNode();
 
     if (loadFromCache(path))
@@ -325,14 +325,14 @@ bool MeshRenderer::initWithFile(std::string_view path)
             }
 
             MeshRendererCache::getInstance()->addMeshRenderData(path, data);
-            CC_SAFE_DELETE(meshdatas);
+            AX_SAFE_DELETE(meshdatas);
             _contentSize = getBoundingBox().size;
             return true;
         }
     }
-    CC_SAFE_DELETE(meshdatas);
-    CC_SAFE_DELETE(materialdatas);
-    CC_SAFE_DELETE(nodeDatas);
+    AX_SAFE_DELETE(meshdatas);
+    AX_SAFE_DELETE(materialdatas);
+    AX_SAFE_DELETE(nodeDatas);
 
     return false;
 }
@@ -350,7 +350,7 @@ bool MeshRenderer::initFrom(const NodeDatas& nodeDatas, const MeshDatas& meshdat
         }
     }
     _skeleton = Skeleton3D::create(nodeDatas.skeleton);
-    CC_SAFE_RETAIN(_skeleton);
+    AX_SAFE_RETAIN(_skeleton);
 
     auto size = nodeDatas.nodes.size();
     for (const auto& it : nodeDatas.nodes)
@@ -472,8 +472,8 @@ void MeshRenderer::setMaterial(Material* material)
 
 void MeshRenderer::setMaterial(Material* material, int meshIndex)
 {
-    CCASSERT(material, "Invalid Material");
-    CCASSERT(meshIndex == -1 || (meshIndex >= 0 && meshIndex < _meshes.size()), "Invalid meshIndex.");
+    AXASSERT(material, "Invalid Material");
+    AXASSERT(meshIndex == -1 || (meshIndex >= 0 && meshIndex < _meshes.size()), "Invalid meshIndex.");
 
     if (meshIndex == -1)
     {
@@ -493,7 +493,7 @@ void MeshRenderer::setMaterial(Material* material, int meshIndex)
 
 Material* MeshRenderer::getMaterial(int meshIndex) const
 {
-    CCASSERT(meshIndex >= 0 && meshIndex < _meshes.size(), "Invalid meshIndex.");
+    AXASSERT(meshIndex >= 0 && meshIndex < _meshes.size(), "Invalid meshIndex.");
     return _meshes.at(meshIndex)->getMaterial();
 }
 
@@ -505,7 +505,7 @@ void MeshRenderer::genMaterial(bool useLight)
     for (auto meshVertexData : _meshVertexDatas)
     {
         auto material = getMeshRendererMaterialForAttribs(meshVertexData, useLight);
-        CCASSERT(material, "material should cannot be null.");
+        AXASSERT(material, "material should cannot be null.");
         materials[meshVertexData] = material;
     }
 
@@ -774,7 +774,7 @@ void MeshRenderer::visit(axis::Renderer* renderer, const axis::Mat4& parentTrans
 
 void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-#if CC_USE_CULLING
+#if AX_USE_CULLING
     // TODO new-renderer: interface isVisibleInFrustum removal
     //  camera clipping
 //    if(_children.empty() && Camera::getVisitingCamera() &&
@@ -911,7 +911,7 @@ void MeshRenderer::setCullFaceEnabled(bool enable)
 
 Mesh* MeshRenderer::getMeshByIndex(int index) const
 {
-    CCASSERT(index < _meshes.size(), "Invalid index.");
+    AXASSERT(index < _meshes.size(), "Invalid index.");
     return _meshes.at(index);
 }
 

@@ -28,7 +28,7 @@
 
 #include "ui/UIEditBox/UIEditBoxImpl-android.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include <jni.h>
@@ -142,7 +142,7 @@ void EditBoxImplAndroid::setNativeFontColor(const Color4B& color)
 
 void EditBoxImplAndroid::setNativePlaceholderFont(const char* pFontName, int fontSize)
 {
-    CCLOG("Warning! You can't change Android Hint fontName and fontSize");
+    AXLOG("Warning! You can't change Android Hint fontName and fontSize");
 }
 
 void EditBoxImplAndroid::setNativePlaceholderFontColor(const Color4B& color)
@@ -249,4 +249,4 @@ const char* EditBoxImplAndroid::getNativeDefaultFontName()
 
 NS_AX_END
 
-#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) */
+#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) */

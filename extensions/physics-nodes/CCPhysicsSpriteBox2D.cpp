@@ -43,7 +43,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::create()
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -58,7 +58,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithTexture(Texture2D* pTexture)
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -73,7 +73,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithTexture(Texture2D* pTexture, c
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -88,7 +88,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithSpriteFrame(SpriteFrame* pSpri
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -103,7 +103,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::createWithSpriteFrameName(const char* ps
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -118,7 +118,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::create(const char* pszFileName)
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -133,7 +133,7 @@ PhysicsSpriteBox2D* PhysicsSpriteBox2D::create(const char* pszFileName, const Re
     }
     else
     {
-        CC_SAFE_DELETE(pRet);
+        AX_SAFE_DELETE(pRet);
     }
 
     return pRet;
@@ -254,7 +254,7 @@ void PhysicsSpriteBox2D::setPosition3D(const Vec3& position)
 
 float PhysicsSpriteBox2D::getRotation() const
 {
-    return (_ignoreBodyRotation ? Sprite::getRotation() : CC_RADIANS_TO_DEGREES(_pB2Body->GetAngle()));
+    return (_ignoreBodyRotation ? Sprite::getRotation() : AX_RADIANS_TO_DEGREES(_pB2Body->GetAngle()));
 }
 
 void PhysicsSpriteBox2D::setRotation(float fRotation)
@@ -267,7 +267,7 @@ void PhysicsSpriteBox2D::setRotation(float fRotation)
     else
     {
         b2Vec2 p      = _pB2Body->GetPosition();
-        float radians = CC_DEGREES_TO_RADIANS(fRotation);
+        float radians = AX_DEGREES_TO_RADIANS(fRotation);
         _pB2Body->SetTransform(p, radians);
     }
 }

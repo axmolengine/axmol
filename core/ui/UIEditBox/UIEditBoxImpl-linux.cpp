@@ -26,7 +26,7 @@
 
 #include "ui/UIEditBox/UIEditBoxImpl-linux.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "2d/CCLabel.h"
@@ -69,7 +69,7 @@ bool LinuxInputBox(std::string& entryLine)
         didChange = true;
         break;
     default:
-        // CCLOG("Undefined. Perhaps dialog was closed");
+        // AXLOG("Undefined. Perhaps dialog was closed");
         break;
     }
 
@@ -112,4 +112,4 @@ void EditBoxImplLinux::nativeOpenKeyboard()
 
 NS_AX_END
 
-#endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) */
+#endif /* #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */

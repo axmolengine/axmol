@@ -45,7 +45,7 @@ NS_AX_BEGIN
 
  @since v0.8.2
  */
-class CC_DLL PageTurn3D : public Grid3DAction
+class AX_DLL PageTurn3D : public Grid3DAction
 {
 public:
     /**

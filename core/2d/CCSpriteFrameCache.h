@@ -88,7 +88,7 @@ class PolygonInfo;
  @since v0.9
  @js cc.spriteFrameCache
  */
-class CC_DLL SpriteFrameCache : public Ref
+class AX_DLL SpriteFrameCache : public Ref
 {
 public:
     /** Returns the shared instance of the Sprite Frame cache.

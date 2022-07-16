@@ -23,8 +23,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CC_FILEUTILS_H__
-#define __CC_FILEUTILS_H__
+#ifndef __AX_FILEUTILS_H__
+#define __AX_FILEUTILS_H__
 
 #include <string>
 #include <vector>
@@ -98,7 +98,7 @@ public:
 };
 
 /** Helper class to handle file operations. */
-class CC_DLL FileUtils
+class AX_DLL FileUtils
 {
 public:
     /**
@@ -943,4 +943,4 @@ protected:
 
 NS_AX_END
 
-#endif  // __CC_FILEUTILS_H__
+#endif  // __AX_FILEUTILS_H__

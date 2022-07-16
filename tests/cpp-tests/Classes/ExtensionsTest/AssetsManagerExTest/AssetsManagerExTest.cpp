@@ -77,7 +77,7 @@ bool AssetsManagerExLoaderScene::init()
 
     auto downloadLabel = Label::createWithTTF("Start Download", "fonts/arial.ttf", 16);
     auto downloadItem =
-        MenuItemLabel::create(downloadLabel, CC_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
+        MenuItemLabel::create(downloadLabel, AX_CALLBACK_1(AssetsManagerExLoaderScene::startDownloadCallback, this));
     downloadItem->setPosition(Vec2(VisibleRect::center().x, VisibleRect::bottom().y + 100));
     _downloadMenu = Menu::create(downloadItem, nullptr);
     _downloadMenu->setPosition(Vec2::ZERO);
@@ -97,7 +97,7 @@ bool AssetsManagerExLoaderScene::init()
 
     std::string manifestPath = sceneManifests[_testIndex],
                 storagePath  = FileUtils::getInstance()->getWritablePath() + storagePaths[_testIndex];
-    CCLOG("Storage path for this test : %s", storagePath.c_str());
+    AXLOG("Storage path for this test : %s", storagePath.c_str());
     _am = AssetsManagerEx::create(manifestPath, storagePath);
     _am->retain();
 
@@ -121,7 +121,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
 
     if (!_am->getLocalManifest()->isLoaded())
     {
-        CCLOG("Fail to update assets, step skipped.");
+        AXLOG("Fail to update assets, step skipped.");
         onLoadEnd();
     }
     else
@@ -133,7 +133,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
                 {
                 case EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST:
                 {
-                    CCLOG("No local manifest file found, skip assets update.");
+                    AXLOG("No local manifest file found, skip assets update.");
                     this->onLoadEnd();
                 }
                 break;
@@ -153,7 +153,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
                     else
                     {
                         str = StringUtils::format("%.2f", percent) + "%";
-                        CCLOG("%.2f Percent", percent);
+                        AXLOG("%.2f Percent", percent);
                     }
                     if (this->_progress != nullptr)
                         this->_progress->setString(str);
@@ -162,20 +162,20 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
                 case EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST:
                 case EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST:
                 {
-                    CCLOG("Fail to download manifest file, update skipped.");
+                    AXLOG("Fail to download manifest file, update skipped.");
                     this->onLoadEnd();
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::ALREADY_UP_TO_DATE:
                 case EventAssetsManagerEx::EventCode::UPDATE_FINISHED:
                 {
-                    CCLOG("Update finished. %s", event->getMessage().c_str());
+                    AXLOG("Update finished. %s", event->getMessage().c_str());
                     this->onLoadEnd();
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::UPDATE_FAILED:
                 {
-                    CCLOG("Update failed. %s", event->getMessage().c_str());
+                    AXLOG("Update failed. %s", event->getMessage().c_str());
 
                     failCount++;
                     if (failCount < 5)
@@ -184,7 +184,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
                     }
                     else
                     {
-                        CCLOG("Reach maximum fail count, exit update process");
+                        AXLOG("Reach maximum fail count, exit update process");
                         failCount = 0;
                         this->onLoadEnd();
                     }
@@ -192,12 +192,12 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
                 break;
                 case EventAssetsManagerEx::EventCode::ERROR_UPDATING:
                 {
-                    CCLOG("Asset %s : %s", event->getAssetId().c_str(), event->getMessage().c_str());
+                    AXLOG("Asset %s : %s", event->getAssetId().c_str(), event->getMessage().c_str());
                 }
                 break;
                 case EventAssetsManagerEx::EventCode::ERROR_DECOMPRESS:
                 {
-                    CCLOG("%s", event->getMessage().c_str());
+                    AXLOG("%s", event->getMessage().c_str());
                 }
                 break;
                 default:

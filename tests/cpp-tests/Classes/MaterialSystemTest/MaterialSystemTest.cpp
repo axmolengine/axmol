@@ -150,10 +150,10 @@ void Material_2DEffects::onEnter()
     FETCH_CCTIME_LOCATION(meshNoise);
     FETCH_CCTIME_LOCATION(meshEdgeDetect);
 
-    schedule(CC_SCHEDULE_SELECTOR(Material_2DEffects::updateCCTimeUniforms));
+    schedule(AX_SCHEDULE_SELECTOR(Material_2DEffects::updateCCTimeUniforms));
 
     // properties is not a "Ref" object
-    CC_SAFE_DELETE(properties);
+    AX_SAFE_DELETE(properties);
 }
 
 std::string Material_2DEffects::subtitle() const
@@ -195,13 +195,13 @@ bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* progra
     if (autoBinding.compare("DYNAMIC_RADIUS") == 0)
     {
         auto loc = programState->getUniformLocation(uniform);
-        programState->setCallbackUniform(loc, CC_CALLBACK_2(EffectAutoBindingResolver::callbackRadius, this));
+        programState->setCallbackUniform(loc, AX_CALLBACK_2(EffectAutoBindingResolver::callbackRadius, this));
         return true;
     }
     else if (autoBinding.compare("OUTLINE_COLOR") == 0)
     {
         auto loc = programState->getUniformLocation(uniform);
-        programState->setCallbackUniform(loc, CC_CALLBACK_2(EffectAutoBindingResolver::callbackColor, this));
+        programState->setCallbackUniform(loc, AX_CALLBACK_2(EffectAutoBindingResolver::callbackColor, this));
         return true;
     }
     return false;
@@ -209,15 +209,15 @@ bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* progra
 
 void EffectAutoBindingResolver::callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform)
 {
-    float f = CCRANDOM_0_1() * 10;
+    float f = AXRANDOM_0_1() * 10;
     programState->setUniform(uniform, &f, sizeof(f));
 }
 
 void EffectAutoBindingResolver::callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform)
 {
-    float r = CCRANDOM_0_1();
-    float g = CCRANDOM_0_1();
-    float b = CCRANDOM_0_1();
+    float r = AXRANDOM_0_1();
+    float g = AXRANDOM_0_1();
+    float b = AXRANDOM_0_1();
     Vec3 color(r, g, b);
 
     programState->setUniform(uniform, &color, sizeof(color));
@@ -268,9 +268,9 @@ void Material_AutoBindings::onEnter()
     _noiseProgramState = meshNoise->getProgramState();
     _locationTime      = _noiseProgramState->getUniformLocation("u_Time");
 
-    schedule(CC_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
+    schedule(AX_SCHEDULE_SELECTOR(Material_AutoBindings::updateUniformTime));
     // properties is not a "Ref" object
-    CC_SAFE_DELETE(properties);
+    AX_SAFE_DELETE(properties);
 }
 
 std::string Material_AutoBindings::subtitle() const
@@ -308,7 +308,7 @@ void Material_setTechnique::onEnter()
     auto light2 = DirectionLight::create(Vec3(-1, 1, 0), Color3B::GREEN);
     addChild(light2);
 
-    this->schedule(CC_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");
+    this->schedule(AX_CALLBACK_1(Material_setTechnique::changeMaterial, this), 1, "cookie");
     _techniqueState = 0;
 
     auto rot    = RotateBy::create(5, Vec3(30.0f, 60.0f, 270.0f));
@@ -417,7 +417,7 @@ void Material_parsePerformance::onEnter()
             ui::Slider* slider = dynamic_cast<ui::Slider*>(sender);
             float p            = slider->getPercent() / 100.0f;
             slider->setTouchEnabled(false);
-            CCLOG("Will parsing material %d times", (int)(p * _maxParsingCoumt));
+            AXLOG("Will parsing material %d times", (int)(p * _maxParsingCoumt));
             Label* label = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
             if (label)
             {
@@ -467,7 +467,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
                                               elapsed_secs, count);
         label->setString(str);
 
-        CCLOG("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
+        AXLOG("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
     }
 }
 

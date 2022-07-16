@@ -98,7 +98,7 @@ FileUtils* FileUtils::getInstance()
         {
             delete s_sharedFileUtils;
             s_sharedFileUtils = nullptr;
-            CCLOG("ERROR: Could not init CCFileUtilsWin32");
+            AXLOG("ERROR: Could not init CCFileUtilsWin32");
         }
     }
     return s_sharedFileUtils;
@@ -175,7 +175,7 @@ FileUtils::Status FileUtilsWin32::getContents(std::string_view filename, Resizab
 
     if (!successed)
     {
-        CCLOG("Get data from file(%s) failed, error code is %s", filename.data(),
+        AXLOG("Get data from file(%s) failed, error code is %s", filename.data(),
               std::to_string(::GetLastError()).data());
         buffer->resize(sizeRead);
         return FileUtils::Status::ReadFailed;
@@ -277,8 +277,8 @@ std::string FileUtilsWin32::getNativeWritableAbsolutePath() const
 
 bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view newfullpath) const
 {
-    CCASSERT(!oldfullpath.empty(), "Invalid path");
-    CCASSERT(!newfullpath.empty(), "Invalid path");
+    AXASSERT(!oldfullpath.empty(), "Invalid path");
+    AXASSERT(!newfullpath.empty(), "Invalid path");
 
     std::wstring _wNew = ntcvt::from_chars(newfullpath);
     std::wstring _wOld = ntcvt::from_chars(oldfullpath);
@@ -287,7 +287,7 @@ bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view n
     {
         if (!DeleteFile(_wNew.c_str()))
         {
-            CCLOGERROR("Fail to delete file %s !Error code is 0x%x", newfullpath.data(), GetLastError());
+            AXLOGERROR("Fail to delete file %s !Error code is 0x%x", newfullpath.data(), GetLastError());
         }
     }
 
@@ -297,7 +297,7 @@ bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view n
     }
     else
     {
-        CCLOGERROR("Fail to rename file %s to %s !Error code is 0x%x", oldfullpath.data(), newfullpath.data(),
+        AXLOGERROR("Fail to rename file %s to %s !Error code is 0x%x", oldfullpath.data(), newfullpath.data(),
                    GetLastError());
         return false;
     }
@@ -305,7 +305,7 @@ bool FileUtilsWin32::renameFile(std::string_view oldfullpath, std::string_view n
 
 bool FileUtilsWin32::renameFile(std::string_view path, std::string_view oldname, std::string_view name) const
 {
-    CCASSERT(!path.empty(), "Invalid path");
+    AXASSERT(!path.empty(), "Invalid path");
     std::string oldPath{path};
     oldPath += oldname;
     std::string newPath{path};
@@ -320,7 +320,7 @@ bool FileUtilsWin32::renameFile(std::string_view path, std::string_view oldname,
 
 bool FileUtilsWin32::createDirectory(std::string_view dirPath) const
 {
-    CCASSERT(!dirPath.empty(), "Invalid path");
+    AXASSERT(!dirPath.empty(), "Invalid path");
 
     if (isDirectoryExist(dirPath))
         return true;
@@ -366,7 +366,7 @@ bool FileUtilsWin32::createDirectory(std::string_view dirPath) const
                 BOOL ret = CreateDirectoryW(subpath.c_str(), NULL);
                 if (!ret && ERROR_ALREADY_EXISTS != GetLastError())
                 {
-                    CCLOGERROR("Fail create directory %s !Error code is 0x%x", utf8Path.c_str(), GetLastError());
+                    AXLOGERROR("Fail create directory %s !Error code is 0x%x", utf8Path.c_str(), GetLastError());
                     return false;
                 }
             }
@@ -385,7 +385,7 @@ bool FileUtilsWin32::removeFile(std::string_view filepath) const
     }
     else
     {
-        CCLOGERROR("Fail remove file %s !Error code is 0x%x", filepath.data(), GetLastError());
+        AXLOGERROR("Fail remove file %s !Error code is 0x%x", filepath.data(), GetLastError());
         return false;
     }
 }

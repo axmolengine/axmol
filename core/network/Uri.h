@@ -52,7 +52,7 @@ namespace network
  * UriEscapeMode::QUERY) (for the query, but probably only after splitting at
  * '&' to identify the individual parameters).
  */
-class CC_DLL Uri
+class AX_DLL Uri
 {
 public:
     /**

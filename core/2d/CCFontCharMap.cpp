@@ -40,7 +40,7 @@ FontCharMap* FontCharMap::create(std::string_view plistFile)
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
-    CCASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
+    AXASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
@@ -112,7 +112,7 @@ FontAtlas* FontCharMap::newFontAtlas()
 
     tempAtlas->setLineHeight((float)_itemHeight);
 
-    auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
 
     FontLetterDefinition tempDefinition;
     tempDefinition.textureID       = 0;

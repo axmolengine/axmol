@@ -161,8 +161,8 @@ class SimulatorCompiler(axis.CCPlugin):
 
     def get_keywords(self):
         osx_keyword = {
-            "CC_TARGET_OS_IPHONE,":"CC_TARGET_OS_IPHONE,\n\"COCOS2D_DEBUG=1\",",
-            "CC_TARGET_OS_MAC,":"CC_TARGET_OS_MAC,\n\"COCOS2D_DEBUG=1\",",
+            "AX_TARGET_OS_IPHONE,":"AX_TARGET_OS_IPHONE,\n\"COCOS2D_DEBUG=1\",",
+            "AX_TARGET_OS_MAC,":"AX_TARGET_OS_MAC,\n\"COCOS2D_DEBUG=1\",",
             "COCOS2D_DEBUG=0":"COCOS2D_DEBUG=1",
         }
 
