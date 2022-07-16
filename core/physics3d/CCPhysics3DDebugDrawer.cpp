@@ -67,7 +67,7 @@ void Physics3DDebugDrawer::drawContactPoint(const btVector3& PointOnB,
 
 void Physics3DDebugDrawer::reportErrorWarning(const char* warningString)
 {
-    CCLOG("%s", warningString);
+    AXLOG("%s", warningString);
 }
 
 void Physics3DDebugDrawer::draw3dText(const btVector3& /*location*/, const char* /*textString*/) {}

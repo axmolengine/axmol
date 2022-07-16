@@ -55,7 +55,7 @@ DrawNode3D* DrawNode3D::create()
 
 void DrawNode3D::ensureCapacity(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     auto EXTENDED_SIZE = _bufferLines.size() + count;
 

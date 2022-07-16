@@ -376,7 +376,7 @@ std::string EditBoxImplWin::getText() const
     bool conversionResult = axis::StringUtils::UTF16ToUTF8(wstrResult, utf8Result);
     if (!conversionResult)
     {
-        CCLOG("warning, editbox input text conversion error.");
+        AXLOG("warning, editbox input text conversion error.");
     }
     return std::move(utf8Result);
 }

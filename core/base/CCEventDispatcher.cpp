@@ -88,7 +88,7 @@ static EventListener::ListenerID __getListenerID(Event* event)
     case Event::Type::TOUCH:
         // Touch listener is very special, it contains two kinds of listeners, EventListenerTouchOneByOne and
         // EventListenerTouchAllAtOnce. return UNKNOWN instead.
-        CCASSERT(false, "Don't call this method if the event is for touch.");
+        AXASSERT(false, "Don't call this method if the event is for touch.");
         break;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
@@ -98,7 +98,7 @@ static EventListener::ListenerID __getListenerID(Event* event)
         break;
 #endif
     default:
-        CCASSERT(false, "Invalid type!");
+        AXASSERT(false, "Invalid type!");
         break;
     }
 
@@ -135,11 +135,11 @@ bool EventDispatcher::EventListenerVector::empty() const
 void EventDispatcher::EventListenerVector::push_back(EventListener* listener)
 {
 #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS
-    CCASSERT(_sceneGraphListeners == nullptr ||
+    AXASSERT(_sceneGraphListeners == nullptr ||
                  std::count(_sceneGraphListeners->begin(), _sceneGraphListeners->end(), listener) == 0,
              "Listener should not be added twice!");
 
-    CCASSERT(_fixedListeners == nullptr || std::count(_fixedListeners->begin(), _fixedListeners->end(), listener) == 0,
+    AXASSERT(_fixedListeners == nullptr || std::count(_fixedListeners->begin(), _fixedListeners->end(), listener) == 0,
              "Listener should not be added twice!");
 #endif
 
@@ -472,7 +472,7 @@ void EventDispatcher::forceAddEventListener(EventListener* listener)
         setDirty(listenerID, DirtyFlag::SCENE_GRAPH_PRIORITY);
 
         auto node = listener->getAssociatedNode();
-        CCASSERT(node != nullptr, "Invalid scene graph priority!");
+        AXASSERT(node != nullptr, "Invalid scene graph priority!");
 
         associateNodeAndEventListener(node, listener);
 
@@ -489,8 +489,8 @@ void EventDispatcher::forceAddEventListener(EventListener* listener)
 
 void EventDispatcher::addEventListenerWithSceneGraphPriority(EventListener* listener, Node* node)
 {
-    CCASSERT(listener && node, "Invalid parameters.");
-    CCASSERT(!listener->isRegistered(), "The listener has been registered.");
+    AXASSERT(listener && node, "Invalid parameters.");
+    AXASSERT(!listener->isRegistered(), "The listener has been registered.");
 
     if (!listener->checkAvailable())
         return;
@@ -502,7 +502,7 @@ void EventDispatcher::addEventListenerWithSceneGraphPriority(EventListener* list
     addEventListener(listener);
 }
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
 
 void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
 {
@@ -517,7 +517,7 @@ void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
             {
                 for (EventListener* listener : *eventListenerVector->getSceneGraphPriorityListeners())
                 {
-                    CCASSERT(!listener || listener->getAssociatedNode() != node,
+                    AXASSERT(!listener || listener->getAssociatedNode() != node,
                              "Node should have no event listeners registered for it upon destruction!");
                 }
             }
@@ -527,13 +527,13 @@ void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
     // Check the node listeners map
     for (const auto& keyValuePair : _nodeListenersMap)
     {
-        CCASSERT(keyValuePair.first != node, "Node should have no event listeners registered for it upon destruction!");
+        AXASSERT(keyValuePair.first != node, "Node should have no event listeners registered for it upon destruction!");
 
         if (keyValuePair.second)
         {
             for (EventListener* listener : *keyValuePair.second)
             {
-                CCASSERT(listener->getAssociatedNode() != node,
+                AXASSERT(listener->getAssociatedNode() != node,
                          "Node should have no event listeners registered for it upon destruction!");
             }
         }
@@ -542,30 +542,30 @@ void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
     // Check the node priority map
     for (const auto& keyValuePair : _nodePriorityMap)
     {
-        CCASSERT(keyValuePair.first != node, "Node should have no event listeners registered for it upon destruction!");
+        AXASSERT(keyValuePair.first != node, "Node should have no event listeners registered for it upon destruction!");
     }
 
     // Check the to be added list
     for (EventListener* listener : _toAddedListeners)
     {
-        CCASSERT(listener->getAssociatedNode() != node,
+        AXASSERT(listener->getAssociatedNode() != node,
                  "Node should have no event listeners registered for it upon destruction!");
     }
 
     // Check the dirty nodes set
     for (Node* dirtyNode : _dirtyNodes)
     {
-        CCASSERT(dirtyNode != node, "Node should have no event listeners registered for it upon destruction!");
+        AXASSERT(dirtyNode != node, "Node should have no event listeners registered for it upon destruction!");
     }
 }
 
-#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
 
 void EventDispatcher::addEventListenerWithFixedPriority(EventListener* listener, int fixedPriority)
 {
-    CCASSERT(listener, "Invalid parameters.");
-    CCASSERT(!listener->isRegistered(), "The listener has been registered.");
-    CCASSERT(fixedPriority != 0,
+    AXASSERT(listener, "Invalid parameters.");
+    AXASSERT(!listener->isRegistered(), "The listener has been registered.");
+    AXASSERT(fixedPriority != 0,
              "0 priority is forbidden for fixed priority since it's used for scene graph based priority.");
 
     if (!listener->checkAvailable())
@@ -654,12 +654,12 @@ void EventDispatcher::removeEventListener(EventListener* listener)
         }
 
 #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS
-        CCASSERT(
+        AXASSERT(
             _inDispatch != 0 || !sceneGraphPriorityListeners ||
                 std::count(sceneGraphPriorityListeners->begin(), sceneGraphPriorityListeners->end(), listener) == 0,
             "Listener should be in no lists after this is done if we're not currently in dispatch mode.");
 
-        CCASSERT(_inDispatch != 0 || !fixedPriorityListeners ||
+        AXASSERT(_inDispatch != 0 || !fixedPriorityListeners ||
                      std::count(fixedPriorityListeners->begin(), fixedPriorityListeners->end(), listener) == 0,
                  "Listener should be in no lists after this is done if we're not currently in dispatch mode.");
 #endif
@@ -712,7 +712,7 @@ void EventDispatcher::setPriority(EventListener* listener, int fixedPriority)
             auto found = std::find(fixedPriorityListeners->begin(), fixedPriorityListeners->end(), listener);
             if (found != fixedPriorityListeners->end())
             {
-                CCASSERT(listener->getAssociatedNode() == nullptr,
+                AXASSERT(listener->getAssociatedNode() == nullptr,
                          "Can't set fixed priority with scene graph based listener.");
 
                 if (listener->getFixedPriority() != fixedPriority)
@@ -737,7 +737,7 @@ void EventDispatcher::dispatchEventToListeners(EventListenerVector* listeners,
     // priority < 0
     if (fixedPriorityListeners)
     {
-        CCASSERT(listeners->getGt0Index() <= static_cast<ssize_t>(fixedPriorityListeners->size()),
+        AXASSERT(listeners->getGt0Index() <= static_cast<ssize_t>(fixedPriorityListeners->size()),
                  "Out of range exception!");
 
         if (!fixedPriorityListeners->empty())
@@ -801,7 +801,7 @@ void EventDispatcher::dispatchTouchEventToListeners(EventListenerVector* listene
     // priority < 0
     if (fixedPriorityListeners)
     {
-        CCASSERT(listeners->getGt0Index() <= static_cast<ssize_t>(fixedPriorityListeners->size()),
+        AXASSERT(listeners->getGt0Index() <= static_cast<ssize_t>(fixedPriorityListeners->size()),
                  "Out of range exception!");
 
         if (!fixedPriorityListeners->empty())
@@ -1032,7 +1032,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                         }
                         break;
                     default:
-                        CCASSERT(false, "The eventcode is invalid.");
+                        AXASSERT(false, "The eventcode is invalid.");
                         break;
                     }
                 }
@@ -1044,7 +1044,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                     return true;
                 }
 
-                CCASSERT(touches->getID() == (*mutableTouchesIter)->getID(),
+                AXASSERT(touches->getID() == (*mutableTouchesIter)->getID(),
                          "touches ID should be equal to mutableTouchesIter's ID.");
 
                 if (isClaimed && listener->_isRegistered && listener->_needSwallow)
@@ -1113,7 +1113,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                 }
                 break;
             default:
-                CCASSERT(false, "The eventcode is invalid.");
+                AXASSERT(false, "The eventcode is invalid.");
                 break;
             }
 
@@ -1139,7 +1139,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
 
 void EventDispatcher::updateListeners(Event* event)
 {
-    CCASSERT(_inDispatch > 0, "If program goes here, there should be event in dispatch.");
+    AXASSERT(_inDispatch > 0, "If program goes here, there should be event in dispatch.");
 
     if (_inDispatch > 1)
         return;
@@ -1217,7 +1217,7 @@ void EventDispatcher::updateListeners(Event* event)
         onUpdateListeners(__getListenerID(event));
     }
 
-    CCASSERT(_inDispatch == 1, "_inDispatch should be 1 here.");
+    AXASSERT(_inDispatch == 1, "_inDispatch should be 1 here.");
 
     for (auto iter = _listenerMap.begin(); iter != _listenerMap.end();)
     {
@@ -1474,7 +1474,7 @@ void EventDispatcher::removeEventListenersForType(EventListener::Type listenerTy
     }
     else
     {
-        CCASSERT(false, "Invalid listener type!");
+        AXASSERT(false, "Invalid listener type!");
     }
 }
 

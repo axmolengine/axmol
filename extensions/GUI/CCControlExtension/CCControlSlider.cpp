@@ -122,10 +122,10 @@ bool ControlSlider::initWithSprites(Sprite* backgroundSprite,
 {
     if (Control::init())
     {
-        CCASSERT(backgroundSprite, "Background sprite must be not nil");
-        CCASSERT(progressSprite, "Progress sprite must be not nil");
-        CCASSERT(thumbSprite, "Thumb sprite must be not nil");
-        CCASSERT(selectedThumbSprite, "Thumb sprite must be not nil");
+        AXASSERT(backgroundSprite, "Background sprite must be not nil");
+        AXASSERT(progressSprite, "Progress sprite must be not nil");
+        AXASSERT(thumbSprite, "Thumb sprite must be not nil");
+        AXASSERT(selectedThumbSprite, "Thumb sprite must be not nil");
 
         setIgnoreAnchorPointForPosition(false);
 

@@ -106,7 +106,7 @@ void PUMaterialCache::addMaterial(PUMaterial* material)
     {
         if (iter->name == material->name)
         {
-            CCLOG("warning: Material has existed (FilePath: %s,  MaterialName: %s)", material->fileName.c_str(),
+            AXLOG("warning: Material has existed (FilePath: %s,  MaterialName: %s)", material->fileName.c_str(),
                   material->name.c_str());
             return;
         }
@@ -180,7 +180,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 
     if (!(d = opendir(fileFolder.data())))
     {
-        CCLOG("error opendir %s!!!\n", fileFolder.data());
+        AXLOG("error opendir %s!!!\n", fileFolder.data());
         return false;
     }
     while ((file = readdir(d)) != NULL)
@@ -194,14 +194,14 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
         {
             std::string fullpath{fileFolder};
             fullpath.append("/"sv).append(file->d_name);
-            CCLOG("%s", fullpath.c_str());
+            AXLOG("%s", fullpath.c_str());
             loadMaterials(fullpath);
             state = true;
         }
     }
     closedir(d);
 #else
-    CCASSERT(0, "no implement for this platform");
+    AXASSERT(0, "no implement for this platform");
 #endif
 
     return state;

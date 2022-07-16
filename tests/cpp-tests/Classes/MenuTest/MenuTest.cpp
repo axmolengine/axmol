@@ -83,7 +83,7 @@ MenuLayerMainMenu::MenuLayerMainMenu()
     auto item3      = MenuItemLabel::create(labelAtlas, AX_CALLBACK_1(MenuLayerMainMenu::menuCallbackDisabled, this));
     item3->setDisabledColor(Color3B(32, 32, 64));
     item3->setColor(Color3B(200, 200, 255));
-    CCLOG("test MenuItem Label getString: %s", item3->getString().data());
+    AXLOG("test MenuItem Label getString: %s", item3->getString().data());
     // Font Item
     auto item4 = MenuItemFont::create("I toggle enable items",
                                       [&](Ref* sender) { _disabledItem->setEnabled(!_disabledItem->isEnabled()); });
@@ -327,7 +327,7 @@ MenuLayer3::MenuLayer3()
 
     auto label = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Enable AtlasItem");
     auto item1 = MenuItemLabel::create(label, [&](Ref* sender) {
-        // CCLOG("Label clicked. Toggling AtlasSprite");
+        // AXLOG("Label clicked. Toggling AtlasSprite");
         _disabledItem->setEnabled(!_disabledItem->isEnabled());
         _disabledItem->stopAllActions();
     });
@@ -445,7 +445,7 @@ MenuLayer4::~MenuLayer4() {}
 
 void MenuLayer4::menuCallback(Ref* sender)
 {
-    // CCLOG("selected item: %x index:%d", dynamic_cast<MenuItemToggle*>(sender)->selectedItem(),
+    // AXLOG("selected item: %x index:%d", dynamic_cast<MenuItemToggle*>(sender)->selectedItem(),
     // dynamic_cast<MenuItemToggle*>(sender)->selectedIndex() );
 }
 

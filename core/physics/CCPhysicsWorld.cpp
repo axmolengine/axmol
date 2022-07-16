@@ -445,7 +445,7 @@ void PhysicsWorld::collisionSeparateCallback(PhysicsContact& contact)
 
 void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, const Vec2& point2, void* data)
 {
-    CCASSERT(func != nullptr, "func shouldn't be nullptr");
+    AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
     if (func != nullptr)
     {
@@ -464,7 +464,7 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, 
 
 void PhysicsWorld::queryRect(PhysicsQueryRectCallbackFunc func, const Rect& rect, void* data)
 {
-    CCASSERT(func != nullptr, "func shouldn't be nullptr");
+    AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
     if (func != nullptr)
     {
@@ -482,7 +482,7 @@ void PhysicsWorld::queryRect(PhysicsQueryRectCallbackFunc func, const Rect& rect
 
 void PhysicsWorld::queryPoint(PhysicsQueryPointCallbackFunc func, const Vec2& point, void* data)
 {
-    CCASSERT(func != nullptr, "func shouldn't be nullptr");
+    AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
     if (func != nullptr)
     {
@@ -543,7 +543,7 @@ bool PhysicsWorld::init()
 
 void PhysicsWorld::addBody(PhysicsBody* body)
 {
-    CCASSERT(body != nullptr, "the body can not be nullptr");
+    AXASSERT(body != nullptr, "the body can not be nullptr");
 
     if (body->getWorld() == this)
     {
@@ -633,7 +633,7 @@ void PhysicsWorld::removeBody(PhysicsBody* body)
 {
     if (body->getWorld() != this)
     {
-        CCLOG("Physics Warning: this body doesn't belong to this world");
+        AXLOG("Physics Warning: this body doesn't belong to this world");
         return;
     }
 
@@ -677,7 +677,7 @@ void PhysicsWorld::removeJoint(PhysicsJoint* joint, bool destroy)
     {
         if (joint->getWorld() != this && destroy)
         {
-            CCLOG(
+            AXLOG(
                 "physics warning: the joint is not in this world, it won't be destroyed until the body it connects is "
                 "destroyed");
             return;
@@ -760,7 +760,7 @@ void PhysicsWorld::addJoint(PhysicsJoint* joint)
 {
     if (joint)
     {
-        CCASSERT(joint->getWorld() == nullptr, "Can not add joint already add to other world!");
+        AXASSERT(joint->getWorld() == nullptr, "Can not add joint already add to other world!");
 
         joint->_world = this;
         auto it       = std::find(_delayRemoveJoints.begin(), _delayRemoveJoints.end(), joint);
@@ -799,7 +799,7 @@ void PhysicsWorld::addShape(PhysicsShape* physicsShape)
 
 void PhysicsWorld::doRemoveBody(PhysicsBody* body)
 {
-    CCASSERT(body != nullptr, "the body can not be nullptr");
+    AXASSERT(body != nullptr, "the body can not be nullptr");
 
     // remove shapes
     for (auto& shape : body->getShapes())
@@ -901,7 +901,7 @@ void PhysicsWorld::step(float delta)
 {
     if (_autoStep)
     {
-        CCLOG("Physics Warning: You need to close auto step( setAutoStep(false) ) first");
+        AXLOG("Physics Warning: You need to close auto step( setAutoStep(false) ) first");
     }
     else
     {

@@ -78,7 +78,7 @@ bool UIButtonTest::init()
 
         // Create the button
         Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
-        CCLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest::touchEvent, this));
@@ -150,11 +150,11 @@ void UIButtonTest::touchEvent(Ref* pSender, Widget::TouchEventType type)
 void UIButtonTest::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData normalFileName = _button->getNormalFile();
-    CCLOG("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
+    AXLOG("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
     axis::ResourceData clickedFileName = _button->getPressedFile();
-    CCLOG("clickedFileName  Name : %s, Type: %d", clickedFileName.file.c_str(), clickedFileName.type);
+    AXLOG("clickedFileName  Name : %s, Type: %d", clickedFileName.file.c_str(), clickedFileName.type);
     axis::ResourceData disabledFileName = _button->getDisabledFile();
-    CCLOG("disabledFileName  Name : %s, Type: %d", disabledFileName.file.c_str(), disabledFileName.type);
+    AXLOG("disabledFileName  Name : %s, Type: %d", disabledFileName.file.c_str(), disabledFileName.type);
 }
 
 // UIButtonTest_Scale9
@@ -433,7 +433,7 @@ bool UIButtonTest_Title::init()
         button->setTitleText("Title Button!");
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->setTitleColor(Color3B::YELLOW);
-        CCASSERT(button->getTitleColor() == Color3B::YELLOW, "Button setTitleColor & getTitleColor not match!");
+        AXASSERT(button->getTitleColor() == Color3B::YELLOW, "Button setTitleColor & getTitleColor not match!");
         button->addTouchEventListener(AX_CALLBACK_2(UIButtonTest_Title::touchEvent, this));
         _uiLayer->addChild(button);
         button->setFlippedX(true);
@@ -661,7 +661,7 @@ bool UIButtonTestZoomScale::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f + 20));
         button->setPressedActionEnabled(true);
         button->addClickEventListener([=](Ref* sender) {
-            CCLOG("Button clicked, position = (%f, %f)", button->getPosition().x, button->getPosition().y);
+            AXLOG("Button clicked, position = (%f, %f)", button->getPosition().x, button->getPosition().y);
         });
         button->setName("button");
         _uiLayer->addChild(button);
@@ -715,11 +715,11 @@ bool UIButtonTextOnly::init()
         button->setPositionNormalized(Vec2(0.5f, 0.5f));
 
         button->setTitleText("PLAY GAME");
-        CCLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
               button->getContentSize().height);
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
-        button->addClickEventListener([](Ref* sender) { CCLOG("clicked!"); });
+        button->addClickEventListener([](Ref* sender) { AXLOG("clicked!"); });
         _uiLayer->addChild(button);
 
         return true;
@@ -753,7 +753,7 @@ bool UIButtonIgnoreContentSizeTest::init()
         button->setZoomScale(0.3f);
         button->setPressedActionEnabled(true);
         button->addClickEventListener([=](Ref* sender) {
-            CCLOG("clicked!");
+            AXLOG("clicked!");
             button->setScale(1.2f);
         });
         _uiLayer->addChild(button);
@@ -768,7 +768,7 @@ bool UIButtonIgnoreContentSizeTest::init()
         button2->setPressedActionEnabled(true);
         button2->addClickEventListener([=](Ref* sender) {
             button2->runAction(ScaleTo::create(1.0f, 1.2f));
-            CCLOG("clicked!");
+            AXLOG("clicked!");
         });
         _uiLayer->addChild(button2);
 
@@ -995,7 +995,7 @@ bool UIButtonCloneTest::init()
         button->setPosition(Vec2(widgetSize.width / 2.0f - 80, widgetSize.height / 2.0f + 40));
         _uiLayer->addChild(button);
 
-        CCASSERT(button->getTitleRenderer() == nullptr, "Button title render must be nullptr ");
+        AXASSERT(button->getTitleRenderer() == nullptr, "Button title render must be nullptr ");
 
         auto buttonCopy = (Button*)button->clone();
         buttonCopy->setPosition(Vec2(widgetSize.width / 2.0f + 80, widgetSize.height / 2.0f + 40));
@@ -1013,9 +1013,9 @@ bool UIButtonCloneTest::init()
         buttonScale9Copy2->setContentSize(buttonCopy->getContentSize() * 1.5f);
         this->addChild(buttonScale9Copy2);
 
-        CCASSERT(button->getTitleRenderer() == nullptr, "Original Button title render must be nullptr ");
+        AXASSERT(button->getTitleRenderer() == nullptr, "Original Button title render must be nullptr ");
 
-        CCASSERT(buttonCopy->getTitleRenderer() == nullptr, "Copied Button title render must be nullptr ");
+        AXASSERT(buttonCopy->getTitleRenderer() == nullptr, "Copied Button title render must be nullptr ");
 
         return true;
     }

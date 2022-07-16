@@ -82,7 +82,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
                                                       backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
         if (_vertexBuffer == nullptr)
         {
-            CCLOG("Particle3DQuadRender::render create vertex buffer failed");
+            AXLOG("Particle3DQuadRender::render create vertex buffer failed");
             return;
         }
     }
@@ -94,7 +94,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
                                                       backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
         if (_indexBuffer == nullptr)
         {
-            CCLOG("Particle3DQuadRender::render create index buffer failed");
+            AXLOG("Particle3DQuadRender::render create index buffer failed");
             return;
         }
     }
@@ -309,7 +309,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
             MeshRenderer* mesh = MeshRenderer::create(_modelFile);
             if (mesh == nullptr)
             {
-                CCLOG("failed to load file %s", _modelFile.c_str());
+                AXLOG("failed to load file %s", _modelFile.c_str());
                 continue;
             }
             mesh->setTexture(_texFile);

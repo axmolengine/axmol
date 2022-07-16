@@ -253,7 +253,7 @@ void ImGuiPresenter::loadCustomFonts(void* ud)
         }
 
         auto fontData = FileUtils::getInstance()->getDataFromFile(fontInfo.first);
-        CCASSERT(!fontData.isNull(), "Cannot load font for IMGUI");
+        AXASSERT(!fontData.isNull(), "Cannot load font for IMGUI");
 
         ssize_t bufferSize = 0;
         auto* buffer       = fontData.takeBuffer(&bufferSize);  // Buffer automatically freed by IMGUI

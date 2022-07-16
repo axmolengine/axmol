@@ -46,19 +46,19 @@ void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const
         {
             int narg = err->index;
             if (err->array)
-                CCLOG("%s\n     %s argument #%d is array of '%s'; array of '%s' expected.\n", msg + 2, funcName, narg,
+                AXLOG("%s\n     %s argument #%d is array of '%s'; array of '%s' expected.\n", msg + 2, funcName, narg,
                       provided, expected);
             else
-                CCLOG("%s\n     %s argument #%d is '%s'; '%s' expected.\n", msg + 2, funcName, narg, provided,
+                AXLOG("%s\n     %s argument #%d is '%s'; '%s' expected.\n", msg + 2, funcName, narg, provided,
                       expected);
         }
         else if (msg[1] == 'v')
         {
             if (err->array)
-                CCLOG("%s\n     %s value is array of '%s'; array of '%s' expected.\n", funcName, msg + 2, provided,
+                AXLOG("%s\n     %s value is array of '%s'; array of '%s' expected.\n", funcName, msg + 2, provided,
                       expected);
             else
-                CCLOG("%s\n     %s value is '%s'; '%s' expected.\n", msg + 2, funcName, provided, expected);
+                AXLOG("%s\n     %s value is '%s'; '%s' expected.\n", msg + 2, funcName, provided, expected);
         }
     }
 }
@@ -1221,7 +1221,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, axis::ValueVector
         }
         else
         {
-            CCASSERT(false, "not supported type");
+            AXASSERT(false, "not supported type");
         }
     }
 
@@ -1361,7 +1361,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, axis::ValueMap* ret, const char*
                 }
                 else
                 {
-                    CCASSERT(false, "not supported type");
+                    AXASSERT(false, "not supported type");
                 }
             }
 
@@ -1449,7 +1449,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, axis::ValueMapIntKey* ret,
                 }
                 else
                 {
-                    CCASSERT(false, "not supported type");
+                    AXASSERT(false, "not supported type");
                 }
             }
 
@@ -1532,7 +1532,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, axis::ValueVector* ret, const
             }
             else
             {
-                CCASSERT(false, "not supported type");
+                AXASSERT(false, "not supported type");
             }
             lua_pop(L, 1);
         }
@@ -1572,7 +1572,7 @@ bool luaval_to_std_vector_string(lua_State* L, int lo, std::vector<std::string>*
             }
             else
             {
-                CCASSERT(false, "string type is needed");
+                AXASSERT(false, "string type is needed");
             }
 
             lua_pop(L, 1);
@@ -1613,7 +1613,7 @@ bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::str
             }
             else
             {
-                CCASSERT(false, "string type is needed");
+                AXASSERT(false, "string type is needed");
             }
 
             lua_pop(L, 1);
@@ -1651,7 +1651,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
             }
             else
             {
-                CCASSERT(false, "int type is needed");
+                AXASSERT(false, "int type is needed");
             }
 
             lua_pop(L, 1);
@@ -1723,7 +1723,7 @@ bool luaval_to_std_vector_float(lua_State* L, int lo, std::vector<float>* ret, c
             }
             else
             {
-                CCASSERT(false, "float type is needed");
+                AXASSERT(false, "float type is needed");
             }
 
             lua_pop(L, 1);
@@ -1762,7 +1762,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
             }
             else
             {
-                CCASSERT(false, "unsigned short type is needed");
+                AXASSERT(false, "unsigned short type is needed");
             }
 
             lua_pop(L, 1);
@@ -1986,7 +1986,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* re
             }
             else
             {
-                CCASSERT(false, "vec2 type is needed");
+                AXASSERT(false, "vec2 type is needed");
             }
             lua_pop(L, 1);
         }
@@ -2029,7 +2029,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* re
             }
             else
             {
-                CCASSERT(false, "vec3 type is needed");
+                AXASSERT(false, "vec3 type is needed");
             }
             lua_pop(L, 1);
         }
@@ -2075,7 +2075,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
             }
             else
             {
-                CCASSERT(false, "V3F_C4B_T2F type is needed");
+                AXASSERT(false, "V3F_C4B_T2F type is needed");
             }
             lua_pop(L, 1);
         }
@@ -3007,7 +3007,7 @@ bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<s
         }
         else
         {
-            CCASSERT(false, "string type is needed");
+            AXASSERT(false, "string type is needed");
         }
 
         lua_pop(L, 1);
@@ -3093,7 +3093,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, axis::backend::UniformLoca
     lua_gettable(L, pos);
     if (lua_isnil(L, -1))
     {
-        CCASSERT(false, "invalidate UniformLocation value");
+        AXASSERT(false, "invalidate UniformLocation value");
     }
     int len = lua_objlen(L, -1);
     for (int i = 0; i < len; i++)
@@ -3108,7 +3108,7 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, axis::backend::UniformLoca
     lua_gettable(L, pos);
     if (lua_isnil(L, -1))
     {
-        CCASSERT(false, "invalidate UniformLocation value");
+        AXASSERT(false, "invalidate UniformLocation value");
     }
     loc.shaderStage = static_cast<axis::backend::ShaderStage>(lua_tointeger(L, -1));
     lua_pop(L, 1);

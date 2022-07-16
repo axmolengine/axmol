@@ -1262,7 +1262,7 @@ float Widget::getScaleY() const
 
 float Widget::getScale() const
 {
-    CCASSERT(this->getScaleX() == this->getScaleY(), "scaleX should be equal to scaleY.");
+    AXASSERT(this->getScaleX() == this->getScaleY(), "scaleX should be equal to scaleY.");
     return this->getScaleX();
 }
 

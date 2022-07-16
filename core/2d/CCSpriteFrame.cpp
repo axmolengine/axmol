@@ -152,7 +152,7 @@ bool SpriteFrame::initWithTextureFilename(std::string_view filename,
 
 SpriteFrame::~SpriteFrame()
 {
-    CCLOGINFO("deallocing SpriteFrame: %p", this);
+    AXLOGINFO("deallocing SpriteFrame: %p", this);
     AX_SAFE_RELEASE(_texture);
 }
 

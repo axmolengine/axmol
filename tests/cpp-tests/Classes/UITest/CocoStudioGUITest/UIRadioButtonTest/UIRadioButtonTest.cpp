@@ -238,7 +238,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioBu
                                                             int index,
                                                             axis::ui::RadioButtonGroup::EventType type)
 {
-    CCASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
+    AXASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup1 : %d", index);
     _groupEventLabel->setString(text);
     addLog(text);
@@ -248,7 +248,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* radioBu
                                                             int index,
                                                             axis::ui::RadioButtonGroup::EventType type)
 {
-    CCASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
+    AXASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup2 : %d", index);
     _groupEventLabel->setString(text);
     addLog(text);

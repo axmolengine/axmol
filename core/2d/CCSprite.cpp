@@ -130,10 +130,10 @@ Sprite* Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
 {
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
-#if COCOS2D_DEBUG > 0
+#if AXIS_DEBUG > 0
     char msg[256] = {0};
     sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.data());
-    CCASSERT(frame != nullptr, msg);
+    AXASSERT(frame != nullptr, msg);
 #endif
 
     return createWithSpriteFrame(frame);
@@ -159,7 +159,7 @@ bool Sprite::init()
 
 bool Sprite::initWithTexture(Texture2D* texture)
 {
-    CCASSERT(texture != nullptr, "Invalid texture for sprite");
+    AXASSERT(texture != nullptr, "Invalid texture for sprite");
 
     Rect rect = Rect::ZERO;
     if (texture)
@@ -182,7 +182,7 @@ bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
 {
     if (filename.empty())
     {
-        CCLOG("Call Sprite::initWithFile with blank resource filename.");
+        AXLOG("Call Sprite::initWithFile with blank resource filename.");
         return false;
     }
 
@@ -204,7 +204,7 @@ bool Sprite::initWithFile(std::string_view filename, PixelFormat format)
 
 bool Sprite::initWithFile(std::string_view filename, const Rect& rect)
 {
-    CCASSERT(!filename.empty(), "Invalid filename");
+    AXASSERT(!filename.empty(), "Invalid filename");
     if (filename.empty())
         return false;
 
@@ -222,7 +222,7 @@ bool Sprite::initWithFile(std::string_view filename, const Rect& rect)
 
 bool Sprite::initWithSpriteFrameName(std::string_view spriteFrameName)
 {
-    CCASSERT(!spriteFrameName.empty(), "Invalid spriteFrameName");
+    AXASSERT(!spriteFrameName.empty(), "Invalid spriteFrameName");
     if (spriteFrameName.empty())
         return false;
 
@@ -235,7 +235,7 @@ bool Sprite::initWithSpriteFrameName(std::string_view spriteFrameName)
 
 bool Sprite::initWithSpriteFrame(SpriteFrame* spriteFrame)
 {
-    CCASSERT(spriteFrame != nullptr, "spriteFrame can't be nullptr!");
+    AXASSERT(spriteFrame != nullptr, "spriteFrame can't be nullptr!");
     if (spriteFrame == nullptr)
         return false;
 
@@ -383,7 +383,7 @@ void Sprite::setProgramState(uint32_t type)
 
 bool Sprite::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    CCASSERT(programState, "argument should not be nullptr");
+    AXASSERT(programState, "argument should not be nullptr");
     if (Node::setProgramState(programState, needsRetain))
     {
         auto& pipelineDescriptor        = _trianglesCommand.getPipelineDescriptor();
@@ -401,10 +401,10 @@ bool Sprite::setProgramState(backend::ProgramState* programState, bool needsReta
 
 void Sprite::setTexture(Texture2D* texture)
 {
-    CCASSERT(!_batchNode || (texture && texture == _batchNode->getTexture()),
+    AXASSERT(!_batchNode || (texture && texture == _batchNode->getTexture()),
              "CCSprite: Batched sprites should use the same texture as the batchnode");
     // accept texture==nil as argument
-    CCASSERT(!texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
+    AXASSERT(!texture || dynamic_cast<Texture2D*>(texture), "setTexture expects a Texture2D. Invalid argument");
 
     if (texture == nullptr)
     {
@@ -416,7 +416,7 @@ void Sprite::setTexture(Texture2D* texture)
         {
             Image* image        = new Image();
             bool AX_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
-            CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
+            AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
 
             texture = _director->getTextureCache()->addImage(image, AX_2x2_WHITE_IMAGE_KEY);
             AX_SAFE_RELEASE(image);
@@ -709,7 +709,7 @@ void Sprite::setCenterRectNormalized(const axis::Rect& rectTopLeft)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
-        CCLOGWARN("Warning: Sprite::setCenterRectNormalized() only works with QUAD and SLICE9 render modes");
+        AXLOGWARN("Warning: Sprite::setCenterRectNormalized() only works with QUAD and SLICE9 render modes");
         return;
     }
 
@@ -765,7 +765,7 @@ void Sprite::setCenterRect(const axis::Rect& rectInPoints)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
-        CCLOGWARN("Warning: Sprite::setCenterRect() only works with QUAD and SLICE9 render modes");
+        AXLOGWARN("Warning: Sprite::setCenterRect() only works with QUAD and SLICE9 render modes");
         return;
     }
 
@@ -928,7 +928,7 @@ void Sprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
 
 void Sprite::populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad& quad)
 {
-    CCASSERT(quadIndex < 9, "Invalid quadIndex");
+    AXASSERT(quadIndex < 9, "Invalid quadIndex");
     // convert Quad intro Triangle since it takes less memory
 
     // Triangles are ordered like the following:
@@ -986,7 +986,7 @@ void Sprite::populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad& quad)
 
 void Sprite::updateTransform()
 {
-    CCASSERT(_renderMode == RenderMode::QUAD_BATCHNODE,
+    AXASSERT(_renderMode == RenderMode::QUAD_BATCHNODE,
              "updateTransform is only valid when Sprite is being rendered using an SpriteBatchNode");
 
     // recalculate matrix only if it is dirty
@@ -1009,7 +1009,7 @@ void Sprite::updateTransform()
                 _transformToBatch = getNodeToParentTransform();
             else
             {
-                CCASSERT(dynamic_cast<Sprite*>(_parent), "Logic error in Sprite. Parent must be a Sprite");
+                AXASSERT(dynamic_cast<Sprite*>(_parent), "Logic error in Sprite. Parent must be a Sprite");
                 const Mat4& nodeToParent = getNodeToParentTransform();
                 Mat4& parentTransform    = static_cast<Sprite*>(_parent)->_transformToBatch;
                 _transformToBatch        = parentTransform * nodeToParent;
@@ -1121,15 +1121,15 @@ void Sprite::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void Sprite::addChild(Node* child, int zOrder, int tag)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nullptr");
+    AXASSERT(child != nullptr, "Argument must be non-nullptr");
     if (child == nullptr)
         return;
 
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
-        CCASSERT(childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
-        CCASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
+        AXASSERT(childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
+        AXASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
                  "childSprite's texture name should be equal to _textureAtlas's texture name!");
         // put it in descendants array of batch node
         _batchNode->appendChild(childSprite);
@@ -1145,15 +1145,15 @@ void Sprite::addChild(Node* child, int zOrder, int tag)
 
 void Sprite::addChild(Node* child, int zOrder, std::string_view name)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nullptr");
+    AXASSERT(child != nullptr, "Argument must be non-nullptr");
     if (child == nullptr)
         return;
 
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         Sprite* childSprite = dynamic_cast<Sprite*>(child);
-        CCASSERT(childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
-        CCASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
+        AXASSERT(childSprite, "CCSprite only supports Sprites as children when using SpriteBatchNode");
+        AXASSERT(childSprite->getTexture() == _textureAtlas->getTexture(),
                  "childSprite's texture name should be equal to _textureAtlas's texture name.");
         // put it in descendants array of batch node
         _batchNode->appendChild(childSprite);
@@ -1169,8 +1169,8 @@ void Sprite::addChild(Node* child, int zOrder, std::string_view name)
 
 void Sprite::reorderChild(Node* child, int zOrder)
 {
-    CCASSERT(child != nullptr, "child must be non null");
-    CCASSERT(_children.contains(child), "child does not belong to this");
+    AXASSERT(child != nullptr, "child must be non null");
+    AXASSERT(_children.contains(child), "child does not belong to this");
 
     if ((_renderMode == RenderMode::QUAD_BATCHNODE) && !_reorderChildDirty)
     {
@@ -1350,7 +1350,7 @@ void Sprite::setAnchorPoint(const Vec2& anchor)
 
 void Sprite::setIgnoreAnchorPointForPosition(bool value)
 {
-    CCASSERT(_renderMode != RenderMode::QUAD_BATCHNODE, "setIgnoreAnchorPointForPosition is invalid in Sprite");
+    AXASSERT(_renderMode != RenderMode::QUAD_BATCHNODE, "setIgnoreAnchorPointForPosition is invalid in Sprite");
     Node::setIgnoreAnchorPointForPosition(value);
 }
 
@@ -1363,7 +1363,7 @@ void Sprite::setVisible(bool bVisible)
 void Sprite::setContentSize(const Vec2& size)
 {
     if (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON)
-        CCLOGWARN(
+        AXLOGWARN(
             "Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
 
     Node::setContentSize(size);
@@ -1552,14 +1552,14 @@ bool Sprite::isOpacityModifyRGB() const
 
 void Sprite::setSpriteFrame(std::string_view spriteFrameName)
 {
-    CCASSERT(!spriteFrameName.empty(), "spriteFrameName must not be empty");
+    AXASSERT(!spriteFrameName.empty(), "spriteFrameName must not be empty");
     if (spriteFrameName.empty())
         return;
 
     SpriteFrameCache* cache  = SpriteFrameCache::getInstance();
     SpriteFrame* spriteFrame = cache->getSpriteFrameByName(spriteFrameName);
 
-    CCASSERT(spriteFrame, std::string("Invalid spriteFrameName :").append(spriteFrameName).c_str());
+    AXASSERT(spriteFrame, std::string("Invalid spriteFrameName :").append(spriteFrameName).c_str());
 
     setSpriteFrame(spriteFrame);
 }
@@ -1603,17 +1603,17 @@ void Sprite::setSpriteFrame(SpriteFrame* spriteFrame)
 
 void Sprite::setDisplayFrameWithAnimationName(std::string_view animationName, unsigned int frameIndex)
 {
-    CCASSERT(!animationName.empty(), "CCSprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
+    AXASSERT(!animationName.empty(), "CCSprite#setDisplayFrameWithAnimationName. animationName must not be nullptr");
     if (animationName.empty())
         return;
 
     Animation* a = AnimationCache::getInstance()->getAnimation(animationName);
 
-    CCASSERT(a, "CCSprite#setDisplayFrameWithAnimationName: Frame not found");
+    AXASSERT(a, "CCSprite#setDisplayFrameWithAnimationName: Frame not found");
 
     AnimationFrame* frame = a->getFrames().at(frameIndex);
 
-    CCASSERT(frame, "CCSprite#setDisplayFrame. Invalid frame");
+    AXASSERT(frame, "CCSprite#setDisplayFrame. Invalid frame");
 
     setSpriteFrame(frame->getSpriteFrame());
 }
@@ -1677,7 +1677,7 @@ void Sprite::setBatchNode(SpriteBatchNode* spriteBatchNode)
 // MARK: Texture protocol
 void Sprite::updateBlendFunc()
 {
-    CCASSERT(_renderMode != RenderMode::QUAD_BATCHNODE,
+    AXASSERT(_renderMode != RenderMode::QUAD_BATCHNODE,
              "CCSprite: updateBlendFunc doesn't work when the sprite is rendered using a SpriteBatchNode");
 
     // it is possible to have an untextured sprite

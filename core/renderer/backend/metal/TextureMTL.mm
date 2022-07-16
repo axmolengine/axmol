@@ -48,7 +48,7 @@ MTLSamplerAddressMode toMTLSamplerAddressMode(SamplerAddressMode mode)
         ret = MTLSamplerAddressModeClampToEdge;
         break;
     default:
-        CCASSERT(false, "Not supported sampler address mode!");
+        AXASSERT(false, "Not supported sampler address mode!");
         break;
     }
     return ret;

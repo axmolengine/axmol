@@ -106,7 +106,7 @@ ParticleSystemQuad* ParticleSystemQuad::create(std::string_view filename)
 
 ParticleSystemQuad* ParticleSystemQuad::createWithTotalParticles(int numberOfParticles)
 {
-    CCASSERT(numberOfParticles <= 10000,
+    AXASSERT(numberOfParticles <= 10000,
              "Adding more than 10000 particles will crash the renderer, the mesh generated has an index format of "
              "U_SHORT (uint16_t)");
 
@@ -257,7 +257,7 @@ void ParticleSystemQuad::setTexture(Texture2D* texture)
 
 void ParticleSystemQuad::setDisplayFrame(SpriteFrame* spriteFrame)
 {
-    CCASSERT(spriteFrame->getOffsetInPixels().isZero(), "QuadParticle only supports SpriteFrames with no offsets");
+    AXASSERT(spriteFrame->getOffsetInPixels().isZero(), "QuadParticle only supports SpriteFrames with no offsets");
 
     this->setTextureWithRect(spriteFrame->getTexture(), spriteFrame->getRect());
 }
@@ -731,7 +731,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         _particleData.release();
         if (!_particleData.init(tp))
         {
-            CCLOG("Particle system: not enough memory");
+            AXLOG("Particle system: not enough memory");
             return;
         }
         V3F_C4B_T2F_Quad* quadsNew = (V3F_C4B_T2F_Quad*)realloc(_quads, quadsSize);
@@ -757,7 +757,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
             if (indicesNew)
                 _indices = indicesNew;
 
-            CCLOG("Particle system: out of memory");
+            AXLOG("Particle system: out of memory");
             return;
         }
 
@@ -809,7 +809,7 @@ void ParticleSystemQuad::listenRendererRecreated(EventCustom* /*event*/)
 
 bool ParticleSystemQuad::allocMemory()
 {
-    CCASSERT(!_batchNode, "Memory should not be alloced when not using batchNode");
+    AXASSERT(!_batchNode, "Memory should not be alloced when not using batchNode");
 
     AX_SAFE_FREE(_quads);
     AX_SAFE_FREE(_indices);
@@ -819,7 +819,7 @@ bool ParticleSystemQuad::allocMemory()
 
     if (!_quads || !_indices)
     {
-        CCLOG("cocos2d: Particle system: not enough memory");
+        AXLOG("cocos2d: Particle system: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 

@@ -44,7 +44,7 @@ EventListenerTouchOneByOne::EventListenerTouchOneByOne()
 
 EventListenerTouchOneByOne::~EventListenerTouchOneByOne()
 {
-    CCLOGINFO("In the destructor of EventListenerTouchOneByOne, %p", this);
+    AXLOGINFO("In the destructor of EventListenerTouchOneByOne, %p", this);
 }
 
 bool EventListenerTouchOneByOne::init()
@@ -87,7 +87,7 @@ bool EventListenerTouchOneByOne::checkAvailable()
     // message to 'EventListenerTouchOneByOne' or not. So 'onTouchBegan' needs to be set.
     if (onTouchBegan == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerTouchOneByOne!");
+        AXASSERT(false, "Invalid EventListenerTouchOneByOne!");
         return false;
     }
 
@@ -126,7 +126,7 @@ EventListenerTouchAllAtOnce::EventListenerTouchAllAtOnce()
 
 EventListenerTouchAllAtOnce::~EventListenerTouchAllAtOnce()
 {
-    CCLOGINFO("In the destructor of EventListenerTouchAllAtOnce, %p", this);
+    AXLOGINFO("In the destructor of EventListenerTouchAllAtOnce, %p", this);
 }
 
 bool EventListenerTouchAllAtOnce::init()
@@ -158,7 +158,7 @@ bool EventListenerTouchAllAtOnce::checkAvailable()
     if (onTouchesBegan == nullptr && onTouchesMoved == nullptr && onTouchesEnded == nullptr &&
         onTouchesCancelled == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerTouchAllAtOnce!");
+        AXASSERT(false, "Invalid EventListenerTouchAllAtOnce!");
         return false;
     }
 

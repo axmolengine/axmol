@@ -41,7 +41,7 @@ Action::Action() : _originalTarget(nullptr), _target(nullptr), _tag(Action::INVA
 
 Action::~Action()
 {
-    CCLOGINFO("deallocing Action: %p - tag: %i", this, _tag);
+    AXLOGINFO("deallocing Action: %p - tag: %i", this, _tag);
 }
 
 std::string Action::description() const
@@ -66,12 +66,12 @@ bool Action::isDone() const
 
 void Action::step(float /*dt*/)
 {
-    CCLOG("[Action step]. override me");
+    AXLOG("[Action step]. override me");
 }
 
 void Action::update(float /*time*/)
 {
-    CCLOG("[Action update]. override me");
+    AXLOG("[Action update]. override me");
 }
 
 //
@@ -98,7 +98,7 @@ Speed* Speed::create(ActionInterval* action, float speed)
 
 bool Speed::initWithAction(ActionInterval* action, float speed)
 {
-    CCASSERT(action != nullptr, "action must not be NULL");
+    AXASSERT(action != nullptr, "action must not be NULL");
     if (action == nullptr)
     {
         log("Speed::initWithAction error: action is nullptr!");
@@ -209,7 +209,7 @@ Follow* Follow::reverse() const
 
 bool Follow::initWithTargetAndOffset(Node* followedNode, float xOffset, float yOffset, const Rect& rect)
 {
-    CCASSERT(followedNode != nullptr, "FollowedNode can't be NULL");
+    AXASSERT(followedNode != nullptr, "FollowedNode can't be NULL");
     if (followedNode == nullptr)
     {
         log("Follow::initWithTarget error: followedNode is nullptr!");

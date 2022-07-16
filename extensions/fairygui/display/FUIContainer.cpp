@@ -381,7 +381,7 @@ void FUIContainer::visit(axis::Renderer * renderer, const axis::Mat4 & parentTra
         // To ease the migration to v3.0, we still support the Mat4 stack,
         // but it is deprecated and your code should not rely on it
         Director* director = Director::getInstance();
-        CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+        AXASSERT(nullptr != director, "Director is null when setting matrix stack");
         director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
         director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 

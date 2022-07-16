@@ -126,7 +126,7 @@ void ParticleSystem3D::addAffector(Particle3DAffector* affector)
 
 void ParticleSystem3D::removeAffector(int index)
 {
-    CCASSERT((unsigned int)index < _affectors.size(), "wrong index");
+    AXASSERT((unsigned int)index < _affectors.size(), "wrong index");
     _affectors.erase(_affectors.begin() + index);
 }
 
@@ -142,7 +142,7 @@ void ParticleSystem3D::removeAllAffector()
 
 Particle3DAffector* ParticleSystem3D::getAffector(int index)
 {
-    CCASSERT(index < (int)_affectors.size(), "wrong index");
+    AXASSERT(index < (int)_affectors.size(), "wrong index");
     return _affectors[index];
 }
 

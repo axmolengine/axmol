@@ -601,7 +601,7 @@ void PhysicsBody::setVelocity(const Vec2& velocity)
 {
     if (cpBodyGetType(_cpBody) == CP_BODY_TYPE_STATIC)
     {
-        CCLOG("physics warning: you can't set velocity for a static body.");
+        AXLOG("physics warning: you can't set velocity for a static body.");
         return;
     }
 
@@ -627,7 +627,7 @@ void PhysicsBody::setAngularVelocity(float velocity)
 {
     if (cpBodyGetType(_cpBody) == CP_BODY_TYPE_STATIC)
     {
-        CCLOG("physics warning: you can't set angular velocity for a static body.");
+        AXLOG("physics warning: you can't set angular velocity for a static body.");
         return;
     }
 
@@ -982,7 +982,7 @@ void PhysicsBody::onAdd()
 
 void PhysicsBody::onRemove()
 {
-    CCASSERT(_owner != nullptr, "_owner can't be nullptr");
+    AXASSERT(_owner != nullptr, "_owner can't be nullptr");
 
     removeFromPhysicsWorld();
 

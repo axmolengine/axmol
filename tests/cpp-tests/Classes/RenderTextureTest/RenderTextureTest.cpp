@@ -87,7 +87,7 @@ std::string RenderTextureSave::subtitle() const
 
 void RenderTextureSave::clearImage(axis::Ref* sender)
 {
-    _target->clear(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1());
+    _target->clear(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
 }
 
 void RenderTextureSave::clearImageTransparent(axis::Ref* sender)
@@ -115,7 +115,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(axis::Ref* sender)
     _target->saveToFile(png, Image::Format::PNG, true, callback);
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    CCLOG("Image saved %s", png);
+    AXLOG("Image saved %s", png);
 
     counter++;
 }
@@ -141,7 +141,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(axis::Ref* sender)
 
     // Add this function to avoid crash if we switch to a new scene.
     Director::getInstance()->getRenderer()->render();
-    CCLOG("Image saved %s", png);
+    AXLOG("Image saved %s", png);
 
     counter++;
 }
@@ -155,8 +155,8 @@ void RenderTextureSave::addImage(axis::Ref* sender)
 
     Sprite* sprite = Sprite::create("Images/test-rgba1.png");
     sprite->setPosition(
-        sprite->getContentSize().width + CCRANDOM_0_1() * (s.width - sprite->getContentSize().width),
-        sprite->getContentSize().height + CCRANDOM_0_1() * (s.height - sprite->getContentSize().height));
+        sprite->getContentSize().width + AXRANDOM_0_1() * (s.width - sprite->getContentSize().width),
+        sprite->getContentSize().height + AXRANDOM_0_1() * (s.height - sprite->getContentSize().height));
     sprite->visit();
 
     // finish drawing and return context back to the screen
@@ -201,8 +201,8 @@ void RenderTextureSave::onTouchesMoved(const std::vector<Touch*>& touches, Event
             _brushs.at(i)->setRotation(rand() % 360);
             float r = (float)(rand() % 50 / 50.f) + 0.25f;
             _brushs.at(i)->setScale(r);
-            /*_brush->setColor(Color3B(CCRANDOM_0_1() * 127 + 128, 255, 255));*/
-            // Use CCRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
+            /*_brush->setColor(Color3B(AXRANDOM_0_1() * 127 + 128, 255, 255));*/
+            // Use AXRANDOM_0_1() will cause error when loading libtests.so on android, I don't know why.
             _brushs.at(i)->setColor(Color3B(rand() % 127 + 128, 255, 255));
             // Call visit to draw the brush, don't call draw..
             _brushs.at(i)->visit();
@@ -649,7 +649,7 @@ void RenderTextureTargetNode::touched(Ref* sender)
     else
     {
         renderTexture->setClearFlags(ClearFlag::NONE);
-        renderTexture->setClearColor(Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+        renderTexture->setClearColor(Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
     }
 }
 
@@ -723,7 +723,7 @@ SpriteRenderTextureBug::SpriteRenderTextureBug()
 
 SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCoords(const Vec2& p)
 {
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -733,7 +733,7 @@ SpriteRenderTextureBug::SimpleSprite* SpriteRenderTextureBug::addNewSpriteWithCo
     sprite->setPosition(p);
 
     FiniteTimeAction* action = nullptr;
-    float rd                 = CCRANDOM_0_1();
+    float rd                 = AXRANDOM_0_1();
 
     if (rd < 0.20)
         action = ScaleBy::create(3, 2);

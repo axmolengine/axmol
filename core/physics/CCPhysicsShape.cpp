@@ -117,7 +117,7 @@ void PhysicsShape::setScale(float scaleX, float scaleY)
     {
         if (_type == Type::CIRCLE && scaleX != scaleY)
         {
-            CCLOG("PhysicsShapeCircle WARNING: CANNOT support setScale with different x and y");
+            AXLOG("PhysicsShapeCircle WARNING: CANNOT support setScale with different x and y");
             return;
         }
         _newScaleX = scaleX;

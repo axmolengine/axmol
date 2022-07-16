@@ -105,10 +105,10 @@ const char* inet_ntop(int af, const void* src, char* dst, int cnt)
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 void SendLogToWindow(const char* log)
 {
-    static const int CCLOG_STRING_TAG = 1;
+    static const int AXLOG_STRING_TAG = 1;
     // Send data as a message
     COPYDATASTRUCT myCDS;
-    myCDS.dwData = CCLOG_STRING_TAG;
+    myCDS.dwData = AXLOG_STRING_TAG;
     myCDS.cbData = (DWORD)strlen(log) + 1;
     myCDS.lpData = (PVOID)log;
     if (Director::getInstance()->getOpenGLView())

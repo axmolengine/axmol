@@ -157,7 +157,7 @@ Sprite1::Sprite1()
 
 void Sprite1::addNewSpriteWithCoords(Vec2 p)
 {
-    int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
+    int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -167,7 +167,7 @@ void Sprite1::addNewSpriteWithCoords(Vec2 p)
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -228,7 +228,7 @@ void SpriteBatchNode1::addNewSpriteWithCoords(Vec2 p)
 {
     auto BatchNode = static_cast<SpriteBatchNode*>(getChildByTag(kTagSpriteBatchNode));
 
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -238,7 +238,7 @@ void SpriteBatchNode1::addNewSpriteWithCoords(Vec2 p)
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -731,8 +731,8 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
         auto child = static_cast<Sprite*>(obj);
 
         ssize_t currentIndex = child->getAtlasIndex();
-        CCASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----CCLOG("children %x - atlasIndex:%d", child, currentIndex);
+        AXASSERT(prev == currentIndex - 1, "Child order failed");
+        ////----AXLOG("children %x - atlasIndex:%d", child, currentIndex);
         prev = currentIndex;
     }
 
@@ -741,8 +741,8 @@ SpriteBatchNodeReorder::SpriteBatchNodeReorder()
     for (const auto& sprite : descendants)
     {
         ssize_t currentIndex = sprite->getAtlasIndex();
-        CCASSERT(prev == currentIndex - 1, "Child order failed");
-        ////----CCLOG("descendant %x - atlasIndex:%d", child, currentIndex);
+        AXASSERT(prev == currentIndex - 1, "Child order failed");
+        ////----AXLOG("descendant %x - atlasIndex:%d", child, currentIndex);
         prev = currentIndex;
     }
 }
@@ -1373,10 +1373,10 @@ void SpriteFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    CCLOG("Pre: %g", sprite1->getContentSize().height);
+    AXLOG("Pre: %g", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    CCLOG("Post: %g", sprite1->getContentSize().height);
+    AXLOG("Post: %g", sprite1->getContentSize().height);
 }
 
 std::string SpriteFlip::title() const
@@ -1421,10 +1421,10 @@ void SpriteBatchNodeFlip::flipSprites(float dt)
     bool x = sprite1->isFlippedX();
     bool y = sprite2->isFlippedY();
 
-    CCLOG("Pre: %g", sprite1->getContentSize().height);
+    AXLOG("Pre: %g", sprite1->getContentSize().height);
     sprite1->setFlippedX(!x);
     sprite2->setFlippedY(!y);
-    CCLOG("Post: %g", sprite1->getContentSize().height);
+    AXLOG("Post: %g", sprite1->getContentSize().height);
 }
 
 std::string SpriteBatchNodeFlip::title() const
@@ -1589,9 +1589,9 @@ void SpriteNewTexture::addNewSprite()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto p = Vec2(CCRANDOM_0_1() * s.width, CCRANDOM_0_1() * s.height);
+    auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
 
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -1602,7 +1602,7 @@ void SpriteNewTexture::addNewSprite()
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -1695,11 +1695,11 @@ void SpriteBatchNodeNewTexture::addNewSprite()
 {
     auto s = Director::getInstance()->getWinSize();
 
-    auto p = Vec2(CCRANDOM_0_1() * s.width, CCRANDOM_0_1() * s.height);
+    auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
 
     auto batch = static_cast<SpriteBatchNode*>(getChildByTag(kTagSpriteBatchNode));
 
-    int idx = CCRANDOM_0_1() * 1400 / 100;
+    int idx = AXRANDOM_0_1() * 1400 / 100;
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -1709,7 +1709,7 @@ void SpriteBatchNodeNewTexture::addNewSprite()
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -2449,7 +2449,7 @@ SpriteHybrid::SpriteHybrid()
     // only show 80% of them
     for (int i = 0; i < 250; i++)
     {
-        int spriteIdx = CCRANDOM_0_1() * 14;
+        int spriteIdx = AXRANDOM_0_1() * 14;
         char str[25]  = {0};
         sprintf(str, "grossini_dance_%02d.png", (spriteIdx + 1));
         auto frame  = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
@@ -2458,10 +2458,10 @@ SpriteHybrid::SpriteHybrid()
 
         float x = -1000;
         float y = -1000;
-        if (CCRANDOM_0_1() < 0.2f)
+        if (AXRANDOM_0_1() < 0.2f)
         {
-            x = CCRANDOM_0_1() * s.width;
-            y = CCRANDOM_0_1() * s.height;
+            x = AXRANDOM_0_1() * s.width;
+            y = AXRANDOM_0_1() * s.height;
         }
         sprite->setPosition(Vec2(x, y));
 
@@ -2484,7 +2484,7 @@ void SpriteHybrid::reparentSprite(float dt)
     if (_usingSpriteBatchNode)
         std::swap(p1, p2);
 
-    ////----CCLOG("New parent is: %x", p2);
+    ////----AXLOG("New parent is: %x", p2);
 
     auto& p1Children = p1->getChildren();
     for (const auto& node : p1Children)

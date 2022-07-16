@@ -54,7 +54,7 @@ ShaderCache::~ShaderCache()
     {
         AX_SAFE_RELEASE(shaderModule.second);
     }
-    CCLOGINFO("deallocing ProgramCache: %p", this);
+    AXLOGINFO("deallocing ProgramCache: %p", this);
 }
 
 bool ShaderCache::init()
@@ -95,7 +95,7 @@ void ShaderCache::removeUnusedShader()
         auto shaderModule = iter->second;
         if (shaderModule->getReferenceCount() == 1)
         {
-            //            CCLOG("cocos2d: TextureCache: removing unused program");
+            //            AXLOG("cocos2d: TextureCache: removing unused program");
             shaderModule->release();
             iter = _cachedShaders.erase(iter);
         }

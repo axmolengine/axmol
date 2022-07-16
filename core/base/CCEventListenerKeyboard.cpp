@@ -35,7 +35,7 @@ bool EventListenerKeyboard::checkAvailable()
 {
     if (onKeyPressed == nullptr && onKeyReleased == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerKeyboard!");
+        AXASSERT(false, "Invalid EventListenerKeyboard!");
         return false;
     }
 

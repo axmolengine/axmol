@@ -99,7 +99,7 @@ void TextBMFontReader::setPropsFromJsonDictionary(Widget* widget, const rapidjso
         break;
     }
     case 1:
-        CCLOG("Wrong res type of LabelAtlas!");
+        AXLOG("Wrong res type of LabelAtlas!");
         break;
     default:
         break;

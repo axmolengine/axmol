@@ -131,7 +131,7 @@ RenderCommand* RenderQueue::operator[](ssize_t index) const
         }
     }
 
-    CCASSERT(false, "invalid index");
+    AXASSERT(false, "invalid index");
     return nullptr;
 }
 
@@ -234,22 +234,22 @@ void Renderer::addCommand(RenderCommand* command)
 
 void Renderer::addCommand(RenderCommand* command, int renderQueueID)
 {
-    CCASSERT(!_isRendering, "Cannot add command while rendering");
-    CCASSERT(renderQueueID >= 0, "Invalid render queue");
-    CCASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
+    AXASSERT(!_isRendering, "Cannot add command while rendering");
+    AXASSERT(renderQueueID >= 0, "Invalid render queue");
+    AXASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
 
     _renderGroups[renderQueueID].push_back(command);
 }
 
 void Renderer::pushGroup(int renderQueueID)
 {
-    CCASSERT(!_isRendering, "Cannot change render queue while rendering");
+    AXASSERT(!_isRendering, "Cannot change render queue while rendering");
     _commandGroupStack.push(renderQueueID);
 }
 
 void Renderer::popGroup()
 {
-    CCASSERT(!_isRendering, "Cannot change render queue while rendering");
+    AXASSERT(!_isRendering, "Cannot change render queue while rendering");
     _commandGroupStack.pop();
 }
 
@@ -291,9 +291,9 @@ void Renderer::processRenderCommand(RenderCommand* command)
         if (_queuedTotalVertexCount + cmd->getVertexCount() > VBO_SIZE ||
             _queuedTotalIndexCount + cmd->getIndexCount() > INDEX_VBO_SIZE)
         {
-            CCASSERT(cmd->getVertexCount() >= 0 && cmd->getVertexCount() < VBO_SIZE,
+            AXASSERT(cmd->getVertexCount() >= 0 && cmd->getVertexCount() < VBO_SIZE,
                      "VBO for vertex is not big enough, please break the data down or use customized render command");
-            CCASSERT(cmd->getIndexCount() >= 0 && cmd->getIndexCount() < INDEX_VBO_SIZE,
+            AXASSERT(cmd->getIndexCount() >= 0 && cmd->getIndexCount() < INDEX_VBO_SIZE,
                      "VBO for index is not big enough, please break the data down or use customized render command");
             drawBatchedTriangles();
 

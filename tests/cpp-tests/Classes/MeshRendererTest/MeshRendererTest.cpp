@@ -167,7 +167,7 @@ MeshRendererBasicTest::MeshRendererBasicTest()
 
 void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
 {
-    // int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
+    // int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
     // int x = (idx%5) * 85;
     // int y = (idx/5) * 121;
 
@@ -188,7 +188,7 @@ void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
     mesh->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -784,7 +784,7 @@ void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
     mesh->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -931,11 +931,11 @@ void MeshRendererWithSkinTest::addNewMeshWithCoords(Vec2 p)
         float speed = 1.0f;
         if (rand2 % 3 == 1)
         {
-            speed = animate->getSpeed() + CCRANDOM_0_1();
+            speed = animate->getSpeed() + AXRANDOM_0_1();
         }
         else if (rand2 % 3 == 2)
         {
-            speed = animate->getSpeed() - 0.5 * CCRANDOM_0_1();
+            speed = animate->getSpeed() - 0.5 * AXRANDOM_0_1();
         }
         animate->setSpeed(inverse ? -speed : speed);
         animate->setTag(110);
@@ -1045,11 +1045,11 @@ void MeshRendererWithSkinOutlineTest::addNewMeshWithCoords(Vec2 p)
         float speed = 1.0f;
         if (rand2 % 3 == 1)
         {
-            speed = animate->getSpeed() + CCRANDOM_0_1();
+            speed = animate->getSpeed() + AXRANDOM_0_1();
         }
         else if (rand2 % 3 == 2)
         {
-            speed = animate->getSpeed() - 0.5 * CCRANDOM_0_1();
+            speed = animate->getSpeed() - 0.5 * AXRANDOM_0_1();
         }
         animate->setSpeed(inverse ? -speed : speed);
 
@@ -1563,8 +1563,8 @@ void MeshRendererWithOBBPerformanceTest::addOBBWithCount(float value)
 {
     for (int i = 0; i < value; i++)
     {
-        Vec2 randompos = Vec2(CCRANDOM_0_1() * Director::getInstance()->getWinSize().width,
-                              CCRANDOM_0_1() * Director::getInstance()->getWinSize().height);
+        Vec2 randompos = Vec2(AXRANDOM_0_1() * Director::getInstance()->getWinSize().width,
+                              AXRANDOM_0_1() * Director::getInstance()->getWinSize().height);
         Vec3 extents   = Vec3(10, 10, 10);
         AABB aabb(-extents, extents);
         auto obb    = OBB(aabb);
@@ -2371,7 +2371,7 @@ void CameraBackgroundClearTest::switch_CameraClearMode(axis::Ref* sender)
     CameraBackgroundBrush::BrushType type = CameraBackgroundBrush::BrushType::NONE;
     if (!brush)
     {
-        CCLOG("No brash found!");
+        AXLOG("No brash found!");
     }
     else
     {
@@ -2383,7 +2383,7 @@ void CameraBackgroundClearTest::switch_CameraClearMode(axis::Ref* sender)
         _camera->setBackgroundBrush(CameraBackgroundBrush::createDepthBrush(1.f));
         _label->setString("Depth Clear Brush");
         // Test brush valid when set by user scene setting
-        CCLOG("Background brush valid status is : %s", _camera->isBrushValid() ? "true" : "false");
+        AXLOG("Background brush valid status is : %s", _camera->isBrushValid() ? "true" : "false");
     }
     else if (type == CameraBackgroundBrush::BrushType::DEPTH)
     {
@@ -2473,7 +2473,7 @@ MeshRendererNormalMappingTest::MeshRendererNormalMappingTest()
     }
 
     int maxAttributes = Configuration::getInstance()->getMaxAttributes();
-    CCASSERT(maxAttributes > 8, "attributes supported must be greater than 8");
+    AXASSERT(maxAttributes > 8, "attributes supported must be greater than 8");
     if (maxAttributes > 8)
     {
         auto mesh = MeshRenderer::create("MeshRendererTest/sphere_bumped.c3b");
@@ -2587,13 +2587,13 @@ std::string MeshRendererPropertyTest::subtitle() const
 void MeshRendererPropertyTest::update(float delta) {}
 void MeshRendererPropertyTest::printMeshName(axis::Ref* sender)
 {
-    CCLOG("MeshName Begin");
+    AXLOG("MeshName Begin");
     Vector<Mesh*> meshes = _mesh->getMeshes();
     for (Mesh* mesh : meshes)
     {
         log("MeshName: %s ", mesh->getName().data());
     }
-    CCLOG("MeshName End");
+    AXLOG("MeshName End");
 }
 void MeshRendererPropertyTest::removeUsedTexture(axis::Ref* sender)
 {

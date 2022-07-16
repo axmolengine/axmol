@@ -89,7 +89,7 @@ public:
      */
     void clear();
 
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
     /**
      * Whether the autorelease pool is doing `clear` operation.
      *
@@ -135,7 +135,7 @@ private:
     std::vector<Ref*> _managedObjectArray;
     std::string _name;
 
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
     /**
      *  The flag for checking whether the pool is doing `clear` operation.
      */

@@ -208,8 +208,8 @@ void ChipmunkTest::addNewSpriteAtPosition(axis::Vec2 pos)
 
     auto parent = getChildByTag(kTagParentNode);
 
-    posx = CCRANDOM_0_1() * 200.0f;
-    posy = CCRANDOM_0_1() * 200.0f;
+    posx = AXRANDOM_0_1() * 200.0f;
+    posy = AXRANDOM_0_1() * 200.0f;
 
     posx = (posx % 4) * 85;
     posy = (posy % 3) * 121;

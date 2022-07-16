@@ -74,7 +74,7 @@ bool SimpleSnake::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-                                           CC_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
+                                           AX_CALLBACK_1(SimpleSnake::menuCloseCallback, this));
 
     if (closeItem == nullptr || closeItem->getContentSize().width <= 0 || closeItem->getContentSize().height <= 0)
     {
@@ -96,7 +96,7 @@ bool SimpleSnake::init()
     // 3. add your codes below...
 
     auto listener          = EventListenerKeyboard::create();
-    listener->onKeyPressed = CC_CALLBACK_2(SimpleSnake::onKeyPressed, this);
+    listener->onKeyPressed = AX_CALLBACK_2(SimpleSnake::onKeyPressed, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // add a label shows "Hello World"

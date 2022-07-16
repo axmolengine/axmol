@@ -124,7 +124,7 @@ bool LabelAtlas::initWithString(std::string_view theString, std::string_view fnt
 
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(pathStr);
 
-    CCASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
+    AXASSERT(dict["version"].asInt() == 1, "Unsupported version. Upgrade cocos2d version");
 
     std::string textureFilename = relPathStr + dict["textureFilename"].asString();
 
@@ -160,7 +160,7 @@ void LabelAtlas::updateAtlasValues()
         itemHeightInPixels = static_cast<float>(_itemHeight);
     }
 
-    CCASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
+    AXASSERT(n <= _textureAtlas->getCapacity(), "updateAtlasValues: Invalid String length");
     V3F_C4B_T2F_Quad* quads = _textureAtlas->getQuads();
     for (ssize_t i = 0; i < n; i++)
     {

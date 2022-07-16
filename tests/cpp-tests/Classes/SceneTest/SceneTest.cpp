@@ -72,18 +72,18 @@ SceneTestLayer1::SceneTestLayer1()
 
 void SceneTestLayer1::testDealloc(float dt)
 {
-    // CCLOG("SceneTestLayer1:testDealloc");
+    // AXLOG("SceneTestLayer1:testDealloc");
 }
 
 void SceneTestLayer1::onEnter()
 {
-    CCLOG("SceneTestLayer1#onEnter");
+    AXLOG("SceneTestLayer1#onEnter");
     Layer::onEnter();
 }
 
 void SceneTestLayer1::onEnterTransitionDidFinish()
 {
-    CCLOG("SceneTestLayer1#onEnterTransitionDidFinish");
+    AXLOG("SceneTestLayer1#onEnterTransitionDidFinish");
     Layer::onEnterTransitionDidFinish();
 }
 

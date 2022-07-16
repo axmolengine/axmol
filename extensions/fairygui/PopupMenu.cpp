@@ -43,7 +43,7 @@ bool PopupMenu::init(const std::string & resourceURL)
         url = UIConfig::popupMenu;
         if (url.empty())
         {
-            CCLOGWARN("FairyGUI: UIConfig.popupMenu not defined");
+            AXLOGWARN("FairyGUI: UIConfig.popupMenu not defined");
             return false;
         }
     }
@@ -100,7 +100,7 @@ void PopupMenu::addSeperator()
 {
     if (UIConfig::popupMenu_seperator.empty())
     {
-        CCLOGWARN("FairyGUI: UIConfig.popupMenu_seperator not defined");
+        AXLOGWARN("FairyGUI: UIConfig.popupMenu_seperator not defined");
         return;
     }
 

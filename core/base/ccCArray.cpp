@@ -64,7 +64,7 @@ void ccArrayDoubleCapacity(ccArray* arr)
     arr->max *= 2;
     Ref** newArr = (Ref**)realloc(arr->arr, arr->max * sizeof(Ref*));
     // will fail when there's not enough memory
-    CCASSERT(newArr != 0, "ccArrayDoubleCapacity failed. Not enough memory");
+    AXASSERT(newArr != 0, "ccArrayDoubleCapacity failed. Not enough memory");
     arr->arr = newArr;
 }
 
@@ -72,7 +72,7 @@ void ccArrayEnsureExtraCapacity(ccArray* arr, ssize_t extra)
 {
     while (arr->max < arr->num + extra)
     {
-        CCLOGINFO("cocos2d: ccCArray: resizing ccArray capacity from [%zd] to [%zd].", arr->max, arr->max * 2);
+        AXLOGINFO("cocos2d: ccCArray: resizing ccArray capacity from [%zd] to [%zd].", arr->max, arr->max * 2);
 
         ccArrayDoubleCapacity(arr);
     }
@@ -97,7 +97,7 @@ void ccArrayShrink(ccArray* arr)
         }
 
         arr->arr = (Ref**)realloc(arr->arr, newSize * sizeof(Ref*));
-        CCASSERT(arr->arr != nullptr, "could not reallocate the memory");
+        AXASSERT(arr->arr != nullptr, "could not reallocate the memory");
     }
 }
 
@@ -124,7 +124,7 @@ bool ccArrayContainsObject(ccArray* arr, Ref* object)
 /** Appends an object. Behavior undefined if array doesn't have enough capacity. */
 void ccArrayAppendObject(ccArray* arr, Ref* object)
 {
-    CCASSERT(object != nullptr, "Invalid parameter!");
+    AXASSERT(object != nullptr, "Invalid parameter!");
     object->retain();
     arr->arr[arr->num] = object;
     arr->num++;
@@ -157,8 +157,8 @@ void ccArrayAppendArrayWithResize(ccArray* arr, ccArray* plusArr)
 /** Inserts an object at index */
 void ccArrayInsertObjectAtIndex(ccArray* arr, Ref* object, ssize_t index)
 {
-    CCASSERT(index <= arr->num, "Invalid index. Out of bounds");
-    CCASSERT(object != nullptr, "Invalid parameter!");
+    AXASSERT(index <= arr->num, "Invalid index. Out of bounds");
+    AXASSERT(object != nullptr, "Invalid parameter!");
 
     ccArrayEnsureExtraCapacity(arr, 1);
 
@@ -176,8 +176,8 @@ void ccArrayInsertObjectAtIndex(ccArray* arr, Ref* object, ssize_t index)
 /** Swaps two objects */
 void ccArraySwapObjectsAtIndexes(ccArray* arr, ssize_t index1, ssize_t index2)
 {
-    CCASSERT(index1 >= 0 && index1 < arr->num, "(1) Invalid index. Out of bounds");
-    CCASSERT(index2 >= 0 && index2 < arr->num, "(2) Invalid index. Out of bounds");
+    AXASSERT(index1 >= 0 && index1 < arr->num, "(1) Invalid index. Out of bounds");
+    AXASSERT(index2 >= 0 && index2 < arr->num, "(2) Invalid index. Out of bounds");
 
     Ref* object1 = arr->arr[index1];
 
@@ -198,7 +198,7 @@ void ccArrayRemoveAllObjects(ccArray* arr)
  Behavior undefined if index outside [0, num-1]. */
 void ccArrayRemoveObjectAtIndex(ccArray* arr, ssize_t index, bool releaseObj /* = true*/)
 {
-    CCASSERT(arr && arr->num > 0 && index >= 0 && index < arr->num, "Invalid index. Out of bounds");
+    AXASSERT(arr && arr->num > 0 && index >= 0 && index < arr->num, "Invalid index. Out of bounds");
     if (releaseObj)
     {
         AX_SAFE_RELEASE(arr->arr[index]);
@@ -339,7 +339,7 @@ bool ccCArrayContainsValue(ccCArray* arr, void* value)
 /** Inserts a value at a certain position. Behavior undefined if array doesn't have enough capacity */
 void ccCArrayInsertValueAtIndex(ccCArray* arr, void* value, ssize_t index)
 {
-    CCASSERT(index < arr->max, "ccCArrayInsertValueAtIndex: invalid index");
+    AXASSERT(index < arr->max, "ccCArrayInsertValueAtIndex: invalid index");
 
     auto remaining = arr->num - index;
     // make sure it has enough capacity

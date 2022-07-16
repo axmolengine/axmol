@@ -374,7 +374,7 @@ Vec3 OBB::getEdgeDirection(int index) const
         tmpLine.normalize();
         break;
     default:
-        CCASSERT(0, "Invalid index!");
+        AXASSERT(0, "Invalid index!");
         break;
     }
     return tmpLine;
@@ -407,7 +407,7 @@ Vec3 OBB::getFaceDirection(int index) const
         faceDirection.normalize();
         break;
     default:
-        CCASSERT(0, "Invalid index!");
+        AXASSERT(0, "Invalid index!");
         break;
     }
     return faceDirection;

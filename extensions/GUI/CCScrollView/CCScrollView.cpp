@@ -650,7 +650,7 @@ void ScrollView::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
     Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
@@ -795,7 +795,7 @@ void ScrollView::onTouchMoved(Touch* touch, Event* /*event*/)
 
             if (!_touchMoved && fabs(convertDistanceFromPointToInch(dis)) < MOVE_INCH)
             {
-                // CCLOG("Invalid movement, distance = [%f, %f], disInch = %f", moveDistance.x, moveDistance.y);
+                // AXLOG("Invalid movement, distance = [%f, %f], disInch = %f", moveDistance.x, moveDistance.y);
                 return;
             }
 

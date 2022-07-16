@@ -782,7 +782,7 @@ void RemoveListenerAfterAddingTest::onEnter()
     auto item1 = MenuItemFont::create("Click Me 1", [this](Ref* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCASSERT(false, "Should not come here!");
+            AXASSERT(false, "Should not come here!");
             return true;
         };
 
@@ -806,7 +806,7 @@ void RemoveListenerAfterAddingTest::onEnter()
     auto item2 = MenuItemFont::create("Click Me 2", [=](Ref* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCASSERT(false, "Should not come here!");
+            AXASSERT(false, "Should not come here!");
             return true;
         };
 
@@ -821,7 +821,7 @@ void RemoveListenerAfterAddingTest::onEnter()
     auto item3 = MenuItemFont::create("Click Me 3", [=](Ref* sender) {
         auto listener          = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCASSERT(false, "Should not come here!");
+            AXASSERT(false, "Should not come here!");
             return true;
         };
 
@@ -1066,7 +1066,7 @@ StopPropagationTest::StopPropagationTest()
             return false;
 
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE, "Yellow blocks shouldn't response event.");
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE, "Yellow blocks shouldn't response event.");
 
         if (this->isPointInNode(touch->getLocation(), target))
         {
@@ -1091,7 +1091,7 @@ StopPropagationTest::StopPropagationTest()
             return;
 
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
 
         if (this->isPointInNode(touches[0]->getLocation(), target))
         {
@@ -1107,7 +1107,7 @@ StopPropagationTest::StopPropagationTest()
             return;
 
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE2, "Yellow blocks shouldn't response event.");
 
         if (this->isPointInNode(touches[0]->getLocation(), target))
         {
@@ -1121,7 +1121,7 @@ StopPropagationTest::StopPropagationTest()
     keyboardEventListener->onKeyPressed = [](EventKeyboard::KeyCode /*key*/, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
         AX_UNUSED_PARAM(target);
-        CCASSERT(target->getTag() == TAG_BLUE_SPRITE || target->getTag() == TAG_BLUE_SPRITE2,
+        AXASSERT(target->getTag() == TAG_BLUE_SPRITE || target->getTag() == TAG_BLUE_SPRITE2,
                  "Yellow blocks shouldn't response event.");
         // Stop propagation, so yellow blocks will not be able to receive event.
         event->stopPropagation();
@@ -1434,7 +1434,7 @@ Issue4129::Issue4129() : _bugFixed(false)
         _eventDispatcher->removeAllEventListeners();
 
         auto nextItem = MenuItemFont::create("Reset", [=](Ref* sender) {
-            CCASSERT(_bugFixed, "This issue was not fixed!");
+            AXASSERT(_bugFixed, "This issue was not fixed!");
             getTestSuite()->restartCurrTest();
         });
 
@@ -1576,15 +1576,15 @@ DanglingNodePointersTest::DanglingNodePointersTest()
     Size size   = Director::getInstance()->getVisibleSize();
 
     auto callback2 = [](DanglingNodePointersTestSprite* sprite2) {
-        CCASSERT(false, "This should never be called because the sprite gets removed from it's parent and destroyed!");
+        AXASSERT(false, "This should never be called because the sprite gets removed from it's parent and destroyed!");
         exit(1);
     };
 
     auto callback1 = [callback2, origin, size](DanglingNodePointersTestSprite* sprite1) {
         DanglingNodePointersTestSprite* sprite2 =
             dynamic_cast<DanglingNodePointersTestSprite*>(sprite1->getChildren().at(0));
-        CCASSERT(sprite2, "The first child of sprite 1 should be sprite 2!");
-        CCASSERT(
+        AXASSERT(sprite2, "The first child of sprite 1 should be sprite 2!");
+        AXASSERT(
             sprite2->getReferenceCount() == 1,
             "There should only be 1 reference to sprite 1, from it's parent node. Hence removing it will destroy it!");
         sprite1->removeAllChildren();  // This call should cause sprite 2 to be destroyed
@@ -1634,7 +1634,7 @@ RegisterAndUnregisterWhileEventHanldingTest::RegisterAndUnregisterWhileEventHanl
 
     auto callback1 = [=](DanglingNodePointersTestSprite* sprite) {
         auto callback2 = [](DanglingNodePointersTestSprite* sprite) {
-            CCASSERT(false, "This should never get called!");
+            AXASSERT(false, "This should never get called!");
         };
 
         {
@@ -1710,7 +1710,7 @@ Issue8194::Issue8194()
         getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](axis::EventCustom* event) {
             if (nodesAdded)
             {
-                // CCLOG("Fire Issue8194 Event");
+                // AXLOG("Fire Issue8194 Event");
                 getEventDispatcher()->dispatchCustomEvent("Issue8194");
 
                 // clear test nodes and listeners

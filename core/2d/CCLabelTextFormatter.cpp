@@ -212,7 +212,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             if (!getFontLetterDef(character, letterDef))
             {
                 recordPlaceholderInfo(letterIndex, character);
-                CCLOG("LabelTextFormatter error: can't find letter definition in font file for letter: 0x%x",
+                AXLOG("LabelTextFormatter error: can't find letter definition in font file for letter: 0x%x",
                       character);
                 continue;
             }

@@ -732,7 +732,7 @@ void LayerMultiplex::switchTo(int n)
 
 void LayerMultiplex::switchTo(int n, bool cleanup)
 {
-    CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
+    AXASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
 
     this->removeChild(_layers.at(_enabledLayer), cleanup);
 
@@ -743,7 +743,7 @@ void LayerMultiplex::switchTo(int n, bool cleanup)
 
 void LayerMultiplex::switchToAndReleaseMe(int n)
 {
-    CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
+    AXASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
 
     this->removeChild(_layers.at(_enabledLayer), true);
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS

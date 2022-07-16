@@ -125,12 +125,12 @@ bool Armature::init(std::string_view name)
         if (!_name.empty())
         {
             AnimationData* animationData = armatureDataManager->getAnimationData(name);
-            CCASSERT(animationData, "AnimationData not exist! ");
+            AXASSERT(animationData, "AnimationData not exist! ");
 
             _animation->setAnimationData(animationData);
 
             ArmatureData* armatureData = armatureDataManager->getArmatureData(name);
-            CCASSERT(armatureData, "armatureData doesn't exists!");
+            AXASSERT(armatureData, "armatureData doesn't exists!");
 
             _armatureData = armatureData;
 
@@ -219,8 +219,8 @@ Bone* Armature::createBone(std::string_view boneName)
 
 void Armature::addBone(Bone* bone, std::string_view parentName)
 {
-    CCASSERT(bone != nullptr, "Argument must be non-nil");
-    CCASSERT(_boneDic.at(bone->getName()) == nullptr, "bone already added. It can't be added again");
+    AXASSERT(bone != nullptr, "Argument must be non-nil");
+    AXASSERT(_boneDic.at(bone->getName()) == nullptr, "bone already added. It can't be added again");
 
     if (!parentName.empty())
     {
@@ -247,7 +247,7 @@ void Armature::addBone(Bone* bone, std::string_view parentName)
 
 void Armature::removeBone(Bone* bone, bool recursion)
 {
-    CCASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
+    AXASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
 
     bone->setArmature(nullptr);
     bone->removeFromParent(recursion);
@@ -267,7 +267,7 @@ Bone* Armature::getBone(std::string_view name) const
 
 void Armature::changeBoneParent(Bone* bone, std::string_view parentName)
 {
-    CCASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
+    AXASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
 
     if (bone->getParentBone())
     {
@@ -460,7 +460,7 @@ void Armature::visit(axis::Renderer* renderer, const Mat4& parentTransform, uint
         // To ease the migration to v3.0, we still support the Mat4 stack,
         // but it is deprecated and your code should not rely on it
         Director* director = Director::getInstance();
-        CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+        AXASSERT(nullptr != director, "Director is null when setting matrix stack");
         director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
         director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 

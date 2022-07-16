@@ -131,7 +131,7 @@ void Mat4::createPerspective(float fieldOfView, float aspectRatio, float zNearPl
     float theta = MATH_DEG_TO_RAD(fieldOfView) * 0.5f;
     if (std::abs(std::fmod(theta, MATH_PIOVER2)) < MATH_EPSILON)
     {
-        CCLOGERROR("Invalid field of view value (%f) causes attempted calculation tan(%f), which is undefined.",
+        AXLOGERROR("Invalid field of view value (%f) causes attempted calculation tan(%f), which is undefined.",
                    fieldOfView, theta);
         return;
     }

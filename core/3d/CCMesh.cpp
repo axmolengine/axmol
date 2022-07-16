@@ -349,7 +349,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto pass : technique->getPasses())
             {
-#ifdef COCOS2D_DEBUG
+#ifdef AXIS_DEBUG
                 // make it crashed when missing attribute data
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
@@ -357,7 +357,7 @@ void Mesh::setMaterial(Material* material)
                     auto attributes     = program->getActiveAttributes();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    CCASSERT(attributes.size() <= attributeCount, "missing attribute data");
+                    AXASSERT(attributes.size() <= attributeCount, "missing attribute data");
                 }
 #endif
                 // TODO
@@ -534,8 +534,8 @@ void Mesh::bindMeshCommand()
 
 void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask)
 {
-    CCASSERT(pass, "Invalid Pass");
-    CCASSERT(scene, "Invalid scene");
+    AXASSERT(pass, "Invalid Pass");
+    AXASSERT(scene, "Invalid scene");
 
     const auto& conf  = Configuration::getInstance();
     int maxDirLight   = conf->getMaxSupportDirLightInShader();

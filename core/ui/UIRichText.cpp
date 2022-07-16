@@ -2042,7 +2042,7 @@ float getPaddingAmount(const RichText::HorizontalAlignment alignment, const floa
     case RichText::HorizontalAlignment::RIGHT:
         return leftOver;
     default:
-        CCASSERT(false, "invalid horizontal alignment!");
+        AXASSERT(false, "invalid horizontal alignment!");
         return 0.f;
     }
 }

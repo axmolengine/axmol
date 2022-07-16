@@ -128,7 +128,7 @@ bool Bone::init(std::string_view name)
 
 void Bone::setBoneData(BoneData* boneData)
 {
-    CCASSERT(nullptr != boneData, "_boneData must not be nullptr");
+    AXASSERT(nullptr != boneData, "_boneData must not be nullptr");
 
     if (_boneData != boneData)
     {
@@ -289,8 +289,8 @@ void Bone::updateZOrder()
 
 void Bone::addChildBone(Bone* child)
 {
-    CCASSERT(nullptr != child, "Argument must be non-nil");
-    CCASSERT(nullptr == child->_parentBone, "child already added. It can't be added again");
+    AXASSERT(nullptr != child, "Argument must be non-nil");
+    AXASSERT(nullptr == child->_parentBone, "child already added. It can't be added again");
 
     if (_children.empty())
     {

@@ -2789,7 +2789,7 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
     ssize_t nChildrenCount = _batchNode->getChildren().size();
     if (nChildrenCount > 0)
     {
-        CCLOG("remove random system");
+        AXLOG("remove random system");
         unsigned int uRand = rand() % (nChildrenCount - 1);
         _batchNode->removeChild(_batchNode->getChildren().at(uRand), true);
 
@@ -2801,7 +2801,7 @@ void AddAndDeleteParticleSystems::removeSystem(float dt)
 
         particleSystem->setPosition(Vec2(rand() % 300, rand() % 400));
 
-        CCLOG("add a new system");
+        AXLOG("add a new system");
         unsigned int randZ = rand() % 100;
         _batchNode->addChild(particleSystem, randZ, -1);
     }
@@ -3010,7 +3010,7 @@ void PremultipliedAlphaTest::onEnter()
     // Cocos2d "normal" blend func for premul causes alpha to be ignored (oversaturates colors)
     _emitter->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
 
-    CCASSERT(_emitter->isOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless");
+    AXASSERT(_emitter->isOpacityModifyRGB(), "Particle texture does not have premultiplied alpha, test is useless");
 
     // Toggle next line to see old behavior
     //	this->emitter.opacityModifyRGB = NO;

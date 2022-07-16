@@ -49,7 +49,7 @@ public:
 
     T get() const
     {
-        CCASSERT(_isSet, "data should be set!");
+        AXASSERT(_isSet, "data should be set!");
         return _data;
     }
     void set(T d)
@@ -149,8 +149,8 @@ bool PhysicsJoint::init(axis::PhysicsBody* a, axis::PhysicsBody* b)
 {
     do
     {
-        CCASSERT(a != nullptr && b != nullptr, "the body passed in is nil");
-        CCASSERT(a != b, "the two bodies are equal");
+        AXASSERT(a != nullptr && b != nullptr, "the body passed in is nil");
+        AXASSERT(a != b, "the two bodies are equal");
 
         _bodyA = a;
         _bodyB = b;

@@ -26,7 +26,7 @@
 
 #include "base/ccMacros.h"
 
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+#if !defined(AXIS_DEBUG) || AXIS_DEBUG == 0
 #    define CHECK_GL_ERROR_DEBUG()
 #else
 #    define CHECK_GL_ERROR_DEBUG()                                                                            \

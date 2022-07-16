@@ -321,7 +321,7 @@ std::string WidgetReader::getResourcePath(const rapidjson::Value& dict,
         }
         else
         {
-            CCASSERT(0, "invalid TextureResType!!!");
+            AXASSERT(0, "invalid TextureResType!!!");
         }
     }
     return imageFileName_tp;
@@ -354,7 +354,7 @@ std::string WidgetReader::getResourcePath(CocoLoader* cocoLoader,
         }
         else
         {
-            CCASSERT(0, "invalid TextureResType!!!");
+            AXASSERT(0, "invalid TextureResType!!!");
         }
     }
     return imageFileName_tp;
@@ -956,7 +956,7 @@ std::string WidgetReader::getResourcePath(std::string_view path, axis::ui::Widge
         }
         else
         {
-            CCASSERT(0, "invalid TextureResType!!!");
+            AXASSERT(0, "invalid TextureResType!!!");
         }
     }
     return imageFileName_tp;

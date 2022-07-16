@@ -163,7 +163,7 @@ void UIFocusTestBase::onFocusChanged(axis::ui::Widget* widgetLostFocus, axis::ui
 
     if (widgetLostFocus && widgetGetFocus)
     {
-        CCLOG("on focus change, %d widget get focus, %d widget lose focus", widgetGetFocus->getTag(),
+        AXLOG("on focus change, %d widget get focus, %d widget lose focus", widgetGetFocus->getTag(),
               widgetLostFocus->getTag());
     }
 }

@@ -459,7 +459,7 @@ void SpritePolygonTest5::loadDefaultSprites()
         sprites[i] = Sprite::create(_polygonInfo);
         sprites[i]->setTag(_tagIndex);
         _tagIndex++;
-        sprites[i]->setPosition(s.width * CCRANDOM_0_1(), s.height * CCRANDOM_0_1());
+        sprites[i]->setPosition(s.width * AXRANDOM_0_1(), s.height * AXRANDOM_0_1());
         this->addChild(sprites[i]);
         auto drawNode = DrawNode::create();
         _drawNodes.pushBack(drawNode);
@@ -493,7 +493,7 @@ void SpritePolygonTest5::addSpritePolygon(const Vec2& pos)
     sprite->addChild(drawNode);
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
     else if (random < 0.40)

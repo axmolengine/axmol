@@ -257,7 +257,7 @@ void Box2DTest::createResetButton()
 
 void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 {
-    CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+    AXLOG("Add sprite %0.2f x %02.f", p.x, p.y);
 
     // Define the dynamic body.
     // Set up a 1m squared box in the physics world
@@ -265,7 +265,7 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(p.x / PTM_RATIO, p.y / PTM_RATIO);
 
-    CCLOG("Add PTM_RATIO sprite %0.2f x %0.2f", p.x / PTM_RATIO, p.y / PTM_RATIO);
+    AXLOG("Add PTM_RATIO sprite %0.2f x %0.2f", p.x / PTM_RATIO, p.y / PTM_RATIO);
 
     b2Body* body = world->CreateBody(&bodyDef);
 
@@ -284,8 +284,8 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
 
     // We have a 64x64 sprite sheet with 4 different 32x32 images.  The following code is
     // just randomly picking one of the images
-    int idx     = (CCRANDOM_0_1() > .5 ? 0 : 1);
-    int idy     = (CCRANDOM_0_1() > .5 ? 0 : 1);
+    int idx     = (AXRANDOM_0_1() > .5 ? 0 : 1);
+    int idy     = (AXRANDOM_0_1() > .5 ? 0 : 1);
     auto sprite = PhysicsSpriteBox2D::createWithTexture(_spriteTexture, Rect(32 * idx, 32 * idy, 32, 32));
     parent->addChild(sprite);
     sprite->setB2Body(body);

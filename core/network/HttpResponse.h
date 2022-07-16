@@ -84,12 +84,12 @@ public:
 
     /**
      * Override autorelease method to prevent developers from calling it.
-     * If this method is called , it would trigger CCASSERT.
+     * If this method is called , it would trigger AXASSERT.
      * @return axis::Ref* always return nullptr.
      */
     axis::Ref* autorelease()
     {
-        CCASSERT(false,
+        AXASSERT(false,
                  "HttpResponse is used between network thread and ui thread \
                         therefore, autorelease is forbidden here");
         return nullptr;

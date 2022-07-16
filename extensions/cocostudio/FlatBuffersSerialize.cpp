@@ -176,7 +176,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, s
     pugi::xml_document& document = *reinterpret_cast<pugi::xml_document*>(opaque);
 
     pugi::xml_node rootElement = document.document_element();  // Root
-                                                               //    CCLOG("rootElement name = %s", rootelement.name());
+                                                               //    AXLOG("rootElement name = %s", rootelement.name());
 
     pugi::xml_node element = rootElement.first_child();
 
@@ -185,7 +185,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, s
 
     while (element)
     {
-        //        CCLOG("entity name = %s", element.name());
+        //        AXLOG("entity name = %s", element.name());
         if ("PropertyGroup"sv == element.name())
         {
             auto attribute = element.first_attribute();
@@ -214,7 +214,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, s
             //            {
             //                std::string name = attribute.name();
             //                std::string_view value = attribute.value();
-            //                CCLOG("attribute name = %s, value = %s", name, value);
+            //                AXLOG("attribute name = %s, value = %s", name, value);
             //                if (name == "")
             //                {
             //                    serializeEnabled = true;
@@ -328,7 +328,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, s
 Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData, std::string_view classType)
 {
     auto classname = classType.substr(0, classType.find("ObjectData"));
-    //    CCLOG("classname = %s", classname.c_str());
+    //    AXLOG("classname = %s", classname.c_str());
 
     Offset<Options> options;
     std::vector<Offset<NodeTree>> children;
@@ -366,7 +366,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
 
     while (child)
     {
-        //        CCLOG("child name = %s", child.name());
+        //        AXLOG("child name = %s", child.name());
 
         if ("Children" == child.name())
         {
@@ -380,7 +380,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
     if (containChildrenElement)
     {
         child = child.first_child();
-        //        CCLOG("element name = %s", child.name());
+        //        AXLOG("element name = %s", child.name());
 
         while (child)
         {
@@ -555,7 +555,7 @@ Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectD
     float speed  = 0.0f;
     std::string currentAnimationName;
 
-    //    CCLOG("animation name = %s", objectData->Name());
+    //    AXLOG("animation name = %s", objectData->Name());
 
     // ActionTimeline
     auto attribute = objectData.first_attribute();
@@ -1238,7 +1238,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
     // xml read
     if (!FileUtils::getInstance()->isFileExist(inFullpath))
     {
-        //        CCLOG(".csd file does not exist.");
+        //        AXLOG(".csd file does not exist.");
     }
 
     std::string content = FileUtils::getInstance()->getStringFromFile(inFullpath);
@@ -1249,7 +1249,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
         document.load_buffer_inplace(&content.front(), content.length());
 
     pugi::xml_node rootElement = document.document_element();  // Root
-                                                               //    CCLOG("rootElement name = %s", rootelement.name());
+                                                               //    AXLOG("rootElement name = %s", rootelement.name());
 
     pugi::xml_node element = rootElement.first_child();
 
@@ -1258,7 +1258,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 
     while (element)
     {
-        //        CCLOG("entity name = %s", element.name());
+        //        AXLOG("entity name = %s", element.name());
         if ("PropertyGroup"sv == element.name())
         {
             auto attribute = element.first_attribute();
@@ -1361,7 +1361,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
 Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node objectData, std::string_view classType)
 {
     auto classname = classType.substr(0, classType.find("ObjectData"));
-    //    CCLOG("classname = %s", classname.c_str());
+    //    AXLOG("classname = %s", classname.c_str());
 
     Offset<Options> options;
     std::vector<Offset<NodeTree>> children;
@@ -1399,7 +1399,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
 
     while (child)
     {
-        //        CCLOG("child name = %s", child.name());
+        //        AXLOG("child name = %s", child.name());
 
         if ("Children"sv == child.name())
         {
@@ -1413,7 +1413,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
     if (containChildrenElement)
     {
         child = child.first_child();
-        //        CCLOG("element name = %s", child.name());
+        //        AXLOG("element name = %s", child.name());
 
         while (child)
         {

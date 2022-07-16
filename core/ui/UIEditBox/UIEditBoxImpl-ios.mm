@@ -207,7 +207,7 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
-    CCASSERT(fontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(fontName != nullptr, "fontName can't be nullptr");
     CCEAGLView* eaglview = static_cast<CCEAGLView*>(axis::Director::getInstance()->getOpenGLView()->getEAGLView());
     float retinaFactor   = eaglview.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];

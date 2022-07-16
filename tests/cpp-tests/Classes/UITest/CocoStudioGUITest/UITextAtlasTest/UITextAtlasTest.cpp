@@ -76,7 +76,7 @@ bool UITextAtlasTest::init()
 void UITextAtlasTest::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData textureFile = _textAtlas->getRenderFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
 // UITextAtlasETC1ShadowTest
@@ -126,5 +126,5 @@ bool UITextAtlasETC1ShadowTest::init()
 void UITextAtlasETC1ShadowTest::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData textureFile = _textAtlas->getRenderFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }

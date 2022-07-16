@@ -96,7 +96,7 @@ CurrentLanguageTest::CurrentLanguageTest()
         labelLanguage->setString("current language is Polish");
         break;
     default:
-        CCASSERT(false, "Invalid language type.");
+        AXASSERT(false, "Invalid language type.");
         break;
     }
 

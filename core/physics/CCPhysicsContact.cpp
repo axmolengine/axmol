@@ -259,7 +259,7 @@ bool EventListenerPhysicsContact::checkAvailable()
     if (onContactBegin == nullptr && onContactPreSolve == nullptr && onContactPostSolve == nullptr &&
         onContactSeparate == nullptr)
     {
-        CCASSERT(false, "Invalid PhysicsContactListener.");
+        AXASSERT(false, "Invalid PhysicsContactListener.");
         return false;
     }
 

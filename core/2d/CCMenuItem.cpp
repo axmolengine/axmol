@@ -289,7 +289,7 @@ bool MenuItemAtlasFont::initWithString(std::string_view value,
                                        char startCharMap,
                                        const ccMenuCallback& callback)
 {
-    CCASSERT(value.size() != 0, "value length must be greater than 0");
+    AXASSERT(value.size() != 0, "value length must be greater than 0");
     LabelAtlas* label = LabelAtlas::create(value, charMapFile, itemWidth, itemHeight, startCharMap);
     if (MenuItemLabel::initWithLabel(label, callback))
     {
@@ -347,12 +347,12 @@ MenuItemFont::MenuItemFont() : _fontSize(0), _fontName("") {}
 
 MenuItemFont::~MenuItemFont()
 {
-    CCLOGINFO("In the destructor of MenuItemFont (%p).", this);
+    AXLOGINFO("In the destructor of MenuItemFont (%p).", this);
 }
 
 bool MenuItemFont::initWithString(std::string_view value, const ccMenuCallback& callback)
 {
-    CCASSERT(!value.empty(), "Value length must be greater than 0");
+    AXASSERT(!value.empty(), "Value length must be greater than 0");
 
     _fontName = _globalFontName;
     _fontSize = _globalFontSize;

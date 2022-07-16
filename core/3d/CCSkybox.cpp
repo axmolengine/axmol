@@ -167,7 +167,7 @@ void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void Skybox::setTexture(TextureCube* texture)
 {
-    CCASSERT(texture != nullptr, __FUNCTION__);
+    AXASSERT(texture != nullptr, __FUNCTION__);
     AX_SAFE_RELEASE_NULL(_texture);
     texture->retain();
     _texture = texture;

@@ -385,17 +385,17 @@ std::string StressTest2::subtitle() const
 SchedulerTest1::SchedulerTest1()
 {
     auto layer = Layer::create();
-    // CCLOG("retain count after init is %d", layer->getReferenceCount());                // 1
+    // AXLOG("retain count after init is %d", layer->getReferenceCount());                // 1
 
     addChild(layer, 0);
-    // CCLOG("retain count after addChild is %d", layer->getReferenceCount());      // 2
+    // AXLOG("retain count after addChild is %d", layer->getReferenceCount());      // 2
 
     layer->schedule(AX_CALLBACK_1(SchedulerTest1::doSomething, this), "do_something_key");
-    // CCLOG("retain count after schedule is %d", layer->getReferenceCount());      // 3 : (objective-c version), but
+    // AXLOG("retain count after schedule is %d", layer->getReferenceCount());      // 3 : (objective-c version), but
     // win32 version is still 2, because Timer class don't save target.
 
     layer->unschedule("do_something_key");
-    // CCLOG("retain count after unschedule is %d", layer->getReferenceCount());        // STILL 3!  (win32 is '2')
+    // AXLOG("retain count after unschedule is %d", layer->getReferenceCount());        // STILL 3!  (win32 is '2')
 }
 
 void SchedulerTest1::doSomething(float dt) {}
@@ -814,7 +814,7 @@ void ConvertToNode::onTouchesEnded(const std::vector<Touch*>& touches, Event* ev
             p1 = node->convertToNodeSpaceAR(location);
             p2 = node->convertToNodeSpace(location);
 
-            CCLOG("AR: x=%.2f, y=%.2f -- Not AR: x=%.2f, y=%.2f", p1.x, p1.y, p2.x, p2.y);
+            AXLOG("AR: x=%.2f, y=%.2f -- Not AR: x=%.2f, y=%.2f", p1.x, p1.y, p2.x, p2.y);
         }
     }
 }
@@ -1170,7 +1170,7 @@ void NodeNormalizedPositionTest2::update(float dt)
 
     Size s = Size(_copyContentSize.width * norm, _copyContentSize.height * norm);
     setContentSize(s);
-    CCLOG("s: %f,%f", s.width, s.height);
+    AXLOG("s: %f,%f", s.width, s.height);
 }
 
 //------------------------------------------------------------------

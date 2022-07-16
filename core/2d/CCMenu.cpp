@@ -50,7 +50,7 @@ enum
 
 Menu::~Menu()
 {
-    CCLOGINFO("In the destructor of Menu. %p", this);
+    AXLOGINFO("In the destructor of Menu. %p", this);
 }
 
 Menu* Menu::create()
@@ -171,13 +171,13 @@ void Menu::addChild(Node* child, int zOrder)
 
 void Menu::addChild(Node* child, int zOrder, int tag)
 {
-    CCASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
+    AXASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
     Node::addChild(child, zOrder, tag);
 }
 
 void Menu::addChild(Node* child, int zOrder, std::string_view name)
 {
-    CCASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
+    AXASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
     Node::addChild(child, zOrder, name);
 }
 
@@ -204,7 +204,7 @@ void Menu::onExit()
 
 void Menu::removeChild(Node* child, bool cleanup)
 {
-    CCASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
+    AXASSERT(dynamic_cast<MenuItem*>(child) != nullptr, "Menu only supports MenuItem objects as children");
 
     if (_selectedItem == child)
     {
@@ -247,7 +247,7 @@ bool Menu::onTouchBegan(Touch* touch, Event* /*event*/)
 
 void Menu::onTouchEnded(Touch* /*touch*/, Event* /*event*/)
 {
-    CCASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchEnded] -- invalid state");
+    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchEnded] -- invalid state");
     this->retain();
     if (_selectedItem)
     {
@@ -261,7 +261,7 @@ void Menu::onTouchEnded(Touch* /*touch*/, Event* /*event*/)
 
 void Menu::onTouchCancelled(Touch* /*touch*/, Event* /*event*/)
 {
-    CCASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchCancelled] -- invalid state");
+    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchCancelled] -- invalid state");
     this->retain();
     if (_selectedItem)
     {
@@ -273,7 +273,7 @@ void Menu::onTouchCancelled(Touch* /*touch*/, Event* /*event*/)
 
 void Menu::onTouchMoved(Touch* touch, Event* /*event*/)
 {
-    CCASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchMoved] -- invalid state");
+    AXASSERT(_state == Menu::State::TRACKING_TOUCH, "[Menu ccTouchMoved] -- invalid state");
     MenuItem* currentItem = this->getItemForTouch(touch, _selectedWithCamera);
     if (currentItem != _selectedItem)
     {
@@ -343,7 +343,7 @@ void Menu::alignItemsInColumns(int columns, ...)
 
 void Menu::alignItemsInColumns(int columns, va_list args)
 {
-    CCASSERT(columns >= 0, "Columns must be >= 0");
+    AXASSERT(columns >= 0, "Columns must be >= 0");
     ValueVector rows;
     while (columns)
     {
@@ -363,11 +363,11 @@ void Menu::alignItemsInColumnsWithArray(const ValueVector& rows)
 
     for (const auto& child : _children)
     {
-        CCASSERT(row < rows.size(), "row should less than rows.size()!");
+        AXASSERT(row < rows.size(), "row should less than rows.size()!");
 
         rowColumns = rows[row].asInt();
         // can not have zero columns on a row
-        CCASSERT(rowColumns, "rowColumns can't be 0.");
+        AXASSERT(rowColumns, "rowColumns can't be 0.");
 
         float tmp = child->getContentSize().height;
         rowHeight = (unsigned int)((rowHeight >= tmp || isnan(tmp)) ? rowHeight : tmp);
@@ -384,7 +384,7 @@ void Menu::alignItemsInColumnsWithArray(const ValueVector& rows)
     }
 
     // check if too many rows/columns for available menu items
-    CCASSERT(!columnsOccupied, "columnsOccupied should be 0.");
+    AXASSERT(!columnsOccupied, "columnsOccupied should be 0.");
 
     Vec2 winSize = getContentSize();
 
@@ -460,11 +460,11 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
     for (const auto& child : _children)
     {
         // check if too many menu items for the amount of rows/columns
-        CCASSERT(column < columns.size(), "column should be less than columns.size().");
+        AXASSERT(column < columns.size(), "column should be less than columns.size().");
 
         columnRows = columns[column].asInt();
         // can't have zero rows on a column
-        CCASSERT(columnRows, "columnRows can't be 0.");
+        AXASSERT(columnRows, "columnRows can't be 0.");
 
         // columnWidth = fmaxf(columnWidth, [item contentSize].width);
         float tmp   = child->getContentSize().width;
@@ -487,7 +487,7 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
     }
 
     // check if too many rows/columns for available menu items.
-    CCASSERT(!rowsOccupied, "rowsOccupied should be 0.");
+    AXASSERT(!rowsOccupied, "rowsOccupied should be 0.");
 
     Vec2 winSize = getContentSize();
 

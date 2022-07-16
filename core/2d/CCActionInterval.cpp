@@ -126,13 +126,13 @@ void ActionInterval::step(float dt)
 void ActionInterval::setAmplitudeRate(float /*amp*/)
 {
     // Abstract class needs implementation
-    CCASSERT(0, "Subclass should implement this method!");
+    AXASSERT(0, "Subclass should implement this method!");
 }
 
 float ActionInterval::getAmplitudeRate()
 {
     // Abstract class needs implementation
-    CCASSERT(0, "Subclass should implement this method!");
+    AXASSERT(0, "Subclass should implement this method!");
 
     return 0;
 }
@@ -237,8 +237,8 @@ bool Sequence::init(const Vector<FiniteTimeAction*>& arrayOfActions)
 
 bool Sequence::initWithTwoActions(FiniteTimeAction* actionOne, FiniteTimeAction* actionTwo)
 {
-    CCASSERT(actionOne != nullptr, "actionOne can't be nullptr!");
-    CCASSERT(actionTwo != nullptr, "actionTwo can't be nullptr!");
+    AXASSERT(actionOne != nullptr, "actionOne can't be nullptr!");
+    AXASSERT(actionTwo != nullptr, "actionTwo can't be nullptr!");
     if (actionOne == nullptr || actionTwo == nullptr)
     {
         log("Sequence::initWithTwoActions error: action is nullptr!!");
@@ -549,7 +549,7 @@ RepeatForever* RepeatForever::create(ActionInterval* action)
 
 bool RepeatForever::initWithAction(ActionInterval* action)
 {
-    CCASSERT(action != nullptr, "action can't be nullptr!");
+    AXASSERT(action != nullptr, "action can't be nullptr!");
     if (action == nullptr)
     {
         log("RepeatForever::initWithAction error:action is nullptr!");
@@ -693,8 +693,8 @@ bool Spawn::init(const Vector<FiniteTimeAction*>& arrayOfActions)
 
 bool Spawn::initWithTwoActions(FiniteTimeAction* action1, FiniteTimeAction* action2)
 {
-    CCASSERT(action1 != nullptr, "action1 can't be nullptr!");
-    CCASSERT(action2 != nullptr, "action2 can't be nullptr!");
+    AXASSERT(action1 != nullptr, "action1 can't be nullptr!");
+    AXASSERT(action2 != nullptr, "action2 can't be nullptr!");
     if (action1 == nullptr || action2 == nullptr)
     {
         log("Spawn::initWithTwoActions error: action is nullptr!");
@@ -952,7 +952,7 @@ void RotateTo::update(float time)
 
 RotateTo* RotateTo::reverse() const
 {
-    CCASSERT(false, "RotateTo doesn't support the 'reverse' method");
+    AXASSERT(false, "RotateTo doesn't support the 'reverse' method");
     return nullptr;
 }
 
@@ -1242,7 +1242,7 @@ void MoveTo::startWithTarget(Node* target)
 
 MoveTo* MoveTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in MoveTo");
+    AXASSERT(false, "reverse() not supported in MoveTo");
     return nullptr;
 }
 
@@ -1285,7 +1285,7 @@ SkewTo* SkewTo::clone() const
 
 SkewTo* SkewTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in SkewTo");
+    AXASSERT(false, "reverse() not supported in SkewTo");
     return nullptr;
 }
 
@@ -1542,7 +1542,7 @@ JumpBy* JumpBy::create(float duration, const Vec2& position, float height, int j
 
 bool JumpBy::initWithDuration(float duration, const Vec2& position, float height, int jumps)
 {
-    CCASSERT(jumps >= 0, "Number of jumps must be >= 0");
+    AXASSERT(jumps >= 0, "Number of jumps must be >= 0");
     if (jumps < 0)
     {
         log("JumpBy::initWithDuration error: Number of jumps must be >= 0");
@@ -1623,7 +1623,7 @@ JumpTo* JumpTo::create(float duration, const Vec2& position, float height, int j
 
 bool JumpTo::initWithDuration(float duration, const Vec2& position, float height, int jumps)
 {
-    CCASSERT(jumps >= 0, "Number of jumps must be >= 0");
+    AXASSERT(jumps >= 0, "Number of jumps must be >= 0");
     if (jumps < 0)
     {
         log("JumpTo::initWithDuration error:Number of jumps must be >= 0");
@@ -1650,7 +1650,7 @@ JumpTo* JumpTo::clone() const
 
 JumpTo* JumpTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in JumpTo");
+    AXASSERT(false, "reverse() not supported in JumpTo");
     return nullptr;
 }
 
@@ -1797,7 +1797,7 @@ void BezierTo::startWithTarget(Node* target)
 
 BezierTo* BezierTo::reverse() const
 {
-    CCASSERT(false, "CCBezierTo doesn't support the 'reverse' method");
+    AXASSERT(false, "CCBezierTo doesn't support the 'reverse' method");
     return nullptr;
 }
 
@@ -1893,7 +1893,7 @@ ScaleTo* ScaleTo::clone() const
 
 ScaleTo* ScaleTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in ScaleTo");
+    AXASSERT(false, "reverse() not supported in ScaleTo");
     return nullptr;
 }
 
@@ -1999,7 +1999,7 @@ Blink* Blink::create(float duration, int blinks)
 
 bool Blink::initWithDuration(float duration, int blinks)
 {
-    CCASSERT(blinks >= 0, "blinks should be >= 0");
+    AXASSERT(blinks >= 0, "blinks should be >= 0");
     if (blinks < 0)
     {
         log("Blink::initWithDuration error:blinks should be >= 0");
@@ -2181,7 +2181,7 @@ FadeTo* FadeTo::clone() const
 
 FadeTo* FadeTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in FadeTo");
+    AXASSERT(false, "reverse() not supported in FadeTo");
     return nullptr;
 }
 
@@ -2243,7 +2243,7 @@ TintTo* TintTo::clone() const
 
 TintTo* TintTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in TintTo");
+    AXASSERT(false, "reverse() not supported in TintTo");
     return nullptr;
 }
 
@@ -2382,8 +2382,8 @@ ReverseTime* ReverseTime::create(FiniteTimeAction* action)
 
 bool ReverseTime::initWithAction(FiniteTimeAction* action)
 {
-    CCASSERT(action != nullptr, "action can't be nullptr!");
-    CCASSERT(action != _other, "action doesn't equal to _other!");
+    AXASSERT(action != nullptr, "action can't be nullptr!");
+    AXASSERT(action != _other, "action doesn't equal to _other!");
     if (action == nullptr || action == _other)
     {
         log("ReverseTime::initWithAction error: action is null or action equal to _other");
@@ -2472,7 +2472,7 @@ Animate::~Animate()
 
 bool Animate::initWithAnimation(Animation* animation)
 {
-    CCASSERT(animation != nullptr, "Animate: argument Animation must be non-nullptr");
+    AXASSERT(animation != nullptr, "Animate: argument Animation must be non-nullptr");
     if (animation == nullptr)
     {
         log("Animate::initWithAnimation: argument Animation must be non-nullptr");

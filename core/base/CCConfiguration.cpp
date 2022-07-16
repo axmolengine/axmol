@@ -80,7 +80,7 @@ bool Configuration::init()
     _valueDict["axis.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
-#if COCOS2D_DEBUG
+#if AXIS_DEBUG
     _valueDict["axis.build_type"] = Value("DEBUG");
 #else
     _valueDict["axis.build_type"]                   = Value("RELEASE");
@@ -98,13 +98,13 @@ std::string Configuration::getInfo() const
 {
     // And Dump some warnings as well
 #if AX_ENABLE_PROFILERS
-    CCLOG(
+    AXLOG(
         "cocos2d: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
         "ccConfig.h)\n");
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
-    CCLOG(
+    AXLOG(
         "cocos2d: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
         "ccConfig.h)\n");
 #endif
@@ -117,7 +117,7 @@ std::string Configuration::getInfo() const
 void Configuration::gatherGPUInfo()
 {
     auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    CCLOG("Supported extensions: %s", _deviceInfo->getExtension());
+    AXLOG("Supported extensions: %s", _deviceInfo->getExtension());
 
     _valueDict["vendor"]   = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
@@ -335,7 +335,7 @@ void Configuration::setValue(std::string_view key, const Value& value)
 void Configuration::loadConfigFile(std::string_view filename)
 {
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(filename);
-    CCASSERT(!dict.empty(), "cannot create dictionary");
+    AXASSERT(!dict.empty(), "cannot create dictionary");
 
     // search for metadata
     bool validMetadata = false;
@@ -360,14 +360,14 @@ void Configuration::loadConfigFile(std::string_view filename)
 
     if (!validMetadata)
     {
-        CCLOG("Invalid config format for file: %s", filename.data());
+        AXLOG("Invalid config format for file: %s", filename.data());
         return;
     }
 
     auto dataIter = dict.find("data");
     if (dataIter == dict.cend() || dataIter->second.getType() != Value::Type::MAP)
     {
-        CCLOG("Expected 'data' dict, but not found. Config file: %s", filename.data());
+        AXLOG("Expected 'data' dict, but not found. Config file: %s", filename.data());
         return;
     }
 
@@ -379,7 +379,7 @@ void Configuration::loadConfigFile(std::string_view filename)
         if (_valueDict.find(dataMapIter.first) == _valueDict.cend())
             _valueDict[dataMapIter.first] = dataMapIter.second;
         else
-            CCLOG("Key already present. Ignoring '%s'", dataMapIter.first.c_str());
+            AXLOG("Key already present. Ignoring '%s'", dataMapIter.first.c_str());
     }
 
     // light info

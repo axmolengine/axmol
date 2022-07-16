@@ -90,14 +90,14 @@ public:
     Map() : _data()
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for axis::Map<K, V>!");
-        CCLOGINFO("In the default constructor of Map!");
+        AXLOGINFO("In the default constructor of Map!");
     }
 
     /** Constructor with capacity. */
     explicit Map(ssize_t capacity) : _data()
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for axis::Map<K, V>!");
-        CCLOGINFO("In the constructor with capacity of Map!");
+        AXLOGINFO("In the constructor with capacity of Map!");
         _data.reserve(capacity);
     }
 
@@ -105,7 +105,7 @@ public:
     Map(const Map& other)
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for axis::Map<K, V>!");
-        CCLOGINFO("In the copy constructor of Map!");
+        AXLOGINFO("In the copy constructor of Map!");
         _data = other._data;
         addRefForAllObjects();
     }
@@ -114,7 +114,7 @@ public:
     Map(Map&& other)
     {
         static_assert(std::is_convertible<V, Ref*>::value, "Invalid Type for axis::Map<K, V>!");
-        CCLOGINFO("In the move constructor of Map!");
+        AXLOGINFO("In the move constructor of Map!");
         _data = std::move(other._data);
     }
 
@@ -124,7 +124,7 @@ public:
      */
     ~Map()
     {
-        CCLOGINFO("In the destructor of Map!");
+        AXLOGINFO("In the destructor of Map!");
         clear();
     }
 
@@ -273,7 +273,7 @@ public:
     template <typename K2>
     void insert(const K2& key, V object)
     {
-        CCASSERT(object != nullptr, "Object is nullptr!");
+        AXASSERT(object != nullptr, "Object is nullptr!");
         object->retain();
         erase(key);
         _data.emplace(key, object);
@@ -287,14 +287,14 @@ public:
      */
     iterator erase(const_iterator position)
     {
-        CCASSERT(position != _data.cend(), "Invalid iterator!");
+        AXASSERT(position != _data.cend(), "Invalid iterator!");
         position->second->release();
         return _data.erase(position);
     }
 
     iterator erase(iterator position)
     {
-        CCASSERT(position != _data.cend(), "Invalid iterator!");
+        AXASSERT(position != _data.cend(), "Invalid iterator!");
         position->second->release();
         return _data.erase(position);
     }
@@ -379,25 +379,25 @@ public:
     // Don't uses operator since we could not decide whether it needs 'retain'/'release'.
     //    V& operator[] ( const K& key )
     //    {
-    //        CCLOG("copy: [] ref");
+    //        AXLOG("copy: [] ref");
     //        return _data[key];
     //    }
     //
     //    V& operator[] ( K&& key )
     //    {
-    //        CCLOG("move [] ref");
+    //        AXLOG("move [] ref");
     //        return _data[key];
     //    }
 
     //    const V& operator[] ( const K& key ) const
     //    {
-    //        CCLOG("const copy []");
+    //        AXLOG("const copy []");
     //        return _data.at(key);
     //    }
     //
     //    const V& operator[] ( K&& key ) const
     //    {
-    //        CCLOG("const move []");
+    //        AXLOG("const move []");
     //        return _data.at(key);
     //    }
 
@@ -406,7 +406,7 @@ public:
     {
         if (this != &other)
         {
-            CCLOGINFO("In the copy assignment operator of Map!");
+            AXLOGINFO("In the copy assignment operator of Map!");
             clear();
             _data = other._data;
             addRefForAllObjects();
@@ -419,7 +419,7 @@ public:
     {
         if (this != &other)
         {
-            CCLOGINFO("In the move assignment operator of Map!");
+            AXLOGINFO("In the move assignment operator of Map!");
             clear();
             _data = std::move(other._data);
         }

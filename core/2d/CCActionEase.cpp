@@ -47,7 +47,7 @@ NS_AX_BEGIN
 
 bool ActionEase::initWithAction(ActionInterval* action)
 {
-    CCASSERT(action != nullptr, "action couldn't be nullptr!");
+    AXASSERT(action != nullptr, "action couldn't be nullptr!");
     if (action == nullptr)
     {
         return false;
@@ -106,7 +106,7 @@ ActionInterval* ActionEase::getInnerAction()
 
 EaseRateAction* EaseRateAction::create(ActionInterval* action, float rate)
 {
-    CCASSERT(action != nullptr, "action cannot be nullptr!");
+    AXASSERT(action != nullptr, "action cannot be nullptr!");
 
     EaseRateAction* easeRateAction = new EaseRateAction();
     if (easeRateAction->initWithAction(action, rate))

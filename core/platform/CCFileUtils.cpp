@@ -117,7 +117,7 @@ public:
         _resultType = SAX_RESULT_DICT;
         SAXParser parser;
 
-        CCASSERT(parser.init("UTF-8"), "The file format isn't UTF-8");
+        AXASSERT(parser.init("UTF-8"), "The file format isn't UTF-8");
         parser.setDelegator(this);
 
         parser.parse(fileName);
@@ -129,7 +129,7 @@ public:
         _resultType = SAX_RESULT_DICT;
         SAXParser parser;
 
-        CCASSERT(parser.init("UTF-8"), "The file format isn't UTF-8");
+        AXASSERT(parser.init("UTF-8"), "The file format isn't UTF-8");
         parser.setDelegator(this);
 
         parser.parse(filedata, filesize);
@@ -141,7 +141,7 @@ public:
         _resultType = SAX_RESULT_ARRAY;
         SAXParser parser;
 
-        CCASSERT(parser.init("UTF-8"), "The file format isn't UTF-8");
+        AXASSERT(parser.init("UTF-8"), "The file format isn't UTF-8");
         parser.setDelegator(this);
 
         parser.parse(fileName);
@@ -175,7 +175,7 @@ public:
             else if (SAX_DICT == preState)
             {
                 // add a new dictionary into the pre dictionary
-                CCASSERT(!_dictStack.empty(), "The state is wrong!");
+                AXASSERT(!_dictStack.empty(), "The state is wrong!");
                 ValueMap* preDict = _dictStack.top();
                 auto& curVal      = hlookup::set_item(*preDict, _curKey, Value(ValueMap()))->second;
                 _curDict          = &curVal.asValueMap();
@@ -222,7 +222,7 @@ public:
             }
             else if (preState == SAX_ARRAY)
             {
-                CCASSERT(!_arrayStack.empty(), "The state is wrong!");
+                AXASSERT(!_arrayStack.empty(), "The state is wrong!");
                 ValueVector* preArray = _arrayStack.top();
                 preArray->push_back(Value(ValueVector()));
                 _curArray = &(_curArray->rbegin())->asValueVector();
@@ -329,7 +329,7 @@ public:
         {
             if (curState == SAX_DICT)
             {
-                CCASSERT(!_curKey.empty(), "key not found : <integer/real>");
+                AXASSERT(!_curKey.empty(), "key not found : <integer/real>");
             }
 
             _curValue.append(text);
@@ -512,7 +512,7 @@ void FileUtils::writeDataToFile(Data data, std::string_view fullPath, std::funct
 
 bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string_view fullPath)
 {
-    CCASSERT(!fullPath.empty() && dataSize > 0, "Invalid parameters.");
+    AXASSERT(!fullPath.empty() && dataSize > 0, "Invalid parameters.");
 
     auto* fileUtils = FileUtils::getInstance();
     do
@@ -711,7 +711,7 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
     if (isPopupNotify())
     {
-        CCLOG("cocos2d: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
+        AXLOG("cocos2d: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
     }
 
     // The file wasn't found, return empty string.
@@ -762,7 +762,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
     if (isPopupNotify())
     {
-        CCLOG("cocos2d: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
+        AXLOG("cocos2d: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
     }
 
     // The file wasn't found, return empty string.
@@ -910,7 +910,7 @@ void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
 
     if (!existDefaultRootPath)
     {
-        // CCLOG("Default root path doesn't exist, adding it.");
+        // AXLOG("Default root path doesn't exist, adding it.");
         _searchPathArray.push_back(_defaultResRootPath);
     }
 }
@@ -1002,7 +1002,7 @@ bool FileUtils::isAbsolutePathInternal(std::string_view path)
 
 bool FileUtils::isDirectoryExist(std::string_view dirPath) const
 {
-    CCASSERT(!dirPath.empty(), "Invalid path");
+    AXASSERT(!dirPath.empty(), "Invalid path");
 
     DECLARE_GUARD;
 
@@ -1019,7 +1019,7 @@ bool FileUtils::isDirectoryExist(std::string_view dirPath) const
 
 void FileUtils::isDirectoryExist(std::string_view fullPath, std::function<void(bool)> callback) const
 {
-    CCASSERT(isAbsolutePath(fullPath), "Async isDirectoryExist only accepts absolute file paths");
+    AXASSERT(isAbsolutePath(fullPath), "Async isDirectoryExist only accepts absolute file paths");
     performOperationOffthread(
         [path = std::string{fullPath}]() -> bool { return FileUtils::getInstance()->isDirectoryExist(path); },
         std::move(callback));
@@ -1181,43 +1181,43 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 {
-    CCASSERT(false, "FileUtils not support isDirectoryExistInternal");
+    AXASSERT(false, "FileUtils not support isDirectoryExistInternal");
     return false;
 }
 
 bool FileUtils::createDirectory(std::string_view path) const
 {
-    CCASSERT(false, "FileUtils not support createDirectory");
+    AXASSERT(false, "FileUtils not support createDirectory");
     return false;
 }
 
 bool FileUtils::removeDirectory(std::string_view path) const
 {
-    CCASSERT(false, "FileUtils not support removeDirectory");
+    AXASSERT(false, "FileUtils not support removeDirectory");
     return false;
 }
 
 bool FileUtils::removeFile(std::string_view path) const
 {
-    CCASSERT(false, "FileUtils not support removeFile");
+    AXASSERT(false, "FileUtils not support removeFile");
     return false;
 }
 
 bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newfullpath) const
 {
-    CCASSERT(false, "FileUtils not support renameFile");
+    AXASSERT(false, "FileUtils not support renameFile");
     return false;
 }
 
 bool FileUtils::renameFile(std::string_view path, std::string_view oldname, std::string_view name) const
 {
-    CCASSERT(false, "FileUtils not support renameFile");
+    AXASSERT(false, "FileUtils not support renameFile");
     return false;
 }
 
 int64_t FileUtils::getFileSize(std::string_view filepath) const
 {
-    CCASSERT(false, "getFileSize should be override by platform FileUtils");
+    AXASSERT(false, "getFileSize should be override by platform FileUtils");
     return 0;
 }
 
@@ -1244,7 +1244,7 @@ bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 
 bool FileUtils::createDirectory(std::string_view path) const
 {
-    CCASSERT(!path.empty(), "Invalid path");
+    AXASSERT(!path.empty(), "Invalid path");
 
     if (isDirectoryExist(path))
         return true;
@@ -1358,14 +1358,14 @@ bool FileUtils::removeFile(std::string_view path) const
 
 bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newfullpath) const
 {
-    CCASSERT(!oldfullpath.empty(), "Invalid path");
-    CCASSERT(!newfullpath.empty(), "Invalid path");
+    AXASSERT(!oldfullpath.empty(), "Invalid path");
+    AXASSERT(!newfullpath.empty(), "Invalid path");
 
     int errorCode = rename(oldfullpath.data(), newfullpath.data());
 
     if (0 != errorCode)
     {
-        CCLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.data(), newfullpath.data(), errorCode);
+        AXLOGERROR("Fail to rename file %s to %s !Error code is %d", oldfullpath.data(), newfullpath.data(), errorCode);
         return false;
     }
     return true;
@@ -1373,7 +1373,7 @@ bool FileUtils::renameFile(std::string_view oldfullpath, std::string_view newful
 
 bool FileUtils::renameFile(std::string_view path, std::string_view oldname, std::string_view name) const
 {
-    CCASSERT(!path.empty(), "Invalid path");
+    AXASSERT(!path.empty(), "Invalid path");
     std::string oldPath{path};
     oldPath += oldname;
     std::string newPath{path};
@@ -1384,7 +1384,7 @@ bool FileUtils::renameFile(std::string_view path, std::string_view oldname, std:
 
 int64_t FileUtils::getFileSize(std::string_view filepath) const
 {
-    CCASSERT(!filepath.empty(), "Invalid path");
+    AXASSERT(!filepath.empty(), "Invalid path");
 
     std::string_view path;
     std::string fullpath;

@@ -240,7 +240,7 @@ void PUBillboardChain::setDynamic(bool dyn)
 //-----------------------------------------------------------------------
 void PUBillboardChain::addChainElement(size_t chainIndex, const PUBillboardChain::Element& dtls)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
     if (seg.head == SEGMENT_EMPTY)
     {
@@ -285,7 +285,7 @@ void PUBillboardChain::addChainElement(size_t chainIndex, const PUBillboardChain
 //-----------------------------------------------------------------------
 void PUBillboardChain::removeChainElement(size_t chainIndex)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
     if (seg.head == SEGMENT_EMPTY)
         return;  // do nothing, nothing to remove
@@ -315,7 +315,7 @@ void PUBillboardChain::removeChainElement(size_t chainIndex)
 //-----------------------------------------------------------------------
 void PUBillboardChain::clearChain(size_t chainIndex)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
 
     // Just reset head & tail
@@ -348,9 +348,9 @@ void PUBillboardChain::setFaceCamera(bool faceCamera, const Vec3& normalVector)
 //-----------------------------------------------------------------------
 void PUBillboardChain::updateChainElement(size_t chainIndex, size_t elementIndex, const PUBillboardChain::Element& dtls)
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     ChainSegment& seg = _chainSegmentList[chainIndex];
-    CCASSERT(seg.head != SEGMENT_EMPTY, "Chain segment is empty");
+    AXASSERT(seg.head != SEGMENT_EMPTY, "Chain segment is empty");
 
     size_t idx = seg.head + elementIndex;
     // adjust for the edge and start
@@ -368,7 +368,7 @@ void PUBillboardChain::updateChainElement(size_t chainIndex, size_t elementIndex
 //-----------------------------------------------------------------------
 const PUBillboardChain::Element& PUBillboardChain::getChainElement(size_t chainIndex, size_t elementIndex) const
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     const ChainSegment& seg = _chainSegmentList[chainIndex];
 
     size_t idx = seg.head + elementIndex;
@@ -380,7 +380,7 @@ const PUBillboardChain::Element& PUBillboardChain::getChainElement(size_t chainI
 //-----------------------------------------------------------------------
 size_t PUBillboardChain::getNumChainElements(size_t chainIndex) const
 {
-    CCASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
+    AXASSERT(chainIndex < _chainCount, "chainIndex out of bounds");
     const ChainSegment& seg = _chainSegmentList[chainIndex];
 
     if (seg.tail < seg.head)
@@ -431,7 +431,7 @@ void PUBillboardChain::updateVertexBuffer(const Mat4& camMat)
                     e = 0;
 
                 Element& elem = _chainElementList[e + seg.start];
-                CCASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
+                AXASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
                 unsigned short vertexIndex = static_cast<unsigned short>((e + seg.start) * 2);
                 //// Determine base pointer to vertex #1
                 // void* pBase = static_cast<void*>(
@@ -594,7 +594,7 @@ void PUBillboardChain::updateIndexBuffer()
                         e = 0;
                     // indexes of this element are (e * 2) and (e * 2) + 1
                     // indexes of the last element are the same, -2
-                    CCASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
+                    AXASSERT(((e + seg.start) * 2) < 65536, "Too many elements!");
                     unsigned short baseIdx     = static_cast<unsigned short>((e + seg.start) * 2);
                     unsigned short lastBaseIdx = static_cast<unsigned short>((laste + seg.start) * 2);
 

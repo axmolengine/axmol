@@ -211,7 +211,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
     else
     {
         // do nothing, do not support
-        // CCASSERT(0, "TMX invalid value");
+        // AXASSERT(0, "TMX invalid value");
     }
 
     _indicesVertexZNumber.clear();
@@ -321,7 +321,7 @@ void FastTMXLayer::setupTiles()
         break;
     case FAST_TMX_ORIENTATION_HEX:
     default:
-        CCLOGERROR("FastTMX does not support type %d", _layerOrientation);
+        AXLOGERROR("FastTMX does not support type %d", _layerOrientation);
         break;
     }
 
@@ -647,10 +647,10 @@ void FastTMXLayer::updateTotalQuads()
 // removing / getting tiles
 Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
 {
-    CCASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+    AXASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");
-    CCASSERT(_tiles, "TMXLayer: the tiles map has been released");
+    AXASSERT(_tiles, "TMXLayer: the tiles map has been released");
 
     Sprite* tile = nullptr;
     int gid      = this->getTileGIDAt(tileCoordinate);
@@ -690,10 +690,10 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
 
 int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /* = nullptr*/)
 {
-    CCASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+    AXASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");
-    CCASSERT(_tiles, "TMXLayer: the tiles map has been released");
+    AXASSERT(_tiles, "TMXLayer: the tiles map has been released");
 
     int idx = static_cast<int>(((int)tileCoordinate.x + (int)tileCoordinate.y * _layerSize.width));
 
@@ -737,10 +737,10 @@ int FastTMXLayer::getVertexZForPos(const Vec2& pos)
             ret = static_cast<int>(-(_layerSize.height - pos.y));
             break;
         case FAST_TMX_ORIENTATION_HEX:
-            CCASSERT(0, "TMX Hexa vertexZ not supported");
+            AXASSERT(0, "TMX Hexa vertexZ not supported");
             break;
         default:
-            CCASSERT(0, "TMX invalid value");
+            AXASSERT(0, "TMX invalid value");
             break;
         }
     }
@@ -755,7 +755,7 @@ int FastTMXLayer::getVertexZForPos(const Vec2& pos)
 void FastTMXLayer::removeTileAt(const Vec2& tileCoordinate)
 {
 
-    CCASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+    AXASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");
 
@@ -842,7 +842,7 @@ Vec2 FastTMXLayer::calculateLayerOffset(const Vec2& pos)
         break;
     case FAST_TMX_ORIENTATION_HEX:
     default:
-        CCASSERT(pos.isZero(), "offset for this map not implemented yet");
+        AXASSERT(pos.isZero(), "offset for this map not implemented yet");
         break;
     }
     return ret;
@@ -856,11 +856,11 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate)
 
 void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags flags)
 {
-    CCASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+    AXASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");
-    CCASSERT(_tiles, "TMXLayer: the tiles map has been released");
-    CCASSERT(gid == 0 || gid >= _tileSet->_firstGid, "TMXLayer: invalid gid");
+    AXASSERT(_tiles, "TMXLayer: the tiles map has been released");
+    AXASSERT(gid == 0 || gid >= _tileSet->_firstGid, "TMXLayer: invalid gid");
 
     TMXTileFlags currentFlags;
     int currentGID = getTileGIDAt(tileCoordinate, &currentFlags);

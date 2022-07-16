@@ -216,7 +216,7 @@ bool ControlSwitchSprite::initWithMaskSprite(Sprite* maskSprite,
 
 void ControlSwitchSprite::updateTweenAction(float value, std::string_view key)
 {
-    CCLOGINFO("key = %s, value = %f", key.c_str(), value);
+    AXLOGINFO("key = %s, value = %f", key.c_str(), value);
     setSliderXPosition(value);
 }
 
@@ -313,10 +313,10 @@ bool ControlSwitch::initWithMaskSprite(Sprite* maskSprite,
 {
     if (Control::init())
     {
-        CCASSERT(maskSprite, "Mask must not be nil.");
-        CCASSERT(onSprite, "onSprite must not be nil.");
-        CCASSERT(offSprite, "offSprite must not be nil.");
-        CCASSERT(thumbSprite, "thumbSprite must not be nil.");
+        AXASSERT(maskSprite, "Mask must not be nil.");
+        AXASSERT(onSprite, "onSprite must not be nil.");
+        AXASSERT(offSprite, "offSprite must not be nil.");
+        AXASSERT(thumbSprite, "thumbSprite must not be nil.");
 
         _on = true;
 

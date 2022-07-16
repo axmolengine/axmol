@@ -66,7 +66,7 @@ ProgressTo* ProgressTo::clone() const
 
 ProgressTo* ProgressTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in ProgressTo");
+    AXASSERT(false, "reverse() not supported in ProgressTo");
     return nullptr;
 }
 

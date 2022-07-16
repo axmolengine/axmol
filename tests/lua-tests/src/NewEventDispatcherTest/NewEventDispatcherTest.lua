@@ -910,7 +910,7 @@ function RemoveListenerAfterAddingTest:onEnter()
     local function item1Callback(tag, sender)
 
         local function onTouchBegan(touch, event)
-            CCASSERT(false, "Should not come here!")
+            AXASSERT(false, "Should not come here!")
             return true
         end
 

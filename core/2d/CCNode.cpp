@@ -155,7 +155,7 @@ Node* Node::create()
 
 Node::~Node()
 {
-    CCLOGINFO("deallocing Node: %p - tag: %i", this, _tag);
+    AXLOGINFO("deallocing Node: %p - tag: %i", this, _tag);
 
     AX_SAFE_DELETE(_childrenIndexer);
 
@@ -187,11 +187,11 @@ Node::~Node()
 
     _eventDispatcher->removeEventListenersForTarget(this);
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
     _eventDispatcher->debugCheckNodeHasNoEventListenersOnDestruction(this);
 #endif
 
-    CCASSERT(!_running,
+    AXASSERT(!_running,
              "Node still marked as running on node destruction! Was base class onExit() called in derived class "
              "onExit() implementations?");
     AX_SAFE_RELEASE(_eventDispatcher);
@@ -310,7 +310,7 @@ void Node::setGlobalZOrder(float globalZOrder)
 /// rotation getter
 float Node::getRotation() const
 {
-    CCASSERT(_rotationZ_X == _rotationZ_Y, "CCNode#rotation. RotationX != RotationY. Don't know which one to return");
+    AXASSERT(_rotationZ_X == _rotationZ_Y, "CCNode#rotation. RotationX != RotationY. Don't know which one to return");
     return _rotationZ_X;
 }
 
@@ -350,7 +350,7 @@ void Node::setRotation3D(const Vec3& rotation)
 Vec3 Node::getRotation3D() const
 {
     // rotation Z is decomposed in 2 to simulate Skew for Flash animations
-    CCASSERT(_rotationZ_X == _rotationZ_Y, "_rotationZ_X != _rotationZ_Y");
+    AXASSERT(_rotationZ_X == _rotationZ_Y, "_rotationZ_X != _rotationZ_Y");
 
     return Vec3(_rotationX, _rotationY, _rotationZ_X);
 }
@@ -427,7 +427,7 @@ void Node::setRotationSkewY(float rotationY)
 /// scale getter
 float Node::getScale() const
 {
-    CCASSERT(_scaleX == _scaleY, "CCNode#scale. ScaleX != ScaleY. Don't know which one to return");
+    AXASSERT(_scaleX == _scaleY, "CCNode#scale. ScaleX != ScaleY. Don't know which one to return");
     return _scaleX;
 }
 
@@ -808,7 +808,7 @@ void Node::childrenAlloc()
 
 Node* Node::getChildByTag(int tag) const
 {
-    CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
     if (_childrenIndexer)
     {
@@ -827,7 +827,7 @@ Node* Node::getChildByTag(int tag) const
 
 Node* Node::getChildByName(std::string_view name) const
 {
-    // CCASSERT(!name.empty(), "Invalid name");
+    // AXASSERT(!name.empty(), "Invalid name");
     auto hash = AX_HASH_NODE_NAME(name);
     if (_childrenIndexer)
     {
@@ -847,8 +847,8 @@ Node* Node::getChildByName(std::string_view name) const
 
 void Node::enumerateChildren(std::string_view name, std::function<bool(Node*)> callback) const
 {
-    CCASSERT(!name.empty(), "Invalid name");
-    CCASSERT(callback != nullptr, "Invalid callback function");
+    AXASSERT(!name.empty(), "Invalid name");
+    AXASSERT(callback != nullptr, "Invalid callback function");
 
     size_t length = name.length();
 
@@ -968,16 +968,16 @@ bool Node::doEnumerate(std::string name, std::function<bool(Node*)> callback) co
  */
 void Node::addChild(Node* child, int localZOrder, int tag)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
-    CCASSERT(child->_parent == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->_parent == nullptr, "child already added. It can't be added again");
 
     addChildHelper(child, localZOrder, tag, "", true);
 }
 
 void Node::addChild(Node* child, int localZOrder, std::string_view name)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
-    CCASSERT(child->_parent == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->_parent == nullptr, "child already added. It can't be added again");
 
     addChildHelper(child, localZOrder, INVALID_TAG, name, false);
 }
@@ -993,7 +993,7 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_vie
     });
     (void)assertNotSelfChild;
 
-    CCASSERT(assertNotSelfChild(), "A node cannot be the child of his own children");
+    AXASSERT(assertNotSelfChild(), "A node cannot be the child of his own children");
 
     if (_children.empty())
     {
@@ -1046,13 +1046,13 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, std::string_vie
 
 void Node::addChild(Node* child, int zOrder)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
     this->addChild(child, zOrder, child->_name);
 }
 
 void Node::addChild(Node* child)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
     this->addChild(child, child->getLocalZOrder(), child->_name);
 }
 
@@ -1088,13 +1088,13 @@ void Node::removeChild(Node* child, bool cleanup /* = true */)
 
 void Node::removeChildByTag(int tag, bool cleanup /* = true */)
 {
-    CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
     Node* child = this->getChildByTag(tag);
 
     if (child == nullptr)
     {
-        CCLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
     }
     else
     {
@@ -1104,13 +1104,13 @@ void Node::removeChildByTag(int tag, bool cleanup /* = true */)
 
 void Node::removeChildByName(std::string_view name, bool cleanup)
 {
-    CCASSERT(!name.empty(), "Invalid name");
+    AXASSERT(!name.empty(), "Invalid name");
 
     Node* child = this->getChildByName(name);
 
     if (child == nullptr)
     {
-        CCLOG("cocos2d: removeChildByName(name = %s): child not found!", name.data());
+        AXLOG("cocos2d: removeChildByName(name = %s): child not found!", name.data());
     }
     else
     {
@@ -1193,7 +1193,7 @@ void Node::insertChild(Node* child, int z)
 
 void Node::reorderChild(Node* child, int zOrder)
 {
-    CCASSERT(child != nullptr, "Child must be non-nil");
+    AXASSERT(child != nullptr, "Child must be non-nil");
     _reorderChildDirty = true;
     child->updateOrderOfArrival();
     child->_setLocalZOrder(zOrder);
@@ -1230,7 +1230,7 @@ uint32_t Node::processParentFlags(const Mat4& parentTransform, uint32_t parentFl
 {
     if (_usingNormalizedPosition)
     {
-        CCASSERT(_parent, "setPositionNormalized() doesn't work with orphan nodes");
+        AXASSERT(_parent, "setPositionNormalized() doesn't work with orphan nodes");
         if ((parentFlags & FLAGS_CONTENT_SIZE_DIRTY) || _normalizedPositionDirty)
         {
             auto& s           = _parent->getContentSize();
@@ -1435,7 +1435,7 @@ void Node::setActionManager(ActionManager* actionManager)
 
 Action* Node::runAction(Action* action)
 {
-    CCASSERT(action != nullptr, "Argument must be non-nil");
+    AXASSERT(action != nullptr, "Argument must be non-nil");
     _actionManager->addAction(action, this, !_running);
     return action;
 }
@@ -1452,13 +1452,13 @@ void Node::stopAction(Action* action)
 
 void Node::stopActionByTag(int tag)
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag");
     _actionManager->removeActionByTag(tag, this);
 }
 
 void Node::stopAllActionsByTag(int tag)
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag");
     _actionManager->removeAllActionsByTag(tag, this);
 }
 
@@ -1472,7 +1472,7 @@ void Node::stopActionsByFlags(unsigned int flags)
 
 Action* Node::getActionByTag(int tag)
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag");
     return _actionManager->getActionByTag(tag, this);
 }
 
@@ -1555,8 +1555,8 @@ void Node::schedule(SEL_SCHEDULE selector, float interval)
 
 void Node::schedule(SEL_SCHEDULE selector, float interval, unsigned int repeat, float delay)
 {
-    CCASSERT(selector, "Argument must be non-nil");
-    CCASSERT(interval >= 0, "Argument must be positive");
+    AXASSERT(selector, "Argument must be non-nil");
+    AXASSERT(interval >= 0, "Argument must be positive");
 
     _scheduler->schedule(selector, this, interval, repeat, delay, !_running);
 }

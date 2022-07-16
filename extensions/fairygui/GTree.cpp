@@ -92,7 +92,7 @@ void GTree::createCell(GTreeNode* node)
 {
     const std::string& url = node->_resURL.empty() ? getDefaultItem() : node->_resURL;
     GComponent* child = getItemPool()->getObject(url)->as<GComponent>();
-    CCASSERT(child, "Unable to create tree cell");
+    AXASSERT(child, "Unable to create tree cell");
     child->_treeNode = node;
     if (node->_cell != child)
     {

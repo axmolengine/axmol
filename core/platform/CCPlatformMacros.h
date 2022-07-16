@@ -299,47 +299,47 @@ public:                                                             \
     if (cond)             \
     break
 
-#define __CCLOGWITHFUNCTION(s, ...) \
+#define __AXLOGWITHFUNCTION(s, ...) \
     axis::log("%s : %s", __FUNCTION__, axis::StringUtils::format(s, ##__VA_ARGS__).c_str())
 
 /// @name Cocos2d debug
 /// @{
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
-#    define CCLOG(...) \
+#if !defined(AXIS_DEBUG) || AXIS_DEBUG == 0
+#    define AXLOG(...) \
         do             \
         {              \
         } while (0)
-#    define CCLOGINFO(...) \
+#    define AXLOGINFO(...) \
         do                 \
         {                  \
         } while (0)
-#    define CCLOGERROR(...) \
+#    define AXLOGERROR(...) \
         do                  \
         {                   \
         } while (0)
-#    define CCLOGWARN(...) \
+#    define AXLOGWARN(...) \
         do                 \
         {                  \
         } while (0)
 
-#elif COCOS2D_DEBUG == 1
-#    define CCLOG(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define CCLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define CCLOGINFO(format, ...) \
+#elif AXIS_DEBUG == 1
+#    define AXLOG(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOGINFO(format, ...) \
         do                         \
         {                          \
         } while (0)
-#    define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
+#    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 
-#elif COCOS2D_DEBUG > 1
-#    define CCLOG(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define CCLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define CCLOGINFO(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
-#endif  // COCOS2D_DEBUG
+#elif AXIS_DEBUG > 1
+#    define AXLOG(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOGINFO(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
+#endif  // AXIS_DEBUG
 
 /** Lua engine debug */
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
+#if !defined(AXIS_DEBUG) || AXIS_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
 #    define LUALOG(...)
 #else
 #    define LUALOG(format, ...) axis::log(format, ##__VA_ARGS__)

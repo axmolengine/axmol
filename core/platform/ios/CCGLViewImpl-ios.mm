@@ -99,7 +99,7 @@ void GLViewImpl::convertAttrs()
     }
     else
     {
-        CCASSERT(0, "Unsupported render buffer pixel format. Using default");
+        AXASSERT(0, "Unsupported render buffer pixel format. Using default");
     }
 
     if (_glContextAttrs.depthBits == 24 && _glContextAttrs.stencilBits == 8)
@@ -112,7 +112,7 @@ void GLViewImpl::convertAttrs()
     }
     else
     {
-        CCASSERT(0, "Unsupported format for depth and stencil buffers. Using default");
+        AXASSERT(0, "Unsupported format for depth and stencil buffers. Using default");
     }
 
     _multisamplingCount = _glContextAttrs.multisamplingCount;
@@ -198,7 +198,7 @@ float GLViewImpl::getContentScaleFactor() const
 
     float scaleFactor = [eaglview contentScaleFactor];
 
-    //    CCASSERT(scaleFactor == _scaleX == _scaleY, "Logic error in GLView::getContentScaleFactor");
+    //    AXASSERT(scaleFactor == _scaleX == _scaleY, "Logic error in GLView::getContentScaleFactor");
 
     return scaleFactor;
 }

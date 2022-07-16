@@ -213,7 +213,7 @@ SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
 
 void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    CCASSERT(renderer, "Render is null");
+    AXASSERT(renderer, "Render is null");
     _spriteWrapperCommand.init(_globalZOrder);
     renderer->addCommand(&_spriteWrapperCommand);
     renderer->pushGroup(_spriteWrapperCommand.getRenderQueueID());
@@ -792,8 +792,8 @@ RendererBatchQuadTri::RendererBatchQuadTri()
 
     for (int i = 0; i < 250; i++)
     {
-        int x = CCRANDOM_0_1() * s.width;
-        int y = CCRANDOM_0_1() * s.height;
+        int x = AXRANDOM_0_1() * s.width;
+        int y = AXRANDOM_0_1() * s.height;
 
         auto label = LabelAtlas::create("This is a label", "fonts/tuffy_bold_italic-charmap.plist");
         label->setColor(Color3B::RED);
@@ -919,7 +919,7 @@ RendererUniformBatch2::RendererUniformBatch2()
             sprite->setScale(0.4);
             addChild(sprite);
 
-            auto r = CCRANDOM_0_1();
+            auto r = AXRANDOM_0_1();
             if (r < 0.33)
                 sprite->setProgramState(sepiaState);
             else if (r < 0.66)

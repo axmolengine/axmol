@@ -213,7 +213,7 @@ const axis::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList
 
 void DisplayManager::changeDisplayWithIndex(int index, bool force)
 {
-    CCASSERT(index < (int)_decoDisplayList.size(), "the _index value is out of range");
+    AXASSERT(index < (int)_decoDisplayList.size(), "the _index value is out of range");
 
     _forceChangeDisplay = force;
 

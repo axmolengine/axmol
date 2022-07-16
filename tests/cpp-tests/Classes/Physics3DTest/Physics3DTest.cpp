@@ -734,15 +734,15 @@ bool Physics3DCollisionCallbackDemo::init()
                     ci.objA->setMask(0);
                 }
             }
-            // CCLOG("------------BoxB Collision Info------------");
-            // CCLOG("Collision Point Num: %d", ci.collisionPointList.size());
+            // AXLOG("------------BoxB Collision Info------------");
+            // AXLOG("Collision Point Num: %d", ci.collisionPointList.size());
             // for (auto &iter : ci.collisionPointList){
-            //	CCLOG("Collision Position On A: (%.2f, %.2f, %.2f)", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
-            // iter.worldPositionOnA.z); 	CCLOG("Collision Position On B: (%.2f, %.2f, %.2f)",
-            // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); 	CCLOG("Collision Normal
+            //	AXLOG("Collision Position On A: (%.2f, %.2f, %.2f)", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
+            // iter.worldPositionOnA.z); 	AXLOG("Collision Position On B: (%.2f, %.2f, %.2f)",
+            // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); 	AXLOG("Collision Normal
             // On B: (%.2f, %.2f, %.2f)", iter.worldNormalOnB.x, iter.worldNormalOnB.y, iter.worldNormalOnB.z);
             // }
-            // CCLOG("------------BoxB Collision Info------------");
+            // AXLOG("------------BoxB Collision Info------------");
         });
     }
 

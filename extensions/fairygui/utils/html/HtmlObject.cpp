@@ -143,7 +143,7 @@ void HtmlObject::createButton()
     else
     {
         _ui = GComponent::create();
-        CCLOGWARN("Set HtmlObject.buttonResource first");
+        AXLOGWARN("Set HtmlObject.buttonResource first");
     }
 
     _ui->retain();
@@ -168,7 +168,7 @@ void HtmlObject::createInput()
     else
     {
         _ui = GComponent::create();
-        CCLOGWARN("Set HtmlObject.inputResource first");
+        AXLOGWARN("Set HtmlObject.inputResource first");
     }
 
     _ui->retain();
@@ -211,7 +211,7 @@ void HtmlObject::createSelect()
     else
     {
         _ui = GComponent::create();
-        CCLOGWARN("Set HtmlObject.selectResource first");
+        AXLOGWARN("Set HtmlObject.selectResource first");
     }
 
     _ui->retain();

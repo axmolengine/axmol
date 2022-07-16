@@ -128,7 +128,7 @@ void ConsoleUploadFile::uploadFile()
     Data srcFileData = FileUtils::getInstance()->getDataFromFile(s_pathGrossini);
     if (srcFileData.isNull())
     {
-        CCLOGERROR("ConsoleUploadFile: could not open file %s", s_pathGrossini);
+        AXLOGERROR("ConsoleUploadFile: could not open file %s", s_pathGrossini);
     }
 
     std::string targetFileName = _targetFileName;
@@ -159,7 +159,7 @@ void ConsoleUploadFile::uploadFile()
     s = getaddrinfo(nodeName.c_str(), "5678", &hints, &result);
     if (s != 0)
     {
-        CCLOG("ConsoleUploadFile: getaddrinfo error");
+        AXLOG("ConsoleUploadFile: getaddrinfo error");
         return;
     }
 
@@ -186,7 +186,7 @@ void ConsoleUploadFile::uploadFile()
 
     if (rp == nullptr)
     { /* No address succeeded */
-        CCLOG("ConsoleUploadFile: could not connect!");
+        AXLOG("ConsoleUploadFile: could not connect!");
         return;
     }
 

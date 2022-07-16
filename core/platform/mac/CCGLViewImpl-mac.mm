@@ -304,7 +304,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
 
 GLViewImpl::~GLViewImpl()
 {
-    CCLOGINFO("deallocing GLViewImpl: %p", this);
+    AXLOGINFO("deallocing GLViewImpl: %p", this);
     GLFWEventHandler::setGLViewImpl(nullptr);
     glfwTerminate();
 }
@@ -415,7 +415,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
     if (!device)
     {
-        CCLOG("Doesn't support metal.");
+        AXLOG("Doesn't support metal.");
         return false;
     }
 
@@ -622,7 +622,7 @@ void GLViewImpl::setCursorVisible(bool isVisible)
 
 void GLViewImpl::setFrameZoomFactor(float zoomFactor)
 {
-    CCASSERT(zoomFactor > 0.0f, "zoomFactor must be larger than 0");
+    AXASSERT(zoomFactor > 0.0f, "zoomFactor must be larger than 0");
 
     if (std::abs(_frameZoomFactor - zoomFactor) < FLT_EPSILON)
     {
@@ -852,7 +852,7 @@ void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
     {
         _glfwError.append(StringUtils::format("GLFWError #%d Happen, %s\n", errorID, errorDesc));
     }
-    CCLOGERROR("%s", _glfwError.c_str());
+    AXLOGERROR("%s", _glfwError.c_str());
 }
 
 void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int action, int /*modify*/)

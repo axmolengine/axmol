@@ -85,7 +85,7 @@ void ListView::setItemModel(Widget* model)
 {
     if (nullptr == model)
     {
-        CCLOG("Can't set a nullptr to item model!");
+        AXLOG("Can't set a nullptr to item model!");
         return;
     }
     AX_SAFE_RELEASE_NULL(_model);
@@ -145,7 +145,7 @@ void ListView::updateInnerContainerSize()
 
 void ListView::remedyVerticalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex)
 {
-    CCASSERT(nullptr != layoutParameter, "Layout parameter can't be nullptr!");
+    AXASSERT(nullptr != layoutParameter, "Layout parameter can't be nullptr!");
 
     switch (_gravity)
     {
@@ -178,7 +178,7 @@ void ListView::remedyVerticalLayoutParameter(LinearLayoutParameter* layoutParame
 
 void ListView::remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex)
 {
-    CCASSERT(nullptr != layoutParameter, "Layout parameter can't be nullptr!");
+    AXASSERT(nullptr != layoutParameter, "Layout parameter can't be nullptr!");
 
     switch (_gravity)
     {
@@ -210,7 +210,7 @@ void ListView::remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutPara
 
 void ListView::remedyLayoutParameter(Widget* item)
 {
-    CCASSERT(nullptr != item, "ListView Item can't be nullptr!");
+    AXASSERT(nullptr != item, "ListView Item can't be nullptr!");
 
     LinearLayoutParameter* linearLayoutParameter = (LinearLayoutParameter*)(item->getLayoutParameter());
     bool isLayoutParameterExists                 = true;
@@ -657,7 +657,7 @@ static Widget* findClosestItem(const Vec2& targetPosition,
                                ssize_t lastIndex,
                                float distanceFromLast)
 {
-    CCASSERT(firstIndex >= 0 && lastIndex < items.size() && firstIndex <= lastIndex, "");
+    AXASSERT(firstIndex >= 0 && lastIndex < items.size() && firstIndex <= lastIndex, "");
     if (firstIndex == lastIndex)
     {
         return items.at(firstIndex);

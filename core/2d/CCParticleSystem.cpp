@@ -412,7 +412,7 @@ bool ParticleSystem::initWithFile(std::string_view plistFile)
     _plistFile    = FileUtils::getInstance()->fullPathForFilename(plistFile);
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(_plistFile);
 
-    CCASSERT(!dict.empty(), "Particles: file not found");
+    AXASSERT(!dict.empty(), "Particles: file not found");
 
     // FIXME: compute path from a path, should define a function somewhere to do it
     auto listFilePath = plistFile;
@@ -573,7 +573,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
             }
             else
             {
-                CCASSERT(false, "Invalid emitterType in config file");
+                AXASSERT(false, "Invalid emitterType in config file");
                 AX_BREAK_IF(true);
             }
 
@@ -630,7 +630,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                 else if (dictionary.find("textureImageData") != dictionary.end())
                 {
                     std::string textureData = dictionary.at("textureImageData").asString();
-                    CCASSERT(!textureData.empty(), "textureData can't be empty!");
+                    AXASSERT(!textureData.empty(), "textureData can't be empty!");
 
                     auto dataLen = textureData.size();
                     if (dataLen != 0)
@@ -638,19 +638,19 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         // if it fails, try to get it from the base64-gzipped data
                         int decodeLen =
                             base64Decode((unsigned char*)textureData.c_str(), (unsigned int)dataLen, &buffer);
-                        CCASSERT(buffer != nullptr, "CCParticleSystem: error decoding textureImageData");
+                        AXASSERT(buffer != nullptr, "CCParticleSystem: error decoding textureImageData");
                         AX_BREAK_IF(!buffer);
 
                         unsigned char* deflated = nullptr;
                         ssize_t deflatedLen     = ZipUtils::inflateMemory(buffer, decodeLen, &deflated);
-                        CCASSERT(deflated != nullptr, "CCParticleSystem: error ungzipping textureImageData");
+                        AXASSERT(deflated != nullptr, "CCParticleSystem: error ungzipping textureImageData");
                         AX_BREAK_IF(!deflated);
 
                         // For android, we should retain it in VolatileTexture::addImage which invoked in
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image     = new Image();
                         bool isOK = image->initWithImageData(deflated, deflatedLen, true);
-                        CCASSERT(isOK, "CCParticleSystem: error init image with Data");
+                        AXASSERT(isOK, "CCParticleSystem: error init image with Data");
                         AX_BREAK_IF(!isOK);
 
                         setTexture(_director->getTextureCache()->addImage(image, _plistFile + textureName));
@@ -662,7 +662,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                 _yCoordFlipped = optValue(dictionary, "yCoordFlipped").asInt(1);
 
                 if (!this->_texture)
-                    CCLOGWARN("cocos2d: Warning: ParticleSystemQuad system without a texture");
+                    AXLOGWARN("cocos2d: Warning: ParticleSystemQuad system without a texture");
             }
             ret = true;
         }
@@ -679,7 +679,7 @@ bool ParticleSystem::initWithTotalParticles(int numberOfParticles)
 
     if (!_particleData.init(_totalParticles))
     {
-        CCLOG("Particle system: not enough memory");
+        AXLOG("Particle system: not enough memory");
         this->release();
         return false;
     }
@@ -1386,12 +1386,12 @@ void ParticleSystem::setAnimationIndicesAtlas()
         return;
     }
 
-    CCASSERT(false, "Couldn't figure out the atlas size and direction.");
+    AXASSERT(false, "Couldn't figure out the atlas size and direction.");
 }
 
 void ParticleSystem::setAnimationIndicesAtlas(unsigned int unifiedCellSize, TexAnimDir direction)
 {
-    CCASSERT(unifiedCellSize > 0, "A cell cannot have a size of zero.");
+    AXASSERT(unifiedCellSize > 0, "A cell cannot have a size of zero.");
 
     resetAnimationIndices();
 
@@ -1870,7 +1870,7 @@ void ParticleSystem::setTexture(Texture2D* var)
 
 void ParticleSystem::updateBlendFunc()
 {
-    CCASSERT(!_batchNode, "Can't change blending functions when the particle is being batched");
+    AXASSERT(!_batchNode, "Can't change blending functions when the particle is being batched");
 
     if (_texture)
     {
@@ -1921,170 +1921,170 @@ bool ParticleSystem::isBlendAdditive() const
 // ParticleSystem - Properties of Gravity Mode
 void ParticleSystem::setTangentialAccel(float t)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.tangentialAccel = t;
 }
 
 float ParticleSystem::getTangentialAccel() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.tangentialAccel;
 }
 
 void ParticleSystem::setTangentialAccelVar(float t)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.tangentialAccelVar = t;
 }
 
 float ParticleSystem::getTangentialAccelVar() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.tangentialAccelVar;
 }
 
 void ParticleSystem::setRadialAccel(float t)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.radialAccel = t;
 }
 
 float ParticleSystem::getRadialAccel() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.radialAccel;
 }
 
 void ParticleSystem::setRadialAccelVar(float t)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.radialAccelVar = t;
 }
 
 float ParticleSystem::getRadialAccelVar() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.radialAccelVar;
 }
 
 void ParticleSystem::setRotationIsDir(bool t)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.rotationIsDir = t;
 }
 
 bool ParticleSystem::getRotationIsDir() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.rotationIsDir;
 }
 
 void ParticleSystem::setGravity(const Vec2& g)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.gravity = g;
 }
 
 const Vec2& ParticleSystem::getGravity()
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.gravity;
 }
 
 void ParticleSystem::setSpeed(float speed)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.speed = speed;
 }
 
 float ParticleSystem::getSpeed() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.speed;
 }
 
 void ParticleSystem::setSpeedVar(float speedVar)
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     modeA.speedVar = speedVar;
 }
 
 float ParticleSystem::getSpeedVar() const
 {
-    CCASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
+    AXASSERT(_emitterMode == Mode::GRAVITY, "Particle Mode should be Gravity");
     return modeA.speedVar;
 }
 
 // ParticleSystem - Properties of Radius Mode
 void ParticleSystem::setStartRadius(float startRadius)
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     modeB.startRadius = startRadius;
 }
 
 float ParticleSystem::getStartRadius() const
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     return modeB.startRadius;
 }
 
 void ParticleSystem::setStartRadiusVar(float startRadiusVar)
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     modeB.startRadiusVar = startRadiusVar;
 }
 
 float ParticleSystem::getStartRadiusVar() const
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     return modeB.startRadiusVar;
 }
 
 void ParticleSystem::setEndRadius(float endRadius)
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     modeB.endRadius = endRadius;
 }
 
 float ParticleSystem::getEndRadius() const
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     return modeB.endRadius;
 }
 
 void ParticleSystem::setEndRadiusVar(float endRadiusVar)
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     modeB.endRadiusVar = endRadiusVar;
 }
 
 float ParticleSystem::getEndRadiusVar() const
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     return modeB.endRadiusVar;
 }
 
 void ParticleSystem::setRotatePerSecond(float degrees)
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     modeB.rotatePerSecond = degrees;
 }
 
 float ParticleSystem::getRotatePerSecond() const
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     return modeB.rotatePerSecond;
 }
 
 void ParticleSystem::setRotatePerSecondVar(float degrees)
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     modeB.rotatePerSecondVar = degrees;
 }
 
 float ParticleSystem::getRotatePerSecondVar() const
 {
-    CCASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
+    AXASSERT(_emitterMode == Mode::RADIUS, "Particle Mode should be Radius");
     return modeB.rotatePerSecondVar;
 }
 
@@ -2141,7 +2141,7 @@ int ParticleSystem::getTotalParticles() const
 
 void ParticleSystem::setTotalParticles(int var)
 {
-    CCASSERT(var <= _allocatedParticles, "Particle: resizing particle array only supported for quads");
+    AXASSERT(var <= _allocatedParticles, "Particle: resizing particle array only supported for quads");
     _totalParticles = var;
 }
 
@@ -2286,7 +2286,7 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
     img->Image::initWithImageFile(texturePath);
     img->autorelease();
 
-    CCASSERT(img, "image texture was nullptr.");
+    AXASSERT(img, "image texture was nullptr.");
     bakeEmissionMask(maskId, img, alphaThreshold, inverted, inbetweenSamples);
 }
 
@@ -2297,8 +2297,8 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
                                                  int inbetweenSamples)
 {
     auto img = imageTexture;
-    CCASSERT(img, "image texture was nullptr.");
-    CCASSERT(img->hasAlpha(), "image data should contain an alpha channel.");
+    AXASSERT(img, "image texture was nullptr.");
+    AXASSERT(img->hasAlpha(), "image data should contain an alpha channel.");
 
     vector<Vec2> points;
 
@@ -2341,7 +2341,7 @@ void ParticleEmissionMaskCache::bakeEmissionMask(std::string_view maskId,
 
     iter->second = desc;
 
-    CCLOG("Particle emission mask '%u' baked (%dx%d), %zu samples generated taking %.2fmb of memory.",
+    AXLOG("Particle emission mask '%u' baked (%dx%d), %zu samples generated taking %.2fmb of memory.",
           (unsigned int)htonl(fourccId), w, h, desc.points.size(), desc.points.size() * 8 / 1e+6);
 }
 

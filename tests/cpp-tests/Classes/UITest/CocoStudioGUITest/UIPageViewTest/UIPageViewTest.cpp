@@ -315,19 +315,19 @@ bool UIPageViewTouchPropagationTest::init()
         pageView->addTouchEventListener([](Ref* sender, Widget::TouchEventType type) {
             if (type == Widget::TouchEventType::BEGAN)
             {
-                CCLOG("page view touch began");
+                AXLOG("page view touch began");
             }
             else if (type == Widget::TouchEventType::MOVED)
             {
-                CCLOG("page view touch moved");
+                AXLOG("page view touch moved");
             }
             else if (type == Widget::TouchEventType::ENDED)
             {
-                CCLOG("page view touch ended");
+                AXLOG("page view touch ended");
             }
             else
             {
-                CCLOG("page view touch cancelled");
+                AXLOG("page view touch cancelled");
             }
         });
         _uiLayer->addChild(pageView);
@@ -366,7 +366,7 @@ bool UIPageViewTouchPropagationTest::init()
 
         auto eventListener          = EventListenerTouchOneByOne::create();
         eventListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
-            CCLOG("layout receives touches");
+            AXLOG("layout receives touches");
             return true;
         };
         _eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
@@ -409,7 +409,7 @@ void UIPageViewTouchPropagationTest::onButtonClicked(Ref* pSender, Widget::Touch
     }
     if (type == Widget::TouchEventType::ENDED)
     {
-        CCLOG("button clicked");
+        AXLOG("button clicked");
     }
 }
 
@@ -537,7 +537,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             pageView->pushBackCustomItem(outerBox);
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
-            CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOG("current page index = %zd", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button);
 
@@ -554,11 +554,11 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             }
             else
             {
-                CCLOG("There is no page to remove!");
+                AXLOG("There is no page to remove!");
             }
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
-            CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOG("current page index = %zd", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button2);
 
@@ -572,7 +572,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
             pageView->removeAllItems();
             _displayValueLabel->setString(
                 StringUtils::format("page count = %d", static_cast<int32_t>(pageView->getItems().size())));
-            CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOG("current page index = %zd", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button3);
 
@@ -581,7 +581,7 @@ bool UIPageViewDynamicAddAndRemoveTest::init()
         button4->setPositionNormalized(Vec2(0.85f, 0.5f));
         button4->addClickEventListener([=](Ref* sender) {
             pageView->scrollToItem(3);
-            CCLOG("current page index = %zd", pageView->getCurrentPageIndex());
+            AXLOG("current page index = %zd", pageView->getCurrentPageIndex());
         });
         _uiLayer->addChild(button4);
 
@@ -674,14 +674,14 @@ bool UIPageViewJumpToPageTest::init()
         auto button1 = ui::Button::create();
         button1->setPositionNormalized(Vec2(0.1f, 0.75f));
         button1->setTitleText("Jump to Page1");
-        CCLOG("button1 content Size = %f, %f", button1->getContentSize().width, button1->getContentSize().height);
+        AXLOG("button1 content Size = %f, %f", button1->getContentSize().width, button1->getContentSize().height);
         button1->addClickEventListener([=](Ref*) { pageView->setCurrentPageIndex(0); });
         _uiLayer->addChild(button1);
 
         auto button2 = static_cast<ui::Button*>(button1->clone());
         button2->setTitleText("Jump to Page2");
         button2->setPositionNormalized(Vec2(0.1f, 0.65f));
-        CCLOG("button2 content Size = %f, %f", button2->getContentSize().width, button2->getContentSize().height);
+        AXLOG("button2 content Size = %f, %f", button2->getContentSize().width, button2->getContentSize().height);
         button2->addClickEventListener([=](Ref*) { pageView->setCurrentPageIndex(1); });
         _uiLayer->addChild(button2);
 

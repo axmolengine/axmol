@@ -47,7 +47,7 @@ MeshSkin* MeshSkin::create(Skeleton3D* skeleton,
     skin->_skeleton = skeleton;
     skeleton->retain();
 
-    CCASSERT(boneNames.size() == invBindPose.size(), "bone names' num should equals to invBindPose's num");
+    AXASSERT(boneNames.size() == invBindPose.size(), "bone names' num should equals to invBindPose's num");
     for (const auto& it : boneNames)
     {
         auto bone = skeleton->getBoneByName(it);

@@ -37,7 +37,7 @@
 #define QUOTEME_(x) #x
 #define QUOTEME(x) QUOTEME_(x)
 
-// log, CCLOG aren't threadsafe, since we uses sub threads for parsing pcm data, threadsafe log output
+// log, AXLOG aren't threadsafe, since we uses sub threads for parsing pcm data, threadsafe log output
 // is needed. Define the following macros (ALOGV, ALOGD, ALOGI, ALOGW, ALOGE) for threadsafe log output.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include "base/ccUTF8.h"  // for StringUtils::format
@@ -49,7 +49,7 @@
 #    define AUDIO_LOG(fmt, ...) printf(fmt "\n", ##__VA_ARGS__)
 #endif
 
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
+#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
 #    define ALOGV(fmt, ...) AUDIO_LOG("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #else
 #    define ALOGV(fmt, ...) \
@@ -62,7 +62,7 @@
 #define ALOGW(fmt, ...) AUDIO_LOG("W/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #define ALOGE(fmt, ...) AUDIO_LOG("E/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
+#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
 #    define CHECK_AL_ERROR_DEBUG()                                                                     \
         do                                                                                             \
         {                                                                                              \

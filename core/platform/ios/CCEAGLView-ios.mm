@@ -194,7 +194,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         if (!device)
         {
-            CCLOG("Doesn't support metal.");
+            AXLOG("Doesn't support metal.");
             return nil;
         }
         CAMetalLayer* metalLayer   = (CAMetalLayer*)[self layer];
@@ -385,10 +385,10 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
     if (![context_ presentRenderbuffer:GL_RENDERBUFFER])
     {
-        //         CCLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
+        //         AXLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
     }
 
-#    if COCOS2D_DEBUG
+#    if AXIS_DEBUG
     CHECK_GL_ERROR();
 #    endif
 
@@ -454,7 +454,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
@@ -481,7 +481,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
@@ -514,7 +514,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 
@@ -539,7 +539,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     {
         if (i >= IOS_MAX_TOUCHES_COUNT)
         {
-            CCLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
+            AXLOG("warning: touches more than 10, should adjust IOS_MAX_TOUCHES_COUNT");
             break;
         }
 

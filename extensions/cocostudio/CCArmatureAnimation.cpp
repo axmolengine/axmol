@@ -160,18 +160,18 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
 {
     if (animationName.empty())
     {
-        CCLOG("_animationData can not be null");
+        AXLOG("_animationData can not be null");
         return;
     }
-    //    CCASSERT(_animationData, "_animationData can not be null");
+    //    AXASSERT(_animationData, "_animationData can not be null");
 
     _movementData = _animationData->getMovement(animationName);
     if (nullptr == _movementData)
     {
-        CCLOG("_movementData can not be null");
+        AXLOG("_movementData can not be null");
         return;
     }
-    //    CCASSERT(_movementData, "_movementData can not be null");
+    //    AXASSERT(_movementData, "_movementData can not be null");
 
     //! Get key frame count
     _rawDuration = _movementData->duration;
@@ -296,7 +296,7 @@ void ArmatureAnimation::gotoAndPlay(int frameIndex)
 {
     if (!_movementData || frameIndex < 0 || frameIndex >= _movementData->duration)
     {
-        CCLOG("Please ensure you have played a movement, and the frameIndex is in the range.");
+        AXLOG("Please ensure you have played a movement, and the frameIndex is in the range.");
         return;
     }
 

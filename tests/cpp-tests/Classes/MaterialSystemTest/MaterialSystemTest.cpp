@@ -209,15 +209,15 @@ bool EffectAutoBindingResolver::resolveAutoBinding(backend::ProgramState* progra
 
 void EffectAutoBindingResolver::callbackRadius(backend::ProgramState* programState, backend::UniformLocation uniform)
 {
-    float f = CCRANDOM_0_1() * 10;
+    float f = AXRANDOM_0_1() * 10;
     programState->setUniform(uniform, &f, sizeof(f));
 }
 
 void EffectAutoBindingResolver::callbackColor(backend::ProgramState* programState, backend::UniformLocation uniform)
 {
-    float r = CCRANDOM_0_1();
-    float g = CCRANDOM_0_1();
-    float b = CCRANDOM_0_1();
+    float r = AXRANDOM_0_1();
+    float g = AXRANDOM_0_1();
+    float b = AXRANDOM_0_1();
     Vec3 color(r, g, b);
 
     programState->setUniform(uniform, &color, sizeof(color));
@@ -417,7 +417,7 @@ void Material_parsePerformance::onEnter()
             ui::Slider* slider = dynamic_cast<ui::Slider*>(sender);
             float p            = slider->getPercent() / 100.0f;
             slider->setTouchEnabled(false);
-            CCLOG("Will parsing material %d times", (int)(p * _maxParsingCoumt));
+            AXLOG("Will parsing material %d times", (int)(p * _maxParsingCoumt));
             Label* label = dynamic_cast<Label*>(this->getChildByTag(SHOW_LEBAL_TAG));
             if (label)
             {
@@ -467,7 +467,7 @@ void Material_parsePerformance::parsingTesting(unsigned int count)
                                               elapsed_secs, count);
         label->setString(str);
 
-        CCLOG("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
+        AXLOG("Took: %.3f seconds for parsing material %d times.", elapsed_secs, count);
     }
 }
 

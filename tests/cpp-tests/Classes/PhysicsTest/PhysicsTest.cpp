@@ -101,12 +101,12 @@ void PhysicsDemo::onEnter()
 
 Sprite* PhysicsDemo::addGrossiniAtPosition(Vec2 p, float scale /* = 1.0*/)
 {
-    CCLOG("Add sprite %0.2f x %02.f", p.x, p.y);
+    AXLOG("Add sprite %0.2f x %02.f", p.x, p.y);
 
     int posx, posy;
 
-    posx = CCRANDOM_0_1() * 200.0f;
-    posy = CCRANDOM_0_1() * 200.0f;
+    posx = AXRANDOM_0_1() * 200.0f;
+    posy = AXRANDOM_0_1() * 200.0f;
 
     posx = (posx % 4) * 85;
     posy = (posy % 3) * 121;
@@ -205,7 +205,7 @@ Sprite* PhysicsDemo::makeBox(Vec2 point, Size size, int color, PhysicsMaterial m
     bool yellow = false;
     if (color == 0)
     {
-        yellow = CCRANDOM_0_1() > 0.5f;
+        yellow = AXRANDOM_0_1() > 0.5f;
     }
     else
     {
@@ -228,7 +228,7 @@ Sprite* PhysicsDemo::makeTriangle(Vec2 point, Size size, int color, PhysicsMater
     bool yellow = false;
     if (color == 0)
     {
-        yellow = CCRANDOM_0_1() > 0.5f;
+        yellow = AXRANDOM_0_1() > 0.5f;
     }
     else
     {
@@ -623,19 +623,19 @@ void PhysicsDemoRayCast::onTouchesEnded(const std::vector<Touch*>& touches, Even
     {
         auto location = touch->getLocation();
 
-        float r = CCRANDOM_0_1();
+        float r = AXRANDOM_0_1();
 
         if (r < 1.0f / 3.0f)
         {
-            addChild(makeBall(location, 5 + CCRANDOM_0_1() * 10));
+            addChild(makeBall(location, 5 + AXRANDOM_0_1() * 10));
         }
         else if (r < 2.0f / 3.0f)
         {
-            addChild(makeBox(location, Size(10 + CCRANDOM_0_1() * 15, 10 + CCRANDOM_0_1() * 15)));
+            addChild(makeBox(location, Size(10 + AXRANDOM_0_1() * 15, 10 + AXRANDOM_0_1() * 15)));
         }
         else
         {
-            addChild(makeTriangle(location, Size(10 + CCRANDOM_0_1() * 20, 10 + CCRANDOM_0_1() * 20)));
+            addChild(makeTriangle(location, Size(10 + AXRANDOM_0_1() * 20, 10 + AXRANDOM_0_1() * 20)));
         }
     }
 }
@@ -983,7 +983,7 @@ void PhysicsDemoPump::onEnter()
     // balls
     for (int i = 0; i < 6; ++i)
     {
-        auto ball = makeBall(VisibleRect::leftTop() + Vec2(75 + CCRANDOM_0_1() * 90, 0.0f), 22,
+        auto ball = makeBall(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f), 22,
                              PhysicsMaterial(0.05f, 0.0f, 0.1f));
         ball->getPhysicsBody()->setTag(DRAG_BODYS_TAG);
         addChild(ball);
@@ -1056,7 +1056,7 @@ void PhysicsDemoPump::update(float delta)
         {
             if (body->getNode() != nullptr)
             {
-                body->getNode()->setPosition(VisibleRect::leftTop() + Vec2(75 + CCRANDOM_0_1() * 90, 0.0f));
+                body->getNode()->setPosition(VisibleRect::leftTop() + Vec2(75 + AXRANDOM_0_1() * 90, 0.0f));
             }
 
             body->setVelocity(Vec2(0.0f, 0.0f));
@@ -1468,13 +1468,13 @@ void PhysicsContactTest::resetTest()
     // yellow box, will collide with itself and blue box.
     for (int i = 0; i < _yellowBoxNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 200, (float)(CCRANDOM_0_1() - 0.5) * 200);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
         auto box     = makeBox(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
         boxBody->setVelocity(velocity);
@@ -1487,13 +1487,13 @@ void PhysicsContactTest::resetTest()
     // blue box, will collide with blue box.
     for (int i = 0; i < _blueBoxNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 200, (float)(CCRANDOM_0_1() - 0.5) * 200);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 200, (float)(AXRANDOM_0_1() - 0.5) * 200);
         auto box     = makeBox(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto boxBody = box->getPhysicsBody();
         boxBody->setVelocity(velocity);
@@ -1506,13 +1506,13 @@ void PhysicsContactTest::resetTest()
     // yellow triangle, will collide with itself and blue box.
     for (int i = 0; i < _yellowTriangleNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 300, (float)(CCRANDOM_0_1() - 0.5) * 300);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
         auto triangle     = makeTriangle(position, size, 1, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
         triangleBody->setVelocity(velocity);
@@ -1525,13 +1525,13 @@ void PhysicsContactTest::resetTest()
     // blue triangle, will collide with yellow box.
     for (int i = 0; i < _blueTriangleNum; ++i)
     {
-        Size size(10 + CCRANDOM_0_1() * 10, 10 + CCRANDOM_0_1() * 10);
+        Size size(10 + AXRANDOM_0_1() * 10, 10 + AXRANDOM_0_1() * 10);
         Size winSize  = VisibleRect::getVisibleRect().size;
         Vec2 position = Vec2(winSize.width, winSize.height) - Vec2(size.width, size.height);
-        position.x    = position.x * CCRANDOM_0_1();
-        position.y    = position.y * CCRANDOM_0_1();
+        position.x    = position.x * AXRANDOM_0_1();
+        position.y    = position.y * AXRANDOM_0_1();
         position      = VisibleRect::leftBottom() + position + Vec2(size.width / 2, size.height / 2);
-        Vec2 velocity((float)(CCRANDOM_0_1() - 0.5) * 300, (float)(CCRANDOM_0_1() - 0.5) * 300);
+        Vec2 velocity((float)(AXRANDOM_0_1() - 0.5) * 300, (float)(AXRANDOM_0_1() - 0.5) * 300);
         auto triangle     = makeTriangle(position, size, 2, PhysicsMaterial(0.1f, 1, 0.0f));
         auto triangleBody = triangle->getPhysicsBody();
         triangleBody->setVelocity(velocity);

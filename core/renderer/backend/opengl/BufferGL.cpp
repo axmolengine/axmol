@@ -130,8 +130,8 @@ void BufferGL::updateData(void* data, std::size_t size)
 void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
 {
 
-    CCASSERT(_bufferAllocated != 0, "updateData should be invoke before updateSubData");
-    CCASSERT(offset + size <= _bufferAllocated, "buffer size overflow");
+    AXASSERT(_bufferAllocated != 0, "updateData should be invoke before updateSubData");
+    AXASSERT(offset + size <= _bufferAllocated, "buffer size overflow");
 
     if (_buffer)
     {

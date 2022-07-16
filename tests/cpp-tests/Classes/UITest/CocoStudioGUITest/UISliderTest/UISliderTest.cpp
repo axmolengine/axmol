@@ -103,18 +103,18 @@ void UISliderTest::sliderEvent(Ref* pSender, Slider::EventType type)
 void UISliderTest::printWidgetResources(axis::Ref* /*sender*/)
 {
     axis::ResourceData textureFile = _slider->getBackFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
     axis::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
-    CCLOG("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
+    AXLOG("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
           progressBarTextureFile.type);
     axis::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
-    CCLOG("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
+    AXLOG("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
           slidBallNormalTextureFile.type);
     axis::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
-    CCLOG("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
+    AXLOG("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
           slidBallPressedTextureFile.type);
     axis::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
-    CCLOG("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
+    AXLOG("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
           slidBallDisabledTextureFile.type);
 }
 
@@ -365,15 +365,15 @@ bool UISliderNewEventCallbackTest::init()
             AX_UNUSED_PARAM(slider);
             if (type == Slider::EventType::ON_SLIDEBALL_DOWN)
             {
-                CCLOG("slider button pressed!");
+                AXLOG("slider button pressed!");
             }
             else if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
             {
-                CCLOG("slider is moving! percent = %f", 100.0f * slider->getPercent() / slider->getMaxPercent());
+                AXLOG("slider is moving! percent = %f", 100.0f * slider->getPercent() / slider->getMaxPercent());
             }
             else if (type == Slider::EventType::ON_SLIDEBALL_UP)
             {
-                CCLOG("slider button is released.");
+                AXLOG("slider button is released.");
             }
         });
         _uiLayer->addChild(slider);

@@ -87,9 +87,9 @@ void CCPUBoxEmitter::initParticlePosition(PUParticle3D* particle)
         Mat4 rotMat;
         Mat4::createRotation(static_cast<PUParticleSystem3D*>(_particleSystem)->getDerivedOrientation(), &rotMat);
         particle->position = getDerivedPosition() + rotMat * (/*_emitterScale **/
-                                                              Vec3(CCRANDOM_MINUS1_1() * _xRange * _emitterScale.x,
-                                                                   CCRANDOM_MINUS1_1() * _yRange * _emitterScale.y,
-                                                                   CCRANDOM_MINUS1_1() * _zRange * _emitterScale.z));
+                                                              Vec3(AXRANDOM_MINUS1_1() * _xRange * _emitterScale.x,
+                                                                   AXRANDOM_MINUS1_1() * _yRange * _emitterScale.y,
+                                                                   AXRANDOM_MINUS1_1() * _zRange * _emitterScale.z));
     }
     // else
     //{

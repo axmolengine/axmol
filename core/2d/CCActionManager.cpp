@@ -54,7 +54,7 @@ ActionManager::ActionManager() : _targets(nullptr), _currentTarget(nullptr), _cu
 
 ActionManager::~ActionManager()
 {
-    CCLOGINFO("deallocing ActionManager: %p", this);
+    AXLOGINFO("deallocing ActionManager: %p", this);
 
     removeAllActions();
 }
@@ -163,8 +163,8 @@ void ActionManager::resumeTargets(const Vector<Node*>& targetsToResume)
 
 void ActionManager::addAction(Action* action, Node* target, bool paused)
 {
-    CCASSERT(action != nullptr, "action can't be nullptr!");
-    CCASSERT(target != nullptr, "target can't be nullptr!");
+    AXASSERT(action != nullptr, "action can't be nullptr!");
+    AXASSERT(target != nullptr, "target can't be nullptr!");
     if (action == nullptr || target == nullptr)
         return;
 
@@ -183,7 +183,7 @@ void ActionManager::addAction(Action* action, Node* target, bool paused)
 
     actionAllocWithHashElement(element);
 
-    CCASSERT(!ccArrayContainsObject(element->actions, action), "action already be added!");
+    AXASSERT(!ccArrayContainsObject(element->actions, action), "action already be added!");
     ccArrayAppendObject(element->actions, action);
 
     action->startWithTarget(target);
@@ -254,8 +254,8 @@ void ActionManager::removeAction(Action* action)
 
 void ActionManager::removeActionByTag(int tag, Node* target)
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
-    CCASSERT(target != nullptr, "target can't be nullptr!");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
+    AXASSERT(target != nullptr, "target can't be nullptr!");
     if (target == nullptr)
     {
         return;
@@ -282,8 +282,8 @@ void ActionManager::removeActionByTag(int tag, Node* target)
 
 void ActionManager::removeAllActionsByTag(int tag, Node* target)
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
-    CCASSERT(target != nullptr, "target can't be nullptr!");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
+    AXASSERT(target != nullptr, "target can't be nullptr!");
     if (target == nullptr)
     {
         return;
@@ -318,7 +318,7 @@ void ActionManager::removeActionsByFlags(unsigned int flags, Node* target)
     {
         return;
     }
-    CCASSERT(target != nullptr, "target can't be nullptr!");
+    AXASSERT(target != nullptr, "target can't be nullptr!");
     if (target == nullptr)
     {
         return;
@@ -353,7 +353,7 @@ void ActionManager::removeActionsByFlags(unsigned int flags, Node* target)
 // and, it is not possible to get the address of a reference
 Action* ActionManager::getActionByTag(int tag, const Node* target) const
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
 
     tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
@@ -396,7 +396,7 @@ ssize_t ActionManager::getNumberOfRunningActionsInTarget(const Node* target) con
 // and, it is not possible to get the address of a reference
 size_t ActionManager::getNumberOfRunningActionsInTargetByTag(const Node* target, int tag)
 {
-    CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
+    AXASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
 
     tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);

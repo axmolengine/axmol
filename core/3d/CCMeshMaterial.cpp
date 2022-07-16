@@ -235,7 +235,7 @@ MeshMaterial* MeshMaterial::createBuiltInMaterial(MaterialType type, bool skinne
         break;
 
     case MeshMaterial::MaterialType::VERTEX_LIT:
-        CCASSERT(0, "not implemented");
+        AXASSERT(0, "not implemented");
         break;
 
     case MeshMaterial::MaterialType::DIFFUSE:
@@ -291,7 +291,7 @@ MeshMaterial* MeshMaterial::createWithFilename(std::string_view path)
 
 MeshMaterial* MeshMaterial::createWithProgramState(backend::ProgramState* programState)
 {
-    CCASSERT(programState, "Invalid program state.");
+    AXASSERT(programState, "Invalid program state.");
 
     auto mat = new MeshMaterial();
     if (mat->initWithProgramState(programState))
@@ -377,7 +377,7 @@ void MeshMaterialCache::removeUnusedMeshMaterial()
         auto value = it->second;
         if (value->getReferenceCount() == 1)
         {
-            CCLOG("cocos2d: MeshMaterialCache: removing unused mesh renderer materials.");
+            AXLOG("cocos2d: MeshMaterialCache: removing unused mesh renderer materials.");
 
             value->release();
             it = _materials.erase(it);

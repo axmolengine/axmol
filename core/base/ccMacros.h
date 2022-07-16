@@ -36,11 +36,11 @@ THE SOFTWARE.
 #include "base/CCConsole.h"
 #include "platform/CCStdC.h"
 
-#ifndef CCASSERT
-#    if COCOS2D_DEBUG > 0
+#ifndef AXASSERT
+#    if AXIS_DEBUG > 0
 #        if AX_ENABLE_SCRIPT_BINDING
 extern bool AX_DLL cc_assert_script_compatible(const char* msg);
-#            define CCASSERT(cond, msg)                                       \
+#            define AXASSERT(cond, msg)                                       \
                 do                                                            \
                 {                                                             \
                     if (!(cond))                                              \
@@ -51,17 +51,17 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
                     }                                                         \
                 } while (0)
 #        else
-#            define CCASSERT(cond, msg) AX_ASSERT(cond)
+#            define AXASSERT(cond, msg) AX_ASSERT(cond)
 #        endif
 #    else
-#        define CCASSERT(cond, msg)
+#        define AXASSERT(cond, msg)
 #    endif
 
-#    define GP_ASSERT(cond) CCASSERT(cond, "")
+#    define GP_ASSERT(cond) AXASSERT(cond, "")
 
 // FIXME:: Backward compatible
-#    define CCAssert CCASSERT
-#endif  // CCASSERT
+#    define CCAssert AXASSERT
+#endif  // AXASSERT
 
 #include "base/ccConfig.h"
 
@@ -71,15 +71,15 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
 
 #define AX_DOUBLE_PI (M_PI * 2)
 
-/** @def CCRANDOM_MINUS1_1
+/** @def AXRANDOM_MINUS1_1
  returns a random float between -1 and 1
  */
-#define CCRANDOM_MINUS1_1() axis::rand_minus1_1()
+#define AXRANDOM_MINUS1_1() axis::rand_minus1_1()
 
-/** @def CCRANDOM_0_1
+/** @def AXRANDOM_0_1
  returns a random float between 0 and 1
  */
-#define CCRANDOM_0_1() axis::rand_0_1()
+#define AXRANDOM_0_1() axis::rand_0_1()
 
 /** @def AX_DEGREES_TO_RADIANS
  converts degrees to radians

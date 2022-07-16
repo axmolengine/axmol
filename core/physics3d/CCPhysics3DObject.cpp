@@ -326,13 +326,13 @@ void Physics3DRigidBody::removeConstraint(Physics3DConstraint* constraint)
 
 void Physics3DRigidBody::removeConstraint(unsigned int idx)
 {
-    CCASSERT(idx < _constraintList.size(), "idx < _constraintList.size()");
+    AXASSERT(idx < _constraintList.size(), "idx < _constraintList.size()");
     removeConstraint(_constraintList[idx]);
 }
 
 Physics3DConstraint* Physics3DRigidBody::getConstraint(unsigned int idx) const
 {
-    CCASSERT(idx < _constraintList.size(), "idx < _constraintList.size()");
+    AXASSERT(idx < _constraintList.size(), "idx < _constraintList.size()");
     return _constraintList[idx];
 }
 

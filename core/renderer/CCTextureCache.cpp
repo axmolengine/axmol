@@ -67,7 +67,7 @@ TextureCache::TextureCache() : _loadingThread(nullptr), _needQuit(false), _async
 
 TextureCache::~TextureCache()
 {
-    CCLOGINFO("deallocing TextureCache: %p", this);
+    AXLOGINFO("deallocing TextureCache: %p", this);
 
     for (auto& texture : _textures)
         texture.second->release();
@@ -362,7 +362,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
             else
             {
                 texture = nullptr;
-                CCLOG("cocos2d: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
+                AXLOG("cocos2d: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
             }
         }
 
@@ -445,7 +445,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
             }
             else
             {
-                CCLOG("cocos2d: Couldn't create texture for file:%s in TextureCache", path.data());
+                AXLOG("cocos2d: Couldn't create texture for file:%s in TextureCache", path.data());
                 AX_SAFE_RELEASE(texture);
                 texture = nullptr;
             }
@@ -474,8 +474,8 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key)
 
 Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelFormat format)
 {
-    CCASSERT(image != nullptr, "TextureCache: image MUST not be nil");
-    CCASSERT(image->getData() != nullptr, "TextureCache: image MUST not be nil");
+    AXASSERT(image != nullptr, "TextureCache: image MUST not be nil");
+    AXASSERT(image->getData() != nullptr, "TextureCache: image MUST not be nil");
 
     Texture2D* texture = nullptr;
 
@@ -497,7 +497,7 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelForma
         {
             AX_SAFE_RELEASE(texture);
             texture = nullptr;
-            CCLOG("cocos2d: initWithImage failed!");
+            AXLOG("cocos2d: initWithImage failed!");
         }
 
     } while (0);
@@ -565,7 +565,7 @@ void TextureCache::removeUnusedTextures()
         Texture2D* tex = it->second;
         if (tex->getReferenceCount() == 1)
         {
-            CCLOG("cocos2d: TextureCache: removing unused texture: %s", it->first.c_str());
+            AXLOG("cocos2d: TextureCache: removing unused texture: %s", it->first.c_str());
 
             tex->release();
             it = _textures.erase(it);
@@ -831,7 +831,7 @@ void VolatileTextureMgr::removeTexture(Texture2D* t)
 void VolatileTextureMgr::reloadAllTextures()
 {
     _isReloading = true;
-    CCLOG("reload all texture");
+    AXLOG("reload all texture");
 
     for (auto& texture : _textures)
     {

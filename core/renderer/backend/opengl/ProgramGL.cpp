@@ -203,7 +203,7 @@ bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned in
     GLint loc = glGetAttribLocation(_program, attributeName.data());
     if (-1 == loc)
     {
-        CCLOG("Cocos2d: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
+        AXLOG("Cocos2d: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
         return false;
     }
 

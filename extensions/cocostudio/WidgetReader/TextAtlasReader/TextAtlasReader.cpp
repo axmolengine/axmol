@@ -122,7 +122,7 @@ void TextAtlasReader::setPropsFromJsonDictionary(Widget* widget, const rapidjson
         break;
     }
     case 1:
-        CCLOG("Wrong res type of LabelAtlas!");
+        AXLOG("Wrong res type of LabelAtlas!");
         break;
     default:
         break;
@@ -254,7 +254,7 @@ void TextAtlasReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffer
     }
 
     case 1:
-        CCLOG("Wrong res type of LabelAtlas!");
+        AXLOG("Wrong res type of LabelAtlas!");
         break;
 
     default:

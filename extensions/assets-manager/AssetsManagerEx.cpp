@@ -323,7 +323,7 @@ void AssetsManagerEx::loadLocalManifest(std::string_view /*manifestUrl*/)
     // Fail to load local manifest
     if (!_localManifest->isLoaded())
     {
-        CCLOG("AssetsManagerEx : No local manifest file found error.\n");
+        AXLOG("AssetsManagerEx : No local manifest file found error.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
     }
 }
@@ -394,7 +394,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     size_t pos = zip.find_last_of("/\\");
     if (pos == std::string::npos)
     {
-        CCLOG("AssetsManagerEx : no root path specified for zip file %s\n", zip.data());
+        AXLOG("AssetsManagerEx : no root path specified for zip file %s\n", zip.data());
         return false;
     }
     const std::string_view rootPath = zip.substr(0, pos + 1);
@@ -411,7 +411,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     unzFile zipfile = unzOpen2(zip.data(), &zipFunctionOverrides);
     if (!zipfile)
     {
-        CCLOG("AssetsManagerEx : can not open downloaded zip file %s\n", zip.data());
+        AXLOG("AssetsManagerEx : can not open downloaded zip file %s\n", zip.data());
         return false;
     }
 
@@ -419,7 +419,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
     unz_global_info global_info;
     if (unzGetGlobalInfo(zipfile, &global_info) != UNZ_OK)
     {
-        CCLOG("AssetsManagerEx : can not read file global info of %s\n", zip.data());
+        AXLOG("AssetsManagerEx : can not read file global info of %s\n", zip.data());
         unzClose(zipfile);
         return false;
     }
@@ -435,7 +435,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
         char fileName[MAX_FILENAME];
         if (unzGetCurrentFileInfo(zipfile, &fileInfo, fileName, MAX_FILENAME, NULL, 0, NULL, 0) != UNZ_OK)
         {
-            CCLOG("AssetsManagerEx : can not read compressed file info\n");
+            AXLOG("AssetsManagerEx : can not read compressed file info\n");
             unzClose(zipfile);
             return false;
         }
@@ -451,7 +451,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             if (!_fileUtils->createDirectory(basename(fullPath)))
             {
                 // Failed to create directory
-                CCLOG("AssetsManagerEx : can not create directory %s\n", fullPath.c_str());
+                AXLOG("AssetsManagerEx : can not create directory %s\n", fullPath.c_str());
                 unzClose(zipfile);
                 return false;
             }
@@ -465,7 +465,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
                 if (!_fileUtils->createDirectory(dir))
                 {
                     // Failed to create directory
-                    CCLOG("AssetsManagerEx : can not create directory %s\n", fullPath.c_str());
+                    AXLOG("AssetsManagerEx : can not create directory %s\n", fullPath.c_str());
                     unzClose(zipfile);
                     return false;
                 }
@@ -474,7 +474,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             // Open current file.
             if (unzOpenCurrentFile(zipfile) != UNZ_OK)
             {
-                CCLOG("AssetsManagerEx : can not extract file %s\n", fileName);
+                AXLOG("AssetsManagerEx : can not extract file %s\n", fileName);
                 unzClose(zipfile);
                 return false;
             }
@@ -483,7 +483,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
             if (!fsOut)
             {
-                CCLOG("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(),
+                AXLOG("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(),
                       errno);
                 unzCloseCurrentFile(zipfile);
                 unzClose(zipfile);
@@ -497,7 +497,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
                 error = unzReadCurrentFile(zipfile, readBuffer, BUFFER_SIZE);
                 if (error < 0)
                 {
-                    CCLOG("AssetsManagerEx : can not read zip file %s, error code is %d\n", fileName, error);
+                    AXLOG("AssetsManagerEx : can not read zip file %s, error code is %d\n", fileName, error);
                     fsOut.reset();
                     unzCloseCurrentFile(zipfile);
                     unzClose(zipfile);
@@ -520,7 +520,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
         {
             if (unzGoToNextFile(zipfile) != UNZ_OK)
             {
-                CCLOG("AssetsManagerEx : can not read next file for decompressing\n");
+                AXLOG("AssetsManagerEx : can not read next file for decompressing\n");
                 unzClose(zipfile);
                 return false;
             }
@@ -630,7 +630,7 @@ void AssetsManagerEx::downloadVersion()
     // No version file found
     else
     {
-        CCLOG("AssetsManagerEx : No version file found, step skipped\n");
+        AXLOG("AssetsManagerEx : No version file found, step skipped\n");
         _updateState = State::PREDOWNLOAD_MANIFEST;
         downloadManifest();
     }
@@ -645,7 +645,7 @@ void AssetsManagerEx::parseVersion()
 
     if (!_remoteManifest->isVersionLoaded())
     {
-        CCLOG("AssetsManagerEx : Fail to parse version file, step skipped\n");
+        AXLOG("AssetsManagerEx : Fail to parse version file, step skipped\n");
         _updateState = State::PREDOWNLOAD_MANIFEST;
         downloadManifest();
     }
@@ -701,7 +701,7 @@ void AssetsManagerEx::downloadManifest()
     // No manifest file found
     else
     {
-        CCLOG("AssetsManagerEx : No manifest file found, check update failed\n");
+        AXLOG("AssetsManagerEx : No manifest file found, check update failed\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_DOWNLOAD_MANIFEST);
         _updateState = State::UNCHECKED;
     }
@@ -716,7 +716,7 @@ void AssetsManagerEx::parseManifest()
 
     if (!_remoteManifest->isLoaded())
     {
-        CCLOG("AssetsManagerEx : Error parsing manifest file, %s", _tempManifestPath.c_str());
+        AXLOG("AssetsManagerEx : Error parsing manifest file, %s", _tempManifestPath.c_str());
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_PARSE_MANIFEST);
         _updateState = State::UNCHECKED;
     }
@@ -877,19 +877,19 @@ void AssetsManagerEx::checkUpdate()
 {
     if (_updateEntry != UpdateEntry::NONE)
     {
-        CCLOGERROR("AssetsManagerEx::checkUpdate, updateEntry isn't NONE");
+        AXLOGERROR("AssetsManagerEx::checkUpdate, updateEntry isn't NONE");
         return;
     }
 
     if (!_inited)
     {
-        CCLOG("AssetsManagerEx : Manifests uninited.\n");
+        AXLOG("AssetsManagerEx : Manifests uninited.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
         return;
     }
     if (!_localManifest->isLoaded())
     {
-        CCLOG("AssetsManagerEx : No local manifest file found error.\n");
+        AXLOG("AssetsManagerEx : No local manifest file found error.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
         return;
     }
@@ -924,19 +924,19 @@ void AssetsManagerEx::update()
 {
     if (_updateEntry != UpdateEntry::NONE)
     {
-        CCLOGERROR("AssetsManagerEx::update, updateEntry isn't NONE");
+        AXLOGERROR("AssetsManagerEx::update, updateEntry isn't NONE");
         return;
     }
 
     if (!_inited)
     {
-        CCLOG("AssetsManagerEx : Manifests uninited.\n");
+        AXLOG("AssetsManagerEx : Manifests uninited.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
         return;
     }
     if (!_localManifest->isLoaded())
     {
-        CCLOG("AssetsManagerEx : No local manifest file found error.\n");
+        AXLOG("AssetsManagerEx : No local manifest file found error.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
         return;
     }
@@ -998,7 +998,7 @@ void AssetsManagerEx::updateAssets(const DownloadUnits& assets)
 {
     if (!_inited)
     {
-        CCLOG("AssetsManagerEx : Manifests uninited.\n");
+        AXLOG("AssetsManagerEx : Manifests uninited.\n");
         dispatchUpdateEvent(EventAssetsManagerEx::EventCode::ERROR_NO_LOCAL_MANIFEST);
         return;
     }
@@ -1031,7 +1031,7 @@ const DownloadUnits& AssetsManagerEx::getFailedAssets() const
 
 void AssetsManagerEx::downloadFailedAssets()
 {
-    CCLOG("AssetsManagerEx : Start update %lu failed assets.\n", static_cast<unsigned long>(_failedUnits.size()));
+    AXLOG("AssetsManagerEx : Start update %lu failed assets.\n", static_cast<unsigned long>(_failedUnits.size()));
     updateAssets(_failedUnits);
 }
 
@@ -1095,7 +1095,7 @@ void AssetsManagerEx::onError(const network::DownloadTask& task,
     // Skip version error occurred
     if (task.identifier == VERSION_ID)
     {
-        CCLOG("AssetsManagerEx : Fail to download version file, step skipped\n");
+        AXLOG("AssetsManagerEx : Fail to download version file, step skipped\n");
         _updateState = State::PREDOWNLOAD_MANIFEST;
         downloadManifest();
     }

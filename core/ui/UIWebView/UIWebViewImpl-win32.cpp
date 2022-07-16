@@ -918,7 +918,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
 
         if (!embed(m_window, false, cb))
         {
-            CCLOG("Cannot create edge chromium webview");
+            AXLOG("Cannot create edge chromium webview");
             ret = false;
             break;
         }

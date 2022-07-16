@@ -89,7 +89,7 @@ MotionStreak3D* MotionStreak3D::create(float fade, float minSeg, float stroke, c
 
 bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const Color3B& color, std::string_view path)
 {
-    CCASSERT(!path.empty(), "Invalid filename");
+    AXASSERT(!path.empty(), "Invalid filename");
 
     Texture2D* texture = _director->getTextureCache()->addImage(path);
     return initWithFade(fade, minSeg, stroke, color, texture);
@@ -293,12 +293,12 @@ const BlendFunc& MotionStreak3D::getBlendFunc() const
 
 void MotionStreak3D::setOpacity(uint8_t /*opacity*/)
 {
-    CCASSERT(false, "Set opacity no supported");
+    AXASSERT(false, "Set opacity no supported");
 }
 
 uint8_t MotionStreak3D::getOpacity() const
 {
-    CCASSERT(false, "Opacity no supported");
+    AXASSERT(false, "Opacity no supported");
     return 0;
 }
 

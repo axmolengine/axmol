@@ -113,7 +113,7 @@ const std::string getAttributeName(const VertexKey& key)
 
     static int max = sizeof(s_attributeNames) / sizeof(s_attributeNames[0]);
     auto idx       = static_cast<int>(key);
-    CCASSERT(idx >= 0 && idx < max, "invalid key ");
+    AXASSERT(idx >= 0 && idx < max, "invalid key ");
     return s_attributeNames[idx];
 }
 };  // namespace shaderinfos

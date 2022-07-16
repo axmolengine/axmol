@@ -63,8 +63,8 @@ void Bug422Layer::reset()
     auto menu       = Menu::create(item1, item2, nullptr);
     menu->alignItemsVertically();
 
-    float x = CCRANDOM_0_1() * 50;
-    float y = CCRANDOM_0_1() * 50;
+    float x = AXRANDOM_0_1() * 50;
+    float y = AXRANDOM_0_1() * 50;
     menu->setPosition(menu->getPosition() + Vec2(x, y));
     addChild(menu, 0, localtag);
 

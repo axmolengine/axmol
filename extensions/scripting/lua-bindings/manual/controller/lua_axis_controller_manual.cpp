@@ -138,7 +138,7 @@ static int tolua_axis_EventListenerController_clone(lua_State* tolua_S)
         return 1;
     }
 
-    CCLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
+    AXLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
     return 0;
 
 #    if COCOS2D_DEBUG >= 1
@@ -280,7 +280,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         return 0;
     }
 
-    CCLOG("'registerScriptHandler' has wrong number of arguments: %d, was expecting %d\n", argc, 2);
+    AXLOG("'registerScriptHandler' has wrong number of arguments: %d, was expecting %d\n", argc, 2);
     return 0;
 
 #    if COCOS2D_DEBUG >= 1
@@ -349,7 +349,7 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
         return 1;
     }
 
-    CCLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
+    AXLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
     return 0;
 
 #    if COCOS2D_DEBUG >= 1

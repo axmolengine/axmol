@@ -780,7 +780,7 @@ void Label::updateShaderProgram()
 
 void Label::updateBatchCommand(Label::BatchCommand& batch)
 {
-    CCASSERT(_programState, "programState should be set!");
+    AXASSERT(_programState, "programState should be set!");
     batch.setProgramState(_programState);
 }
 
@@ -1398,7 +1398,7 @@ void Label::enableGlow(const Color4B& glowColor)
 
 void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 */)
 {
-    CCASSERT(_currentLabelType == LabelType::STRING_TEXTURE || _currentLabelType == LabelType::TTF,
+    AXASSERT(_currentLabelType == LabelType::STRING_TEXTURE || _currentLabelType == LabelType::TTF,
              "Only supported system font and TTF!");
 
     if (outlineSize > 0 || _currLabelEffect == LabelEffect::OUTLINE)
@@ -2197,7 +2197,7 @@ Sprite* Label::getLetter(int letterIndex)
 
 void Label::setLineHeight(float height)
 {
-    CCASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
+    AXASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
 
     if (_lineHeight != height)
     {
@@ -2208,7 +2208,7 @@ void Label::setLineHeight(float height)
 
 float Label::getLineHeight() const
 {
-    CCASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
+    AXASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
     return _textSprite ? 0.0f : _lineHeight * _bmfontScale;
 }
 
@@ -2238,12 +2238,12 @@ void Label::setAdditionalKerning(float space)
         }
     }
     else
-        CCLOG("Label::setAdditionalKerning not supported on LabelType::STRING_TEXTURE");
+        AXLOG("Label::setAdditionalKerning not supported on LabelType::STRING_TEXTURE");
 }
 
 float Label::getAdditionalKerning() const
 {
-    CCASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
+    AXASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
 
     return _additionalKerning;
 }
@@ -2356,7 +2356,7 @@ void Label::updateDisplayedOpacity(uint8_t parentOpacity)
 // that's fine but it should be documented
 void Label::setTextColor(const Color4B& color)
 {
-    CCASSERT(_currentLabelType == LabelType::TTF || _currentLabelType == LabelType::STRING_TEXTURE,
+    AXASSERT(_currentLabelType == LabelType::TTF || _currentLabelType == LabelType::STRING_TEXTURE,
              "Only supported system font and ttf!");
 
     if (_currentLabelType == LabelType::STRING_TEXTURE && _textColor != color)
@@ -2505,7 +2505,7 @@ FontDefinition Label::_getFontDefinition() const
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID) && (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
     if (systemFontDef._stroke._strokeEnabled)
     {
-        CCLOGERROR("Stroke Currently only supported on iOS and Android!");
+        AXLOGERROR("Stroke Currently only supported on iOS and Android!");
     }
     systemFontDef._stroke._strokeEnabled = false;
 #endif

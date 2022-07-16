@@ -93,7 +93,7 @@ bool EventListenerController::init()
         }
         break;
         default:
-            CCASSERT(false, "Invalid EventController type");
+            AXASSERT(false, "Invalid EventController type");
             break;
         }
     };

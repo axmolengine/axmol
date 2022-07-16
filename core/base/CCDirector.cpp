@@ -92,7 +92,7 @@ Director* Director::getInstance()
     if (!s_SharedDirector)
     {
         s_SharedDirector = new Director;
-        CCASSERT(s_SharedDirector, "FATAL: Not enough memory");
+        AXASSERT(s_SharedDirector, "FATAL: Not enough memory");
         s_SharedDirector->init();
     }
 
@@ -148,7 +148,7 @@ bool Director::init()
 
 Director::~Director()
 {
-    CCLOGINFO("deallocing Director: %p", this);
+    AXLOGINFO("deallocing Director: %p", this);
 
     AX_SAFE_RELEASE(_FPSLabel);
     AX_SAFE_RELEASE(_drawnVerticesLabel);
@@ -208,7 +208,7 @@ void Director::setDefaultValues()
     else if (projection == "custom")
         _projection = Projection::CUSTOM;
     else
-        CCASSERT(false, "Invalid projection value");
+        AXASSERT(false, "Invalid projection value");
 
     // Default pixel format for PNG images with alpha
     std::string pixel_format = conf->getValue("axis.texture.pixel_format_for_png", Value("rgba8888")).asString();
@@ -241,7 +241,7 @@ void Director::setDefaultValues()
 void Director::setGLDefaultValues()
 {
     // This method SHOULD be called only after openGLView_ was initialized
-    CCASSERT(_openGLView, "opengl view should not be null");
+    AXASSERT(_openGLView, "opengl view should not be null");
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
@@ -358,7 +358,7 @@ void Director::calculateDeltaTime()
         _deltaTime = MAX(0, _deltaTime);
     }
 
-#if COCOS2D_DEBUG
+#if AXIS_DEBUG
     // If we are debugging our code, prevent big delta time
     if (_deltaTime > 0.2f)
     {
@@ -373,14 +373,14 @@ float Director::getDeltaTime() const
 }
 void Director::setOpenGLView(GLView* openGLView)
 {
-    CCASSERT(openGLView, "opengl view should not be null");
+    AXASSERT(openGLView, "opengl view should not be null");
 
     if (_openGLView != openGLView)
     {
         // Configuration. Gather GPU info
         Configuration* conf = Configuration::getInstance();
         conf->gatherGPUInfo();
-        CCLOG("%s\n", conf->getInfo().c_str());
+        AXLOG("%s\n", conf->getInfo().c_str());
 
         if (_openGLView)
             _openGLView->release();
@@ -487,7 +487,7 @@ void Director::popMatrix(MATRIX_STACK_TYPE type)
     }
     else
     {
-        CCASSERT(false, "unknown matrix stack type");
+        AXASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -507,7 +507,7 @@ void Director::loadIdentityMatrix(MATRIX_STACK_TYPE type)
     }
     else
     {
-        CCASSERT(false, "unknown matrix stack type");
+        AXASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -527,7 +527,7 @@ void Director::loadMatrix(MATRIX_STACK_TYPE type, const Mat4& mat)
     }
     else
     {
-        CCASSERT(false, "unknown matrix stack type");
+        AXASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -547,7 +547,7 @@ void Director::multiplyMatrix(MATRIX_STACK_TYPE type, const Mat4& mat)
     }
     else
     {
-        CCASSERT(false, "unknown matrix stack type");
+        AXASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -567,7 +567,7 @@ void Director::pushMatrix(MATRIX_STACK_TYPE type)
     }
     else
     {
-        CCASSERT(false, "unknown matrix stack type");
+        AXASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -586,7 +586,7 @@ const Mat4& Director::getMatrix(MATRIX_STACK_TYPE type) const
         return _textureMatrixStack.top();
     }
 
-    CCASSERT(false, "unknown matrix stack type, will return modelview matrix instead");
+    AXASSERT(false, "unknown matrix stack type, will return modelview matrix instead");
     return _modelViewMatrixStack.top();
 }
 
@@ -596,7 +596,7 @@ void Director::setProjection(Projection projection)
 
     if (size.width == 0 || size.height == 0)
     {
-        CCLOGERROR("cocos2d: warning, Director::setProjection() failed because size is 0");
+        AXLOGERROR("cocos2d: warning, Director::setProjection() failed because size is 0");
         return;
     }
 
@@ -638,7 +638,7 @@ void Director::setProjection(Projection projection)
         break;
 
     default:
-        CCLOG("cocos2d: Director: unrecognized projection");
+        AXLOG("cocos2d: Director: unrecognized projection");
         break;
     }
 
@@ -680,7 +680,7 @@ static void GLToClipTransform(Mat4* transformOut)
         return;
 
     Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
 
     auto& projection = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto& modelview  = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
@@ -785,9 +785,9 @@ Rect Director::getSafeAreaRect() const
 
 void Director::runWithScene(Scene* scene)
 {
-    CCASSERT(scene != nullptr,
+    AXASSERT(scene != nullptr,
              "This command can only be used to start the Director. There is already a scene present.");
-    CCASSERT(_runningScene == nullptr, "_runningScene should be null");
+    AXASSERT(_runningScene == nullptr, "_runningScene should be null");
 
     pushScene(scene);
     startAnimation();
@@ -795,8 +795,8 @@ void Director::runWithScene(Scene* scene)
 
 void Director::replaceScene(Scene* scene)
 {
-    // CCASSERT(_runningScene, "Use runWithScene: instead to start the director");
-    CCASSERT(scene != nullptr, "the scene should not be null");
+    // AXASSERT(_runningScene, "Use runWithScene: instead to start the director");
+    AXASSERT(scene != nullptr, "the scene should not be null");
 
     if (_runningScene == nullptr)
     {
@@ -835,7 +835,7 @@ void Director::replaceScene(Scene* scene)
 
 void Director::pushScene(Scene* scene)
 {
-    CCASSERT(scene, "the scene should not null");
+    AXASSERT(scene, "the scene should not null");
 
     _sendCleanupToScene = false;
 
@@ -852,7 +852,7 @@ void Director::pushScene(Scene* scene)
 
 void Director::popScene()
 {
-    CCASSERT(_runningScene != nullptr, "running scene should not null");
+    AXASSERT(_runningScene != nullptr, "running scene should not null");
 
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
@@ -882,7 +882,7 @@ void Director::popToRootScene()
 
 void Director::popToSceneStackLevel(int level)
 {
-    CCASSERT(_runningScene != nullptr, "A running Scene is needed");
+    AXASSERT(_runningScene != nullptr, "A running Scene is needed");
     ssize_t c = _scenesStack.size();
 
     // level 0? -> end
@@ -1271,7 +1271,7 @@ void Director::createStatsLabel()
     {
         if (image)
             delete image;
-        CCLOGERROR("%s", "Fails: init fps_images");
+        AXLOGERROR("%s", "Fails: init fps_images");
         return;
     }
 

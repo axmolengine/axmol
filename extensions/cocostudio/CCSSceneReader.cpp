@@ -242,7 +242,7 @@ std::string SceneReader::getComponentClassName(std::string_view name)
     }
     else
     {
-        CCASSERT(false, "Unregistered Component!");
+        AXASSERT(false, "Unregistered Component!");
     }
 
     return comName;

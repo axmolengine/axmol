@@ -929,7 +929,7 @@ void ActionCallFunction::callback2(Node* sender)
 
     addChild(label);
 
-    CCLOG("sender is: %p", sender);
+    AXLOG("sender is: %p", sender);
 }
 
 void ActionCallFunction::callback3(Node* sender, int32_t data)
@@ -939,7 +939,7 @@ void ActionCallFunction::callback3(Node* sender, int32_t data)
     label->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label);
 
-    CCLOG("target is: %p, data is: %d", sender, data);
+    AXLOG("target is: %p, data is: %d", sender, data);
 }
 
 std::string ActionCallFunction::subtitle() const
@@ -1243,7 +1243,7 @@ void ActionFollow::onEnter()
     float y            = s.height;
 
     Vec2 vertices[] = {Vec2(5.0f, 5.0f), Vec2(x - 5, 5.0f), Vec2(x - 5, y - 5), Vec2(5.0f, y - 5)};
-    drawNode->drawPoly(vertices, 4, true, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+    drawNode->drawPoly(vertices, 4, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     this->addChild(drawNode);
 
@@ -1280,7 +1280,7 @@ void ActionFollowWithOffset::onEnter()
     float y            = s.height;
 
     Vec2 vertices[] = {Vec2(5.0f, 5.0f), Vec2(x - 5, 5.0f), Vec2(x - 5, y - 5), Vec2(5.0f, y - 5)};
-    drawNode->drawPoly(vertices, 4, true, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+    drawNode->drawPoly(vertices, 4, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     this->addChild(drawNode);
 
@@ -1380,7 +1380,7 @@ void ActionStacked::onEnter()
 
 void ActionStacked::addNewSpriteWithCoords(Vec2 p)
 {
-    int idx = static_cast<int>(CCRANDOM_0_1() * 1400 / 100);
+    int idx = static_cast<int>(AXRANDOM_0_1() * 1400 / 100);
     float w = 85.0f;
     float h = 121.0f;
     float x = (idx % 5) * w;

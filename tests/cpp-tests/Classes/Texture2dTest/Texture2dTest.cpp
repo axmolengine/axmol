@@ -222,7 +222,7 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -341,7 +341,7 @@ TextureBMP::TextureBMP()
 
 void TextureBMP::addNewSpriteWithCoords(Vec2 p)
 {
-    int idx = (int)(CCRANDOM_0_1() * 1400.0f / 100.0f);
+    int idx = (int)(AXRANDOM_0_1() * 1400.0f / 100.0f);
     int x   = (idx % 5) * 85;
     int y   = (idx / 5) * 121;
 
@@ -351,7 +351,7 @@ void TextureBMP::addNewSpriteWithCoords(Vec2 p)
     sprite->setPosition(Vec2(p.x, p.y));
 
     ActionInterval* action;
-    float random = CCRANDOM_0_1();
+    float random = AXRANDOM_0_1();
 
     if (random < 0.20)
         action = ScaleBy::create(3, 2);
@@ -1773,7 +1773,7 @@ void TextureAsync::imageLoaded(Texture2D* texture)
 {
     auto director = Director::getInstance();
 
-    // CCASSERT( [NSThread currentThread] == [director runningThread], @"FAIL. Callback should be on cocos2d thread");
+    // AXASSERT( [NSThread currentThread] == [director runningThread], @"FAIL. Callback should be on cocos2d thread");
 
     // IMPORTANT: The order on the callback is not guaranteed. Don't depend on the callback
 
@@ -2019,7 +2019,7 @@ void TextureDrawAtPoint::draw(Renderer* renderer, const Mat4& transform, uint32_
 void TextureDrawAtPoint::onDraw(const Mat4& transform, uint32_t flags)
 {
     Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
 
@@ -2058,7 +2058,7 @@ void TextureDrawInRect::draw(Renderer* renderer, const Mat4& transform, uint32_t
 void TextureDrawInRect::onDraw(const Mat4& transform, uint32_t flags)
 {
     Director* director = Director::getInstance();
-    CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+    AXASSERT(nullptr != director, "Director is null when setting matrix stack");
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
 

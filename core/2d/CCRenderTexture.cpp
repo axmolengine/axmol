@@ -84,7 +84,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
         }
         else
         {
-            CCLOG("Cache rendertexture failed!");
+            AXLOG("Cache rendertexture failed!");
         }
         AX_SAFE_RELEASE(uiTextureImage);
     };
@@ -158,7 +158,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
                                            PixelFormat depthStencilFormat,
                                            bool sharedRenderTarget)
 {
-    CCASSERT(format != backend::PixelFormat::A8, "only RGB and RGBA formats are valid for a render texture");
+    AXASSERT(format != backend::PixelFormat::A8, "only RGB and RGBA formats are valid for a render texture");
 
     bool ret = false;
     do
@@ -379,12 +379,12 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view filename, bool isRGBA, S
     else if (basename.find(".jpg") != std::string::npos)
     {
         if (isRGBA)
-            CCLOG("RGBA is not supported for JPG format.");
+            AXLOG("RGBA is not supported for JPG format.");
         return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
     }
     else
     {
-        CCLOG("Only PNG and JPG format are supported now!");
+        AXLOG("Only PNG and JPG format are supported now!");
     }
 
     return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
@@ -402,12 +402,12 @@ bool RenderTexture::saveToFile(std::string_view filename, bool isRGBA, SaveFileC
     else if (basename.find(".jpg") != std::string::npos)
     {
         if (isRGBA)
-            CCLOG("RGBA is not supported for JPG format.");
+            AXLOG("RGBA is not supported for JPG format.");
         return saveToFile(filename, Image::Format::JPG, false, callback);
     }
     else
     {
-        CCLOG("Only PNG and JPG format are supported now!");
+        AXLOG("Only PNG and JPG format are supported now!");
     }
 
     return saveToFile(filename, Image::Format::JPG, false, callback);
@@ -418,10 +418,10 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
                                        bool isRGBA,
                                        SaveFileCallbackType callback)
 {
-    CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
+    AXASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
     if (isRGBA && format == Image::Format::JPG)
-        CCLOG("RGBA is not supported for JPG format");
+        AXLOG("RGBA is not supported for JPG format");
 
     _saveFileCallback = callback;
 
@@ -441,10 +441,10 @@ bool RenderTexture::saveToFile(std::string_view fileName,
                                bool isRGBA,
                                SaveFileCallbackType callback)
 {
-    CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
+    AXASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
     if (isRGBA && format == Image::Format::JPG)
-        CCLOG("RGBA is not supported for JPG format");
+        AXLOG("RGBA is not supported for JPG format");
 
     _saveFileCallback = callback;
 
@@ -481,7 +481,7 @@ void RenderTexture::onSaveToFile(std::string_view filename, bool isRGBA, bool fo
 /* get buffer as Image */
 void RenderTexture::newImage(std::function<void(RefPtr<Image>)> imageCallback, bool flipImage)
 {
-    CCASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
+    AXASSERT(_pixelFormat == backend::PixelFormat::RGBA8, "only RGBA8888 can be saved as image");
 
     if ((nullptr == _texture2D))
     {

@@ -157,7 +157,7 @@ void TwoColorTrianglesCommand::init(float globalOrder, axis::Texture2D *texture,
     if (_triangles.indexCount % 3 != 0) {
         int count = _triangles.indexCount;
         _triangles.indexCount = count / 3 * 3;
-        CCLOGERROR("Resize indexCount from %d to %d, size must be multiple times of 3", count, _triangles.indexCount);
+        AXLOGERROR("Resize indexCount from %d to %d, size must be multiple times of 3", count, _triangles.indexCount);
     }
 
     _mv = mv;
@@ -206,7 +206,7 @@ void TwoColorTrianglesCommand::updateCommandPipelineDescriptor(axis::backend::Pr
         _programState = __twoColorProgramState->clone();
     }
 
-    CCASSERT(_programState, "programState should not be null");
+    AXASSERT(_programState, "programState should not be null");
     pipelinePS = _programState;
 
     if (needsUpdateStateLayout)

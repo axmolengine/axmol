@@ -90,7 +90,7 @@ DrawNode* DrawNode::create(float defaultLineWidth)
 
 void DrawNode::ensureCapacity(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_bufferCountTriangle + count > _bufferCapacityTriangle)
     {
@@ -105,7 +105,7 @@ void DrawNode::ensureCapacity(int count)
 
 void DrawNode::ensureCapacityGLPoint(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_bufferCountPoint + count > _bufferCapacityPoint)
     {
@@ -120,7 +120,7 @@ void DrawNode::ensureCapacityGLPoint(int count)
 
 void DrawNode::ensureCapacityGLLine(int count)
 {
-    CCASSERT(count >= 0, "capacity must be >= 0");
+    AXASSERT(count >= 0, "capacity must be >= 0");
 
     if (_bufferCountLine + count > _bufferCapacityLine)
     {
@@ -605,7 +605,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
                            float borderWidth,
                            const Color4B& borderColor)
 {
-    CCASSERT(count >= 0, "invalid count value");
+    AXASSERT(count >= 0, "invalid count value");
 
     bool outline = (borderColor.a > 0.0f && borderWidth > 0.0f);
 

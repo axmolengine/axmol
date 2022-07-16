@@ -297,7 +297,7 @@ bool UILayoutTest_BackGroundImage::init()
 void UILayoutTest_BackGroundImage::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData textureFile = _layout->getRenderFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
 // UILayoutTest_BackGroundImage_Scale9
@@ -767,7 +767,7 @@ bool UILayoutComponentTest::init()
         _uiLayer->addChild(_baseLayer);
 
         Button* button = Button::create("cocosui/animationbuttonnormal.png");
-        CCLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
+        AXLOG("content size should be greater than 0:  width = %f, height = %f", button->getContentSize().width,
               button->getContentSize().height);
         button->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
         button->addTouchEventListener(AX_CALLBACK_2(UILayoutComponentTest::touchEvent, this));

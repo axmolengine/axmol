@@ -116,7 +116,7 @@ void BoneNode::addChild(Node* child, int localZOrder, std::string_view name)
 
 void BoneNode::addSkin(SkinNode* skin, bool isDisplay, bool hideOthers)
 {
-    CCASSERT(skin != nullptr, "Argument must be non-nil");
+    AXASSERT(skin != nullptr, "Argument must be non-nil");
     if (hideOthers)
     {
         for (auto& bonskin : _boneSkins)
@@ -198,7 +198,7 @@ void BoneNode::addToBoneList(BoneNode* bone)
                     _rootSkeleton->_subBonesOrderDirty = true;
                 }
                 else
-                    CCLOG("already has a bone named %s in skeleton %s", bonename.data(),
+                    AXLOG("already has a bone named %s in skeleton %s", bonename.data(),
                           _rootSkeleton->getName().data());
             }
         }

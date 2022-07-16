@@ -80,18 +80,18 @@ Ref::~Ref()
 
 void Ref::retain()
 {
-    CCASSERT(_referenceCount > 0, "reference count should be greater than 0");
+    AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
     ++_referenceCount;
 }
 
 void Ref::release()
 {
-    CCASSERT(_referenceCount > 0, "reference count should be greater than 0");
+    AXASSERT(_referenceCount > 0, "reference count should be greater than 0");
     --_referenceCount;
 
     if (_referenceCount == 0)
     {
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
         auto poolManager = PoolManager::getInstance();
         if (!poolManager->getCurrentPool()->isClearing() && poolManager->isObjectInPools(this))
         {
@@ -123,7 +123,7 @@ void Ref::release()
             // auto obj = Node::create();
             // obj->retain();
             // obj->release();   // This `release` is the pair of `retain` of previous line.
-            CCASSERT(false, "The reference shouldn't be 0 because it is still in autorelease pool.");
+            AXASSERT(false, "The reference shouldn't be 0 because it is still in autorelease pool.");
         }
 #endif
 
@@ -175,7 +175,7 @@ void Ref::printLeaks()
 static void trackRef(Ref* ref)
 {
     std::lock_guard<std::mutex> refLockGuard(__refMutex);
-    CCASSERT(ref, "Invalid parameter, ref should not be null!");
+    AXASSERT(ref, "Invalid parameter, ref should not be null!");
 
     // Create memory allocation record.
     __refAllocationList.push_back(ref);

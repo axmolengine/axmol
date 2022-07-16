@@ -760,7 +760,7 @@ void ScrollView::scrollToTopLeft(float timeInSec, bool attenuated)
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     startAutoScrollToDestination(Vec2(0.0f, _contentSize.height - _innerContainer->getContentSize().height), timeInSec,
@@ -771,7 +771,7 @@ void ScrollView::scrollToTopRight(float timeInSec, bool attenuated)
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     startAutoScrollToDestination(Vec2(_contentSize.width - _innerContainer->getContentSize().width,
@@ -783,7 +783,7 @@ void ScrollView::scrollToBottomLeft(float timeInSec, bool attenuated)
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     startAutoScrollToDestination(Vec2::ZERO, timeInSec, attenuated);
@@ -793,7 +793,7 @@ void ScrollView::scrollToBottomRight(float timeInSec, bool attenuated)
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     startAutoScrollToDestination(Vec2(_contentSize.width - _innerContainer->getContentSize().width, 0.0f), timeInSec,
@@ -868,7 +868,7 @@ void ScrollView::jumpToTopLeft()
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     jumpToDestination(Vec2(0.0f, _contentSize.height - _innerContainer->getContentSize().height));
@@ -878,7 +878,7 @@ void ScrollView::jumpToTopRight()
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     jumpToDestination(Vec2(_contentSize.width - _innerContainer->getContentSize().width,
@@ -889,7 +889,7 @@ void ScrollView::jumpToBottomLeft()
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     jumpToDestination(Vec2::ZERO);
@@ -899,7 +899,7 @@ void ScrollView::jumpToBottomRight()
 {
     if (_direction != Direction::BOTH)
     {
-        CCLOG("Scroll direction is not both!");
+        AXLOG("Scroll direction is not both!");
         return;
     }
     jumpToDestination(Vec2(_contentSize.width - _innerContainer->getContentSize().width, 0.0f));
@@ -1285,35 +1285,35 @@ void ScrollView::setScrollBarPositionFromCorner(const Vec2& positionFromCorner)
 
 void ScrollView::setScrollBarPositionFromCornerForVertical(const Vec2& positionFromCorner)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
-    CCASSERT(_direction != Direction::HORIZONTAL, "Scroll view doesn't have a vertical scroll bar!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_direction != Direction::HORIZONTAL, "Scroll view doesn't have a vertical scroll bar!");
     _verticalScrollBar->setPositionFromCorner(positionFromCorner);
 }
 
 Vec2 ScrollView::getScrollBarPositionFromCornerForVertical() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
-    CCASSERT(_direction != Direction::HORIZONTAL, "Scroll view doesn't have a vertical scroll bar!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_direction != Direction::HORIZONTAL, "Scroll view doesn't have a vertical scroll bar!");
     return _verticalScrollBar->getPositionFromCorner();
 }
 
 void ScrollView::setScrollBarPositionFromCornerForHorizontal(const Vec2& positionFromCorner)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
-    CCASSERT(_direction != Direction::VERTICAL, "Scroll view doesn't have a horizontal scroll bar!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_direction != Direction::VERTICAL, "Scroll view doesn't have a horizontal scroll bar!");
     _horizontalScrollBar->setPositionFromCorner(positionFromCorner);
 }
 
 Vec2 ScrollView::getScrollBarPositionFromCornerForHorizontal() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
-    CCASSERT(_direction != Direction::VERTICAL, "Scroll view doesn't have a horizontal scroll bar!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_direction != Direction::VERTICAL, "Scroll view doesn't have a horizontal scroll bar!");
     return _horizontalScrollBar->getPositionFromCorner();
 }
 
 void ScrollView::setScrollBarWidth(float width)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         _verticalScrollBar->setWidth(width);
@@ -1326,7 +1326,7 @@ void ScrollView::setScrollBarWidth(float width)
 
 float ScrollView::getScrollBarWidth() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         return _verticalScrollBar->getWidth();
@@ -1340,7 +1340,7 @@ float ScrollView::getScrollBarWidth() const
 
 void ScrollView::setScrollBarColor(const Color3B& color)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         _verticalScrollBar->setColor(color);
@@ -1353,7 +1353,7 @@ void ScrollView::setScrollBarColor(const Color3B& color)
 
 const Color3B& ScrollView::getScrollBarColor() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         return _verticalScrollBar->getColor();
@@ -1367,7 +1367,7 @@ const Color3B& ScrollView::getScrollBarColor() const
 
 void ScrollView::setScrollBarOpacity(uint8_t opacity)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         _verticalScrollBar->setOpacity(opacity);
@@ -1380,7 +1380,7 @@ void ScrollView::setScrollBarOpacity(uint8_t opacity)
 
 uint8_t ScrollView::getScrollBarOpacity() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         return _verticalScrollBar->getOpacity();
@@ -1394,7 +1394,7 @@ uint8_t ScrollView::getScrollBarOpacity() const
 
 void ScrollView::setScrollBarAutoHideEnabled(bool autoHideEnabled)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         _verticalScrollBar->setAutoHideEnabled(autoHideEnabled);
@@ -1407,7 +1407,7 @@ void ScrollView::setScrollBarAutoHideEnabled(bool autoHideEnabled)
 
 bool ScrollView::isScrollBarAutoHideEnabled() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         return _verticalScrollBar->isAutoHideEnabled();
@@ -1421,7 +1421,7 @@ bool ScrollView::isScrollBarAutoHideEnabled() const
 
 void ScrollView::setScrollBarAutoHideTime(float autoHideTime)
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         _verticalScrollBar->setAutoHideTime(autoHideTime);
@@ -1434,7 +1434,7 @@ void ScrollView::setScrollBarAutoHideTime(float autoHideTime)
 
 float ScrollView::getScrollBarAutoHideTime() const
 {
-    CCASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
+    AXASSERT(_scrollBarEnabled, "Scroll bar should be enabled!");
     if (_verticalScrollBar != nullptr)
     {
         return _verticalScrollBar->getAutoHideTime();

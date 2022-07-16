@@ -230,7 +230,7 @@ GLint UtilsGL::toGLMinFilter(SamplerFilter minFilter, bool hasMipmaps, bool isPo
 {
     if (hasMipmaps && !isPow2)
     {
-        CCLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d",
+        AXLOG("Change minification filter to either NEAREST or LINEAR since non-power-of-two texture occur in %s %s %d",
               __FILE__, __FUNCTION__, __LINE__);
         if (SamplerFilter::LINEAR == minFilter)
             return GL_LINEAR;
@@ -264,7 +264,7 @@ GLint UtilsGL::toGLAddressMode(SamplerAddressMode addressMode, bool isPow2)
     GLint ret = GL_REPEAT;
     if (!isPow2 && (addressMode != SamplerAddressMode::CLAMP_TO_EDGE))
     {
-        CCLOG("Change texture wrap mode to CLAMP_TO_EDGE since non-power-of-two texture occur in %s %s %d", __FILE__,
+        AXLOG("Change texture wrap mode to CLAMP_TO_EDGE since non-power-of-two texture occur in %s %s %d", __FILE__,
               __FUNCTION__, __LINE__);
         return GL_CLAMP_TO_EDGE;
     }

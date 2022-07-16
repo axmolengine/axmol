@@ -71,9 +71,9 @@ void GScrollBar::constructExtension(ByteBuffer* buffer)
     _fixedGripSize = buffer->readBool();
 
     _grip = getChild("grip");
-    CCASSERT(_grip != nullptr, "FairyGUI: should define grip");
+    AXASSERT(_grip != nullptr, "FairyGUI: should define grip");
     _bar = getChild("bar");
-    CCASSERT(_bar != nullptr, "FairyGUI: should define bar");
+    AXASSERT(_bar != nullptr, "FairyGUI: should define bar");
 
     _arrowButton1 = getChild("arrow1");
     _arrowButton2 = getChild("arrow2");

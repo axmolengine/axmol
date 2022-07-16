@@ -248,19 +248,19 @@
         self.dataInputMode = inputFlag;
         break;
     case axis::ui::EditBox::InputFlag::INITIAL_CAPS_WORD:
-        CCLOG("INITIAL_CAPS_WORD not implemented");
+        AXLOG("INITIAL_CAPS_WORD not implemented");
         break;
     case axis::ui::EditBox::InputFlag::INITIAL_CAPS_SENTENCE:
-        CCLOG("INITIAL_CAPS_SENTENCE not implemented");
+        AXLOG("INITIAL_CAPS_SENTENCE not implemented");
         break;
     case axis::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS:
-        CCLOG("INITIAL_CAPS_ALL_CHARACTERS not implemented");
+        AXLOG("INITIAL_CAPS_ALL_CHARACTERS not implemented");
         break;
     case axis::ui::EditBox::InputFlag::SENSITIVE:
-        CCLOG("SENSITIVE not implemented");
+        AXLOG("SENSITIVE not implemented");
         break;
     case axis::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS:
-        CCLOG("LOWERCASE_ALL_CHARACTERS not implemented");
+        AXLOG("LOWERCASE_ALL_CHARACTERS not implemented");
         break;
     default:
         break;
@@ -269,7 +269,7 @@
 
 - (void)setReturnType:(axis::ui::EditBox::KeyboardReturnType)returnType
 {
-    CCLOG("setReturnType not implemented");
+    AXLOG("setReturnType not implemented");
 }
 
 - (void)setTextHorizontalAlignment:(axis::TextHAlignment)alignment

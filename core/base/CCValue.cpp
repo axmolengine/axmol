@@ -458,7 +458,7 @@ bool Value::operator==(const Value& v) const
 /// Convert value to a specified type
 unsigned char Value::asByte(unsigned char defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
 
     switch (_type)
@@ -491,7 +491,7 @@ unsigned char Value::asByte(unsigned char defaultValue) const
 
 int Value::asInt(int defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -523,7 +523,7 @@ int Value::asInt(int defaultValue) const
 
 unsigned int Value::asUint(unsigned int defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -556,7 +556,7 @@ unsigned int Value::asUint(unsigned int defaultValue) const
 
 int64_t Value::asInt64(int64_t defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -589,7 +589,7 @@ int64_t Value::asInt64(int64_t defaultValue) const
 
 uint64_t Value::asUint64(uint64_t defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -622,7 +622,7 @@ uint64_t Value::asUint64(uint64_t defaultValue) const
 
 float Value::asFloat(float defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -654,7 +654,7 @@ float Value::asFloat(float defaultValue) const
 
 double Value::asDouble(double defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -686,7 +686,7 @@ double Value::asDouble(double defaultValue) const
 
 bool Value::asBool(bool defaultValue) const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
     switch (_type)
     {
@@ -718,7 +718,7 @@ bool Value::asBool(bool defaultValue) const
 
 std::string Value::asString() const
 {
-    CCASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
+    AXASSERT(_type != Type::VECTOR && _type != Type::MAP && _type != Type::INT_KEY_MAP,
              "Only base type (bool, string, float, double, int) could be converted");
 
     if (_type == Type::STRING)
@@ -778,37 +778,37 @@ std::string_view Value::asStringRef() const
 
 ValueVector& Value::asValueVector()
 {
-    CCASSERT(_type == Type::VECTOR, "The value type isn't Type::VECTOR");
+    AXASSERT(_type == Type::VECTOR, "The value type isn't Type::VECTOR");
     return *_field.vectorVal;
 }
 
 const ValueVector& Value::asValueVector() const
 {
-    CCASSERT(_type == Type::VECTOR, "The value type isn't Type::VECTOR");
+    AXASSERT(_type == Type::VECTOR, "The value type isn't Type::VECTOR");
     return *_field.vectorVal;
 }
 
 ValueMap& Value::asValueMap()
 {
-    CCASSERT(_type == Type::MAP, "The value type isn't Type::MAP");
+    AXASSERT(_type == Type::MAP, "The value type isn't Type::MAP");
     return *_field.mapVal;
 }
 
 const ValueMap& Value::asValueMap() const
 {
-    CCASSERT(_type == Type::MAP, "The value type isn't Type::MAP");
+    AXASSERT(_type == Type::MAP, "The value type isn't Type::MAP");
     return *_field.mapVal;
 }
 
 ValueMapIntKey& Value::asIntKeyMap()
 {
-    CCASSERT(_type == Type::INT_KEY_MAP, "The value type isn't Type::INT_KEY_MAP");
+    AXASSERT(_type == Type::INT_KEY_MAP, "The value type isn't Type::INT_KEY_MAP");
     return *_field.intKeyMapVal;
 }
 
 const ValueMapIntKey& Value::asIntKeyMap() const
 {
-    CCASSERT(_type == Type::INT_KEY_MAP, "The value type isn't Type::INT_KEY_MAP");
+    AXASSERT(_type == Type::INT_KEY_MAP, "The value type isn't Type::INT_KEY_MAP");
     return *_field.intKeyMapVal;
 }
 
@@ -892,7 +892,7 @@ static std::string visit(const Value& v, int depth)
         ret << visitMap(v.asIntKeyMap(), depth);
         break;
     default:
-        CCASSERT(false, "Invalid type!");
+        AXASSERT(false, "Invalid type!");
         break;
     }
 

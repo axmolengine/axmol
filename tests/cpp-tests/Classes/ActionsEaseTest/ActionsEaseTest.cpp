@@ -931,9 +931,9 @@ void SpeedTest::altertime(float dt)
     auto action2 = static_cast<Speed*>(_tamara->getActionByTag(kTagAction1));
     auto action3 = static_cast<Speed*>(_kathia->getActionByTag(kTagAction1));
 
-    action1->setSpeed(CCRANDOM_MINUS1_1() * 2);
-    action2->setSpeed(CCRANDOM_MINUS1_1() * 2);
-    action3->setSpeed(CCRANDOM_MINUS1_1() * 2);
+    action1->setSpeed(rand_minus1_1() * 2);
+    action2->setSpeed(rand_minus1_1() * 2);
+    action3->setSpeed(rand_minus1_1() * 2);
 }
 
 std::string SpeedTest::subtitle() const

@@ -130,19 +130,19 @@ void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, axis::ba
 {
     auto cache = SpriteFrameCache::getInstance();
 
-    CCASSERT(cache->isSpriteFramesWithFileLoaded("plist which not exists") == false, "Plist not exists");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded("plist which not exists") == false, "Plist not exists");
 
     cache->addSpriteFramesWithFile(file);
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after loaded");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after loaded");
 
     cache->removeSpriteFrameByName("not_exists_grossinis_sister.png");
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should not be still full");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should not be still full");
 
     cache->removeSpriteFrameByName("grossinis_sister1.png");
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == false, "Plist should not be full after remove any sprite");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == false, "Plist should not be full after remove any sprite");
 
     cache->addSpriteFramesWithFile(file);
-    CCASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after reloaded");
+    AXASSERT(cache->isSpriteFramesWithFileLoaded(file) == true, "Plist should be full after reloaded");
 }
 
 class GenericJsonArraySpriteSheetLoader : public SpriteSheetLoader
@@ -154,13 +154,13 @@ public:
 
     void load(std::string_view filePath, SpriteFrameCache& cache) override
     {
-        CCASSERT(!filePath.empty(), "atlas filename should not be nullptr");
+        AXASSERT(!filePath.empty(), "atlas filename should not be nullptr");
 
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
         if (fullPath.empty())
         {
             // return if plist file doesn't exist
-            CCLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
+            AXLOG("GenericJsonArraySpriteSheetLoader: can not find %s", filePath.data());
             return;
         }
 
@@ -197,7 +197,7 @@ public:
             // append .png
             texturePath = texturePath.append(".png");
 
-            CCLOG("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
+            AXLOG("GenericJsonArraySpriteSheetLoader::load: Trying to use file %s as texture", texturePath.c_str());
         }
 
         addSpriteFramesWithJson(jDoc, texturePath, filePath, cache);
@@ -215,7 +215,7 @@ public:
 
     void load(std::string_view filePath, std::string_view textureFileName, SpriteFrameCache& cache) override
     {
-        CCASSERT(!textureFileName.empty(), "texture name should not be null");
+        AXASSERT(!textureFileName.empty(), "texture name should not be null");
         const auto fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
         rapidjson::Document jDoc;
         const auto data = FileUtils::getInstance()->getStringFromFile(fullPath);
@@ -284,7 +284,7 @@ public:
         }
         else
         {
-            CCLOG("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
+            AXLOG("GenericJsonArraySpriteSheetLoader::reload: Couldn't load texture");
         }
     }
 
@@ -337,7 +337,7 @@ protected:
         }
         else
         {
-            CCLOG("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
+            AXLOG("GenericJsonArraySpriteSheetLoader::addSpriteFramesWithJson: Couldn't load texture");
         }
     }
 

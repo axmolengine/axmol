@@ -160,13 +160,13 @@ public:
 
     T& operator*() const
     {
-        CCASSERT(_ptr, "Attempt to dereference a null pointer!");
+        AXASSERT(_ptr, "Attempt to dereference a null pointer!");
         return *_ptr;
     }
 
     T* operator->() const
     {
-        CCASSERT(_ptr, "Attempt to dereference a null pointer!");
+        AXASSERT(_ptr, "Attempt to dereference a null pointer!");
         return _ptr;
     }
 

@@ -418,7 +418,7 @@ void CommandBufferGL::setUniform(bool isArray, GLuint location, unsigned int siz
         break;
 
     default:
-        CCASSERT(false, "invalidate Uniform data type");
+        AXASSERT(false, "invalidate Uniform data type");
         break;
     }
 }

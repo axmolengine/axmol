@@ -1065,7 +1065,7 @@ Vec2 Layout::getWorldCenterPoint(Widget* widget) const
     Layout* layout = dynamic_cast<Layout*>(widget);
     // FIXEDME: we don't need to calculate the content size of layout anymore
     Vec2 widgetSize = layout ? layout->getLayoutAccumulatedSize() : widget->getContentSize();
-    //    CCLOG("content size : width = %f, height = %f", widgetSize.width, widgetSize.height);
+    //    AXLOG("content size : width = %f, height = %f", widgetSize.width, widgetSize.height);
     return widget->convertToWorldSpace(Vec2(widgetSize.width / 2, widgetSize.height / 2));
 }
 
@@ -1154,7 +1154,7 @@ int Layout::findFirstFocusEnabledWidgetIndex()
         }
         index++;
     }
-    CCASSERT(0, "invalid operation");
+    AXASSERT(0, "invalid operation");
     return 0;
 }
 
@@ -1201,7 +1201,7 @@ int Layout::findNearestChildWidgetIndex(FocusDirection direction, Widget* baseWi
         return found;
     }
 
-    CCASSERT(0, "invalid focus direction!!!");
+    AXASSERT(0, "invalid focus direction!!!");
     return 0;
 }
 
@@ -1248,7 +1248,7 @@ int Layout::findFarthestChildWidgetIndex(FocusDirection direction, axis::ui::Wid
         return found;
     }
 
-    CCASSERT(0, "invalid focus direction!!!");
+    AXASSERT(0, "invalid focus direction!!!");
     return 0;
 }
 
@@ -1354,7 +1354,7 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
     }
     else
     {
-        CCASSERT(0, "invalid direction!");
+        AXASSERT(0, "invalid direction!");
     }
 }
 
@@ -1708,7 +1708,7 @@ bool Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction) c
     }
     else
     {
-        CCASSERT(0, "invalid layout Type");
+        AXASSERT(0, "invalid layout Type");
         return false;
     }
 
@@ -1749,7 +1749,7 @@ bool Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection dir
         }
         else
         {
-            CCASSERT(0, "invalid layout type");
+            AXASSERT(0, "invalid layout type");
             return false;
         }
     }
@@ -1822,7 +1822,7 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
             break;
             default:
             {
-                CCASSERT(0, "Invalid Focus Direction");
+                AXASSERT(0, "Invalid Focus Direction");
                 return current;
             }
             break;
@@ -1861,7 +1861,7 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
             break;
             default:
             {
-                CCASSERT(0, "Invalid Focus Direction");
+                AXASSERT(0, "Invalid Focus Direction");
                 return current;
             }
             break;
@@ -1869,7 +1869,7 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
         }
         else
         {
-            CCASSERT(0, "Un Supported Layout type, please use VBox and HBox instead!!!");
+            AXASSERT(0, "Un Supported Layout type, please use VBox and HBox instead!!!");
             return current;
         }
     }

@@ -142,7 +142,7 @@ void ProfilingEndTimingBlock(const char* timerName)
     Profiler* p           = Profiler::getInstance();
     ProfilingTimer* timer = p->_activeTimers.at(timerName);
 
-    CCASSERT(timer, "CCProfilingTimer  not found");
+    AXASSERT(timer, "CCProfilingTimer  not found");
 
     int32_t duration =
         static_cast<int32_t>(chrono::duration_cast<chrono::microseconds>(now - timer->_startTime).count());
@@ -159,7 +159,7 @@ void ProfilingResetTimingBlock(const char* timerName)
     Profiler* p           = Profiler::getInstance();
     ProfilingTimer* timer = p->_activeTimers.at(timerName);
 
-    CCASSERT(timer, "CCProfilingTimer not found");
+    AXASSERT(timer, "CCProfilingTimer not found");
 
     timer->reset();
 }

@@ -452,7 +452,7 @@ const char* EditBox::getText() const
 
 void EditBox::setFont(const char* pFontName, int fontSize)
 {
-    CCASSERT(pFontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
     if (pFontName != nullptr)
     {
         if (_editBoxImpl != nullptr)
@@ -464,7 +464,7 @@ void EditBox::setFont(const char* pFontName, int fontSize)
 
 void EditBox::setFontName(const char* pFontName)
 {
-    CCASSERT(pFontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
     if (_editBoxImpl != nullptr)
     {
         _editBoxImpl->setFont(pFontName, _editBoxImpl->getFontSize());
@@ -520,7 +520,7 @@ const Color4B& EditBox::getFontColor() const
 
 void EditBox::setPlaceholderFont(const char* pFontName, int fontSize)
 {
-    CCASSERT(pFontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
     if (pFontName != nullptr)
     {
         if (_editBoxImpl != nullptr)
@@ -532,7 +532,7 @@ void EditBox::setPlaceholderFont(const char* pFontName, int fontSize)
 
 void EditBox::setPlaceholderFontName(const char* pFontName)
 {
-    CCASSERT(pFontName != nullptr, "fontName can't be nullptr");
+    AXASSERT(pFontName != nullptr, "fontName can't be nullptr");
     if (_editBoxImpl != nullptr)
     {
         _editBoxImpl->setPlaceholderFont(pFontName, _editBoxImpl->getPlaceholderFontSize());
@@ -829,7 +829,7 @@ static Rect getRect(Node* pNode)
 
 void EditBox::keyboardWillShow(IMEKeyboardNotificationInfo& info)
 {
-    // CCLOG("CCEditBox::keyboardWillShow");
+    // AXLOG("CCEditBox::keyboardWillShow");
     Rect rectTracked = getRect(this);
     // some adjustment for margin between the keyboard and the edit box.
     rectTracked.origin.y -= 4;
@@ -837,13 +837,13 @@ void EditBox::keyboardWillShow(IMEKeyboardNotificationInfo& info)
     // if the keyboard area doesn't intersect with the tracking node area, nothing needs to be done.
     if (!rectTracked.intersectsRect(info.end))
     {
-        CCLOG("needn't to adjust view layout.");
+        AXLOG("needn't to adjust view layout.");
         return;
     }
 
     // assume keyboard at the bottom of screen, calculate the vertical adjustment.
     _adjustHeight = info.end.getMaxY() - rectTracked.getMinY();
-    // CCLOG("CCEditBox:needAdjustVerticalPosition(%f)", _adjustHeight);
+    // AXLOG("CCEditBox:needAdjustVerticalPosition(%f)", _adjustHeight);
 
     if (_editBoxImpl != nullptr)
     {
@@ -855,7 +855,7 @@ void EditBox::keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/) {}
 
 void EditBox::keyboardWillHide(IMEKeyboardNotificationInfo& info)
 {
-    // CCLOG("CCEditBox::keyboardWillHide");
+    // AXLOG("CCEditBox::keyboardWillHide");
     if (_editBoxImpl != nullptr)
     {
         _editBoxImpl->doAnimationWhenKeyboardMove(info.duration, -_adjustHeight);

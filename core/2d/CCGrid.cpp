@@ -149,7 +149,7 @@ void GridBase::updateBlendState()
 
 GridBase::~GridBase()
 {
-    CCLOGINFO("deallocing GridBase: %p", this);
+    AXLOGINFO("deallocing GridBase: %p", this);
 
     AX_SAFE_RELEASE(_renderTarget);
 
@@ -470,7 +470,7 @@ void Grid3D::calculateVertexPoints()
 
 Vec3 Grid3D::getVertex(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
 
     int index        = (int)(pos.x * (_gridSize.height + 1) + pos.y) * 3;
     float* vertArray = (float*)_vertices;
@@ -482,7 +482,7 @@ Vec3 Grid3D::getVertex(const Vec2& pos) const
 
 Vec3 Grid3D::getOriginalVertex(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
 
     int index        = (int)(pos.x * (_gridSize.height + 1) + pos.y) * 3;
     float* vertArray = (float*)_originalVertices;
@@ -494,7 +494,7 @@ Vec3 Grid3D::getOriginalVertex(const Vec2& pos) const
 
 void Grid3D::setVertex(const Vec2& pos, const Vec3& vertex)
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int index            = (int)(pos.x * (_gridSize.height + 1) + pos.y) * 3;
     float* vertArray     = (float*)_vertices;
     vertArray[index]     = vertex.x;
@@ -718,7 +718,7 @@ void TiledGrid3D::calculateVertexPoints()
 
 void TiledGrid3D::setTile(const Vec2& pos, const Quad3& coords)
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int idx          = (int)(_gridSize.height * pos.x + pos.y) * 4 * 3;
     float* vertArray = (float*)_vertices;
     memcpy(&vertArray[idx], &coords, sizeof(Quad3));
@@ -726,7 +726,7 @@ void TiledGrid3D::setTile(const Vec2& pos, const Quad3& coords)
 
 Quad3 TiledGrid3D::getOriginalTile(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int idx          = (int)(_gridSize.height * pos.x + pos.y) * 4 * 3;
     float* vertArray = (float*)_originalVertices;
 
@@ -738,7 +738,7 @@ Quad3 TiledGrid3D::getOriginalTile(const Vec2& pos) const
 
 Quad3 TiledGrid3D::getTile(const Vec2& pos) const
 {
-    CCASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
+    AXASSERT(pos.x == (unsigned int)pos.x && pos.y == (unsigned int)pos.y, "Numbers must be integers");
     int idx          = (int)(_gridSize.height * pos.x + pos.y) * 4 * 3;
     float* vertArray = (float*)_vertices;
 

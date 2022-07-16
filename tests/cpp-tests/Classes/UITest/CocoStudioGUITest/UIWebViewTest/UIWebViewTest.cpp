@@ -174,7 +174,7 @@ bool WebViewTest::init()
 
 bool WebViewTest::onWebViewShouldStartLoading(ui::WebView* sender, std::string_view url)
 {
-    CCLOG("onWebViewShouldStartLoading, url is %s", url.data());
+    AXLOG("onWebViewShouldStartLoading, url is %s", url.data());
     // don't do any OpenGL operation here!! It's forbidden!
     return true;
 }
@@ -183,10 +183,10 @@ void WebViewTest::onWebViewDidFinishLoading(ui::WebView* sender, std::string_vie
 {
     auto node = (ui::Button*)this->getChildByName("evalJs");
     node->setTitleText("start loading...");
-    CCLOG("onWebViewDidFinishLoading, url is %s", url.data());
+    AXLOG("onWebViewDidFinishLoading, url is %s", url.data());
 }
 
 void WebViewTest::onWebViewDidFailLoading(ui::WebView* sender, std::string_view url)
 {
-    CCLOG("onWebViewDidFailLoading, url is %s", url.data());
+    AXLOG("onWebViewDidFailLoading, url is %s", url.data());
 }

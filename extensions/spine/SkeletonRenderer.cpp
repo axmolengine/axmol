@@ -188,7 +188,7 @@ void SkeletonRenderer::initWithJsonFile (const std::string& skeletonDataFile, At
 	SkeletonJson json(_attachmentLoader);
 	json.setScale(scale);
 	SkeletonData* skeletonData = json.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
+	AXASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
 
 	_ownsSkeleton = true;
 	setSkeletonData(skeletonData, true);
@@ -198,14 +198,14 @@ void SkeletonRenderer::initWithJsonFile (const std::string& skeletonDataFile, At
 
 void SkeletonRenderer::initWithJsonFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale) {
 	_atlas = new (__FILE__, __LINE__) Atlas(atlasFile.c_str(), &textureLoader, true);
-	CCASSERT(_atlas, "Error reading atlas file.");
+	AXASSERT(_atlas, "Error reading atlas file.");
 
 	_attachmentLoader = new (__FILE__, __LINE__) Cocos2dAtlasAttachmentLoader(_atlas);
 
 	SkeletonJson json(_attachmentLoader);
 	json.setScale(scale);
 	SkeletonData* skeletonData = json.readSkeletonDataFile(skeletonDataFile.c_str());
-    CCASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
+    AXASSERT(skeletonData, (!json.getError().isEmpty() ? json.getError().buffer() : "Error reading skeleton data."));
 
 	_ownsSkeleton = true;
 	_ownsAtlas = true;
@@ -221,7 +221,7 @@ void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, 
 	SkeletonBinary binary(_attachmentLoader);
 	binary.setScale(scale);
 	SkeletonData* skeletonData = binary.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
+	AXASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
 	_ownsSkeleton = true;
 	setSkeletonData(skeletonData, true);
 
@@ -230,14 +230,14 @@ void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, 
 
 void SkeletonRenderer::initWithBinaryFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale) {
 	_atlas = new (__FILE__, __LINE__) Atlas(atlasFile.c_str(), &textureLoader, true);
-	CCASSERT(_atlas, "Error reading atlas file.");
+	AXASSERT(_atlas, "Error reading atlas file.");
 
 	_attachmentLoader = new (__FILE__, __LINE__) Cocos2dAtlasAttachmentLoader(_atlas);
 
 	SkeletonBinary binary(_attachmentLoader);
 	binary.setScale(scale);
 	SkeletonData* skeletonData = binary.readSkeletonDataFile(skeletonDataFile.c_str());
-	CCASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
+	AXASSERT(skeletonData, (!binary.getError().isEmpty() ? binary.getError().buffer() : "Error reading skeleton data."));
 	_ownsSkeleton = true;
 	_ownsAtlas = true;
 	setSkeletonData(skeletonData, true);

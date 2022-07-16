@@ -97,7 +97,7 @@ public:
      */
     Ref* autorelease()
     {
-        CCASSERT(false,
+        AXASSERT(false,
                  "HttpResponse is used between network thread and ui thread \
                  therefore, autorelease is forbidden here");
         return nullptr;

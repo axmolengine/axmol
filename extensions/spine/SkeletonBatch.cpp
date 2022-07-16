@@ -169,7 +169,7 @@ axis::TrianglesCommand* SkeletonBatch::addCommand(axis::Renderer* renderer, floa
 	if (programState == nullptr)
 		programState = _programState;
 
-	CCASSERT(programState, "programState should not be null");
+	AXASSERT(programState, "programState should not be null");
 
 	auto pipelinePS = updateCommandPipelinePS(command, programState);
 	

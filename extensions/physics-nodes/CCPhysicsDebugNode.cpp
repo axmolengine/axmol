@@ -205,7 +205,7 @@ static void DrawConstraint(cpConstraint* constraint, DrawNode* renderer)
     }
     else
     {
-        CCLOG("Cannot draw constraint");
+        AXLOG("Cannot draw constraint");
     }
 }
 

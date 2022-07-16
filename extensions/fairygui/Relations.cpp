@@ -23,7 +23,7 @@ void Relations::add(GObject * target, RelationType relationType)
 
 void Relations::add(GObject * target, RelationType relationType, bool usePercent)
 {
-    CCASSERT(target, "target is null");
+    AXASSERT(target, "target is null");
 
     for (auto it = _items.begin(); it != _items.end(); ++it)
     {

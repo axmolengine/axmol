@@ -36,7 +36,7 @@ EventListenerFocus::EventListenerFocus() : onFocusChanged(nullptr) {}
 
 EventListenerFocus::~EventListenerFocus()
 {
-    CCLOGINFO("In the destructor of EventListenerFocus, %p", this);
+    AXLOGINFO("In the destructor of EventListenerFocus, %p", this);
 }
 
 EventListenerFocus* EventListenerFocus::create()
@@ -84,7 +84,7 @@ bool EventListenerFocus::checkAvailable()
 {
     if (onFocusChanged == nullptr)
     {
-        CCASSERT(false, "Invalid EventListenerFocus!");
+        AXASSERT(false, "Invalid EventListenerFocus!");
         return false;
     }
 

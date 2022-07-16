@@ -69,7 +69,7 @@ bool LinuxInputBox(std::string& entryLine)
         didChange = true;
         break;
     default:
-        // CCLOG("Undefined. Perhaps dialog was closed");
+        // AXLOG("Undefined. Perhaps dialog was closed");
         break;
     }
 

@@ -69,5 +69,5 @@ bool UITextBMFontTest::init()
 void UITextBMFontTest::printWidgetResources(axis::Ref* sender)
 {
     axis::ResourceData textureFile = _textBMFont->getRenderFile();
-    CCLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
+    AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }

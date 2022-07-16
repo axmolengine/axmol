@@ -45,7 +45,7 @@ TMXLayerInfo::TMXLayerInfo() : _name(""), _tiles(nullptr), _ownTiles(true) {}
 
 TMXLayerInfo::~TMXLayerInfo()
 {
-    CCLOGINFO("deallocing TMXLayerInfo: %p", this);
+    AXLOGINFO("deallocing TMXLayerInfo: %p", this);
     if (_ownTiles && _tiles)
     {
         free(_tiles);
@@ -69,7 +69,7 @@ TMXTilesetInfo::TMXTilesetInfo() : _firstGid(0), _tileSize(Vec2::ZERO), _spacing
 
 TMXTilesetInfo::~TMXTilesetInfo()
 {
-    CCLOGINFO("deallocing TMXTilesetInfo: %p", this);
+    AXLOGINFO("deallocing TMXTilesetInfo: %p", this);
 }
 
 Rect TMXTilesetInfo::getRectForGID(uint32_t gid)
@@ -168,7 +168,7 @@ TMXMapInfo::TMXMapInfo()
 
 TMXMapInfo::~TMXMapInfo()
 {
-    CCLOGINFO("deallocing TMXMapInfo: %p", this);
+    AXLOGINFO("deallocing TMXMapInfo: %p", this);
 }
 
 bool TMXMapInfo::parseXMLString(std::string_view xmlString)
@@ -221,7 +221,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
     if (elementName == "map")
     {
         std::string version = attributeDict["version"].asString();
-        CCLOG("cocos2d: TMXFormat: TMX version: %s", version.c_str());
+        AXLOG("cocos2d: TMXFormat: TMX version: %s", version.c_str());
 
         std::string orientationStr = attributeDict["orientation"].asString();
         if (orientationStr == "orthogonal")
@@ -242,7 +242,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         }
         else
         {
-            CCLOG("cocos2d: TMXFomat: Unsupported orientation: %d", tmxMapInfo->getOrientation());
+            AXLOG("cocos2d: TMXFomat: Unsupported orientation: %d", tmxMapInfo->getOrientation());
         }
 
         std::string staggerAxisStr = attributeDict["staggeraxis"].asString();
@@ -467,7 +467,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
                 layerAttribs = tmxMapInfo->getLayerAttribs();
                 tmxMapInfo->setLayerAttribs(layerAttribs | TMXLayerAttribZlib);
             }
-            CCASSERT(compression == "" || compression == "gzip" || compression == "zlib",
+            AXASSERT(compression == "" || compression == "gzip" || compression == "zlib",
                      "TMX: unsupported compression method");
         }
         else if (encoding == "csv")
@@ -525,7 +525,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
     {
         if (tmxMapInfo->getParentElement() == TMXPropertyNone)
         {
-            CCLOG("TMX tile map: Parent element is unsupported. Cannot add property named '%s' with value '%s'",
+            AXLOG("TMX tile map: Parent element is unsupported. Cannot add property named '%s' with value '%s'",
                   attributeDict["name"].asString().c_str(), attributeDict["value"].asString().c_str());
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyMap)
@@ -694,7 +694,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(), &buffer);
             if (!buffer)
             {
-                CCLOG("cocos2d: TiledMap: decode data error");
+                AXLOG("cocos2d: TiledMap: decode data error");
                 return;
             }
 
@@ -706,14 +706,14 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 ssize_t sizeHint = s.width * s.height * sizeof(unsigned int);
 
                 ssize_t AX_UNUSED inflatedLen = ZipUtils::inflateMemoryWithHint(buffer, len, &deflated, sizeHint);
-                CCASSERT(inflatedLen == sizeHint, "inflatedLen should be equal to sizeHint!");
+                AXASSERT(inflatedLen == sizeHint, "inflatedLen should be equal to sizeHint!");
 
                 free(buffer);
                 buffer = nullptr;
 
                 if (!deflated)
                 {
-                    CCLOG("cocos2d: TiledMap: inflate data error");
+                    AXLOG("cocos2d: TiledMap: inflate data error");
                     return;
                 }
 
@@ -753,7 +753,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             buffer = (unsigned char*)malloc(gidTokens.size() * 4);
             if (!buffer)
             {
-                CCLOG("cocos2d: TiledMap: CSV buffer not allocated.");
+                AXLOG("cocos2d: TiledMap: CSV buffer not allocated.");
                 return;
             }
 

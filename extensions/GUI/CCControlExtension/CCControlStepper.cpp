@@ -70,8 +70,8 @@ bool ControlStepper::initWithMinusSpriteAndPlusSprite(Sprite* minusSprite, Sprit
 {
     if (Control::init())
     {
-        CCASSERT(minusSprite, "Minus sprite must be not nil");
-        CCASSERT(plusSprite, "Plus sprite must be not nil");
+        AXASSERT(minusSprite, "Minus sprite must be not nil");
+        AXASSERT(plusSprite, "Plus sprite must be not nil");
 
         // Set the default values
         _autorepeat   = true;
@@ -148,7 +148,7 @@ void ControlStepper::setMinimumValue(double minimumValue)
 {
     if (minimumValue >= _maximumValue)
     {
-        CCASSERT(0, "Must be numerically less than maximumValue.");
+        AXASSERT(0, "Must be numerically less than maximumValue.");
     }
 
     _minimumValue = minimumValue;
@@ -159,7 +159,7 @@ void ControlStepper::setMaximumValue(double maximumValue)
 {
     if (maximumValue <= _minimumValue)
     {
-        CCASSERT(0, "Must be numerically greater than minimumValue.");
+        AXASSERT(0, "Must be numerically greater than minimumValue.");
     }
 
     _maximumValue = maximumValue;
@@ -180,7 +180,7 @@ void ControlStepper::setStepValue(double stepValue)
 {
     if (stepValue <= 0)
     {
-        CCASSERT(0, "Must be numerically greater than 0.");
+        AXASSERT(0, "Must be numerically greater than 0.");
     }
 
     _stepValue = stepValue;

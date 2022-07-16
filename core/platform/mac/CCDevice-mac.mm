@@ -281,8 +281,8 @@ static bool _initWithString(const char* text,
 {
     bool ret = false;
 
-    CCASSERT(text, "Invalid text");
-    CCASSERT(info, "Invalid info");
+    AXASSERT(text, "Invalid text");
+    AXASSERT(info, "Invalid info");
 
     do
     {

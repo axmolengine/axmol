@@ -50,14 +50,14 @@ DrawNodeTest::DrawNodeTest()
     addChild(draw, 10);
 
     draw->drawPoint(Vec2(s.width / 2 - 120, s.height / 2 - 120), 10,
-                    Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+                    Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
     draw->drawPoint(Vec2(s.width / 2 + 120, s.height / 2 + 120), 10,
-                    Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+                    Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
     // draw 4 small points
     Vec2 position[] = {Vec2(60, 60), Vec2(70, 70), Vec2(60, 70), Vec2(70, 60)};
-    draw->drawPoints(position, 4, 5, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+    draw->drawPoints(position, 4, 5, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
     // draw a line
     draw->drawLine(Vec2(0, 0), Vec2(s.width, s.height), Color4F(1.0, 0.0, 0.0, 0.5));
@@ -66,30 +66,30 @@ DrawNodeTest::DrawNodeTest()
     draw->drawRect(Vec2(23, 23), Vec2(7, 7), Color4F(1, 1, 0, 1));
 
     draw->drawRect(Vec2(15, 30), Vec2(30, 15), Vec2(15, 0), Vec2(0, 15),
-                   Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+                   Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 
     // draw a circle
     draw->drawCircle(VisibleRect::center() + Vec2(140, 0), 100, AX_DEGREES_TO_RADIANS(90), 50, true, 1.0f, 2.0f,
                      Color4F(1.0f, 0.0f, 0.0f, 0.5f));
 
     draw->drawCircle(VisibleRect::center() - Vec2(140, 0), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                     Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     // Draw some beziers
     draw->drawQuadBezier(Vec2(s.width - 150, s.height - 150), Vec2(s.width - 70, s.height - 10),
                          Vec2(s.width - 10, s.height - 10), 10,
-                         Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+                         Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     draw->drawQuadBezier(Vec2(0.0f, s.height), Vec2(s.width / 2, s.height / 2), Vec2(s.width, s.height), 50,
-                         Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+                         Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     draw->drawCubicBezier(VisibleRect::center(), Vec2(VisibleRect::center().x + 30, VisibleRect::center().y + 50),
                           Vec2(VisibleRect::center().x + 60, VisibleRect::center().y - 50), VisibleRect::right(), 100,
-                          Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     draw->drawCubicBezier(Vec2(s.width - 250, 40.0f), Vec2(s.width - 70, 100.0f), Vec2(s.width - 30, 250.0f),
                           Vec2(s.width - 10, s.height - 50), 10,
-                          Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+                          Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     auto array = PointArray::create(20);
     array->addControlPoint(Vec2(0.0f, 0.0f));
@@ -99,7 +99,7 @@ DrawNodeTest::DrawNodeTest()
     array->addControlPoint(Vec2(80.0f, s.height - 80));
     array->addControlPoint(Vec2(80.0f, 80.0f));
     array->addControlPoint(Vec2(s.width / 2, s.height / 2));
-    draw->drawCardinalSpline(array, 0.5f, 50, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+    draw->drawCardinalSpline(array, 0.5f, 50, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     auto array2 = PointArray::create(20);
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
@@ -107,22 +107,22 @@ DrawNodeTest::DrawNodeTest()
     array2->addControlPoint(Vec2(s.width - 80, s.height - 80));
     array2->addControlPoint(Vec2(s.width / 2, s.height - 80));
     array2->addControlPoint(Vec2(s.width / 2, 30.0f));
-    draw->drawCatmullRom(array2, 50, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+    draw->drawCatmullRom(array2, 50, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     // open random color poly
     Vec2 vertices[] = {Vec2(0.0f, 0.0f), Vec2(50.0f, 50.0f), Vec2(100.0f, 50.0f), Vec2(100.0f, 100.0f),
                        Vec2(50.0f, 100.0f)};
-    draw->drawPoly(vertices, 5, false, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+    draw->drawPoly(vertices, 5, false, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     // closed random color poly
     Vec2 vertices2[] = {Vec2(30.0f, 130.0f), Vec2(30.0f, 230.0f), Vec2(50.0f, 200.0f)};
-    draw->drawPoly(vertices2, 3, true, Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+    draw->drawPoly(vertices2, 3, true, Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
     // Draw 10 circles
     for (int i = 0; i < 10; i++)
     {
         draw->drawDot(Vec2(s.width / 2, s.height / 2), 10 * (10 - i),
-                      Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
 
     // Draw polygons
@@ -184,12 +184,12 @@ DrawNodeTest::DrawNodeTest()
 
     // Draw triangle
     draw->drawTriangle(Vec2(10.0f, 10.0f), Vec2(70.0f, 30.0f), Vec2(100.0f, 140.0f),
-                       Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 0.5f));
+                       Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 0.5f));
 
     for (int i = 0; i < 100; i++)
     {
         draw->drawPoint(Vec2(i * 7.0f, 5.0f), (float)i / 5 + 1,
-                        Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1.0f));
+                        Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     }
 
     auto draw1 = DrawNode::create();
@@ -223,10 +223,10 @@ Issue11942Test::Issue11942Test()
     // draw a circle
     draw->setLineWidth(1);
     draw->drawCircle(VisibleRect::center() - Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                     Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
     draw->setLineWidth(10);
     draw->drawCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                     Color4F(CCRANDOM_0_1(), CCRANDOM_0_1(), CCRANDOM_0_1(), 1));
+                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 }
 
 string Issue11942Test::title() const

@@ -194,7 +194,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithContent(std::string_
     doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
-        CCLOG("GetParseError %d\n", doc.GetParseError());
+        AXLOG("GetParseError %d\n", doc.GetParseError());
     }
 
     const rapidjson::Value& json = DICTOOL->getSubDictionary_json(doc, ACTION);
@@ -599,7 +599,7 @@ Timeline* ActionTimelineCache::loadTimelineWithFlatBuffers(const flatbuffers::Ti
 
             if (!frame)
             {
-                CCLOG("frame is invalid.");
+                AXLOG("frame is invalid.");
                 continue;
             }
             timeline->addFrame(frame);

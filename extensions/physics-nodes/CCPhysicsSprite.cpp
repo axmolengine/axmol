@@ -205,7 +205,7 @@ cpBody* PhysicsSprite::getCPBody() const
 #    if AX_ENABLE_CHIPMUNK_INTEGRATION
     return _CPBody;
 #    else
-    CCASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
+    AXASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
     return nullptr;
 #    endif
 }
@@ -215,7 +215,7 @@ void PhysicsSprite::setCPBody(cpBody* pBody)
 #    if AX_ENABLE_CHIPMUNK_INTEGRATION
     _CPBody = pBody;
 #    else
-    CCASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
+    AXASSERT(false, "Can't call chipmunk methods when Chipmunk is disabled");
 #    endif
 }
 
@@ -224,7 +224,7 @@ b2Body* PhysicsSprite::getB2Body() const
 #    if AX_ENABLE_BOX2D_INTEGRATION
     return _pB2Body;
 #    else
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
+    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
     return nullptr;
 #    endif
 }
@@ -235,7 +235,7 @@ void PhysicsSprite::setB2Body(b2Body* pBody)
     _pB2Body = pBody;
 #    else
     AX_UNUSED_PARAM(pBody);
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
+    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
 #    endif
 }
 
@@ -244,7 +244,7 @@ float PhysicsSprite::getPTMRatio() const
 #    if AX_ENABLE_BOX2D_INTEGRATION
     return _PTMRatio;
 #    else
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
+    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
     return 0;
 #    endif
 }
@@ -255,7 +255,7 @@ void PhysicsSprite::setPTMRatio(float fRatio)
     _PTMRatio = fRatio;
 #    else
     AX_UNUSED_PARAM(fRatio);
-    CCASSERT(false, "Can't call box2d methods when Box2d is disabled");
+    AXASSERT(false, "Can't call box2d methods when Box2d is disabled");
 #    endif
 }
 

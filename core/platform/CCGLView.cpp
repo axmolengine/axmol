@@ -173,7 +173,7 @@ void GLView::updateDesignResolutionSize()
 
 void GLView::setDesignResolutionSize(float width, float height, ResolutionPolicy resolutionPolicy)
 {
-    CCASSERT(resolutionPolicy != ResolutionPolicy::UNKNOWN, "should set resolutionPolicy");
+    AXASSERT(resolutionPolicy != ResolutionPolicy::UNKNOWN, "should set resolutionPolicy");
 
     if (width == 0.0f || height == 0.0f)
     {
@@ -313,7 +313,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             // The touches is more than MAX_TOUCHES ?
             if (unusedIndex == -1)
             {
-                CCLOG("The touches is more than MAX_TOUCHES, unusedIndex = %d", unusedIndex);
+                AXLOG("The touches is more than MAX_TOUCHES, unusedIndex = %d", unusedIndex);
                 continue;
             }
 
@@ -321,7 +321,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             touch->setTouchInfo(unusedIndex, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
-            CCLOGINFO("x = %f y = %f", touch->getLocationInView().x, touch->getLocationInView().y);
+            AXLOGINFO("x = %f y = %f", touch->getLocationInView().x, touch->getLocationInView().y);
 
             g_touchIdReorderMap.emplace(id, unusedIndex);
             touchEvent._touches.push_back(touch);
@@ -330,7 +330,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
 
     if (touchEvent._touches.empty())
     {
-        CCLOG("touchesBegan: size = 0");
+        AXLOG("touchesBegan: size = 0");
         return;
     }
 
@@ -364,11 +364,11 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
         {
-            CCLOG("if the index doesn't exist, it is an error");
+            AXLOG("if the index doesn't exist, it is an error");
             continue;
         }
 
-        CCLOGINFO("Moving touches with id: %d, x=%f, y=%f, force=%f, maxFource=%f", (int)id, x, y, force, maxForce);
+        AXLOGINFO("Moving touches with id: %d, x=%f, y=%f, force=%f, maxFource=%f", (int)id, x, y, force, maxForce);
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
@@ -380,14 +380,14 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
         else
         {
             // It is error, should return.
-            CCLOG("Moving touches with id: %d error", static_cast<int32_t>(id));
+            AXLOG("Moving touches with id: %d error", static_cast<int32_t>(id));
             return;
         }
     }
 
     if (touchEvent._touches.empty())
     {
-        CCLOG("touchesMoved: size = 0");
+        AXLOG("touchesMoved: size = 0");
         return;
     }
 
@@ -416,7 +416,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
         {
-            CCLOG("if the index doesn't exist, it is an error");
+            AXLOG("if the index doesn't exist, it is an error");
             continue;
         }
 
@@ -424,7 +424,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         Touch* touch = g_touches[iter->second];
         if (touch)
         {
-            CCLOGINFO("Ending touches with id: %d, x=%f, y=%f", (int)id, x, y);
+            AXLOGINFO("Ending touches with id: %d, x=%f, y=%f", (int)id, x, y);
             touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
@@ -437,14 +437,14 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
         }
         else
         {
-            CCLOG("Ending touches with id: %d error", static_cast<int32_t>(id));
+            AXLOG("Ending touches with id: %d error", static_cast<int32_t>(id));
             return;
         }
     }
 
     if (touchEvent._touches.empty())
     {
-        CCLOG("touchesEnded or touchesCancel: size = 0");
+        AXLOG("touchesEnded or touchesCancel: size = 0");
         return;
     }
 
@@ -491,8 +491,8 @@ float GLView::getScaleY() const
 
 void GLView::renderScene(Scene* scene, Renderer* renderer)
 {
-    CCASSERT(scene, "Invalid Scene");
-    CCASSERT(renderer, "Invalid Renderer");
+    AXASSERT(scene, "Invalid Scene");
+    AXASSERT(renderer, "Invalid Renderer");
 
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }

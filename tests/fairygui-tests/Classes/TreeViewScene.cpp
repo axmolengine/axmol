@@ -59,7 +59,7 @@ void TreeViewScene::continueInit()
 void TreeViewScene::onClickNode(EventContext* context)
 {
     GTreeNode* node = ((GObject*)context->getData())->treeNode();
-    CCLOG("click node %s", node->getText().c_str());
+    AXLOG("click node %s", node->getText().c_str());
 }
 
 void TreeViewScene::renderTreeNode(GTreeNode* node, GComponent* obj)

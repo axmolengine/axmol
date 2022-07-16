@@ -402,8 +402,8 @@ void HoleDemo::setup()
 
 void HoleDemo::pokeHoleAtPoint(Vec2 point)
 {
-    float scale    = CCRANDOM_0_1() * 0.2 + 0.9;
-    float rotation = CCRANDOM_0_1() * 360;
+    float scale    = AXRANDOM_0_1() * 0.2 + 0.9;
+    float rotation = AXRANDOM_0_1() * 360;
 
     auto hole = Sprite::create("Images/hole_effect.png");
     hole->setPosition(point);
@@ -632,7 +632,7 @@ void RawStencilBufferTest::draw(Renderer* renderer, const Mat4& transform, uint3
         cmdIndex++;
 
         Director* director = Director::getInstance();
-        CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+        AXASSERT(nullptr != director, "Director is null when setting matrix stack");
         director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
         _modelViewTransform = this->transform(transform);

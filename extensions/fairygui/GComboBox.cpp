@@ -307,12 +307,12 @@ void GComboBox::constructExtension(ByteBuffer* buffer)
     if (!dropdown.empty())
     {
         _dropdown = dynamic_cast<GComponent*>(UIPackage::createObjectFromURL(dropdown));
-        CCASSERT(_dropdown != nullptr, "FairyGUI: should be a component.");
+        AXASSERT(_dropdown != nullptr, "FairyGUI: should be a component.");
 
         _dropdown->retain();
 
         _list = dynamic_cast<GList*>(_dropdown->getChild("list"));
-        CCASSERT(_list != nullptr, "FairyGUI: should container a list component named list.");
+        AXASSERT(_list != nullptr, "FairyGUI: should container a list component named list.");
 
         _list->addEventListener(UIEventType::ClickItem, AX_CALLBACK_1(GComboBox::onClickItem, this));
 

@@ -88,17 +88,17 @@ ParallaxNode* ParallaxNode::create()
 
 void ParallaxNode::addChild(Node* /*child*/, int /*zOrder*/, int /*tag*/)
 {
-    CCASSERT(0, "ParallaxNode: use addChild:z:parallaxRatio:positionOffset instead");
+    AXASSERT(0, "ParallaxNode: use addChild:z:parallaxRatio:positionOffset instead");
 }
 
 void ParallaxNode::addChild(Node* /*child*/, int /*zOrder*/, std::string_view /*name*/)
 {
-    CCASSERT(0, "ParallaxNode: use addChild:z:parallaxRatio:positionOffset instead");
+    AXASSERT(0, "ParallaxNode: use addChild:z:parallaxRatio:positionOffset instead");
 }
 
 void ParallaxNode::addChild(Node* child, int z, const Vec2& ratio, const Vec2& offset)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
     PointObject* obj = PointObject::create(ratio, offset);
     obj->setChild(child);
     ccArrayAppendObjectWithResize(_parallaxArray, (Ref*)obj);

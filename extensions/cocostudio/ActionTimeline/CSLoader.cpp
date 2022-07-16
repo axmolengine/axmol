@@ -451,7 +451,7 @@ Node* CSLoader::loadNodeWithContent(std::string_view content)
     doc.Parse<0>(content.data(), content.length());
     if (doc.HasParseError())
     {
-        CCLOG("GetParseError %d\n", doc.GetParseError());
+        AXLOG("GetParseError %d\n", doc.GetParseError());
     }
 
     // cocos2dx version mono editor is based on
@@ -566,7 +566,7 @@ Node* CSLoader::loadNode(const rapidjson::Value& json)
     }
     else
     {
-        CCLOG("Not supported NodeType: %s", nodeType.c_str());
+        AXLOG("Not supported NodeType: %s", nodeType.c_str());
     }
 
     return node;
@@ -688,7 +688,7 @@ Node* CSLoader::loadSprite(const rapidjson::Value& json)
         if (!sprite)
         {
             sprite = Sprite::create();
-            CCLOG("filePath is empty. Create a sprite with no texture");
+            AXLOG("filePath is empty. Create a sprite with no texture");
         }
     }
     else
@@ -798,14 +798,14 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                CCLOG("GetParseError %d\n", customJsonDict.GetParseError());
+                AXLOG("GetParseError %d\n", customJsonDict.GetParseError());
             }
 
             widgetPropertiesReader.setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
         }
         else
         {
-            CCLOG("Widget or WidgetReader doesn't exists!!!  Please check your protocol buffers file.");
+            AXLOG("Widget or WidgetReader doesn't exists!!!  Please check your protocol buffers file.");
         }
     }
 
@@ -934,7 +934,7 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
                 }
             });
 
-            CCASSERT(readerVersion >= writterVersion,
+            AXASSERT(readerVersion >= writterVersion,
                      StringUtils::format(
                          "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
                          ") and the reader build id in your axis(", loader->_csBuildID.c_str(),
@@ -946,7 +946,7 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
         // decode plist
         auto textures   = csparsebinary->textures();
         int textureSize = csparsebinary->textures()->size();
-        CCLOG("textureSize = %d", textureSize);
+        AXLOG("textureSize = %d", textureSize);
         for (int i = 0; i < textureSize; ++i)
         {
             std::string plist = textures->Get(i)->c_str();
@@ -985,12 +985,12 @@ inline void CSLoader::reconstructNestNode(axis::Node* node)
         if (_callbackHandlers.empty())
         {
             _rootNode = nullptr;
-            CCLOG("Call back handler container has been clear.");
+            AXLOG("Call back handler container has been clear.");
         }
         else
         {
             _rootNode = _callbackHandlers.back();
-            CCLOG("after pop back _rootNode name = %s", _rootNode->getName().data());
+            AXLOG("after pop back _rootNode name = %s", _rootNode->getName().data());
         }
     }
 }
@@ -1010,7 +1010,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
 
     if (buf.isNull())
     {
-        CCLOG("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.data());
+        AXLOG("CSLoader::nodeWithFlatBuffersFile - failed read file: %s", fileName.data());
         AX_ASSERT(false);
         return nullptr;
     }
@@ -1051,7 +1051,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
             }
         });
 
-        CCASSERT(readerVersion >= writterVersion,
+        AXASSERT(readerVersion >= writterVersion,
                  StringUtils::format(
                      "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
                      ") and the reader build id in your axis(", _csBuildID.c_str(), ") are not match.\n",
@@ -1288,7 +1288,7 @@ bool CSLoader::bindCallback(std::string_view callbackName,
         }
     }
 
-    CCLOG("callBackName %s cannot be found", callbackName.data());
+    AXLOG("callBackName %s cannot be found", callbackName.data());
 
     return false;
 }
@@ -1436,7 +1436,7 @@ Node* CSLoader::createNodeWithFlatBuffersForSimulator(std::string_view filename)
     // decode plist
     auto textures   = csparsebinary->textures();
     int textureSize = csparsebinary->textures()->size();
-    //    CCLOG("textureSize = %d", textureSize);
+    //    AXLOG("textureSize = %d", textureSize);
     for (int i = 0; i < textureSize; ++i)
     {
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(textures->Get(i)->c_str());

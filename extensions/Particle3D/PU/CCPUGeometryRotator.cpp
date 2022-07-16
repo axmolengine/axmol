@@ -110,14 +110,14 @@ void PUGeometryRotator::initParticleForEmission(PUParticle3D* particle)
         if (!_rotationAxisSet)
         {
             // Set initial random rotation axis and orientation(PU 1.4)
-            particle->orientation.x = CCRANDOM_MINUS1_1();
-            particle->orientation.y = CCRANDOM_MINUS1_1();
-            particle->orientation.z = CCRANDOM_MINUS1_1();
-            particle->orientation.w = CCRANDOM_MINUS1_1();
+            particle->orientation.x = AXRANDOM_MINUS1_1();
+            particle->orientation.y = AXRANDOM_MINUS1_1();
+            particle->orientation.z = AXRANDOM_MINUS1_1();
+            particle->orientation.w = AXRANDOM_MINUS1_1();
             particle->orientation.normalize();
-            particle->rotationAxis.x = CCRANDOM_0_1();
-            particle->rotationAxis.y = CCRANDOM_0_1();
-            particle->rotationAxis.z = CCRANDOM_0_1();
+            particle->rotationAxis.x = AXRANDOM_0_1();
+            particle->rotationAxis.y = AXRANDOM_0_1();
+            particle->rotationAxis.z = AXRANDOM_0_1();
             particle->rotationAxis.normalize();
         }
 

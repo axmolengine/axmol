@@ -89,7 +89,7 @@ int ${signature_name}_set${name}(lua_State* tolua_S)
         return 0;
     }
 
-    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}:${name}",argc, 1);
+    AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}:${name}",argc, 1);
     return 0;
 
 \#if COCOS2D_DEBUG >= 1

@@ -178,7 +178,7 @@ bool BillBoard::calculateBillboardTransform()
             camWorldMat.transformVector(Vec3(0.0f, 0.0f, -1.0f), &camDir);
             break;
         default:
-            CCASSERT(false, "invalid billboard mode");
+            AXASSERT(false, "invalid billboard mode");
             break;
         }
         _modeDirty = false;

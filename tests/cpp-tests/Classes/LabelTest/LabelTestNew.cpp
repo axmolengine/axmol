@@ -397,7 +397,7 @@ LabelFNTHundredLabels::LabelFNTHundredLabels()
 
         auto s = Director::getInstance()->getWinSize();
 
-        auto p = Vec2(CCRANDOM_0_1() * s.width, CCRANDOM_0_1() * s.height);
+        auto p = Vec2(AXRANDOM_0_1() * s.width, AXRANDOM_0_1() * s.height);
         label->setPosition(p);
     }
 }
@@ -422,14 +422,14 @@ LabelFNTMultiLine::LabelFNTMultiLine()
     addChild(label1, 0, kTagBitmapAtlas1);
 
     s = label1->getContentSize();
-    CCLOG("content size: %.2fx%.2f", s.width, s.height);
+    AXLOG("content size: %.2fx%.2f", s.width, s.height);
 
     // Center
     auto label2 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Multi line\nCenter");
     addChild(label2, 0, kTagBitmapAtlas2);
 
     s = label2->getContentSize();
-    CCLOG("content size: %.2fx%.2f", s.width, s.height);
+    AXLOG("content size: %.2fx%.2f", s.width, s.height);
 
     // right
     auto label3 = Label::createWithBMFont("fonts/bitmapFontTest3.fnt", "Multi line\nRight\nThree lines Three");
@@ -437,7 +437,7 @@ LabelFNTMultiLine::LabelFNTMultiLine()
     addChild(label3, 0, kTagBitmapAtlas3);
 
     s = label3->getContentSize();
-    CCLOG("content size: %.2fx%.2f", s.width, s.height);
+    AXLOG("content size: %.2fx%.2f", s.width, s.height);
 
     label1->setPosition(VisibleRect::leftBottom());
     label2->setPosition(VisibleRect::center());
@@ -1525,7 +1525,7 @@ LabelCharMapColorTest::LabelCharMapColorTest()
 
 void LabelCharMapColorTest::actionFinishCallback()
 {
-    CCLOG("Action finished");
+    AXLOG("Action finished");
 }
 
 void LabelCharMapColorTest::step(float dt)
@@ -2498,7 +2498,7 @@ void LabelLayoutBaseTest::valueChanged(axis::Ref* sender, axis::extension::Contr
     //    letterSprite->stopAllActions();
     //    letterSprite->runAction(Sequence::create(moveBy, moveBy->clone()->reverse(), nullptr ));
     //
-    //    CCLOG("label line height = %f", _label->getLineHeight());
+    //    AXLOG("label line height = %f", _label->getLineHeight());
 }
 
 void LabelLayoutBaseTest::updateDrawNodeSize(const axis::Size& drawNodeSize)

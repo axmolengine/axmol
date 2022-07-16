@@ -106,7 +106,7 @@ GTreeNode* GTreeNode::addChild(GTreeNode* child)
 
 GTreeNode* GTreeNode::addChildAt(GTreeNode* child, int index)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
 
     if (child->_parent == this)
     {
@@ -136,7 +136,7 @@ GTreeNode* GTreeNode::addChildAt(GTreeNode* child, int index)
 
 void GTreeNode::removeChild(GTreeNode* child)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
 
     int childIndex = (int)_children.getIndex(child);
     if (childIndex != -1)
@@ -145,7 +145,7 @@ void GTreeNode::removeChild(GTreeNode* child)
 
 void GTreeNode::removeChildAt(int index)
 {
-    CCASSERT(index >= 0 && index < _children.size(), "Invalid child index");
+    AXASSERT(index >= 0 && index < _children.size(), "Invalid child index");
 
     GTreeNode* child = _children.at(index);
     child->_parent = nullptr;
@@ -170,7 +170,7 @@ void GTreeNode::removeChildren(int beginIndex, int endIndex)
 
 GTreeNode* GTreeNode::getChildAt(int index) const
 {
-    CCASSERT(index >= 0 && index < _children.size(), "Invalid child index");
+    AXASSERT(index >= 0 && index < _children.size(), "Invalid child index");
 
     return _children.at(index);
 }
@@ -201,27 +201,27 @@ GTreeNode* GTreeNode::getNextSibling() const
 
 int GTreeNode::getChildIndex(const GTreeNode* child) const
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
 
     return (int)_children.getIndex((GTreeNode*)child);
 }
 
 void GTreeNode::setChildIndex(GTreeNode* child, int index)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
 
     int oldIndex = (int)_children.getIndex(child);
-    CCASSERT(oldIndex != -1, "Not a child of this container");
+    AXASSERT(oldIndex != -1, "Not a child of this container");
 
     moveChild(child, oldIndex, index);
 }
 
 int GTreeNode::setChildIndexBefore(GTreeNode* child, int index)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
 
     int oldIndex = (int)_children.getIndex(child);
-    CCASSERT(oldIndex != -1, "Not a child of this container");
+    AXASSERT(oldIndex != -1, "Not a child of this container");
 
     if (oldIndex < index)
         return moveChild(child, oldIndex, index - 1);
@@ -253,14 +253,14 @@ int GTreeNode::moveChild(GTreeNode* child, int oldIndex, int index)
 
 void GTreeNode::swapChildren(GTreeNode* child1, GTreeNode* child2)
 {
-    CCASSERT(child1 != nullptr, "Argument1 must be non-nil");
-    CCASSERT(child2 != nullptr, "Argument2 must be non-nil");
+    AXASSERT(child1 != nullptr, "Argument1 must be non-nil");
+    AXASSERT(child2 != nullptr, "Argument2 must be non-nil");
 
     int index1 = (int)_children.getIndex(child1);
     int index2 = (int)_children.getIndex(child2);
 
-    CCASSERT(index1 != -1, "Not a child of this container");
-    CCASSERT(index2 != -1, "Not a child of this container");
+    AXASSERT(index1 != -1, "Not a child of this container");
+    AXASSERT(index2 != -1, "Not a child of this container");
 
     swapChildrenAt(index1, index2);
 }

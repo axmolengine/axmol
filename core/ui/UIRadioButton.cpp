@@ -171,7 +171,7 @@ void RadioButtonGroup::addRadioButton(RadioButton* radioButton)
 {
     if (radioButton != nullptr)
     {
-        CCASSERT(!radioButton->_group, "It already belongs to a group!");
+        AXASSERT(!radioButton->_group, "It already belongs to a group!");
         radioButton->_group = this;
         _radioButtons.pushBack(radioButton);
 
@@ -187,7 +187,7 @@ void RadioButtonGroup::removeRadioButton(RadioButton* radioButton)
     ssize_t index = _radioButtons.getIndex(radioButton);
     if (index == AX_INVALID_INDEX)
     {
-        CCLOGERROR("The radio button does not belong to this group!");
+        AXLOGERROR("The radio button does not belong to this group!");
         return;
     }
 
@@ -224,7 +224,7 @@ RadioButton* RadioButtonGroup::getRadioButtonByIndex(int index) const
 {
     if (index >= _radioButtons.size())
     {
-        CCLOGERROR("Out of array index! length=%d, requestedIndex=%d", (int)_radioButtons.size(), index);
+        AXLOGERROR("Out of array index! length=%d, requestedIndex=%d", (int)_radioButtons.size(), index);
         return nullptr;
     }
     return _radioButtons.at(index);
@@ -247,7 +247,7 @@ int RadioButtonGroup::getSelectedButtonIndex() const
 
 void RadioButtonGroup::setSelectedButton(int index)
 {
-    CCASSERT(index < _radioButtons.size(), "Out of array index!");
+    AXASSERT(index < _radioButtons.size(), "Out of array index!");
     setSelectedButton(_radioButtons.at(index));
 }
 
@@ -274,7 +274,7 @@ void RadioButtonGroup::setSelectedButtonWithoutEvent(RadioButton* radioButton)
     }
     if (radioButton != nullptr && !_radioButtons.contains(radioButton))
     {
-        CCLOGERROR("The radio button does not belong to this group!");
+        AXLOGERROR("The radio button does not belong to this group!");
         return;
     }
 

@@ -224,7 +224,7 @@ void Animate3D::startWithTarget(Node* target)
 
         if (!hasCurve)
         {
-            CCLOG("warning: no animation found for the skeleton");
+            AXLOG("warning: no animation found for the skeleton");
         }
     }
 
@@ -434,7 +434,7 @@ void Animate3D::setSpeed(float speed)
 
 void Animate3D::setWeight(float weight)
 {
-    CCASSERT(weight >= 0.0f, "invalid weight");
+    AXASSERT(weight >= 0.0f, "invalid weight");
     _weight = fabsf(weight);
 }
 

@@ -79,7 +79,7 @@ PointArray* PointArray::clone() const
 
 PointArray::~PointArray()
 {
-    CCLOGINFO("deallocing PointArray: %p", this);
+    AXLOGINFO("deallocing PointArray: %p", this);
 }
 
 PointArray::PointArray() {}
@@ -205,7 +205,7 @@ CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray* points, f
 
 bool CardinalSplineTo::initWithDuration(float duration, PointArray* points, float tension)
 {
-    CCASSERT(points->count() > 0, "Invalid configuration. It must at least have one control point");
+    AXASSERT(points->count() > 0, "Invalid configuration. It must at least have one control point");
 
     if (ActionInterval::initWithDuration(duration))
     {

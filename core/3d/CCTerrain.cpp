@@ -246,7 +246,7 @@ bool Terrain::initHeightMap(std::string_view heightMap)
     }
     else
     {
-        CCLOG("warning: the height map size is not POT or POT + 1");
+        AXLOG("warning: the height map size is not POT or POT + 1");
         return false;
     }
 }
@@ -267,7 +267,7 @@ Terrain::Terrain()
 #ifdef AX_USE_METAL
     auto image          = new Image();
     bool AX_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
-    CCASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
+    AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
     _dummyTexture = new Texture2D();
     _dummyTexture->initWithImage(image);
     AX_SAFE_RELEASE(image);
@@ -683,7 +683,7 @@ void Terrain::setDetailMap(unsigned int index, DetailMap detailMap)
 {
     if (index > 4)
     {
-        CCLOG("invalid DetailMap index %d\n", index);
+        AXLOG("invalid DetailMap index %d\n", index);
     }
     _terrainData._detailMaps[index] = detailMap;
     if (_detailMapTextures[index])
@@ -971,7 +971,7 @@ void Terrain::Chunk::bindAndDraw()
     }
 
     auto* renderer = Director::getInstance()->getRenderer();
-    CCASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
+    AXASSERT(_buffer && _chunkIndices._indexBuffer, "buffer should not be nullptr");
     _command.setIndexBuffer(_chunkIndices._indexBuffer, backend::IndexFormat::U_SHORT);
     _command.setVertexBuffer(_buffer);
     _command.getPipelineDescriptor().programState = _terrain->_programState;

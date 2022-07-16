@@ -38,7 +38,7 @@ ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false) {}
 
 ProtectedNode::~ProtectedNode()
 {
-    CCLOGINFO("deallocing ProtectedNode: %p - tag: %i", this, _tag);
+    AXLOGINFO("deallocing ProtectedNode: %p - tag: %i", this, _tag);
     removeAllProtectedChildren();
 }
 
@@ -80,8 +80,8 @@ void ProtectedNode::addProtectedChild(axis::Node* child, int localZOrder)
  */
 void ProtectedNode::addProtectedChild(Node* child, int zOrder, int tag)
 {
-    CCASSERT(child != nullptr, "Argument must be non-nil");
-    CCASSERT(child->getParent() == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->getParent() == nullptr, "child already added. It can't be added again");
 
     if (_protectedChildren.empty())
     {
@@ -118,7 +118,7 @@ void ProtectedNode::addProtectedChild(Node* child, int zOrder, int tag)
 
 Node* ProtectedNode::getProtectedChildByTag(int tag)
 {
-    CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
     for (auto& child : _protectedChildren)
     {
@@ -213,13 +213,13 @@ void ProtectedNode::removeAllProtectedChildrenWithCleanup(bool cleanup)
 
 void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 {
-    CCASSERT(tag != Node::INVALID_TAG, "Invalid tag");
+    AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
     Node* child = this->getProtectedChildByTag(tag);
 
     if (child == nullptr)
     {
-        CCLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
     }
     else
     {
@@ -253,7 +253,7 @@ void ProtectedNode::sortAllProtectedChildren()
 
 void ProtectedNode::reorderProtectedChild(axis::Node* child, int localZOrder)
 {
-    CCASSERT(child != nullptr, "Child must be non-nil");
+    AXASSERT(child != nullptr, "Child must be non-nil");
     _reorderProtectedChildDirty = true;
     child->updateOrderOfArrival();
     child->setLocalZOrder(localZOrder);

@@ -108,7 +108,7 @@ UIPackage* UIPackage::addPackage(const string& assetPath)
 
     if (FileUtils::getInstance()->getContents(assetPath + ".fui", &data) != FileUtils::Status::OK)
     {
-        CCLOGERROR("FairyGUI: cannot load package from '%s'", assetPath.c_str());
+        AXLOGERROR("FairyGUI: cannot load package from '%s'", assetPath.c_str());
         return nullptr;
     }
 
@@ -151,7 +151,7 @@ void UIPackage::removePackage(const string& packageIdOrName)
         pkg->release();
     }
     else
-        CCLOGERROR("FairyGUI: invalid package name or id: %s", packageIdOrName.c_str());
+        AXLOGERROR("FairyGUI: invalid package name or id: %s", packageIdOrName.c_str());
 }
 
 void UIPackage::removeAllPackages()
@@ -171,7 +171,7 @@ GObject* UIPackage::createObject(const string& pkgName, const string& resName)
         return pkg->createObject(resName);
     else
     {
-        CCLOGERROR("FairyGUI: package not found - %s", pkgName.c_str());
+        AXLOGERROR("FairyGUI: package not found - %s", pkgName.c_str());
         return nullptr;
     }
 }
@@ -183,7 +183,7 @@ GObject* UIPackage::createObjectFromURL(const string& url)
         return pi->owner->createObject(pi);
     else
     {
-        CCLOGERROR("FairyGUI: resource not found - %s", url.c_str());
+        AXLOGERROR("FairyGUI: resource not found - %s", url.c_str());
         return nullptr;
     }
 }
@@ -309,7 +309,7 @@ PackageItem* UIPackage::getItemByName(const string& itemName)
 GObject* UIPackage::createObject(const string& resName)
 {
     PackageItem* pi = getItemByName(resName);
-    CCASSERT(pi, StringUtils::format("FairyGUI: resource not found - %s in  %s",
+    AXASSERT(pi, StringUtils::format("FairyGUI: resource not found - %s in  %s",
         resName.c_str(), _name.c_str())
         .c_str());
 
@@ -332,7 +332,7 @@ bool UIPackage::loadPackage(ByteBuffer* buffer)
 {
     if (buffer->readUint() != 0x46475549)
     {
-        CCLOGERROR("FairyGUI: old package format found in '%s'", _assetPath.c_str());
+        AXLOGERROR("FairyGUI: old package format found in '%s'", _assetPath.c_str());
         return false;
     }
 
@@ -613,7 +613,7 @@ void UIPackage::loadAtlas(PackageItem* item)
 #if COCOS2D_VERSION < 0x00031702
         Image::setPNGPremultipliedAlphaEnabled(true);
 #endif
-        CCLOGWARN("FairyGUI: texture '%s' not found in %s", item->file.c_str(), _name.c_str());
+        AXLOGWARN("FairyGUI: texture '%s' not found in %s", item->file.c_str(), _name.c_str());
         return;
     }
 #if COCOS2D_VERSION < 0x00031702

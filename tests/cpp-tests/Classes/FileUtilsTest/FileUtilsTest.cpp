@@ -123,7 +123,7 @@ void TestSearchPath::onEnter()
     if (fp)
     {
         size_t ret = fwrite(szBuf, 1, strlen(szBuf), fp);
-        CCASSERT(ret != 0, "fwrite function returned zero value");
+        AXASSERT(ret != 0, "fwrite function returned zero value");
         fclose(fp);
         if (ret != 0)
             log("Writing file to writable path succeed.");
@@ -977,7 +977,7 @@ void TestIsFileExistAsync::onEnter()
     auto sharedFileUtils = FileUtils::getInstance();
 
     sharedFileUtils->isFileExist("Images/grossini.png", [=](bool isExist) {
-        CCASSERT(std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId(),
+        AXASSERT(std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId(),
                  "Callback should be on cocos thread");
         auto label = Label::createWithSystemFont(
             isExist ? "Images/grossini.png exists" : "Images/grossini.png doesn't exist", "", 20);
@@ -1070,7 +1070,7 @@ void TestFileFuncsAsync::onEnter()
     fclose(out);
 
     sharedFileUtils->isFileExist(filepath, [=](bool exists) {
-        CCASSERT(exists, "File could not be found");
+        AXASSERT(exists, "File could not be found");
         auto label = Label::createWithSystemFont("Test file '__test.test' created", "", 20);
         label->setPosition(x, y * 4);
         this->addChild(label);
@@ -1082,13 +1082,13 @@ void TestFileFuncsAsync::onEnter()
             this->addChild(label);
 
             sharedFileUtils->renameFile(sharedFileUtils->getWritablePath(), filename, filename2, [=](bool success) {
-                CCASSERT(success, "Was not able to properly rename file");
+                AXASSERT(success, "Was not able to properly rename file");
                 auto label = Label::createWithSystemFont("renameFile: Test file renamed to  '__newtest.test'", "", 20);
                 label->setPosition(x, y * 2);
                 this->addChild(label);
 
                 sharedFileUtils->removeFile(sharedFileUtils->getWritablePath() + filename2, [=](bool success) {
-                    CCASSERT(success, "Was not able to remove file");
+                    AXASSERT(success, "Was not able to remove file");
                     auto label = Label::createWithSystemFont("removeFile: Test file removed", "", 20);
                     label->setPosition(x, y * 1);
                     this->addChild(label);
@@ -1130,11 +1130,11 @@ void TestWriteStringAsync::onEnter()
     std::string fullPath     = writablePath + fileName;
 
     FileUtils::getInstance()->writeStringToFile(writeDataStr, fullPath, [=](bool success) {
-        CCASSERT(success, "Write String to data failed");
+        AXASSERT(success, "Write String to data failed");
         writeResult->setString("write success:" + writeDataStr);
 
         FileUtils::getInstance()->getStringFromFile(fullPath, [=](std::string_view value) {
-            CCASSERT(!value.empty(), "String should be readable");
+            AXASSERT(!value.empty(), "String should be readable");
 
             std::string strVal = "read success: ";
             readResult->setString(strVal.append(value));
@@ -1240,12 +1240,12 @@ void TestListFiles::onEnter()
 
     for (int i = 0; i < listFonts.size(); i++)
     {
-        CCLOG("fonts/ %d: \t %s", i, listFonts[i].c_str());
+        AXLOG("fonts/ %d: \t %s", i, listFonts[i].c_str());
     }
 
     for (int i = 0; i < list.size(); i++)
     {
-        CCLOG("defResRootPath %d: \t %s", i, list[i].c_str());
+        AXLOG("defResRootPath %d: \t %s", i, list[i].c_str());
     }
 
     cntLabel->setString(cntBuffer);

@@ -248,7 +248,7 @@ void Pass::onAfterVisitCmd(MeshCommand* command)
 
 Node* Pass::getTarget() const
 {
-    CCASSERT(_technique && _technique->_material, "Pass must have a Technique and Material");
+    AXASSERT(_technique && _technique->_material, "Pass must have a Technique and Material");
 
     Material* material = _technique->_material;
     return material->_target;

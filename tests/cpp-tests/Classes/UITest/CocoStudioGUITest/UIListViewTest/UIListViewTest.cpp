@@ -234,7 +234,7 @@ void UIListViewTest_Vertical::update(float dt)
             {
                 int itemID = item->getTag() - (int)items.size();
                 item->setPositionY(item->getPositionY() + _reuseItemOffset);
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -245,7 +245,7 @@ void UIListViewTest_Vertical::update(float dt)
 
                 item->setPositionY(item->getPositionY() - _reuseItemOffset);
                 int itemID = item->getTag() + (int)items.size();
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -282,10 +282,10 @@ void UIListViewTest_Vertical::selectedItemEventScrollView(Ref* pSender, ui::Scro
     switch (type)
     {
     case ui::ScrollView::EventType::SCROLL_TO_BOTTOM:
-        CCLOG("SCROLL_TO_BOTTOM");
+        AXLOG("SCROLL_TO_BOTTOM");
         break;
     case ui::ScrollView::EventType::SCROLL_TO_TOP:
-        CCLOG("SCROLL_TO_TOP");
+        AXLOG("SCROLL_TO_TOP");
         break;
     default:
         break;
@@ -438,7 +438,7 @@ void UIListViewTest_Horizontal::update(float dt)
             {
                 int itemID = item->getTag() + (int)items.size();
                 item->setPositionX(item->getPositionX() + _reuseItemOffset);
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -450,7 +450,7 @@ void UIListViewTest_Horizontal::update(float dt)
 
                 item->setPositionX(item->getPositionX() - _reuseItemOffset);
                 int itemID = item->getTag() - (int)items.size();
-                CCLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
+                AXLOG("itemPos = %f, itemID = %d, templateID = %d", itemPos, itemID, i);
                 this->updateItem(itemID, i);
             }
         }
@@ -1028,7 +1028,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 0)
         {
             int left = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Left Padding: %d", left);
+            AXLOG("Left Padding: %d", left);
             _listView->setLeftPadding(left);
             _paddingLabels[0]->setString(StringUtils::format("Left\nPadding=%d", left));
         }
@@ -1036,7 +1036,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 1)
         {
             int top = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Top Padding: %d", top);
+            AXLOG("Top Padding: %d", top);
             _listView->setTopPadding(top);
             _paddingLabels[1]->setString(StringUtils::format("Top\nPadding=%d", top));
         }
@@ -1044,7 +1044,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 2)
         {
             int right = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Right Padding: %d", right);
+            AXLOG("Right Padding: %d", right);
             _listView->setRightPadding(right);
             _paddingLabels[2]->setString(StringUtils::format("Right\nPadding=%d", right));
         }
@@ -1052,7 +1052,7 @@ void UIListViewTest_Padding::sliderEvent(Ref* pSender, Slider::EventType type)
         if (slider && slider->getTag() == 3)
         {
             int bottom = slider->getPercent() / 100.f * 50.f;
-            CCLOG("Bottom Padding: %d", bottom);
+            AXLOG("Bottom Padding: %d", bottom);
             _listView->setBottomPadding(bottom);
             _paddingLabels[3]->setString(StringUtils::format("Bottom\nPadding=%d", bottom));
         }
