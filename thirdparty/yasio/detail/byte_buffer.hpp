@@ -176,11 +176,11 @@ public:
   {
     _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last,
                         "byte_buffer: out of range!");
-    auto ifirst = (iterator)std::addressof(*first);
-    auto ilast  = (iterator)std::addressof(*last);
-    auto count  = std::distance(ifirst, ilast);
-    if (count > 0)
+    if (first != last)
     {
+      auto ifirst        = (iterator)std::addressof(*first);
+      auto ilast         = (iterator)(std::addressof(*first) + std::distance(first, last));
+      auto count         = std::distance(ifirst, ilast);
       auto insertion_pos = std::distance(_Myfirst, _Where);
       if (_Where == _Mylast)
       {
