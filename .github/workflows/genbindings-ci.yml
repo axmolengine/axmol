@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - dev
-
     paths-ignore:
       - '**.md'
+      
+  workflow_dispatch:
 jobs:
   build:
     runs-on: windows-latest
