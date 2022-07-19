@@ -199,7 +199,7 @@ class TemplateModifier(object):
             file_content = f.read()
             f.close()
 
-            file_content = file_content.replace("#ifndef _DEBUG", "#ifndef COCOS2D_DEBUG")
+            file_content = file_content.replace("#ifndef _DEBUG", "#ifndef AXIS_DEBUG")
             f = open(cpp_path, "w")
             f.write(file_content)
             f.close()

@@ -2,7 +2,7 @@
 
 [![dev](https://img.shields.io/github/v/release/axis-project/axis?include_prereleases&label=release)](https://github.com/axis-project/axis/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axis-project/axis/blob/master/LICENSE)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1c5628dea478449ea0c6e1b0e30c3be9)](https://app.codacy.com/gh/axis-project/axis?utm_source=github.com&utm_medium=referral&utm_content=axis-project/axis&utm_campaign=Badge_Grade_Settings)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axis-project/axis/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axis-project/axis&amp;utm_campaign=Badge_Grade)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axis-project/axis/pulls)
   
 [![Windows Build Status](https://github.com/axis-project/axis/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axis-project/axis/actions/workflows/windows-ci.yml)

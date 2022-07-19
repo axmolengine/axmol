@@ -38,18 +38,18 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok                     = true;
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.NavMeshAgent", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_move'", nullptr);
@@ -79,7 +79,7 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.NavMeshAgent:move");
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
         if (!toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -106,7 +106,7 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:move", argc, 1);
     return 0;
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_navmesh_NavMeshAgent_move'.", &tolua_err);
 #    endif
