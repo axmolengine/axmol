@@ -35,7 +35,7 @@ static int lua_axis_WebView_setOnShouldStartLoading(lua_State* L)
     int argc                   = 0;
     axis::ui::WebView* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "axui.WebView", 0, &tolua_err))
         goto tolua_lerror;
@@ -43,7 +43,7 @@ static int lua_axis_WebView_setOnShouldStartLoading(lua_State* L)
 
     self = static_cast<axis::ui::WebView*>(tolua_tousertype(L, 1, 0));
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_WebView_setOnShouldStartLoading'\n", nullptr);
@@ -55,7 +55,7 @@ static int lua_axis_WebView_setOnShouldStartLoading(lua_State* L)
 
     if (argc == 1)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -78,7 +78,7 @@ static int lua_axis_WebView_setOnShouldStartLoading(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.WebView:setOnShouldStartLoading",
                argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_WebView_setOnShouldStartLoading'.", &tolua_err);
 #endif
@@ -91,7 +91,7 @@ static int lua_axis_WebView_setOnDidFinishLoading(lua_State* L)
     int argc                   = 0;
     axis::ui::WebView* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "axui.WebView", 0, &tolua_err))
         goto tolua_lerror;
@@ -99,7 +99,7 @@ static int lua_axis_WebView_setOnDidFinishLoading(lua_State* L)
 
     self = static_cast<axis::ui::WebView*>(tolua_tousertype(L, 1, 0));
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_WebView_setOnDidFinishLoading'\n", nullptr);
@@ -111,7 +111,7 @@ static int lua_axis_WebView_setOnDidFinishLoading(lua_State* L)
 
     if (argc == 1)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -133,7 +133,7 @@ static int lua_axis_WebView_setOnDidFinishLoading(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.WebView:setOnDidFinishLoading",
                argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_WebView_setOnDidFinishLoading'.", &tolua_err);
 #endif
@@ -146,7 +146,7 @@ static int lua_axis_WebView_setOnDidFailLoading(lua_State* L)
     int argc                   = 0;
     axis::ui::WebView* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "axui.WebView", 0, &tolua_err))
         goto tolua_lerror;
@@ -154,7 +154,7 @@ static int lua_axis_WebView_setOnDidFailLoading(lua_State* L)
 
     self = static_cast<axis::ui::WebView*>(tolua_tousertype(L, 1, 0));
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_WebView_setOnDidFailLoading'\n", nullptr);
@@ -166,7 +166,7 @@ static int lua_axis_WebView_setOnDidFailLoading(lua_State* L)
 
     if (argc == 1)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -188,7 +188,7 @@ static int lua_axis_WebView_setOnDidFailLoading(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.WebView:setOnDidFailLoading", argc,
                1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_WebView_setOnDidFailLoading'.", &tolua_err);
 #endif

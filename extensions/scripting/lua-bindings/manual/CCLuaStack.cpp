@@ -712,7 +712,7 @@ int LuaStack::luaLoadBuffer(lua_State* L, const char* chunk, int chunkSize, cons
     skipBOM(chunk, chunkSize);
     r = luaL_loadbuffer(L, chunk, chunkSize, chunkName);
 
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
+#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
     if (r)
     {
         switch (r)
