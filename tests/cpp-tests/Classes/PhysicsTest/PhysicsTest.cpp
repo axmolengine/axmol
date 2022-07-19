@@ -1751,9 +1751,8 @@ void PhysicsDemoBug5482::changeBodyCallback(Ref* /*sender*/)
     }
 	
 	// very important to have always _body and sprite in sync (Fix: #712)
-    float rot = node->getRotation();
-    node->setRotation(node->getRotation() - rot); 
-	
+    node->setRotation(AX_DEGREES_TO_RADIANS(_body->getRotation())); 
+
     node->addComponent(_body);
     _bodyInA = !_bodyInA;
 }
