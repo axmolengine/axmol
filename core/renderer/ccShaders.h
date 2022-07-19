@@ -79,8 +79,9 @@ extern AX_DLL const char* CC3D_terrain_frag;
 extern AX_DLL const char* CC3D_terrain_vert;
 
 extern AX_DLL const char* CC2D_quadTexture_frag;
+extern AX_DLL const char* CC2D_quadTexture_vert;
 extern AX_DLL const char* CC2D_quadColor_frag;
-extern AX_DLL const char* CC2D_quad_vert;
+extern AX_DLL const char* CC2D_quadColor_vert;
 
 extern AX_DLL const char* hsv_frag;
 extern AX_DLL const char* dualSampler_hsv_frag;

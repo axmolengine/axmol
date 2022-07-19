@@ -23,7 +23,7 @@
  ****************************************************************************/
  
 
-const char* CC2D_quad_vert = R"(
+const char* CC2D_quadTexture_vert = R"(
                                               
 attribute vec4 a_position;
 attribute vec4 a_color;
@@ -39,6 +39,23 @@ void main()
     ColorOut = a_color;
     TextureCoordOut = a_texCoord;
     TextureCoordOut.y = 1.0 - TextureCoordOut.y;
+    gl_Position = u_MVPMatrix * a_position;
+}
+
+)";
+
+const char* CC2D_quadColor_vert = R"(
+                                              
+attribute vec4 a_position;
+attribute vec4 a_color;
+
+varying vec4 ColorOut;
+
+uniform mat4 u_MVPMatrix;
+
+void main()
+{
+    ColorOut = a_color;
     gl_Position = u_MVPMatrix * a_position;
 }
 
