@@ -10,18 +10,18 @@ int lua_axis_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DShape_getbtShape'", nullptr);
@@ -44,7 +44,7 @@ int lua_axis_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:getbtShape",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_getbtShape'.",&tolua_err);
 #endif
@@ -57,18 +57,18 @@ int lua_axis_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DShape_initSphere'", nullptr);
@@ -94,7 +94,7 @@ int lua_axis_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:initSphere",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_initSphere'.",&tolua_err);
 #endif
@@ -107,18 +107,18 @@ int lua_axis_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DShape_initBox'", nullptr);
@@ -144,7 +144,7 @@ int lua_axis_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:initBox",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_initBox'.",&tolua_err);
 #endif
@@ -157,18 +157,18 @@ int lua_axis_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DShape_initCapsule'", nullptr);
@@ -197,7 +197,7 @@ int lua_axis_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:initCapsule",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_initCapsule'.",&tolua_err);
 #endif
@@ -210,18 +210,18 @@ int lua_axis_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DShape_initCylinder'", nullptr);
@@ -250,7 +250,7 @@ int lua_axis_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:initCylinder",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_initCylinder'.",&tolua_err);
 #endif
@@ -263,18 +263,18 @@ int lua_axis_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DShape*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DShape_getShapeType'", nullptr);
@@ -297,7 +297,7 @@ int lua_axis_physics3d_Physics3DShape_getShapeType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:getShapeType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_getShapeType'.",&tolua_err);
 #endif
@@ -309,11 +309,11 @@ int lua_axis_physics3d_Physics3DShape_createBox(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -334,7 +334,7 @@ int lua_axis_physics3d_Physics3DShape_createBox(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DShape:createBox",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_createBox'.",&tolua_err);
 #endif
@@ -345,11 +345,11 @@ int lua_axis_physics3d_Physics3DShape_createCylinder(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -372,7 +372,7 @@ int lua_axis_physics3d_Physics3DShape_createCylinder(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DShape:createCylinder",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_createCylinder'.",&tolua_err);
 #endif
@@ -383,11 +383,11 @@ int lua_axis_physics3d_Physics3DShape_createConvexHull(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -410,7 +410,7 @@ int lua_axis_physics3d_Physics3DShape_createConvexHull(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DShape:createConvexHull",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_createConvexHull'.",&tolua_err);
 #endif
@@ -421,11 +421,11 @@ int lua_axis_physics3d_Physics3DShape_createCapsule(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -448,7 +448,7 @@ int lua_axis_physics3d_Physics3DShape_createCapsule(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DShape:createCapsule",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_createCapsule'.",&tolua_err);
 #endif
@@ -459,11 +459,11 @@ int lua_axis_physics3d_Physics3DShape_createSphere(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -484,7 +484,7 @@ int lua_axis_physics3d_Physics3DShape_createSphere(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DShape:createSphere",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_createSphere'.",&tolua_err);
 #endif
@@ -496,7 +496,7 @@ int lua_axis_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
     axis::Physics3DShape* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -520,7 +520,7 @@ int lua_axis_physics3d_Physics3DShape_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DShape:Physics3DShape",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DShape_constructor'.",&tolua_err);
 #endif
 
@@ -564,18 +564,18 @@ int lua_axis_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_setUserData'", nullptr);
@@ -602,7 +602,7 @@ int lua_axis_physics3d_Physics3DObject_setUserData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:setUserData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_setUserData'.",&tolua_err);
 #endif
@@ -615,18 +615,18 @@ int lua_axis_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_getUserData'", nullptr);
@@ -649,7 +649,7 @@ int lua_axis_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:getUserData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_getUserData'.",&tolua_err);
 #endif
@@ -662,18 +662,18 @@ int lua_axis_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_getObjType'", nullptr);
@@ -696,7 +696,7 @@ int lua_axis_physics3d_Physics3DObject_getObjType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:getObjType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_getObjType'.",&tolua_err);
 #endif
@@ -709,18 +709,18 @@ int lua_axis_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_setPhysicsWorld'", nullptr);
@@ -746,7 +746,7 @@ int lua_axis_physics3d_Physics3DObject_setPhysicsWorld(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:setPhysicsWorld",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_setPhysicsWorld'.",&tolua_err);
 #endif
@@ -759,18 +759,18 @@ int lua_axis_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_getWorldTransform'", nullptr);
@@ -793,7 +793,7 @@ int lua_axis_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:getWorldTransform",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_getWorldTransform'.",&tolua_err);
 #endif
@@ -806,18 +806,18 @@ int lua_axis_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_getPhysicsWorld'", nullptr);
@@ -840,7 +840,7 @@ int lua_axis_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:getPhysicsWorld",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_getPhysicsWorld'.",&tolua_err);
 #endif
@@ -853,18 +853,18 @@ int lua_axis_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_setMask'", nullptr);
@@ -890,7 +890,7 @@ int lua_axis_physics3d_Physics3DObject_setMask(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:setMask",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_setMask'.",&tolua_err);
 #endif
@@ -903,18 +903,18 @@ int lua_axis_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_getCollisionCallback'", nullptr);
@@ -937,7 +937,7 @@ int lua_axis_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:getCollisionCallback",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_getCollisionCallback'.",&tolua_err);
 #endif
@@ -950,18 +950,18 @@ int lua_axis_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_getMask'", nullptr);
@@ -984,7 +984,7 @@ int lua_axis_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:getMask",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_getMask'.",&tolua_err);
 #endif
@@ -997,18 +997,18 @@ int lua_axis_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
     axis::Physics3DObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DObject_needCollisionCallback'", nullptr);
@@ -1031,7 +1031,7 @@ int lua_axis_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DObject:needCollisionCallback",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DObject_needCollisionCallback'.",&tolua_err);
 #endif
@@ -1073,18 +1073,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setGravity'", nullptr);
@@ -1110,7 +1110,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setGravity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setGravity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setGravity'.",&tolua_err);
 #endif
@@ -1123,18 +1123,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getFriction'", nullptr);
@@ -1157,7 +1157,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getFriction",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getFriction'.",&tolua_err);
 #endif
@@ -1169,15 +1169,15 @@ int lua_axis_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
     int argc = 0;
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setAngularFactor'", nullptr);
@@ -1212,7 +1212,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setAngularFactor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Physics3DRigidBody:setAngularFactor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setAngularFactor'.",&tolua_err);
 #endif
@@ -1225,18 +1225,18 @@ int lua_axis_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_addConstraint'", nullptr);
@@ -1262,7 +1262,7 @@ int lua_axis_physics3d_Physics3DRigidBody_addConstraint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:addConstraint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_addConstraint'.",&tolua_err);
 #endif
@@ -1275,18 +1275,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getRigidBody'", nullptr);
@@ -1309,7 +1309,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getRigidBody",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getRigidBody'.",&tolua_err);
 #endif
@@ -1322,18 +1322,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getTotalForce'", nullptr);
@@ -1356,7 +1356,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getTotalForce",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getTotalForce'.",&tolua_err);
 #endif
@@ -1369,18 +1369,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getConstraintCount'", nullptr);
@@ -1403,7 +1403,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getConstraintCount",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getConstraintCount'.",&tolua_err);
 #endif
@@ -1416,18 +1416,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyCentralForce'", nullptr);
@@ -1453,7 +1453,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyCentralForce(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyCentralForce",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyCentralForce'.",&tolua_err);
 #endif
@@ -1466,18 +1466,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setMassProps'", nullptr);
@@ -1506,7 +1506,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setMassProps(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setMassProps",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setMassProps'.",&tolua_err);
 #endif
@@ -1519,18 +1519,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setFriction'", nullptr);
@@ -1556,7 +1556,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setFriction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setFriction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setFriction'.",&tolua_err);
 #endif
@@ -1569,18 +1569,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setKinematic'", nullptr);
@@ -1606,7 +1606,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setKinematic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setKinematic",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setKinematic'.",&tolua_err);
 #endif
@@ -1619,18 +1619,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setDamping'", nullptr);
@@ -1659,7 +1659,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setDamping(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setDamping",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setDamping'.",&tolua_err);
 #endif
@@ -1672,18 +1672,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyImpulse'", nullptr);
@@ -1712,7 +1712,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyImpulse(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyImpulse",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyImpulse'.",&tolua_err);
 #endif
@@ -1725,18 +1725,18 @@ int lua_axis_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_isKinematic'", nullptr);
@@ -1759,7 +1759,7 @@ int lua_axis_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:isKinematic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_isKinematic'.",&tolua_err);
 #endif
@@ -1772,18 +1772,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyTorque'", nullptr);
@@ -1809,7 +1809,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyTorque(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyTorque",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyTorque'.",&tolua_err);
 #endif
@@ -1822,18 +1822,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setCcdMotionThreshold'", nullptr);
@@ -1859,7 +1859,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setCcdMotionThreshold(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setCcdMotionThreshold",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setCcdMotionThreshold'.",&tolua_err);
 #endif
@@ -1872,18 +1872,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setRollingFriction'", nullptr);
@@ -1909,7 +1909,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setRollingFriction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setRollingFriction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setRollingFriction'.",&tolua_err);
 #endif
@@ -1922,18 +1922,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getCcdMotionThreshold'", nullptr);
@@ -1956,7 +1956,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getCcdMotionThreshold",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getCcdMotionThreshold'.",&tolua_err);
 #endif
@@ -1969,18 +1969,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getLinearFactor'", nullptr);
@@ -2003,7 +2003,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getLinearFactor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getLinearFactor'.",&tolua_err);
 #endif
@@ -2016,18 +2016,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyDamping'", nullptr);
@@ -2053,7 +2053,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyDamping(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyDamping",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyDamping'.",&tolua_err);
 #endif
@@ -2066,18 +2066,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getAngularVelocity'", nullptr);
@@ -2100,7 +2100,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getAngularVelocity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getAngularVelocity'.",&tolua_err);
 #endif
@@ -2113,18 +2113,18 @@ int lua_axis_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_init'", nullptr);
@@ -2151,7 +2151,7 @@ int lua_axis_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_init'.",&tolua_err);
 #endif
@@ -2164,18 +2164,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyTorqueImpulse'", nullptr);
@@ -2201,7 +2201,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyTorqueImpulse(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyTorqueImpulse",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyTorqueImpulse'.",&tolua_err);
 #endif
@@ -2214,18 +2214,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setActive'", nullptr);
@@ -2251,7 +2251,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setActive(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setActive",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setActive'.",&tolua_err);
 #endif
@@ -2264,18 +2264,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setLinearFactor'", nullptr);
@@ -2301,7 +2301,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setLinearFactor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setLinearFactor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setLinearFactor'.",&tolua_err);
 #endif
@@ -2314,18 +2314,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setLinearVelocity'", nullptr);
@@ -2351,7 +2351,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setLinearVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setLinearVelocity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setLinearVelocity'.",&tolua_err);
 #endif
@@ -2364,18 +2364,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getLinearVelocity'", nullptr);
@@ -2398,7 +2398,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getLinearVelocity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getLinearVelocity'.",&tolua_err);
 #endif
@@ -2411,18 +2411,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tol
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius'", nullptr);
@@ -2448,7 +2448,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setCcdSweptSphereRadius",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setCcdSweptSphereRadius'.",&tolua_err);
 #endif
@@ -2461,18 +2461,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyForce'", nullptr);
@@ -2501,7 +2501,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyForce(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyForce",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyForce'.",&tolua_err);
 #endif
@@ -2514,18 +2514,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setAngularVelocity'", nullptr);
@@ -2551,7 +2551,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setAngularVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setAngularVelocity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setAngularVelocity'.",&tolua_err);
 #endif
@@ -2564,18 +2564,18 @@ int lua_axis_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_applyCentralImpulse'", nullptr);
@@ -2601,7 +2601,7 @@ int lua_axis_physics3d_Physics3DRigidBody_applyCentralImpulse(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:applyCentralImpulse",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_applyCentralImpulse'.",&tolua_err);
 #endif
@@ -2614,18 +2614,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getGravity'", nullptr);
@@ -2648,7 +2648,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getGravity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getGravity'.",&tolua_err);
 #endif
@@ -2661,18 +2661,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getRollingFriction'", nullptr);
@@ -2695,7 +2695,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getRollingFriction",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getRollingFriction'.",&tolua_err);
 #endif
@@ -2708,18 +2708,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* to
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setCenterOfMassTransform'", nullptr);
@@ -2745,7 +2745,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setCenterOfMassTransform(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setCenterOfMassTransform",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setCenterOfMassTransform'.",&tolua_err);
 #endif
@@ -2758,18 +2758,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolu
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal'", nullptr);
@@ -2795,7 +2795,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setInvInertiaDiagLocal",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setInvInertiaDiagLocal'.",&tolua_err);
 #endif
@@ -2807,15 +2807,15 @@ int lua_axis_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
     int argc = 0;
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_removeConstraint'", nullptr);
@@ -2850,7 +2850,7 @@ int lua_axis_physics3d_Physics3DRigidBody_removeConstraint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Physics3DRigidBody:removeConstraint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_removeConstraint'.",&tolua_err);
 #endif
@@ -2863,18 +2863,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getTotalTorque'", nullptr);
@@ -2897,7 +2897,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getTotalTorque",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getTotalTorque'.",&tolua_err);
 #endif
@@ -2910,18 +2910,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getInvMass'", nullptr);
@@ -2944,7 +2944,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getInvMass",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getInvMass'.",&tolua_err);
 #endif
@@ -2957,18 +2957,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
@@ -2994,7 +2994,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getConstraint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getConstraint'.",&tolua_err);
 #endif
@@ -3007,18 +3007,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getRestitution'", nullptr);
@@ -3041,7 +3041,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getRestitution",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getRestitution'.",&tolua_err);
 #endif
@@ -3054,18 +3054,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tol
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius'", nullptr);
@@ -3088,7 +3088,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getCcdSweptSphereRadius",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius'.",&tolua_err);
 #endif
@@ -3101,18 +3101,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getHitFraction'", nullptr);
@@ -3135,7 +3135,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getHitFraction",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getHitFraction'.",&tolua_err);
 #endif
@@ -3148,18 +3148,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getAngularDamping'", nullptr);
@@ -3182,7 +3182,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getAngularDamping",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getAngularDamping'.",&tolua_err);
 #endif
@@ -3195,18 +3195,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolu
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'", nullptr);
@@ -3229,7 +3229,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getInvInertiaDiagLocal",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'.",&tolua_err);
 #endif
@@ -3242,18 +3242,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* to
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getCenterOfMassTransform'", nullptr);
@@ -3276,7 +3276,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getCenterOfMassTransform",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getCenterOfMassTransform'.",&tolua_err);
 #endif
@@ -3289,18 +3289,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getAngularFactor'", nullptr);
@@ -3323,7 +3323,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getAngularFactor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getAngularFactor'.",&tolua_err);
 #endif
@@ -3336,18 +3336,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setRestitution'", nullptr);
@@ -3373,7 +3373,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setRestitution(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setRestitution",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setRestitution'.",&tolua_err);
 #endif
@@ -3386,18 +3386,18 @@ int lua_axis_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_setHitFraction'", nullptr);
@@ -3423,7 +3423,7 @@ int lua_axis_physics3d_Physics3DRigidBody_setHitFraction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:setHitFraction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_setHitFraction'.",&tolua_err);
 #endif
@@ -3436,18 +3436,18 @@ int lua_axis_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DRigidBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DRigidBody*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DRigidBody_getLinearDamping'", nullptr);
@@ -3470,7 +3470,7 @@ int lua_axis_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:getLinearDamping",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_getLinearDamping'.",&tolua_err);
 #endif
@@ -3483,7 +3483,7 @@ int lua_axis_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
     axis::Physics3DRigidBody* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3507,7 +3507,7 @@ int lua_axis_physics3d_Physics3DRigidBody_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DRigidBody:Physics3DRigidBody",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DRigidBody_constructor'.",&tolua_err);
 #endif
 
@@ -3589,18 +3589,18 @@ int lua_axis_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DComponent_syncNodeToPhysics'", nullptr);
@@ -3623,7 +3623,7 @@ int lua_axis_physics3d_Physics3DComponent_syncNodeToPhysics(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:syncNodeToPhysics",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_syncNodeToPhysics'.",&tolua_err);
 #endif
@@ -3636,18 +3636,18 @@ int lua_axis_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DComponent_addToPhysicsWorld'", nullptr);
@@ -3673,7 +3673,7 @@ int lua_axis_physics3d_Physics3DComponent_addToPhysicsWorld(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:addToPhysicsWorld",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_addToPhysicsWorld'.",&tolua_err);
 #endif
@@ -3686,18 +3686,18 @@ int lua_axis_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DComponent_syncPhysicsToNode'", nullptr);
@@ -3720,7 +3720,7 @@ int lua_axis_physics3d_Physics3DComponent_syncPhysicsToNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:syncPhysicsToNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_syncPhysicsToNode'.",&tolua_err);
 #endif
@@ -3733,18 +3733,18 @@ int lua_axis_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DComponent_getPhysics3DObject'", nullptr);
@@ -3767,7 +3767,7 @@ int lua_axis_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:getPhysics3DObject",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_getPhysics3DObject'.",&tolua_err);
 #endif
@@ -3780,18 +3780,18 @@ int lua_axis_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DComponent_setPhysics3DObject'", nullptr);
@@ -3817,7 +3817,7 @@ int lua_axis_physics3d_Physics3DComponent_setPhysics3DObject(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:setPhysics3DObject",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_setPhysics3DObject'.",&tolua_err);
 #endif
@@ -3830,18 +3830,18 @@ int lua_axis_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DComponent*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DComponent_setSyncFlag'", nullptr);
@@ -3867,7 +3867,7 @@ int lua_axis_physics3d_Physics3DComponent_setSyncFlag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:setSyncFlag",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_setSyncFlag'.",&tolua_err);
 #endif
@@ -3879,11 +3879,11 @@ int lua_axis_physics3d_Physics3DComponent_getPhysics3DComponentName(lua_State* t
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3902,7 +3902,7 @@ int lua_axis_physics3d_Physics3DComponent_getPhysics3DComponentName(lua_State* t
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DComponent:getPhysics3DComponentName",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_getPhysics3DComponentName'.",&tolua_err);
 #endif
@@ -3914,7 +3914,7 @@ int lua_axis_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
     axis::Physics3DComponent* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3938,7 +3938,7 @@ int lua_axis_physics3d_Physics3DComponent_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DComponent:Physics3DComponent",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DComponent_constructor'.",&tolua_err);
 #endif
 
@@ -3978,18 +3978,18 @@ int lua_axis_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
     axis::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'", nullptr);
@@ -4012,7 +4012,7 @@ int lua_axis_physics3d_PhysicsMeshRenderer_syncNodeToPhysics(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:syncNodeToPhysics",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_PhysicsMeshRenderer_syncNodeToPhysics'.",&tolua_err);
 #endif
@@ -4025,18 +4025,18 @@ int lua_axis_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
     axis::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'", nullptr);
@@ -4059,7 +4059,7 @@ int lua_axis_physics3d_PhysicsMeshRenderer_syncPhysicsToNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:syncPhysicsToNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_PhysicsMeshRenderer_syncPhysicsToNode'.",&tolua_err);
 #endif
@@ -4072,18 +4072,18 @@ int lua_axis_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
     axis::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
@@ -4106,7 +4106,7 @@ int lua_axis_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:getPhysicsObj",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_PhysicsMeshRenderer_getPhysicsObj'.",&tolua_err);
 #endif
@@ -4119,18 +4119,18 @@ int lua_axis_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
     axis::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsMeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PhysicsMeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_PhysicsMeshRenderer_setSyncFlag'", nullptr);
@@ -4156,7 +4156,7 @@ int lua_axis_physics3d_PhysicsMeshRenderer_setSyncFlag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:setSyncFlag",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_PhysicsMeshRenderer_setSyncFlag'.",&tolua_err);
 #endif
@@ -4169,7 +4169,7 @@ int lua_axis_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
     axis::PhysicsMeshRenderer* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -4193,7 +4193,7 @@ int lua_axis_physics3d_PhysicsMeshRenderer_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsMeshRenderer:PhysicsMeshRenderer",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_PhysicsMeshRenderer_constructor'.",&tolua_err);
 #endif
 
@@ -4230,18 +4230,18 @@ int lua_axis_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_setGravity'", nullptr);
@@ -4267,7 +4267,7 @@ int lua_axis_physics3d_Physics3DWorld_setGravity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:setGravity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_setGravity'.",&tolua_err);
 #endif
@@ -4280,18 +4280,18 @@ int lua_axis_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_stepSimulate'", nullptr);
@@ -4317,7 +4317,7 @@ int lua_axis_physics3d_Physics3DWorld_stepSimulate(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:stepSimulate",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_stepSimulate'.",&tolua_err);
 #endif
@@ -4330,18 +4330,18 @@ int lua_axis_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_needCollisionChecking'", nullptr);
@@ -4364,7 +4364,7 @@ int lua_axis_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:needCollisionChecking",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_needCollisionChecking'.",&tolua_err);
 #endif
@@ -4377,18 +4377,18 @@ int lua_axis_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_collisionChecking'", nullptr);
@@ -4411,7 +4411,7 @@ int lua_axis_physics3d_Physics3DWorld_collisionChecking(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:collisionChecking",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_collisionChecking'.",&tolua_err);
 #endif
@@ -4424,18 +4424,18 @@ int lua_axis_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_setGhostPairCallback'", nullptr);
@@ -4458,7 +4458,7 @@ int lua_axis_physics3d_Physics3DWorld_setGhostPairCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:setGhostPairCallback",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_setGhostPairCallback'.",&tolua_err);
 #endif
@@ -4471,18 +4471,18 @@ int lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DObjects'", nullptr);
@@ -4505,7 +4505,7 @@ int lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DObjects(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:removeAllPhysics3DObjects",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DObjects'.",&tolua_err);
 #endif
@@ -4518,18 +4518,18 @@ int lua_axis_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_isDebugDrawEnabled'", nullptr);
@@ -4552,7 +4552,7 @@ int lua_axis_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:isDebugDrawEnabled",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_isDebugDrawEnabled'.",&tolua_err);
 #endif
@@ -4565,18 +4565,18 @@ int lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* t
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DConstraints'", nullptr);
@@ -4599,7 +4599,7 @@ int lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DConstraints(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:removeAllPhysics3DConstraints",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_removeAllPhysics3DConstraints'.",&tolua_err);
 #endif
@@ -4612,18 +4612,18 @@ int lua_axis_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_getGravity'", nullptr);
@@ -4646,7 +4646,7 @@ int lua_axis_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:getGravity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_getGravity'.",&tolua_err);
 #endif
@@ -4659,18 +4659,18 @@ int lua_axis_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_removePhysics3DConstraint'", nullptr);
@@ -4696,7 +4696,7 @@ int lua_axis_physics3d_Physics3DWorld_removePhysics3DConstraint(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:removePhysics3DConstraint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_removePhysics3DConstraint'.",&tolua_err);
 #endif
@@ -4709,18 +4709,18 @@ int lua_axis_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_addPhysics3DObject'", nullptr);
@@ -4746,7 +4746,7 @@ int lua_axis_physics3d_Physics3DWorld_addPhysics3DObject(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:addPhysics3DObject",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_addPhysics3DObject'.",&tolua_err);
 #endif
@@ -4759,18 +4759,18 @@ int lua_axis_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_setDebugDrawEnable'", nullptr);
@@ -4796,7 +4796,7 @@ int lua_axis_physics3d_Physics3DWorld_setDebugDrawEnable(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:setDebugDrawEnable",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_setDebugDrawEnable'.",&tolua_err);
 #endif
@@ -4809,18 +4809,18 @@ int lua_axis_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_removePhysics3DObject'", nullptr);
@@ -4846,7 +4846,7 @@ int lua_axis_physics3d_Physics3DWorld_removePhysics3DObject(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:removePhysics3DObject",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_removePhysics3DObject'.",&tolua_err);
 #endif
@@ -4859,18 +4859,18 @@ int lua_axis_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_addPhysics3DConstraint'", nullptr);
@@ -4913,7 +4913,7 @@ int lua_axis_physics3d_Physics3DWorld_addPhysics3DConstraint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:addPhysics3DConstraint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_addPhysics3DConstraint'.",&tolua_err);
 #endif
@@ -4926,18 +4926,18 @@ int lua_axis_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DWorld*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DWorld_debugDraw'", nullptr);
@@ -4963,7 +4963,7 @@ int lua_axis_physics3d_Physics3DWorld_debugDraw(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:debugDraw",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_debugDraw'.",&tolua_err);
 #endif
@@ -4976,7 +4976,7 @@ int lua_axis_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
     axis::Physics3DWorld* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -5000,7 +5000,7 @@ int lua_axis_physics3d_Physics3DWorld_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DWorld:Physics3DWorld",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DWorld_constructor'.",&tolua_err);
 #endif
 
@@ -5048,18 +5048,18 @@ int lua_axis_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_setEnabled'", nullptr);
@@ -5085,7 +5085,7 @@ int lua_axis_physics3d_Physics3DConstraint_setEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:setEnabled",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_setEnabled'.",&tolua_err);
 #endif
@@ -5098,18 +5098,18 @@ int lua_axis_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_setBreakingImpulse'", nullptr);
@@ -5135,7 +5135,7 @@ int lua_axis_physics3d_Physics3DConstraint_setBreakingImpulse(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:setBreakingImpulse",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_setBreakingImpulse'.",&tolua_err);
 #endif
@@ -5148,18 +5148,18 @@ int lua_axis_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getUserData'", nullptr);
@@ -5182,7 +5182,7 @@ int lua_axis_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getUserData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getUserData'.",&tolua_err);
 #endif
@@ -5195,18 +5195,18 @@ int lua_axis_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getBreakingImpulse'", nullptr);
@@ -5229,7 +5229,7 @@ int lua_axis_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getBreakingImpulse",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getBreakingImpulse'.",&tolua_err);
 #endif
@@ -5242,18 +5242,18 @@ int lua_axis_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getBodyA'", nullptr);
@@ -5276,7 +5276,7 @@ int lua_axis_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getBodyA",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getBodyA'.",&tolua_err);
 #endif
@@ -5289,18 +5289,18 @@ int lua_axis_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_isEnabled'", nullptr);
@@ -5323,7 +5323,7 @@ int lua_axis_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:isEnabled",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_isEnabled'.",&tolua_err);
 #endif
@@ -5336,18 +5336,18 @@ int lua_axis_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_St
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getOverrideNumSolverIterations'", nullptr);
@@ -5370,7 +5370,7 @@ int lua_axis_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_St
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getOverrideNumSolverIterations",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getOverrideNumSolverIterations'.",&tolua_err);
 #endif
@@ -5383,18 +5383,18 @@ int lua_axis_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getBodyB'", nullptr);
@@ -5417,7 +5417,7 @@ int lua_axis_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getBodyB",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getBodyB'.",&tolua_err);
 #endif
@@ -5430,18 +5430,18 @@ int lua_axis_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_St
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_setOverrideNumSolverIterations'", nullptr);
@@ -5467,7 +5467,7 @@ int lua_axis_physics3d_Physics3DConstraint_setOverrideNumSolverIterations(lua_St
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:setOverrideNumSolverIterations",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_setOverrideNumSolverIterations'.",&tolua_err);
 #endif
@@ -5480,18 +5480,18 @@ int lua_axis_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getConstraintType'", nullptr);
@@ -5514,7 +5514,7 @@ int lua_axis_physics3d_Physics3DConstraint_getConstraintType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getConstraintType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getConstraintType'.",&tolua_err);
 #endif
@@ -5527,18 +5527,18 @@ int lua_axis_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_setUserData'", nullptr);
@@ -5565,7 +5565,7 @@ int lua_axis_physics3d_Physics3DConstraint_setUserData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:setUserData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_setUserData'.",&tolua_err);
 #endif
@@ -5578,18 +5578,18 @@ int lua_axis_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
     axis::Physics3DConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConstraint_getbtContraint'", nullptr);
@@ -5612,7 +5612,7 @@ int lua_axis_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConstraint:getbtContraint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConstraint_getbtContraint'.",&tolua_err);
 #endif
@@ -5656,18 +5656,18 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_Stat
     axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'", nullptr);
@@ -5690,7 +5690,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:getPivotPointInA",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'.",&tolua_err);
 #endif
@@ -5703,18 +5703,18 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_Stat
     axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'", nullptr);
@@ -5737,7 +5737,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:getPivotPointInB",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'.",&tolua_err);
 #endif
@@ -5749,15 +5749,15 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
     int argc = 0;
     axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_init'", nullptr);
@@ -5808,7 +5808,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Physics3DPointToPointConstraint:init",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_init'.",&tolua_err);
 #endif
@@ -5821,18 +5821,18 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_Stat
     axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInA'", nullptr);
@@ -5858,7 +5858,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInA(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:setPivotPointInA",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInA'.",&tolua_err);
 #endif
@@ -5871,18 +5871,18 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_Stat
     axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DPointToPointConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInB'", nullptr);
@@ -5908,7 +5908,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInB(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:setPivotPointInB",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_setPivotPointInB'.",&tolua_err);
 #endif
@@ -5919,11 +5919,11 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_create(lua_State* tolua_S
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DPointToPointConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -5969,7 +5969,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_create(lua_State* tolua_S
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Physics3DPointToPointConstraint:create",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_create'.",&tolua_err);
 #endif
@@ -5981,7 +5981,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* to
     axis::Physics3DPointToPointConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -6005,7 +6005,7 @@ int lua_axis_physics3d_Physics3DPointToPointConstraint_constructor(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DPointToPointConstraint:Physics3DPointToPointConstraint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DPointToPointConstraint_constructor'.",&tolua_err);
 #endif
 
@@ -6043,15 +6043,15 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S
     int argc = 0;
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getHingeAngle'", nullptr);
@@ -6086,7 +6086,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getHingeAngle(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.Physics3DHingeConstraint:getHingeAngle",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getHingeAngle'.",&tolua_err);
 #endif
@@ -6099,18 +6099,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity'", nullptr);
@@ -6133,7 +6133,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getMotorTargetVelosity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity'.",&tolua_err);
 #endif
@@ -6146,18 +6146,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetA'", nullptr);
@@ -6180,7 +6180,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getFrameOffsetA",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetA'.",&tolua_err);
 #endif
@@ -6193,18 +6193,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetB'", nullptr);
@@ -6227,7 +6227,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getFrameOffsetB",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getFrameOffsetB'.",&tolua_err);
 #endif
@@ -6240,18 +6240,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* to
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse'", nullptr);
@@ -6277,7 +6277,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:setMaxMotorImpulse",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_setMaxMotorImpulse'.",&tolua_err);
 #endif
@@ -6290,18 +6290,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* to
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_enableAngularMotor'", nullptr);
@@ -6333,7 +6333,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_enableAngularMotor(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:enableAngularMotor",argc, 3);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_enableAngularMotor'.",&tolua_err);
 #endif
@@ -6346,18 +6346,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getUpperLimit'", nullptr);
@@ -6380,7 +6380,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getUpperLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getUpperLimit'.",&tolua_err);
 #endif
@@ -6393,18 +6393,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* to
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse'", nullptr);
@@ -6427,7 +6427,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getMaxMotorImpulse",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse'.",&tolua_err);
 #endif
@@ -6440,18 +6440,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getLowerLimit'", nullptr);
@@ -6474,7 +6474,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getLowerLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getLowerLimit'.",&tolua_err);
 #endif
@@ -6487,18 +6487,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tol
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_setUseFrameOffset'", nullptr);
@@ -6524,7 +6524,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setUseFrameOffset(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:setUseFrameOffset",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_setUseFrameOffset'.",&tolua_err);
 #endif
@@ -6537,18 +6537,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State*
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getEnableAngularMotor'", nullptr);
@@ -6571,7 +6571,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getEnableAngularMotor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getEnableAngularMotor'.",&tolua_err);
 #endif
@@ -6584,18 +6584,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_enableMotor'", nullptr);
@@ -6621,7 +6621,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_enableMotor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:enableMotor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_enableMotor'.",&tolua_err);
 #endif
@@ -6634,18 +6634,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getBFrame'", nullptr);
@@ -6668,7 +6668,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getBFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getBFrame'.",&tolua_err);
 #endif
@@ -6681,18 +6681,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_setFrames'", nullptr);
@@ -6721,7 +6721,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setFrames(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:setFrames",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_setFrames'.",&tolua_err);
 #endif
@@ -6734,18 +6734,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tol
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getUseFrameOffset'", nullptr);
@@ -6768,7 +6768,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getUseFrameOffset",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getUseFrameOffset'.",&tolua_err);
 #endif
@@ -6781,18 +6781,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_setAngularOnly'", nullptr);
@@ -6818,7 +6818,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setAngularOnly(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:setAngularOnly",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_setAngularOnly'.",&tolua_err);
 #endif
@@ -6831,18 +6831,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_setLimit'", nullptr);
@@ -6940,7 +6940,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setLimit(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:setLimit",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_setLimit'.",&tolua_err);
 #endif
@@ -6953,18 +6953,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getAngularOnly'", nullptr);
@@ -6987,7 +6987,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getAngularOnly",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getAngularOnly'.",&tolua_err);
 #endif
@@ -7000,18 +7000,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_setAxis'", nullptr);
@@ -7037,7 +7037,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_setAxis(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:setAxis",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_setAxis'.",&tolua_err);
 #endif
@@ -7050,18 +7050,18 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DHingeConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DHingeConstraint_getAFrame'", nullptr);
@@ -7084,7 +7084,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:getAFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_getAFrame'.",&tolua_err);
 #endif
@@ -7095,11 +7095,11 @@ int lua_axis_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DHingeConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -7289,7 +7289,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Physics3DHingeConstraint:create",argc, 4);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_create'.",&tolua_err);
 #endif
@@ -7301,7 +7301,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
     axis::Physics3DHingeConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -7325,7 +7325,7 @@ int lua_axis_physics3d_Physics3DHingeConstraint_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DHingeConstraint:Physics3DHingeConstraint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DHingeConstraint_constructor'.",&tolua_err);
 #endif
 
@@ -7379,18 +7379,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setPoweredAngMotor'", nullptr);
@@ -7416,7 +7416,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setPoweredAngMotor(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setPoweredAngMotor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setPoweredAngMotor'.",&tolua_err);
 #endif
@@ -7429,18 +7429,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimAng'", nullptr);
@@ -7463,7 +7463,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getDampingLimAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimAng'.",&tolua_err);
 #endif
@@ -7476,18 +7476,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_Stat
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin'", nullptr);
@@ -7513,7 +7513,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setRestitutionOrthoLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoLin'.",&tolua_err);
 #endif
@@ -7526,18 +7526,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirLin'", nullptr);
@@ -7563,7 +7563,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirLin(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setRestitutionDirLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirLin'.",&tolua_err);
 #endif
@@ -7576,18 +7576,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getLinearPos'", nullptr);
@@ -7610,7 +7610,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getLinearPos",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getLinearPos'.",&tolua_err);
 #endif
@@ -7623,18 +7623,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolu
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetA'", nullptr);
@@ -7657,7 +7657,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getFrameOffsetA",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetA'.",&tolua_err);
 #endif
@@ -7670,18 +7670,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolu
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetB'", nullptr);
@@ -7704,7 +7704,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getFrameOffsetB",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getFrameOffsetB'.",&tolua_err);
 #endif
@@ -7717,18 +7717,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setPoweredLinMotor'", nullptr);
@@ -7754,7 +7754,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setPoweredLinMotor(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setPoweredLinMotor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setPoweredLinMotor'.",&tolua_err);
 #endif
@@ -7767,18 +7767,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirAng'", nullptr);
@@ -7801,7 +7801,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getDampingDirAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirAng'.",&tolua_err);
 #endif
@@ -7814,18 +7814,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimLin'", nullptr);
@@ -7848,7 +7848,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getRestitutionLimLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimLin'.",&tolua_err);
 #endif
@@ -7861,18 +7861,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng'", nullptr);
@@ -7895,7 +7895,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getSoftnessOrthoAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng'.",&tolua_err);
 #endif
@@ -7908,18 +7908,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin'", nullptr);
@@ -7945,7 +7945,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setSoftnessOrthoLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoLin'.",&tolua_err);
 #endif
@@ -7958,18 +7958,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimLin'", nullptr);
@@ -7995,7 +7995,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimLin(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setSoftnessLimLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimLin'.",&tolua_err);
 #endif
@@ -8008,18 +8008,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getAngularPos'", nullptr);
@@ -8042,7 +8042,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getAngularPos",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getAngularPos'.",&tolua_err);
 #endif
@@ -8055,18 +8055,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimAng'", nullptr);
@@ -8092,7 +8092,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimAng(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setRestitutionLimAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimAng'.",&tolua_err);
 #endif
@@ -8105,18 +8105,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setUpperLinLimit'", nullptr);
@@ -8142,7 +8142,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setUpperLinLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setUpperLinLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setUpperLinLimit'.",&tolua_err);
 #endif
@@ -8155,18 +8155,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirLin'", nullptr);
@@ -8192,7 +8192,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirLin(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setDampingDirLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirLin'.",&tolua_err);
 #endif
@@ -8205,18 +8205,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUpperAngLimit'", nullptr);
@@ -8239,7 +8239,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getUpperAngLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUpperAngLimit'.",&tolua_err);
 #endif
@@ -8252,18 +8252,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirLin'", nullptr);
@@ -8286,7 +8286,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getDampingDirLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingDirLin'.",&tolua_err);
 #endif
@@ -8299,18 +8299,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirAng'", nullptr);
@@ -8333,7 +8333,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getSoftnessDirAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirAng'.",&tolua_err);
 #endif
@@ -8346,18 +8346,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getPoweredAngMotor'", nullptr);
@@ -8380,7 +8380,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getPoweredAngMotor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getPoweredAngMotor'.",&tolua_err);
 #endif
@@ -8393,18 +8393,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setLowerAngLimit'", nullptr);
@@ -8430,7 +8430,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setLowerAngLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setLowerAngLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setLowerAngLimit'.",&tolua_err);
 #endif
@@ -8443,18 +8443,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setUpperAngLimit'", nullptr);
@@ -8480,7 +8480,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setUpperAngLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setUpperAngLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setUpperAngLimit'.",&tolua_err);
 #endif
@@ -8493,18 +8493,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_S
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity'", nullptr);
@@ -8530,7 +8530,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity(lua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setTargetLinMotorVelocity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setTargetLinMotorVelocity'.",&tolua_err);
 #endif
@@ -8543,18 +8543,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimAng'", nullptr);
@@ -8580,7 +8580,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimAng(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setDampingLimAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimAng'.",&tolua_err);
 #endif
@@ -8593,18 +8593,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimAng'", nullptr);
@@ -8627,7 +8627,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getRestitutionLimAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionLimAng'.",&tolua_err);
 #endif
@@ -8640,18 +8640,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUseFrameOffset'", nullptr);
@@ -8674,7 +8674,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getUseFrameOffset",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUseFrameOffset'.",&tolua_err);
 #endif
@@ -8687,18 +8687,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin'", nullptr);
@@ -8721,7 +8721,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getSoftnessOrthoLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin'.",&tolua_err);
 #endif
@@ -8734,18 +8734,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoAng'", nullptr);
@@ -8768,7 +8768,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getDampingOrthoAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoAng'.",&tolua_err);
 #endif
@@ -8781,18 +8781,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setUseFrameOffset'", nullptr);
@@ -8818,7 +8818,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setUseFrameOffset(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setUseFrameOffset",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setUseFrameOffset'.",&tolua_err);
 #endif
@@ -8831,18 +8831,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setLowerLinLimit'", nullptr);
@@ -8868,7 +8868,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setLowerLinLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setLowerLinLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setLowerLinLimit'.",&tolua_err);
 #endif
@@ -8881,18 +8881,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirLin'", nullptr);
@@ -8915,7 +8915,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getRestitutionDirLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirLin'.",&tolua_err);
 #endif
@@ -8928,18 +8928,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_S
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity'", nullptr);
@@ -8962,7 +8962,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getTargetLinMotorVelocity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity'.",&tolua_err);
 #endif
@@ -8975,18 +8975,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getLowerLinLimit'", nullptr);
@@ -9009,7 +9009,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getLowerLinLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getLowerLinLimit'.",&tolua_err);
 #endif
@@ -9022,18 +9022,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimLin'", nullptr);
@@ -9056,7 +9056,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getSoftnessLimLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimLin'.",&tolua_err);
 #endif
@@ -9069,18 +9069,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoAng'", nullptr);
@@ -9106,7 +9106,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoAng(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setDampingOrthoAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoAng'.",&tolua_err);
 #endif
@@ -9119,18 +9119,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirAng'", nullptr);
@@ -9156,7 +9156,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirAng(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setSoftnessDirAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirAng'.",&tolua_err);
 #endif
@@ -9169,18 +9169,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getPoweredLinMotor'", nullptr);
@@ -9203,7 +9203,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getPoweredLinMotor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getPoweredLinMotor'.",&tolua_err);
 #endif
@@ -9216,18 +9216,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_Stat
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng'", nullptr);
@@ -9253,7 +9253,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setRestitutionOrthoAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionOrthoAng'.",&tolua_err);
 #endif
@@ -9266,18 +9266,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirAng'", nullptr);
@@ -9303,7 +9303,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirAng(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setDampingDirAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingDirAng'.",&tolua_err);
 #endif
@@ -9316,18 +9316,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_S)
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setFrames'", nullptr);
@@ -9356,7 +9356,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setFrames(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setFrames",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setFrames'.",&tolua_err);
 #endif
@@ -9369,18 +9369,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_Stat
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng'", nullptr);
@@ -9403,7 +9403,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getRestitutionOrthoAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng'.",&tolua_err);
 #endif
@@ -9416,18 +9416,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce'", nullptr);
@@ -9450,7 +9450,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getMaxAngMotorForce",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce'.",&tolua_err);
 #endif
@@ -9463,18 +9463,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoLin'", nullptr);
@@ -9497,7 +9497,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getDampingOrthoLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingOrthoLin'.",&tolua_err);
 #endif
@@ -9510,18 +9510,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUpperLinLimit'", nullptr);
@@ -9544,7 +9544,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getUpperLinLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUpperLinLimit'.",&tolua_err);
 #endif
@@ -9557,18 +9557,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce'", nullptr);
@@ -9594,7 +9594,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setMaxLinMotorForce",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setMaxLinMotorForce'.",&tolua_err);
 #endif
@@ -9607,18 +9607,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_Stat
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin'", nullptr);
@@ -9641,7 +9641,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getRestitutionOrthoLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin'.",&tolua_err);
 #endif
@@ -9654,18 +9654,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_S
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity'", nullptr);
@@ -9691,7 +9691,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity(lua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setTargetAngMotorVelocity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setTargetAngMotorVelocity'.",&tolua_err);
 #endif
@@ -9704,18 +9704,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimAng'", nullptr);
@@ -9738,7 +9738,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getSoftnessLimAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessLimAng'.",&tolua_err);
 #endif
@@ -9751,18 +9751,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirAng'", nullptr);
@@ -9788,7 +9788,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirAng(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setRestitutionDirAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionDirAng'.",&tolua_err);
 #endif
@@ -9801,18 +9801,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimLin'", nullptr);
@@ -9835,7 +9835,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getDampingLimLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getDampingLimLin'.",&tolua_err);
 #endif
@@ -9848,18 +9848,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getLowerAngLimit'", nullptr);
@@ -9882,7 +9882,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getLowerAngLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getLowerAngLimit'.",&tolua_err);
 #endif
@@ -9895,18 +9895,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirAng'", nullptr);
@@ -9929,7 +9929,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getRestitutionDirAng",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getRestitutionDirAng'.",&tolua_err);
 #endif
@@ -9942,18 +9942,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_S
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity'", nullptr);
@@ -9976,7 +9976,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getTargetAngMotorVelocity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity'.",&tolua_err);
 #endif
@@ -9989,18 +9989,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State*
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimLin'", nullptr);
@@ -10026,7 +10026,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimLin(lua_State*
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setRestitutionLimLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setRestitutionLimLin'.",&tolua_err);
 #endif
@@ -10039,18 +10039,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce'", nullptr);
@@ -10073,7 +10073,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getMaxLinMotorForce",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce'.",&tolua_err);
 #endif
@@ -10086,18 +10086,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* t
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoLin'", nullptr);
@@ -10123,7 +10123,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoLin(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setDampingOrthoLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingOrthoLin'.",&tolua_err);
 #endif
@@ -10136,18 +10136,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng'", nullptr);
@@ -10173,7 +10173,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setSoftnessOrthoAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessOrthoAng'.",&tolua_err);
 #endif
@@ -10186,18 +10186,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tol
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimLin'", nullptr);
@@ -10223,7 +10223,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimLin(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setDampingLimLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setDampingLimLin'.",&tolua_err);
 #endif
@@ -10236,18 +10236,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirLin'", nullptr);
@@ -10273,7 +10273,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirLin(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setSoftnessDirLin",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessDirLin'.",&tolua_err);
 #endif
@@ -10286,18 +10286,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* 
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce'", nullptr);
@@ -10323,7 +10323,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setMaxAngMotorForce",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setMaxAngMotorForce'.",&tolua_err);
 #endif
@@ -10336,18 +10336,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirLin'", nullptr);
@@ -10370,7 +10370,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getSoftnessDirLin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getSoftnessDirLin'.",&tolua_err);
 #endif
@@ -10383,18 +10383,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* to
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimAng'", nullptr);
@@ -10420,7 +10420,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimAng(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:setSoftnessLimAng",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_setSoftnessLimAng'.",&tolua_err);
 #endif
@@ -10433,18 +10433,18 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DSliderConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA'", nullptr);
@@ -10467,7 +10467,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:getUseLinearReferenceFrameA",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA'.",&tolua_err);
 #endif
@@ -10479,11 +10479,11 @@ int lua_axis_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DSliderConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -10512,7 +10512,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Physics3DSliderConstraint:create",argc, 5);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_create'.",&tolua_err);
 #endif
@@ -10524,7 +10524,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
     axis::Physics3DSliderConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -10548,7 +10548,7 @@ int lua_axis_physics3d_Physics3DSliderConstraint_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DSliderConstraint:Physics3DSliderConstraint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DSliderConstraint_constructor'.",&tolua_err);
 #endif
 
@@ -10646,18 +10646,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getBFrame'", nullptr);
@@ -10680,7 +10680,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getBFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getBFrame'.",&tolua_err);
 #endif
@@ -10693,18 +10693,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolu
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setFixThresh'", nullptr);
@@ -10730,7 +10730,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setFixThresh(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:setFixThresh",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setFixThresh'.",&tolua_err);
 #endif
@@ -10743,18 +10743,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* t
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'", nullptr);
@@ -10777,7 +10777,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getFrameOffsetB",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'.",&tolua_err);
 #endif
@@ -10790,18 +10790,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* t
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'", nullptr);
@@ -10824,7 +10824,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getFrameOffsetA",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'.",&tolua_err);
 #endif
@@ -10837,18 +10837,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolu
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getFixThresh'", nullptr);
@@ -10871,7 +10871,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getFixThresh",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getFixThresh'.",&tolua_err);
 #endif
@@ -10884,18 +10884,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tol
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan2'", nullptr);
@@ -10918,7 +10918,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getSwingSpan2",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan2'.",&tolua_err);
 #endif
@@ -10931,18 +10931,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tol
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan1'", nullptr);
@@ -10965,7 +10965,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getSwingSpan1",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getSwingSpan1'.",&tolua_err);
 #endif
@@ -10978,18 +10978,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse'", nullptr);
@@ -11015,7 +11015,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse(lua_State
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:setMaxMotorImpulse",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulse'.",&tolua_err);
 #endif
@@ -11028,18 +11028,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setFrames'", nullptr);
@@ -11068,7 +11068,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setFrames(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:setFrames",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setFrames'.",&tolua_err);
 #endif
@@ -11081,18 +11081,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tol
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistAngle'", nullptr);
@@ -11115,7 +11115,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getTwistAngle",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistAngle'.",&tolua_err);
 #endif
@@ -11128,18 +11128,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* 
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
@@ -11168,7 +11168,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:GetPointForAngle",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'.",&tolua_err);
 #endif
@@ -11181,18 +11181,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized'", nullptr);
@@ -11218,7 +11218,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:setMaxMotorImpulseNormalized",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setMaxMotorImpulseNormalized'.",&tolua_err);
 #endif
@@ -11231,18 +11231,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolu
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistSpan'", nullptr);
@@ -11265,7 +11265,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getTwistSpan",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getTwistSpan'.",&tolua_err);
 #endif
@@ -11278,18 +11278,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setDamping'", nullptr);
@@ -11315,7 +11315,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setDamping(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:setDamping",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setDamping'.",&tolua_err);
 #endif
@@ -11328,18 +11328,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setLimit'", nullptr);
@@ -11449,7 +11449,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_setLimit(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:setLimit",argc, 3);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_setLimit'.",&tolua_err);
 #endif
@@ -11462,18 +11462,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getAFrame'", nullptr);
@@ -11496,7 +11496,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:getAFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_getAFrame'.",&tolua_err);
 #endif
@@ -11509,18 +11509,18 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3DConeTwistConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_enableMotor'", nullptr);
@@ -11546,7 +11546,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_enableMotor(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:enableMotor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_enableMotor'.",&tolua_err);
 #endif
@@ -11557,11 +11557,11 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3DConeTwistConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -11607,7 +11607,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Physics3DConeTwistConstraint:create",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_create'.",&tolua_err);
 #endif
@@ -11619,7 +11619,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua
     axis::Physics3DConeTwistConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -11643,7 +11643,7 @@ int lua_axis_physics3d_Physics3DConeTwistConstraint_constructor(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3DConeTwistConstraint:Physics3DConeTwistConstraint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3DConeTwistConstraint_constructor'.",&tolua_err);
 #endif
 
@@ -11694,18 +11694,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* to
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_setLinearLowerLimit'", nullptr);
@@ -11731,7 +11731,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setLinearLowerLimit(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:setLinearLowerLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_setLinearLowerLimit'.",&tolua_err);
 #endif
@@ -11744,18 +11744,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* to
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'", nullptr);
@@ -11778,7 +11778,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:getLinearLowerLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'.",&tolua_err);
 #endif
@@ -11791,18 +11791,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* t
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'", nullptr);
@@ -11825,7 +11825,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:getAngularUpperLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'.",&tolua_err);
 #endif
@@ -11838,18 +11838,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolu
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_getUseFrameOffset'", nullptr);
@@ -11872,7 +11872,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:getUseFrameOffset",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_getUseFrameOffset'.",&tolua_err);
 #endif
@@ -11885,18 +11885,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* to
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'", nullptr);
@@ -11919,7 +11919,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:getLinearUpperLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'.",&tolua_err);
 #endif
@@ -11932,18 +11932,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* t
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_setAngularLowerLimit'", nullptr);
@@ -11969,7 +11969,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setAngularLowerLimit(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:setAngularLowerLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_setAngularLowerLimit'.",&tolua_err);
 #endif
@@ -11982,18 +11982,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_isLimited'", nullptr);
@@ -12019,7 +12019,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:isLimited",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_isLimited'.",&tolua_err);
 #endif
@@ -12032,18 +12032,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolu
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_setUseFrameOffset'", nullptr);
@@ -12069,7 +12069,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setUseFrameOffset(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:setUseFrameOffset",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_setUseFrameOffset'.",&tolua_err);
 #endif
@@ -12082,18 +12082,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* to
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_setLinearUpperLimit'", nullptr);
@@ -12119,7 +12119,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setLinearUpperLimit(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:setLinearUpperLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_setLinearUpperLimit'.",&tolua_err);
 #endif
@@ -12132,18 +12132,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* t
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'", nullptr);
@@ -12166,7 +12166,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:getAngularLowerLimit",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'.",&tolua_err);
 #endif
@@ -12179,18 +12179,18 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* t
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::Physics3D6DofConstraint*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_physics3d_Physics3D6DofConstraint_setAngularUpperLimit'", nullptr);
@@ -12216,7 +12216,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_setAngularUpperLimit(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:setAngularUpperLimit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_setAngularUpperLimit'.",&tolua_err);
 #endif
@@ -12227,11 +12227,11 @@ int lua_axis_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.Physics3D6DofConstraint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -12283,7 +12283,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.Physics3D6DofConstraint:create",argc, 5);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_create'.",&tolua_err);
 #endif
@@ -12295,7 +12295,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
     axis::Physics3D6DofConstraint* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -12319,7 +12319,7 @@ int lua_axis_physics3d_Physics3D6DofConstraint_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Physics3D6DofConstraint:Physics3D6DofConstraint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_physics3d_Physics3D6DofConstraint_constructor'.",&tolua_err);
 #endif
 

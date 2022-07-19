@@ -10,15 +10,15 @@ int lua_axis_studio_ActionFrame_getAction(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_getAction'", nullptr);
@@ -57,7 +57,7 @@ int lua_axis_studio_ActionFrame_getAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ActionFrame:getAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_getAction'.",&tolua_err);
 #endif
@@ -70,18 +70,18 @@ int lua_axis_studio_ActionFrame_getFrameType(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_getFrameType'", nullptr);
@@ -104,7 +104,7 @@ int lua_axis_studio_ActionFrame_getFrameType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:getFrameType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_getFrameType'.",&tolua_err);
 #endif
@@ -117,18 +117,18 @@ int lua_axis_studio_ActionFrame_setFrameTime(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_setFrameTime'", nullptr);
@@ -154,7 +154,7 @@ int lua_axis_studio_ActionFrame_setFrameTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:setFrameTime",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_setFrameTime'.",&tolua_err);
 #endif
@@ -167,18 +167,18 @@ int lua_axis_studio_ActionFrame_setEasingType(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_setEasingType'", nullptr);
@@ -204,7 +204,7 @@ int lua_axis_studio_ActionFrame_setEasingType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:setEasingType",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_setEasingType'.",&tolua_err);
 #endif
@@ -217,18 +217,18 @@ int lua_axis_studio_ActionFrame_getFrameTime(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_getFrameTime'", nullptr);
@@ -251,7 +251,7 @@ int lua_axis_studio_ActionFrame_getFrameTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:getFrameTime",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_getFrameTime'.",&tolua_err);
 #endif
@@ -264,18 +264,18 @@ int lua_axis_studio_ActionFrame_getFrameIndex(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_getFrameIndex'", nullptr);
@@ -298,7 +298,7 @@ int lua_axis_studio_ActionFrame_getFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:getFrameIndex",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_getFrameIndex'.",&tolua_err);
 #endif
@@ -311,18 +311,18 @@ int lua_axis_studio_ActionFrame_setFrameType(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_setFrameType'", nullptr);
@@ -348,7 +348,7 @@ int lua_axis_studio_ActionFrame_setFrameType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:setFrameType",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_setFrameType'.",&tolua_err);
 #endif
@@ -361,18 +361,18 @@ int lua_axis_studio_ActionFrame_setFrameIndex(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_setFrameIndex'", nullptr);
@@ -398,7 +398,7 @@ int lua_axis_studio_ActionFrame_setFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:setFrameIndex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_setFrameIndex'.",&tolua_err);
 #endif
@@ -411,18 +411,18 @@ int lua_axis_studio_ActionFrame_setEasingParameter(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_setEasingParameter'", nullptr);
@@ -448,7 +448,7 @@ int lua_axis_studio_ActionFrame_setEasingParameter(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:setEasingParameter",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_setEasingParameter'.",&tolua_err);
 #endif
@@ -461,18 +461,18 @@ int lua_axis_studio_ActionFrame_getEasingType(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFrame_getEasingType'", nullptr);
@@ -495,7 +495,7 @@ int lua_axis_studio_ActionFrame_getEasingType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:getEasingType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_getEasingType'.",&tolua_err);
 #endif
@@ -508,7 +508,7 @@ int lua_axis_studio_ActionFrame_constructor(lua_State* tolua_S)
     cocostudio::ActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -532,7 +532,7 @@ int lua_axis_studio_ActionFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFrame:ActionFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFrame_constructor'.",&tolua_err);
 #endif
 
@@ -575,18 +575,18 @@ int lua_axis_studio_ActionMoveFrame_setPosition(lua_State* tolua_S)
     cocostudio::ActionMoveFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionMoveFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionMoveFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionMoveFrame_setPosition'", nullptr);
@@ -612,7 +612,7 @@ int lua_axis_studio_ActionMoveFrame_setPosition(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionMoveFrame:setPosition",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionMoveFrame_setPosition'.",&tolua_err);
 #endif
@@ -625,18 +625,18 @@ int lua_axis_studio_ActionMoveFrame_getAction(lua_State* tolua_S)
     cocostudio::ActionMoveFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionMoveFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionMoveFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionMoveFrame_getAction'", nullptr);
@@ -662,7 +662,7 @@ int lua_axis_studio_ActionMoveFrame_getAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionMoveFrame:getAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionMoveFrame_getAction'.",&tolua_err);
 #endif
@@ -675,18 +675,18 @@ int lua_axis_studio_ActionMoveFrame_getPosition(lua_State* tolua_S)
     cocostudio::ActionMoveFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionMoveFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionMoveFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionMoveFrame_getPosition'", nullptr);
@@ -709,7 +709,7 @@ int lua_axis_studio_ActionMoveFrame_getPosition(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionMoveFrame:getPosition",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionMoveFrame_getPosition'.",&tolua_err);
 #endif
@@ -722,7 +722,7 @@ int lua_axis_studio_ActionMoveFrame_constructor(lua_State* tolua_S)
     cocostudio::ActionMoveFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -746,7 +746,7 @@ int lua_axis_studio_ActionMoveFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionMoveFrame:ActionMoveFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionMoveFrame_constructor'.",&tolua_err);
 #endif
 
@@ -782,18 +782,18 @@ int lua_axis_studio_ActionScaleFrame_setScaleY(lua_State* tolua_S)
     cocostudio::ActionScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionScaleFrame_setScaleY'", nullptr);
@@ -819,7 +819,7 @@ int lua_axis_studio_ActionScaleFrame_setScaleY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:setScaleY",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionScaleFrame_setScaleY'.",&tolua_err);
 #endif
@@ -832,18 +832,18 @@ int lua_axis_studio_ActionScaleFrame_setScaleX(lua_State* tolua_S)
     cocostudio::ActionScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionScaleFrame_setScaleX'", nullptr);
@@ -869,7 +869,7 @@ int lua_axis_studio_ActionScaleFrame_setScaleX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:setScaleX",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionScaleFrame_setScaleX'.",&tolua_err);
 #endif
@@ -882,18 +882,18 @@ int lua_axis_studio_ActionScaleFrame_getScaleY(lua_State* tolua_S)
     cocostudio::ActionScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionScaleFrame_getScaleY'", nullptr);
@@ -916,7 +916,7 @@ int lua_axis_studio_ActionScaleFrame_getScaleY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:getScaleY",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionScaleFrame_getScaleY'.",&tolua_err);
 #endif
@@ -929,18 +929,18 @@ int lua_axis_studio_ActionScaleFrame_getScaleX(lua_State* tolua_S)
     cocostudio::ActionScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionScaleFrame_getScaleX'", nullptr);
@@ -963,7 +963,7 @@ int lua_axis_studio_ActionScaleFrame_getScaleX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:getScaleX",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionScaleFrame_getScaleX'.",&tolua_err);
 #endif
@@ -976,18 +976,18 @@ int lua_axis_studio_ActionScaleFrame_getAction(lua_State* tolua_S)
     cocostudio::ActionScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionScaleFrame_getAction'", nullptr);
@@ -1013,7 +1013,7 @@ int lua_axis_studio_ActionScaleFrame_getAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:getAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionScaleFrame_getAction'.",&tolua_err);
 #endif
@@ -1026,7 +1026,7 @@ int lua_axis_studio_ActionScaleFrame_constructor(lua_State* tolua_S)
     cocostudio::ActionScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1050,7 +1050,7 @@ int lua_axis_studio_ActionScaleFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionScaleFrame:ActionScaleFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionScaleFrame_constructor'.",&tolua_err);
 #endif
 
@@ -1088,18 +1088,18 @@ int lua_axis_studio_ActionRotationFrame_setRotation(lua_State* tolua_S)
     cocostudio::ActionRotationFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionRotationFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionRotationFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionRotationFrame_setRotation'", nullptr);
@@ -1125,7 +1125,7 @@ int lua_axis_studio_ActionRotationFrame_setRotation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionRotationFrame:setRotation",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionRotationFrame_setRotation'.",&tolua_err);
 #endif
@@ -1137,15 +1137,15 @@ int lua_axis_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ActionRotationFrame* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionRotationFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ActionRotationFrame*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionRotationFrame_getAction'", nullptr);
@@ -1184,7 +1184,7 @@ int lua_axis_studio_ActionRotationFrame_getAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ActionRotationFrame:getAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionRotationFrame_getAction'.",&tolua_err);
 #endif
@@ -1197,18 +1197,18 @@ int lua_axis_studio_ActionRotationFrame_getRotation(lua_State* tolua_S)
     cocostudio::ActionRotationFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionRotationFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionRotationFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionRotationFrame_getRotation'", nullptr);
@@ -1231,7 +1231,7 @@ int lua_axis_studio_ActionRotationFrame_getRotation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionRotationFrame:getRotation",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionRotationFrame_getRotation'.",&tolua_err);
 #endif
@@ -1244,7 +1244,7 @@ int lua_axis_studio_ActionRotationFrame_constructor(lua_State* tolua_S)
     cocostudio::ActionRotationFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1268,7 +1268,7 @@ int lua_axis_studio_ActionRotationFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionRotationFrame:ActionRotationFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionRotationFrame_constructor'.",&tolua_err);
 #endif
 
@@ -1304,18 +1304,18 @@ int lua_axis_studio_ActionFadeFrame_getOpacity(lua_State* tolua_S)
     cocostudio::ActionFadeFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFadeFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFadeFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFadeFrame_getOpacity'", nullptr);
@@ -1338,7 +1338,7 @@ int lua_axis_studio_ActionFadeFrame_getOpacity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFadeFrame:getOpacity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFadeFrame_getOpacity'.",&tolua_err);
 #endif
@@ -1351,18 +1351,18 @@ int lua_axis_studio_ActionFadeFrame_getAction(lua_State* tolua_S)
     cocostudio::ActionFadeFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFadeFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFadeFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFadeFrame_getAction'", nullptr);
@@ -1388,7 +1388,7 @@ int lua_axis_studio_ActionFadeFrame_getAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFadeFrame:getAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFadeFrame_getAction'.",&tolua_err);
 #endif
@@ -1401,18 +1401,18 @@ int lua_axis_studio_ActionFadeFrame_setOpacity(lua_State* tolua_S)
     cocostudio::ActionFadeFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionFadeFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionFadeFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionFadeFrame_setOpacity'", nullptr);
@@ -1438,7 +1438,7 @@ int lua_axis_studio_ActionFadeFrame_setOpacity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFadeFrame:setOpacity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFadeFrame_setOpacity'.",&tolua_err);
 #endif
@@ -1451,7 +1451,7 @@ int lua_axis_studio_ActionFadeFrame_constructor(lua_State* tolua_S)
     cocostudio::ActionFadeFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1475,7 +1475,7 @@ int lua_axis_studio_ActionFadeFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionFadeFrame:ActionFadeFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionFadeFrame_constructor'.",&tolua_err);
 #endif
 
@@ -1511,18 +1511,18 @@ int lua_axis_studio_ActionTintFrame_getColor(lua_State* tolua_S)
     cocostudio::ActionTintFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTintFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionTintFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTintFrame_getColor'", nullptr);
@@ -1545,7 +1545,7 @@ int lua_axis_studio_ActionTintFrame_getColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:getColor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTintFrame_getColor'.",&tolua_err);
 #endif
@@ -1558,18 +1558,18 @@ int lua_axis_studio_ActionTintFrame_getAction(lua_State* tolua_S)
     cocostudio::ActionTintFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTintFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionTintFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTintFrame_getAction'", nullptr);
@@ -1595,7 +1595,7 @@ int lua_axis_studio_ActionTintFrame_getAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:getAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTintFrame_getAction'.",&tolua_err);
 #endif
@@ -1608,18 +1608,18 @@ int lua_axis_studio_ActionTintFrame_setColor(lua_State* tolua_S)
     cocostudio::ActionTintFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTintFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionTintFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTintFrame_setColor'", nullptr);
@@ -1645,7 +1645,7 @@ int lua_axis_studio_ActionTintFrame_setColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:setColor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTintFrame_setColor'.",&tolua_err);
 #endif
@@ -1658,7 +1658,7 @@ int lua_axis_studio_ActionTintFrame_constructor(lua_State* tolua_S)
     cocostudio::ActionTintFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1682,7 +1682,7 @@ int lua_axis_studio_ActionTintFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTintFrame:ActionTintFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTintFrame_constructor'.",&tolua_err);
 #endif
 
@@ -1718,18 +1718,18 @@ int lua_axis_studio_ActionObject_setCurrentTime(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_setCurrentTime'", nullptr);
@@ -1755,7 +1755,7 @@ int lua_axis_studio_ActionObject_setCurrentTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:setCurrentTime",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_setCurrentTime'.",&tolua_err);
 #endif
@@ -1768,18 +1768,18 @@ int lua_axis_studio_ActionObject_pause(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_pause'", nullptr);
@@ -1802,7 +1802,7 @@ int lua_axis_studio_ActionObject_pause(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:pause",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_pause'.",&tolua_err);
 #endif
@@ -1815,18 +1815,18 @@ int lua_axis_studio_ActionObject_setName(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_setName'", nullptr);
@@ -1852,7 +1852,7 @@ int lua_axis_studio_ActionObject_setName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:setName",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_setName'.",&tolua_err);
 #endif
@@ -1865,18 +1865,18 @@ int lua_axis_studio_ActionObject_setUnitTime(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_setUnitTime'", nullptr);
@@ -1902,7 +1902,7 @@ int lua_axis_studio_ActionObject_setUnitTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:setUnitTime",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_setUnitTime'.",&tolua_err);
 #endif
@@ -1915,18 +1915,18 @@ int lua_axis_studio_ActionObject_getTotalTime(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_getTotalTime'", nullptr);
@@ -1949,7 +1949,7 @@ int lua_axis_studio_ActionObject_getTotalTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:getTotalTime",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_getTotalTime'.",&tolua_err);
 #endif
@@ -1962,18 +1962,18 @@ int lua_axis_studio_ActionObject_getName(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_getName'", nullptr);
@@ -1996,7 +1996,7 @@ int lua_axis_studio_ActionObject_getName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:getName",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_getName'.",&tolua_err);
 #endif
@@ -2009,18 +2009,18 @@ int lua_axis_studio_ActionObject_stop(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_stop'", nullptr);
@@ -2043,7 +2043,7 @@ int lua_axis_studio_ActionObject_stop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:stop",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_stop'.",&tolua_err);
 #endif
@@ -2055,15 +2055,15 @@ int lua_axis_studio_ActionObject_play(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_play'", nullptr);
@@ -2094,7 +2094,7 @@ int lua_axis_studio_ActionObject_play(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ActionObject:play",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_play'.",&tolua_err);
 #endif
@@ -2107,18 +2107,18 @@ int lua_axis_studio_ActionObject_getCurrentTime(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_getCurrentTime'", nullptr);
@@ -2141,7 +2141,7 @@ int lua_axis_studio_ActionObject_getCurrentTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:getCurrentTime",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_getCurrentTime'.",&tolua_err);
 #endif
@@ -2154,18 +2154,18 @@ int lua_axis_studio_ActionObject_removeActionNode(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_removeActionNode'", nullptr);
@@ -2191,7 +2191,7 @@ int lua_axis_studio_ActionObject_removeActionNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:removeActionNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_removeActionNode'.",&tolua_err);
 #endif
@@ -2204,18 +2204,18 @@ int lua_axis_studio_ActionObject_getLoop(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_getLoop'", nullptr);
@@ -2238,7 +2238,7 @@ int lua_axis_studio_ActionObject_getLoop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:getLoop",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_getLoop'.",&tolua_err);
 #endif
@@ -2251,18 +2251,18 @@ int lua_axis_studio_ActionObject_addActionNode(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_addActionNode'", nullptr);
@@ -2288,7 +2288,7 @@ int lua_axis_studio_ActionObject_addActionNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:addActionNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_addActionNode'.",&tolua_err);
 #endif
@@ -2301,18 +2301,18 @@ int lua_axis_studio_ActionObject_getUnitTime(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_getUnitTime'", nullptr);
@@ -2335,7 +2335,7 @@ int lua_axis_studio_ActionObject_getUnitTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:getUnitTime",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_getUnitTime'.",&tolua_err);
 #endif
@@ -2348,18 +2348,18 @@ int lua_axis_studio_ActionObject_isPlaying(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_isPlaying'", nullptr);
@@ -2382,7 +2382,7 @@ int lua_axis_studio_ActionObject_isPlaying(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:isPlaying",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_isPlaying'.",&tolua_err);
 #endif
@@ -2395,18 +2395,18 @@ int lua_axis_studio_ActionObject_updateToFrameByTime(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_updateToFrameByTime'", nullptr);
@@ -2432,7 +2432,7 @@ int lua_axis_studio_ActionObject_updateToFrameByTime(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:updateToFrameByTime",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_updateToFrameByTime'.",&tolua_err);
 #endif
@@ -2445,18 +2445,18 @@ int lua_axis_studio_ActionObject_setLoop(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_setLoop'", nullptr);
@@ -2482,7 +2482,7 @@ int lua_axis_studio_ActionObject_setLoop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:setLoop",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_setLoop'.",&tolua_err);
 #endif
@@ -2495,18 +2495,18 @@ int lua_axis_studio_ActionObject_simulationActionUpdate(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionObject",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionObject*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionObject_simulationActionUpdate'", nullptr);
@@ -2532,7 +2532,7 @@ int lua_axis_studio_ActionObject_simulationActionUpdate(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:simulationActionUpdate",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_simulationActionUpdate'.",&tolua_err);
 #endif
@@ -2545,7 +2545,7 @@ int lua_axis_studio_ActionObject_constructor(lua_State* tolua_S)
     cocostudio::ActionObject* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -2569,7 +2569,7 @@ int lua_axis_studio_ActionObject_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionObject:ActionObject",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionObject_constructor'.",&tolua_err);
 #endif
 
@@ -2619,18 +2619,18 @@ int lua_axis_studio_ActionManagerEx_stopActionByName(lua_State* tolua_S)
     cocostudio::ActionManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionManagerEx_stopActionByName'", nullptr);
@@ -2659,7 +2659,7 @@ int lua_axis_studio_ActionManagerEx_stopActionByName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionManagerEx:stopActionByName",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_stopActionByName'.",&tolua_err);
 #endif
@@ -2672,18 +2672,18 @@ int lua_axis_studio_ActionManagerEx_getActionByName(lua_State* tolua_S)
     cocostudio::ActionManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionManagerEx_getActionByName'", nullptr);
@@ -2712,7 +2712,7 @@ int lua_axis_studio_ActionManagerEx_getActionByName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionManagerEx:getActionByName",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_getActionByName'.",&tolua_err);
 #endif
@@ -2725,18 +2725,18 @@ int lua_axis_studio_ActionManagerEx_getStudioVersionNumber(lua_State* tolua_S)
     cocostudio::ActionManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionManagerEx_getStudioVersionNumber'", nullptr);
@@ -2759,7 +2759,7 @@ int lua_axis_studio_ActionManagerEx_getStudioVersionNumber(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionManagerEx:getStudioVersionNumber",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_getStudioVersionNumber'.",&tolua_err);
 #endif
@@ -2771,15 +2771,15 @@ int lua_axis_studio_ActionManagerEx_playActionByName(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ActionManagerEx* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionManagerEx_playActionByName'", nullptr);
@@ -2826,7 +2826,7 @@ int lua_axis_studio_ActionManagerEx_playActionByName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ActionManagerEx:playActionByName",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_playActionByName'.",&tolua_err);
 #endif
@@ -2839,18 +2839,18 @@ int lua_axis_studio_ActionManagerEx_releaseActions(lua_State* tolua_S)
     cocostudio::ActionManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ActionManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionManagerEx_releaseActions'", nullptr);
@@ -2873,7 +2873,7 @@ int lua_axis_studio_ActionManagerEx_releaseActions(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionManagerEx:releaseActions",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_releaseActions'.",&tolua_err);
 #endif
@@ -2885,11 +2885,11 @@ int lua_axis_studio_ActionManagerEx_destroyInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -2908,7 +2908,7 @@ int lua_axis_studio_ActionManagerEx_destroyInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionManagerEx:destroyInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_destroyInstance'.",&tolua_err);
 #endif
@@ -2919,11 +2919,11 @@ int lua_axis_studio_ActionManagerEx_getInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -2942,7 +2942,7 @@ int lua_axis_studio_ActionManagerEx_getInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionManagerEx:getInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionManagerEx_getInstance'.",&tolua_err);
 #endif
@@ -2980,18 +2980,18 @@ int lua_axis_studio_BaseData_getColor(lua_State* tolua_S)
     cocostudio::BaseData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BaseData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::BaseData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BaseData_getColor'", nullptr);
@@ -3014,7 +3014,7 @@ int lua_axis_studio_BaseData_getColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BaseData:getColor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BaseData_getColor'.",&tolua_err);
 #endif
@@ -3027,18 +3027,18 @@ int lua_axis_studio_BaseData_setColor(lua_State* tolua_S)
     cocostudio::BaseData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BaseData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::BaseData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BaseData_setColor'", nullptr);
@@ -3064,7 +3064,7 @@ int lua_axis_studio_BaseData_setColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BaseData:setColor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BaseData_setColor'.",&tolua_err);
 #endif
@@ -3076,11 +3076,11 @@ int lua_axis_studio_BaseData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.BaseData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3099,7 +3099,7 @@ int lua_axis_studio_BaseData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.BaseData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BaseData_create'.",&tolua_err);
 #endif
@@ -3111,7 +3111,7 @@ int lua_axis_studio_BaseData_constructor(lua_State* tolua_S)
     cocostudio::BaseData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3135,7 +3135,7 @@ int lua_axis_studio_BaseData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BaseData:BaseData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BaseData_constructor'.",&tolua_err);
 #endif
 
@@ -3171,18 +3171,18 @@ int lua_axis_studio_DisplayData_copy(lua_State* tolua_S)
     cocostudio::DisplayData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayData_copy'", nullptr);
@@ -3208,7 +3208,7 @@ int lua_axis_studio_DisplayData_copy(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayData:copy",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayData_copy'.",&tolua_err);
 #endif
@@ -3220,11 +3220,11 @@ int lua_axis_studio_DisplayData_changeDisplayToTexture(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.DisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3245,7 +3245,7 @@ int lua_axis_studio_DisplayData_changeDisplayToTexture(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.DisplayData:changeDisplayToTexture",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayData_changeDisplayToTexture'.",&tolua_err);
 #endif
@@ -3256,11 +3256,11 @@ int lua_axis_studio_DisplayData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.DisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3279,7 +3279,7 @@ int lua_axis_studio_DisplayData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.DisplayData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayData_create'.",&tolua_err);
 #endif
@@ -3291,7 +3291,7 @@ int lua_axis_studio_DisplayData_constructor(lua_State* tolua_S)
     cocostudio::DisplayData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3315,7 +3315,7 @@ int lua_axis_studio_DisplayData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayData:DisplayData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayData_constructor'.",&tolua_err);
 #endif
 
@@ -3351,18 +3351,18 @@ int lua_axis_studio_SpriteDisplayData_copy(lua_State* tolua_S)
     cocostudio::SpriteDisplayData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SpriteDisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::SpriteDisplayData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SpriteDisplayData_copy'", nullptr);
@@ -3388,7 +3388,7 @@ int lua_axis_studio_SpriteDisplayData_copy(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SpriteDisplayData:copy",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SpriteDisplayData_copy'.",&tolua_err);
 #endif
@@ -3400,11 +3400,11 @@ int lua_axis_studio_SpriteDisplayData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.SpriteDisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3423,7 +3423,7 @@ int lua_axis_studio_SpriteDisplayData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.SpriteDisplayData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SpriteDisplayData_create'.",&tolua_err);
 #endif
@@ -3435,7 +3435,7 @@ int lua_axis_studio_SpriteDisplayData_constructor(lua_State* tolua_S)
     cocostudio::SpriteDisplayData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3459,7 +3459,7 @@ int lua_axis_studio_SpriteDisplayData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SpriteDisplayData:SpriteDisplayData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SpriteDisplayData_constructor'.",&tolua_err);
 #endif
 
@@ -3493,11 +3493,11 @@ int lua_axis_studio_ArmatureDisplayData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ArmatureDisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3516,7 +3516,7 @@ int lua_axis_studio_ArmatureDisplayData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ArmatureDisplayData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDisplayData_create'.",&tolua_err);
 #endif
@@ -3528,7 +3528,7 @@ int lua_axis_studio_ArmatureDisplayData_constructor(lua_State* tolua_S)
     cocostudio::ArmatureDisplayData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3552,7 +3552,7 @@ int lua_axis_studio_ArmatureDisplayData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDisplayData:ArmatureDisplayData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDisplayData_constructor'.",&tolua_err);
 #endif
 
@@ -3585,11 +3585,11 @@ int lua_axis_studio_ParticleDisplayData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ParticleDisplayData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3608,7 +3608,7 @@ int lua_axis_studio_ParticleDisplayData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ParticleDisplayData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ParticleDisplayData_create'.",&tolua_err);
 #endif
@@ -3620,7 +3620,7 @@ int lua_axis_studio_ParticleDisplayData_constructor(lua_State* tolua_S)
     cocostudio::ParticleDisplayData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3644,7 +3644,7 @@ int lua_axis_studio_ParticleDisplayData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ParticleDisplayData:ParticleDisplayData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ParticleDisplayData_constructor'.",&tolua_err);
 #endif
 
@@ -3678,18 +3678,18 @@ int lua_axis_studio_BoneData_getDisplayData(lua_State* tolua_S)
     cocostudio::BoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::BoneData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneData_getDisplayData'", nullptr);
@@ -3715,7 +3715,7 @@ int lua_axis_studio_BoneData_getDisplayData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneData:getDisplayData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneData_getDisplayData'.",&tolua_err);
 #endif
@@ -3728,18 +3728,18 @@ int lua_axis_studio_BoneData_init(lua_State* tolua_S)
     cocostudio::BoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::BoneData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneData_init'", nullptr);
@@ -3762,7 +3762,7 @@ int lua_axis_studio_BoneData_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneData:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneData_init'.",&tolua_err);
 #endif
@@ -3775,18 +3775,18 @@ int lua_axis_studio_BoneData_addDisplayData(lua_State* tolua_S)
     cocostudio::BoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::BoneData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneData_addDisplayData'", nullptr);
@@ -3812,7 +3812,7 @@ int lua_axis_studio_BoneData_addDisplayData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneData:addDisplayData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneData_addDisplayData'.",&tolua_err);
 #endif
@@ -3824,11 +3824,11 @@ int lua_axis_studio_BoneData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.BoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -3847,7 +3847,7 @@ int lua_axis_studio_BoneData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.BoneData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneData_create'.",&tolua_err);
 #endif
@@ -3859,7 +3859,7 @@ int lua_axis_studio_BoneData_constructor(lua_State* tolua_S)
     cocostudio::BoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3883,7 +3883,7 @@ int lua_axis_studio_BoneData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneData:BoneData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneData_constructor'.",&tolua_err);
 #endif
 
@@ -3920,18 +3920,18 @@ int lua_axis_studio_ArmatureData_addBoneData(lua_State* tolua_S)
     cocostudio::ArmatureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureData_addBoneData'", nullptr);
@@ -3957,7 +3957,7 @@ int lua_axis_studio_ArmatureData_addBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureData:addBoneData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureData_addBoneData'.",&tolua_err);
 #endif
@@ -3970,18 +3970,18 @@ int lua_axis_studio_ArmatureData_init(lua_State* tolua_S)
     cocostudio::ArmatureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureData_init'", nullptr);
@@ -4004,7 +4004,7 @@ int lua_axis_studio_ArmatureData_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureData:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureData_init'.",&tolua_err);
 #endif
@@ -4017,18 +4017,18 @@ int lua_axis_studio_ArmatureData_getBoneData(lua_State* tolua_S)
     cocostudio::ArmatureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureData_getBoneData'", nullptr);
@@ -4054,7 +4054,7 @@ int lua_axis_studio_ArmatureData_getBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureData:getBoneData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureData_getBoneData'.",&tolua_err);
 #endif
@@ -4066,11 +4066,11 @@ int lua_axis_studio_ArmatureData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ArmatureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -4089,7 +4089,7 @@ int lua_axis_studio_ArmatureData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ArmatureData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureData_create'.",&tolua_err);
 #endif
@@ -4101,7 +4101,7 @@ int lua_axis_studio_ArmatureData_constructor(lua_State* tolua_S)
     cocostudio::ArmatureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -4125,7 +4125,7 @@ int lua_axis_studio_ArmatureData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureData:ArmatureData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureData_constructor'.",&tolua_err);
 #endif
 
@@ -4162,18 +4162,18 @@ int lua_axis_studio_FrameData_copy(lua_State* tolua_S)
     cocostudio::FrameData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.FrameData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::FrameData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_FrameData_copy'", nullptr);
@@ -4199,7 +4199,7 @@ int lua_axis_studio_FrameData_copy(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.FrameData:copy",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_FrameData_copy'.",&tolua_err);
 #endif
@@ -4211,11 +4211,11 @@ int lua_axis_studio_FrameData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.FrameData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -4234,7 +4234,7 @@ int lua_axis_studio_FrameData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.FrameData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_FrameData_create'.",&tolua_err);
 #endif
@@ -4246,7 +4246,7 @@ int lua_axis_studio_FrameData_constructor(lua_State* tolua_S)
     cocostudio::FrameData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -4270,7 +4270,7 @@ int lua_axis_studio_FrameData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.FrameData:FrameData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_FrameData_constructor'.",&tolua_err);
 #endif
 
@@ -4305,18 +4305,18 @@ int lua_axis_studio_MovementBoneData_init(lua_State* tolua_S)
     cocostudio::MovementBoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.MovementBoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::MovementBoneData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_MovementBoneData_init'", nullptr);
@@ -4339,7 +4339,7 @@ int lua_axis_studio_MovementBoneData_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementBoneData:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementBoneData_init'.",&tolua_err);
 #endif
@@ -4352,18 +4352,18 @@ int lua_axis_studio_MovementBoneData_getFrameData(lua_State* tolua_S)
     cocostudio::MovementBoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.MovementBoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::MovementBoneData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_MovementBoneData_getFrameData'", nullptr);
@@ -4389,7 +4389,7 @@ int lua_axis_studio_MovementBoneData_getFrameData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementBoneData:getFrameData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementBoneData_getFrameData'.",&tolua_err);
 #endif
@@ -4402,18 +4402,18 @@ int lua_axis_studio_MovementBoneData_addFrameData(lua_State* tolua_S)
     cocostudio::MovementBoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.MovementBoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::MovementBoneData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_MovementBoneData_addFrameData'", nullptr);
@@ -4439,7 +4439,7 @@ int lua_axis_studio_MovementBoneData_addFrameData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementBoneData:addFrameData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementBoneData_addFrameData'.",&tolua_err);
 #endif
@@ -4451,11 +4451,11 @@ int lua_axis_studio_MovementBoneData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.MovementBoneData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -4474,7 +4474,7 @@ int lua_axis_studio_MovementBoneData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.MovementBoneData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementBoneData_create'.",&tolua_err);
 #endif
@@ -4486,7 +4486,7 @@ int lua_axis_studio_MovementBoneData_constructor(lua_State* tolua_S)
     cocostudio::MovementBoneData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -4510,7 +4510,7 @@ int lua_axis_studio_MovementBoneData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementBoneData:MovementBoneData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementBoneData_constructor'.",&tolua_err);
 #endif
 
@@ -4547,18 +4547,18 @@ int lua_axis_studio_MovementData_getMovementBoneData(lua_State* tolua_S)
     cocostudio::MovementData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.MovementData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::MovementData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_MovementData_getMovementBoneData'", nullptr);
@@ -4584,7 +4584,7 @@ int lua_axis_studio_MovementData_getMovementBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementData:getMovementBoneData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementData_getMovementBoneData'.",&tolua_err);
 #endif
@@ -4597,18 +4597,18 @@ int lua_axis_studio_MovementData_addMovementBoneData(lua_State* tolua_S)
     cocostudio::MovementData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.MovementData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::MovementData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_MovementData_addMovementBoneData'", nullptr);
@@ -4634,7 +4634,7 @@ int lua_axis_studio_MovementData_addMovementBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementData:addMovementBoneData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementData_addMovementBoneData'.",&tolua_err);
 #endif
@@ -4646,11 +4646,11 @@ int lua_axis_studio_MovementData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.MovementData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -4669,7 +4669,7 @@ int lua_axis_studio_MovementData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.MovementData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementData_create'.",&tolua_err);
 #endif
@@ -4681,7 +4681,7 @@ int lua_axis_studio_MovementData_constructor(lua_State* tolua_S)
     cocostudio::MovementData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -4705,7 +4705,7 @@ int lua_axis_studio_MovementData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.MovementData:MovementData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_MovementData_constructor'.",&tolua_err);
 #endif
 
@@ -4741,18 +4741,18 @@ int lua_axis_studio_AnimationData_getMovement(lua_State* tolua_S)
     cocostudio::AnimationData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AnimationData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::AnimationData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AnimationData_getMovement'", nullptr);
@@ -4778,7 +4778,7 @@ int lua_axis_studio_AnimationData_getMovement(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnimationData:getMovement",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnimationData_getMovement'.",&tolua_err);
 #endif
@@ -4791,18 +4791,18 @@ int lua_axis_studio_AnimationData_getMovementCount(lua_State* tolua_S)
     cocostudio::AnimationData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AnimationData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::AnimationData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AnimationData_getMovementCount'", nullptr);
@@ -4825,7 +4825,7 @@ int lua_axis_studio_AnimationData_getMovementCount(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnimationData:getMovementCount",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnimationData_getMovementCount'.",&tolua_err);
 #endif
@@ -4838,18 +4838,18 @@ int lua_axis_studio_AnimationData_addMovement(lua_State* tolua_S)
     cocostudio::AnimationData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AnimationData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::AnimationData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AnimationData_addMovement'", nullptr);
@@ -4875,7 +4875,7 @@ int lua_axis_studio_AnimationData_addMovement(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnimationData:addMovement",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnimationData_addMovement'.",&tolua_err);
 #endif
@@ -4887,11 +4887,11 @@ int lua_axis_studio_AnimationData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.AnimationData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -4910,7 +4910,7 @@ int lua_axis_studio_AnimationData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.AnimationData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnimationData_create'.",&tolua_err);
 #endif
@@ -4922,7 +4922,7 @@ int lua_axis_studio_AnimationData_constructor(lua_State* tolua_S)
     cocostudio::AnimationData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -4946,7 +4946,7 @@ int lua_axis_studio_AnimationData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnimationData:AnimationData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnimationData_constructor'.",&tolua_err);
 #endif
 
@@ -4983,18 +4983,18 @@ int lua_axis_studio_ContourData_init(lua_State* tolua_S)
     cocostudio::ContourData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ContourData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ContourData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ContourData_init'", nullptr);
@@ -5017,7 +5017,7 @@ int lua_axis_studio_ContourData_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ContourData:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ContourData_init'.",&tolua_err);
 #endif
@@ -5030,18 +5030,18 @@ int lua_axis_studio_ContourData_addVertex(lua_State* tolua_S)
     cocostudio::ContourData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ContourData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ContourData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ContourData_addVertex'", nullptr);
@@ -5067,7 +5067,7 @@ int lua_axis_studio_ContourData_addVertex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ContourData:addVertex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ContourData_addVertex'.",&tolua_err);
 #endif
@@ -5079,11 +5079,11 @@ int lua_axis_studio_ContourData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ContourData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -5102,7 +5102,7 @@ int lua_axis_studio_ContourData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ContourData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ContourData_create'.",&tolua_err);
 #endif
@@ -5114,7 +5114,7 @@ int lua_axis_studio_ContourData_constructor(lua_State* tolua_S)
     cocostudio::ContourData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -5138,7 +5138,7 @@ int lua_axis_studio_ContourData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ContourData:ContourData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ContourData_constructor'.",&tolua_err);
 #endif
 
@@ -5174,18 +5174,18 @@ int lua_axis_studio_TextureData_getContourData(lua_State* tolua_S)
     cocostudio::TextureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.TextureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::TextureData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_TextureData_getContourData'", nullptr);
@@ -5211,7 +5211,7 @@ int lua_axis_studio_TextureData_getContourData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureData:getContourData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureData_getContourData'.",&tolua_err);
 #endif
@@ -5224,18 +5224,18 @@ int lua_axis_studio_TextureData_init(lua_State* tolua_S)
     cocostudio::TextureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.TextureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::TextureData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_TextureData_init'", nullptr);
@@ -5258,7 +5258,7 @@ int lua_axis_studio_TextureData_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureData:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureData_init'.",&tolua_err);
 #endif
@@ -5271,18 +5271,18 @@ int lua_axis_studio_TextureData_addContourData(lua_State* tolua_S)
     cocostudio::TextureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.TextureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::TextureData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_TextureData_addContourData'", nullptr);
@@ -5308,7 +5308,7 @@ int lua_axis_studio_TextureData_addContourData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureData:addContourData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureData_addContourData'.",&tolua_err);
 #endif
@@ -5320,11 +5320,11 @@ int lua_axis_studio_TextureData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.TextureData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -5343,7 +5343,7 @@ int lua_axis_studio_TextureData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.TextureData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureData_create'.",&tolua_err);
 #endif
@@ -5355,7 +5355,7 @@ int lua_axis_studio_TextureData_constructor(lua_State* tolua_S)
     cocostudio::TextureData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -5379,7 +5379,7 @@ int lua_axis_studio_TextureData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureData:TextureData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureData_constructor'.",&tolua_err);
 #endif
 
@@ -5416,18 +5416,18 @@ int lua_axis_studio_Tween_getAnimation(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Tween_getAnimation'", nullptr);
@@ -5450,7 +5450,7 @@ int lua_axis_studio_Tween_getAnimation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:getAnimation",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_getAnimation'.",&tolua_err);
 #endif
@@ -5463,18 +5463,18 @@ int lua_axis_studio_Tween_gotoAndPause(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Tween_gotoAndPause'", nullptr);
@@ -5500,7 +5500,7 @@ int lua_axis_studio_Tween_gotoAndPause(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:gotoAndPause",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_gotoAndPause'.",&tolua_err);
 #endif
@@ -5513,18 +5513,18 @@ int lua_axis_studio_Tween_play(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Tween_play'", nullptr);
@@ -5562,7 +5562,7 @@ int lua_axis_studio_Tween_play(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:play",argc, 5);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_play'.",&tolua_err);
 #endif
@@ -5575,18 +5575,18 @@ int lua_axis_studio_Tween_gotoAndPlay(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Tween_gotoAndPlay'", nullptr);
@@ -5612,7 +5612,7 @@ int lua_axis_studio_Tween_gotoAndPlay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:gotoAndPlay",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_gotoAndPlay'.",&tolua_err);
 #endif
@@ -5625,18 +5625,18 @@ int lua_axis_studio_Tween_init(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Tween_init'", nullptr);
@@ -5662,7 +5662,7 @@ int lua_axis_studio_Tween_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_init'.",&tolua_err);
 #endif
@@ -5675,18 +5675,18 @@ int lua_axis_studio_Tween_setAnimation(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Tween*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Tween_setAnimation'", nullptr);
@@ -5712,7 +5712,7 @@ int lua_axis_studio_Tween_setAnimation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:setAnimation",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_setAnimation'.",&tolua_err);
 #endif
@@ -5724,11 +5724,11 @@ int lua_axis_studio_Tween_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.Tween",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -5749,7 +5749,7 @@ int lua_axis_studio_Tween_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.Tween:create",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_create'.",&tolua_err);
 #endif
@@ -5761,7 +5761,7 @@ int lua_axis_studio_Tween_constructor(lua_State* tolua_S)
     cocostudio::Tween* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -5785,7 +5785,7 @@ int lua_axis_studio_Tween_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Tween:Tween",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Tween_constructor'.",&tolua_err);
 #endif
 
@@ -5825,18 +5825,18 @@ int lua_axis_studio_DisplayManager_getDisplayRenderNode(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getDisplayRenderNode'", nullptr);
@@ -5859,7 +5859,7 @@ int lua_axis_studio_DisplayManager_getDisplayRenderNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getDisplayRenderNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getDisplayRenderNode'.",&tolua_err);
 #endif
@@ -5872,18 +5872,18 @@ int lua_axis_studio_DisplayManager_getAnchorPointInPoints(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getAnchorPointInPoints'", nullptr);
@@ -5906,7 +5906,7 @@ int lua_axis_studio_DisplayManager_getAnchorPointInPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getAnchorPointInPoints",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getAnchorPointInPoints'.",&tolua_err);
 #endif
@@ -5919,18 +5919,18 @@ int lua_axis_studio_DisplayManager_getDisplayRenderNodeType(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getDisplayRenderNodeType'", nullptr);
@@ -5953,7 +5953,7 @@ int lua_axis_studio_DisplayManager_getDisplayRenderNodeType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getDisplayRenderNodeType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getDisplayRenderNodeType'.",&tolua_err);
 #endif
@@ -5966,18 +5966,18 @@ int lua_axis_studio_DisplayManager_removeDisplay(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_removeDisplay'", nullptr);
@@ -6003,7 +6003,7 @@ int lua_axis_studio_DisplayManager_removeDisplay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:removeDisplay",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_removeDisplay'.",&tolua_err);
 #endif
@@ -6016,18 +6016,18 @@ int lua_axis_studio_DisplayManager_setForceChangeDisplay(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_setForceChangeDisplay'", nullptr);
@@ -6053,7 +6053,7 @@ int lua_axis_studio_DisplayManager_setForceChangeDisplay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:setForceChangeDisplay",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_setForceChangeDisplay'.",&tolua_err);
 #endif
@@ -6066,18 +6066,18 @@ int lua_axis_studio_DisplayManager_init(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_init'", nullptr);
@@ -6103,7 +6103,7 @@ int lua_axis_studio_DisplayManager_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_init'.",&tolua_err);
 #endif
@@ -6116,18 +6116,18 @@ int lua_axis_studio_DisplayManager_getContentSize(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getContentSize'", nullptr);
@@ -6150,7 +6150,7 @@ int lua_axis_studio_DisplayManager_getContentSize(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getContentSize",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getContentSize'.",&tolua_err);
 #endif
@@ -6163,18 +6163,18 @@ int lua_axis_studio_DisplayManager_getBoundingBox(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getBoundingBox'", nullptr);
@@ -6197,7 +6197,7 @@ int lua_axis_studio_DisplayManager_getBoundingBox(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getBoundingBox",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getBoundingBox'.",&tolua_err);
 #endif
@@ -6209,15 +6209,15 @@ int lua_axis_studio_DisplayManager_addDisplay(lua_State* tolua_S)
     int argc = 0;
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_addDisplay'", nullptr);
@@ -6260,7 +6260,7 @@ int lua_axis_studio_DisplayManager_addDisplay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.DisplayManager:addDisplay",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_addDisplay'.",&tolua_err);
 #endif
@@ -6272,15 +6272,15 @@ int lua_axis_studio_DisplayManager_containPoint(lua_State* tolua_S)
     int argc = 0;
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_containPoint'", nullptr);
@@ -6319,7 +6319,7 @@ int lua_axis_studio_DisplayManager_containPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.DisplayManager:containPoint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_containPoint'.",&tolua_err);
 #endif
@@ -6332,18 +6332,18 @@ int lua_axis_studio_DisplayManager_changeDisplayWithIndex(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_changeDisplayWithIndex'", nullptr);
@@ -6372,7 +6372,7 @@ int lua_axis_studio_DisplayManager_changeDisplayWithIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:changeDisplayWithIndex",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_changeDisplayWithIndex'.",&tolua_err);
 #endif
@@ -6385,18 +6385,18 @@ int lua_axis_studio_DisplayManager_changeDisplayWithName(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_changeDisplayWithName'", nullptr);
@@ -6425,7 +6425,7 @@ int lua_axis_studio_DisplayManager_changeDisplayWithName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:changeDisplayWithName",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_changeDisplayWithName'.",&tolua_err);
 #endif
@@ -6438,18 +6438,18 @@ int lua_axis_studio_DisplayManager_isForceChangeDisplay(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_isForceChangeDisplay'", nullptr);
@@ -6472,7 +6472,7 @@ int lua_axis_studio_DisplayManager_isForceChangeDisplay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:isForceChangeDisplay",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_isForceChangeDisplay'.",&tolua_err);
 #endif
@@ -6485,18 +6485,18 @@ int lua_axis_studio_DisplayManager_getCurrentDisplayIndex(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getCurrentDisplayIndex'", nullptr);
@@ -6519,7 +6519,7 @@ int lua_axis_studio_DisplayManager_getCurrentDisplayIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getCurrentDisplayIndex",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getCurrentDisplayIndex'.",&tolua_err);
 #endif
@@ -6532,18 +6532,18 @@ int lua_axis_studio_DisplayManager_getAnchorPoint(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getAnchorPoint'", nullptr);
@@ -6566,7 +6566,7 @@ int lua_axis_studio_DisplayManager_getAnchorPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getAnchorPoint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getAnchorPoint'.",&tolua_err);
 #endif
@@ -6579,18 +6579,18 @@ int lua_axis_studio_DisplayManager_getDecorativeDisplayList(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_getDecorativeDisplayList'", nullptr);
@@ -6613,7 +6613,7 @@ int lua_axis_studio_DisplayManager_getDecorativeDisplayList(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:getDecorativeDisplayList",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_getDecorativeDisplayList'.",&tolua_err);
 #endif
@@ -6626,18 +6626,18 @@ int lua_axis_studio_DisplayManager_isVisible(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_isVisible'", nullptr);
@@ -6660,7 +6660,7 @@ int lua_axis_studio_DisplayManager_isVisible(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:isVisible",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_isVisible'.",&tolua_err);
 #endif
@@ -6673,18 +6673,18 @@ int lua_axis_studio_DisplayManager_setVisible(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::DisplayManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_DisplayManager_setVisible'", nullptr);
@@ -6710,7 +6710,7 @@ int lua_axis_studio_DisplayManager_setVisible(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:setVisible",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_setVisible'.",&tolua_err);
 #endif
@@ -6722,11 +6722,11 @@ int lua_axis_studio_DisplayManager_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.DisplayManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -6747,7 +6747,7 @@ int lua_axis_studio_DisplayManager_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.DisplayManager:create",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_create'.",&tolua_err);
 #endif
@@ -6759,7 +6759,7 @@ int lua_axis_studio_DisplayManager_constructor(lua_State* tolua_S)
     cocostudio::DisplayManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -6783,7 +6783,7 @@ int lua_axis_studio_DisplayManager_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.DisplayManager:DisplayManager",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_DisplayManager_constructor'.",&tolua_err);
 #endif
 
@@ -6835,18 +6835,18 @@ int lua_axis_studio_Bone_isTransformDirty(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_isTransformDirty'", nullptr);
@@ -6869,7 +6869,7 @@ int lua_axis_studio_Bone_isTransformDirty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:isTransformDirty",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_isTransformDirty'.",&tolua_err);
 #endif
@@ -6882,18 +6882,18 @@ int lua_axis_studio_Bone_setBlendFunc(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setBlendFunc'", nullptr);
@@ -6919,7 +6919,7 @@ int lua_axis_studio_Bone_setBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setBlendFunc",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setBlendFunc'.",&tolua_err);
 #endif
@@ -6932,18 +6932,18 @@ int lua_axis_studio_Bone_isIgnoreMovementBoneData(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_isIgnoreMovementBoneData'", nullptr);
@@ -6966,7 +6966,7 @@ int lua_axis_studio_Bone_isIgnoreMovementBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:isIgnoreMovementBoneData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_isIgnoreMovementBoneData'.",&tolua_err);
 #endif
@@ -6979,18 +6979,18 @@ int lua_axis_studio_Bone_updateZOrder(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_updateZOrder'", nullptr);
@@ -7013,7 +7013,7 @@ int lua_axis_studio_Bone_updateZOrder(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:updateZOrder",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_updateZOrder'.",&tolua_err);
 #endif
@@ -7026,18 +7026,18 @@ int lua_axis_studio_Bone_getDisplayRenderNode(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getDisplayRenderNode'", nullptr);
@@ -7060,7 +7060,7 @@ int lua_axis_studio_Bone_getDisplayRenderNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getDisplayRenderNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getDisplayRenderNode'.",&tolua_err);
 #endif
@@ -7073,18 +7073,18 @@ int lua_axis_studio_Bone_isBlendDirty(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_isBlendDirty'", nullptr);
@@ -7107,7 +7107,7 @@ int lua_axis_studio_Bone_isBlendDirty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:isBlendDirty",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_isBlendDirty'.",&tolua_err);
 #endif
@@ -7120,18 +7120,18 @@ int lua_axis_studio_Bone_addChildBone(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_addChildBone'", nullptr);
@@ -7157,7 +7157,7 @@ int lua_axis_studio_Bone_addChildBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:addChildBone",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_addChildBone'.",&tolua_err);
 #endif
@@ -7170,18 +7170,18 @@ int lua_axis_studio_Bone_getWorldInfo(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getWorldInfo'", nullptr);
@@ -7204,7 +7204,7 @@ int lua_axis_studio_Bone_getWorldInfo(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getWorldInfo",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getWorldInfo'.",&tolua_err);
 #endif
@@ -7217,18 +7217,18 @@ int lua_axis_studio_Bone_getTween(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getTween'", nullptr);
@@ -7251,7 +7251,7 @@ int lua_axis_studio_Bone_getTween(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getTween",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getTween'.",&tolua_err);
 #endif
@@ -7264,18 +7264,18 @@ int lua_axis_studio_Bone_getParentBone(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getParentBone'", nullptr);
@@ -7298,7 +7298,7 @@ int lua_axis_studio_Bone_getParentBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getParentBone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getParentBone'.",&tolua_err);
 #endif
@@ -7311,18 +7311,18 @@ int lua_axis_studio_Bone_updateColor(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_updateColor'", nullptr);
@@ -7345,7 +7345,7 @@ int lua_axis_studio_Bone_updateColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:updateColor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_updateColor'.",&tolua_err);
 #endif
@@ -7358,18 +7358,18 @@ int lua_axis_studio_Bone_setTransformDirty(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setTransformDirty'", nullptr);
@@ -7395,7 +7395,7 @@ int lua_axis_studio_Bone_setTransformDirty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setTransformDirty",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setTransformDirty'.",&tolua_err);
 #endif
@@ -7408,18 +7408,18 @@ int lua_axis_studio_Bone_getDisplayRenderNodeType(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getDisplayRenderNodeType'", nullptr);
@@ -7442,7 +7442,7 @@ int lua_axis_studio_Bone_getDisplayRenderNodeType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getDisplayRenderNodeType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getDisplayRenderNodeType'.",&tolua_err);
 #endif
@@ -7455,18 +7455,18 @@ int lua_axis_studio_Bone_removeDisplay(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_removeDisplay'", nullptr);
@@ -7492,7 +7492,7 @@ int lua_axis_studio_Bone_removeDisplay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:removeDisplay",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_removeDisplay'.",&tolua_err);
 #endif
@@ -7505,18 +7505,18 @@ int lua_axis_studio_Bone_setBoneData(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setBoneData'", nullptr);
@@ -7542,7 +7542,7 @@ int lua_axis_studio_Bone_setBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setBoneData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setBoneData'.",&tolua_err);
 #endif
@@ -7555,18 +7555,18 @@ int lua_axis_studio_Bone_init(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_init'", nullptr);
@@ -7592,7 +7592,7 @@ int lua_axis_studio_Bone_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_init'.",&tolua_err);
 #endif
@@ -7605,18 +7605,18 @@ int lua_axis_studio_Bone_setParentBone(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setParentBone'", nullptr);
@@ -7642,7 +7642,7 @@ int lua_axis_studio_Bone_setParentBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setParentBone",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setParentBone'.",&tolua_err);
 #endif
@@ -7654,15 +7654,15 @@ int lua_axis_studio_Bone_addDisplay(lua_State* tolua_S)
     int argc = 0;
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_addDisplay'", nullptr);
@@ -7705,7 +7705,7 @@ int lua_axis_studio_Bone_addDisplay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.Bone:addDisplay",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_addDisplay'.",&tolua_err);
 #endif
@@ -7718,18 +7718,18 @@ int lua_axis_studio_Bone_getBlendFunc(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getBlendFunc'", nullptr);
@@ -7752,7 +7752,7 @@ int lua_axis_studio_Bone_getBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getBlendFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getBlendFunc'.",&tolua_err);
 #endif
@@ -7765,18 +7765,18 @@ int lua_axis_studio_Bone_removeFromParent(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_removeFromParent'", nullptr);
@@ -7802,7 +7802,7 @@ int lua_axis_studio_Bone_removeFromParent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:removeFromParent",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_removeFromParent'.",&tolua_err);
 #endif
@@ -7815,18 +7815,18 @@ int lua_axis_studio_Bone_getColliderDetector(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getColliderDetector'", nullptr);
@@ -7849,7 +7849,7 @@ int lua_axis_studio_Bone_getColliderDetector(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getColliderDetector",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getColliderDetector'.",&tolua_err);
 #endif
@@ -7862,18 +7862,18 @@ int lua_axis_studio_Bone_getChildArmature(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getChildArmature'", nullptr);
@@ -7896,7 +7896,7 @@ int lua_axis_studio_Bone_getChildArmature(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getChildArmature",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getChildArmature'.",&tolua_err);
 #endif
@@ -7909,18 +7909,18 @@ int lua_axis_studio_Bone_getTweenData(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getTweenData'", nullptr);
@@ -7943,7 +7943,7 @@ int lua_axis_studio_Bone_getTweenData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getTweenData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getTweenData'.",&tolua_err);
 #endif
@@ -7956,18 +7956,18 @@ int lua_axis_studio_Bone_changeDisplayWithIndex(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_changeDisplayWithIndex'", nullptr);
@@ -7996,7 +7996,7 @@ int lua_axis_studio_Bone_changeDisplayWithIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:changeDisplayWithIndex",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_changeDisplayWithIndex'.",&tolua_err);
 #endif
@@ -8009,18 +8009,18 @@ int lua_axis_studio_Bone_changeDisplayWithName(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_changeDisplayWithName'", nullptr);
@@ -8049,7 +8049,7 @@ int lua_axis_studio_Bone_changeDisplayWithName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:changeDisplayWithName",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_changeDisplayWithName'.",&tolua_err);
 #endif
@@ -8062,18 +8062,18 @@ int lua_axis_studio_Bone_setArmature(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setArmature'", nullptr);
@@ -8099,7 +8099,7 @@ int lua_axis_studio_Bone_setArmature(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setArmature",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setArmature'.",&tolua_err);
 #endif
@@ -8112,18 +8112,18 @@ int lua_axis_studio_Bone_setBlendDirty(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setBlendDirty'", nullptr);
@@ -8149,7 +8149,7 @@ int lua_axis_studio_Bone_setBlendDirty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setBlendDirty",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setBlendDirty'.",&tolua_err);
 #endif
@@ -8162,18 +8162,18 @@ int lua_axis_studio_Bone_removeChildBone(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_removeChildBone'", nullptr);
@@ -8202,7 +8202,7 @@ int lua_axis_studio_Bone_removeChildBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:removeChildBone",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_removeChildBone'.",&tolua_err);
 #endif
@@ -8215,18 +8215,18 @@ int lua_axis_studio_Bone_setChildArmature(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_setChildArmature'", nullptr);
@@ -8252,7 +8252,7 @@ int lua_axis_studio_Bone_setChildArmature(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setChildArmature",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_setChildArmature'.",&tolua_err);
 #endif
@@ -8265,18 +8265,18 @@ int lua_axis_studio_Bone_getNodeToArmatureTransform(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getNodeToArmatureTransform'", nullptr);
@@ -8299,7 +8299,7 @@ int lua_axis_studio_Bone_getNodeToArmatureTransform(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getNodeToArmatureTransform",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getNodeToArmatureTransform'.",&tolua_err);
 #endif
@@ -8312,18 +8312,18 @@ int lua_axis_studio_Bone_getDisplayManager(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getDisplayManager'", nullptr);
@@ -8346,7 +8346,7 @@ int lua_axis_studio_Bone_getDisplayManager(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getDisplayManager",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getDisplayManager'.",&tolua_err);
 #endif
@@ -8359,18 +8359,18 @@ int lua_axis_studio_Bone_getArmature(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getArmature'", nullptr);
@@ -8393,7 +8393,7 @@ int lua_axis_studio_Bone_getArmature(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getArmature",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getArmature'.",&tolua_err);
 #endif
@@ -8406,18 +8406,18 @@ int lua_axis_studio_Bone_getBoneData(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Bone_getBoneData'", nullptr);
@@ -8440,7 +8440,7 @@ int lua_axis_studio_Bone_getBoneData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:getBoneData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_getBoneData'.",&tolua_err);
 #endif
@@ -8451,11 +8451,11 @@ int lua_axis_studio_Bone_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -8486,7 +8486,7 @@ int lua_axis_studio_Bone_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ccs.Bone:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_create'.",&tolua_err);
 #endif
@@ -8498,7 +8498,7 @@ int lua_axis_studio_Bone_constructor(lua_State* tolua_S)
     cocostudio::Bone* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -8522,7 +8522,7 @@ int lua_axis_studio_Bone_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:Bone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Bone_constructor'.",&tolua_err);
 #endif
 
@@ -8588,11 +8588,11 @@ int lua_axis_studio_BatchNode_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.BatchNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -8611,7 +8611,7 @@ int lua_axis_studio_BatchNode_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.BatchNode:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BatchNode_create'.",&tolua_err);
 #endif
@@ -8643,18 +8643,18 @@ int lua_axis_studio_ArmatureAnimation_getSpeedScale(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_getSpeedScale'", nullptr);
@@ -8677,7 +8677,7 @@ int lua_axis_studio_ArmatureAnimation_getSpeedScale(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:getSpeedScale",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_getSpeedScale'.",&tolua_err);
 #endif
@@ -8690,18 +8690,18 @@ int lua_axis_studio_ArmatureAnimation_play(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_play'", nullptr);
@@ -8764,7 +8764,7 @@ int lua_axis_studio_ArmatureAnimation_play(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:play",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_play'.",&tolua_err);
 #endif
@@ -8777,18 +8777,18 @@ int lua_axis_studio_ArmatureAnimation_gotoAndPause(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_gotoAndPause'", nullptr);
@@ -8814,7 +8814,7 @@ int lua_axis_studio_ArmatureAnimation_gotoAndPause(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:gotoAndPause",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_gotoAndPause'.",&tolua_err);
 #endif
@@ -8827,18 +8827,18 @@ int lua_axis_studio_ArmatureAnimation_playWithIndexes(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_playWithIndexes'", nullptr);
@@ -8901,7 +8901,7 @@ int lua_axis_studio_ArmatureAnimation_playWithIndexes(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:playWithIndexes",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_playWithIndexes'.",&tolua_err);
 #endif
@@ -8914,18 +8914,18 @@ int lua_axis_studio_ArmatureAnimation_setAnimationData(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_setAnimationData'", nullptr);
@@ -8951,7 +8951,7 @@ int lua_axis_studio_ArmatureAnimation_setAnimationData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:setAnimationData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_setAnimationData'.",&tolua_err);
 #endif
@@ -8964,18 +8964,18 @@ int lua_axis_studio_ArmatureAnimation_setSpeedScale(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_setSpeedScale'", nullptr);
@@ -9001,7 +9001,7 @@ int lua_axis_studio_ArmatureAnimation_setSpeedScale(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:setSpeedScale",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_setSpeedScale'.",&tolua_err);
 #endif
@@ -9014,18 +9014,18 @@ int lua_axis_studio_ArmatureAnimation_getAnimationData(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_getAnimationData'", nullptr);
@@ -9048,7 +9048,7 @@ int lua_axis_studio_ArmatureAnimation_getAnimationData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:getAnimationData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_getAnimationData'.",&tolua_err);
 #endif
@@ -9061,18 +9061,18 @@ int lua_axis_studio_ArmatureAnimation_gotoAndPlay(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_gotoAndPlay'", nullptr);
@@ -9098,7 +9098,7 @@ int lua_axis_studio_ArmatureAnimation_gotoAndPlay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:gotoAndPlay",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_gotoAndPlay'.",&tolua_err);
 #endif
@@ -9111,18 +9111,18 @@ int lua_axis_studio_ArmatureAnimation_init(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_init'", nullptr);
@@ -9148,7 +9148,7 @@ int lua_axis_studio_ArmatureAnimation_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_init'.",&tolua_err);
 #endif
@@ -9161,18 +9161,18 @@ int lua_axis_studio_ArmatureAnimation_playWithNames(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_playWithNames'", nullptr);
@@ -9235,7 +9235,7 @@ int lua_axis_studio_ArmatureAnimation_playWithNames(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:playWithNames",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_playWithNames'.",&tolua_err);
 #endif
@@ -9248,18 +9248,18 @@ int lua_axis_studio_ArmatureAnimation_getMovementCount(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_getMovementCount'", nullptr);
@@ -9282,7 +9282,7 @@ int lua_axis_studio_ArmatureAnimation_getMovementCount(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:getMovementCount",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_getMovementCount'.",&tolua_err);
 #endif
@@ -9295,18 +9295,18 @@ int lua_axis_studio_ArmatureAnimation_playWithIndex(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_playWithIndex'", nullptr);
@@ -9369,7 +9369,7 @@ int lua_axis_studio_ArmatureAnimation_playWithIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:playWithIndex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_playWithIndex'.",&tolua_err);
 #endif
@@ -9382,18 +9382,18 @@ int lua_axis_studio_ArmatureAnimation_getCurrentMovementID(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureAnimation*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureAnimation_getCurrentMovementID'", nullptr);
@@ -9416,7 +9416,7 @@ int lua_axis_studio_ArmatureAnimation_getCurrentMovementID(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:getCurrentMovementID",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_getCurrentMovementID'.",&tolua_err);
 #endif
@@ -9428,11 +9428,11 @@ int lua_axis_studio_ArmatureAnimation_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ArmatureAnimation",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -9453,7 +9453,7 @@ int lua_axis_studio_ArmatureAnimation_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ArmatureAnimation:create",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_create'.",&tolua_err);
 #endif
@@ -9465,7 +9465,7 @@ int lua_axis_studio_ArmatureAnimation_constructor(lua_State* tolua_S)
     cocostudio::ArmatureAnimation* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -9489,7 +9489,7 @@ int lua_axis_studio_ArmatureAnimation_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureAnimation:ArmatureAnimation",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureAnimation_constructor'.",&tolua_err);
 #endif
 
@@ -9536,18 +9536,18 @@ int lua_axis_studio_ArmatureDataManager_removeAnimationData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_removeAnimationData'", nullptr);
@@ -9573,7 +9573,7 @@ int lua_axis_studio_ArmatureDataManager_removeAnimationData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:removeAnimationData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_removeAnimationData'.",&tolua_err);
 #endif
@@ -9586,18 +9586,18 @@ int lua_axis_studio_ArmatureDataManager_addArmatureData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_addArmatureData'", nullptr);
@@ -9646,7 +9646,7 @@ int lua_axis_studio_ArmatureDataManager_addArmatureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:addArmatureData",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_addArmatureData'.",&tolua_err);
 #endif
@@ -9658,15 +9658,15 @@ int lua_axis_studio_ArmatureDataManager_addArmatureFileInfo(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_addArmatureFileInfo'", nullptr);
@@ -9709,7 +9709,7 @@ int lua_axis_studio_ArmatureDataManager_addArmatureFileInfo(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ArmatureDataManager:addArmatureFileInfo",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_addArmatureFileInfo'.",&tolua_err);
 #endif
@@ -9722,18 +9722,18 @@ int lua_axis_studio_ArmatureDataManager_removeArmatureFileInfo(lua_State* tolua_
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_removeArmatureFileInfo'", nullptr);
@@ -9759,7 +9759,7 @@ int lua_axis_studio_ArmatureDataManager_removeArmatureFileInfo(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:removeArmatureFileInfo",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_removeArmatureFileInfo'.",&tolua_err);
 #endif
@@ -9772,18 +9772,18 @@ int lua_axis_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getTextureDatas'", nullptr);
@@ -9806,7 +9806,7 @@ int lua_axis_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getTextureDatas",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getTextureDatas'.",&tolua_err);
 #endif
@@ -9819,18 +9819,18 @@ int lua_axis_studio_ArmatureDataManager_getTextureData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getTextureData'", nullptr);
@@ -9856,7 +9856,7 @@ int lua_axis_studio_ArmatureDataManager_getTextureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getTextureData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getTextureData'.",&tolua_err);
 #endif
@@ -9869,18 +9869,18 @@ int lua_axis_studio_ArmatureDataManager_getArmatureData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getArmatureData'", nullptr);
@@ -9906,7 +9906,7 @@ int lua_axis_studio_ArmatureDataManager_getArmatureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getArmatureData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getArmatureData'.",&tolua_err);
 #endif
@@ -9919,18 +9919,18 @@ int lua_axis_studio_ArmatureDataManager_getAnimationData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getAnimationData'", nullptr);
@@ -9956,7 +9956,7 @@ int lua_axis_studio_ArmatureDataManager_getAnimationData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getAnimationData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getAnimationData'.",&tolua_err);
 #endif
@@ -9969,18 +9969,18 @@ int lua_axis_studio_ArmatureDataManager_addAnimationData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_addAnimationData'", nullptr);
@@ -10029,7 +10029,7 @@ int lua_axis_studio_ArmatureDataManager_addAnimationData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:addAnimationData",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_addAnimationData'.",&tolua_err);
 #endif
@@ -10042,18 +10042,18 @@ int lua_axis_studio_ArmatureDataManager_init(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_init'", nullptr);
@@ -10076,7 +10076,7 @@ int lua_axis_studio_ArmatureDataManager_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_init'.",&tolua_err);
 #endif
@@ -10089,18 +10089,18 @@ int lua_axis_studio_ArmatureDataManager_removeArmatureData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_removeArmatureData'", nullptr);
@@ -10126,7 +10126,7 @@ int lua_axis_studio_ArmatureDataManager_removeArmatureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:removeArmatureData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_removeArmatureData'.",&tolua_err);
 #endif
@@ -10139,18 +10139,18 @@ int lua_axis_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getArmatureDatas'", nullptr);
@@ -10173,7 +10173,7 @@ int lua_axis_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getArmatureDatas",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getArmatureDatas'.",&tolua_err);
 #endif
@@ -10186,18 +10186,18 @@ int lua_axis_studio_ArmatureDataManager_addRelativeData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_addRelativeData'", nullptr);
@@ -10223,7 +10223,7 @@ int lua_axis_studio_ArmatureDataManager_addRelativeData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:addRelativeData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_addRelativeData'.",&tolua_err);
 #endif
@@ -10236,18 +10236,18 @@ int lua_axis_studio_ArmatureDataManager_removeTextureData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_removeTextureData'", nullptr);
@@ -10273,7 +10273,7 @@ int lua_axis_studio_ArmatureDataManager_removeTextureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:removeTextureData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_removeTextureData'.",&tolua_err);
 #endif
@@ -10286,18 +10286,18 @@ int lua_axis_studio_ArmatureDataManager_getRelativeData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getRelativeData'", nullptr);
@@ -10323,7 +10323,7 @@ int lua_axis_studio_ArmatureDataManager_getRelativeData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getRelativeData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getRelativeData'.",&tolua_err);
 #endif
@@ -10336,18 +10336,18 @@ int lua_axis_studio_ArmatureDataManager_addTextureData(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_addTextureData'", nullptr);
@@ -10396,7 +10396,7 @@ int lua_axis_studio_ArmatureDataManager_addTextureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:addTextureData",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_addTextureData'.",&tolua_err);
 #endif
@@ -10409,18 +10409,18 @@ int lua_axis_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_getAnimationDatas'", nullptr);
@@ -10443,7 +10443,7 @@ int lua_axis_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:getAnimationDatas",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getAnimationDatas'.",&tolua_err);
 #endif
@@ -10456,18 +10456,18 @@ int lua_axis_studio_ArmatureDataManager_isAutoLoadSpriteFile(lua_State* tolua_S)
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_isAutoLoadSpriteFile'", nullptr);
@@ -10490,7 +10490,7 @@ int lua_axis_studio_ArmatureDataManager_isAutoLoadSpriteFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:isAutoLoadSpriteFile",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_isAutoLoadSpriteFile'.",&tolua_err);
 #endif
@@ -10503,18 +10503,18 @@ int lua_axis_studio_ArmatureDataManager_addSpriteFrameFromFile(lua_State* tolua_
     cocostudio::ArmatureDataManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ArmatureDataManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ArmatureDataManager_addSpriteFrameFromFile'", nullptr);
@@ -10563,7 +10563,7 @@ int lua_axis_studio_ArmatureDataManager_addSpriteFrameFromFile(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ArmatureDataManager:addSpriteFrameFromFile",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_addSpriteFrameFromFile'.",&tolua_err);
 #endif
@@ -10575,11 +10575,11 @@ int lua_axis_studio_ArmatureDataManager_destroyInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -10598,7 +10598,7 @@ int lua_axis_studio_ArmatureDataManager_destroyInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ArmatureDataManager:destroyInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_destroyInstance'.",&tolua_err);
 #endif
@@ -10609,11 +10609,11 @@ int lua_axis_studio_ArmatureDataManager_getInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ArmatureDataManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -10632,7 +10632,7 @@ int lua_axis_studio_ArmatureDataManager_getInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ArmatureDataManager:getInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ArmatureDataManager_getInstance'.",&tolua_err);
 #endif
@@ -10684,18 +10684,18 @@ int lua_axis_studio_Armature_getBone(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getBone'", nullptr);
@@ -10721,7 +10721,7 @@ int lua_axis_studio_Armature_getBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getBone",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getBone'.",&tolua_err);
 #endif
@@ -10734,18 +10734,18 @@ int lua_axis_studio_Armature_changeBoneParent(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_changeBoneParent'", nullptr);
@@ -10774,7 +10774,7 @@ int lua_axis_studio_Armature_changeBoneParent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:changeBoneParent",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_changeBoneParent'.",&tolua_err);
 #endif
@@ -10787,18 +10787,18 @@ int lua_axis_studio_Armature_setAnimation(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_setAnimation'", nullptr);
@@ -10824,7 +10824,7 @@ int lua_axis_studio_Armature_setAnimation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:setAnimation",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_setAnimation'.",&tolua_err);
 #endif
@@ -10837,18 +10837,18 @@ int lua_axis_studio_Armature_getBoneAtPoint(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getBoneAtPoint'", nullptr);
@@ -10877,7 +10877,7 @@ int lua_axis_studio_Armature_getBoneAtPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getBoneAtPoint",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getBoneAtPoint'.",&tolua_err);
 #endif
@@ -10890,18 +10890,18 @@ int lua_axis_studio_Armature_getArmatureTransformDirty(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getArmatureTransformDirty'", nullptr);
@@ -10924,7 +10924,7 @@ int lua_axis_studio_Armature_getArmatureTransformDirty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getArmatureTransformDirty",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getArmatureTransformDirty'.",&tolua_err);
 #endif
@@ -10937,18 +10937,18 @@ int lua_axis_studio_Armature_setVersion(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_setVersion'", nullptr);
@@ -10974,7 +10974,7 @@ int lua_axis_studio_Armature_setVersion(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:setVersion",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_setVersion'.",&tolua_err);
 #endif
@@ -10987,18 +10987,18 @@ int lua_axis_studio_Armature_updateOffsetPoint(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_updateOffsetPoint'", nullptr);
@@ -11021,7 +11021,7 @@ int lua_axis_studio_Armature_updateOffsetPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:updateOffsetPoint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_updateOffsetPoint'.",&tolua_err);
 #endif
@@ -11034,18 +11034,18 @@ int lua_axis_studio_Armature_getParentBone(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getParentBone'", nullptr);
@@ -11068,7 +11068,7 @@ int lua_axis_studio_Armature_getParentBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getParentBone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getParentBone'.",&tolua_err);
 #endif
@@ -11081,18 +11081,18 @@ int lua_axis_studio_Armature_removeBone(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_removeBone'", nullptr);
@@ -11121,7 +11121,7 @@ int lua_axis_studio_Armature_removeBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:removeBone",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_removeBone'.",&tolua_err);
 #endif
@@ -11134,18 +11134,18 @@ int lua_axis_studio_Armature_getBatchNode(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getBatchNode'", nullptr);
@@ -11168,7 +11168,7 @@ int lua_axis_studio_Armature_getBatchNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getBatchNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getBatchNode'.",&tolua_err);
 #endif
@@ -11180,15 +11180,15 @@ int lua_axis_studio_Armature_init(lua_State* tolua_S)
     int argc = 0;
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_init'", nullptr);
@@ -11227,7 +11227,7 @@ int lua_axis_studio_Armature_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.Armature:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_init'.",&tolua_err);
 #endif
@@ -11240,18 +11240,18 @@ int lua_axis_studio_Armature_setParentBone(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_setParentBone'", nullptr);
@@ -11277,7 +11277,7 @@ int lua_axis_studio_Armature_setParentBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:setParentBone",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_setParentBone'.",&tolua_err);
 #endif
@@ -11290,18 +11290,18 @@ int lua_axis_studio_Armature_setBatchNode(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_setBatchNode'", nullptr);
@@ -11327,7 +11327,7 @@ int lua_axis_studio_Armature_setBatchNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:setBatchNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_setBatchNode'.",&tolua_err);
 #endif
@@ -11340,18 +11340,18 @@ int lua_axis_studio_Armature_getBlendFunc(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getBlendFunc'", nullptr);
@@ -11374,7 +11374,7 @@ int lua_axis_studio_Armature_getBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getBlendFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getBlendFunc'.",&tolua_err);
 #endif
@@ -11387,18 +11387,18 @@ int lua_axis_studio_Armature_setArmatureData(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_setArmatureData'", nullptr);
@@ -11424,7 +11424,7 @@ int lua_axis_studio_Armature_setArmatureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:setArmatureData",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_setArmatureData'.",&tolua_err);
 #endif
@@ -11437,18 +11437,18 @@ int lua_axis_studio_Armature_addBone(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_addBone'", nullptr);
@@ -11477,7 +11477,7 @@ int lua_axis_studio_Armature_addBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:addBone",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_addBone'.",&tolua_err);
 #endif
@@ -11490,18 +11490,18 @@ int lua_axis_studio_Armature_getArmatureData(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getArmatureData'", nullptr);
@@ -11524,7 +11524,7 @@ int lua_axis_studio_Armature_getArmatureData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getArmatureData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getArmatureData'.",&tolua_err);
 #endif
@@ -11537,18 +11537,18 @@ int lua_axis_studio_Armature_getVersion(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getVersion'", nullptr);
@@ -11571,7 +11571,7 @@ int lua_axis_studio_Armature_getVersion(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getVersion",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getVersion'.",&tolua_err);
 #endif
@@ -11584,18 +11584,18 @@ int lua_axis_studio_Armature_getAnimation(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getAnimation'", nullptr);
@@ -11618,7 +11618,7 @@ int lua_axis_studio_Armature_getAnimation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getAnimation",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getAnimation'.",&tolua_err);
 #endif
@@ -11631,18 +11631,18 @@ int lua_axis_studio_Armature_getOffsetPoints(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getOffsetPoints'", nullptr);
@@ -11665,7 +11665,7 @@ int lua_axis_studio_Armature_getOffsetPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getOffsetPoints",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getOffsetPoints'.",&tolua_err);
 #endif
@@ -11678,18 +11678,18 @@ int lua_axis_studio_Armature_setBlendFunc(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_setBlendFunc'", nullptr);
@@ -11715,7 +11715,7 @@ int lua_axis_studio_Armature_setBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:setBlendFunc",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_setBlendFunc'.",&tolua_err);
 #endif
@@ -11728,18 +11728,18 @@ int lua_axis_studio_Armature_getBoneDic(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Armature*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Armature_getBoneDic'", nullptr);
@@ -11762,7 +11762,7 @@ int lua_axis_studio_Armature_getBoneDic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:getBoneDic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_getBoneDic'.",&tolua_err);
 #endif
@@ -11773,11 +11773,11 @@ int lua_axis_studio_Armature_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.Armature",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -11824,7 +11824,7 @@ int lua_axis_studio_Armature_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ccs.Armature:create",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_create'.",&tolua_err);
 #endif
@@ -11836,7 +11836,7 @@ int lua_axis_studio_Armature_constructor(lua_State* tolua_S)
     cocostudio::Armature* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -11860,7 +11860,7 @@ int lua_axis_studio_Armature_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Armature:Armature",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Armature_constructor'.",&tolua_err);
 #endif
 
@@ -11916,18 +11916,18 @@ int lua_axis_studio_Skin_getBone(lua_State* tolua_S)
     cocostudio::Skin* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Skin_getBone'", nullptr);
@@ -11950,7 +11950,7 @@ int lua_axis_studio_Skin_getBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:getBone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_getBone'.",&tolua_err);
 #endif
@@ -11963,18 +11963,18 @@ int lua_axis_studio_Skin_getNodeToWorldTransformAR(lua_State* tolua_S)
     cocostudio::Skin* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Skin_getNodeToWorldTransformAR'", nullptr);
@@ -11997,7 +11997,7 @@ int lua_axis_studio_Skin_getNodeToWorldTransformAR(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:getNodeToWorldTransformAR",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_getNodeToWorldTransformAR'.",&tolua_err);
 #endif
@@ -12010,18 +12010,18 @@ int lua_axis_studio_Skin_getDisplayName(lua_State* tolua_S)
     cocostudio::Skin* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Skin_getDisplayName'", nullptr);
@@ -12044,7 +12044,7 @@ int lua_axis_studio_Skin_getDisplayName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:getDisplayName",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_getDisplayName'.",&tolua_err);
 #endif
@@ -12057,18 +12057,18 @@ int lua_axis_studio_Skin_updateArmatureTransform(lua_State* tolua_S)
     cocostudio::Skin* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Skin_updateArmatureTransform'", nullptr);
@@ -12091,7 +12091,7 @@ int lua_axis_studio_Skin_updateArmatureTransform(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:updateArmatureTransform",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_updateArmatureTransform'.",&tolua_err);
 #endif
@@ -12104,18 +12104,18 @@ int lua_axis_studio_Skin_setBone(lua_State* tolua_S)
     cocostudio::Skin* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::Skin*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Skin_setBone'", nullptr);
@@ -12141,7 +12141,7 @@ int lua_axis_studio_Skin_setBone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:setBone",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_setBone'.",&tolua_err);
 #endif
@@ -12152,11 +12152,11 @@ int lua_axis_studio_Skin_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -12187,7 +12187,7 @@ int lua_axis_studio_Skin_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ccs.Skin:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_create'.",&tolua_err);
 #endif
@@ -12198,11 +12198,11 @@ int lua_axis_studio_Skin_createWithSpriteFrameName(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.Skin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -12223,7 +12223,7 @@ int lua_axis_studio_Skin_createWithSpriteFrameName(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.Skin:createWithSpriteFrameName",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_createWithSpriteFrameName'.",&tolua_err);
 #endif
@@ -12235,7 +12235,7 @@ int lua_axis_studio_Skin_constructor(lua_State* tolua_S)
     cocostudio::Skin* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -12259,7 +12259,7 @@ int lua_axis_studio_Skin_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Skin:Skin",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Skin_constructor'.",&tolua_err);
 #endif
 
@@ -12299,18 +12299,18 @@ int lua_axis_studio_ComAttribute_getFloat(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_getFloat'", nullptr);
@@ -12353,7 +12353,7 @@ int lua_axis_studio_ComAttribute_getFloat(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:getFloat",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_getFloat'.",&tolua_err);
 #endif
@@ -12366,18 +12366,18 @@ int lua_axis_studio_ComAttribute_getString(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_getString'", nullptr);
@@ -12420,7 +12420,7 @@ int lua_axis_studio_ComAttribute_getString(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:getString",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_getString'.",&tolua_err);
 #endif
@@ -12433,18 +12433,18 @@ int lua_axis_studio_ComAttribute_setFloat(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_setFloat'", nullptr);
@@ -12473,7 +12473,7 @@ int lua_axis_studio_ComAttribute_setFloat(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:setFloat",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_setFloat'.",&tolua_err);
 #endif
@@ -12486,18 +12486,18 @@ int lua_axis_studio_ComAttribute_setString(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_setString'", nullptr);
@@ -12526,7 +12526,7 @@ int lua_axis_studio_ComAttribute_setString(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:setString",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_setString'.",&tolua_err);
 #endif
@@ -12539,18 +12539,18 @@ int lua_axis_studio_ComAttribute_getBool(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_getBool'", nullptr);
@@ -12593,7 +12593,7 @@ int lua_axis_studio_ComAttribute_getBool(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:getBool",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_getBool'.",&tolua_err);
 #endif
@@ -12606,18 +12606,18 @@ int lua_axis_studio_ComAttribute_setInt(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_setInt'", nullptr);
@@ -12646,7 +12646,7 @@ int lua_axis_studio_ComAttribute_setInt(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:setInt",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_setInt'.",&tolua_err);
 #endif
@@ -12659,18 +12659,18 @@ int lua_axis_studio_ComAttribute_parse(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_parse'", nullptr);
@@ -12696,7 +12696,7 @@ int lua_axis_studio_ComAttribute_parse(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:parse",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_parse'.",&tolua_err);
 #endif
@@ -12709,18 +12709,18 @@ int lua_axis_studio_ComAttribute_getInt(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_getInt'", nullptr);
@@ -12763,7 +12763,7 @@ int lua_axis_studio_ComAttribute_getInt(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:getInt",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_getInt'.",&tolua_err);
 #endif
@@ -12776,18 +12776,18 @@ int lua_axis_studio_ComAttribute_setBool(lua_State* tolua_S)
     cocostudio::ComAttribute* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAttribute*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAttribute_setBool'", nullptr);
@@ -12816,7 +12816,7 @@ int lua_axis_studio_ComAttribute_setBool(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAttribute:setBool",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_setBool'.",&tolua_err);
 #endif
@@ -12828,11 +12828,11 @@ int lua_axis_studio_ComAttribute_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -12851,7 +12851,7 @@ int lua_axis_studio_ComAttribute_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAttribute:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_create'.",&tolua_err);
 #endif
@@ -12862,11 +12862,11 @@ int lua_axis_studio_ComAttribute_createInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComAttribute",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -12885,7 +12885,7 @@ int lua_axis_studio_ComAttribute_createInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAttribute:createInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAttribute_createInstance'.",&tolua_err);
 #endif
@@ -12927,18 +12927,18 @@ int lua_axis_studio_ComAudio_stopAllEffects(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_stopAllEffects'", nullptr);
@@ -12961,7 +12961,7 @@ int lua_axis_studio_ComAudio_stopAllEffects(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:stopAllEffects",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_stopAllEffects'.",&tolua_err);
 #endif
@@ -12974,18 +12974,18 @@ int lua_axis_studio_ComAudio_getEffectsVolume(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_getEffectsVolume'", nullptr);
@@ -13008,7 +13008,7 @@ int lua_axis_studio_ComAudio_getEffectsVolume(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:getEffectsVolume",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_getEffectsVolume'.",&tolua_err);
 #endif
@@ -13021,18 +13021,18 @@ int lua_axis_studio_ComAudio_stopEffect(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_stopEffect'", nullptr);
@@ -13058,7 +13058,7 @@ int lua_axis_studio_ComAudio_stopEffect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:stopEffect",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_stopEffect'.",&tolua_err);
 #endif
@@ -13071,18 +13071,18 @@ int lua_axis_studio_ComAudio_getBackgroundMusicVolume(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_getBackgroundMusicVolume'", nullptr);
@@ -13105,7 +13105,7 @@ int lua_axis_studio_ComAudio_getBackgroundMusicVolume(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:getBackgroundMusicVolume",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_getBackgroundMusicVolume'.",&tolua_err);
 #endif
@@ -13118,18 +13118,18 @@ int lua_axis_studio_ComAudio_willPlayBackgroundMusic(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_willPlayBackgroundMusic'", nullptr);
@@ -13152,7 +13152,7 @@ int lua_axis_studio_ComAudio_willPlayBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:willPlayBackgroundMusic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_willPlayBackgroundMusic'.",&tolua_err);
 #endif
@@ -13165,18 +13165,18 @@ int lua_axis_studio_ComAudio_setBackgroundMusicVolume(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_setBackgroundMusicVolume'", nullptr);
@@ -13202,7 +13202,7 @@ int lua_axis_studio_ComAudio_setBackgroundMusicVolume(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:setBackgroundMusicVolume",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_setBackgroundMusicVolume'.",&tolua_err);
 #endif
@@ -13215,18 +13215,18 @@ int lua_axis_studio_ComAudio_start(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_start'", nullptr);
@@ -13249,7 +13249,7 @@ int lua_axis_studio_ComAudio_start(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:start",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_start'.",&tolua_err);
 #endif
@@ -13261,15 +13261,15 @@ int lua_axis_studio_ComAudio_stopBackgroundMusic(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_stopBackgroundMusic'", nullptr);
@@ -13300,7 +13300,7 @@ int lua_axis_studio_ComAudio_stopBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ComAudio:stopBackgroundMusic",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_stopBackgroundMusic'.",&tolua_err);
 #endif
@@ -13313,18 +13313,18 @@ int lua_axis_studio_ComAudio_pauseBackgroundMusic(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_pauseBackgroundMusic'", nullptr);
@@ -13347,7 +13347,7 @@ int lua_axis_studio_ComAudio_pauseBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:pauseBackgroundMusic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_pauseBackgroundMusic'.",&tolua_err);
 #endif
@@ -13360,18 +13360,18 @@ int lua_axis_studio_ComAudio_isBackgroundMusicPlaying(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_isBackgroundMusicPlaying'", nullptr);
@@ -13394,7 +13394,7 @@ int lua_axis_studio_ComAudio_isBackgroundMusicPlaying(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:isBackgroundMusicPlaying",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_isBackgroundMusicPlaying'.",&tolua_err);
 #endif
@@ -13407,18 +13407,18 @@ int lua_axis_studio_ComAudio_isLoop(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_isLoop'", nullptr);
@@ -13441,7 +13441,7 @@ int lua_axis_studio_ComAudio_isLoop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:isLoop",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_isLoop'.",&tolua_err);
 #endif
@@ -13454,18 +13454,18 @@ int lua_axis_studio_ComAudio_resumeAllEffects(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_resumeAllEffects'", nullptr);
@@ -13488,7 +13488,7 @@ int lua_axis_studio_ComAudio_resumeAllEffects(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:resumeAllEffects",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_resumeAllEffects'.",&tolua_err);
 #endif
@@ -13501,18 +13501,18 @@ int lua_axis_studio_ComAudio_pauseAllEffects(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_pauseAllEffects'", nullptr);
@@ -13535,7 +13535,7 @@ int lua_axis_studio_ComAudio_pauseAllEffects(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:pauseAllEffects",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_pauseAllEffects'.",&tolua_err);
 #endif
@@ -13548,18 +13548,18 @@ int lua_axis_studio_ComAudio_preloadBackgroundMusic(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_preloadBackgroundMusic'", nullptr);
@@ -13585,7 +13585,7 @@ int lua_axis_studio_ComAudio_preloadBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:preloadBackgroundMusic",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_preloadBackgroundMusic'.",&tolua_err);
 #endif
@@ -13597,15 +13597,15 @@ int lua_axis_studio_ComAudio_playBackgroundMusic(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_playBackgroundMusic'", nullptr);
@@ -13652,7 +13652,7 @@ int lua_axis_studio_ComAudio_playBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ComAudio:playBackgroundMusic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_playBackgroundMusic'.",&tolua_err);
 #endif
@@ -13665,18 +13665,18 @@ int lua_axis_studio_ComAudio_stop(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_stop'", nullptr);
@@ -13699,7 +13699,7 @@ int lua_axis_studio_ComAudio_stop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:stop",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_stop'.",&tolua_err);
 #endif
@@ -13712,18 +13712,18 @@ int lua_axis_studio_ComAudio_end(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_end'", nullptr);
@@ -13746,7 +13746,7 @@ int lua_axis_studio_ComAudio_end(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:end",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_end'.",&tolua_err);
 #endif
@@ -13758,15 +13758,15 @@ int lua_axis_studio_ComAudio_playEffect(lua_State* tolua_S)
     int argc = 0;
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_playEffect'", nullptr);
@@ -13813,7 +13813,7 @@ int lua_axis_studio_ComAudio_playEffect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ComAudio:playEffect",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_playEffect'.",&tolua_err);
 #endif
@@ -13826,18 +13826,18 @@ int lua_axis_studio_ComAudio_preloadEffect(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_preloadEffect'", nullptr);
@@ -13863,7 +13863,7 @@ int lua_axis_studio_ComAudio_preloadEffect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:preloadEffect",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_preloadEffect'.",&tolua_err);
 #endif
@@ -13876,18 +13876,18 @@ int lua_axis_studio_ComAudio_setLoop(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_setLoop'", nullptr);
@@ -13913,7 +13913,7 @@ int lua_axis_studio_ComAudio_setLoop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:setLoop",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_setLoop'.",&tolua_err);
 #endif
@@ -13926,18 +13926,18 @@ int lua_axis_studio_ComAudio_unloadEffect(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_unloadEffect'", nullptr);
@@ -13963,7 +13963,7 @@ int lua_axis_studio_ComAudio_unloadEffect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:unloadEffect",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_unloadEffect'.",&tolua_err);
 #endif
@@ -13976,18 +13976,18 @@ int lua_axis_studio_ComAudio_rewindBackgroundMusic(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_rewindBackgroundMusic'", nullptr);
@@ -14010,7 +14010,7 @@ int lua_axis_studio_ComAudio_rewindBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:rewindBackgroundMusic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_rewindBackgroundMusic'.",&tolua_err);
 #endif
@@ -14023,18 +14023,18 @@ int lua_axis_studio_ComAudio_pauseEffect(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_pauseEffect'", nullptr);
@@ -14060,7 +14060,7 @@ int lua_axis_studio_ComAudio_pauseEffect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:pauseEffect",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_pauseEffect'.",&tolua_err);
 #endif
@@ -14073,18 +14073,18 @@ int lua_axis_studio_ComAudio_resumeBackgroundMusic(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_resumeBackgroundMusic'", nullptr);
@@ -14107,7 +14107,7 @@ int lua_axis_studio_ComAudio_resumeBackgroundMusic(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:resumeBackgroundMusic",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_resumeBackgroundMusic'.",&tolua_err);
 #endif
@@ -14120,18 +14120,18 @@ int lua_axis_studio_ComAudio_setFile(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_setFile'", nullptr);
@@ -14157,7 +14157,7 @@ int lua_axis_studio_ComAudio_setFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:setFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_setFile'.",&tolua_err);
 #endif
@@ -14170,18 +14170,18 @@ int lua_axis_studio_ComAudio_setEffectsVolume(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_setEffectsVolume'", nullptr);
@@ -14207,7 +14207,7 @@ int lua_axis_studio_ComAudio_setEffectsVolume(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:setEffectsVolume",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_setEffectsVolume'.",&tolua_err);
 #endif
@@ -14220,18 +14220,18 @@ int lua_axis_studio_ComAudio_getFile(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_getFile'", nullptr);
@@ -14254,7 +14254,7 @@ int lua_axis_studio_ComAudio_getFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:getFile",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_getFile'.",&tolua_err);
 #endif
@@ -14267,18 +14267,18 @@ int lua_axis_studio_ComAudio_resumeEffect(lua_State* tolua_S)
     cocostudio::ComAudio* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComAudio*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComAudio_resumeEffect'", nullptr);
@@ -14304,7 +14304,7 @@ int lua_axis_studio_ComAudio_resumeEffect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComAudio:resumeEffect",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_resumeEffect'.",&tolua_err);
 #endif
@@ -14316,11 +14316,11 @@ int lua_axis_studio_ComAudio_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -14339,7 +14339,7 @@ int lua_axis_studio_ComAudio_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAudio:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_create'.",&tolua_err);
 #endif
@@ -14350,11 +14350,11 @@ int lua_axis_studio_ComAudio_createInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComAudio",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -14373,7 +14373,7 @@ int lua_axis_studio_ComAudio_createInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComAudio:createInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComAudio_createInstance'.",&tolua_err);
 #endif
@@ -14433,11 +14433,11 @@ int lua_axis_studio_ComController_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -14456,7 +14456,7 @@ int lua_axis_studio_ComController_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComController:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComController_create'.",&tolua_err);
 #endif
@@ -14467,11 +14467,11 @@ int lua_axis_studio_ComController_createInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -14490,7 +14490,7 @@ int lua_axis_studio_ComController_createInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComController:createInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComController_createInstance'.",&tolua_err);
 #endif
@@ -14502,7 +14502,7 @@ int lua_axis_studio_ComController_constructor(lua_State* tolua_S)
     cocostudio::ComController* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -14526,7 +14526,7 @@ int lua_axis_studio_ComController_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComController:ComController",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComController_constructor'.",&tolua_err);
 #endif
 
@@ -14561,18 +14561,18 @@ int lua_axis_studio_ComRender_setNode(lua_State* tolua_S)
     cocostudio::ComRender* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComRender",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComRender*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComRender_setNode'", nullptr);
@@ -14598,7 +14598,7 @@ int lua_axis_studio_ComRender_setNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComRender:setNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComRender_setNode'.",&tolua_err);
 #endif
@@ -14611,18 +14611,18 @@ int lua_axis_studio_ComRender_getNode(lua_State* tolua_S)
     cocostudio::ComRender* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComRender",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComRender*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComRender_getNode'", nullptr);
@@ -14645,7 +14645,7 @@ int lua_axis_studio_ComRender_getNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComRender:getNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComRender_getNode'.",&tolua_err);
 #endif
@@ -14656,11 +14656,11 @@ int lua_axis_studio_ComRender_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComRender",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -14694,7 +14694,7 @@ int lua_axis_studio_ComRender_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ccs.ComRender:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComRender_create'.",&tolua_err);
 #endif
@@ -14705,11 +14705,11 @@ int lua_axis_studio_ComRender_createInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComRender",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -14728,7 +14728,7 @@ int lua_axis_studio_ComRender_createInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComRender:createInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComRender_createInstance'.",&tolua_err);
 #endif
@@ -14763,18 +14763,18 @@ int lua_axis_studio_GUIReader_setFilePath(lua_State* tolua_S)
     cocostudio::GUIReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_GUIReader_setFilePath'", nullptr);
@@ -14800,7 +14800,7 @@ int lua_axis_studio_GUIReader_setFilePath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:setFilePath",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_setFilePath'.",&tolua_err);
 #endif
@@ -14813,18 +14813,18 @@ int lua_axis_studio_GUIReader_widgetFromJsonFile(lua_State* tolua_S)
     cocostudio::GUIReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_GUIReader_widgetFromJsonFile'", nullptr);
@@ -14850,7 +14850,7 @@ int lua_axis_studio_GUIReader_widgetFromJsonFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:widgetFromJsonFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_widgetFromJsonFile'.",&tolua_err);
 #endif
@@ -14863,18 +14863,18 @@ int lua_axis_studio_GUIReader_getFilePath(lua_State* tolua_S)
     cocostudio::GUIReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_GUIReader_getFilePath'", nullptr);
@@ -14897,7 +14897,7 @@ int lua_axis_studio_GUIReader_getFilePath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:getFilePath",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_getFilePath'.",&tolua_err);
 #endif
@@ -14910,18 +14910,18 @@ int lua_axis_studio_GUIReader_widgetFromBinaryFile(lua_State* tolua_S)
     cocostudio::GUIReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_GUIReader_widgetFromBinaryFile'", nullptr);
@@ -14947,7 +14947,7 @@ int lua_axis_studio_GUIReader_widgetFromBinaryFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:widgetFromBinaryFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_widgetFromBinaryFile'.",&tolua_err);
 #endif
@@ -14960,18 +14960,18 @@ int lua_axis_studio_GUIReader_getVersionInteger(lua_State* tolua_S)
     cocostudio::GUIReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::GUIReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_GUIReader_getVersionInteger'", nullptr);
@@ -14997,7 +14997,7 @@ int lua_axis_studio_GUIReader_getVersionInteger(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.GUIReader:getVersionInteger",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_getVersionInteger'.",&tolua_err);
 #endif
@@ -15009,11 +15009,11 @@ int lua_axis_studio_GUIReader_destroyInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -15032,7 +15032,7 @@ int lua_axis_studio_GUIReader_destroyInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.GUIReader:destroyInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_destroyInstance'.",&tolua_err);
 #endif
@@ -15043,11 +15043,11 @@ int lua_axis_studio_GUIReader_getInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.GUIReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -15066,7 +15066,7 @@ int lua_axis_studio_GUIReader_getInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.GUIReader:getInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_GUIReader_getInstance'.",&tolua_err);
 #endif
@@ -15104,18 +15104,18 @@ int lua_axis_studio_SceneReader_setTarget(lua_State* tolua_S)
     cocostudio::SceneReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SceneReader_setTarget'", nullptr);
@@ -15145,7 +15145,7 @@ int lua_axis_studio_SceneReader_setTarget(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SceneReader:setTarget",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_setTarget'.",&tolua_err);
 #endif
@@ -15158,18 +15158,18 @@ int lua_axis_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
     cocostudio::SceneReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SceneReader_createNodeWithSceneFile'", nullptr);
@@ -15212,7 +15212,7 @@ int lua_axis_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SceneReader:createNodeWithSceneFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_createNodeWithSceneFile'.",&tolua_err);
 #endif
@@ -15225,18 +15225,18 @@ int lua_axis_studio_SceneReader_getAttachComponentType(lua_State* tolua_S)
     cocostudio::SceneReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SceneReader_getAttachComponentType'", nullptr);
@@ -15259,7 +15259,7 @@ int lua_axis_studio_SceneReader_getAttachComponentType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SceneReader:getAttachComponentType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_getAttachComponentType'.",&tolua_err);
 #endif
@@ -15272,18 +15272,18 @@ int lua_axis_studio_SceneReader_getNodeByTag(lua_State* tolua_S)
     cocostudio::SceneReader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::SceneReader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SceneReader_getNodeByTag'", nullptr);
@@ -15309,7 +15309,7 @@ int lua_axis_studio_SceneReader_getNodeByTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SceneReader:getNodeByTag",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_getNodeByTag'.",&tolua_err);
 #endif
@@ -15321,11 +15321,11 @@ int lua_axis_studio_SceneReader_destroyInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -15344,7 +15344,7 @@ int lua_axis_studio_SceneReader_destroyInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.SceneReader:destroyInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_destroyInstance'.",&tolua_err);
 #endif
@@ -15355,11 +15355,11 @@ int lua_axis_studio_SceneReader_sceneReaderVersion(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -15378,7 +15378,7 @@ int lua_axis_studio_SceneReader_sceneReaderVersion(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.SceneReader:sceneReaderVersion",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_sceneReaderVersion'.",&tolua_err);
 #endif
@@ -15389,11 +15389,11 @@ int lua_axis_studio_SceneReader_getInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.SceneReader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -15412,7 +15412,7 @@ int lua_axis_studio_SceneReader_getInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.SceneReader:getInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SceneReader_getInstance'.",&tolua_err);
 #endif
@@ -15450,18 +15450,18 @@ int lua_axis_studio_ActionTimelineCache_createActionFromJson(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_createActionFromJson'", nullptr);
@@ -15487,7 +15487,7 @@ int lua_axis_studio_ActionTimelineCache_createActionFromJson(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:createActionFromJson",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_createActionFromJson'.",&tolua_err);
 #endif
@@ -15500,18 +15500,18 @@ int lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersFile(lua_Stat
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersFile'", nullptr);
@@ -15537,7 +15537,7 @@ int lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersFile(lua_Stat
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:createActionWithFlatBuffersFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersFile'.",&tolua_err);
 #endif
@@ -15550,18 +15550,18 @@ int lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile(l
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile'", nullptr);
@@ -15587,7 +15587,7 @@ int lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile(l
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:loadAnimationActionWithFlatBuffersFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile'.",&tolua_err);
 #endif
@@ -15600,18 +15600,18 @@ int lua_axis_studio_ActionTimelineCache_createActionFromContent(lua_State* tolua
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_createActionFromContent'", nullptr);
@@ -15640,7 +15640,7 @@ int lua_axis_studio_ActionTimelineCache_createActionFromContent(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:createActionFromContent",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_createActionFromContent'.",&tolua_err);
 #endif
@@ -15653,18 +15653,18 @@ int lua_axis_studio_ActionTimelineCache_purge(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_purge'", nullptr);
@@ -15687,7 +15687,7 @@ int lua_axis_studio_ActionTimelineCache_purge(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:purge",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_purge'.",&tolua_err);
 #endif
@@ -15700,18 +15700,18 @@ int lua_axis_studio_ActionTimelineCache_init(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_init'", nullptr);
@@ -15734,7 +15734,7 @@ int lua_axis_studio_ActionTimelineCache_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_init'.",&tolua_err);
 #endif
@@ -15747,18 +15747,18 @@ int lua_axis_studio_ActionTimelineCache_loadAnimationActionWithContent(lua_State
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_loadAnimationActionWithContent'", nullptr);
@@ -15787,7 +15787,7 @@ int lua_axis_studio_ActionTimelineCache_loadAnimationActionWithContent(lua_State
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:loadAnimationActionWithContent",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_loadAnimationActionWithContent'.",&tolua_err);
 #endif
@@ -15800,18 +15800,18 @@ int lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFile(lua_State* t
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFile'", nullptr);
@@ -15837,7 +15837,7 @@ int lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFile(lua_State* t
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:loadAnimationActionWithFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_loadAnimationActionWithFile'.",&tolua_err);
 #endif
@@ -15850,18 +15850,18 @@ int lua_axis_studio_ActionTimelineCache_removeAction(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_removeAction'", nullptr);
@@ -15887,7 +15887,7 @@ int lua_axis_studio_ActionTimelineCache_removeAction(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:removeAction",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_removeAction'.",&tolua_err);
 #endif
@@ -15900,18 +15900,18 @@ int lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator(
     cocostudio::timeline::ActionTimelineCache* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineCache*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator'", nullptr);
@@ -15937,7 +15937,7 @@ int lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator(
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineCache:createActionWithFlatBuffersForSimulator",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator'.",&tolua_err);
 #endif
@@ -15949,11 +15949,11 @@ int lua_axis_studio_ActionTimelineCache_destroyInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -15972,7 +15972,7 @@ int lua_axis_studio_ActionTimelineCache_destroyInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionTimelineCache:destroyInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_destroyInstance'.",&tolua_err);
 #endif
@@ -15983,11 +15983,11 @@ int lua_axis_studio_ActionTimelineCache_createAction(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionTimelineCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -16008,7 +16008,7 @@ int lua_axis_studio_ActionTimelineCache_createAction(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionTimelineCache:createAction",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineCache_createAction'.",&tolua_err);
 #endif
@@ -16051,18 +16051,18 @@ int lua_axis_studio_Frame_clone(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_clone'", nullptr);
@@ -16085,7 +16085,7 @@ int lua_axis_studio_Frame_clone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:clone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_clone'.",&tolua_err);
 #endif
@@ -16098,18 +16098,18 @@ int lua_axis_studio_Frame_setTweenType(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_setTweenType'", nullptr);
@@ -16135,7 +16135,7 @@ int lua_axis_studio_Frame_setTweenType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:setTweenType",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_setTweenType'.",&tolua_err);
 #endif
@@ -16148,18 +16148,18 @@ int lua_axis_studio_Frame_setNode(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_setNode'", nullptr);
@@ -16185,7 +16185,7 @@ int lua_axis_studio_Frame_setNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:setNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_setNode'.",&tolua_err);
 #endif
@@ -16198,18 +16198,18 @@ int lua_axis_studio_Frame_setTimeline(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_setTimeline'", nullptr);
@@ -16235,7 +16235,7 @@ int lua_axis_studio_Frame_setTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:setTimeline",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_setTimeline'.",&tolua_err);
 #endif
@@ -16248,18 +16248,18 @@ int lua_axis_studio_Frame_isEnterWhenPassed(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_isEnterWhenPassed'", nullptr);
@@ -16282,7 +16282,7 @@ int lua_axis_studio_Frame_isEnterWhenPassed(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:isEnterWhenPassed",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_isEnterWhenPassed'.",&tolua_err);
 #endif
@@ -16295,18 +16295,18 @@ int lua_axis_studio_Frame_getTweenType(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_getTweenType'", nullptr);
@@ -16329,7 +16329,7 @@ int lua_axis_studio_Frame_getTweenType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getTweenType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_getTweenType'.",&tolua_err);
 #endif
@@ -16342,18 +16342,18 @@ int lua_axis_studio_Frame_getEasingParams(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_getEasingParams'", nullptr);
@@ -16376,7 +16376,7 @@ int lua_axis_studio_Frame_getEasingParams(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getEasingParams",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_getEasingParams'.",&tolua_err);
 #endif
@@ -16389,18 +16389,18 @@ int lua_axis_studio_Frame_setEasingParams(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_setEasingParams'", nullptr);
@@ -16426,7 +16426,7 @@ int lua_axis_studio_Frame_setEasingParams(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:setEasingParams",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_setEasingParams'.",&tolua_err);
 #endif
@@ -16439,18 +16439,18 @@ int lua_axis_studio_Frame_getFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_getFrameIndex'", nullptr);
@@ -16473,7 +16473,7 @@ int lua_axis_studio_Frame_getFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getFrameIndex",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_getFrameIndex'.",&tolua_err);
 #endif
@@ -16486,18 +16486,18 @@ int lua_axis_studio_Frame_apply(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_apply'", nullptr);
@@ -16523,7 +16523,7 @@ int lua_axis_studio_Frame_apply(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:apply",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_apply'.",&tolua_err);
 #endif
@@ -16536,18 +16536,18 @@ int lua_axis_studio_Frame_isTween(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_isTween'", nullptr);
@@ -16570,7 +16570,7 @@ int lua_axis_studio_Frame_isTween(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:isTween",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_isTween'.",&tolua_err);
 #endif
@@ -16583,18 +16583,18 @@ int lua_axis_studio_Frame_setFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_setFrameIndex'", nullptr);
@@ -16620,7 +16620,7 @@ int lua_axis_studio_Frame_setFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:setFrameIndex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_setFrameIndex'.",&tolua_err);
 #endif
@@ -16633,18 +16633,18 @@ int lua_axis_studio_Frame_setTween(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_setTween'", nullptr);
@@ -16670,7 +16670,7 @@ int lua_axis_studio_Frame_setTween(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:setTween",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_setTween'.",&tolua_err);
 #endif
@@ -16683,18 +16683,18 @@ int lua_axis_studio_Frame_getTimeline(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_getTimeline'", nullptr);
@@ -16717,7 +16717,7 @@ int lua_axis_studio_Frame_getTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getTimeline",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_getTimeline'.",&tolua_err);
 #endif
@@ -16730,18 +16730,18 @@ int lua_axis_studio_Frame_getNode(lua_State* tolua_S)
     cocostudio::timeline::Frame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Frame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Frame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Frame_getNode'", nullptr);
@@ -16764,7 +16764,7 @@ int lua_axis_studio_Frame_getNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Frame:getNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Frame_getNode'.",&tolua_err);
 #endif
@@ -16811,18 +16811,18 @@ int lua_axis_studio_VisibleFrame_isVisible(lua_State* tolua_S)
     cocostudio::timeline::VisibleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.VisibleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::VisibleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_VisibleFrame_isVisible'", nullptr);
@@ -16845,7 +16845,7 @@ int lua_axis_studio_VisibleFrame_isVisible(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.VisibleFrame:isVisible",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_VisibleFrame_isVisible'.",&tolua_err);
 #endif
@@ -16858,18 +16858,18 @@ int lua_axis_studio_VisibleFrame_setVisible(lua_State* tolua_S)
     cocostudio::timeline::VisibleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.VisibleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::VisibleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_VisibleFrame_setVisible'", nullptr);
@@ -16895,7 +16895,7 @@ int lua_axis_studio_VisibleFrame_setVisible(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.VisibleFrame:setVisible",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_VisibleFrame_setVisible'.",&tolua_err);
 #endif
@@ -16907,11 +16907,11 @@ int lua_axis_studio_VisibleFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.VisibleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -16930,7 +16930,7 @@ int lua_axis_studio_VisibleFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.VisibleFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_VisibleFrame_create'.",&tolua_err);
 #endif
@@ -16942,7 +16942,7 @@ int lua_axis_studio_VisibleFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::VisibleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -16966,7 +16966,7 @@ int lua_axis_studio_VisibleFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.VisibleFrame:VisibleFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_VisibleFrame_constructor'.",&tolua_err);
 #endif
 
@@ -17002,18 +17002,18 @@ int lua_axis_studio_TextureFrame_getTextureName(lua_State* tolua_S)
     cocostudio::timeline::TextureFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.TextureFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::TextureFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_TextureFrame_getTextureName'", nullptr);
@@ -17036,7 +17036,7 @@ int lua_axis_studio_TextureFrame_getTextureName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureFrame:getTextureName",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureFrame_getTextureName'.",&tolua_err);
 #endif
@@ -17049,18 +17049,18 @@ int lua_axis_studio_TextureFrame_setTextureName(lua_State* tolua_S)
     cocostudio::timeline::TextureFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.TextureFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::TextureFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_TextureFrame_setTextureName'", nullptr);
@@ -17086,7 +17086,7 @@ int lua_axis_studio_TextureFrame_setTextureName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureFrame:setTextureName",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureFrame_setTextureName'.",&tolua_err);
 #endif
@@ -17098,11 +17098,11 @@ int lua_axis_studio_TextureFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.TextureFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -17121,7 +17121,7 @@ int lua_axis_studio_TextureFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.TextureFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureFrame_create'.",&tolua_err);
 #endif
@@ -17133,7 +17133,7 @@ int lua_axis_studio_TextureFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::TextureFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -17157,7 +17157,7 @@ int lua_axis_studio_TextureFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.TextureFrame:TextureFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_TextureFrame_constructor'.",&tolua_err);
 #endif
 
@@ -17193,18 +17193,18 @@ int lua_axis_studio_RotationFrame_setRotation(lua_State* tolua_S)
     cocostudio::timeline::RotationFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.RotationFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::RotationFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_RotationFrame_setRotation'", nullptr);
@@ -17230,7 +17230,7 @@ int lua_axis_studio_RotationFrame_setRotation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.RotationFrame:setRotation",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_RotationFrame_setRotation'.",&tolua_err);
 #endif
@@ -17243,18 +17243,18 @@ int lua_axis_studio_RotationFrame_getRotation(lua_State* tolua_S)
     cocostudio::timeline::RotationFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.RotationFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::RotationFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_RotationFrame_getRotation'", nullptr);
@@ -17277,7 +17277,7 @@ int lua_axis_studio_RotationFrame_getRotation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.RotationFrame:getRotation",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_RotationFrame_getRotation'.",&tolua_err);
 #endif
@@ -17289,11 +17289,11 @@ int lua_axis_studio_RotationFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.RotationFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -17312,7 +17312,7 @@ int lua_axis_studio_RotationFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.RotationFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_RotationFrame_create'.",&tolua_err);
 #endif
@@ -17324,7 +17324,7 @@ int lua_axis_studio_RotationFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::RotationFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -17348,7 +17348,7 @@ int lua_axis_studio_RotationFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.RotationFrame:RotationFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_RotationFrame_constructor'.",&tolua_err);
 #endif
 
@@ -17384,18 +17384,18 @@ int lua_axis_studio_SkewFrame_getSkewY(lua_State* tolua_S)
     cocostudio::timeline::SkewFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkewFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkewFrame_getSkewY'", nullptr);
@@ -17418,7 +17418,7 @@ int lua_axis_studio_SkewFrame_getSkewY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkewFrame:getSkewY",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkewFrame_getSkewY'.",&tolua_err);
 #endif
@@ -17431,18 +17431,18 @@ int lua_axis_studio_SkewFrame_setSkewX(lua_State* tolua_S)
     cocostudio::timeline::SkewFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkewFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkewFrame_setSkewX'", nullptr);
@@ -17468,7 +17468,7 @@ int lua_axis_studio_SkewFrame_setSkewX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkewFrame:setSkewX",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkewFrame_setSkewX'.",&tolua_err);
 #endif
@@ -17481,18 +17481,18 @@ int lua_axis_studio_SkewFrame_setSkewY(lua_State* tolua_S)
     cocostudio::timeline::SkewFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkewFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkewFrame_setSkewY'", nullptr);
@@ -17518,7 +17518,7 @@ int lua_axis_studio_SkewFrame_setSkewY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkewFrame:setSkewY",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkewFrame_setSkewY'.",&tolua_err);
 #endif
@@ -17531,18 +17531,18 @@ int lua_axis_studio_SkewFrame_getSkewX(lua_State* tolua_S)
     cocostudio::timeline::SkewFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkewFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkewFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkewFrame_getSkewX'", nullptr);
@@ -17565,7 +17565,7 @@ int lua_axis_studio_SkewFrame_getSkewX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkewFrame:getSkewX",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkewFrame_getSkewX'.",&tolua_err);
 #endif
@@ -17577,11 +17577,11 @@ int lua_axis_studio_SkewFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.SkewFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -17600,7 +17600,7 @@ int lua_axis_studio_SkewFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.SkewFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkewFrame_create'.",&tolua_err);
 #endif
@@ -17612,7 +17612,7 @@ int lua_axis_studio_SkewFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::SkewFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -17636,7 +17636,7 @@ int lua_axis_studio_SkewFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkewFrame:SkewFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkewFrame_constructor'.",&tolua_err);
 #endif
 
@@ -17673,11 +17673,11 @@ int lua_axis_studio_RotationSkewFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.RotationSkewFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -17696,7 +17696,7 @@ int lua_axis_studio_RotationSkewFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.RotationSkewFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_RotationSkewFrame_create'.",&tolua_err);
 #endif
@@ -17708,7 +17708,7 @@ int lua_axis_studio_RotationSkewFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::RotationSkewFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -17732,7 +17732,7 @@ int lua_axis_studio_RotationSkewFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.RotationSkewFrame:RotationSkewFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_RotationSkewFrame_constructor'.",&tolua_err);
 #endif
 
@@ -17766,18 +17766,18 @@ int lua_axis_studio_PositionFrame_getX(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PositionFrame_getX'", nullptr);
@@ -17800,7 +17800,7 @@ int lua_axis_studio_PositionFrame_getX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:getX",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_getX'.",&tolua_err);
 #endif
@@ -17813,18 +17813,18 @@ int lua_axis_studio_PositionFrame_getY(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PositionFrame_getY'", nullptr);
@@ -17847,7 +17847,7 @@ int lua_axis_studio_PositionFrame_getY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:getY",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_getY'.",&tolua_err);
 #endif
@@ -17860,18 +17860,18 @@ int lua_axis_studio_PositionFrame_setPosition(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PositionFrame_setPosition'", nullptr);
@@ -17897,7 +17897,7 @@ int lua_axis_studio_PositionFrame_setPosition(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:setPosition",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_setPosition'.",&tolua_err);
 #endif
@@ -17910,18 +17910,18 @@ int lua_axis_studio_PositionFrame_setX(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PositionFrame_setX'", nullptr);
@@ -17947,7 +17947,7 @@ int lua_axis_studio_PositionFrame_setX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:setX",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_setX'.",&tolua_err);
 #endif
@@ -17960,18 +17960,18 @@ int lua_axis_studio_PositionFrame_setY(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PositionFrame_setY'", nullptr);
@@ -17997,7 +17997,7 @@ int lua_axis_studio_PositionFrame_setY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:setY",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_setY'.",&tolua_err);
 #endif
@@ -18010,18 +18010,18 @@ int lua_axis_studio_PositionFrame_getPosition(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PositionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PositionFrame_getPosition'", nullptr);
@@ -18044,7 +18044,7 @@ int lua_axis_studio_PositionFrame_getPosition(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:getPosition",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_getPosition'.",&tolua_err);
 #endif
@@ -18056,11 +18056,11 @@ int lua_axis_studio_PositionFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.PositionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -18079,7 +18079,7 @@ int lua_axis_studio_PositionFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.PositionFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_create'.",&tolua_err);
 #endif
@@ -18091,7 +18091,7 @@ int lua_axis_studio_PositionFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::PositionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -18115,7 +18115,7 @@ int lua_axis_studio_PositionFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PositionFrame:PositionFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PositionFrame_constructor'.",&tolua_err);
 #endif
 
@@ -18155,18 +18155,18 @@ int lua_axis_studio_ScaleFrame_setScaleY(lua_State* tolua_S)
     cocostudio::timeline::ScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ScaleFrame_setScaleY'", nullptr);
@@ -18192,7 +18192,7 @@ int lua_axis_studio_ScaleFrame_setScaleY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:setScaleY",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_setScaleY'.",&tolua_err);
 #endif
@@ -18205,18 +18205,18 @@ int lua_axis_studio_ScaleFrame_setScaleX(lua_State* tolua_S)
     cocostudio::timeline::ScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ScaleFrame_setScaleX'", nullptr);
@@ -18242,7 +18242,7 @@ int lua_axis_studio_ScaleFrame_setScaleX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:setScaleX",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_setScaleX'.",&tolua_err);
 #endif
@@ -18255,18 +18255,18 @@ int lua_axis_studio_ScaleFrame_getScaleY(lua_State* tolua_S)
     cocostudio::timeline::ScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ScaleFrame_getScaleY'", nullptr);
@@ -18289,7 +18289,7 @@ int lua_axis_studio_ScaleFrame_getScaleY(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:getScaleY",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_getScaleY'.",&tolua_err);
 #endif
@@ -18302,18 +18302,18 @@ int lua_axis_studio_ScaleFrame_getScaleX(lua_State* tolua_S)
     cocostudio::timeline::ScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ScaleFrame_getScaleX'", nullptr);
@@ -18336,7 +18336,7 @@ int lua_axis_studio_ScaleFrame_getScaleX(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:getScaleX",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_getScaleX'.",&tolua_err);
 #endif
@@ -18349,18 +18349,18 @@ int lua_axis_studio_ScaleFrame_setScale(lua_State* tolua_S)
     cocostudio::timeline::ScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ScaleFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ScaleFrame_setScale'", nullptr);
@@ -18386,7 +18386,7 @@ int lua_axis_studio_ScaleFrame_setScale(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:setScale",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_setScale'.",&tolua_err);
 #endif
@@ -18398,11 +18398,11 @@ int lua_axis_studio_ScaleFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ScaleFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -18421,7 +18421,7 @@ int lua_axis_studio_ScaleFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ScaleFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_create'.",&tolua_err);
 #endif
@@ -18433,7 +18433,7 @@ int lua_axis_studio_ScaleFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::ScaleFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -18457,7 +18457,7 @@ int lua_axis_studio_ScaleFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ScaleFrame:ScaleFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ScaleFrame_constructor'.",&tolua_err);
 #endif
 
@@ -18496,18 +18496,18 @@ int lua_axis_studio_AnchorPointFrame_setAnchorPoint(lua_State* tolua_S)
     cocostudio::timeline::AnchorPointFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AnchorPointFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::AnchorPointFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AnchorPointFrame_setAnchorPoint'", nullptr);
@@ -18533,7 +18533,7 @@ int lua_axis_studio_AnchorPointFrame_setAnchorPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnchorPointFrame:setAnchorPoint",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnchorPointFrame_setAnchorPoint'.",&tolua_err);
 #endif
@@ -18546,18 +18546,18 @@ int lua_axis_studio_AnchorPointFrame_getAnchorPoint(lua_State* tolua_S)
     cocostudio::timeline::AnchorPointFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AnchorPointFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::AnchorPointFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AnchorPointFrame_getAnchorPoint'", nullptr);
@@ -18580,7 +18580,7 @@ int lua_axis_studio_AnchorPointFrame_getAnchorPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnchorPointFrame:getAnchorPoint",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnchorPointFrame_getAnchorPoint'.",&tolua_err);
 #endif
@@ -18592,11 +18592,11 @@ int lua_axis_studio_AnchorPointFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.AnchorPointFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -18615,7 +18615,7 @@ int lua_axis_studio_AnchorPointFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.AnchorPointFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnchorPointFrame_create'.",&tolua_err);
 #endif
@@ -18627,7 +18627,7 @@ int lua_axis_studio_AnchorPointFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::AnchorPointFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -18651,7 +18651,7 @@ int lua_axis_studio_AnchorPointFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AnchorPointFrame:AnchorPointFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AnchorPointFrame_constructor'.",&tolua_err);
 #endif
 
@@ -18687,18 +18687,18 @@ int lua_axis_studio_InnerActionFrame_getEndFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_getEndFrameIndex'", nullptr);
@@ -18721,7 +18721,7 @@ int lua_axis_studio_InnerActionFrame_getEndFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:getEndFrameIndex",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_getEndFrameIndex'.",&tolua_err);
 #endif
@@ -18734,18 +18734,18 @@ int lua_axis_studio_InnerActionFrame_getStartFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_getStartFrameIndex'", nullptr);
@@ -18768,7 +18768,7 @@ int lua_axis_studio_InnerActionFrame_getStartFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:getStartFrameIndex",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_getStartFrameIndex'.",&tolua_err);
 #endif
@@ -18781,18 +18781,18 @@ int lua_axis_studio_InnerActionFrame_getInnerActionType(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_getInnerActionType'", nullptr);
@@ -18815,7 +18815,7 @@ int lua_axis_studio_InnerActionFrame_getInnerActionType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:getInnerActionType",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_getInnerActionType'.",&tolua_err);
 #endif
@@ -18828,18 +18828,18 @@ int lua_axis_studio_InnerActionFrame_setEndFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_setEndFrameIndex'", nullptr);
@@ -18865,7 +18865,7 @@ int lua_axis_studio_InnerActionFrame_setEndFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:setEndFrameIndex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_setEndFrameIndex'.",&tolua_err);
 #endif
@@ -18878,18 +18878,18 @@ int lua_axis_studio_InnerActionFrame_setEnterWithName(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_setEnterWithName'", nullptr);
@@ -18915,7 +18915,7 @@ int lua_axis_studio_InnerActionFrame_setEnterWithName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:setEnterWithName",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_setEnterWithName'.",&tolua_err);
 #endif
@@ -18928,18 +18928,18 @@ int lua_axis_studio_InnerActionFrame_setSingleFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_setSingleFrameIndex'", nullptr);
@@ -18965,7 +18965,7 @@ int lua_axis_studio_InnerActionFrame_setSingleFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:setSingleFrameIndex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_setSingleFrameIndex'.",&tolua_err);
 #endif
@@ -18978,18 +18978,18 @@ int lua_axis_studio_InnerActionFrame_setStartFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_setStartFrameIndex'", nullptr);
@@ -19015,7 +19015,7 @@ int lua_axis_studio_InnerActionFrame_setStartFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:setStartFrameIndex",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_setStartFrameIndex'.",&tolua_err);
 #endif
@@ -19028,18 +19028,18 @@ int lua_axis_studio_InnerActionFrame_getSingleFrameIndex(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_getSingleFrameIndex'", nullptr);
@@ -19062,7 +19062,7 @@ int lua_axis_studio_InnerActionFrame_getSingleFrameIndex(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:getSingleFrameIndex",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_getSingleFrameIndex'.",&tolua_err);
 #endif
@@ -19075,18 +19075,18 @@ int lua_axis_studio_InnerActionFrame_setInnerActionType(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_setInnerActionType'", nullptr);
@@ -19112,7 +19112,7 @@ int lua_axis_studio_InnerActionFrame_setInnerActionType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:setInnerActionType",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_setInnerActionType'.",&tolua_err);
 #endif
@@ -19125,18 +19125,18 @@ int lua_axis_studio_InnerActionFrame_setAnimationName(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::InnerActionFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_InnerActionFrame_setAnimationName'", nullptr);
@@ -19162,7 +19162,7 @@ int lua_axis_studio_InnerActionFrame_setAnimationName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:setAnimationName",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_setAnimationName'.",&tolua_err);
 #endif
@@ -19174,11 +19174,11 @@ int lua_axis_studio_InnerActionFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.InnerActionFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -19197,7 +19197,7 @@ int lua_axis_studio_InnerActionFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.InnerActionFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_create'.",&tolua_err);
 #endif
@@ -19209,7 +19209,7 @@ int lua_axis_studio_InnerActionFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::InnerActionFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -19233,7 +19233,7 @@ int lua_axis_studio_InnerActionFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.InnerActionFrame:InnerActionFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_InnerActionFrame_constructor'.",&tolua_err);
 #endif
 
@@ -19277,18 +19277,18 @@ int lua_axis_studio_ColorFrame_getColor(lua_State* tolua_S)
     cocostudio::timeline::ColorFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ColorFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ColorFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ColorFrame_getColor'", nullptr);
@@ -19311,7 +19311,7 @@ int lua_axis_studio_ColorFrame_getColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ColorFrame:getColor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ColorFrame_getColor'.",&tolua_err);
 #endif
@@ -19324,18 +19324,18 @@ int lua_axis_studio_ColorFrame_setColor(lua_State* tolua_S)
     cocostudio::timeline::ColorFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ColorFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ColorFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ColorFrame_setColor'", nullptr);
@@ -19361,7 +19361,7 @@ int lua_axis_studio_ColorFrame_setColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ColorFrame:setColor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ColorFrame_setColor'.",&tolua_err);
 #endif
@@ -19373,11 +19373,11 @@ int lua_axis_studio_ColorFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ColorFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -19396,7 +19396,7 @@ int lua_axis_studio_ColorFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ColorFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ColorFrame_create'.",&tolua_err);
 #endif
@@ -19408,7 +19408,7 @@ int lua_axis_studio_ColorFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::ColorFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -19432,7 +19432,7 @@ int lua_axis_studio_ColorFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ColorFrame:ColorFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ColorFrame_constructor'.",&tolua_err);
 #endif
 
@@ -19468,18 +19468,18 @@ int lua_axis_studio_AlphaFrame_getAlpha(lua_State* tolua_S)
     cocostudio::timeline::AlphaFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AlphaFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::AlphaFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AlphaFrame_getAlpha'", nullptr);
@@ -19502,7 +19502,7 @@ int lua_axis_studio_AlphaFrame_getAlpha(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AlphaFrame:getAlpha",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AlphaFrame_getAlpha'.",&tolua_err);
 #endif
@@ -19515,18 +19515,18 @@ int lua_axis_studio_AlphaFrame_setAlpha(lua_State* tolua_S)
     cocostudio::timeline::AlphaFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.AlphaFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::AlphaFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_AlphaFrame_setAlpha'", nullptr);
@@ -19552,7 +19552,7 @@ int lua_axis_studio_AlphaFrame_setAlpha(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AlphaFrame:setAlpha",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AlphaFrame_setAlpha'.",&tolua_err);
 #endif
@@ -19564,11 +19564,11 @@ int lua_axis_studio_AlphaFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.AlphaFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -19587,7 +19587,7 @@ int lua_axis_studio_AlphaFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.AlphaFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AlphaFrame_create'.",&tolua_err);
 #endif
@@ -19599,7 +19599,7 @@ int lua_axis_studio_AlphaFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::AlphaFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -19623,7 +19623,7 @@ int lua_axis_studio_AlphaFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.AlphaFrame:AlphaFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_AlphaFrame_constructor'.",&tolua_err);
 #endif
 
@@ -19659,18 +19659,18 @@ int lua_axis_studio_EventFrame_setEvent(lua_State* tolua_S)
     cocostudio::timeline::EventFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.EventFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::EventFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_EventFrame_setEvent'", nullptr);
@@ -19696,7 +19696,7 @@ int lua_axis_studio_EventFrame_setEvent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:setEvent",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_EventFrame_setEvent'.",&tolua_err);
 #endif
@@ -19709,18 +19709,18 @@ int lua_axis_studio_EventFrame_init(lua_State* tolua_S)
     cocostudio::timeline::EventFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.EventFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::EventFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_EventFrame_init'", nullptr);
@@ -19743,7 +19743,7 @@ int lua_axis_studio_EventFrame_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_EventFrame_init'.",&tolua_err);
 #endif
@@ -19756,18 +19756,18 @@ int lua_axis_studio_EventFrame_getEvent(lua_State* tolua_S)
     cocostudio::timeline::EventFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.EventFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::EventFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_EventFrame_getEvent'", nullptr);
@@ -19790,7 +19790,7 @@ int lua_axis_studio_EventFrame_getEvent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:getEvent",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_EventFrame_getEvent'.",&tolua_err);
 #endif
@@ -19802,11 +19802,11 @@ int lua_axis_studio_EventFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.EventFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -19825,7 +19825,7 @@ int lua_axis_studio_EventFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.EventFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_EventFrame_create'.",&tolua_err);
 #endif
@@ -19837,7 +19837,7 @@ int lua_axis_studio_EventFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::EventFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -19861,7 +19861,7 @@ int lua_axis_studio_EventFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.EventFrame:EventFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_EventFrame_constructor'.",&tolua_err);
 #endif
 
@@ -19898,18 +19898,18 @@ int lua_axis_studio_ZOrderFrame_getZOrder(lua_State* tolua_S)
     cocostudio::timeline::ZOrderFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ZOrderFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ZOrderFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ZOrderFrame_getZOrder'", nullptr);
@@ -19932,7 +19932,7 @@ int lua_axis_studio_ZOrderFrame_getZOrder(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ZOrderFrame:getZOrder",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ZOrderFrame_getZOrder'.",&tolua_err);
 #endif
@@ -19945,18 +19945,18 @@ int lua_axis_studio_ZOrderFrame_setZOrder(lua_State* tolua_S)
     cocostudio::timeline::ZOrderFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ZOrderFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ZOrderFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ZOrderFrame_setZOrder'", nullptr);
@@ -19982,7 +19982,7 @@ int lua_axis_studio_ZOrderFrame_setZOrder(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ZOrderFrame:setZOrder",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ZOrderFrame_setZOrder'.",&tolua_err);
 #endif
@@ -19994,11 +19994,11 @@ int lua_axis_studio_ZOrderFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ZOrderFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -20017,7 +20017,7 @@ int lua_axis_studio_ZOrderFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ZOrderFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ZOrderFrame_create'.",&tolua_err);
 #endif
@@ -20029,7 +20029,7 @@ int lua_axis_studio_ZOrderFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::ZOrderFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -20053,7 +20053,7 @@ int lua_axis_studio_ZOrderFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ZOrderFrame:ZOrderFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ZOrderFrame_constructor'.",&tolua_err);
 #endif
 
@@ -20089,18 +20089,18 @@ int lua_axis_studio_BlendFuncFrame_getBlendFunc(lua_State* tolua_S)
     cocostudio::timeline::BlendFuncFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BlendFuncFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BlendFuncFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BlendFuncFrame_getBlendFunc'", nullptr);
@@ -20123,7 +20123,7 @@ int lua_axis_studio_BlendFuncFrame_getBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BlendFuncFrame:getBlendFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BlendFuncFrame_getBlendFunc'.",&tolua_err);
 #endif
@@ -20136,18 +20136,18 @@ int lua_axis_studio_BlendFuncFrame_setBlendFunc(lua_State* tolua_S)
     cocostudio::timeline::BlendFuncFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BlendFuncFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BlendFuncFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BlendFuncFrame_setBlendFunc'", nullptr);
@@ -20173,7 +20173,7 @@ int lua_axis_studio_BlendFuncFrame_setBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BlendFuncFrame:setBlendFunc",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BlendFuncFrame_setBlendFunc'.",&tolua_err);
 #endif
@@ -20185,11 +20185,11 @@ int lua_axis_studio_BlendFuncFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.BlendFuncFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -20208,7 +20208,7 @@ int lua_axis_studio_BlendFuncFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.BlendFuncFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BlendFuncFrame_create'.",&tolua_err);
 #endif
@@ -20220,7 +20220,7 @@ int lua_axis_studio_BlendFuncFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::BlendFuncFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -20244,7 +20244,7 @@ int lua_axis_studio_BlendFuncFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BlendFuncFrame:BlendFuncFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BlendFuncFrame_constructor'.",&tolua_err);
 #endif
 
@@ -20280,18 +20280,18 @@ int lua_axis_studio_PlayableFrame_setPlayableAct(lua_State* tolua_S)
     cocostudio::timeline::PlayableFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PlayableFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PlayableFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PlayableFrame_setPlayableAct'", nullptr);
@@ -20317,7 +20317,7 @@ int lua_axis_studio_PlayableFrame_setPlayableAct(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PlayableFrame:setPlayableAct",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PlayableFrame_setPlayableAct'.",&tolua_err);
 #endif
@@ -20330,18 +20330,18 @@ int lua_axis_studio_PlayableFrame_getPlayableAct(lua_State* tolua_S)
     cocostudio::timeline::PlayableFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.PlayableFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::PlayableFrame*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_PlayableFrame_getPlayableAct'", nullptr);
@@ -20364,7 +20364,7 @@ int lua_axis_studio_PlayableFrame_getPlayableAct(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PlayableFrame:getPlayableAct",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PlayableFrame_getPlayableAct'.",&tolua_err);
 #endif
@@ -20376,11 +20376,11 @@ int lua_axis_studio_PlayableFrame_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.PlayableFrame",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -20399,7 +20399,7 @@ int lua_axis_studio_PlayableFrame_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.PlayableFrame:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PlayableFrame_create'.",&tolua_err);
 #endif
@@ -20411,7 +20411,7 @@ int lua_axis_studio_PlayableFrame_constructor(lua_State* tolua_S)
     cocostudio::timeline::PlayableFrame* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -20435,7 +20435,7 @@ int lua_axis_studio_PlayableFrame_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.PlayableFrame:PlayableFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_PlayableFrame_constructor'.",&tolua_err);
 #endif
 
@@ -20471,18 +20471,18 @@ int lua_axis_studio_Timeline_clone(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_clone'", nullptr);
@@ -20505,7 +20505,7 @@ int lua_axis_studio_Timeline_clone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:clone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_clone'.",&tolua_err);
 #endif
@@ -20518,18 +20518,18 @@ int lua_axis_studio_Timeline_gotoFrame(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_gotoFrame'", nullptr);
@@ -20555,7 +20555,7 @@ int lua_axis_studio_Timeline_gotoFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:gotoFrame",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_gotoFrame'.",&tolua_err);
 #endif
@@ -20568,18 +20568,18 @@ int lua_axis_studio_Timeline_setNode(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_setNode'", nullptr);
@@ -20605,7 +20605,7 @@ int lua_axis_studio_Timeline_setNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:setNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_setNode'.",&tolua_err);
 #endif
@@ -20618,18 +20618,18 @@ int lua_axis_studio_Timeline_getActionTimeline(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_getActionTimeline'", nullptr);
@@ -20652,7 +20652,7 @@ int lua_axis_studio_Timeline_getActionTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:getActionTimeline",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_getActionTimeline'.",&tolua_err);
 #endif
@@ -20665,18 +20665,18 @@ int lua_axis_studio_Timeline_insertFrame(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_insertFrame'", nullptr);
@@ -20705,7 +20705,7 @@ int lua_axis_studio_Timeline_insertFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:insertFrame",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_insertFrame'.",&tolua_err);
 #endif
@@ -20718,18 +20718,18 @@ int lua_axis_studio_Timeline_setActionTag(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_setActionTag'", nullptr);
@@ -20755,7 +20755,7 @@ int lua_axis_studio_Timeline_setActionTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:setActionTag",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_setActionTag'.",&tolua_err);
 #endif
@@ -20768,18 +20768,18 @@ int lua_axis_studio_Timeline_addFrame(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_addFrame'", nullptr);
@@ -20805,7 +20805,7 @@ int lua_axis_studio_Timeline_addFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:addFrame",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_addFrame'.",&tolua_err);
 #endif
@@ -20818,18 +20818,18 @@ int lua_axis_studio_Timeline_getFrames(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_getFrames'", nullptr);
@@ -20852,7 +20852,7 @@ int lua_axis_studio_Timeline_getFrames(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:getFrames",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_getFrames'.",&tolua_err);
 #endif
@@ -20865,18 +20865,18 @@ int lua_axis_studio_Timeline_getActionTag(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_getActionTag'", nullptr);
@@ -20899,7 +20899,7 @@ int lua_axis_studio_Timeline_getActionTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:getActionTag",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_getActionTag'.",&tolua_err);
 #endif
@@ -20912,18 +20912,18 @@ int lua_axis_studio_Timeline_getNode(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_getNode'", nullptr);
@@ -20946,7 +20946,7 @@ int lua_axis_studio_Timeline_getNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:getNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_getNode'.",&tolua_err);
 #endif
@@ -20959,18 +20959,18 @@ int lua_axis_studio_Timeline_removeFrame(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_removeFrame'", nullptr);
@@ -20996,7 +20996,7 @@ int lua_axis_studio_Timeline_removeFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:removeFrame",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_removeFrame'.",&tolua_err);
 #endif
@@ -21009,18 +21009,18 @@ int lua_axis_studio_Timeline_setActionTimeline(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_setActionTimeline'", nullptr);
@@ -21046,7 +21046,7 @@ int lua_axis_studio_Timeline_setActionTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:setActionTimeline",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_setActionTimeline'.",&tolua_err);
 #endif
@@ -21059,18 +21059,18 @@ int lua_axis_studio_Timeline_stepToFrame(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::Timeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_Timeline_stepToFrame'", nullptr);
@@ -21096,7 +21096,7 @@ int lua_axis_studio_Timeline_stepToFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:stepToFrame",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_stepToFrame'.",&tolua_err);
 #endif
@@ -21108,11 +21108,11 @@ int lua_axis_studio_Timeline_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.Timeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -21131,7 +21131,7 @@ int lua_axis_studio_Timeline_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.Timeline:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_create'.",&tolua_err);
 #endif
@@ -21143,7 +21143,7 @@ int lua_axis_studio_Timeline_constructor(lua_State* tolua_S)
     cocostudio::timeline::Timeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -21167,7 +21167,7 @@ int lua_axis_studio_Timeline_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Timeline:Timeline",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_Timeline_constructor'.",&tolua_err);
 #endif
 
@@ -21214,18 +21214,18 @@ int lua_axis_studio_ActionTimelineData_setActionTag(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineData_setActionTag'", nullptr);
@@ -21251,7 +21251,7 @@ int lua_axis_studio_ActionTimelineData_setActionTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineData:setActionTag",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineData_setActionTag'.",&tolua_err);
 #endif
@@ -21264,18 +21264,18 @@ int lua_axis_studio_ActionTimelineData_init(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineData_init'", nullptr);
@@ -21301,7 +21301,7 @@ int lua_axis_studio_ActionTimelineData_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineData:init",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineData_init'.",&tolua_err);
 #endif
@@ -21314,18 +21314,18 @@ int lua_axis_studio_ActionTimelineData_getActionTag(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineData_getActionTag'", nullptr);
@@ -21348,7 +21348,7 @@ int lua_axis_studio_ActionTimelineData_getActionTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineData:getActionTag",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineData_getActionTag'.",&tolua_err);
 #endif
@@ -21360,11 +21360,11 @@ int lua_axis_studio_ActionTimelineData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionTimelineData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -21385,7 +21385,7 @@ int lua_axis_studio_ActionTimelineData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionTimelineData:create",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineData_create'.",&tolua_err);
 #endif
@@ -21397,7 +21397,7 @@ int lua_axis_studio_ActionTimelineData_constructor(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -21421,7 +21421,7 @@ int lua_axis_studio_ActionTimelineData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineData:ActionTimelineData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineData_constructor'.",&tolua_err);
 #endif
 
@@ -21458,18 +21458,18 @@ int lua_axis_studio_ActionTimeline_clearFrameEndCallFuncs(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_clearFrameEndCallFuncs'", nullptr);
@@ -21492,7 +21492,7 @@ int lua_axis_studio_ActionTimeline_clearFrameEndCallFuncs(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:clearFrameEndCallFuncs",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_clearFrameEndCallFuncs'.",&tolua_err);
 #endif
@@ -21505,18 +21505,18 @@ int lua_axis_studio_ActionTimeline_setAnimationEndCallFunc(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_setAnimationEndCallFunc'", nullptr);
@@ -21549,7 +21549,7 @@ int lua_axis_studio_ActionTimeline_setAnimationEndCallFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:setAnimationEndCallFunc",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_setAnimationEndCallFunc'.",&tolua_err);
 #endif
@@ -21562,18 +21562,18 @@ int lua_axis_studio_ActionTimeline_addTimeline(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_addTimeline'", nullptr);
@@ -21599,7 +21599,7 @@ int lua_axis_studio_ActionTimeline_addTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:addTimeline",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_addTimeline'.",&tolua_err);
 #endif
@@ -21612,18 +21612,18 @@ int lua_axis_studio_ActionTimeline_getCurrentFrame(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getCurrentFrame'", nullptr);
@@ -21646,7 +21646,7 @@ int lua_axis_studio_ActionTimeline_getCurrentFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getCurrentFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getCurrentFrame'.",&tolua_err);
 #endif
@@ -21659,18 +21659,18 @@ int lua_axis_studio_ActionTimeline_getStartFrame(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getStartFrame'", nullptr);
@@ -21693,7 +21693,7 @@ int lua_axis_studio_ActionTimeline_getStartFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getStartFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getStartFrame'.",&tolua_err);
 #endif
@@ -21706,18 +21706,18 @@ int lua_axis_studio_ActionTimeline_pause(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_pause'", nullptr);
@@ -21740,7 +21740,7 @@ int lua_axis_studio_ActionTimeline_pause(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:pause",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_pause'.",&tolua_err);
 #endif
@@ -21753,18 +21753,18 @@ int lua_axis_studio_ActionTimeline_start(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_start'", nullptr);
@@ -21787,7 +21787,7 @@ int lua_axis_studio_ActionTimeline_start(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:start",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_start'.",&tolua_err);
 #endif
@@ -21800,18 +21800,18 @@ int lua_axis_studio_ActionTimeline_init(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_init'", nullptr);
@@ -21834,7 +21834,7 @@ int lua_axis_studio_ActionTimeline_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_init'.",&tolua_err);
 #endif
@@ -21847,18 +21847,18 @@ int lua_axis_studio_ActionTimeline_removeTimeline(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_removeTimeline'", nullptr);
@@ -21884,7 +21884,7 @@ int lua_axis_studio_ActionTimeline_removeTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:removeTimeline",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_removeTimeline'.",&tolua_err);
 #endif
@@ -21897,18 +21897,18 @@ int lua_axis_studio_ActionTimeline_clearFrameEventCallFunc(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_clearFrameEventCallFunc'", nullptr);
@@ -21931,7 +21931,7 @@ int lua_axis_studio_ActionTimeline_clearFrameEventCallFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:clearFrameEventCallFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_clearFrameEventCallFunc'.",&tolua_err);
 #endif
@@ -21944,18 +21944,18 @@ int lua_axis_studio_ActionTimeline_setLastFrameCallFunc(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_setLastFrameCallFunc'", nullptr);
@@ -21985,7 +21985,7 @@ int lua_axis_studio_ActionTimeline_setLastFrameCallFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:setLastFrameCallFunc",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_setLastFrameCallFunc'.",&tolua_err);
 #endif
@@ -21998,18 +21998,18 @@ int lua_axis_studio_ActionTimeline_getTimelines(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getTimelines'", nullptr);
@@ -22032,7 +22032,7 @@ int lua_axis_studio_ActionTimeline_getTimelines(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getTimelines",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getTimelines'.",&tolua_err);
 #endif
@@ -22045,18 +22045,18 @@ int lua_axis_studio_ActionTimeline_play(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_play'", nullptr);
@@ -22085,7 +22085,7 @@ int lua_axis_studio_ActionTimeline_play(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:play",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_play'.",&tolua_err);
 #endif
@@ -22098,18 +22098,18 @@ int lua_axis_studio_ActionTimeline_getAnimationInfo(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getAnimationInfo'", nullptr);
@@ -22135,7 +22135,7 @@ int lua_axis_studio_ActionTimeline_getAnimationInfo(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getAnimationInfo",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getAnimationInfo'.",&tolua_err);
 #endif
@@ -22148,18 +22148,18 @@ int lua_axis_studio_ActionTimeline_resume(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_resume'", nullptr);
@@ -22182,7 +22182,7 @@ int lua_axis_studio_ActionTimeline_resume(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:resume",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_resume'.",&tolua_err);
 #endif
@@ -22195,18 +22195,18 @@ int lua_axis_studio_ActionTimeline_addFrameEndCallFunc(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_addFrameEndCallFunc'", nullptr);
@@ -22242,7 +22242,7 @@ int lua_axis_studio_ActionTimeline_addFrameEndCallFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:addFrameEndCallFunc",argc, 3);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_addFrameEndCallFunc'.",&tolua_err);
 #endif
@@ -22255,18 +22255,18 @@ int lua_axis_studio_ActionTimeline_removeAnimationInfo(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_removeAnimationInfo'", nullptr);
@@ -22292,7 +22292,7 @@ int lua_axis_studio_ActionTimeline_removeAnimationInfo(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:removeAnimationInfo",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_removeAnimationInfo'.",&tolua_err);
 #endif
@@ -22305,18 +22305,18 @@ int lua_axis_studio_ActionTimeline_getTimeSpeed(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getTimeSpeed'", nullptr);
@@ -22339,7 +22339,7 @@ int lua_axis_studio_ActionTimeline_getTimeSpeed(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getTimeSpeed",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getTimeSpeed'.",&tolua_err);
 #endif
@@ -22352,18 +22352,18 @@ int lua_axis_studio_ActionTimeline_addAnimationInfo(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_addAnimationInfo'", nullptr);
@@ -22389,7 +22389,7 @@ int lua_axis_studio_ActionTimeline_addAnimationInfo(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:addAnimationInfo",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_addAnimationInfo'.",&tolua_err);
 #endif
@@ -22402,18 +22402,18 @@ int lua_axis_studio_ActionTimeline_getDuration(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getDuration'", nullptr);
@@ -22436,7 +22436,7 @@ int lua_axis_studio_ActionTimeline_getDuration(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getDuration",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getDuration'.",&tolua_err);
 #endif
@@ -22449,18 +22449,18 @@ int lua_axis_studio_ActionTimeline_gotoFrameAndPause(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_gotoFrameAndPause'", nullptr);
@@ -22486,7 +22486,7 @@ int lua_axis_studio_ActionTimeline_gotoFrameAndPause(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:gotoFrameAndPause",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_gotoFrameAndPause'.",&tolua_err);
 #endif
@@ -22499,18 +22499,18 @@ int lua_axis_studio_ActionTimeline_isPlaying(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_isPlaying'", nullptr);
@@ -22533,7 +22533,7 @@ int lua_axis_studio_ActionTimeline_isPlaying(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:isPlaying",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_isPlaying'.",&tolua_err);
 #endif
@@ -22546,18 +22546,18 @@ int lua_axis_studio_ActionTimeline_removeFrameEndCallFuncs(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_removeFrameEndCallFuncs'", nullptr);
@@ -22583,7 +22583,7 @@ int lua_axis_studio_ActionTimeline_removeFrameEndCallFuncs(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:removeFrameEndCallFuncs",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_removeFrameEndCallFuncs'.",&tolua_err);
 #endif
@@ -22595,15 +22595,15 @@ int lua_axis_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_gotoFrameAndPlay'", nullptr);
@@ -22686,7 +22686,7 @@ int lua_axis_studio_ActionTimeline_gotoFrameAndPlay(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.ActionTimeline:gotoFrameAndPlay",argc, 4);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_gotoFrameAndPlay'.",&tolua_err);
 #endif
@@ -22699,18 +22699,18 @@ int lua_axis_studio_ActionTimeline_IsAnimationInfoExists(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_IsAnimationInfoExists'", nullptr);
@@ -22736,7 +22736,7 @@ int lua_axis_studio_ActionTimeline_IsAnimationInfoExists(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:IsAnimationInfoExists",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_IsAnimationInfoExists'.",&tolua_err);
 #endif
@@ -22749,18 +22749,18 @@ int lua_axis_studio_ActionTimeline_getEndFrame(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_getEndFrame'", nullptr);
@@ -22783,7 +22783,7 @@ int lua_axis_studio_ActionTimeline_getEndFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:getEndFrame",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_getEndFrame'.",&tolua_err);
 #endif
@@ -22796,18 +22796,18 @@ int lua_axis_studio_ActionTimeline_setTimeSpeed(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_setTimeSpeed'", nullptr);
@@ -22833,7 +22833,7 @@ int lua_axis_studio_ActionTimeline_setTimeSpeed(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:setTimeSpeed",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_setTimeSpeed'.",&tolua_err);
 #endif
@@ -22846,18 +22846,18 @@ int lua_axis_studio_ActionTimeline_clearLastFrameCallFunc(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_clearLastFrameCallFunc'", nullptr);
@@ -22880,7 +22880,7 @@ int lua_axis_studio_ActionTimeline_clearLastFrameCallFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:clearLastFrameCallFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_clearLastFrameCallFunc'.",&tolua_err);
 #endif
@@ -22893,18 +22893,18 @@ int lua_axis_studio_ActionTimeline_setDuration(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_setDuration'", nullptr);
@@ -22930,7 +22930,7 @@ int lua_axis_studio_ActionTimeline_setDuration(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:setDuration",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_setDuration'.",&tolua_err);
 #endif
@@ -22943,18 +22943,18 @@ int lua_axis_studio_ActionTimeline_setCurrentFrame(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_setCurrentFrame'", nullptr);
@@ -22980,7 +22980,7 @@ int lua_axis_studio_ActionTimeline_setCurrentFrame(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:setCurrentFrame",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_setCurrentFrame'.",&tolua_err);
 #endif
@@ -22993,18 +22993,18 @@ int lua_axis_studio_ActionTimeline_removeFrameEndCallFunc(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimeline*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimeline_removeFrameEndCallFunc'", nullptr);
@@ -23033,7 +23033,7 @@ int lua_axis_studio_ActionTimeline_removeFrameEndCallFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:removeFrameEndCallFunc",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_removeFrameEndCallFunc'.",&tolua_err);
 #endif
@@ -23045,11 +23045,11 @@ int lua_axis_studio_ActionTimeline_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionTimeline",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -23068,7 +23068,7 @@ int lua_axis_studio_ActionTimeline_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionTimeline:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_create'.",&tolua_err);
 #endif
@@ -23080,7 +23080,7 @@ int lua_axis_studio_ActionTimeline_constructor(lua_State* tolua_S)
     cocostudio::timeline::ActionTimeline* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -23104,7 +23104,7 @@ int lua_axis_studio_ActionTimeline_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimeline:ActionTimeline",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimeline_constructor'.",&tolua_err);
 #endif
 
@@ -23169,18 +23169,18 @@ int lua_axis_studio_ActionTimelineNode_getRoot(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineNode_getRoot'", nullptr);
@@ -23203,7 +23203,7 @@ int lua_axis_studio_ActionTimelineNode_getRoot(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:getRoot",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_getRoot'.",&tolua_err);
 #endif
@@ -23216,18 +23216,18 @@ int lua_axis_studio_ActionTimelineNode_getActionTimeline(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineNode_getActionTimeline'", nullptr);
@@ -23250,7 +23250,7 @@ int lua_axis_studio_ActionTimelineNode_getActionTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:getActionTimeline",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_getActionTimeline'.",&tolua_err);
 #endif
@@ -23263,18 +23263,18 @@ int lua_axis_studio_ActionTimelineNode_setActionTimeline(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineNode_setActionTimeline'", nullptr);
@@ -23300,7 +23300,7 @@ int lua_axis_studio_ActionTimelineNode_setActionTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:setActionTimeline",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_setActionTimeline'.",&tolua_err);
 #endif
@@ -23313,18 +23313,18 @@ int lua_axis_studio_ActionTimelineNode_init(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineNode_init'", nullptr);
@@ -23353,7 +23353,7 @@ int lua_axis_studio_ActionTimelineNode_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:init",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_init'.",&tolua_err);
 #endif
@@ -23366,18 +23366,18 @@ int lua_axis_studio_ActionTimelineNode_setRoot(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ActionTimelineNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::ActionTimelineNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ActionTimelineNode_setRoot'", nullptr);
@@ -23403,7 +23403,7 @@ int lua_axis_studio_ActionTimelineNode_setRoot(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:setRoot",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_setRoot'.",&tolua_err);
 #endif
@@ -23415,11 +23415,11 @@ int lua_axis_studio_ActionTimelineNode_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ActionTimelineNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -23442,7 +23442,7 @@ int lua_axis_studio_ActionTimelineNode_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ActionTimelineNode:create",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_create'.",&tolua_err);
 #endif
@@ -23454,7 +23454,7 @@ int lua_axis_studio_ActionTimelineNode_constructor(lua_State* tolua_S)
     cocostudio::timeline::ActionTimelineNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -23478,7 +23478,7 @@ int lua_axis_studio_ActionTimelineNode_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ActionTimelineNode:ActionTimelineNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ActionTimelineNode_constructor'.",&tolua_err);
 #endif
 
@@ -23517,18 +23517,18 @@ int lua_axis_studio_BoneNode_getDebugDrawWidth(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getDebugDrawWidth'", nullptr);
@@ -23551,7 +23551,7 @@ int lua_axis_studio_BoneNode_getDebugDrawWidth(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getDebugDrawWidth",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getDebugDrawWidth'.",&tolua_err);
 #endif
@@ -23563,15 +23563,15 @@ int lua_axis_studio_BoneNode_getChildBones(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getChildBones'", nullptr);
@@ -23598,7 +23598,7 @@ int lua_axis_studio_BoneNode_getChildBones(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.BoneNode:getChildBones",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getChildBones'.",&tolua_err);
 #endif
@@ -23611,18 +23611,18 @@ int lua_axis_studio_BoneNode_getBlendFunc(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getBlendFunc'", nullptr);
@@ -23645,7 +23645,7 @@ int lua_axis_studio_BoneNode_getBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getBlendFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getBlendFunc'.",&tolua_err);
 #endif
@@ -23658,18 +23658,18 @@ int lua_axis_studio_BoneNode_getAllSubBones(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getAllSubBones'", nullptr);
@@ -23692,7 +23692,7 @@ int lua_axis_studio_BoneNode_getAllSubBones(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getAllSubBones",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getAllSubBones'.",&tolua_err);
 #endif
@@ -23705,18 +23705,18 @@ int lua_axis_studio_BoneNode_setBlendFunc(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_setBlendFunc'", nullptr);
@@ -23742,7 +23742,7 @@ int lua_axis_studio_BoneNode_setBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:setBlendFunc",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_setBlendFunc'.",&tolua_err);
 #endif
@@ -23755,18 +23755,18 @@ int lua_axis_studio_BoneNode_setDebugDrawEnabled(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_setDebugDrawEnabled'", nullptr);
@@ -23792,7 +23792,7 @@ int lua_axis_studio_BoneNode_setDebugDrawEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:setDebugDrawEnabled",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_setDebugDrawEnabled'.",&tolua_err);
 #endif
@@ -23805,18 +23805,18 @@ int lua_axis_studio_BoneNode_getVisibleSkinsRect(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getVisibleSkinsRect'", nullptr);
@@ -23839,7 +23839,7 @@ int lua_axis_studio_BoneNode_getVisibleSkinsRect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getVisibleSkinsRect",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getVisibleSkinsRect'.",&tolua_err);
 #endif
@@ -23852,18 +23852,18 @@ int lua_axis_studio_BoneNode_getAllSubSkins(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getAllSubSkins'", nullptr);
@@ -23886,7 +23886,7 @@ int lua_axis_studio_BoneNode_getAllSubSkins(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getAllSubSkins",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getAllSubSkins'.",&tolua_err);
 #endif
@@ -23898,15 +23898,15 @@ int lua_axis_studio_BoneNode_displaySkin(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_displaySkin'", nullptr);
@@ -23949,7 +23949,7 @@ int lua_axis_studio_BoneNode_displaySkin(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.BoneNode:displaySkin",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_displaySkin'.",&tolua_err);
 #endif
@@ -23962,18 +23962,18 @@ int lua_axis_studio_BoneNode_isDebugDrawEnabled(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_isDebugDrawEnabled'", nullptr);
@@ -23996,7 +23996,7 @@ int lua_axis_studio_BoneNode_isDebugDrawEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:isDebugDrawEnabled",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_isDebugDrawEnabled'.",&tolua_err);
 #endif
@@ -24008,15 +24008,15 @@ int lua_axis_studio_BoneNode_addSkin(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_addSkin'", nullptr);
@@ -24063,7 +24063,7 @@ int lua_axis_studio_BoneNode_addSkin(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.BoneNode:addSkin",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_addSkin'.",&tolua_err);
 #endif
@@ -24076,18 +24076,18 @@ int lua_axis_studio_BoneNode_getRootSkeletonNode(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getRootSkeletonNode'", nullptr);
@@ -24110,7 +24110,7 @@ int lua_axis_studio_BoneNode_getRootSkeletonNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getRootSkeletonNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getRootSkeletonNode'.",&tolua_err);
 #endif
@@ -24123,18 +24123,18 @@ int lua_axis_studio_BoneNode_setDebugDrawLength(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_setDebugDrawLength'", nullptr);
@@ -24160,7 +24160,7 @@ int lua_axis_studio_BoneNode_setDebugDrawLength(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:setDebugDrawLength",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_setDebugDrawLength'.",&tolua_err);
 #endif
@@ -24172,15 +24172,15 @@ int lua_axis_studio_BoneNode_getSkins(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getSkins'", nullptr);
@@ -24207,7 +24207,7 @@ int lua_axis_studio_BoneNode_getSkins(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.BoneNode:getSkins",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getSkins'.",&tolua_err);
 #endif
@@ -24220,18 +24220,18 @@ int lua_axis_studio_BoneNode_getVisibleSkins(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getVisibleSkins'", nullptr);
@@ -24254,7 +24254,7 @@ int lua_axis_studio_BoneNode_getVisibleSkins(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getVisibleSkins",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getVisibleSkins'.",&tolua_err);
 #endif
@@ -24267,18 +24267,18 @@ int lua_axis_studio_BoneNode_setDebugDrawWidth(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_setDebugDrawWidth'", nullptr);
@@ -24304,7 +24304,7 @@ int lua_axis_studio_BoneNode_setDebugDrawWidth(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:setDebugDrawWidth",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_setDebugDrawWidth'.",&tolua_err);
 #endif
@@ -24317,18 +24317,18 @@ int lua_axis_studio_BoneNode_getDebugDrawLength(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getDebugDrawLength'", nullptr);
@@ -24351,7 +24351,7 @@ int lua_axis_studio_BoneNode_getDebugDrawLength(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getDebugDrawLength",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getDebugDrawLength'.",&tolua_err);
 #endif
@@ -24364,18 +24364,18 @@ int lua_axis_studio_BoneNode_setDebugDrawColor(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_setDebugDrawColor'", nullptr);
@@ -24401,7 +24401,7 @@ int lua_axis_studio_BoneNode_setDebugDrawColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:setDebugDrawColor",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_setDebugDrawColor'.",&tolua_err);
 #endif
@@ -24414,18 +24414,18 @@ int lua_axis_studio_BoneNode_getDebugDrawColor(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::BoneNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_BoneNode_getDebugDrawColor'", nullptr);
@@ -24448,7 +24448,7 @@ int lua_axis_studio_BoneNode_getDebugDrawColor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:getDebugDrawColor",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_getDebugDrawColor'.",&tolua_err);
 #endif
@@ -24459,11 +24459,11 @@ int lua_axis_studio_BoneNode_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.BoneNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -24494,7 +24494,7 @@ int lua_axis_studio_BoneNode_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ccs.BoneNode:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_create'.",&tolua_err);
 #endif
@@ -24506,7 +24506,7 @@ int lua_axis_studio_BoneNode_constructor(lua_State* tolua_S)
     cocostudio::timeline::BoneNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -24530,7 +24530,7 @@ int lua_axis_studio_BoneNode_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.BoneNode:BoneNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_BoneNode_constructor'.",&tolua_err);
 #endif
 
@@ -24583,18 +24583,18 @@ int lua_axis_studio_SkeletonNode_getBoneNode(lua_State* tolua_S)
     cocostudio::timeline::SkeletonNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkeletonNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkeletonNode_getBoneNode'", nullptr);
@@ -24620,7 +24620,7 @@ int lua_axis_studio_SkeletonNode_getBoneNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkeletonNode:getBoneNode",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkeletonNode_getBoneNode'.",&tolua_err);
 #endif
@@ -24632,15 +24632,15 @@ int lua_axis_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
     int argc = 0;
     cocostudio::timeline::SkeletonNode* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkeletonNode",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkeletonNode_changeSkins'", nullptr);
@@ -24675,7 +24675,7 @@ int lua_axis_studio_SkeletonNode_changeSkins(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ccs.SkeletonNode:changeSkins",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkeletonNode_changeSkins'.",&tolua_err);
 #endif
@@ -24688,18 +24688,18 @@ int lua_axis_studio_SkeletonNode_addSkinGroup(lua_State* tolua_S)
     cocostudio::timeline::SkeletonNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkeletonNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkeletonNode_addSkinGroup'", nullptr);
@@ -24728,7 +24728,7 @@ int lua_axis_studio_SkeletonNode_addSkinGroup(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkeletonNode:addSkinGroup",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkeletonNode_addSkinGroup'.",&tolua_err);
 #endif
@@ -24741,18 +24741,18 @@ int lua_axis_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
     cocostudio::timeline::SkeletonNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.SkeletonNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::timeline::SkeletonNode*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_SkeletonNode_getAllSubBonesMap'", nullptr);
@@ -24775,7 +24775,7 @@ int lua_axis_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkeletonNode:getAllSubBonesMap",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkeletonNode_getAllSubBonesMap'.",&tolua_err);
 #endif
@@ -24787,11 +24787,11 @@ int lua_axis_studio_SkeletonNode_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.SkeletonNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -24810,7 +24810,7 @@ int lua_axis_studio_SkeletonNode_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.SkeletonNode:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkeletonNode_create'.",&tolua_err);
 #endif
@@ -24822,7 +24822,7 @@ int lua_axis_studio_SkeletonNode_constructor(lua_State* tolua_S)
     cocostudio::timeline::SkeletonNode* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -24846,7 +24846,7 @@ int lua_axis_studio_SkeletonNode_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.SkeletonNode:SkeletonNode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_SkeletonNode_constructor'.",&tolua_err);
 #endif
 
@@ -24884,18 +24884,18 @@ int lua_axis_studio_ComExtensionData_setActionTag(lua_State* tolua_S)
     cocostudio::ComExtensionData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComExtensionData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComExtensionData_setActionTag'", nullptr);
@@ -24921,7 +24921,7 @@ int lua_axis_studio_ComExtensionData_setActionTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComExtensionData:setActionTag",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_setActionTag'.",&tolua_err);
 #endif
@@ -24934,18 +24934,18 @@ int lua_axis_studio_ComExtensionData_getCustomProperty(lua_State* tolua_S)
     cocostudio::ComExtensionData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComExtensionData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComExtensionData_getCustomProperty'", nullptr);
@@ -24968,7 +24968,7 @@ int lua_axis_studio_ComExtensionData_getCustomProperty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComExtensionData:getCustomProperty",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_getCustomProperty'.",&tolua_err);
 #endif
@@ -24981,18 +24981,18 @@ int lua_axis_studio_ComExtensionData_getActionTag(lua_State* tolua_S)
     cocostudio::ComExtensionData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComExtensionData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComExtensionData_getActionTag'", nullptr);
@@ -25015,7 +25015,7 @@ int lua_axis_studio_ComExtensionData_getActionTag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComExtensionData:getActionTag",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_getActionTag'.",&tolua_err);
 #endif
@@ -25028,18 +25028,18 @@ int lua_axis_studio_ComExtensionData_setCustomProperty(lua_State* tolua_S)
     cocostudio::ComExtensionData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ccs.ComExtensionData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (cocostudio::ComExtensionData*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_studio_ComExtensionData_setCustomProperty'", nullptr);
@@ -25065,7 +25065,7 @@ int lua_axis_studio_ComExtensionData_setCustomProperty(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComExtensionData:setCustomProperty",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_setCustomProperty'.",&tolua_err);
 #endif
@@ -25077,11 +25077,11 @@ int lua_axis_studio_ComExtensionData_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComExtensionData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -25100,7 +25100,7 @@ int lua_axis_studio_ComExtensionData_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComExtensionData:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_create'.",&tolua_err);
 #endif
@@ -25111,11 +25111,11 @@ int lua_axis_studio_ComExtensionData_createInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ccs.ComExtensionData",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -25134,7 +25134,7 @@ int lua_axis_studio_ComExtensionData_createInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ccs.ComExtensionData:createInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_createInstance'.",&tolua_err);
 #endif
@@ -25146,7 +25146,7 @@ int lua_axis_studio_ComExtensionData_constructor(lua_State* tolua_S)
     cocostudio::ComExtensionData* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -25170,7 +25170,7 @@ int lua_axis_studio_ComExtensionData_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.ComExtensionData:ComExtensionData",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_studio_ComExtensionData_constructor'.",&tolua_err);
 #endif
 
