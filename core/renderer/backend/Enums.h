@@ -173,6 +173,7 @@ enum class PrimitiveType : uint32_t
 {
     POINT,
     LINE,
+    LINE_LOOP,
     LINE_STRIP,
     TRIANGLE,
     TRIANGLE_STRIP
