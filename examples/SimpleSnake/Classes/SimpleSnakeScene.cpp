@@ -44,7 +44,7 @@ static void problemLoading(const char* filename)
 
 inline void setNodeIgnoreDesignScale(axis::Node* node)
 {
-    CCASSERT(node, "node pointer cannot be null.");
+    AXASSERT(node, "node pointer cannot be null.");
 
     Size actualFrameSize = Director::getInstance()->getOpenGLView()->getFrameSize();
     Size actualWinSize   = Director::getInstance()->getWinSizeInPixels();

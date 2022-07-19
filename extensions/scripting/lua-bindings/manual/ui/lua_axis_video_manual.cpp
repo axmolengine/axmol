@@ -36,7 +36,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
     int argc                       = 0;
     axis::ui::VideoPlayer* self = nullptr;
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "axui.VideoPlayer", 0, &tolua_err))
         goto tolua_lerror;
@@ -44,7 +44,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
 
     self = static_cast<axis::ui::VideoPlayer*>(tolua_tousertype(L, 1, 0));
 
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_Widget_addTouchEventListener'\n", nullptr);
@@ -56,7 +56,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
 
     if (argc == 1)
     {
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -79,7 +79,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.VideoPlayer:addEventListener",
                argc, 0);
     return 0;
-#    if COCOS2D_DEBUG >= 1
+#    if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_VideoPlayer_addEventListener'.", &tolua_err);
 #    endif

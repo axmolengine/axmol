@@ -78,13 +78,13 @@ static int lua_cocos2dx_deleteDownloadDir(lua_State* L)
 
     int argc = lua_gettop(L);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
     if (1 == argc)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!tolua_isstring(L, 1, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -103,7 +103,7 @@ static int lua_cocos2dx_deleteDownloadDir(lua_State* L)
     AXLOG("'resetDownloadDir' function wrong number of arguments: %d, was expecting %d\n", argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'resetDownloadDir'.", &tolua_err);
     return 0;
@@ -117,13 +117,13 @@ static int lua_cocos2dx_addSearchPath(lua_State* L)
 
     int argc = lua_gettop(L);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
     if (2 == argc)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!tolua_isstring(L, 1, 0, &tolua_err) || !tolua_isboolean(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -135,7 +135,7 @@ static int lua_cocos2dx_addSearchPath(lua_State* L)
     AXLOG("'addSearchPath' function wrong number of arguments: %d, was expecting %d\n", argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'addSearchPath'.", &tolua_err);
     return 0;

@@ -573,7 +573,7 @@ std::string SpriteCreation::title() const
 
 std::string SpriteCreation::subtitle() const
 {
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
+#if defined(AXIS_DEBUG) && AXIS_DEBUG == 1
     return "In debug mode";
 #else
     return "In release mode";
@@ -1068,7 +1068,7 @@ std::string NonBatchSprites::title() const
 
 std::string NonBatchSprites::subtitle() const
 {
-#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
+#if defined(AXIS_DEBUG) && AXIS_DEBUG == 1
     return "DEBUG: simulate lots of sprites, drop to 30 fps";
 #else
     return "RELEASE: simulate lots of sprites, drop to 30 fps";

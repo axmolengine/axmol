@@ -33,14 +33,14 @@ static int lua_get_AudioProfile_name(lua_State* L)
 {
     axis::AudioProfile* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AudioProfile", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_AudioProfile_name'\n", nullptr);
@@ -51,7 +51,7 @@ static int lua_get_AudioProfile_name(lua_State* L)
     lua_pushstring(L, self->name.c_str());
     return 1;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_AudioProfile_name'.", &tolua_err);
     return 0;
@@ -63,14 +63,14 @@ static int lua_set_AudioProfile_name(lua_State* L)
     int argc                    = 0;
     axis::AudioProfile* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AudioProfile", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_set_AudioProfile_name'\n", nullptr);
@@ -82,7 +82,7 @@ static int lua_set_AudioProfile_name(lua_State* L)
 
     if (1 == argc)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!tolua_isstring(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -92,7 +92,7 @@ static int lua_set_AudioProfile_name(lua_State* L)
 
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_set_AudioProfile_name'.", &tolua_err);
     return 0;
@@ -103,14 +103,14 @@ static int lua_get_AudioProfile_maxInstances(lua_State* L)
 {
     axis::AudioProfile* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AudioProfile", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_AudioProfile_maxInstances'\n", nullptr);
@@ -121,7 +121,7 @@ static int lua_get_AudioProfile_maxInstances(lua_State* L)
     tolua_pushnumber(L, (lua_Number)self->maxInstances);
     return 1;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_AudioProfile_maxInstances'.", &tolua_err);
     return 0;
@@ -133,14 +133,14 @@ static int lua_set_AudioProfile_maxInstances(lua_State* L)
     int argc                    = 0;
     axis::AudioProfile* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AudioProfile", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_set_AudioProfile_maxInstances'\n", nullptr);
@@ -152,7 +152,7 @@ static int lua_set_AudioProfile_maxInstances(lua_State* L)
 
     if (1 == argc)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!tolua_isnumber(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -162,7 +162,7 @@ static int lua_set_AudioProfile_maxInstances(lua_State* L)
 
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_set_AudioProfile_maxInstances'.", &tolua_err);
     return 0;
@@ -173,14 +173,14 @@ static int lua_get_AudioProfile_minDelay(lua_State* L)
 {
     axis::AudioProfile* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AudioProfile", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_AudioProfile_minDelay'\n", nullptr);
@@ -191,7 +191,7 @@ static int lua_get_AudioProfile_minDelay(lua_State* L)
     tolua_pushnumber(L, (lua_Number)self->minDelay);
     return 1;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_AudioProfile_minDelay'.", &tolua_err);
     return 0;
@@ -203,14 +203,14 @@ static int lua_set_AudioProfile_minDelay(lua_State* L)
     int argc                    = 0;
     axis::AudioProfile* self = nullptr;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AudioProfile", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_set_AudioProfile_minDelay'\n", nullptr);
@@ -222,7 +222,7 @@ static int lua_set_AudioProfile_minDelay(lua_State* L)
 
     if (1 == argc)
     {
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!tolua_isnumber(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -232,7 +232,7 @@ static int lua_set_AudioProfile_minDelay(lua_State* L)
 
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_set_AudioProfile_minDelay'.", &tolua_err);
     return 0;
@@ -244,11 +244,11 @@ int lua_axis_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.AudioEngine", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -260,7 +260,7 @@ int lua_axis_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
         int arg0;
         ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "ax.AudioEngine:setFinishCallback");
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -285,7 +285,7 @@ int lua_axis_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:setFinishCallback",
                argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_audioengine_AudioEngine_setFinishCallback'.", &tolua_err);
 #endif

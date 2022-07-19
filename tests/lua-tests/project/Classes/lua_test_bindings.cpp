@@ -337,18 +337,18 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
     axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'", nullptr);
@@ -368,7 +368,7 @@ int lua_cocos2dx_DrawNode3D_getBlendFunc(lua_State* L)
     AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:getBlendFunc", argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_getBlendFunc'.", &tolua_err);
 #endif
@@ -382,18 +382,18 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
     axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'", nullptr);
@@ -419,7 +419,7 @@ int lua_cocos2dx_DrawNode3D_setBlendFunc(lua_State* L)
     AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:setBlendFunc", argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_setBlendFunc'.", &tolua_err);
 #endif
@@ -433,18 +433,18 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
     axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawLine'", nullptr);
@@ -472,7 +472,7 @@ int lua_cocos2dx_DrawNode3D_drawLine(lua_State* L)
     AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawLine", argc, 3);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_drawLine'.", &tolua_err);
 #endif
@@ -486,18 +486,18 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
     axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_clear'", nullptr);
@@ -516,7 +516,7 @@ int lua_cocos2dx_DrawNode3D_clear(lua_State* L)
     AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:clear", argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_clear'.", &tolua_err);
 #endif
@@ -530,18 +530,18 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
     axis::DrawNode3D* cobj = nullptr;
     bool ok                   = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::DrawNode3D*)tolua_tousertype(L, 1, 0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_cocos2dx_DrawNode3D_drawCube'", nullptr);
@@ -555,7 +555,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
         std::vector<axis::Vec3> arg0;
         axis::Color4F arg1;
         Vec3 vec3;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -564,7 +564,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
         {
             lua_pushnumber(L, i + 1);
             lua_gettable(L, 2);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
             if (!tolua_istable(L, -1, 0, &tolua_err))
             {
                 lua_pop(L, 1);
@@ -573,7 +573,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
 #endif
             ok &= luaval_to_vec3(L, lua_gettop(L), &vec3);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
             if (!ok)
             {
                 lua_pop(L, 1);
@@ -594,7 +594,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
     AXLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ax.DrawNode3D:drawCube", argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_drawCube'.", &tolua_err);
 #endif
@@ -607,11 +607,11 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(L, 1, "ax.DrawNode3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -628,7 +628,7 @@ int lua_cocos2dx_DrawNode3D_create(lua_State* L)
     }
     AXLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.DrawNode3D:create", argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_DrawNode3D_create'.", &tolua_err);
 #endif
@@ -658,11 +658,11 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(L, 1, "ax.ValueTypeJudgeInTable", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -682,7 +682,7 @@ int lua_cocos2dx_ValueTypeJudgeInTable_create(lua_State* L)
     }
     AXLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "ax.ValueTypeJudgeInTable:create", argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_cocos2dx_ValueTypeJudgeInTable_create'.", &tolua_err);
 #endif
