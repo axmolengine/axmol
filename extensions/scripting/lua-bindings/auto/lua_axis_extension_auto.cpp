@@ -9,18 +9,18 @@ int lua_axis_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_setStoragePath'", nullptr);
@@ -46,7 +46,7 @@ int lua_axis_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setStoragePath",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_setStoragePath'.",&tolua_err);
 #endif
@@ -59,18 +59,18 @@ int lua_axis_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_setPackageUrl'", nullptr);
@@ -96,7 +96,7 @@ int lua_axis_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setPackageUrl",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_setPackageUrl'.",&tolua_err);
 #endif
@@ -109,18 +109,18 @@ int lua_axis_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_checkUpdate'", nullptr);
@@ -143,7 +143,7 @@ int lua_axis_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:checkUpdate",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_checkUpdate'.",&tolua_err);
 #endif
@@ -156,18 +156,18 @@ int lua_axis_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_getStoragePath'", nullptr);
@@ -190,7 +190,7 @@ int lua_axis_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getStoragePath",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_getStoragePath'.",&tolua_err);
 #endif
@@ -203,18 +203,18 @@ int lua_axis_extension_AssetsManager_update(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_update'", nullptr);
@@ -237,7 +237,7 @@ int lua_axis_extension_AssetsManager_update(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:update",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_update'.",&tolua_err);
 #endif
@@ -250,18 +250,18 @@ int lua_axis_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_setConnectionTimeout'", nullptr);
@@ -287,7 +287,7 @@ int lua_axis_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setConnectionTimeout",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_setConnectionTimeout'.",&tolua_err);
 #endif
@@ -300,18 +300,18 @@ int lua_axis_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_setVersionFileUrl'", nullptr);
@@ -337,7 +337,7 @@ int lua_axis_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:setVersionFileUrl",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_setVersionFileUrl'.",&tolua_err);
 #endif
@@ -350,18 +350,18 @@ int lua_axis_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_getPackageUrl'", nullptr);
@@ -384,7 +384,7 @@ int lua_axis_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getPackageUrl",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_getPackageUrl'.",&tolua_err);
 #endif
@@ -397,18 +397,18 @@ int lua_axis_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_getConnectionTimeout'", nullptr);
@@ -431,7 +431,7 @@ int lua_axis_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getConnectionTimeout",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_getConnectionTimeout'.",&tolua_err);
 #endif
@@ -444,18 +444,18 @@ int lua_axis_extension_AssetsManager_getVersion(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_getVersion'", nullptr);
@@ -478,7 +478,7 @@ int lua_axis_extension_AssetsManager_getVersion(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getVersion",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_getVersion'.",&tolua_err);
 #endif
@@ -491,18 +491,18 @@ int lua_axis_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_getVersionFileUrl'", nullptr);
@@ -525,7 +525,7 @@ int lua_axis_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:getVersionFileUrl",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_getVersionFileUrl'.",&tolua_err);
 #endif
@@ -538,18 +538,18 @@ int lua_axis_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManager_deleteVersion'", nullptr);
@@ -572,7 +572,7 @@ int lua_axis_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:deleteVersion",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_deleteVersion'.",&tolua_err);
 #endif
@@ -584,11 +584,11 @@ int lua_axis_extension_AssetsManager_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -631,7 +631,7 @@ int lua_axis_extension_AssetsManager_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AssetsManager:create",argc, 6);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_create'.",&tolua_err);
 #endif
@@ -643,7 +643,7 @@ int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
     axis::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -727,7 +727,7 @@ int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManager:AssetsManager",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManager_constructor'.",&tolua_err);
 #endif
 
@@ -773,18 +773,18 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx'", nullptr);
@@ -807,7 +807,7 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getAssetsManagerEx",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx'.",&tolua_err);
 #endif
@@ -820,18 +820,18 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getAssetId'", nullptr);
@@ -854,7 +854,7 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getAssetId",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getAssetId'.",&tolua_err);
 #endif
@@ -867,18 +867,18 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getCURLECode'", nullptr);
@@ -901,7 +901,7 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getCURLECode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getCURLECode'.",&tolua_err);
 #endif
@@ -914,18 +914,18 @@ int lua_axis_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getMessage'", nullptr);
@@ -948,7 +948,7 @@ int lua_axis_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getMessage",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getMessage'.",&tolua_err);
 #endif
@@ -961,18 +961,18 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getCURLMCode'", nullptr);
@@ -995,7 +995,7 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getCURLMCode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getCURLMCode'.",&tolua_err);
 #endif
@@ -1008,18 +1008,18 @@ int lua_axis_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getPercentByFile'", nullptr);
@@ -1042,7 +1042,7 @@ int lua_axis_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getPercentByFile",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getPercentByFile'.",&tolua_err);
 #endif
@@ -1055,18 +1055,18 @@ int lua_axis_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getEventCode'", nullptr);
@@ -1089,7 +1089,7 @@ int lua_axis_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getEventCode",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getEventCode'.",&tolua_err);
 #endif
@@ -1102,18 +1102,18 @@ int lua_axis_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventAssetsManagerEx_getPercent'", nullptr);
@@ -1136,7 +1136,7 @@ int lua_axis_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getPercent",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_getPercent'.",&tolua_err);
 #endif
@@ -1149,7 +1149,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     axis::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1383,7 +1383,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:EventAssetsManagerEx",argc, 3);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventAssetsManagerEx_constructor'.",&tolua_err);
 #endif
 
@@ -1424,18 +1424,18 @@ int lua_axis_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_getManifestFileUrl'", nullptr);
@@ -1458,7 +1458,7 @@ int lua_axis_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getManifestFileUrl",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_getManifestFileUrl'.",&tolua_err);
 #endif
@@ -1471,18 +1471,18 @@ int lua_axis_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_isVersionLoaded'", nullptr);
@@ -1505,7 +1505,7 @@ int lua_axis_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:isVersionLoaded",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_isVersionLoaded'.",&tolua_err);
 #endif
@@ -1518,18 +1518,18 @@ int lua_axis_extension_Manifest_isLoaded(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_isLoaded'", nullptr);
@@ -1552,7 +1552,7 @@ int lua_axis_extension_Manifest_isLoaded(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:isLoaded",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_isLoaded'.",&tolua_err);
 #endif
@@ -1565,18 +1565,18 @@ int lua_axis_extension_Manifest_getPackageUrl(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_getPackageUrl'", nullptr);
@@ -1599,7 +1599,7 @@ int lua_axis_extension_Manifest_getPackageUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getPackageUrl",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_getPackageUrl'.",&tolua_err);
 #endif
@@ -1612,18 +1612,18 @@ int lua_axis_extension_Manifest_getVersion(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_getVersion'", nullptr);
@@ -1646,7 +1646,7 @@ int lua_axis_extension_Manifest_getVersion(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getVersion",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_getVersion'.",&tolua_err);
 #endif
@@ -1659,18 +1659,18 @@ int lua_axis_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_getVersionFileUrl'", nullptr);
@@ -1693,7 +1693,7 @@ int lua_axis_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getVersionFileUrl",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_getVersionFileUrl'.",&tolua_err);
 #endif
@@ -1706,18 +1706,18 @@ int lua_axis_extension_Manifest_getSearchPaths(lua_State* tolua_S)
     axis::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_Manifest_getSearchPaths'", nullptr);
@@ -1740,7 +1740,7 @@ int lua_axis_extension_Manifest_getSearchPaths(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Manifest:getSearchPaths",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_Manifest_getSearchPaths'.",&tolua_err);
 #endif
@@ -1779,18 +1779,18 @@ int lua_axis_extension_AssetsManagerEx_getState(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_getState'", nullptr);
@@ -1813,7 +1813,7 @@ int lua_axis_extension_AssetsManagerEx_getState(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getState",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_getState'.",&tolua_err);
 #endif
@@ -1826,18 +1826,18 @@ int lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask'", nullptr);
@@ -1860,7 +1860,7 @@ int lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getMaxConcurrentTask",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask'.",&tolua_err);
 #endif
@@ -1873,18 +1873,18 @@ int lua_axis_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_checkUpdate'", nullptr);
@@ -1907,7 +1907,7 @@ int lua_axis_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:checkUpdate",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_checkUpdate'.",&tolua_err);
 #endif
@@ -1920,18 +1920,18 @@ int lua_axis_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_setVerifyCallback'", nullptr);
@@ -1961,7 +1961,7 @@ int lua_axis_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:setVerifyCallback",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_setVerifyCallback'.",&tolua_err);
 #endif
@@ -1974,18 +1974,18 @@ int lua_axis_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_getStoragePath'", nullptr);
@@ -2008,7 +2008,7 @@ int lua_axis_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getStoragePath",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_getStoragePath'.",&tolua_err);
 #endif
@@ -2021,18 +2021,18 @@ int lua_axis_extension_AssetsManagerEx_update(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_update'", nullptr);
@@ -2055,7 +2055,7 @@ int lua_axis_extension_AssetsManagerEx_update(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:update",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_update'.",&tolua_err);
 #endif
@@ -2068,18 +2068,18 @@ int lua_axis_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_setVersionCompareHandle'", nullptr);
@@ -2109,7 +2109,7 @@ int lua_axis_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:setVersionCompareHandle",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_setVersionCompareHandle'.",&tolua_err);
 #endif
@@ -2122,18 +2122,18 @@ int lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask'", nullptr);
@@ -2159,7 +2159,7 @@ int lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:setMaxConcurrentTask",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask'.",&tolua_err);
 #endif
@@ -2172,18 +2172,18 @@ int lua_axis_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_getLocalManifest'", nullptr);
@@ -2206,7 +2206,7 @@ int lua_axis_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getLocalManifest",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_getLocalManifest'.",&tolua_err);
 #endif
@@ -2219,18 +2219,18 @@ int lua_axis_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_getRemoteManifest'", nullptr);
@@ -2253,7 +2253,7 @@ int lua_axis_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getRemoteManifest",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_getRemoteManifest'.",&tolua_err);
 #endif
@@ -2266,18 +2266,18 @@ int lua_axis_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_AssetsManagerEx_downloadFailedAssets'", nullptr);
@@ -2300,7 +2300,7 @@ int lua_axis_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:downloadFailedAssets",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_downloadFailedAssets'.",&tolua_err);
 #endif
@@ -2312,11 +2312,11 @@ int lua_axis_extension_AssetsManagerEx_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -2339,7 +2339,7 @@ int lua_axis_extension_AssetsManagerEx_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AssetsManagerEx:create",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_create'.",&tolua_err);
 #endif
@@ -2351,7 +2351,7 @@ int lua_axis_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
     axis::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -2381,7 +2381,7 @@ int lua_axis_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:AssetsManagerEx",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_AssetsManagerEx_constructor'.",&tolua_err);
 #endif
 
@@ -2426,18 +2426,18 @@ int lua_axis_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
     axis::extension::EventListenerAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::extension::EventListenerAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_EventListenerAssetsManagerEx_init'", nullptr);
@@ -2470,7 +2470,7 @@ int lua_axis_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAssetsManagerEx:init",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventListenerAssetsManagerEx_init'.",&tolua_err);
 #endif
@@ -2483,7 +2483,7 @@ int lua_axis_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua
     axis::extension::EventListenerAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -2507,7 +2507,7 @@ int lua_axis_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventListenerAssetsManagerEx:EventListenerAssetsManagerEx",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_EventListenerAssetsManagerEx_constructor'.",&tolua_err);
 #endif
 
@@ -2541,18 +2541,18 @@ int lua_axis_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_removeAffector'", nullptr);
@@ -2578,7 +2578,7 @@ int lua_axis_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:removeAffector",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_removeAffector'.",&tolua_err);
 #endif
@@ -2591,18 +2591,18 @@ int lua_axis_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_resumeParticleSystem'", nullptr);
@@ -2625,7 +2625,7 @@ int lua_axis_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:resumeParticleSystem",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_resumeParticleSystem'.",&tolua_err);
 #endif
@@ -2638,18 +2638,18 @@ int lua_axis_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_removeAllAffector'", nullptr);
@@ -2672,7 +2672,7 @@ int lua_axis_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:removeAllAffector",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_removeAllAffector'.",&tolua_err);
 #endif
@@ -2685,18 +2685,18 @@ int lua_axis_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_addAffector'", nullptr);
@@ -2722,7 +2722,7 @@ int lua_axis_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:addAffector",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_addAffector'.",&tolua_err);
 #endif
@@ -2735,18 +2735,18 @@ int lua_axis_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_startParticleSystem'", nullptr);
@@ -2769,7 +2769,7 @@ int lua_axis_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:startParticleSystem",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_startParticleSystem'.",&tolua_err);
 #endif
@@ -2782,18 +2782,18 @@ int lua_axis_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_isEnabled'", nullptr);
@@ -2816,7 +2816,7 @@ int lua_axis_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:isEnabled",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_isEnabled'.",&tolua_err);
 #endif
@@ -2829,18 +2829,18 @@ int lua_axis_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_getRender'", nullptr);
@@ -2863,7 +2863,7 @@ int lua_axis_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:getRender",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_getRender'.",&tolua_err);
 #endif
@@ -2876,18 +2876,18 @@ int lua_axis_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_setEmitter'", nullptr);
@@ -2913,7 +2913,7 @@ int lua_axis_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:setEmitter",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_setEmitter'.",&tolua_err);
 #endif
@@ -2926,18 +2926,18 @@ int lua_axis_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_isKeepLocal'", nullptr);
@@ -2960,7 +2960,7 @@ int lua_axis_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:isKeepLocal",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_isKeepLocal'.",&tolua_err);
 #endif
@@ -2973,18 +2973,18 @@ int lua_axis_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_setEnabled'", nullptr);
@@ -3010,7 +3010,7 @@ int lua_axis_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:setEnabled",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_setEnabled'.",&tolua_err);
 #endif
@@ -3023,18 +3023,18 @@ int lua_axis_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_getParticleQuota'", nullptr);
@@ -3057,7 +3057,7 @@ int lua_axis_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:getParticleQuota",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_getParticleQuota'.",&tolua_err);
 #endif
@@ -3070,18 +3070,18 @@ int lua_axis_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_getBlendFunc'", nullptr);
@@ -3104,7 +3104,7 @@ int lua_axis_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:getBlendFunc",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_getBlendFunc'.",&tolua_err);
 #endif
@@ -3117,18 +3117,18 @@ int lua_axis_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_pauseParticleSystem'", nullptr);
@@ -3151,7 +3151,7 @@ int lua_axis_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:pauseParticleSystem",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_pauseParticleSystem'.",&tolua_err);
 #endif
@@ -3164,18 +3164,18 @@ int lua_axis_extension_ParticleSystem3D_getState(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_getState'", nullptr);
@@ -3198,7 +3198,7 @@ int lua_axis_extension_ParticleSystem3D_getState(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:getState",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_getState'.",&tolua_err);
 #endif
@@ -3211,18 +3211,18 @@ int lua_axis_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_getAliveParticleCount'", nullptr);
@@ -3245,7 +3245,7 @@ int lua_axis_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:getAliveParticleCount",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_getAliveParticleCount'.",&tolua_err);
 #endif
@@ -3258,18 +3258,18 @@ int lua_axis_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_setParticleQuota'", nullptr);
@@ -3295,7 +3295,7 @@ int lua_axis_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:setParticleQuota",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_setParticleQuota'.",&tolua_err);
 #endif
@@ -3308,18 +3308,18 @@ int lua_axis_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_setBlendFunc'", nullptr);
@@ -3345,7 +3345,7 @@ int lua_axis_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:setBlendFunc",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_setBlendFunc'.",&tolua_err);
 #endif
@@ -3358,18 +3358,18 @@ int lua_axis_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_setRender'", nullptr);
@@ -3395,7 +3395,7 @@ int lua_axis_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:setRender",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_setRender'.",&tolua_err);
 #endif
@@ -3408,18 +3408,18 @@ int lua_axis_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_stopParticleSystem'", nullptr);
@@ -3442,7 +3442,7 @@ int lua_axis_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:stopParticleSystem",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_stopParticleSystem'.",&tolua_err);
 #endif
@@ -3455,18 +3455,18 @@ int lua_axis_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_setKeepLocal'", nullptr);
@@ -3492,7 +3492,7 @@ int lua_axis_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:setKeepLocal",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_setKeepLocal'.",&tolua_err);
 #endif
@@ -3505,7 +3505,7 @@ int lua_axis_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -3529,7 +3529,7 @@ int lua_axis_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:ParticleSystem3D",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_ParticleSystem3D_constructor'.",&tolua_err);
 #endif
 
@@ -3582,18 +3582,18 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_initWithFilePath'", nullptr);
@@ -3619,7 +3619,7 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:initWithFilePath",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_initWithFilePath'.",&tolua_err);
 #endif
@@ -3632,18 +3632,18 @@ int lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_Sta
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity'", nullptr);
@@ -3666,7 +3666,7 @@ int lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_Sta
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getParticleSystemScaleVelocity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity'.",&tolua_err);
 #endif
@@ -3679,18 +3679,18 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota'", nullptr);
@@ -3716,7 +3716,7 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setEmittedSystemQuota",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota'.",&tolua_err);
 #endif
@@ -3729,18 +3729,18 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getDefaultDepth'", nullptr);
@@ -3763,7 +3763,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getDefaultDepth",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getDefaultDepth'.",&tolua_err);
 #endif
@@ -3776,18 +3776,18 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota'", nullptr);
@@ -3810,7 +3810,7 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getEmittedSystemQuota",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota'.",&tolua_err);
 #endif
@@ -3823,18 +3823,18 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_St
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath'", nullptr);
@@ -3863,7 +3863,7 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_St
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:initWithFilePathAndMaterialPath",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath'.",&tolua_err);
 #endif
@@ -3876,18 +3876,18 @@ int lua_axis_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_clearAllParticles'", nullptr);
@@ -3910,7 +3910,7 @@ int lua_axis_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:clearAllParticles",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_clearAllParticles'.",&tolua_err);
 #endif
@@ -3923,18 +3923,18 @@ int lua_axis_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getMaterialName'", nullptr);
@@ -3957,7 +3957,7 @@ int lua_axis_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getMaterialName",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getMaterialName'.",&tolua_err);
 #endif
@@ -3970,18 +3970,18 @@ int lua_axis_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolu
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_calulateRotationOffset'", nullptr);
@@ -4004,7 +4004,7 @@ int lua_axis_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:calulateRotationOffset",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_calulateRotationOffset'.",&tolua_err);
 #endif
@@ -4017,18 +4017,18 @@ int lua_axis_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getMaxVelocity'", nullptr);
@@ -4051,7 +4051,7 @@ int lua_axis_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getMaxVelocity",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getMaxVelocity'.",&tolua_err);
 #endif
@@ -4064,18 +4064,18 @@ int lua_axis_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_forceUpdate'", nullptr);
@@ -4101,7 +4101,7 @@ int lua_axis_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:forceUpdate",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_forceUpdate'.",&tolua_err);
 #endif
@@ -4114,18 +4114,18 @@ int lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* to
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart'", nullptr);
@@ -4148,7 +4148,7 @@ int lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* to
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getTimeElapsedSinceStart",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart'.",&tolua_err);
 #endif
@@ -4161,18 +4161,18 @@ int lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* 
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate'", nullptr);
@@ -4195,7 +4195,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:removeAllBehaviourTemplate",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate'.",&tolua_err);
 #endif
@@ -4208,18 +4208,18 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolu
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota'", nullptr);
@@ -4242,7 +4242,7 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getEmittedEmitterQuota",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota'.",&tolua_err);
 #endif
@@ -4255,18 +4255,18 @@ int lua_axis_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_forceEmission'", nullptr);
@@ -4295,7 +4295,7 @@ int lua_axis_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:forceEmission",argc, 2);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_forceEmission'.",&tolua_err);
 #endif
@@ -4308,18 +4308,18 @@ int lua_axis_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_addListener'", nullptr);
@@ -4345,7 +4345,7 @@ int lua_axis_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:addListener",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_addListener'.",&tolua_err);
 #endif
@@ -4358,18 +4358,18 @@ int lua_axis_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_isMarkedForEmission'", nullptr);
@@ -4392,7 +4392,7 @@ int lua_axis_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:isMarkedForEmission",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_isMarkedForEmission'.",&tolua_err);
 #endif
@@ -4405,18 +4405,18 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getDefaultWidth'", nullptr);
@@ -4439,7 +4439,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getDefaultWidth",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getDefaultWidth'.",&tolua_err);
 #endif
@@ -4452,18 +4452,18 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolu
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota'", nullptr);
@@ -4489,7 +4489,7 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolu
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setEmittedEmitterQuota",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota'.",&tolua_err);
 #endif
@@ -4502,18 +4502,18 @@ int lua_axis_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setMarkedForEmission'", nullptr);
@@ -4539,7 +4539,7 @@ int lua_axis_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setMarkedForEmission",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setMarkedForEmission'.",&tolua_err);
 #endif
@@ -4552,18 +4552,18 @@ int lua_axis_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_clone'", nullptr);
@@ -4586,7 +4586,7 @@ int lua_axis_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:clone",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_clone'.",&tolua_err);
 #endif
@@ -4599,18 +4599,18 @@ int lua_axis_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_addEmitter'", nullptr);
@@ -4636,7 +4636,7 @@ int lua_axis_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:addEmitter",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_addEmitter'.",&tolua_err);
 #endif
@@ -4649,18 +4649,18 @@ int lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate'", nullptr);
@@ -4686,7 +4686,7 @@ int lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:addBehaviourTemplate",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate'.",&tolua_err);
 #endif
@@ -4699,18 +4699,18 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setDefaultWidth'", nullptr);
@@ -4736,7 +4736,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setDefaultWidth",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setDefaultWidth'.",&tolua_err);
 #endif
@@ -4749,18 +4749,18 @@ int lua_axis_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_copyAttributesTo'", nullptr);
@@ -4786,7 +4786,7 @@ int lua_axis_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:copyAttributesTo",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_copyAttributesTo'.",&tolua_err);
 #endif
@@ -4799,18 +4799,18 @@ int lua_axis_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setMaterialName'", nullptr);
@@ -4836,7 +4836,7 @@ int lua_axis_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setMaterialName",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setMaterialName'.",&tolua_err);
 #endif
@@ -4849,18 +4849,18 @@ int lua_axis_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tol
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getParentParticleSystem'", nullptr);
@@ -4883,7 +4883,7 @@ int lua_axis_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tol
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getParentParticleSystem",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getParentParticleSystem'.",&tolua_err);
 #endif
@@ -4896,18 +4896,18 @@ int lua_axis_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_removeListener'", nullptr);
@@ -4933,7 +4933,7 @@ int lua_axis_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:removeListener",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_removeListener'.",&tolua_err);
 #endif
@@ -4946,18 +4946,18 @@ int lua_axis_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setMaxVelocity'", nullptr);
@@ -4983,7 +4983,7 @@ int lua_axis_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setMaxVelocity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setMaxVelocity'.",&tolua_err);
 #endif
@@ -4996,18 +4996,18 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getDefaultHeight'", nullptr);
@@ -5030,7 +5030,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getDefaultHeight",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getDefaultHeight'.",&tolua_err);
 #endif
@@ -5043,18 +5043,18 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getDerivedPosition'", nullptr);
@@ -5077,7 +5077,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getDerivedPosition",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getDerivedPosition'.",&tolua_err);
 #endif
@@ -5090,18 +5090,18 @@ int lua_axis_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_rotationOffset'", nullptr);
@@ -5127,7 +5127,7 @@ int lua_axis_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:rotationOffset",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_rotationOffset'.",&tolua_err);
 #endif
@@ -5140,18 +5140,18 @@ int lua_axis_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_removeAllEmitter'", nullptr);
@@ -5174,7 +5174,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:removeAllEmitter",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_removeAllEmitter'.",&tolua_err);
 #endif
@@ -5187,18 +5187,18 @@ int lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_Sta
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity'", nullptr);
@@ -5224,7 +5224,7 @@ int lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_Sta
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setParticleSystemScaleVelocity",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity'.",&tolua_err);
 #endif
@@ -5237,18 +5237,18 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_getDerivedScale'", nullptr);
@@ -5271,7 +5271,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getDerivedScale",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_getDerivedScale'.",&tolua_err);
 #endif
@@ -5284,18 +5284,18 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setDefaultHeight'", nullptr);
@@ -5321,7 +5321,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setDefaultHeight",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setDefaultHeight'.",&tolua_err);
 #endif
@@ -5334,18 +5334,18 @@ int lua_axis_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_removeAllListener'", nullptr);
@@ -5368,7 +5368,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:removeAllListener",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_removeAllListener'.",&tolua_err);
 #endif
@@ -5381,18 +5381,18 @@ int lua_axis_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_initSystem'", nullptr);
@@ -5418,7 +5418,7 @@ int lua_axis_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:initSystem",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_initSystem'.",&tolua_err);
 #endif
@@ -5431,18 +5431,18 @@ int lua_axis_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_makeParticleLocal'", nullptr);
@@ -5469,7 +5469,7 @@ int lua_axis_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:makeParticleLocal",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_makeParticleLocal'.",&tolua_err);
 #endif
@@ -5482,18 +5482,18 @@ int lua_axis_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_removerAllObserver'", nullptr);
@@ -5516,7 +5516,7 @@ int lua_axis_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:removerAllObserver",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_removerAllObserver'.",&tolua_err);
 #endif
@@ -5529,18 +5529,18 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_setDefaultDepth'", nullptr);
@@ -5566,7 +5566,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:setDefaultDepth",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_setDefaultDepth'.",&tolua_err);
 #endif
@@ -5579,18 +5579,18 @@ int lua_axis_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_extension_PUParticleSystem3D_addObserver'", nullptr);
@@ -5616,7 +5616,7 @@ int lua_axis_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:addObserver",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_addObserver'.",&tolua_err);
 #endif
@@ -5627,11 +5627,11 @@ int lua_axis_extension_PUParticleSystem3D_create(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -5678,7 +5678,7 @@ int lua_axis_extension_PUParticleSystem3D_create(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.PUParticleSystem3D:create",argc, 2);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_create'.",&tolua_err);
 #endif
@@ -5690,7 +5690,7 @@ int lua_axis_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
     axis::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -5714,7 +5714,7 @@ int lua_axis_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:PUParticleSystem3D",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_extension_PUParticleSystem3D_constructor'.",&tolua_err);
 #endif
 

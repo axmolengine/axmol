@@ -9,18 +9,18 @@ int lua_axis_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_createNodeFromJson'", nullptr);
@@ -46,7 +46,7 @@ int lua_axis_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:createNodeFromJson",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_createNodeFromJson'.",&tolua_err);
 #endif
@@ -59,18 +59,18 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
@@ -96,7 +96,7 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:createNodeWithFlatBuffersFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile'.",&tolua_err);
 #endif
@@ -109,18 +109,18 @@ int lua_axis_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_loadNodeWithFile'", nullptr);
@@ -146,7 +146,7 @@ int lua_axis_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:loadNodeWithFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_loadNodeWithFile'.",&tolua_err);
 #endif
@@ -159,18 +159,18 @@ int lua_axis_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_bindCallback'", nullptr);
@@ -205,7 +205,7 @@ int lua_axis_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:bindCallback",argc, 4);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_bindCallback'.",&tolua_err);
 #endif
@@ -218,18 +218,18 @@ int lua_axis_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_setJsonPath'", nullptr);
@@ -255,7 +255,7 @@ int lua_axis_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:setJsonPath",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_setJsonPath'.",&tolua_err);
 #endif
@@ -268,18 +268,18 @@ int lua_axis_csloader_CSLoader_init(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_init'", nullptr);
@@ -302,7 +302,7 @@ int lua_axis_csloader_CSLoader_init(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:init",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_init'.",&tolua_err);
 #endif
@@ -315,18 +315,18 @@ int lua_axis_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_loadNodeWithContent'", nullptr);
@@ -352,7 +352,7 @@ int lua_axis_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:loadNodeWithContent",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_loadNodeWithContent'.",&tolua_err);
 #endif
@@ -365,18 +365,18 @@ int lua_axis_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_isRecordJsonPath'", nullptr);
@@ -399,7 +399,7 @@ int lua_axis_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:isRecordJsonPath",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_isRecordJsonPath'.",&tolua_err);
 #endif
@@ -412,18 +412,18 @@ int lua_axis_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_getJsonPath'", nullptr);
@@ -446,7 +446,7 @@ int lua_axis_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:getJsonPath",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_getJsonPath'.",&tolua_err);
 #endif
@@ -459,18 +459,18 @@ int lua_axis_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_setRecordJsonPath'", nullptr);
@@ -496,7 +496,7 @@ int lua_axis_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:setRecordJsonPath",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_setRecordJsonPath'.",&tolua_err);
 #endif
@@ -509,18 +509,18 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* 
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
@@ -546,7 +546,7 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* 
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:createNodeWithFlatBuffersForSimulator",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'.",&tolua_err);
 #endif
@@ -558,11 +558,11 @@ int lua_axis_csloader_CSLoader_destroyInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -581,7 +581,7 @@ int lua_axis_csloader_CSLoader_destroyInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.CSLoader:destroyInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_destroyInstance'.",&tolua_err);
 #endif
@@ -591,11 +591,11 @@ int lua_axis_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -636,7 +636,7 @@ int lua_axis_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
     ok  = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.CSLoader:createNodeWithVisibleSize",argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_createNodeWithVisibleSize'.",&tolua_err);
 #endif
@@ -647,11 +647,11 @@ int lua_axis_csloader_CSLoader_getInstance(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -670,7 +670,7 @@ int lua_axis_csloader_CSLoader_getInstance(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.CSLoader:getInstance",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_getInstance'.",&tolua_err);
 #endif
@@ -682,7 +682,7 @@ int lua_axis_csloader_CSLoader_constructor(lua_State* tolua_S)
     axis::CSLoader* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -704,7 +704,7 @@ int lua_axis_csloader_CSLoader_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:CSLoader",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_csloader_CSLoader_constructor'.",&tolua_err);
 #endif
 

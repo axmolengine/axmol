@@ -9,18 +9,18 @@ int lua_axis_webview_WebView_setOpacityWebView(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_setOpacityWebView'", nullptr);
@@ -46,7 +46,7 @@ int lua_axis_webview_WebView_setOpacityWebView(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:setOpacityWebView",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_setOpacityWebView'.",&tolua_err);
 #endif
@@ -59,18 +59,18 @@ int lua_axis_webview_WebView_canGoBack(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_canGoBack'", nullptr);
@@ -93,7 +93,7 @@ int lua_axis_webview_WebView_canGoBack(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:canGoBack",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_canGoBack'.",&tolua_err);
 #endif
@@ -106,18 +106,18 @@ int lua_axis_webview_WebView_loadHTMLString(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_loadHTMLString'", nullptr);
@@ -160,7 +160,7 @@ int lua_axis_webview_WebView_loadHTMLString(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:loadHTMLString",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_loadHTMLString'.",&tolua_err);
 #endif
@@ -173,18 +173,18 @@ int lua_axis_webview_WebView_goForward(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_goForward'", nullptr);
@@ -207,7 +207,7 @@ int lua_axis_webview_WebView_goForward(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:goForward",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_goForward'.",&tolua_err);
 #endif
@@ -220,18 +220,18 @@ int lua_axis_webview_WebView_goBack(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_goBack'", nullptr);
@@ -254,7 +254,7 @@ int lua_axis_webview_WebView_goBack(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:goBack",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_goBack'.",&tolua_err);
 #endif
@@ -267,18 +267,18 @@ int lua_axis_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_setScalesPageToFit'", nullptr);
@@ -304,7 +304,7 @@ int lua_axis_webview_WebView_setScalesPageToFit(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:setScalesPageToFit",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_setScalesPageToFit'.",&tolua_err);
 #endif
@@ -317,18 +317,18 @@ int lua_axis_webview_WebView_loadFile(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_loadFile'", nullptr);
@@ -354,7 +354,7 @@ int lua_axis_webview_WebView_loadFile(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:loadFile",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_loadFile'.",&tolua_err);
 #endif
@@ -366,15 +366,15 @@ int lua_axis_webview_WebView_loadURL(lua_State* tolua_S)
     int argc = 0;
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_loadURL'", nullptr);
@@ -413,7 +413,7 @@ int lua_axis_webview_WebView_loadURL(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axui.WebView:loadURL",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_loadURL'.",&tolua_err);
 #endif
@@ -426,18 +426,18 @@ int lua_axis_webview_WebView_setBounces(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_setBounces'", nullptr);
@@ -463,7 +463,7 @@ int lua_axis_webview_WebView_setBounces(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:setBounces",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_setBounces'.",&tolua_err);
 #endif
@@ -476,18 +476,18 @@ int lua_axis_webview_WebView_evaluateJS(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_evaluateJS'", nullptr);
@@ -513,7 +513,7 @@ int lua_axis_webview_WebView_evaluateJS(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:evaluateJS",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_evaluateJS'.",&tolua_err);
 #endif
@@ -526,18 +526,18 @@ int lua_axis_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_setBackgroundTransparent'", nullptr);
@@ -560,7 +560,7 @@ int lua_axis_webview_WebView_setBackgroundTransparent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:setBackgroundTransparent",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_setBackgroundTransparent'.",&tolua_err);
 #endif
@@ -573,18 +573,18 @@ int lua_axis_webview_WebView_getOnJSCallback(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_getOnJSCallback'", nullptr);
@@ -607,7 +607,7 @@ int lua_axis_webview_WebView_getOnJSCallback(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:getOnJSCallback",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_getOnJSCallback'.",&tolua_err);
 #endif
@@ -620,18 +620,18 @@ int lua_axis_webview_WebView_canGoForward(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_canGoForward'", nullptr);
@@ -654,7 +654,7 @@ int lua_axis_webview_WebView_canGoForward(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:canGoForward",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_canGoForward'.",&tolua_err);
 #endif
@@ -667,18 +667,18 @@ int lua_axis_webview_WebView_stopLoading(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_stopLoading'", nullptr);
@@ -701,7 +701,7 @@ int lua_axis_webview_WebView_stopLoading(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:stopLoading",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_stopLoading'.",&tolua_err);
 #endif
@@ -714,18 +714,18 @@ int lua_axis_webview_WebView_getOpacityWebView(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_getOpacityWebView'", nullptr);
@@ -748,7 +748,7 @@ int lua_axis_webview_WebView_getOpacityWebView(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:getOpacityWebView",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_getOpacityWebView'.",&tolua_err);
 #endif
@@ -761,18 +761,18 @@ int lua_axis_webview_WebView_reload(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_reload'", nullptr);
@@ -795,7 +795,7 @@ int lua_axis_webview_WebView_reload(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:reload",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_reload'.",&tolua_err);
 #endif
@@ -808,18 +808,18 @@ int lua_axis_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::ui::WebView*)tolua_tousertype(tolua_S,1,0);
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_webview_WebView_setJavascriptInterfaceScheme'", nullptr);
@@ -845,7 +845,7 @@ int lua_axis_webview_WebView_setJavascriptInterfaceScheme(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:setJavascriptInterfaceScheme",argc, 1);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_setJavascriptInterfaceScheme'.",&tolua_err);
 #endif
@@ -857,11 +857,11 @@ int lua_axis_webview_WebView_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"axui.WebView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -880,7 +880,7 @@ int lua_axis_webview_WebView_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.WebView:create",argc, 0);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_create'.",&tolua_err);
 #endif
@@ -892,7 +892,7 @@ int lua_axis_webview_WebView_constructor(lua_State* tolua_S)
     axis::ui::WebView* cobj = nullptr;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -916,7 +916,7 @@ int lua_axis_webview_WebView_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.WebView:WebView",argc, 0);
     return 0;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_webview_WebView_constructor'.",&tolua_err);
 #endif
 
