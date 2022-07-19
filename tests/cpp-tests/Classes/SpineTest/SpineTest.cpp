@@ -72,7 +72,7 @@ SpineTests::SpineTests()
     ADD_TEST_CASE(SpineboyExample);
     ADD_TEST_CASE(TankExample);
 
-#ifdef COCOS2D_DEBUG
+#ifdef AXIS_DEBUG
     debugExtension = new DebugExtension(SpineExtension::getInstance());
 #endif
 }
@@ -82,7 +82,7 @@ SpineTests::~SpineTests()
     FileUtils::getInstance()->setSearchPaths(_searchPaths);
     SkeletonBatch::destroyInstance();
     SkeletonTwoColorBatch::destroyInstance();
-#ifdef COCOS2D_DEBUG
+#ifdef AXIS_DEBUG
     debugExtension->reportLeaks();
     delete debugExtension;
 #endif

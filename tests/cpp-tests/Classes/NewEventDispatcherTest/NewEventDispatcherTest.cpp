@@ -1571,7 +1571,7 @@ private:
 
 DanglingNodePointersTest::DanglingNodePointersTest()
 {
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && AXIS_DEBUG > 0
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
@@ -1619,11 +1619,11 @@ std::string DanglingNodePointersTest::title() const
 
 std::string DanglingNodePointersTest::subtitle() const
 {
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && COCOS2D_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && AXIS_DEBUG > 0
     return "Tap the square - should not crash!";
 #else
     return "For test to work, must be compiled with:\n"
-           "AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& COCOS2D_DEBUG > 0";
+           "AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& AXIS_DEBUG > 0";
 #endif
 }
 

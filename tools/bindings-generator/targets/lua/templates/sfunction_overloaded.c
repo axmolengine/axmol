@@ -3,11 +3,11 @@ int ${signature_name}(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-\#if COCOS2D_DEBUG >= 1
+\#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 \#endif
 
-\#if COCOS2D_DEBUG >= 1
+\#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"${generator.scriptname_from_native($namespaced_class_name,$namespace_name)}",0,&tolua_err)) goto tolua_lerror;
 \#endif
 
@@ -75,7 +75,7 @@ int ${signature_name}(lua_State* tolua_S)
     #end for
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "${generator.scriptname_from_native($namespaced_class_name, $namespace_name)}:${func.func_name}",argc, ${func.min_args});
     return 0;
-\#if COCOS2D_DEBUG >= 1
+\#if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function '${signature_name}'.",&tolua_err);
 \#endif

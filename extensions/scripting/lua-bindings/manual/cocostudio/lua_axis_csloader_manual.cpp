@@ -36,11 +36,11 @@ int lua_axis_csloader_CSLoader_createTimeline(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.CSLoader", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -61,7 +61,7 @@ int lua_axis_csloader_CSLoader_createTimeline(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.CSLoader:createTimeline", argc,
                1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_CSLoader_createTimeline'.", &tolua_err);
 #endif
@@ -72,11 +72,11 @@ int lua_axis_csloader_CSLoader_createNode(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.CSLoader", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -94,7 +94,7 @@ int lua_axis_csloader_CSLoader_createNode(lua_State* tolua_S)
                 break;
             }
 
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
             if (!toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
             {
                 goto tolua_lerror;
@@ -135,7 +135,7 @@ int lua_axis_csloader_CSLoader_createNode(lua_State* tolua_S)
     ok = true;
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.CSLoader:createNode", argc, 1);
     return 0;
-#if COCOS2D_DEBUG >= 1
+#if AXIS_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_csloader_CSLoader_createNode'.", &tolua_err);
 #endif
