@@ -628,7 +628,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             }
         }
     }
-    for (auto j : p2points)
+    for (auto& j : p2points)
     {
         delete j;
     };

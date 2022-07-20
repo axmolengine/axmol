@@ -639,7 +639,7 @@ void PhysicsWorld::removeBody(PhysicsBody* body)
 
     // destroy the body's joints
     auto removeCopy = body->_joints;
-    for (auto joint : removeCopy)
+    for (auto& joint : removeCopy)
     {
         removeJoint(joint, true);
     }
@@ -716,7 +716,7 @@ void PhysicsWorld::updateJoints()
         return;
     }
 
-    for (auto joint : _delayAddJoints)
+    for (auto& joint : _delayAddJoints)
     {
         joint->_world = this;
         if (joint->initJoint())
@@ -730,13 +730,13 @@ void PhysicsWorld::updateJoints()
     }
     _delayAddJoints.clear();
 
-    for (auto joint : _delayRemoveJoints)
+    for (auto& joint : _delayRemoveJoints)
     {
         doRemoveJoint(joint);
     }
     _delayRemoveJoints.clear();
 
-    for (auto joint : _joints)
+    for (auto& joint : _joints)
     {
         joint->flushDelayTasks();
     }
@@ -746,7 +746,7 @@ void PhysicsWorld::removeShape(PhysicsShape* shape)
 {
     if (shape)
     {
-        for (auto cps : shape->_cpShapes)
+        for (auto& cps : shape->_cpShapes)
         {
             if (cpSpaceContainsShape(_cpSpace, cps))
             {
@@ -780,7 +780,7 @@ void PhysicsWorld::addJoint(PhysicsJoint* joint)
 void PhysicsWorld::removeAllJoints(bool destroy)
 {
     auto removeCopy = _joints;
-    for (auto joint : removeCopy)
+    for (auto& joint : removeCopy)
     {
         removeJoint(joint, destroy);
     }
@@ -790,7 +790,7 @@ void PhysicsWorld::addShape(PhysicsShape* physicsShape)
 {
     if (physicsShape)
     {
-        for (auto shape : physicsShape->_cpShapes)
+        for (auto& shape : physicsShape->_cpShapes)
         {
             cpSpaceAddShape(_cpSpace, shape);
         }
@@ -816,7 +816,7 @@ void PhysicsWorld::doRemoveBody(PhysicsBody* body)
 
 void PhysicsWorld::doRemoveJoint(PhysicsJoint* joint)
 {
-    for (auto constraint : joint->_cpConstraints)
+    for (auto& constraint : joint->_cpConstraints)
     {
         cpSpaceRemoveConstraint(_cpSpace, constraint);
     }
@@ -1062,7 +1062,7 @@ void PhysicsWorld::beforeSimulation(Node* node,
         physicsBody->beforeSimulation(parentToWorldTransform, nodeToWorldTransform, scaleX, scaleY, rotation);
     }
 
-    for (auto child : node->getChildren())
+    for (auto& child : node->getChildren())
         beforeSimulation(child, nodeToWorldTransform, scaleX, scaleY, rotation);
 }
 
@@ -1077,7 +1077,7 @@ void PhysicsWorld::afterSimulation(Node* node, const Mat4& parentToWorldTransfor
         physicsBody->afterSimulation(parentToWorldTransform, parentRotation);
     }
 
-    for (auto child : node->getChildren())
+    for (auto& child : node->getChildren())
         afterSimulation(child, nodeToWorldTransform, nodeRotation);
 }
 

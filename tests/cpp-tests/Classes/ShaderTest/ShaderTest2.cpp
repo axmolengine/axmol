@@ -149,7 +149,7 @@ public:
             renderer->addCommand(&_trianglesCommand);
 
             // positive effects: order >= 0
-            for (auto it = std::begin(_effects) + idx; it != std::end(_effects); ++it)
+            for (auto& it = std::begin(_effects) + idx; it != std::end(_effects); ++it)
             {
                 QuadCommand& q     = std::get<2>(*it);
                 auto* programState = std::get<1>(*it)->getProgramState();

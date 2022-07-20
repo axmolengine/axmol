@@ -116,7 +116,7 @@ void Particle3DTestDemo::update(float delta)
     {
         unsigned int count = 0;
         auto children      = ps->getChildren();
-        for (auto iter : children)
+        for (auto& iter : children)
         {
             ParticleSystem3D* child = dynamic_cast<ParticleSystem3D*>(iter);
             if (child)

@@ -253,7 +253,7 @@ void TemplateVectorTest::onEnter()
         array2.pushBack(objB);
         array2.pushBack(objC);
 
-        for (auto obj : array1)
+        for (auto& obj : array1)
         {
             array2.eraseObject(obj);
         }

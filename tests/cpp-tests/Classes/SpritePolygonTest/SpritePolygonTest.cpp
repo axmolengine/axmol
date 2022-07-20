@@ -327,7 +327,7 @@ void SpritePolygonTestSlider::changeEpsilon(axis::Ref* pSender, axis::ui::Slider
     {
         axis::ui::Slider* slider = dynamic_cast<axis::ui::Slider*>(pSender);
         float epsilon               = powf(slider->getPercent() / 100.0, 2) * 19.0f + 1.0f;
-        for (auto child : _children)
+        for (auto& child : _children)
         {
             if (child->getName().size())
             {

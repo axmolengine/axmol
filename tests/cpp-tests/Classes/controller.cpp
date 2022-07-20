@@ -534,7 +534,7 @@ static void signalHandler(int sig)
 
 static void initCrashCatch()
 {
-    for (auto sig : s_fatal_signals)
+    for (auto& sig : s_fatal_signals)
     {
         signal(sig, signalHandler);
     }
@@ -542,7 +542,7 @@ static void initCrashCatch()
 
 static void disableCrashCatch()
 {
-    for (auto sig : s_fatal_signals)
+    for (auto& sig : s_fatal_signals)
     {
         signal(sig, SIG_DFL);
     }

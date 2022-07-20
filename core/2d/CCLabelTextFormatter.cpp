@@ -42,13 +42,13 @@ void Label::computeAlignmentOffset()
         _linesOffsetX.assign(_numberOfLines, 0);
         break;
     case axis::TextHAlignment::CENTER:
-        for (auto lineWidth : _linesWidth)
+        for (auto& lineWidth : _linesWidth)
         {
             _linesOffsetX.push_back((_contentSize.width - lineWidth) / 2.f);
         }
         break;
     case axis::TextHAlignment::RIGHT:
-        for (auto lineWidth : _linesWidth)
+        for (auto& lineWidth : _linesWidth)
         {
             _linesOffsetX.push_back(_contentSize.width - lineWidth);
         }

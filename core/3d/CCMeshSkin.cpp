@@ -103,7 +103,7 @@ Vec4* MeshSkin::getMatrixPalette()
     _matrixPalette.resize(_skinBones.size() * PALETTE_ROWS);
     int i = 0, paletteIndex = 0;
     static Mat4 t;
-    for (auto it : _skinBones)
+    for (auto& it : _skinBones)
     {
         Mat4::multiply(it->getWorldMat(), _invBindPoses[i++], &t);
         _matrixPalette[paletteIndex++].set(t.m[0], t.m[4], t.m[8], t.m[12]);

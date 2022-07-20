@@ -339,7 +339,7 @@ void Mesh::setMaterial(Material* material)
 
     if (_material)
     {
-        for (auto technique : _material->getTechniques())
+        for (auto& technique : _material->getTechniques())
         {
             // allocate MeshCommand vector for technique
             // allocate MeshCommand for each pass
@@ -347,7 +347,7 @@ void Mesh::setMaterial(Material* material)
             auto& list                          = _meshCommands[technique->getName()];
 
             int i = 0;
-            for (auto pass : technique->getPasses())
+            for (auto& pass : technique->getPasses())
             {
 #ifdef AXIS_DEBUG
                 // make it crashed when missing attribute data

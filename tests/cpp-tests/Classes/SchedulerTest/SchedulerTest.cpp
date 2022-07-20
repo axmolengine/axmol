@@ -1374,7 +1374,7 @@ void SchedulerRemoveEntryWhileUpdate::onEnter()
 
 void SchedulerRemoveEntryWhileUpdate::onExit()
 {
-    for (auto obj : _testvector)
+    for (auto& obj : _testvector)
     {
         getScheduler()->unscheduleUpdate(obj);
         delete obj;

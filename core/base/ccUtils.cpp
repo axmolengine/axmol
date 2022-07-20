@@ -255,7 +255,7 @@ Rect getCascadeBoundingBox(Node* node)
     // check all children bounding box, get maximize box
     Node* child = nullptr;
     bool merge  = false;
-    for (auto object : node->getChildren())
+    for (auto& object : node->getChildren())
     {
         child = dynamic_cast<Node*>(object);
         if (!child->isVisible())

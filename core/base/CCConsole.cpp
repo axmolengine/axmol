@@ -812,7 +812,7 @@ void Console::loop()
             {
                 for (const auto& str : _DebugStrings)
                 {
-                    for (auto fd : _fds)
+                    for (auto& fd : _fds)
                     {
                         Console::Utility::sendToConsole(fd, str.c_str(), str.length());
                     }
@@ -959,7 +959,7 @@ bool Console::parseCommand(socket_native_type fd)
     auto commands = Console::Utility::split(cmdLine, _commandSeparator);
     try
     {
-        for (auto command : commands)
+        for (auto& command : commands)
         {
             performCommand(fd, Console::Utility::trim(command));
         }

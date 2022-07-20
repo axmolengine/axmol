@@ -2297,7 +2297,7 @@ std::vector<Vec3> Bundle3D::getTrianglesList(std::string_view path)
     }
 
     Bundle3D::destroyBundle(bundle);
-    for (auto iter : meshs.meshDatas)
+    for (auto& iter : meshs.meshDatas)
     {
         int preVertexSize = iter->getPerVertexSize() / sizeof(float);
         for (const auto& indices : iter->subMeshIndices)

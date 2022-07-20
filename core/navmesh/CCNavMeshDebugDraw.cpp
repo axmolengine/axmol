@@ -94,7 +94,7 @@ void NavMeshDebugDraw::vertex(const float* pos, unsigned int color)
 
 NavMeshDebugDraw::~NavMeshDebugDraw()
 {
-    for (auto iter : _primitiveList)
+    for (auto& iter : _primitiveList)
     {
         delete iter;
     }
@@ -255,7 +255,7 @@ void NavMeshDebugDraw::onBeforeEachCommand(bool enableDepthWrite)
 void NavMeshDebugDraw::clear()
 {
     _vertices.clear();
-    for (auto iter : _primitiveList)
+    for (auto& iter : _primitiveList)
     {
         delete iter;
     }

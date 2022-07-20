@@ -831,7 +831,7 @@ void ClippingToRenderTextureTest::setup()
             nodes.push_back(node);
             return false;
         });
-        for (auto node : nodes)
+        for (auto& node : nodes)
         {
             this->removeChild(node);
         }

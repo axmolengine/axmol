@@ -179,7 +179,7 @@ Renderer::~Renderer()
     _renderGroups.clear();
     _groupCommandManager->release();
 
-    for (auto clearCommand : _callbackCommandsPool)
+    for (auto& clearCommand : _callbackCommandsPool)
         delete clearCommand;
     _callbackCommandsPool.clear();
 
