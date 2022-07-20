@@ -2293,11 +2293,11 @@ static int lua_axis_Node_enumerateChildren(lua_State* tolua_S)
         }
 #endif
 
-        std::string name     = axislua_tostr(tolua_S, 2);
+        auto name     = axislua_tosv(tolua_S, 2);
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 3, 0);
-
+        auto stack = LuaEngine::getInstance()->getLuaStack();
         cobj->enumerateChildren(name, [=](Node* node) -> bool {
-            auto stack = LuaEngine::getInstance()->getLuaStack();
+            
             int id     = node ? (int)node->_ID : -1;
             int* luaID = node ? &node->_luaID : nullptr;
             toluafix_pushusertype_ccobject(stack->getLuaState(), id, luaID, (void*)node, "ax.Node");
@@ -2305,7 +2305,7 @@ static int lua_axis_Node_enumerateChildren(lua_State* tolua_S)
 
             return ret;
         });
-        toluafix_remove_function_by_refid(tolua_S, handler);
+        stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6582,7 +6582,7 @@ static int lua_axis_TextureCache_addImageAsync(lua_State* tolua_S)
             goto tolua_lerror;
         }
 #endif
-        const char* configFilePath = tolua_tostring(tolua_S, 2, "");
+        auto configFilePath = axislua_tosv(tolua_S, 2);
         LUA_FUNCTION handler       = (toluafix_ref_function(tolua_S, 3, 0));
 
         self->addImageAsync(configFilePath, [=](Texture2D* tex) {
@@ -6591,7 +6591,7 @@ static int lua_axis_TextureCache_addImageAsync(lua_State* tolua_S)
             int* luaID = (tex) ? &tex->_luaID : nullptr;
             toluafix_pushusertype_ccobject(stack->getLuaState(), ID, luaID, (void*)tex, "ax.Texture2D");
             stack->executeFunctionByHandler(handler, 1);
-            toluafix_remove_function_by_refid(tolua_S, handler);
+            stack->removeScriptHandler(handler);
         });
 
         return 0;
@@ -7450,7 +7450,7 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
                 tolua_pushboolean(Ls, succeed);
                 tolua_pushstring(Ls, name.data());
                 stack->executeFunctionByHandler(handler, 2);
-                toluafix_remove_function_by_refid(tolua_S, handler);
+                stack->removeScriptHandler(handler);
             },
             fileName);
 
