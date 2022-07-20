@@ -176,9 +176,10 @@ int lua_register_axis_backend_PrimitiveType(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PrimitiveType");
         tolua_constant(tolua_S, "POINT", 0);
         tolua_constant(tolua_S, "LINE", 1);
-        tolua_constant(tolua_S, "LINE_STRIP", 2);
-        tolua_constant(tolua_S, "TRIANGLE", 3);
-        tolua_constant(tolua_S, "TRIANGLE_STRIP", 4);
+        tolua_constant(tolua_S, "LINE_LOOP", 2);
+        tolua_constant(tolua_S, "LINE_STRIP", 3);
+        tolua_constant(tolua_S, "TRIANGLE", 4);
+        tolua_constant(tolua_S, "TRIANGLE_STRIP", 5);
     tolua_endmodule(tolua_S);
 
     auto typeName = typeid(axis::backend::PrimitiveType).name(); // rtti is literal storage
