@@ -277,7 +277,7 @@ int lua_axis_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
 
             stack->executeFunctionByHandler(handler, 2);
 
-            toluafix_remove_function_by_refid(tolua_S, handler);
+            stack->removeScriptHandler(handler);
         });
 
         return 0;

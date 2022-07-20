@@ -192,11 +192,12 @@ int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
         axis::Vec2 arg1;
         axis::Vec2 arg2;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
+        auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler](axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info,
+            arg0 = [handler, stack](axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info,
                              void* data) -> bool {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
+                
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 physics_raycastinfo_to_luaval(Ls, info);
@@ -207,9 +208,12 @@ int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsWorld:rayCast");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsWorld:rayCast");
         if (!ok)
+        {
+            stack->removeScriptHandler(handler);
             return 0;
+        }
         cobj->rayCast(arg0, arg1, arg2, nullptr);
-        toluafix_remove_function_by_refid(tolua_S, handler);
+        stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -254,10 +258,11 @@ int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
         std::function<bool(axis::PhysicsWorld&, axis::PhysicsShape&, void*)> arg0;
         axis::Rect arg1;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
+        auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler](axis::PhysicsWorld& world, axis::PhysicsShape& shape, void* data) -> bool {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
+            arg0 = [handler,stack](axis::PhysicsWorld& world, axis::PhysicsShape& shape, void* data) -> bool {
+               
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
@@ -267,9 +272,12 @@ int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
 
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.PhysicsWorld:queryRect");
         if (!ok)
+        {
+            stack->removeScriptHandler(handler);
             return 0;
+        }
         cobj->queryRect(arg0, arg1, nullptr);
-        toluafix_remove_function_by_refid(tolua_S, handler);
+        stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -315,10 +323,10 @@ int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
         std::function<bool(axis::PhysicsWorld&, axis::PhysicsShape&, void*)> arg0;
         axis::Vec2 arg1;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
+        auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler](axis::PhysicsWorld& world, axis::PhysicsShape& shape, void* data) -> bool {
-                auto stack = LuaEngine::getInstance()->getLuaStack();
+            arg0 = [handler,stack](axis::PhysicsWorld& world, axis::PhysicsShape& shape, void* data) -> bool {
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
@@ -328,9 +336,12 @@ int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
         } while (0);
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsWorld:queryPoint");
         if (!ok)
+        {
+            stack->removeScriptHandler(handler);
             return 0;
+        }
         cobj->queryPoint(arg0, arg1, nullptr);
-        toluafix_remove_function_by_refid(tolua_S, handler);
+        stack->removeScriptHandler(handler);
         lua_settop(tolua_S, 1);
         return 1;
     }
