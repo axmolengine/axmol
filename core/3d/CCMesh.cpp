@@ -366,6 +366,8 @@ void Mesh::setMaterial(Material* material)
                 i += 1;
             }
         }
+
+        _meshIndexData->setPrimitiveType(material->getPrimitiveType());
     }
     // Was the texture set before the GLProgramState ? Set it
     for (auto& tex : _textures)
@@ -442,6 +444,7 @@ void Mesh::draw(Renderer* renderer,
         command.set3D(!_force2DQueue);
     }
 
+    _meshIndexData->setPrimitiveType(_material->_drawPrimitive);
     _material->draw(commands.data(), globalZ, getVertexBuffer(), getIndexBuffer(), getPrimitiveType(), getIndexFormat(),
                     getIndexCount(), transform);
 }

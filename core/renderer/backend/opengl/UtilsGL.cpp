@@ -452,6 +452,9 @@ GLenum UtilsGL::toGLPrimitiveType(PrimitiveType primitiveType)
     case PrimitiveType::LINE:
         ret = GL_LINES;
         break;
+    case PrimitiveType::LINE_LOOP:
+        ret = GL_LINE_LOOP;
+        break;
     case PrimitiveType::LINE_STRIP:
         ret = GL_LINE_STRIP;
         break;
