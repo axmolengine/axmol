@@ -857,7 +857,7 @@ static std::string visitMap(const T& v, int depth)
 
     ret << getTabs(depth) << "{\n";
 
-    for (auto& iter : v)
+    for (auto&& iter : v)
     {
         ret << getTabs(depth + 1) << iter.first << ": ";
         ret << visit(iter.second, depth + 1);

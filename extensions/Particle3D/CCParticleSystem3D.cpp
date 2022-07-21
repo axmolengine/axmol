@@ -133,7 +133,7 @@ void ParticleSystem3D::removeAffector(int index)
 void ParticleSystem3D::removeAllAffector()
 {
     // release all affectors
-    for (auto it : _affectors)
+    for (auto&& it : _affectors)
     {
         it->release();
     }
@@ -159,7 +159,7 @@ void ParticleSystem3D::update(float delta)
             _emitter->updateEmitter(particle, delta);
         }
 
-        for (auto& it : _affectors)
+        for (auto&& it : _affectors)
         {
             it->updateAffector(particle, delta);
         }

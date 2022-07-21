@@ -517,7 +517,7 @@ void Widget::onSizeChanged()
 {
     if (!_usingLayoutComponent)
     {
-        for (auto& child : getChildren())
+        for (auto&& child : getChildren())
         {
             Widget* widgetChild = dynamic_cast<Widget*>(child);
             if (widgetChild)
@@ -1136,7 +1136,7 @@ void Widget::copyClonedWidgetChildren(Widget* model)
 {
     auto& modelChildren = model->getChildren();
 
-    for (auto& subWidget : modelChildren)
+    for (auto&& subWidget : modelChildren)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
         if (child)
@@ -1188,7 +1188,7 @@ void Widget::copyProperties(Widget* widget)
     copySpecialProperties(widget);
 
     Map<int, LayoutParameter*>& layoutParameterDic = widget->_layoutParameterDictionary;
-    for (auto& iter : layoutParameterDic)
+    for (auto&& iter : layoutParameterDic)
     {
         setLayoutParameter(iter.second->clone());
     }

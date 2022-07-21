@@ -165,7 +165,7 @@ void Material_2DEffects::updateCCTimeUniforms(float)
 {
     float time = Director::getInstance()->getTotalFrames() * Director::getInstance()->getAnimationInterval();
     Vec4 random(time / 10.0f, time, time * 2.0f, time * 4.0f);
-    for (auto& loc : timeUniforms)
+    for (auto&& loc : timeUniforms)
     {
         loc.programState->setUniform(loc.location, &random, sizeof(random));
     }

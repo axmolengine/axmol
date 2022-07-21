@@ -297,7 +297,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
 {
     _viewName = "AX_10";
     g_keyCodeMap.clear();
-    for (auto& item : g_keyCodeStructArray)
+    for (auto&& item : g_keyCodeStructArray)
     {
         g_keyCodeMap[item.glfwKeyCode] = item.keyCode;
     }
@@ -634,7 +634,7 @@ void GLViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
     glfwSetWindowIcon(window, iconsCount, images);
 
     AX_SAFE_DELETE_ARRAY(images);
-    for (auto& icon : icons)
+    for (auto&& icon : icons)
     {
         AX_SAFE_DELETE(icon);
     }

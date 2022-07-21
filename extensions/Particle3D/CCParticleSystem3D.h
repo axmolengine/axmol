@@ -142,7 +142,7 @@ public:
     void removeAllDatas()
     {
         lockAllDatas();
-        for (auto iter : _locked)
+        for (auto&& iter : _locked)
         {
             delete iter;
         }

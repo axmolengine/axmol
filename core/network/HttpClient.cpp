@@ -320,7 +320,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
             if (!headers.empty())
             {
                 using namespace cxx17;  // for string_view literal
-                for (auto& header : headers)
+                for (auto&& header : headers)
                 {
                     obs.write_bytes(header);
                     obs.write_bytes("\r\n");

@@ -167,7 +167,7 @@ ActionObject* ActionManagerEx::stopActionByName(const char* jsonName, const char
 
 void ActionManagerEx::releaseActions()
 {
-    for (auto& iter : _actionDic)
+    for (auto&& iter : _actionDic)
     {
         axis::Vector<ActionObject*> objList = iter.second;
         ssize_t listCount                      = objList.size();

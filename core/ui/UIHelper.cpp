@@ -74,7 +74,7 @@ Widget* Helper::seekWidgetByName(Widget* root, std::string_view name)
         return root;
     }
     const auto& arrayRootChildren = root->getChildren();
-    for (auto& subWidget : arrayRootChildren)
+    for (auto&& subWidget : arrayRootChildren)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
         if (child)
@@ -101,7 +101,7 @@ Widget* Helper::seekActionWidgetByActionTag(Widget* root, int tag)
         return root;
     }
     const auto& arrayRootChildren = root->getChildren();
-    for (auto& subWidget : arrayRootChildren)
+    for (auto&& subWidget : arrayRootChildren)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
         if (child)
@@ -151,7 +151,7 @@ void Helper::doLayout(axis::Node* rootNode)
         return;
     }
 
-    for (auto& node : rootNode->getChildren())
+    for (auto&& node : rootNode->getChildren())
     {
         auto com     = node->getComponent(__LAYOUT_COMPONENT_NAME);
         Node* parent = node->getParent();

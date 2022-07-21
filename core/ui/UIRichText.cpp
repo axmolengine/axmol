@@ -1949,11 +1949,11 @@ void RichText::formatRenderers()
         float nextPosY            = 0.0f;
         std::vector<std::pair<Vector<Node*>*, float>> rowWidthPairs;
         rowWidthPairs.reserve(_elementRenders.size());
-        for (auto& element : _elementRenders)
+        for (auto&& element : _elementRenders)
         {
             float nextPosX = 0.0f;
             float maxY     = 0.0f;
-            for (auto& iter : element)
+            for (auto&& iter : element)
             {
                 iter->setAnchorPoint(Vec2::ZERO);
                 iter->setPosition(nextPosX, nextPosY);
@@ -1967,7 +1967,7 @@ void RichText::formatRenderers()
             rowWidthPairs.emplace_back(&element, nextPosX);
         }
         this->setContentSize(Vec2(newContentSizeWidth, -nextPosY));
-        for (auto& row : rowWidthPairs)
+        for (auto&& row : rowWidthPairs)
             doHorizontalAlignment(*row.first, row.second);
     }
     else
@@ -1980,7 +1980,7 @@ void RichText::formatRenderers()
         {
             Vector<Node*>& row = _elementRenders[i];
             float maxHeight    = 0.0f;
-            for (auto& iter : row)
+            for (auto&& iter : row)
             {
                 maxHeight = std::max(iter->getContentSize().height, maxHeight);
             }
@@ -2004,7 +2004,7 @@ void RichText::formatRenderers()
             Vector<Node*>& row = _elementRenders[i];
             float nextPosX     = 0.0f;
             nextPosY -= (i != 0 ? maxHeights[i] + verticalSpace : maxHeights[i]);
-            for (auto& iter : row)
+            for (auto&& iter : row)
             {
                 iter->setAnchorPoint(Vec2::ZERO);
                 iter->setPosition(nextPosX, nextPosY);
@@ -2057,7 +2057,7 @@ void RichText::doHorizontalAlignment(const Vector<axis::Node*>& row, float rowWi
         const auto leftOver     = getContentSize().width - (rowWidth + diff);
         const float leftPadding = getPaddingAmount(alignment, leftOver);
         const Vec2 offset(leftPadding, 0.f);
-        for (auto& node : row)
+        for (auto&& node : row)
         {
             node->setPosition(node->getPosition() + offset);
         }

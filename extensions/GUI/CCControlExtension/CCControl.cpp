@@ -226,7 +226,7 @@ void Control::setOpacityModifyRGB(bool bOpacityModifyRGB)
 {
     _isOpacityModifyRGB = bOpacityModifyRGB;
 
-    for (auto child : _children)
+    for (auto&& child : _children)
     {
         child->setOpacityModifyRGB(bOpacityModifyRGB);
     }

@@ -116,7 +116,7 @@ void Layout::setGlobalZOrder(float globalZOrder)
     if (_clippingStencil)
         _clippingStencil->setGlobalZOrder(globalZOrder);
 
-    for (auto& child : _children)
+    for (auto&& child : _children)
         child->setGlobalZOrder(globalZOrder);
 }
 
@@ -886,7 +886,7 @@ void Layout::setLayoutType(Type type)
 {
     _layoutType = type;
 
-    for (auto& child : _children)
+    for (auto&& child : _children)
     {
         Widget* widgetChild = dynamic_cast<Widget*>(child);
         if (widgetChild)
