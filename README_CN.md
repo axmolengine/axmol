@@ -107,9 +107,6 @@
   * official v4: https://gitee.com/mirrors/cocos2d-x
   * Git快速手册: https://github.com/axis-project/axis/discussions/411
 
-### axis项目的活跃贡献者
+### Axis项目活跃状态
 
-- @halx99
-- @rh101
-- @aismann
-- @weiwest
+![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")
