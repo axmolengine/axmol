@@ -228,7 +228,7 @@ void Animation3DCache::removeAllAnimations()
 }
 void Animation3DCache::removeUnusedAnimation()
 {
-    for (auto& itor = _animations.begin(); itor != _animations.end();)
+    for (auto itor = _animations.begin(); itor != _animations.end();)
     {
         if (itor->second->getReferenceCount() == 1)
         {
