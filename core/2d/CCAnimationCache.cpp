@@ -104,7 +104,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
         ssize_t frameNameSize = frameNames.size();
         Vector<AnimationFrame*> frames(frameNameSize);
 
-        for (auto& frameName : frameNames)
+        for (auto&& frameName : frameNames)
         {
             SpriteFrame* spriteFrame = frameCache->getSpriteFrameByName(frameName.asString());
 
@@ -170,7 +170,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
         // Array of AnimationFrames
         Vector<AnimationFrame*> array(static_cast<int>(frameArray.size()));
 
-        for (auto& obj : frameArray)
+        for (auto&& obj : frameArray)
         {
             ValueMap& entry             = obj.asValueMap();
             std::string spriteFrameName = entry["spriteframe"].asString();

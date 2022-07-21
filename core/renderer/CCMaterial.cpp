@@ -53,7 +53,7 @@ std::string replaceDefines(std::string_view compileTimeDefines)
 
     auto defineParts = Console::Utility::split(compileTimeDefines, ';');
     std::stringstream ss;
-    for (auto& p : defineParts)
+    for (auto&& p : defineParts)
     {
         if (p.find("#define ") == std::string::npos)
         {

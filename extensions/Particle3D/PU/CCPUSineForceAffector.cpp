@@ -88,7 +88,7 @@ void PUSineForceAffector::setFrequencyMax(const float frequencyMax)
 
 void PUSineForceAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime*/)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         //  Affect the direction

@@ -127,7 +127,7 @@ public:
     /** Constructor with initializer list. */
     Vector<T>(std::initializer_list<T> list)
     {
-        for (auto& element : list)
+        for (auto&& element : list)
         {
             pushBack(element);
         }
@@ -424,7 +424,7 @@ public:
      */
     void clear()
     {
-        for (auto& it : _data)
+        for (auto&& it : _data)
         {
             it->release();
         }

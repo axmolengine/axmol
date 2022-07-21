@@ -69,7 +69,7 @@ TextureCache::~TextureCache()
 {
     AXLOGINFO("deallocing TextureCache: %p", this);
 
-    for (auto& texture : _textures)
+    for (auto&& texture : _textures)
         texture.second->release();
 
     AX_SAFE_DELETE(_loadingThread);
@@ -231,7 +231,7 @@ void TextureCache::unbindImageAsync(std::string_view callbackKey)
         return;
     }
 
-    for (auto& asyncStruct : _asyncStructQueue)
+    for (auto&& asyncStruct : _asyncStructQueue)
     {
         if (asyncStruct->callbackKey == callbackKey)
         {
@@ -246,7 +246,7 @@ void TextureCache::unbindAllImageAsync()
     {
         return;
     }
-    for (auto& asyncStruct : _asyncStructQueue)
+    for (auto&& asyncStruct : _asyncStructQueue)
     {
         asyncStruct->callback = nullptr;
     }
@@ -551,7 +551,7 @@ bool TextureCache::reloadTexture(std::string_view fileName)
 
 void TextureCache::removeAllTextures()
 {
-    for (auto& texture : _textures)
+    for (auto&& texture : _textures)
     {
         texture.second->release();
     }
@@ -631,7 +631,7 @@ Texture2D* TextureCache::getTextureForKey(std::string_view textureKeyName) const
 
 std::string TextureCache::getTextureFilePath(axis::Texture2D* texture) const
 {
-    for (auto& item : _textures)
+    for (auto&& item : _textures)
     {
         if (item.second == texture)
         {
@@ -661,7 +661,7 @@ std::string TextureCache::getCachedTextureInfo() const
     unsigned int count      = 0;
     unsigned int totalBytes = 0;
 
-    for (auto& texture : _textures)
+    for (auto&& texture : _textures)
     {
 
         memset(buftmp, 0, sizeof(buftmp));
@@ -816,7 +816,7 @@ void VolatileTextureMgr::addStringTexture(Texture2D* tt, const char* text, const
 
 void VolatileTextureMgr::removeTexture(Texture2D* t)
 {
-    for (auto& item : _textures)
+    for (auto&& item : _textures)
     {
         VolatileTexture* vt = item;
         if (vt->_texture == t)
@@ -833,7 +833,7 @@ void VolatileTextureMgr::reloadAllTextures()
     _isReloading = true;
     AXLOG("reload all texture");
 
-    for (auto& texture : _textures)
+    for (auto&& texture : _textures)
     {
         VolatileTexture* vt = texture;
 

@@ -196,7 +196,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
     auto textureFileName = Director::getInstance()->getTextureCache()->getTextureFilePath(texture);
     Image* image         = nullptr;
     NinePatchImageParser parser;
-    for (auto& iter : framesDict)
+    for (auto&& iter : framesDict)
     {
         auto& frameDict      = iter.second.asValueMap();
         auto spriteFrameName = iter.first;
@@ -394,7 +394,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
     spriteSheet->format = getFormat();
     spriteSheet->path   = plist;
 
-    for (auto& iter : framesDict)
+    for (auto&& iter : framesDict)
     {
         const ValueMap& frameDict        = iter.second.asValueMap();
         std::string_view spriteFrameName = iter.first;

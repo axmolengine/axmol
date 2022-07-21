@@ -128,7 +128,7 @@ void PUTextureRotator::initParticleForEmission(PUParticle3D* particle)
 
 void PUTextureRotator::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         //// Only continue if the particle is a visual particle

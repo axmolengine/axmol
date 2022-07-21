@@ -396,7 +396,7 @@ void PhysicsDemoClickAdd::onTouchesEnded(const std::vector<Touch*>& touches, Eve
 {
     // Add a new body/atlas sprite at the touched location
 
-    for (auto touch : touches)
+    for (auto& touch : touches)
     {
         auto location = touch->getLocation();
 

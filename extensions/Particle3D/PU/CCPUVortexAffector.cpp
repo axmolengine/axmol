@@ -80,7 +80,7 @@ float PUVortexAffector::calculateRotationSpeed()
 
 void PUVortexAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime*/)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         //  Explicitly check on 'freezed', because it passes the techniques' validation.

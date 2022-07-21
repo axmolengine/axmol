@@ -50,7 +50,7 @@ TabControl::TabControl()
 
 TabControl::~TabControl()
 {
-    for (auto& item : _tabItems)
+    for (auto&& item : _tabItems)
     {
         if (item)
             AX_SAFE_DELETE(item);
@@ -179,7 +179,7 @@ void TabControl::setHeaderDockPlace(TabControl::Dock dockPlace)
         initContainers();
 
         auto anpoint = getHeaderAnchorWithDock();
-        for (auto& item : _tabItems)
+        for (auto&& item : _tabItems)
         {
             item->header->setAnchorPoint(anpoint);
         }
@@ -280,7 +280,7 @@ void TabControl::initContainers()
         break;
     }
 
-    for (auto& tabItem : _tabItems)
+    for (auto&& tabItem : _tabItems)
     {
         Layout* container = tabItem->container;
         container->setPosition(_containerPosition);
@@ -440,7 +440,7 @@ void TabControl::ignoreHeadersTextureSize(bool ignore)
         return;
 
     _ignoreHeaderTextureSize = ignore;
-    for (auto& item : _tabItems)
+    for (auto&& item : _tabItems)
     {
         item->header->ignoreContentAdaptWithSize(!ignore);
         if (ignore)

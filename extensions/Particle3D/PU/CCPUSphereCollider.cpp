@@ -99,7 +99,7 @@ void PUSphereCollider::calculateDirectionAfterCollision(PUParticle3D* particle, 
 
 void PUSphereCollider::updatePUAffector(PUParticle3D* particle, float /*deltaTime*/)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         _predictedPosition   = particle->position + _velocityScale * particle->direction;

@@ -135,7 +135,7 @@ void PageViewIndicator::rearrange()
     float totalSizeValue  = sizeValue * numberOfItems + _spaceBetweenIndexNodes * (numberOfItems - 1);
 
     float posValue = -(totalSizeValue / 2) + (sizeValue / 2);
-    for (auto& indexNode : _indexNodes)
+    for (auto&& indexNode : _indexNodes)
     {
         Vec2 position;
         if (horizontal)
@@ -165,7 +165,7 @@ void PageViewIndicator::setIndexNodesColor(const Color3B& indexNodesColor)
 {
     _indexNodesColor = indexNodesColor;
 
-    for (auto& indexNode : _indexNodes)
+    for (auto&& indexNode : _indexNodes)
     {
         indexNode->setColor(indexNodesColor);
     }
@@ -174,7 +174,7 @@ void PageViewIndicator::setIndexNodesColor(const Color3B& indexNodesColor)
 void PageViewIndicator::setIndexNodesOpacity(uint8_t opacity)
 {
     _indexNodesOpacity = opacity;
-    for (auto& indexNode : _indexNodes)
+    for (auto&& indexNode : _indexNodes)
         indexNode->setOpacity(opacity);
 }
 
@@ -187,7 +187,7 @@ void PageViewIndicator::setIndexNodesScale(float indexNodesScale)
     _indexNodesScale = indexNodesScale;
 
     _currentIndexNode->setScale(indexNodesScale);
-    for (auto& indexNode : _indexNodes)
+    for (auto&& indexNode : _indexNodes)
     {
         indexNode->setScale(_indexNodesScale);
     }
@@ -205,14 +205,14 @@ void PageViewIndicator::setIndexNodesTexture(std::string_view texName, Widget::T
     {
     case Widget::TextureResType::LOCAL:
         _currentIndexNode->setTexture(texName);
-        for (auto& indexNode : _indexNodes)
+        for (auto&& indexNode : _indexNodes)
         {
             indexNode->setTexture(texName);
         }
         break;
     case Widget::TextureResType::PLIST:
         _currentIndexNode->setSpriteFrame(texName);
-        for (auto& indexNode : _indexNodes)
+        for (auto&& indexNode : _indexNodes)
         {
             indexNode->setSpriteFrame(texName);
         }
@@ -281,7 +281,7 @@ void PageViewIndicator::clear()
         _currentOverlappingIndexNode->setVisible(true);
         _currentOverlappingIndexNode = nullptr;
     }
-    for (auto& indexNode : _indexNodes)
+    for (auto&& indexNode : _indexNodes)
     {
         removeProtectedChild(indexNode);
     }

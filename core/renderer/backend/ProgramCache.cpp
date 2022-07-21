@@ -71,7 +71,7 @@ void ProgramCache::destroyInstance()
 
 ProgramCache::~ProgramCache()
 {
-    for (auto& program : _cachedPrograms)
+    for (auto&& program : _cachedPrograms)
     {
         AX_SAFE_RELEASE(program.second);
     }
@@ -255,7 +255,7 @@ void ProgramCache::removeUnusedProgram()
 void ProgramCache::removeAllPrograms()
 {
     ProgramStateRegistry::getInstance()->clearPrograms();
-    for (auto& program : _cachedPrograms)
+    for (auto&& program : _cachedPrograms)
     {
         program.second->release();
     }
