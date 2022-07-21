@@ -70,7 +70,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
         glview = GLViewImpl::createWithRect(
-            "Example: Simple Snake", axis::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+            "Simple Snake", axis::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
         glview = GLViewImpl::create("Example: Simple Snake");
 #endif

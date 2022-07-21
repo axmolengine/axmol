@@ -132,17 +132,17 @@ bool SimpleSnake::init()
     }
 
     // add "AXIS" splash screen"
-    auto sprite = Sprite::create("AXIS_white.png"sv);
+    auto sprite = Sprite::create("AXIS_black.png"sv); 
     setNodeIgnoreDesignScale(sprite);
     if (sprite == nullptr)
     {
-        problemLoading("'AXIS_white.png'");
+        problemLoading("'AXIS_black.png'");
     }
     else
     {
         // position the sprite on the center of the screen
-        sprite->setPosition(offset);
-
+        sprite->setPosition(offset+Vec2(0,-250));
+        sprite->setScale(0.7);
         // add the sprite as a child to this layer
         this->addChild(sprite, 9);
         auto drawNode = DrawNode::create();
@@ -150,6 +150,12 @@ bool SimpleSnake::init()
         addChild(drawNode, 20);
 
         drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
+
+        auto powerdBy = Label::createWithTTF("POWERD BY", "fonts/arial.ttf", 24);
+        powerdBy->setPosition(Vec2(origin.x + visibleSize.width / 2, 100+ powerdBy->getContentSize().height * 3));
+
+        // add the label as a child to this layer
+        this->addChild(powerdBy, 1);
     }
 
     srand(time(0));
