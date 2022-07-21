@@ -225,7 +225,7 @@ TransitionsTests::TransitionsTests()
 {
     int sceneIndex = 0;
 
-    for (auto& test : transitions)
+    for (auto&& test : transitions)
     {
         addTestCase(test.name, [sceneIndex]() {
             auto scene = TransitionsTest::create();

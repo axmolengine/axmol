@@ -121,7 +121,7 @@ bool Animation::initWithSpriteFrames(const Vector<SpriteFrame*>& frames,
     _delayPerUnit = delay;
     _loops        = loops;
 
-    for (auto& spriteFrame : frames)
+    for (auto&& spriteFrame : frames)
     {
         auto animFrame = AnimationFrame::create(spriteFrame, 1, ValueMap());
         _frames.pushBack(animFrame);
@@ -140,7 +140,7 @@ bool Animation::initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAn
 
     setFrames(arrayOfAnimationFrames);
 
-    for (auto& animFrame : _frames)
+    for (auto&& animFrame : _frames)
     {
         _totalDelayUnits += animFrame->getDelayUnits();
     }

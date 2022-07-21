@@ -121,7 +121,7 @@ FastTMXLayer::~FastTMXLayer()
     AX_SAFE_RELEASE(_vertexBuffer);
     AX_SAFE_RELEASE(_indexBuffer);
 
-    for (auto& e : _customCommands)
+    for (auto&& e : _customCommands)
     {
         AX_SAFE_RELEASE(e.second->getPipelineDescriptor().programState);
         delete e.second;
@@ -633,7 +633,7 @@ void FastTMXLayer::updateTotalQuads()
         }
 
         int offset = 0;
-        for (auto& vertexZOffset : _indicesVertexZOffsets)
+        for (auto&& vertexZOffset : _indicesVertexZOffsets)
         {
             std::swap(offset, vertexZOffset.second);
             offset += vertexZOffset.second;
@@ -976,7 +976,7 @@ TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
     _layer = layer;
     for (const auto& p : *_layer->getAnimTileCoord())
     {
-        for (auto tilePos : p.second)
+        for (auto&& tilePos : p.second)
         {
             _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first), tilePos));
         }
@@ -995,7 +995,7 @@ void TMXTileAnimManager::startAll()
     if (_started || _tasks.empty())
         return;
     _started = true;
-    for (auto& task : _tasks)
+    for (auto&& task : _tasks)
     {
         task->start();
     }
@@ -1006,7 +1006,7 @@ void TMXTileAnimManager::stopAll()
     if (!_started)
         return;
     _started = false;
-    for (auto& task : _tasks)
+    for (auto&& task : _tasks)
     {
         task->stop();
     }

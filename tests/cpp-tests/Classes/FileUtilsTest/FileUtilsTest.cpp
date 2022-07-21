@@ -556,7 +556,7 @@ void TestGetContents::onEnter()
             return std::string("failed: read as zero terminated string");
 
         std::string files[] = {_generatedFile, "background.wav", "fileLookup.plist"};
-        for (auto& file : files)
+        for (auto&& file : files)
         {
             std::string sbuf;
 

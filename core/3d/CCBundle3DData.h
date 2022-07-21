@@ -272,13 +272,13 @@ struct NodeData
     {
         id.clear();
         transform.setIdentity();
-        for (auto& it : children)
+        for (auto&& it : children)
         {
             delete it;
         }
         children.clear();
 
-        for (auto& modeldata : modelNodeDatas)
+        for (auto&& modeldata : modelNodeDatas)
         {
             delete modeldata;
         }
@@ -299,12 +299,12 @@ struct NodeDatas
 
     void resetData()
     {
-        for (auto& it : skeleton)
+        for (auto&& it : skeleton)
         {
             delete it;
         }
         skeleton.clear();
-        for (auto& it : nodes)
+        for (auto&& it : nodes)
         {
             delete it;
         }
@@ -369,7 +369,7 @@ struct MeshDatas
 
     void resetData()
     {
-        for (auto& it : meshDatas)
+        for (auto&& it : meshDatas)
         {
             delete it;
         }

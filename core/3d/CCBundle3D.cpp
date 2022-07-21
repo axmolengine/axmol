@@ -230,7 +230,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
         auto last       = fullPath.rfind('/');
         if (last != std::string::npos)
             dir = fullPath.substr(0, last + 1);
-        for (auto& material : materials)
+        for (auto&& material : materials)
         {
             NMaterialData materialdata;
 
@@ -249,7 +249,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
 
         // convert mesh
         i = 0;
-        for (auto& shape : shapes)
+        for (auto&& shape : shapes)
         {
             auto mesh          = shape.mesh;
             MeshData* meshdata = new MeshData();
@@ -310,7 +310,7 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
 
             auto node = new NodeData();
             node->id  = shape.name;
-            for (auto& submesh : subMeshMap)
+            for (auto&& submesh : subMeshMap)
             {
                 auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(submesh.second));
                 meshdata->subMeshAABB.push_back(
@@ -490,7 +490,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
 FAILED:
 {
     AX_SAFE_DELETE(meshData);
-    for (auto& meshdata : meshdatas.meshDatas)
+    for (auto&& meshdata : meshdatas.meshDatas)
     {
         delete meshdata;
     }
@@ -2297,7 +2297,7 @@ std::vector<Vec3> Bundle3D::getTrianglesList(std::string_view path)
     }
 
     Bundle3D::destroyBundle(bundle);
-    for (auto iter : meshs.meshDatas)
+    for (auto&& iter : meshs.meshDatas)
     {
         int preVertexSize = iter->getPerVertexSize() / sizeof(float);
         for (const auto& indices : iter->subMeshIndices)

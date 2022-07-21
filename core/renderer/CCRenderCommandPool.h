@@ -45,7 +45,7 @@ public:
         //            AXLOG("All RenderCommand should not be used when Pool is released!");
         //        }
         _freePool.clear();
-        for (auto& allocatedPoolBlock : _allocatedPoolBlocks)
+        for (auto&& allocatedPoolBlock : _allocatedPoolBlocks)
         {
             delete[] allocatedPoolBlock;
             allocatedPoolBlock = nullptr;

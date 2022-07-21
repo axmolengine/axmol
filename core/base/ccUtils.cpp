@@ -255,7 +255,7 @@ Rect getCascadeBoundingBox(Node* node)
     // check all children bounding box, get maximize box
     Node* child = nullptr;
     bool merge  = false;
-    for (auto object : node->getChildren())
+    for (auto&& object : node->getChildren())
     {
         child = dynamic_cast<Node*>(object);
         if (!child->isVisible())
@@ -359,7 +359,7 @@ Node* findChild(Node* levelRoot, std::string_view name)
         return target;
 
     // Find recursively
-    for (auto& child : levelRoot->getChildren())
+    for (auto&& child : levelRoot->getChildren())
     {
         target = findChild(child, name);
         if (target != nullptr)
@@ -379,7 +379,7 @@ Node* findChild(Node* levelRoot, int tag)
         return target;
 
     // Find recursively
-    for (auto& child : levelRoot->getChildren())
+    for (auto&& child : levelRoot->getChildren())
     {
         target = findChild(child, tag);
         if (target != nullptr)

@@ -134,7 +134,7 @@ void BatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     //    AX_NODE_DRAW_SETUP();
 
     bool pushed = false;
-    for (auto object : _children)
+    for (auto&& object : _children)
     {
         Armature* armature = dynamic_cast<Armature*>(object);
         if (armature)

@@ -768,7 +768,7 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
     // ensure pathname ends with `/` as a directory
     std::string ensureDir;
     std::string_view dirname = pathname[pathname.length() - 1] == '/' ? pathname : (ensureDir.append(pathname) += '/');
-    for (auto& item : _data->fileList)
+    for (auto&& item : _data->fileList)
     {
         std::string_view filename = item.first;
         if (cxx20::starts_with(filename, cxx17::string_view{dirname}))
