@@ -1,7 +1,7 @@
 # Simple Snake 
 axis version of a "Simple Snake" game.
 
-![image](https://user-images.githubusercontent.com/8652787/175750227-f3f412dd-f555-4b05-bb91-8efe2f3ccc6b.png)
+![image](https://github.com/aismann/axis/blob/dev/examples/SimpleSnake/Resources/screenshot.png)
 
 
 If you have any questions or want to continue this project feel free to do so.
