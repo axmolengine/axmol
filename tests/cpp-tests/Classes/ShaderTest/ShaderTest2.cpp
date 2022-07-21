@@ -126,7 +126,7 @@ public:
         {
             // negative effects: order < 0
             int idx = 0;
-            for (auto& effect : _effects)
+            for (auto&&effect : _effects)
             {
 
                 if (std::get<0>(effect) >= 0)
@@ -149,7 +149,7 @@ public:
             renderer->addCommand(&_trianglesCommand);
 
             // positive effects: order >= 0
-            for (auto it = std::begin(_effects) + idx; it != std::end(_effects); ++it)
+            for (auto&& it = std::begin(_effects) + idx; it != std::end(_effects); ++it)
             {
                 QuadCommand& q     = std::get<2>(*it);
                 auto* programState = std::get<1>(*it)->getProgramState();
@@ -166,7 +166,7 @@ protected:
     EffectSprite() : _defaultEffect(nullptr) { _effects.reserve(2); }
     ~EffectSprite()
     {
-        for (auto& tuple : _effects)
+        for (auto&&tuple : _effects)
         {
             std::get<1>(tuple)->release();
         }
@@ -577,7 +577,7 @@ bool EffectSpriteLamp::init()
 
 void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for (auto& item : touches)
+    for (auto&&item : touches)
     {
         auto touch         = item;
         auto s             = Director::getInstance()->getWinSize();
@@ -593,7 +593,7 @@ void EffectSpriteLamp::onTouchesBegan(const std::vector<Touch*>& touches, Event*
 
 void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for (auto& item : touches)
+    for (auto&&item : touches)
     {
         auto touch         = item;
         auto s             = Director::getInstance()->getWinSize();
@@ -609,7 +609,7 @@ void EffectSpriteLamp::onTouchesMoved(const std::vector<Touch*>& touches, Event*
 
 void EffectSpriteLamp::onTouchesEnded(const std::vector<Touch*>& touches, Event* unused_event)
 {
-    for (auto& item : touches)
+    for (auto&&item : touches)
     {
         auto touch         = item;
         auto s             = Director::getInstance()->getWinSize();

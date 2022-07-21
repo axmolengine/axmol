@@ -139,7 +139,7 @@ void FontAtlas::reset()
 
 void FontAtlas::releaseTextures()
 {
-    for (auto& item : _atlasTextures)
+    for (auto&& item : _atlasTextures)
     {
         item.second->release();
     }
@@ -203,7 +203,7 @@ void FontAtlas::findNewCharacters(const std::u32string& u32Text, std::unordered_
     }
     else
     {
-        for (auto& charCode : u32Text)
+        for (auto&& charCode : u32Text)
             if (_letterDefinitions.find(charCode) == _letterDefinitions.end())
                 charset.insert(charCode);
     }
@@ -239,7 +239,7 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
     int startY = (int)_currentPageOrigY;
 
-    for (auto& charCode : charCodeSet)
+    for (auto&& charCode : charCodeSet)
     {
         auto bitmap = _fontFreeType->getGlyphBitmap(charCode, bitmapWidth, bitmapHeight, tempRect, tempDef.xAdvance);
         if (bitmap && bitmapWidth > 0 && bitmapHeight > 0)

@@ -49,7 +49,7 @@ Physics3DShape::~Physics3DShape()
 #        if (AX_ENABLE_BULLET_INTEGRATION)
     AX_SAFE_DELETE(_btShape);
     AX_SAFE_DELETE_ARRAY(_heightfieldData);
-    for (auto& iter : _compoundChildShapes)
+    for (auto&& iter : _compoundChildShapes)
     {
         AX_SAFE_RELEASE(iter);
     }
@@ -206,7 +206,7 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
 {
     _shapeType    = ShapeType::COMPOUND;
     auto compound = new btCompoundShape;
-    for (auto& iter : shapes)
+    for (auto&& iter : shapes)
     {
         compound->addChildShape(convertMat4TobtTransform(iter.second), iter.first->getbtShape());
         AX_SAFE_RETAIN(iter.first);

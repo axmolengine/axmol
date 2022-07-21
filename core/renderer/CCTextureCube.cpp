@@ -254,7 +254,7 @@ bool TextureCube::init(std::string_view positive_x,
             free(pData);
     }
 
-    for (auto& img : images)
+    for (auto&& img : images)
     {
         AX_SAFE_RELEASE(img);
     }

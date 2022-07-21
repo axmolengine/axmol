@@ -40,7 +40,7 @@ std::vector<Controller*> Controller::s_allController;
 
 Controller* Controller::getControllerByTag(int tag)
 {
-    for (auto& controller : Controller::s_allController)
+    for (auto&& controller : Controller::s_allController)
     {
         if (controller->_controllerTag == tag)
         {
@@ -52,7 +52,7 @@ Controller* Controller::getControllerByTag(int tag)
 
 Controller* Controller::getControllerByDeviceId(int deviceId)
 {
-    for (auto& controller : Controller::s_allController)
+    for (auto&& controller : Controller::s_allController)
     {
         if (controller->_deviceId == deviceId)
         {

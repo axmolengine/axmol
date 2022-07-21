@@ -198,7 +198,7 @@ FastTMXLayer* FastTMXTiledMap::getLayer(std::string_view layerName) const
 {
     AXASSERT(!layerName.empty(), "Invalid layer name!");
 
-    for (auto& child : _children)
+    for (auto&& child : _children)
     {
         FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
         if (layer)
@@ -258,7 +258,7 @@ std::string FastTMXTiledMap::getDescription() const
 
 void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
 {
-    for (auto& child : _children)
+    for (auto&& child : _children)
     {
         FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
         if (layer)

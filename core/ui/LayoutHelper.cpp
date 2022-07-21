@@ -324,7 +324,7 @@ void LayoutHelper::setNodeGroupBottom(const std::vector<Node*>& nodes, float bot
 
 void LayoutHelper::moveNodeGroupHorizontally(const std::vector<Node*>& nodes, float delta)
 {
-    for (auto& node : nodes)
+    for (auto&& node : nodes)
     {
         node->setPositionX(node->getPositionX() + delta);
     }
@@ -332,7 +332,7 @@ void LayoutHelper::moveNodeGroupHorizontally(const std::vector<Node*>& nodes, fl
 
 void LayoutHelper::moveNodeGroupVertically(const std::vector<Node*>& nodes, float delta)
 {
-    for (auto& node : nodes)
+    for (auto&& node : nodes)
     {
         node->setPositionY(node->getPositionY() - delta);
     }

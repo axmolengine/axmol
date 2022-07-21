@@ -183,7 +183,7 @@ void MeshMaterial::releaseBuiltInMaterial()
 
 void MeshMaterial::releaseCachedMaterial()
 {
-    for (auto& it : _materials)
+    for (auto&& it : _materials)
     {
         if (it.second)
             it.second->release();
@@ -307,7 +307,7 @@ MeshMaterial* MeshMaterial::createWithProgramState(backend::ProgramState* progra
 void MeshMaterial::setTexture(Texture2D* tex, NTextureData::Usage usage)
 {
     const auto& passes = getTechnique()->getPasses();
-    for (auto& pass : passes)
+    for (auto&& pass : passes)
     {
         pass->setUniformTexture(0, tex->getBackendTexture());
     }
@@ -364,7 +364,7 @@ Texture2D* MeshMaterialCache::getMeshMaterial(std::string_view key)
 
 void MeshMaterialCache::removeAllMeshMaterial()
 {
-    for (auto& itr : _materials)
+    for (auto&& itr : _materials)
     {
         AX_SAFE_RELEASE_NULL(itr.second);
     }

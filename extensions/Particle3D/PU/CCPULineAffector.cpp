@@ -117,7 +117,7 @@ void PULineAffector::preUpdateAffector(float deltaTime)
 void PULineAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime*/)
 {
     //_first = true;
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         (static_cast<PUParticleSystem3D*>(_particleSystem))

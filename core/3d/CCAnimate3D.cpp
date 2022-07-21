@@ -411,7 +411,7 @@ void Animate3D::update(float t)
                         }
                     }
                     std::sort(eventInfos.begin(), eventInfos.end(), _playReverse ? cmpEventInfoDes : cmpEventInfoAsc);
-                    for (auto& eventInfo : eventInfos)
+                    for (auto&& eventInfo : eventInfos)
                     {
                         Director::getInstance()->getEventDispatcher()->dispatchEvent(_keyFrameEvent[eventInfo->frame]);
                     }
@@ -507,7 +507,7 @@ Animate3D::~Animate3D()
 {
     removeFromMap();
 
-    for (auto& it : _keyFrameEvent)
+    for (auto&& it : _keyFrameEvent)
     {
         delete it.second;
     }

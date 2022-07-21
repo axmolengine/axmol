@@ -312,7 +312,7 @@ void Bone::removeChildBone(Bone* bone, bool recursion)
         {
             auto ccbones = bone->_children;
 
-            for (auto& object : ccbones)
+            for (auto&& object : ccbones)
             {
                 Bone* ccBone = static_cast<Bone*>(object);
                 bone->removeChildBone(ccBone, recursion);
@@ -448,7 +448,7 @@ void Bone::setColliderFilter(ColliderFilter* filter)
 {
     auto array = _displayManager->getDecorativeDisplayList();
 
-    for (auto& object : array)
+    for (auto&& object : array)
     {
         DecorativeDisplay* decoDisplay = static_cast<DecorativeDisplay*>(object);
         if (ColliderDetector* detector = decoDisplay->getColliderDetector())

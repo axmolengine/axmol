@@ -329,7 +329,7 @@ void ClippingNode::setProgramStateRecursively(Node* node, backend::ProgramState*
 
 void ClippingNode::restoreAllProgramStates()
 {
-    for (auto& item : _originalStencilProgramState)
+    for (auto&& item : _originalStencilProgramState)
     {
         auto node         = item.first;
         auto programState = item.second;

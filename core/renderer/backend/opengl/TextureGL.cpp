@@ -122,7 +122,7 @@ GLuint TextureInfoGL::ensure(int index, GLenum target)
 void TextureInfoGL::recreateAll(GLenum target)
 {
     int idx = 0;
-    for (auto& texID : textures)
+    for (auto&& texID : textures)
     {
         if (texID)
         {

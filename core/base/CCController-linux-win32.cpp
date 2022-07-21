@@ -4182,7 +4182,7 @@ public:
     {
         // If there are any controllers connected that were not deleted at the end of execution, delete them.
         // This wil prevent any memory leaks showing up in valgrind
-        for (auto& controller : Controller::s_allController)
+        for (auto&& controller : Controller::s_allController)
         {
             delete controller;
         }
@@ -4422,7 +4422,7 @@ void Controller::stopDiscoveryController()
     glfwSetJoystickCallback(nullptr);
 
     // Also remove all the connected controllers:
-    for (auto& controller : Controller::s_allController)
+    for (auto&& controller : Controller::s_allController)
     {
         delete controller;
     }

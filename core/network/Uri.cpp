@@ -58,7 +58,7 @@ std::string submatch(const std::smatch& m, int idx)
 template <class String>
 void toLower(String& s)
 {
-    for (auto& c : s)
+    for (auto&& c : s)
     {
         c = char(tolower(c));
     }

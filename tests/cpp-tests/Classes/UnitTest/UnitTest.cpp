@@ -154,7 +154,7 @@ void TemplateVectorTest::onEnter()
         }
 
         int j = 1000;
-        for (auto& child : ret)
+        for (auto&& child : ret)
         {
             child->setTag(j++);
         }
@@ -253,7 +253,7 @@ void TemplateVectorTest::onEnter()
         array2.pushBack(objB);
         array2.pushBack(objC);
 
-        for (auto& obj : array1)
+        for (auto&& obj : array1)
         {
             array2.eraseObject(obj);
         }
@@ -1132,7 +1132,7 @@ void ParseUriTest::onEnter()
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto& param : paramsList)
+        for (auto&&param : paramsList)
         {
             params[param.first] = param.second;
         }
@@ -1158,7 +1158,7 @@ void ParseUriTest::onEnter()
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto& param : paramsList)
+        for (auto&&param : paramsList)
         {
             params[param.first] = param.second;
         }
@@ -1174,7 +1174,7 @@ void ParseUriTest::onEnter()
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto& param : paramsList)
+        for (auto&&param : paramsList)
         {
             params[param.first] = param.second;
         }
@@ -1189,7 +1189,7 @@ void ParseUriTest::onEnter()
         Uri u           = Uri::parse(s);
         auto paramsList = u.getQueryParams();
         std::map<std::string, std::string> params;
-        for (auto& param : paramsList)
+        for (auto&& param : paramsList)
         {
             params[param.first] = param.second;
         }

@@ -100,7 +100,7 @@ void PUSlaveEmitter::initParticleDirection(PUParticle3D* particle)
 
     // Make use of the opportunity to set the master particle in the behaviour object (if available)
 
-    for (auto iter : particle->behaviours)
+    for (auto&& iter : particle->behaviours)
     {
         if (iter->getBehaviourType() == "Slave")
         {
@@ -116,7 +116,7 @@ void PUSlaveEmitter::prepare()
     if (system)
     {
         auto children = system->getChildren();
-        for (auto it : children)
+        for (auto&& it : children)
         {
             if (it->getName() == _masterTechniqueName)
             {
@@ -136,7 +136,7 @@ void PUSlaveEmitter::unPrepare()
     if (system)
     {
         auto children = system->getChildren();
-        for (auto it : children)
+        for (auto&& it : children)
         {
             if (it->getName() == _masterTechniqueName)
             {

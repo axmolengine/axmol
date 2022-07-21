@@ -233,7 +233,7 @@ void ColliderDetector::setActive(bool active)
         }
         else
         {
-            for (auto& object : _colliderBodyList)
+            for (auto&& object : _colliderBodyList)
             {
                 ColliderBody* colliderBody = (ColliderBody*)object;
                 b2Fixture* fixture         = colliderBody->getB2Fixture();
@@ -248,7 +248,7 @@ void ColliderDetector::setActive(bool active)
     {
         if (_active)
         {
-            for (auto& object : _colliderBodyList)
+            for (auto&& object : _colliderBodyList)
             {
                 ColliderBody* colliderBody = (ColliderBody*)object;
                 cpShape* shape             = colliderBody->getShape();
@@ -260,7 +260,7 @@ void ColliderDetector::setActive(bool active)
         }
         else
         {
-            for (auto& object : _colliderBodyList)
+            for (auto&& object : _colliderBodyList)
             {
                 ColliderBody* colliderBody = (ColliderBody*)object;
                 cpShape* shape             = colliderBody->getShape();
@@ -289,7 +289,7 @@ void ColliderDetector::setColliderFilter(ColliderFilter* filter)
 {
     *_filter = *filter;
 
-    for (auto& object : _colliderBodyList)
+    for (auto&& object : _colliderBodyList)
     {
         ColliderBody* colliderBody = (ColliderBody*)object;
         colliderBody->setColliderFilter(filter);
@@ -322,7 +322,7 @@ void ColliderDetector::updateTransform(Mat4& t)
         return;
     }
 
-    for (auto& object : _colliderBodyList)
+    for (auto&& object : _colliderBodyList)
     {
         ColliderBody* colliderBody = (ColliderBody*)object;
         ContourData* contourData   = colliderBody->getContourData();
@@ -395,7 +395,7 @@ void ColliderDetector::setBody(b2Body* pBody)
 {
     _body = pBody;
 
-    for (auto& object : _colliderBodyList)
+    for (auto&& object : _colliderBodyList)
     {
         ColliderBody* colliderBody = (ColliderBody*)object;
 
@@ -404,7 +404,7 @@ void ColliderDetector::setBody(b2Body* pBody)
         b2Vec2* b2bv = new b2Vec2[contourData->vertexList.size()];
 
         int i = 0;
-        for (auto& v : contourData->vertexList)
+        for (auto&& v : contourData->vertexList)
         {
             b2bv[i].Set(v.x / PT_RATIO, v.y / PT_RATIO);
             i++;
@@ -442,7 +442,7 @@ void ColliderDetector::setBody(cpBody* pBody)
 {
     _body = pBody;
 
-    for (auto& object : _colliderBodyList)
+    for (auto&& object : _colliderBodyList)
     {
         ColliderBody* colliderBody = (ColliderBody*)object;
 

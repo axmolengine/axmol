@@ -699,7 +699,7 @@ bool Label::setProgramState(backend::ProgramState* programState, bool needsRetai
     if (Node::setProgramState(programState, needsRetain))
     {
         updateUniformLocations();
-        for (auto& batch : _batchCommands)
+        for (auto&& batch : _batchCommands)
         {
             updateBatchCommand(batch);
         }
@@ -768,7 +768,7 @@ void Label::updateShaderProgram()
 
     updateUniformLocations();
 
-    for (auto& batch : _batchCommands)
+    for (auto&& batch : _batchCommands)
     {
         updateBatchCommand(batch);
     }
@@ -1983,7 +1983,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
                     continue;
 
                 auto& batch = _batchCommands[i++];
-                for (auto& command : batch.getCommandArray())
+                for (auto&& command : batch.getCommandArray())
                 {
                     auto* programState = command->getPipelineDescriptor().programState;
                     Vec4 textColor(_textColorF.r, _textColorF.g, _textColorF.b, _textColorF.a);
@@ -2003,9 +2003,9 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 void Label::updateBlendState()
 {
     setOpacityModifyRGB(_blendFunc != BlendFunc::ALPHA_NON_PREMULTIPLIED);
-    for (auto& batch : _batchCommands)
+    for (auto&& batch : _batchCommands)
     {
-        for (auto& command : batch.getCommandArray())
+        for (auto&& command : batch.getCommandArray())
         {
             auto& blendDescriptor = command->getPipelineDescriptor().blendDescriptor;
             updateBlend(blendDescriptor, _blendFunc);

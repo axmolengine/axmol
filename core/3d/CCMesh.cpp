@@ -122,7 +122,7 @@ Mesh::Mesh()
 {}
 Mesh::~Mesh()
 {
-    for (auto& tex : _textures)
+    for (auto&& tex : _textures)
     {
         AX_SAFE_RELEASE(tex.second);
     }
@@ -288,7 +288,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
         if (_material)
         {
             auto technique = _material->_currentTechnique;
-            for (auto& pass : technique->_passes)
+            for (auto&& pass : technique->_passes)
             {
                 pass->setUniformTexture(0, tex->getBackendTexture());
             }
@@ -303,7 +303,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
         if (_material)
         {
             auto technique = _material->_currentTechnique;
-            for (auto& pass : technique->_passes)
+            for (auto&& pass : technique->_passes)
             {
                 pass->setUniformNormTexture(1, tex->getBackendTexture());
             }
@@ -339,7 +339,7 @@ void Mesh::setMaterial(Material* material)
 
     if (_material)
     {
-        for (auto& technique : _material->getTechniques())
+        for (auto&& technique : _material->getTechniques())
         {
             // allocate MeshCommand vector for technique
             // allocate MeshCommand for each pass
@@ -347,7 +347,7 @@ void Mesh::setMaterial(Material* material)
             auto& list                          = _meshCommands[technique->getName()];
 
             int i = 0;
-            for (auto& pass : technique->getPasses())
+            for (auto&& pass : technique->getPasses())
             {
 #ifdef AXIS_DEBUG
                 // make it crashed when missing attribute data
@@ -370,7 +370,7 @@ void Mesh::setMaterial(Material* material)
         _meshIndexData->setPrimitiveType(material->getPrimitiveType());
     }
     // Was the texture set before the GLProgramState ? Set it
-    for (auto& tex : _textures)
+    for (auto&& tex : _textures)
         setTexture(tex.second, tex.first);
 
     if (_blendDirty)
@@ -436,7 +436,7 @@ void Mesh::draw(Renderer* renderer,
     }
     auto& commands = _meshCommands[technique->getName()];
 
-    for (auto& command : commands)
+    for (auto&& command : commands)
     {
         command.init(globalZ, transform);
         command.setSkipBatching(isTransparent);

@@ -649,7 +649,7 @@ void LayoutComponent::refreshLayout()
         page->forceDoLayout();
 
         Vector<Widget*> _widgetVector = page->getItems();
-        for (auto& item : _widgetVector)
+        for (auto&& item : _widgetVector)
         {
             ui::Helper::doLayout(item);
         }

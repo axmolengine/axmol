@@ -120,7 +120,7 @@ Node* ProtectedNode::getProtectedChildByTag(int tag)
 {
     AXASSERT(tag != Node::INVALID_TAG, "Invalid tag");
 
-    for (auto& child : _protectedChildren)
+    for (auto&& child : _protectedChildren)
     {
         if (child && child->getTag() == tag)
             return child;
@@ -182,7 +182,7 @@ void ProtectedNode::removeAllProtectedChildren()
 void ProtectedNode::removeAllProtectedChildrenWithCleanup(bool cleanup)
 {
     // not using detachChild improves speed here
-    for (auto& child : _protectedChildren)
+    for (auto&& child : _protectedChildren)
     {
         // IMPORTANT:
         //  -1st do onExit
@@ -361,13 +361,13 @@ void ProtectedNode::updateDisplayedOpacity(uint8_t parentOpacity)
 
     if (_cascadeOpacityEnabled)
     {
-        for (auto& child : _children)
+        for (auto&& child : _children)
         {
             child->updateDisplayedOpacity(_displayedOpacity);
         }
     }
 
-    for (auto& child : _protectedChildren)
+    for (auto&& child : _protectedChildren)
     {
         child->updateDisplayedOpacity(_displayedOpacity);
     }
@@ -395,11 +395,11 @@ void ProtectedNode::updateDisplayedColor(const Color3B& parentColor)
 
 void ProtectedNode::disableCascadeColor()
 {
-    for (auto& child : _children)
+    for (auto&& child : _children)
     {
         child->updateDisplayedColor(Color3B::WHITE);
     }
-    for (auto& child : _protectedChildren)
+    for (auto&& child : _protectedChildren)
     {
         child->updateDisplayedColor(Color3B::WHITE);
     }
@@ -409,12 +409,12 @@ void ProtectedNode::disableCascadeOpacity()
 {
     _displayedOpacity = _realOpacity;
 
-    for (auto& child : _children)
+    for (auto&& child : _children)
     {
         child->updateDisplayedOpacity(255);
     }
 
-    for (auto& child : _protectedChildren)
+    for (auto&& child : _protectedChildren)
     {
         child->updateDisplayedOpacity(255);
     }
@@ -425,7 +425,7 @@ void ProtectedNode::setCameraMask(unsigned short mask, bool applyChildren)
     Node::setCameraMask(mask, applyChildren);
     if (applyChildren)
     {
-        for (auto& iter : _protectedChildren)
+        for (auto&& iter : _protectedChildren)
         {
             iter->setCameraMask(mask);
         }
@@ -435,7 +435,7 @@ void ProtectedNode::setCameraMask(unsigned short mask, bool applyChildren)
 void ProtectedNode::setGlobalZOrder(float globalZOrder)
 {
     Node::setGlobalZOrder(globalZOrder);
-    for (auto& child : _protectedChildren)
+    for (auto&& child : _protectedChildren)
         child->setGlobalZOrder(globalZOrder);
 }
 

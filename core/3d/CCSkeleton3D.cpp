@@ -51,7 +51,7 @@ void Bone3D::resetPose()
 {
     _local = _oriPose;
 
-    for (auto& it : _children)
+    for (auto&& it : _children)
     {
         it->resetPose();
     }
@@ -60,7 +60,7 @@ void Bone3D::resetPose()
 void Bone3D::setWorldMatDirty(bool dirty)
 {
     _worldDirty = dirty;
-    for (auto& it : _children)
+    for (auto&& it : _children)
     {
         it->setWorldMatDirty(dirty);
     }
@@ -70,7 +70,7 @@ void Bone3D::setWorldMatDirty(bool dirty)
 void Bone3D::updateWorldMat()
 {
     getWorldMat();
-    for (auto& itor : _children)
+    for (auto&& itor : _children)
     {
         itor->updateWorldMat();
     }
@@ -96,7 +96,7 @@ const Mat4& Bone3D::getWorldMat()
 
 void Bone3D::setAnimationValue(float* trans, float* rot, float* scale, void* tag, float weight)
 {
-    for (auto& it : _blendStates)
+    for (auto&& it : _blendStates)
     {
         if (it.tag == tag)
         {
@@ -127,7 +127,7 @@ void Bone3D::setAnimationValue(float* trans, float* rot, float* scale, void* tag
 void Bone3D::clearBoneBlendState()
 {
     _blendStates.clear();
-    for (auto& it : _children)
+    for (auto&& it : _children)
     {
         it->clearBoneBlendState();
     }
@@ -282,7 +282,7 @@ Bone3D* Skeleton3D::getBoneByIndex(unsigned int index) const
 Bone3D* Skeleton3D::getBoneByName(std::string_view id) const
 {
     // search from bones
-    for (auto& it : _bones)
+    for (auto&& it : _bones)
     {
         if (it->getName() == id)
             return it;

@@ -162,7 +162,7 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata, CustomCommand::
 
 MeshIndexData* MeshVertexData::getMeshIndexDataById(std::string_view id) const
 {
-    for (auto& it : _indices)
+    for (auto&& it : _indices)
     {
         if (it->getId() == id)
             return it;
