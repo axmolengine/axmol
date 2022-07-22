@@ -835,7 +835,7 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
     {
         if (!_finishCallbacks.empty())
         {
-            for (auto& finishCallback : _finishCallbacks)
+            for (auto&& finishCallback : _finishCallbacks)
                 finishCallback();
             _finishCallbacks.clear();
         }
@@ -864,7 +864,7 @@ void AudioEngineImpl::uncache(std::string_view filePath)
 void AudioEngineImpl::uncacheAll()
 {
     // prevent player hold invalid AudioCache* pointer, since all audio caches purged
-    for (auto& player : _audioPlayers)
+    for (auto&& player : _audioPlayers)
         player.second->setCache(nullptr);
 
     _audioCaches.clear();

@@ -102,17 +102,17 @@ const hlookup::string_map<std::string>& PUObjectAbstractNode::getVariables() con
 
 PUObjectAbstractNode::~PUObjectAbstractNode()
 {
-    for (auto iter : children)
+    for (auto&& iter : children)
     {
         delete iter;
     }
 
-    for (auto iter : values)
+    for (auto&& iter : values)
     {
         delete iter;
     }
 
-    for (auto iter : overrides)
+    for (auto&& iter : overrides)
     {
         delete iter;
     }
@@ -148,7 +148,7 @@ std::string PUPropertyAbstractNode::getValue() const
 
 PUPropertyAbstractNode::~PUPropertyAbstractNode()
 {
-    for (auto iter : values)
+    for (auto&& iter : values)
     {
         delete iter;
     }
@@ -180,7 +180,7 @@ PUScriptCompiler::~PUScriptCompiler()
 {
     for (const auto& iter : _compiledScripts)
     {
-        for (auto miter : iter.second)
+        for (auto&& miter : iter.second)
         {
             delete miter;
         }
@@ -211,7 +211,7 @@ hlookup::string_map<PUAbstractNodeList>::iterator PUScriptCompiler::compile(cons
     //     }
     // }
 
-    // for (auto iter : aNodes){
+    // for (auto&& iter : aNodes){
     //     delete iter;
     // }
     // return true;
@@ -235,12 +235,12 @@ const PUAbstractNodeList* PUScriptCompiler::compile(std::string_view file, bool&
     parser.parse(creteNodeList, tokenList);
     auto it = compile(creteNodeList, file);
 
-    for (auto iter1 : creteNodeList)
+    for (auto&& iter1 : creteNodeList)
     {
         delete iter1;
     }
 
-    for (auto iter2 : tokenList)
+    for (auto&& iter2 : tokenList)
     {
         delete iter2;
     }

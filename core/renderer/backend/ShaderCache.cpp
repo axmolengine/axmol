@@ -50,7 +50,7 @@ void ShaderCache::destroyInstance()
 
 ShaderCache::~ShaderCache()
 {
-    for (auto& shaderModule : _cachedShaders)
+    for (auto&& shaderModule : _cachedShaders)
     {
         AX_SAFE_RELEASE(shaderModule.second);
     }

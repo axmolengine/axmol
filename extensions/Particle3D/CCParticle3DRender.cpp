@@ -117,7 +117,7 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     Vec3 position;  // particle position
     int vertexindex = 0;
     int index       = 0;
-    for (auto iter : activeParticleList)
+    for (auto&& iter : activeParticleList)
     {
         auto particle   = iter;
         Vec3 halfwidth  = particle->width * 0.5f * right;
@@ -283,7 +283,7 @@ void Particle3DQuadRender::reset()
 Particle3DModelRender::Particle3DModelRender() : _meshSize(Vec3::ONE) {}
 Particle3DModelRender::~Particle3DModelRender()
 {
-    for (auto iter : _meshList)
+    for (auto&& iter : _meshList)
     {
         iter->release();
     }
@@ -333,7 +333,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
     Quaternion q;
     transform.decompose(nullptr, &q, nullptr);
     unsigned int index = 0;
-    for (auto iter : activeParticleList)
+    for (auto&& iter : activeParticleList)
     {
         auto particle = iter;
         Mat4::createRotation(q * particle->orientation, &rotMat);
@@ -350,7 +350,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
 
 void Particle3DModelRender::reset()
 {
-    for (auto iter : _meshList)
+    for (auto&& iter : _meshList)
     {
         iter->release();
     }

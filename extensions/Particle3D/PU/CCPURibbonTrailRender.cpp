@@ -393,7 +393,7 @@ void PURibbonTrailRender::copyAttributesTo(PURibbonTrailRender* trailRender)
 void PURibbonTrailRender::updateParticles(const ParticlePool& pool)
 {
     PURibbonTrailVisualData* visualData = nullptr;
-    for (auto iter : pool.getActiveDataList())
+    for (auto&& iter : pool.getActiveDataList())
     {
         auto particle = static_cast<PUParticle3D*>(iter);
         if (!particle->visualData && !_visualData.empty())

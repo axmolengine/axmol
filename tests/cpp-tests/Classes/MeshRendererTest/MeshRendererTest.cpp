@@ -208,7 +208,7 @@ void MeshRendererBasicTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererBasicTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&&touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -504,7 +504,7 @@ void MeshRendererFakeShadowTest::onTouchesMoved(const std::vector<Touch*>& touch
 
 void MeshRendererFakeShadowTest::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
 {
-    for (auto& item : touches)
+    for (auto&&item : touches)
     {
         auto touch    = item;
         auto location = touch->getLocationInView();
@@ -743,7 +743,7 @@ MeshRendererEffectTest::MeshRendererEffectTest()
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_noneskinned");
-        for (auto& mesh : _meshes)
+        for (auto&&mesh : _meshes)
         {
             mesh->setMaterial(material->clone());
         }
@@ -805,7 +805,7 @@ void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererEffectTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&&touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -966,7 +966,7 @@ void MeshRendererWithSkinTest::switchAnimationQualityCallback(Ref* sender)
 
     _menuItem->setString(getAnimationQualityMessage());
 
-    for (auto iter : _meshes)
+    for (auto&&iter : _meshes)
     {
         RepeatForever* repAction = dynamic_cast<RepeatForever*>(iter->getActionByTag(110));
         Animate3D* animate3D     = dynamic_cast<Animate3D*>(repAction->getInnerAction());
@@ -976,7 +976,7 @@ void MeshRendererWithSkinTest::switchAnimationQualityCallback(Ref* sender)
 
 void MeshRendererWithSkinTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&&touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -997,7 +997,7 @@ MeshRendererWithSkinOutlineTest::MeshRendererWithSkinOutlineTest()
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*) {
         auto material = MeshMaterial::createWithFilename("MeshRendererTest/outline.material");
         material->setTechnique("outline_skinned");
-        for (auto& mesh : _meshes)
+        for (auto&&mesh : _meshes)
         {
             mesh->setMaterial(material->clone());
         }
@@ -1059,7 +1059,7 @@ void MeshRendererWithSkinOutlineTest::addNewMeshWithCoords(Vec2 p)
 
 void MeshRendererWithSkinOutlineTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&&touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -1174,7 +1174,7 @@ void Animate3DTest::renewCallBack()
 
 void Animate3DTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&&touch : touches)
     {
         auto location = touch->getLocation();
 

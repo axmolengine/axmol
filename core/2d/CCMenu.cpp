@@ -128,7 +128,7 @@ bool Menu::initWithArray(const Vector<MenuItem*>& arrayOfItems)
 
         int z = 0;
 
-        for (auto& item : arrayOfItems)
+        for (auto&& item : arrayOfItems)
         {
             this->addChild(item, z);
             z++;

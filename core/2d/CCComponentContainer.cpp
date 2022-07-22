@@ -100,7 +100,7 @@ void ComponentContainer::removeAll()
 {
     if (!_componentMap.empty())
     {
-        for (auto& iter : _componentMap)
+        for (auto&& iter : _componentMap)
         {
             iter.second->onRemove();
             iter.second->setOwner(nullptr);
@@ -117,7 +117,7 @@ void ComponentContainer::visit(float delta)
     if (!_componentMap.empty())
     {
         AX_SAFE_RETAIN(_owner);
-        for (auto& iter : _componentMap)
+        for (auto&& iter : _componentMap)
         {
             iter.second->update(delta);
         }
@@ -127,7 +127,7 @@ void ComponentContainer::visit(float delta)
 
 void ComponentContainer::onEnter()
 {
-    for (auto& iter : _componentMap)
+    for (auto&& iter : _componentMap)
     {
         iter.second->onEnter();
     }
@@ -135,7 +135,7 @@ void ComponentContainer::onEnter()
 
 void ComponentContainer::onExit()
 {
-    for (auto& iter : _componentMap)
+    for (auto&& iter : _componentMap)
     {
         iter.second->onExit();
     }

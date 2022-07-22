@@ -64,7 +64,7 @@ void PUBeamRender::render(Renderer* renderer, const Mat4& transform, ParticleSys
         return;
 
     Vec3 basePosition = static_cast<PUParticleSystem3D*>(_particleSystem)->getDerivedPosition();
-    for (auto iter : particlePool.getActiveDataList())
+    for (auto&& iter : particlePool.getActiveDataList())
     {
         auto particle   = static_cast<PUParticle3D*>(iter);
         auto visualData = static_cast<PUParticle3DBeamVisualData*>(particle->visualData);

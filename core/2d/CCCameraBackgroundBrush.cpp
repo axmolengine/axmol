@@ -254,7 +254,7 @@ void CameraBackgroundColorBrush::drawBackground(Camera* camera)
 
 void CameraBackgroundColorBrush::setColor(const Color4F& color)
 {
-    for (auto& vert : _vertices)
+    for (auto&& vert : _vertices)
     {
         vert.colors = Color4B(color);
     }

@@ -105,7 +105,7 @@ PongLayer::PongLayer()
 
     _paddles = paddlesM;
 
-    for (auto& paddle : _paddles)
+    for (auto&& paddle : _paddles)
     {
         addChild(paddle);
     }
@@ -128,7 +128,7 @@ void PongLayer::doStep(float delta)
 {
     _ball->move(delta);
 
-    for (auto& paddle : _paddles)
+    for (auto&& paddle : _paddles)
     {
         _ball->collideWithPaddle(paddle);
     }
@@ -176,7 +176,7 @@ void ForceTouchTest::onTouchesBegan(const std::vector<axis::Touch*>& touches, ax
 
 void ForceTouchTest::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
 {
-    for (auto& t : touches)
+    for (auto&& t : touches)
     {
         float currentForce = t->getCurrentForce();
         float maxForce     = t->getMaxForce();

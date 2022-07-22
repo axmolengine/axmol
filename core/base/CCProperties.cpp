@@ -833,7 +833,7 @@ bool Properties::setString(const char* name, const char* value)
 {
     if (name)
     {
-        for (auto& itr : _properties)
+        for (auto&& itr : _properties)
         {
             if (itr.name == name)
             {

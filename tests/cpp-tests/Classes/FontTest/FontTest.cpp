@@ -56,7 +56,7 @@ static TextVAlignment verticalAlignment[] = {
 
 FontTests::FontTests()
 {
-    for (auto& fontFile : fontList)
+    for (auto&& fontFile : fontList)
     {
         addTestCase("FontTests", [&]() {
             vAlignIdx = 0;
@@ -64,7 +64,7 @@ FontTests::FontTests()
         });
     }
 
-    for (auto& fontFile : fontList)
+    for (auto&& fontFile : fontList)
     {
         addTestCase("FontTests", [&]() {
             vAlignIdx = 1;
@@ -72,7 +72,7 @@ FontTests::FontTests()
         });
     }
 
-    for (auto& fontFile : fontList)
+    for (auto&& fontFile : fontList)
     {
         addTestCase("FontTests", [&]() {
             vAlignIdx = 2;

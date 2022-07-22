@@ -62,7 +62,7 @@ void PUVelocityMatchingAffector::setRadius(float radius)
 
 void PUVelocityMatchingAffector::updatePUAffector(PUParticle3D* /*particle*/, float /*deltaTime*/)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     //{
     //     PUParticle3D *particle = iter;
     //	// Determine neighbouring particles.

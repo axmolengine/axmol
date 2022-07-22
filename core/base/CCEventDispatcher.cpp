@@ -285,13 +285,13 @@ void EventDispatcher::pauseEventListenersForTarget(Node* target, bool recursive 
     if (listenerIter != _nodeListenersMap.end())
     {
         auto listeners = listenerIter->second;
-        for (auto& l : *listeners)
+        for (auto&& l : *listeners)
         {
             l->setPaused(true);
         }
     }
 
-    for (auto& listener : _toAddedListeners)
+    for (auto&& listener : _toAddedListeners)
     {
         if (listener->getAssociatedNode() == target)
         {
@@ -315,13 +315,13 @@ void EventDispatcher::resumeEventListenersForTarget(Node* target, bool recursive
     if (listenerIter != _nodeListenersMap.end())
     {
         auto listeners = listenerIter->second;
-        for (auto& l : *listeners)
+        for (auto&& l : *listeners)
         {
             l->setPaused(false);
         }
     }
 
-    for (auto& listener : _toAddedListeners)
+    for (auto&& listener : _toAddedListeners)
     {
         if (listener->getAssociatedNode() == target)
         {
@@ -353,7 +353,7 @@ void EventDispatcher::removeEventListenersForTarget(Node* target, bool recursive
     {
         auto listeners     = listenerIter->second;
         auto listenersCopy = *listeners;
-        for (auto& l : listenersCopy)
+        for (auto&& l : listenersCopy)
         {
             removeEventListener(l);
         }
@@ -704,7 +704,7 @@ void EventDispatcher::setPriority(EventListener* listener, int fixedPriority)
     if (listener == nullptr)
         return;
 
-    for (auto& iter : _listenerMap)
+    for (auto&& iter : _listenerMap)
     {
         auto fixedPriorityListeners = iter.second->getFixedPriorityListeners();
         if (fixedPriorityListeners)
@@ -759,7 +759,7 @@ void EventDispatcher::dispatchEventToListeners(EventListenerVector* listeners,
         if (!shouldStopPropagation)
         {
             // priority == 0, scene graph priority
-            for (auto& l : *sceneGraphPriorityListeners)
+            for (auto&& l : *sceneGraphPriorityListeners)
             {
                 if (l->isEnabled() && !l->isPaused() && l->isRegistered() && onEvent(l))
                 {
@@ -827,7 +827,7 @@ void EventDispatcher::dispatchTouchEventToListeners(EventListenerVector* listene
 
             // first, get all enabled, unPaused and registered listeners
             std::vector<EventListener*> sceneListeners;
-            for (auto& l : *sceneGraphPriorityListeners)
+            for (auto&& l : *sceneGraphPriorityListeners)
             {
                 if (l->isEnabled() && !l->isPaused() && l->isRegistered())
                 {
@@ -848,7 +848,7 @@ void EventDispatcher::dispatchTouchEventToListeners(EventListenerVector* listene
 
                 Camera::_visitingCamera = camera;
                 auto cameraFlag         = (unsigned short)camera->getCameraFlag();
-                for (auto& l : sceneListeners)
+                for (auto&& l : sceneListeners)
                 {
                     if (nullptr == l->getAssociatedNode() ||
                         0 == (l->getAssociatedNode()->getCameraMask() & cameraFlag))
@@ -968,7 +968,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     {
         auto mutableTouchesIter = mutableTouches.begin();
 
-        for (auto& touches : originalTouches)
+        for (auto&& touches : originalTouches)
         {
             bool isSwallowed = false;
 
@@ -1235,7 +1235,7 @@ void EventDispatcher::updateListeners(Event* event)
 
     if (!_toAddedListeners.empty())
     {
-        for (auto& listener : _toAddedListeners)
+        for (auto&& listener : _toAddedListeners)
         {
             forceAddEventListener(listener);
         }
@@ -1252,12 +1252,12 @@ void EventDispatcher::updateDirtyFlagForSceneGraph()
 {
     if (!_dirtyNodes.empty())
     {
-        for (auto& node : _dirtyNodes)
+        for (auto&& node : _dirtyNodes)
         {
             auto iter = _nodeListenersMap.find(node);
             if (iter != _nodeListenersMap.end())
             {
-                for (auto& l : *iter->second)
+                for (auto&& l : *iter->second)
                 {
                     setDirty(l->getListenerID(), DirtyFlag::SCENE_GRAPH_PRIORITY);
                 }
@@ -1328,7 +1328,7 @@ void EventDispatcher::sortEventListenersOfSceneGraphPriority(std::string_view li
 
 #if DUMP_LISTENER_ITEM_PRIORITY_INFO
     log("-----------------------------------");
-    for (auto& l : *sceneGraphListeners)
+    for (auto&& l : *sceneGraphListeners)
     {
         log("listener priority: node ([%s]%p), priority (%d)", typeid(*l->_node).name(), l->_node,
             _nodePriorityMap[l->_node]);
@@ -1355,7 +1355,7 @@ void EventDispatcher::sortEventListenersOfFixedPriority(std::string_view listene
 
     // FIXME: Should use binary search
     int index = 0;
-    for (auto& listener : *fixedListeners)
+    for (auto&& listener : *fixedListeners)
     {
         if (listener->getFixedPriority() >= 0)
             break;
@@ -1366,7 +1366,7 @@ void EventDispatcher::sortEventListenersOfFixedPriority(std::string_view listene
 
 #if DUMP_LISTENER_ITEM_PRIORITY_INFO
     log("-----------------------------------");
-    for (auto& l : *fixedListeners)
+    for (auto&& l : *fixedListeners)
     {
         log("listener priority: node (%p), fixed (%d)", l->_node, l->_fixedPriority);
     }
@@ -1554,7 +1554,7 @@ void EventDispatcher::setDirty(std::string_view listenerID, DirtyFlag flag)
 
 void EventDispatcher::cleanToRemovedListeners()
 {
-    for (auto& l : _toRemovedListeners)
+    for (auto&& l : _toRemovedListeners)
     {
         auto listenersIter = _listenerMap.find(l->getListenerID());
         if (listenersIter == _listenerMap.end())

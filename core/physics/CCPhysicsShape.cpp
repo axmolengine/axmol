@@ -66,7 +66,7 @@ PhysicsShape::PhysicsShape()
 
 PhysicsShape::~PhysicsShape()
 {
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         cpShapeFree(shape);
     }
@@ -269,7 +269,7 @@ void PhysicsShape::setBody(PhysicsBody* body)
         _body->removeShape(this);
     }
 
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         cpShapeSetBody(shape, body == nullptr ? s_sharedBody : body->_cpBody);
     }
@@ -794,7 +794,7 @@ Vec2 PhysicsShapeEdgePolygon::getCenter()
     int count      = (int)_cpShapes.size();
     cpVect* points = new cpVect[count];
     int i          = 0;
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         points[i++] = cpSegmentShapeGetA(shape);
     }
@@ -808,7 +808,7 @@ Vec2 PhysicsShapeEdgePolygon::getCenter()
 void PhysicsShapeEdgePolygon::getPoints(axis::Vec2* outPoints) const
 {
     int i = 0;
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         outPoints[i++] = PhysicsHelper::cpv2vec2(cpSegmentShapeGetA(shape));
     }
@@ -841,7 +841,7 @@ void PhysicsShapeEdgePolygon::updateScale()
     cpFloat factorX = _newScaleX / _scaleX;
     cpFloat factorY = _newScaleY / _scaleY;
 
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         cpVect a = cpSegmentShapeGetA(shape);
         a.x *= factorX;
@@ -899,7 +899,7 @@ Vec2 PhysicsShapeEdgeChain::getCenter()
     int count      = (int)_cpShapes.size() + 1;
     cpVect* points = new cpVect[count];
     int i          = 0;
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         points[i++] = cpSegmentShapeGetA(shape);
     }
@@ -915,7 +915,7 @@ Vec2 PhysicsShapeEdgeChain::getCenter()
 void PhysicsShapeEdgeChain::getPoints(Vec2* outPoints) const
 {
     int i = 0;
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         outPoints[i++] = PhysicsHelper::cpv2vec2(cpSegmentShapeGetA(shape));
     }
@@ -933,7 +933,7 @@ void PhysicsShapeEdgeChain::updateScale()
     cpFloat factorX = _newScaleX / _scaleX;
     cpFloat factorY = _newScaleY / _scaleY;
 
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         cpVect a = cpSegmentShapeGetA(shape);
         a.x *= factorX;
@@ -951,7 +951,7 @@ void PhysicsShape::setGroup(int group)
 {
     if (group < 0)
     {
-        for (auto shape : _cpShapes)
+        for (auto&& shape : _cpShapes)
         {
             cpShapeSetFilter(shape, cpShapeFilterNew(group, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
         }
@@ -962,7 +962,7 @@ void PhysicsShape::setGroup(int group)
 
 bool PhysicsShape::containsPoint(const Vec2& point) const
 {
-    for (auto shape : _cpShapes)
+    for (auto&& shape : _cpShapes)
     {
         if (cpShapePointQuery(shape, PhysicsHelper::vec22cpv(point), nullptr) < 0)
         {

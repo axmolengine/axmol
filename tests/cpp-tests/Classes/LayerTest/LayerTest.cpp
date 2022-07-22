@@ -874,7 +874,7 @@ void LayerRadialGradientTest::listviewCallback(axis::Ref* sender, axis::ui::List
 {
     // clear all text to white
     auto listview = static_cast<axis::ui::ListView*>(sender);
-    for (auto& item : listview->getItems())
+    for (auto&& item : listview->getItems())
         static_cast<axis::ui::Text*>(item)->setColor(axis::Color3B::WHITE);
 
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();

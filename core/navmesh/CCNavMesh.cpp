@@ -125,13 +125,13 @@ NavMesh::~NavMesh()
     AX_SAFE_DELETE(_meshProcess);
     AX_SAFE_DELETE(_geomData);
 
-    for (auto iter : _agentList)
+    for (auto&& iter : _agentList)
     {
         AX_SAFE_RELEASE(iter);
     }
     _agentList.clear();
 
-    for (auto iter : _obstacleList)
+    for (auto&& iter : _obstacleList)
     {
         AX_SAFE_RELEASE(iter);
     }
@@ -320,7 +320,7 @@ void axis::NavMesh::drawOffMeshConnections()
 void axis::NavMesh::drawObstacles()
 {
     // Draw obstacles
-    for (auto iter : _obstacleList)
+    for (auto&& iter : _obstacleList)
     {
         if (iter)
         {
@@ -347,7 +347,7 @@ void axis::NavMesh::drawObstacles()
 
 void axis::NavMesh::drawAgents()
 {
-    for (auto iter : _agentList)
+    for (auto&& iter : _agentList)
     {
         if (iter)
         {
@@ -375,7 +375,7 @@ void axis::NavMesh::drawAgents()
     }
 
     // Velocity stuff.
-    for (auto iter : _agentList)
+    for (auto&& iter : _agentList)
     {
         if (iter)
         {
@@ -478,13 +478,13 @@ void NavMesh::debugDraw(Renderer* renderer)
 
 void NavMesh::update(float dt)
 {
-    for (auto iter : _agentList)
+    for (auto&& iter : _agentList)
     {
         if (iter)
             iter->preUpdate(dt);
     }
 
-    for (auto iter : _obstacleList)
+    for (auto&& iter : _obstacleList)
     {
         if (iter)
             iter->preUpdate(dt);
@@ -496,13 +496,13 @@ void NavMesh::update(float dt)
     if (_tileCache)
         _tileCache->update(dt, _navMesh);
 
-    for (auto iter : _agentList)
+    for (auto&& iter : _agentList)
     {
         if (iter)
             iter->postUpdate(dt);
     }
 
-    for (auto iter : _obstacleList)
+    for (auto&& iter : _obstacleList)
     {
         if (iter)
             iter->postUpdate(dt);

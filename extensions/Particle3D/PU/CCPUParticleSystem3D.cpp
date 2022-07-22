@@ -90,7 +90,7 @@ void PUParticle3D::initForEmission()
 
     if (!behaviours.empty())
     {
-        for (auto& it : behaviours)
+        for (auto&& it : behaviours)
         {
             it->initParticleForEmission(this);
         }
@@ -101,7 +101,7 @@ void PUParticle3D::initForExpiration(float timeElapsed)
 {
     if (!behaviours.empty())
     {
-        for (auto& it : behaviours)
+        for (auto&& it : behaviours)
         {
             it->initParticleForExpiration(this, timeElapsed);
         }
@@ -114,7 +114,7 @@ void PUParticle3D::process(float timeElapsed)
 
     if (!behaviours.empty())
     {
-        for (auto& it : behaviours)
+        for (auto&& it : behaviours)
         {
             it->updateBehaviour(this, timeElapsed);
         }
@@ -158,7 +158,7 @@ PUParticle3D::PUParticle3D()
 
 PUParticle3D::~PUParticle3D()
 {
-    for (auto it : behaviours)
+    for (auto&& it : behaviours)
     {
         it->release();
     }
@@ -168,7 +168,7 @@ PUParticle3D::~PUParticle3D()
 
 void PUParticle3D::copyBehaviours(const ParticleBehaviourList& list)
 {
-    for (auto it : list)
+    for (auto&& it : list)
     {
         auto behaviour = it->clone();
         behaviour->retain();
@@ -210,22 +210,22 @@ PUParticleSystem3D::~PUParticleSystem3D()
 
     _particlePool.removeAllDatas();
 
-    for (auto iter : _emittedEmitterParticlePool)
+    for (auto&& iter : _emittedEmitterParticlePool)
     {
         auto pool       = iter.second;
         auto lockedList = pool.getUnActiveDataList();
-        for (auto iter2 : lockedList)
+        for (auto&& iter2 : lockedList)
         {
             static_cast<PUParticle3D*>(iter2)->particleEntityPtr->release();
         }
         iter.second.removeAllDatas();
     }
 
-    for (auto iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         auto pool       = iter.second;
         auto lockedList = pool.getUnActiveDataList();
-        for (auto iter2 : lockedList)
+        for (auto&& iter2 : lockedList)
         {
             static_cast<PUParticle3D*>(iter2)->particleEntityPtr->release();
         }
@@ -233,18 +233,18 @@ PUParticleSystem3D::~PUParticleSystem3D()
     }
 
     // release all emitters
-    for (auto it : _emitters)
+    for (auto&& it : _emitters)
     {
         it->release();
     }
     _emitters.clear();
 
-    for (auto it : _observers)
+    for (auto&& it : _observers)
     {
         it->release();
     }
 
-    for (auto it : _behaviourTemplates)
+    for (auto&& it : _behaviourTemplates)
     {
         it->release();
     }
@@ -342,18 +342,18 @@ void PUParticleSystem3D::startParticleSystem()
         if (_render)
             _render->notifyStart();
 
-        for (auto& it : _observers)
+        for (auto&& it : _observers)
         {
             it->notifyStart();
         }
 
-        for (auto& it : _emitters)
+        for (auto&& it : _emitters)
         {
             auto emitter = static_cast<PUEmitter*>(it);
             emitter->notifyStart();
         }
 
-        for (auto& it : _affectors)
+        for (auto&& it : _affectors)
         {
             auto affector = static_cast<PUAffector*>(it);
             affector->notifyStart();
@@ -363,7 +363,7 @@ void PUParticleSystem3D::startParticleSystem()
         _state = State::RUNNING;
     }
 
-    for (auto iter : _children)
+    for (auto&& iter : _children)
     {
         PUParticleSystem3D* system = dynamic_cast<PUParticleSystem3D*>(iter);
         if (system)
@@ -381,7 +381,7 @@ void PUParticleSystem3D::stopParticleSystem()
         _state = State::STOP;
     }
 
-    for (auto iter : _children)
+    for (auto&& iter : _children)
     {
         PUParticleSystem3D* system = dynamic_cast<PUParticleSystem3D*>(iter);
         if (system)
@@ -399,13 +399,13 @@ void PUParticleSystem3D::pauseParticleSystem()
         //     emitter->notifyPause();
         // }
 
-        for (auto& it : _emitters)
+        for (auto&& it : _emitters)
         {
             auto emitter = static_cast<PUEmitter*>(it);
             emitter->notifyPause();
         }
 
-        for (auto& it : _affectors)
+        for (auto&& it : _affectors)
         {
             auto affector = static_cast<PUAffector*>(it);
             affector->notifyPause();
@@ -414,7 +414,7 @@ void PUParticleSystem3D::pauseParticleSystem()
         _state = State::PAUSE;
     }
 
-    for (auto iter : _children)
+    for (auto&& iter : _children)
     {
         PUParticleSystem3D* system = dynamic_cast<PUParticleSystem3D*>(iter);
         if (system)
@@ -432,13 +432,13 @@ void PUParticleSystem3D::resumeParticleSystem()
         //     emitter->notifyResume();
         // }
 
-        for (auto& it : _emitters)
+        for (auto&& it : _emitters)
         {
             auto emitter = static_cast<PUEmitter*>(it);
             emitter->notifyResume();
         }
 
-        for (auto& it : _affectors)
+        for (auto&& it : _affectors)
         {
             auto affector = static_cast<PUAffector*>(it);
             affector->notifyResume();
@@ -447,7 +447,7 @@ void PUParticleSystem3D::resumeParticleSystem()
         _state = State::RUNNING;
     }
 
-    for (auto iter : _children)
+    for (auto&& iter : _children)
     {
         PUParticleSystem3D* system = dynamic_cast<PUParticleSystem3D*>(iter);
         if (system)
@@ -521,18 +521,18 @@ void PUParticleSystem3D::prepared()
         if (_render)
             static_cast<PURender*>(_render)->prepare();
 
-        for (auto it : _behaviourTemplates)
+        for (auto&& it : _behaviourTemplates)
         {
             it->prepare();
         }
 
-        for (auto it : _emitters)
+        for (auto&& it : _emitters)
         {
             // if (it->isEnabled())
             (static_cast<PUEmitter*>(it))->prepare();
         }
 
-        for (auto it : _affectors)
+        for (auto&& it : _affectors)
         {
             // if (it->isEnabled())
             (static_cast<PUAffector*>(it))->prepare();
@@ -540,7 +540,7 @@ void PUParticleSystem3D::prepared()
 
         if (!_poolPrepared)
         {
-            for (auto it : _emitters)
+            for (auto&& it : _emitters)
             {
                 // if (it->isEnabled())
                 PUEmitter* emitter = static_cast<PUEmitter*>(it);
@@ -609,25 +609,25 @@ void PUParticleSystem3D::unPrepared()
         if (_render)
             static_cast<PURender*>(_render)->unPrepare();
 
-        for (auto it : _behaviourTemplates)
+        for (auto&& it : _behaviourTemplates)
         {
             it->unPrepare();
         }
 
-        for (auto it : _emitters)
+        for (auto&& it : _emitters)
         {
             if (it->isEnabled())
                 (static_cast<PUEmitter*>(it))->unPrepare();
         }
 
-        for (auto it : _affectors)
+        for (auto&& it : _affectors)
         {
             if (it->isEnabled())
                 (static_cast<PUAffector*>(it))->unPrepare();
         }
 
         _particlePool.lockAllDatas();
-        for (auto& iter : _emittedEmitterParticlePool)
+        for (auto&& iter : _emittedEmitterParticlePool)
         {
             PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
             while (particle)
@@ -638,7 +638,7 @@ void PUParticleSystem3D::unPrepared()
             const_cast<ParticlePool&>(iter.second).lockAllDatas();
         }
 
-        for (auto& iter : _emittedSystemParticlePool)
+        for (auto&& iter : _emittedSystemParticlePool)
         {
             PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
             while (particle)
@@ -660,7 +660,7 @@ void PUParticleSystem3D::preUpdator(float elapsedTime)
     //     emitter->preUpdateEmitter(elapsedTime);
     // }
     // bool hasNoEmitted = true;
-    for (auto it : _emitters)
+    for (auto&& it : _emitters)
     {
         if (!it->isEmitterDone())
         {
@@ -674,7 +674,7 @@ void PUParticleSystem3D::preUpdator(float elapsedTime)
     //         stopParticle();
     // }
 
-    for (auto it : _affectors)
+    for (auto&& it : _affectors)
     {
         if (it->isEnabled())
         {
@@ -682,7 +682,7 @@ void PUParticleSystem3D::preUpdator(float elapsedTime)
         }
     }
 
-    for (auto it : _observers)
+    for (auto&& it : _observers)
     {
         if (it->isEnabled())
         {
@@ -690,7 +690,7 @@ void PUParticleSystem3D::preUpdator(float elapsedTime)
         }
     }
 
-    for (auto& iter : _emittedEmitterParticlePool)
+    for (auto&& iter : _emittedEmitterParticlePool)
     {
         PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
         while (particle)
@@ -700,7 +700,7 @@ void PUParticleSystem3D::preUpdator(float elapsedTime)
         }
     }
 
-    for (auto& iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
         while (particle)
@@ -717,12 +717,12 @@ void PUParticleSystem3D::updator(float elapsedTime)
     bool firstParticle       = true;
     processParticle(_particlePool, firstActiveParticle, firstParticle, elapsedTime);
 
-    for (auto& iter : _emittedEmitterParticlePool)
+    for (auto&& iter : _emittedEmitterParticlePool)
     {
         processParticle(const_cast<ParticlePool&>(iter.second), firstActiveParticle, firstParticle, elapsedTime);
     }
 
-    for (auto& iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         processParticle(const_cast<ParticlePool&>(iter.second), firstActiveParticle, firstParticle, elapsedTime);
     }
@@ -736,7 +736,7 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
     //     emitter->postUpdateEmitter(elapsedTime);
     // }
 
-    for (auto it : _emitters)
+    for (auto&& it : _emitters)
     {
         if (it->isEnabled())
         {
@@ -744,7 +744,7 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
         }
     }
 
-    for (auto it : _affectors)
+    for (auto&& it : _affectors)
     {
         if (it->isEnabled())
         {
@@ -753,7 +753,7 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
         }
     }
 
-    for (auto it : _observers)
+    for (auto&& it : _observers)
     {
         if (it->isEnabled())
         {
@@ -761,7 +761,7 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
         }
     }
 
-    for (auto& iter : _emittedEmitterParticlePool)
+    for (auto&& iter : _emittedEmitterParticlePool)
     {
         PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
         while (particle)
@@ -771,7 +771,7 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
         }
     }
 
-    for (auto& iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
         while (particle)
@@ -785,7 +785,7 @@ void PUParticleSystem3D::postUpdator(float elapsedTime)
 void PUParticleSystem3D::emitParticles(float elapsedTime)
 {
     // Vec3 scale = getDerivedScale();
-    for (auto iter : _emitters)
+    for (auto&& iter : _emitters)
     {
         // if (!_emitter) return;
         // auto emitter = static_cast<PUEmitter*>(_emitter);
@@ -924,7 +924,7 @@ void PUParticleSystem3D::addEmitter(PUEmitter* emitter)
 
 PUAffector* PUParticleSystem3D::getAffector(std::string_view name)
 {
-    for (auto iter : _affectors)
+    for (auto&& iter : _affectors)
     {
         auto pa = static_cast<PUAffector*>(iter);
         if (pa->getName() == name)
@@ -936,7 +936,7 @@ PUAffector* PUParticleSystem3D::getAffector(std::string_view name)
 
 PUEmitter* PUParticleSystem3D::getEmitter(std::string_view name)
 {
-    for (auto iter : _emitters)
+    for (auto&& iter : _emitters)
     {
         auto pe = static_cast<PUEmitter*>(iter);
         if (pe->getName() == name)
@@ -1011,7 +1011,7 @@ void PUParticleSystem3D::emitParticles(ParticlePool& pool, PUEmitter* emitter, u
         particle->originalDirection = (rotMat * Vec3(particle->originalDirection.x, particle->originalDirection.y,
                                                      particle->originalDirection.z));
 
-        for (auto& it : _affectors)
+        for (auto&& it : _affectors)
         {
             if (it->isEnabled())
             {
@@ -1042,7 +1042,7 @@ void PUParticleSystem3D::addObserver(PUObserver* observer)
 
 PUObserver* PUParticleSystem3D::getObserver(std::string_view name)
 {
-    for (auto iter : _observers)
+    for (auto&& iter : _observers)
     {
         auto po = static_cast<PUObserver*>(iter);
         if (po->getName() == name)
@@ -1057,22 +1057,22 @@ void PUParticleSystem3D::notifyRescaled(const Vec3& scl)
     if (_render)
         _render->notifyRescaled(scl);
 
-    for (auto it : _emitters)
+    for (auto&& it : _emitters)
     {
         (static_cast<PUEmitter*>(it))->notifyRescaled(scl);
     }
 
-    for (auto it : _affectors)
+    for (auto&& it : _affectors)
     {
         (static_cast<PUAffector*>(it))->notifyRescaled(scl);
     }
 
-    for (auto it : _observers)
+    for (auto&& it : _observers)
     {
         it->notifyRescaled(scl);
     }
 
-    for (auto& iter : _emittedEmitterParticlePool)
+    for (auto&& iter : _emittedEmitterParticlePool)
     {
         PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
         while (particle)
@@ -1082,7 +1082,7 @@ void PUParticleSystem3D::notifyRescaled(const Vec3& scl)
         }
     }
 
-    for (auto& iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
         while (particle)
@@ -1108,7 +1108,7 @@ void PUParticleSystem3D::initParticleForExpiration(PUParticle3D* particle, float
 
     particle->initForExpiration(timeElapsed);
 
-    for (auto it : _listeners)
+    for (auto&& it : _listeners)
     {
         it->particleExpired(this, particle);
     }
@@ -1129,7 +1129,7 @@ void PUParticleSystem3D::initParticleForExpiration(PUParticle3D* particle, float
 
 void PUParticleSystem3D::initParticleForEmission(PUParticle3D* particle)
 {
-    for (auto it : _listeners)
+    for (auto&& it : _listeners)
     {
         it->particleEmitted(this, particle);
     }
@@ -1149,7 +1149,7 @@ void PUParticleSystem3D::addBehaviourTemplate(PUBehaviour* behaviour)
 void PUParticleSystem3D::convertToUnixStylePath(std::string& path)
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    for (auto& iter : path)
+    for (auto&& iter : path)
     {
         if (iter == '\\')
             iter = '/';
@@ -1162,12 +1162,12 @@ void PUParticleSystem3D::convertToUnixStylePath(std::string& path)
 void PUParticleSystem3D::clearAllParticles()
 {
     _particlePool.lockAllDatas();
-    for (auto& iter : _emittedEmitterParticlePool)
+    for (auto&& iter : _emittedEmitterParticlePool)
     {
         const_cast<ParticlePool&>(iter.second).lockAllDatas();
     }
 
-    for (auto& iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         const_cast<ParticlePool&>(iter.second).lockAllDatas();
     }
@@ -1181,12 +1181,12 @@ void PUParticleSystem3D::copyAttributesTo(PUParticleSystem3D* system)
     system->removeAllBehaviourTemplate();
     system->removeAllListener();
     system->_particlePool.removeAllDatas();
-    for (auto iter : system->_emittedEmitterParticlePool)
+    for (auto&& iter : system->_emittedEmitterParticlePool)
     {
         iter.second.removeAllDatas();
     }
 
-    for (auto iter : system->_emittedSystemParticlePool)
+    for (auto&& iter : system->_emittedSystemParticlePool)
     {
         iter.second.removeAllDatas();
     }
@@ -1200,7 +1200,7 @@ void PUParticleSystem3D::copyAttributesTo(PUParticleSystem3D* system)
     system->_keepLocal     = _keepLocal;
     system->_isEnabled     = _isEnabled;
 
-    for (auto iter : _affectors)
+    for (auto&& iter : _affectors)
     {
         PUAffector* affector = static_cast<PUAffector*>(iter);
         PUAffector* copy     = PUAffectorManager::Instance()->createAffector(affector->getAffectorType());
@@ -1208,7 +1208,7 @@ void PUParticleSystem3D::copyAttributesTo(PUParticleSystem3D* system)
         system->addAffector(copy);
     }
 
-    for (auto iter : _emitters)
+    for (auto&& iter : _emitters)
     {
         PUEmitter* emitter = static_cast<PUEmitter*>(iter);
         PUEmitter* copy    = PUEmitterManager::Instance()->createEmitter(emitter->getEmitterType());
@@ -1216,7 +1216,7 @@ void PUParticleSystem3D::copyAttributesTo(PUParticleSystem3D* system)
         system->addEmitter(copy);
     }
 
-    for (auto iter : _observers)
+    for (auto&& iter : _observers)
     {
         PUObserver* observer = static_cast<PUObserver*>(iter);
         PUObserver* copy     = PUObserverManager::Instance()->createObserver(observer->getObserverType());
@@ -1224,7 +1224,7 @@ void PUParticleSystem3D::copyAttributesTo(PUParticleSystem3D* system)
         system->addObserver(copy);
     }
 
-    for (auto iter : _behaviourTemplates)
+    for (auto&& iter : _behaviourTemplates)
     {
         PUBehaviour* behaviour = static_cast<PUBehaviour*>(iter);
         PUBehaviour* copy      = behaviour->clone();
@@ -1249,7 +1249,7 @@ PUParticleSystem3D* PUParticleSystem3D::clone()
 {
     auto ps = PUParticleSystem3D::create();
     copyAttributesTo(ps);
-    for (auto& iter : _children)
+    for (auto&& iter : _children)
     {
         PUParticleSystem3D* child = dynamic_cast<PUParticleSystem3D*>(iter);
         if (child)
@@ -1260,7 +1260,7 @@ PUParticleSystem3D* PUParticleSystem3D::clone()
 
 void PUParticleSystem3D::removeAllEmitter()
 {
-    for (auto iter : _emitters)
+    for (auto&& iter : _emitters)
     {
         iter->release();
     }
@@ -1269,7 +1269,7 @@ void PUParticleSystem3D::removeAllEmitter()
 
 void PUParticleSystem3D::removerAllObserver()
 {
-    for (auto iter : _observers)
+    for (auto&& iter : _observers)
     {
         iter->release();
     }
@@ -1278,7 +1278,7 @@ void PUParticleSystem3D::removerAllObserver()
 
 void PUParticleSystem3D::removeAllBehaviourTemplate()
 {
-    for (auto iter : _behaviourTemplates)
+    for (auto&& iter : _behaviourTemplates)
     {
         iter->release();
     }
@@ -1301,7 +1301,7 @@ void PUParticleSystem3D::draw(Renderer* renderer, const Mat4& transform, uint32_
 
     if (!_emittedSystemParticlePool.empty())
     {
-        for (auto& iter : _emittedSystemParticlePool)
+        for (auto&& iter : _emittedSystemParticlePool)
         {
             PUParticle3D* particle = static_cast<PUParticle3D*>(const_cast<ParticlePool&>(iter.second).getFirst());
             while (particle)
@@ -1334,7 +1334,7 @@ void PUParticleSystem3D::processParticle(ParticlePool& pool,
             // if (_emitter && _emitter->isEnabled())
             //     _emitter->updateEmitter(particle, elapsedTime);
 
-            for (auto it : _emitters)
+            for (auto&& it : _emitters)
             {
                 if (it->isEnabled() && !it->isMarkedForEmission())
                 {
@@ -1342,7 +1342,7 @@ void PUParticleSystem3D::processParticle(ParticlePool& pool,
                 }
             }
 
-            for (auto& it : _affectors)
+            for (auto&& it : _affectors)
             {
                 if (it->isEnabled())
                 {
@@ -1409,7 +1409,7 @@ void PUParticleSystem3D::processParticle(ParticlePool& pool,
             pool.lockLatestData();
         }
 
-        for (auto it : _observers)
+        for (auto&& it : _observers)
         {
             if (it->isEnabled())
             {
@@ -1529,7 +1529,7 @@ int PUParticleSystem3D::getAliveParticleCount() const
 
     if (!_emittedEmitterParticlePool.empty())
     {
-        for (auto& iter : _emittedEmitterParticlePool)
+        for (auto&& iter : _emittedEmitterParticlePool)
         {
             sz += iter.second.getActiveDataList().size();
         }
@@ -1538,7 +1538,7 @@ int PUParticleSystem3D::getAliveParticleCount() const
     if (_emittedSystemParticlePool.empty())
         return sz;
 
-    for (auto& iter : _emittedSystemParticlePool)
+    for (auto&& iter : _emittedSystemParticlePool)
     {
         auto pool = iter.second;
         sz += pool.getActiveDataList().size();
@@ -1557,18 +1557,18 @@ void PUParticleSystem3D::forceStopParticleSystem()
     if (_render)
         _render->notifyStop();
 
-    for (auto& it : _observers)
+    for (auto&& it : _observers)
     {
         it->notifyStop();
     }
 
-    for (auto& it : _emitters)
+    for (auto&& it : _emitters)
     {
         auto emitter = static_cast<PUEmitter*>(it);
         emitter->notifyStop();
     }
 
-    for (auto& it : _affectors)
+    for (auto&& it : _affectors)
     {
         auto affector = static_cast<PUAffector*>(it);
         affector->notifyStop();

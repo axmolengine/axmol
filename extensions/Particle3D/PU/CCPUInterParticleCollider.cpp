@@ -131,7 +131,7 @@ bool PUParticle3DInterParticleCollider::validateAndExecuteSphereCollision(PUPart
 void PUParticle3DInterParticleCollider::updatePUAffector(PUParticle3D* /*particle*/, float /*deltaTime*/)
 {
     // AXASSERT(0, "nonsupport yet");
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     //{
     //     PUParticle3D *particle = iter;
     //      Fast rejection: only visible, moving particles are able to collide, unless they are colliding already

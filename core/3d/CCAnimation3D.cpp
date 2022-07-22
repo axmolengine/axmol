@@ -220,7 +220,7 @@ void Animation3DCache::addAnimation(std::string_view key, Animation3D* animation
 
 void Animation3DCache::removeAllAnimations()
 {
-    for (auto itor : _animations)
+    for (auto&& itor : _animations)
     {
         AX_SAFE_RELEASE(itor.second);
     }
