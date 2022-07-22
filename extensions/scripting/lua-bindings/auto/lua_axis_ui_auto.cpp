@@ -4650,21 +4650,7 @@ int lua_axis_ui_Layout_getRenderFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getRenderFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Layout:getRenderFile",argc, 0);
@@ -6579,21 +6565,7 @@ int lua_axis_ui_Button_getDisabledFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getDisabledFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getDisabledFile",argc, 0);
@@ -6784,21 +6756,7 @@ int lua_axis_ui_Button_getNormalFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getNormalFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getNormalFile",argc, 0);
@@ -7846,21 +7804,7 @@ int lua_axis_ui_Button_getPressedFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getPressedFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getPressedFile",argc, 0);
@@ -8476,21 +8420,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossDisabledFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getCrossDisabledFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getCrossDisabledFile",argc, 0);
@@ -8537,21 +8467,7 @@ int lua_axis_ui_AbstractCheckButton_getBackDisabledFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBackDisabledFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getBackDisabledFile",argc, 0);
@@ -8732,21 +8648,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossNormalFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getCrossNormalFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getCrossNormalFile",argc, 0);
@@ -8843,21 +8745,7 @@ int lua_axis_ui_AbstractCheckButton_getBackPressedFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBackPressedFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getBackPressedFile",argc, 0);
@@ -9250,21 +9138,7 @@ int lua_axis_ui_AbstractCheckButton_getBackNormalFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBackNormalFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getBackNormalFile",argc, 0);
@@ -11339,21 +11213,7 @@ int lua_axis_ui_ImageView_getRenderFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getRenderFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ImageView:getRenderFile",argc, 0);
@@ -13695,21 +13555,7 @@ int lua_axis_ui_TextAtlas_getRenderFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getRenderFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TextAtlas:getRenderFile",argc, 0);
@@ -14188,21 +14034,7 @@ int lua_axis_ui_LoadingBar_getRenderFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getRenderFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.LoadingBar:getRenderFile",argc, 0);
@@ -20423,21 +20255,7 @@ int lua_axis_ui_Slider_getBallNormalFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBallNormalFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getBallNormalFile",argc, 0);
@@ -20581,21 +20399,7 @@ int lua_axis_ui_Slider_getBallPressedFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBallPressedFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getBallPressedFile",argc, 0);
@@ -21067,21 +20871,7 @@ int lua_axis_ui_Slider_getProgressBarFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getProgressBarFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getProgressBarFile",argc, 0);
@@ -21383,21 +21173,7 @@ int lua_axis_ui_Slider_getBackFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBackFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getBackFile",argc, 0);
@@ -21491,21 +21267,7 @@ int lua_axis_ui_Slider_getBallDisabledFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getBallDisabledFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getBallDisabledFile",argc, 0);
@@ -24633,21 +24395,7 @@ int lua_axis_ui_TextBMFont_getRenderFile(lua_State* tolua_S)
             return 0;
         }
         axis::ResourceData ret = cobj->getRenderFile();
-
-        lua_newtable(tolua_S);
-
-        lua_pushstring(tolua_S, "type");
-        lua_pushinteger(tolua_S, ret.type);
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "file");
-        lua_pushstring(tolua_S, ret.file.c_str());
-        lua_rawset(tolua_S, -3);
-
-        lua_pushstring(tolua_S, "plist");
-        lua_pushstring(tolua_S, ret.plist.c_str());
-        lua_rawset(tolua_S, -3);
-
+        #pragma warning NO CONVERSION FROM NATIVE FOR ResourceData;
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TextBMFont:getRenderFile",argc, 0);
