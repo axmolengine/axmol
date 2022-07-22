@@ -44,6 +44,7 @@
 #include "physics/CCPhysicsWorld.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/VertexLayout.h"
+#include "ui/GUIDefine.h"
 
 #include "yasio/cxx17/string_view.hpp"
 
@@ -1363,6 +1364,12 @@ AX_LUA_DLL void uniformLocation_to_luaval(lua_State* L, const axis::backend::Uni
 
 AX_LUA_DLL void program_activeattrs_to_luaval(lua_State* L,
                                               const hlookup::string_map<axis::backend::AttributeBindInfo>& map);
+
+
+/**
+ * convert axis::ResourceData to lua object
+ */
+AX_LUA_DLL void resourceData_to_luaval(lua_State* L, const axis::ResourceData& data);
 
 // end group
 /// @}
