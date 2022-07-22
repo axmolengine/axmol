@@ -109,7 +109,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
 
 void SpineSkeletonDataCache::removeAllData(void)
 {
-    for (auto& e : _cacheTable)
+    for (auto&& e : _cacheTable)
     {
         e.second->release();
     }
@@ -260,7 +260,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
 
 void SpineSkeletonDataCache::removeAllData(void)
 {
-    for (auto& e : _cacheTable)
+    for (auto&& e : _cacheTable)
     {
         e.second->release();
     }

@@ -659,7 +659,7 @@ TMXOrthoObjectsTestNew::TMXOrthoObjectsTestNew()
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);
-    for (auto& obj : objects)
+    for (auto&& obj : objects)
     {
         ValueMap& dict = obj.asValueMap();
 
@@ -709,7 +709,7 @@ TMXIsoObjectsTestNew::TMXIsoObjectsTestNew()
 
     auto drawNode = DrawNode::create();
     Color4F color(1.0, 1.0, 1.0, 1.0);
-    for (auto& obj : objects)
+    for (auto&& obj : objects)
     {
         ValueMap& dict = obj.asValueMap();
 
@@ -1340,7 +1340,7 @@ TMXGIDObjectsTestNew::TMXGIDObjectsTestNew()
     Color4F color(1.0, 1.0, 1.0, 1.0);
     auto group   = map->getObjectGroup("Object Layer 1");
     auto objects = group->getObjects();
-    for (auto& obj : objects)
+    for (auto&& obj : objects)
     {
         ValueMap& dict = obj.asValueMap();
 

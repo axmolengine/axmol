@@ -908,7 +908,7 @@ void Scheduler::update(float dt)
     }
 
     // delete all updates that are removed in update
-    for (auto& e : _updateDeleteVector)
+    for (auto&& e : _updateDeleteVector)
         delete e;
 
     _updateDeleteVector.clear();

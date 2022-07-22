@@ -104,7 +104,7 @@ void PUGeometryRotator::initParticleForEmission(PUParticle3D* particle)
     //// Only continue if the particle is a visual particle
     // if (particle->particleType != Particle::PT_VISUAL)
     //	return;
-    // for (auto iter : _particleSystem->getParticlePool().getActiveParticleList())
+    // for (auto&& iter : _particleSystem->getParticlePool().getActiveParticleList())
     {
         // PUParticle3D *particle = static_cast<PUParticle3D*>(iter);
         if (!_rotationAxisSet)
@@ -132,7 +132,7 @@ void PUGeometryRotator::initParticleForEmission(PUParticle3D* particle)
 
 void PUGeometryRotator::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         //  Rotate the geometry

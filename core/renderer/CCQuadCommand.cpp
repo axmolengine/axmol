@@ -41,7 +41,7 @@ QuadCommand::QuadCommand() : _indexSize(-1), _ownedIndices() {}
 
 QuadCommand::~QuadCommand()
 {
-    for (auto& indices : _ownedIndices)
+    for (auto&& indices : _ownedIndices)
     {
         AX_SAFE_DELETE_ARRAY(indices);
     }

@@ -48,7 +48,7 @@ void PUCollisionAvoidanceAffector::setRadius(float radius)
 void PUCollisionAvoidanceAffector::updatePUAffector(PUParticle3D* /*particle*/, float /*deltaTime*/)
 {
     AXASSERT(0, "nonsupport yet");
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     //{
     //	PUParticle3D *particle = iter;
     //	// Activate spatial hashing

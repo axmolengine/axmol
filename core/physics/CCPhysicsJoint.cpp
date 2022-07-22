@@ -171,7 +171,7 @@ bool PhysicsJoint::initJoint()
         ret = createConstraints();
         AX_BREAK_IF(!ret);
 
-        for (auto subjoint : _cpConstraints)
+        for (auto&& subjoint : _cpConstraints)
         {
             cpConstraintSetMaxForce(subjoint, _maxForce);
             cpConstraintSetErrorBias(subjoint, cpfpow(1.0f - 0.15f, 60.0f));
@@ -235,7 +235,7 @@ void PhysicsJoint::setMaxForce(float force)
     {
         delay([this, force]() {
             _maxForce = force;
-            for (auto joint : _cpConstraints)
+            for (auto&& joint : _cpConstraints)
             {
                 cpConstraintSetMaxForce(joint, force);
             }
@@ -244,7 +244,7 @@ void PhysicsJoint::setMaxForce(float force)
     else
     {
         _maxForce = force;
-        for (auto joint : _cpConstraints)
+        for (auto&& joint : _cpConstraints)
         {
             cpConstraintSetMaxForce(joint, force);
         }

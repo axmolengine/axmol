@@ -242,7 +242,7 @@ void TextureETC1Alpha::addNewSpriteWithCoords(Vec2 p)
 
 void TextureETC1Alpha::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 
@@ -305,7 +305,7 @@ void TextureETC2::addNewSpriteWithCoords()
 
 void TextureETC2::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    // for (auto touch : touches)
+    // for (auto&& touch : touches)
     //{
     //     auto location = touch->getLocation();
 
@@ -371,7 +371,7 @@ void TextureBMP::addNewSpriteWithCoords(Vec2 p)
 
 void TextureBMP::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    for (auto touch : touches)
+    for (auto&& touch : touches)
     {
         auto location = touch->getLocation();
 

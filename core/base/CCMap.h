@@ -430,7 +430,7 @@ protected:
     /** Retains all the objects in the map */
     void addRefForAllObjects()
     {
-        for (auto& iter : _data)
+        for (auto&& iter : _data)
         {
             iter.second->retain();
         }

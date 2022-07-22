@@ -1366,7 +1366,7 @@ void ParticleSystem::resetAnimationDescriptors()
 void ParticleSystem::setMultiAnimationRandom()
 {
     _randomAnimations.clear();
-    for (auto& a : _animations)
+    for (auto&& a : _animations)
         _randomAnimations.push_back(a.first);
 }
 

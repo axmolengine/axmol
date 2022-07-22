@@ -438,7 +438,7 @@ void Terrain::calculateNormal()
         _vertices[Index2]._normal += Normal;
     }
 
-    for (auto& vertex : _vertices)
+    for (auto&& vertex : _vertices)
     {
         vertex._normal.normalize();
     }
@@ -1565,7 +1565,7 @@ Terrain::QuadTree::QuadTree(int x, int y, int w, int h, Terrain* terrain)
         _localAABB      = _chunk->_aabb;
         _chunk->_parent = this;
 
-        for (auto& triangle : _chunk->_trianglesList)
+        for (auto&& triangle : _chunk->_trianglesList)
         {
             triangle.transform(_terrain->getNodeToWorldTransform());
         }

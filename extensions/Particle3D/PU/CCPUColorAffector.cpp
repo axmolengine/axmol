@@ -86,7 +86,7 @@ void PUColorAffector::updatePUAffector(PUParticle3D* particle, float /*deltaTime
     if (_colorMap.empty())
         return;
 
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         //  Linear interpolation of the colour

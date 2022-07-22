@@ -90,7 +90,7 @@ public:
         _task_queue_cv.notify_all();
         _task_queue_mtx.unlock();
 
-        for (auto& t : _threads)
+        for (auto&& t : _threads)
         {
             if (t.joinable())
                 t.join();

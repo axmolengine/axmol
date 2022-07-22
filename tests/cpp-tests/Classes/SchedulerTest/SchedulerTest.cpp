@@ -596,7 +596,7 @@ void SchedulerUpdate::removeUpdates(float /*dt*/)
 {
     auto& children = getChildren();
 
-    for (auto& c : children)
+    for (auto&& c : children)
     {
         auto obj  = static_cast<Ref*>(c);
         auto node = static_cast<Node*>(obj);
@@ -1374,7 +1374,7 @@ void SchedulerRemoveEntryWhileUpdate::onEnter()
 
 void SchedulerRemoveEntryWhileUpdate::onExit()
 {
-    for (auto obj : _testvector)
+    for (auto&& obj : _testvector)
     {
         getScheduler()->unscheduleUpdate(obj);
         delete obj;

@@ -46,7 +46,7 @@ void PUDoAffectorEventHandler::handle(PUParticleSystem3D* particleSystem, PUPart
         // Search all techniques in this ParticleSystem for an affector with the correct name
         PUParticleSystem3D* system = particleSystem->getParentParticleSystem();
         auto children              = system->getChildren();
-        for (auto iter : children)
+        for (auto&& iter : children)
         {
             technique = dynamic_cast<PUParticleSystem3D*>(iter);
             if (technique)

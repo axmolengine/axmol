@@ -119,7 +119,7 @@ void BoneNode::addSkin(SkinNode* skin, bool isDisplay, bool hideOthers)
     AXASSERT(skin != nullptr, "Argument must be non-nil");
     if (hideOthers)
     {
-        for (auto& bonskin : _boneSkins)
+        for (auto&& bonskin : _boneSkins)
         {
             bonskin->setVisible(false);
         }
@@ -152,7 +152,7 @@ void BoneNode::removeFromBoneList(BoneNode* bone)
         {
             auto subBones = bone->getAllSubBones();
             subBones.pushBack(bone);
-            for (auto subBone : subBones)
+            for (auto&& subBone : subBones)
             {
                 if (subBone->_rootSkeleton == nullptr)
                     continue;
@@ -186,7 +186,7 @@ void BoneNode::addToBoneList(BoneNode* bone)
         {
             auto subBones = bone->getAllSubBones();
             subBones.pushBack(bone);
-            for (auto subBone : subBones)
+            for (auto&& subBone : subBones)
             {
                 subBone->_rootSkeleton = _rootSkeleton;
                 auto bonename          = subBone->getName();
@@ -227,7 +227,7 @@ void BoneNode::removeFromSkinList(SkinNode* skin)
 
 void BoneNode::displaySkin(SkinNode* skin, bool hideOthers)
 {
-    for (auto boneskin : _boneSkins)
+    for (auto&& boneskin : _boneSkins)
     {
         if (boneskin == skin)
         {
@@ -242,7 +242,7 @@ void BoneNode::displaySkin(SkinNode* skin, bool hideOthers)
 
 void BoneNode::displaySkin(std::string_view skinName, bool hideOthers)
 {
-    for (auto& skin : _boneSkins)
+    for (auto&& skin : _boneSkins)
     {
         if (skinName == skin->getName())
         {
@@ -320,7 +320,7 @@ void BoneNode::setBlendFunc(const axis::BlendFunc& blendFunc)
     if (_blendFunc != blendFunc)
     {
         _blendFunc = blendFunc;
-        for (auto& skin : _boneSkins)
+        for (auto&& skin : _boneSkins)
         {
             auto blendSkin = dynamic_cast<BlendProtocol*>(skin);
             if (nullptr != blendSkin)

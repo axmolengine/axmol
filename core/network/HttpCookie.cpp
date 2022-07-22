@@ -103,7 +103,7 @@ const std::vector<CookieInfo>* HttpCookie::getCookies() const
 
 const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 {
-    for (auto& cookie : _cookies)
+    for (auto&& cookie : _cookies)
     {
         if (cxx20::ends_with(uri.getHost(), cookie.domain) && cxx20::starts_with(uri.getPath(), cookie.path))
             return &cookie;
@@ -114,7 +114,7 @@ const CookieInfo* HttpCookie::getMatchCookie(const Uri& uri) const
 
 void HttpCookie::updateOrAddCookie(CookieInfo* cookie)
 {
-    for (auto& _cookie : _cookies)
+    for (auto&& _cookie : _cookies)
     {
         if (cookie->isSame(_cookie))
         {
@@ -264,7 +264,7 @@ void HttpCookie::writeFile()
     std::string line;
 
     char expires[32] = {0};  // LONGLONG_STRING_SIZE=20
-    for (auto& cookie : _cookies)
+    for (auto&& cookie : _cookies)
     {
         line.clear();
         line.append(cookie.domain);

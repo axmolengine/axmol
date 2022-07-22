@@ -64,7 +64,7 @@ PUMaterialCache::PUMaterialCache() {}
 
 PUMaterialCache::~PUMaterialCache()
 {
-    for (auto iter : _materialMap)
+    for (auto&& iter : _materialMap)
     {
         iter->release();
     }
@@ -79,7 +79,7 @@ PUMaterialCache* PUMaterialCache::Instance()
 
 PUMaterial* PUMaterialCache::getMaterial(std::string_view name)
 {
-    for (auto iter : _materialMap)
+    for (auto&& iter : _materialMap)
     {
         if (iter->name == name)
             return iter;
@@ -102,7 +102,7 @@ bool PUMaterialCache::loadMaterials(std::string_view file)
 
 void PUMaterialCache::addMaterial(PUMaterial* material)
 {
-    for (auto iter : _materialMap)
+    for (auto&& iter : _materialMap)
     {
         if (iter->name == material->name)
         {

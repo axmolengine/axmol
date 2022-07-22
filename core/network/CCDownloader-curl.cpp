@@ -414,7 +414,7 @@ public:
         if (!_processSet.empty())
         {
             std::lock_guard<std::mutex> lock(_processMutex);
-            for (auto& task : _processSet)
+            for (auto&& task : _processSet)
                 task->cancel();
             _processSet.clear();
         }
@@ -434,7 +434,7 @@ public:
     {
         std::lock_guard<std::mutex> lock(_processMutex);
         outList.reserve(_processSet.size());
-        for (auto& task : _processSet)
+        for (auto&& task : _processSet)
         {
             if (!task->background)
                 outList.push_back(task);
@@ -984,7 +984,7 @@ void DownloaderCURL::_onUpdate(float)
 
     // update processing tasks
     _impl->getProcessTasks(tasks);
-    for (auto& task : tasks)
+    for (auto&& task : tasks)
     {
         DownloadTaskCURL& coTask = static_cast<DownloadTaskCURL&>(*task->_coTask);
         std::lock_guard<std::recursive_mutex> lock(coTask._mutex);
@@ -1007,7 +1007,7 @@ void DownloaderCURL::_onUpdate(float)
             _scheduler->pauseTarget(this);
     }
 
-    for (auto& task : tasks)
+    for (auto&& task : tasks)
     {
         _onDownloadFinished(*task);
     }

@@ -171,7 +171,7 @@ Node::~Node()
     // `AX_SAFE_RELEASE_NULL(_actionManager)`.
     AX_SAFE_RELEASE_NULL(_userObject);
 
-    for (auto& child : _children)
+    for (auto&& child : _children)
     {
         child->_parent = nullptr;
     }
