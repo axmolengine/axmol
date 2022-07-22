@@ -77,8 +77,3 @@ if(AX_BUILD_TESTS)
     endif(AX_ENABLE_EXT_LUA)
 
 endif()
-
-if(AX_BUILD_EXAMPLES)
-    # add examples/SimpleSnake into project(axis) for tmp example
-    add_subdirectory(${AXIS_ROOT_PATH}/examples/SimpleSnake ${ENGINE_BINARY_PATH}/examples/SimpleSnake)
-endif()
