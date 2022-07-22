@@ -143,11 +143,6 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
 ### Contributing guide
 https://github.com/axis-project/axis/discussions/411
 
-### The axis Active Contributors
-
-- @halx99
-- @rh101
-- @aismann
-- @weiwest
+### The axis Active Stats
 
 ![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")
