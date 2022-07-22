@@ -142,6 +142,7 @@ conversions:
     "OffMeshLinkData": "offmeshlinkdata_to_luaval(tolua_S, ${in_value})"
     "UniformLocation": "uniformLocation_to_luaval(tolua_S, ${in_value})"
     "@.*map<std::string.*,\\s*.*AttributeBindInfo>": "program_activeattrs_to_luaval(tolua_S, ${in_value})"
+    "ResourceData": "resourceData_to_luaval(tolua_S, ${in_value})"
 
     object: "object_to_luaval<${ntype.replace(\"*\", \"\").replace(\"const \", \"\")}>(tolua_S, \"${scriptname}\",(${ntype.replace(\"const \", \"\")})${in_value})"
 
