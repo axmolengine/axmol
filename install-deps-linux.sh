@@ -19,6 +19,8 @@ sudo dpkg --add-architecture i386
  
 
 DEPENDS=' libx11-dev'
+DEPENDS=' automake'
+DEPENDS=' libtool'
 DEPENDS+=' libxmu-dev'
 DEPENDS+=' libglu1-mesa-dev'
 DEPENDS+=' libgl2ps-dev'
