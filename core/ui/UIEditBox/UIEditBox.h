@@ -650,6 +650,7 @@ public:
     void setGlobalZOrder(float globalZOrder) override;
 
     void openKeyboard() const;
+    void closeKeyboard() const;
 
 protected:
     virtual void releaseUpEvent() override;
