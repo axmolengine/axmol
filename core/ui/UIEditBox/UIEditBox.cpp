@@ -56,6 +56,11 @@ void EditBox::openKeyboard() const
     _editBoxImpl->openKeyboard();
 }
 
+void EditBox::closeKeyboard() const
+{
+    _editBoxImpl->closeKeyboard();
+}
+
 EditBox* EditBox::create(const Vec2& size, std::string_view normalImage, TextureResType texType)
 {
     return EditBox::create(size, normalImage, "", "", texType);
