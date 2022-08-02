@@ -66,7 +66,7 @@ endif()
 if(ANDROID)
     # the APP_NAME should match on AndroidManifest.xml
     list(APPEND GAME_SOURCE
-         proj.android/app/jni/hellocpp/main.cpp
+         proj.android/app/jni/main.cpp
          )
 elseif(LINUX)
     list(APPEND GAME_SOURCE
