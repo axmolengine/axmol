@@ -242,7 +242,7 @@ void LoadingBarReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffe
         {
             fileExist = true;
         }
-        else if (SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName))
+        else if (SpriteFrameCache::getInstance()->findFrame(imageFileName))
         {
             fileExist         = true;
             imageFileNameType = 1;
@@ -258,7 +258,7 @@ void LoadingBarReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffe
     case 1:
     {
         std::string plist        = imageFileNameDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(imageFileName);
         if (spriteFrame)
         {
             fileExist = true;
