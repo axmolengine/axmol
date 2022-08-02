@@ -207,7 +207,7 @@ void CommandBufferMTL::updateRenderCommandEncoder(const RenderTarget* renderTarg
         _currentRenderTargetFlags == renderTarget->getTargetFlags() &&
         !renderTarget->isDirty())
     {
-        return _mtlRenderEncoder;
+        return;
     }
 
     _currentRenderTarget      = renderTarget;
