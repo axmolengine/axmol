@@ -162,11 +162,25 @@ class axistools {
         def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
 
         if(Files.exists(sdkRoot)) {
+            def verList = []
+
+            // Scan installed cmake in $sdk_root/cmake
+            File sdkCMakeDir = new File(sdkRoot.toAbsolutePath().toString() + '/cmake')
+            if (sdkCMakeDir.isDirectory()) {
+                for (cmakeDir in sdkCMakeDir.listFiles()) {
+                    verList.add(cmakeDir.getName())
+                }
+            }
+
+            // Sort cmake verList
+            verList.sort {a,b ->
+                return  axistools.compareVersion(b, a)
+            }
+
+            // Collect cmakeBinDirs for search
             sdkRoot = sdkRoot.toAbsolutePath().toString()
-            def verList = ["3.10.2.4988404", "3.18.1"]
             for(foundVer in verList){
                 cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + foundVer + File.separator + "bin"
-
                 if(new File(cmakeBinDir).isDirectory()) {
                     cmakeBinDirs.add(cmakeBinDir)
                 }
@@ -238,7 +252,7 @@ class axistools {
         
         String ninjaPath = cmakeBin + File.separator + getNinjaProgramName()
         if(!new File(ninjaPath).isFile()) {
-            println("The required ninja program is not present in cmake bin dir!")
+            println("The required ninja program is not present in cmake bin dir: '$cmakeBin'")
             return null
         }
 
