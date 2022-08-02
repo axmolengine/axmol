@@ -380,7 +380,7 @@ Frame* ActionTimelineCache::loadTextureFrame(const rapidjson::Value& json)
     {
         std::string path = texture;
 
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(path);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path);
         if (spriteFrame == nullptr)
         {
             std::string jsonPath = CSLoader::getInstance()->getJsonPath();

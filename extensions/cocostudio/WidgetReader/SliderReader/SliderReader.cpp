@@ -470,7 +470,7 @@ void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = imageFileNameDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(imageFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
         if (spriteFrame)
         {
             imageFileExist = true;
@@ -535,7 +535,7 @@ void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = normalDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(normalFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(normalFileName);
         if (spriteFrame)
         {
             normalFileExist = true;
@@ -600,7 +600,7 @@ void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = pressedDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(pressedFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pressedFileName);
         if (spriteFrame)
         {
             pressedFileExist = true;
@@ -665,7 +665,7 @@ void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = disabledDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(disabledFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(disabledFileName);
         if (spriteFrame)
         {
             disabledFileExist = true;
@@ -730,7 +730,7 @@ void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = progressBarDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(progressBarFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(progressBarFileName);
         if (spriteFrame)
         {
             progressFileExist = true;

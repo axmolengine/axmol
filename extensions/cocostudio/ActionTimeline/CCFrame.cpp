@@ -146,7 +146,7 @@ void TextureFrame::onEnter(Frame* /*nextFrame*/, int /*currentFrameIndex*/)
     if (_sprite)
     {
         auto spriteBlendFunc     = _sprite->getBlendFunc();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(_textureName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(_textureName);
 
         if (spriteFrame != nullptr)
             _sprite->setSpriteFrame(spriteFrame);

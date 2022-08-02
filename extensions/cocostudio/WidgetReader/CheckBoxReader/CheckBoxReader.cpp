@@ -458,7 +458,7 @@ void CheckBoxReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     case 1:
     {
         std::string plist        = backGroundDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(backGroundTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundTexturePath);
         if (spriteFrame)
         {
             backGroundFileExist = true;
@@ -518,7 +518,7 @@ void CheckBoxReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     case 1:
     {
         std::string plist        = backGroundSelectedDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(backGroundSelectedTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundSelectedTexturePath);
         if (spriteFrame)
         {
             backGroundSelectedfileExist = true;
@@ -578,7 +578,7 @@ void CheckBoxReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     case 1:
     {
         std::string plist        = frontCrossDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(frontCrossFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossFileName);
         if (spriteFrame)
         {
             frontCrossFileExist = true;
@@ -637,7 +637,7 @@ void CheckBoxReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     case 1:
     {
         std::string plist        = backGroundDisabledDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(backGroundDisabledFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundDisabledFileName);
         if (spriteFrame)
         {
             backGroundBoxDisabledFileExist = true;
@@ -697,7 +697,7 @@ void CheckBoxReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     case 1:
     {
         std::string plist        = frontCrossDisabledDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(frontCrossDisabledFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossDisabledFileName);
         if (spriteFrame)
         {
             frontCrossDisabledFileExist = true;

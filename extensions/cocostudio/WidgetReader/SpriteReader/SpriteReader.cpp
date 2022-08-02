@@ -258,7 +258,7 @@ void SpriteReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = fileNameDataDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(path);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path);
         if (spriteFrame)
         {
             sprite->setSpriteFrame(spriteFrame);

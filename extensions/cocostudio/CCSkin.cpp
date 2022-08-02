@@ -85,7 +85,7 @@ bool Skin::initWithSpriteFrameName(std::string_view spriteFrameName)
 {
     CCAssert(spriteFrameName != "", "");
 
-    SpriteFrame* pFrame = SpriteFrameCache::getInstance()->findFrame(spriteFrameName);
+    SpriteFrame* pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
     bool ret            = true;
 
     if (pFrame != nullptr)
