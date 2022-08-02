@@ -484,9 +484,7 @@ void UserDefault::flush()
         if (obs.length() > _curMapSize)
         {
             _rwmmap->unmap();
-            while (obs.length() > _curMapSize)
-                _curMapSize <<= 1;  // X2
-                
+            _curMapSize <<= 1;  // X2
             posix_fsetsize(_fd, _curMapSize);
             _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
         }
