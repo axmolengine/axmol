@@ -104,7 +104,7 @@ def install_android_sdk():
         'cmdline-tools;latest',
         'platforms;android-28',
         'build-tools;29.0.2',
-        'cmake;3.10.2.4988404',
+        'cmake;3.22.1',
         'ndk;' + NDK_VER
     ]
 
