@@ -674,7 +674,7 @@ Node* CSLoader::loadSprite(const rapidjson::Value& json)
     {
         std::string path = filePath;
 
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(path);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(path);
         if (!spriteFrame)
         {
             path   = _jsonPath + path;
