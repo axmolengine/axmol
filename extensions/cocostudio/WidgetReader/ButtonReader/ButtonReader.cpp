@@ -689,7 +689,7 @@ void ButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
         {
             normalFileExist = true;
         }
-        else if (SpriteFrameCache::getInstance()->getSpriteFrameByName(normalTexturePath))
+        else if (SpriteFrameCache::getInstance()->findFrame(normalTexturePath))
         {
             normalFileExist = true;
             normalType      = 1;
@@ -704,7 +704,7 @@ void ButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = normalDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(normalTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(normalTexturePath);
         if (spriteFrame)
         {
             normalFileExist = true;
@@ -762,7 +762,7 @@ void ButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = pressedDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(pressedTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(pressedTexturePath);
         if (spriteFrame)
         {
             pressedFileExist = true;
@@ -820,7 +820,7 @@ void ButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     case 1:
     {
         std::string plist        = disabledDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(disabledTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(disabledTexturePath);
         if (spriteFrame)
         {
             disabledFileExist = true;
