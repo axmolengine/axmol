@@ -598,7 +598,7 @@ void LayoutReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
         case 1:
         {
             std::string plist        = imageFileNameDic->plistFile()->c_str();
-            SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imageFileName);
+            SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(imageFileName);
             if (spriteFrame)
             {
                 fileExist = true;
