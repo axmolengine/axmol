@@ -506,6 +506,18 @@ std::string Material::getName() const
     return _name;
 }
 
+void Material::setTransparent(bool value)
+{
+    _isTransparent = value;
+    getStateBlock().setBlend(_force2DQueue || _isTransparent);
+}
+
+void Material::setForce2DQueue(bool value)
+{
+    _force2DQueue = value;
+    getStateBlock().setBlend(_force2DQueue || _isTransparent);
+}
+
 Material::Material() : _name(""), _currentTechnique(nullptr), _target(nullptr) {}
 
 Material::~Material() {}
