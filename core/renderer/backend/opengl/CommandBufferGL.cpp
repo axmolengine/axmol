@@ -214,9 +214,9 @@ void CommandBufferGL::setProgramState(ProgramState* programState)
 void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, 0x1B01);
     glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, 0x1B02);
     cleanResources();
 }
 
@@ -227,12 +227,12 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
                                    bool wireframe)
 {
     prepareDrawing();
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, 0x1B01);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, 0x1B02);
     cleanResources();
 }
 
