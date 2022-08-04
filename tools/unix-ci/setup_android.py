@@ -102,9 +102,9 @@ def install_android_sdk():
     packages = [
         'platform-tools',
         'cmdline-tools;latest',
-        'platforms;android-28',
-        'build-tools;29.0.2',
-        'cmake;3.10.2.4988404',
+        'platforms;android-33',
+        'build-tools;33.0.0',
+        'cmake;3.22.1',
         'ndk;' + NDK_VER
     ]
 
@@ -116,11 +116,15 @@ def export_environment(ndk_only):
     with open(os.path.join(ROOT_DIR, "environment.sh"), "a") as myfile:
         if not ndk_only:
             myfile.write("export ANDROID_SDK=" + ANDROID_SDK + "\n")
+            myfile.write("export ANDROID_HOME=" + ANDROID_SDK + "\n")
+            myfile.write("export ANDROID_SDK_ROOT=" + ANDROID_SDK + "\n")
         myfile.write("export ANDROID_NDK=" + ANDROID_NDK + "\n")
 
     with open(os.path.join(ROOT_DIR, "environment.ps1"), "a") as myfile:
         if not ndk_only:
             myfile.write("$env:ANDROID_SDK=\"" + ANDROID_SDK + "\"\n")
+            myfile.write("$env:ANDROID_HOME=\"" + ANDROID_SDK + "\"\n")
+            myfile.write("$env:ANDROID_SDK_ROOT=\"" + ANDROID_SDK + "\"\n")
         myfile.write("$env:ANDROID_NDK=\"" + ANDROID_NDK + "\"\n")
 
 def main(ndk_only):

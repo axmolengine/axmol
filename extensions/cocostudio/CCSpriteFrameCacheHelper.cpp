@@ -65,7 +65,10 @@ void SpriteFrameCacheHelper::retainSpriteFrames(std::string_view plistPath)
     for (auto iter = framesDict.begin(); iter != framesDict.end(); ++iter)
     {
         auto& spriteFrameName    = iter->first;
-        SpriteFrame* spriteFrame = spriteFramesCache->getSpriteFrameByName(spriteFrameName);
+
+        SpriteFrame* spriteFrame = spriteFramesCache->findFrame(spriteFrameName);
+        AXASSERT(spriteFrame, "spriteframe is null!");
+
         vec.push_back(spriteFrame);
         AX_SAFE_RETAIN(spriteFrame);
     }

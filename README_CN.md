@@ -93,6 +93,13 @@
 
   4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
+### 一些基于axis有趣的项目
+
+- https://github.com/solan-solan/HeightMap/tree/smooth_lod_passing
+- https://github.com/wzhengsen/StarryX
+- https://github.com/aismann/SimpleSnake
+- https://github.com/EugenyN/TanksKombat
+
 ### 注意
   * ThreadLocalStorage线程本地存储
     - ios x86 simulator ios>=10 and axis no longer provide x86 libraries

@@ -325,7 +325,7 @@ void RadioButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuff
     case 1:
     {
         std::string plist        = backGroundDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(backGroundTexturePath);
         if (spriteFrame)
         {
             backGroundFileExist = true;
@@ -384,7 +384,7 @@ void RadioButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuff
     case 1:
     {
         std::string plist        = backGroundSelectedDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundSelectedTexturePath);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(backGroundSelectedTexturePath);
         if (spriteFrame)
         {
             backGroundSelectedfileExist = true;
@@ -444,7 +444,7 @@ void RadioButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuff
     case 1:
     {
         std::string plist        = frontCrossDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(frontCrossFileName);
         if (spriteFrame)
         {
             frontCrossFileExist = true;
@@ -503,7 +503,7 @@ void RadioButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuff
     case 1:
     {
         std::string plist        = backGroundDisabledDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(backGroundDisabledFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(backGroundDisabledFileName);
         if (spriteFrame)
         {
             backGroundBoxDisabledFileExist = true;
@@ -563,7 +563,7 @@ void RadioButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuff
     case 1:
     {
         std::string plist        = frontCrossDisabledDic->plistFile()->c_str();
-        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frontCrossDisabledFileName);
+        SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->findFrame(frontCrossDisabledFileName);
         if (spriteFrame)
         {
             frontCrossDisabledFileExist = true;

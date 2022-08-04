@@ -34516,6 +34516,53 @@ int lua_axis_ui_EditBox_keyboardWillHide(lua_State* tolua_S)
 
     return 0;
 }
+int lua_axis_ui_EditBox_closeKeyboard(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::ui::EditBox* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_ui_EditBox_closeKeyboard'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_closeKeyboard'", nullptr);
+            return 0;
+        }
+        cobj->closeKeyboard();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.EditBox:closeKeyboard",argc, 0);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_ui_EditBox_closeKeyboard'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_axis_ui_EditBox_setCapInsetsNormalRenderer(lua_State* tolua_S)
 {
     int argc = 0;
@@ -36007,6 +36054,7 @@ int lua_register_axis_ui_EditBox(lua_State* tolua_S)
         tolua_function(tolua_S,"setFontColor",lua_axis_ui_EditBox_setFontColor);
         tolua_function(tolua_S,"getFontName",lua_axis_ui_EditBox_getFontName);
         tolua_function(tolua_S,"keyboardWillHide",lua_axis_ui_EditBox_keyboardWillHide);
+        tolua_function(tolua_S,"closeKeyboard",lua_axis_ui_EditBox_closeKeyboard);
         tolua_function(tolua_S,"setCapInsetsNormalRenderer",lua_axis_ui_EditBox_setCapInsetsNormalRenderer);
         tolua_function(tolua_S,"loadTexturePressed",lua_axis_ui_EditBox_loadTexturePressed);
         tolua_function(tolua_S,"getFontColor",lua_axis_ui_EditBox_getFontColor);

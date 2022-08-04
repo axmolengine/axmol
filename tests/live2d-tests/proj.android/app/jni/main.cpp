@@ -1,9 +1,8 @@
 /****************************************************************************
- Copyright (c) 2013      cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
- http://www.cocos2d-x.org
+ https://axis-project.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +23,23 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import <UIKit/UIKit.h>
+#include <memory>
 
-@interface RootViewController : UIViewController {
+#include <android/log.h>
+#include <jni.h>
+
+#include "AppDelegate.h"
+
+#define LOG_TAG "main"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+
+namespace
+{
+std::unique_ptr<AppDelegate> appDelegate;
 }
-- (BOOL)prefersStatusBarHidden;
 
-@end
+void cocos_android_app_init(JNIEnv* env)
+{
+    LOGD("cocos_android_app_init");
+    appDelegate.reset(new AppDelegate());
+}

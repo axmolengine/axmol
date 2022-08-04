@@ -564,7 +564,7 @@ public:
 
       robin_const_iterator operator++(int)
       {
-          robin_iterator tmp(*this);
+          robin_const_iterator tmp(*this);
           ++*this;
 
           return tmp;
