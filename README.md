@@ -131,6 +131,13 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
 - Cpp: `axis new -p org.axis.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
 - Lua: `axis new -p org.axis.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
+### Some interesting related projects based on axis
+
+- https://github.com/solan-solan/HeightMap/tree/smooth_lod_passing
+- https://github.com/wzhengsen/StarryX
+- https://github.com/aismann/SimpleSnake
+- https://github.com/EugenyN/TanksKombat
+
 ### Notes
   * ThreadLocalStorage (TLS) 
     - ios x86 simulator ios>=10 and axis no longer provide x86 libraries
@@ -143,11 +150,6 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
 ### Contributing guide
 https://github.com/axis-project/axis/discussions/411
 
-### The axis Active Contributors
-
-- @halx99
-- @rh101
-- @aismann
-- @weiwest
+### The axis Active Stats
 
 ![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")

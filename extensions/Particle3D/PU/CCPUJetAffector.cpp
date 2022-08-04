@@ -58,7 +58,7 @@ void PUJetAffector::setDynAcceleration(PUDynamicAttribute* dynAcceleration)
 
 void PUJetAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
 {
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         _scaled = deltaTime * (_dynAcceleration->getValue(particle->timeFraction));

@@ -483,7 +483,7 @@ Console::~Console()
 {
     stop();
 
-    for (auto& e : _commands)
+    for (auto&& e : _commands)
         delete e.second;
 }
 
@@ -812,7 +812,7 @@ void Console::loop()
             {
                 for (const auto& str : _DebugStrings)
                 {
-                    for (auto fd : _fds)
+                    for (auto&& fd : _fds)
                     {
                         Console::Utility::sendToConsole(fd, str.c_str(), str.length());
                     }
@@ -959,7 +959,7 @@ bool Console::parseCommand(socket_native_type fd)
     auto commands = Console::Utility::split(cmdLine, _commandSeparator);
     try
     {
-        for (auto command : commands)
+        for (auto&& command : commands)
         {
             performCommand(fd, Console::Utility::trim(command));
         }
@@ -1623,7 +1623,7 @@ void Console::printFileUtils(socket_native_type fd)
 void Console::sendHelp(socket_native_type fd, const hlookup::string_map<Command*>& commands, const char* msg)
 {
     Console::Utility::sendToConsole(fd, msg, strlen(msg));
-    for (auto& it : commands)
+    for (auto&& it : commands)
     {
         auto command = it.second;
         if (command->getHelp().empty())

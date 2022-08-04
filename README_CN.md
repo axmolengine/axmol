@@ -93,6 +93,13 @@
 
   4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 
+### 一些基于axis有趣的项目
+
+- https://github.com/solan-solan/HeightMap/tree/smooth_lod_passing
+- https://github.com/wzhengsen/StarryX
+- https://github.com/aismann/SimpleSnake
+- https://github.com/EugenyN/TanksKombat
+
 ### 注意
   * ThreadLocalStorage线程本地存储
     - ios x86 simulator ios>=10 and axis no longer provide x86 libraries
@@ -107,9 +114,6 @@
   * official v4: https://gitee.com/mirrors/cocos2d-x
   * Git快速手册: https://github.com/axis-project/axis/discussions/411
 
-### axis项目的活跃贡献者
+### Axis项目活跃状态
 
-- @halx99
-- @rh101
-- @aismann
-- @weiwest
+![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")

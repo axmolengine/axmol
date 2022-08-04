@@ -701,7 +701,7 @@ bool Physics3DCollisionCallbackDemo::init()
 
         float scale = 2.0f;
         std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("MeshRendererTest/boss.c3b");
-        for (auto& it : trianglesList)
+        for (auto&& it : trianglesList)
         {
             it *= scale;
         }
@@ -736,7 +736,7 @@ bool Physics3DCollisionCallbackDemo::init()
             }
             // AXLOG("------------BoxB Collision Info------------");
             // AXLOG("Collision Point Num: %d", ci.collisionPointList.size());
-            // for (auto &iter : ci.collisionPointList){
+            // for (auto&& iter : ci.collisionPointList){
             //	AXLOG("Collision Position On A: (%.2f, %.2f, %.2f)", iter.worldPositionOnA.x, iter.worldPositionOnA.y,
             // iter.worldPositionOnA.z); 	AXLOG("Collision Position On B: (%.2f, %.2f, %.2f)",
             // iter.worldPositionOnB.x, iter.worldPositionOnB.y, iter.worldPositionOnB.z); 	AXLOG("Collision Normal

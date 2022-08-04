@@ -19,7 +19,7 @@ android {
     def cmakeVer = axistools.findCMake(project)
 
     defaultConfig {
-        applicationId "org.cocos2dx.hellocpp"
+        applicationId "org.cocos2dx.live2d_tests"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
@@ -27,7 +27,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE"
+                arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE", "-DAX_ENABLE_EXT_LIVE2D=TRUE"
                 cppFlags "-frtti -fexceptions -fsigned-char"
             }
         }

@@ -134,7 +134,7 @@ bool Armature::init(std::string_view name)
 
             _armatureData = armatureData;
 
-            for (auto& element : armatureData->boneDataDic)
+            for (auto&& element : armatureData->boneDataDic)
             {
                 Bone* bone = createBone(element.first);
 
@@ -375,7 +375,7 @@ void Armature::draw(axis::Renderer* renderer, const Mat4& transform, uint32_t fl
         //        AX_NODE_DRAW_SETUP();
     }
 
-    for (auto& object : _children)
+    for (auto&& object : _children)
     {
         if (Bone* bone = dynamic_cast<Bone*>(object))
         {
@@ -533,7 +533,7 @@ void Armature::setParentBone(Bone* parentBone)
 {
     _parentBone = parentBone;
 
-    for (auto& element : _boneDic)
+    for (auto&& element : _boneDic)
     {
         element.second->setArmature(this);
     }
@@ -548,7 +548,7 @@ Bone* Armature::getParentBone() const
 
 void Armature::setColliderFilter(ColliderFilter* filter)
 {
-    for (auto& element : _boneDic)
+    for (auto&& element : _boneDic)
     {
         element.second->setColliderFilter(filter);
     }
@@ -557,7 +557,7 @@ void Armature::setColliderFilter(ColliderFilter* filter)
 
 void Armature::drawContour()
 {
-    for (auto& element : _boneDic)
+    for (auto&& element : _boneDic)
     {
         Bone* bone                 = element.second;
         ColliderDetector* detector = bone->getColliderDetector();
@@ -567,7 +567,7 @@ void Armature::drawContour()
 
         const axis::Vector<ColliderBody*>& bodyList = detector->getColliderBodyList();
 
-        for (auto& object : bodyList)
+        for (auto&& object : bodyList)
         {
             ColliderBody* body                  = static_cast<ColliderBody*>(object);
             const std::vector<Vec2>& vertexList = body->getCalculatedVertexList();
@@ -618,13 +618,13 @@ void Armature::setBody(b2Body* body)
     _body = body;
     _body->SetUserData(this);
 
-    for (auto& object : _children)
+    for (auto&& object : _children)
     {
         if (Bone* bone = dynamic_cast<Bone*>(object))
         {
             auto displayList = bone->getDisplayManager()->getDecorativeDisplayList();
 
-            for (auto displayObject : displayList)
+            for (auto&& displayObject : displayList)
             {
                 ColliderDetector* detector = static_cast<DecorativeDisplay*>(displayObject)->getColliderDetector();
                 if (detector != nullptr)

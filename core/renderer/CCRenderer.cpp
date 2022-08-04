@@ -179,7 +179,7 @@ Renderer::~Renderer()
     _renderGroups.clear();
     _groupCommandManager->release();
 
-    for (auto clearCommand : _callbackCommandsPool)
+    for (auto&& clearCommand : _callbackCommandsPool)
         delete clearCommand;
     _callbackCommandsPool.clear();
 
@@ -389,7 +389,7 @@ void Renderer::render()
     {
         // Process render commands
         // 1. Sort render commands based on ID
-        for (auto& renderqueue : _renderGroups)
+        for (auto&& renderqueue : _renderGroups)
         {
             renderqueue.sort();
         }
@@ -933,10 +933,10 @@ void Renderer::setScissorRect(float x, float y, float width, float height)
 // TriangleCommandBufferManager
 Renderer::TriangleCommandBufferManager::~TriangleCommandBufferManager()
 {
-    for (auto& vertexBuffer : _vertexBufferPool)
+    for (auto&& vertexBuffer : _vertexBufferPool)
         vertexBuffer->release();
 
-    for (auto& indexBuffer : _indexBufferPool)
+    for (auto&& indexBuffer : _indexBufferPool)
         indexBuffer->release();
 }
 

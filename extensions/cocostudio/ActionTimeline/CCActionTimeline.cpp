@@ -173,16 +173,16 @@ ActionTimeline* ActionTimeline::clone() const
     newAction->setDuration(_duration);
     newAction->setTimeSpeed(_timeSpeed);
 
-    for (auto timelines : _timelineMap)
+    for (auto&& timelines : _timelineMap)
     {
-        for (auto timeline : timelines.second)
+        for (auto&& timeline : timelines.second)
         {
             Timeline* newTimeline = timeline->clone();
             newAction->addTimeline(newTimeline);
         }
     }
 
-    for (auto info : _animationInfos)
+    for (auto&& info : _animationInfos)
     {
         newAction->addAnimationInfo(info.second);
     }
@@ -235,7 +235,7 @@ void foreachNodeDescendant(Node* parent, tCallBack callback)
     callback(parent);
 
     auto& children = parent->getChildren();
-    for (auto child : children)
+    for (auto&& child : children)
     {
         foreachNodeDescendant(child, callback);
     }
@@ -255,7 +255,7 @@ void ActionTimeline::startWithTarget(Node* target)
             if (_timelineMap.find(actionTag) != _timelineMap.end())
             {
                 auto timelines = this->_timelineMap[actionTag];
-                for (auto timeline : timelines)
+                for (auto&& timeline : timelines)
                 {
                     timeline->setNode(child);
                 }
@@ -410,7 +410,7 @@ void ActionTimeline::emitFrameEndCallFuncs(int frameIndex)
     if (clipEndCallsIter != _frameEndCallFuncs.end())
     {
         auto clipEndCalls = (*clipEndCallsIter).second;
-        for (auto call : clipEndCalls)
+        for (auto&& call : clipEndCalls)
             (call).second();
     }
 }

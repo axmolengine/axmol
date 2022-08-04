@@ -198,7 +198,7 @@ void PUScaleAffector::updatePUAffector(PUParticle3D* particle, float deltaTime)
     //// Only continue if the particle is a visual particle
     // if (particle->particleType != Particle::PT_VISUAL)
     //	return;
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         float ds        = 0;

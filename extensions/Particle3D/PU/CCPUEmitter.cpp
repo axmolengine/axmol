@@ -378,7 +378,7 @@ void PUEmitter::prepare()
             if (system)
             {
                 auto children = system->getChildren();
-                for (auto it : children)
+                for (auto&& it : children)
                 {
                     if (it->getName() == _emitsName)
                     {

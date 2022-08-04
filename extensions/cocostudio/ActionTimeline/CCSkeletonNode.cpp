@@ -134,7 +134,7 @@ SkeletonNode::SkeletonNode() : BoneNode(), _subBonesDirty(true), _subBonesOrderD
 
 SkeletonNode::~SkeletonNode()
 {
-    for (auto& bonepair : _subBonesMap)
+    for (auto&& bonepair : _subBonesMap)
     {
         setRootSkeleton(bonepair.second, nullptr);
     }
@@ -300,7 +300,7 @@ void SkeletonNode::batchDrawAllSubBones()
 
 void SkeletonNode::changeSkins(const hlookup::string_map<std::string>& boneSkinNameMap)
 {
-    for (auto& boneskin : boneSkinNameMap)
+    for (auto&& boneskin : boneSkinNameMap)
     {
         auto bone = getBoneNode(boneskin.first);
         if (nullptr != bone)

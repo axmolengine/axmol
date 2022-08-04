@@ -3170,3 +3170,23 @@ void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<axis:
         lua_rawset(L, -3);
     }
 }
+
+void resourceData_to_luaval(lua_State* L, const axis::ResourceData& data)
+{
+    if (L == nullptr)
+        return;
+
+    lua_newtable(L);
+
+    lua_pushstring(L, "type");
+    lua_pushinteger(L, data.type);
+    lua_rawset(L, -3);
+
+    lua_pushstring(L, "file");
+    lua_pushstring(L, data.file.c_str());
+    lua_rawset(L, -3);
+
+    lua_pushstring(L, "plist");
+    lua_pushstring(L, data.plist.c_str());
+    lua_rawset(L, -3);
+}

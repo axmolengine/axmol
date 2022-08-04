@@ -124,13 +124,13 @@ TextureInfo::~TextureInfo()
 
 void TextureInfo::retainTextures()
 {
-    for (auto& texture : textures)
+    for (auto&& texture : textures)
         AX_SAFE_RETAIN(texture);
 }
 
 void TextureInfo::releaseTextures()
 {
-    for (auto& texture : textures)
+    for (auto&& texture : textures)
         AX_SAFE_RELEASE(texture);
     textures.clear();
 }

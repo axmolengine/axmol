@@ -151,7 +151,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
     std::vector<std::string> toRemoveFrames;
 
     const auto& frames = getSpriteFrames();
-    for (auto& iter : frames)
+    for (auto&& iter : frames)
     {
         auto* spriteFrame = iter.second;
         if (spriteFrame->getReferenceCount() == 1)
@@ -228,7 +228,7 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 {
     std::vector<std::string> keysToRemove;
 
-    for (auto& iter : getSpriteFrames())
+    for (auto&& iter : getSpriteFrames())
     {
         auto key    = iter.first;
         auto* frame = findFrame(key);

@@ -63,7 +63,7 @@ void PUParticleFollower::setMinDistance(float minDistance)
 void PUParticleFollower::updatePUAffector(PUParticle3D* particle, float /*deltaTime*/)
 {
     //_first = true;
-    // for (auto iter : _particleSystem->getParticles())
+    // for (auto&& iter : _particleSystem->getParticles())
     {
         // PUParticle3D *particle = iter;
         if (!_first)

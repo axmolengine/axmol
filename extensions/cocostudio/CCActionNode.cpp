@@ -68,7 +68,7 @@ ActionNode::~ActionNode()
 
     AX_SAFE_RELEASE(_object);
 
-    for (auto object : _frameArray)
+    for (auto&& object : _frameArray)
     {
         object->clear();
         AX_SAFE_DELETE(object);
@@ -460,7 +460,7 @@ void ActionNode::deleteFrame(ActionFrame* frame)
 
 void ActionNode::clearAllFrame()
 {
-    for (auto array : _frameArray)
+    for (auto&& array : _frameArray)
     {
         array->clear();
     }

@@ -185,7 +185,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
 AABB MeshRenderer::getAABBRecursivelyImp(Node* node)
 {
     AABB aabb;
-    for (auto iter : node->getChildren())
+    for (auto&& iter : node->getChildren())
     {
         aabb.merge(getAABBRecursivelyImp(iter));
     }
@@ -202,7 +202,7 @@ bool MeshRenderer::loadFromCache(std::string_view path)
     auto meshdata = MeshRendererCache::getInstance()->getMeshRenderData(path);
     if (meshdata)
     {
-        for (auto it : meshdata->meshVertexDatas)
+        for (auto&& it : meshdata->meshVertexDatas)
         {
             _meshVertexDatas.pushBack(it);
         }
@@ -503,14 +503,14 @@ void MeshRenderer::genMaterial(bool useLight)
     _shaderUsingLight = useLight;
 
     std::unordered_map<const MeshVertexData*, MeshMaterial*> materials;
-    for (auto meshVertexData : _meshVertexDatas)
+    for (auto&& meshVertexData : _meshVertexDatas)
     {
         auto material = getMeshRendererMaterialForAttribs(meshVertexData, useLight);
         AXASSERT(material, "material should cannot be null.");
         materials[meshVertexData] = material;
     }
 
-    for (auto& mesh : _meshes)
+    for (auto&& mesh : _meshes)
     {
         auto material = materials[mesh->getMeshIndexData()->getMeshVertexData()];
         // keep original state block if exist
@@ -656,7 +656,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
 
 MeshIndexData* MeshRenderer::getMeshIndexData(std::string_view indexId) const
 {
-    for (auto it : _meshVertexDatas)
+    for (auto&& it : _meshVertexDatas)
     {
         auto index = it->getMeshIndexDataById(indexId);
         if (index)
@@ -680,7 +680,7 @@ void MeshRenderer::setTexture(std::string_view texFile)
 
 void MeshRenderer::setTexture(Texture2D* texture)
 {
-    for (auto mesh : _meshes)
+    for (auto&& mesh : _meshes)
     {
         mesh->setTexture(texture);
     }
@@ -718,7 +718,7 @@ void MeshRenderer::removeAttachNode(std::string_view boneName)
 
 void MeshRenderer::removeAllAttachNode()
 {
-    for (auto& it : _attachments)
+    for (auto&& it : _attachments)
     {
         removeChild(it.second);
     }
@@ -808,7 +808,7 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
         }
     }
 
-    for (auto mesh : _meshes)
+    for (auto&& mesh : _meshes)
     {
         mesh->draw(renderer, _globalZOrder, transform, flags, _lightMask, Vec4(color.r, color.g, color.b, color.a),
                    _forceDepthWrite, _wireframe);
@@ -819,7 +819,7 @@ bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool nee
 {
     if (Node::setProgramState(programState, needsRetain))
     {
-        for (auto state : _meshes)
+        for (auto&& state : _meshes)
         {
             state->setProgramState(programState);
         }
@@ -833,7 +833,7 @@ void MeshRenderer::setBlendFunc(const BlendFunc& blendFunc)
     if (_blend.src != blendFunc.src || _blend.dst != blendFunc.dst)
     {
         _blend = blendFunc;
-        for (auto mesh : _meshes)
+        for (auto&& mesh : _meshes)
         {
             mesh->setBlendFunc(blendFunc);
         }
@@ -895,7 +895,7 @@ Rect MeshRenderer::getBoundingBox() const
 
 void MeshRenderer::setCullFace(CullFaceSide side)
 {
-    for (auto& it : _meshes)
+    for (auto&& it : _meshes)
     {
         it->getMaterial()->getStateBlock().setCullFaceSide(side);
     }
@@ -903,7 +903,7 @@ void MeshRenderer::setCullFace(CullFaceSide side)
 
 void MeshRenderer::setCullFaceEnabled(bool enable)
 {
-    for (auto& it : _meshes)
+    for (auto&& it : _meshes)
     {
         it->getMaterial()->getStateBlock().setCullFace(enable);
     }
@@ -994,7 +994,7 @@ void MeshRendererCache::removeMeshRenderData(std::string_view key)
 
 void MeshRendererCache::removeAllMeshRenderData()
 {
-    for (auto& it : _meshDatas)
+    for (auto&& it : _meshDatas)
     {
         delete it.second;
     }

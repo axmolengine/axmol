@@ -54,7 +54,7 @@ void PUDoEnableComponentEventHandler::handle(PUParticleSystem3D* particleSystem,
             if (system)
             {
                 auto children = system->getChildren();
-                for (auto iter : children)
+                for (auto&& iter : children)
                 {
                     PUParticleSystem3D* child = dynamic_cast<PUParticleSystem3D*>(iter);
                     if (child)
@@ -85,7 +85,7 @@ void PUDoEnableComponentEventHandler::handle(PUParticleSystem3D* particleSystem,
             if (system)
             {
                 auto children = system->getChildren();
-                for (auto iter : children)
+                for (auto&& iter : children)
                 {
                     PUParticleSystem3D* child = dynamic_cast<PUParticleSystem3D*>(iter);
                     if (child)
@@ -116,7 +116,7 @@ void PUDoEnableComponentEventHandler::handle(PUParticleSystem3D* particleSystem,
             if (system)
             {
                 auto children = system->getChildren();
-                for (auto iter : children)
+                for (auto&& iter : children)
                 {
                     PUParticleSystem3D* child = dynamic_cast<PUParticleSystem3D*>(iter);
                     if (child)
@@ -144,7 +144,7 @@ void PUDoEnableComponentEventHandler::handle(PUParticleSystem3D* particleSystem,
         if (system)
         {
             auto children = system->getChildren();
-            for (auto iter : children)
+            for (auto&& iter : children)
             {
                 PUParticleSystem3D* child = dynamic_cast<PUParticleSystem3D*>(iter);
                 if (child && child->getName() == _componentName)

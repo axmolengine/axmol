@@ -68,7 +68,7 @@ NavMeshBaseTestDemo::NavMeshBaseTestDemo() : _camera(nullptr), _needMoveAgents(f
 
 NavMeshBaseTestDemo::~NavMeshBaseTestDemo()
 {
-    for (auto iter : _agents)
+    for (auto&& iter : _agents)
     {
         AgentUserData* data = static_cast<AgentUserData*>(iter.first->getUserData());
         delete data;
@@ -222,7 +222,7 @@ Vec3 jump(const Vec3* pV1, const Vec3* pV2, float height, float t)
 
 void NavMeshBaseTestDemo::moveAgents(const axis::Vec3& des)
 {
-    for (auto iter : _agents)
+    for (auto&& iter : _agents)
     {
         NavMeshAgent::MoveCallback callback = [](NavMeshAgent* agent, float totalTimeAfterMove) {
             AgentUserData* data = static_cast<AgentUserData*>(agent->getUserData());
@@ -258,7 +258,7 @@ void NavMeshBaseTestDemo::moveAgents(const axis::Vec3& des)
 
 void NavMeshBaseTestDemo::update(float delta)
 {
-    for (auto iter : _agents)
+    for (auto&& iter : _agents)
     {
         float speed = iter.first->getCurrentVelocity().length() * 0.2f;
         iter.second->setSpeed(0.0f < speed ? speed : 0.0f);
