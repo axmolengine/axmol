@@ -116,11 +116,13 @@ def export_environment(ndk_only):
     with open(os.path.join(ROOT_DIR, "environment.sh"), "a") as myfile:
         if not ndk_only:
             myfile.write("export ANDROID_SDK_ROOT=" + ANDROID_SDK_ROOT + "\n") # refer to: https://developer.android.google.cn/studio/command-line/variables
+            myfile.write("export ANDROID_HOME=" + ANDROID_SDK_ROOT + "\n") # github action has ANDROID_HOME=/usr/local/lib/android/sdk
         myfile.write("export ANDROID_NDK=" + ANDROID_NDK + "\n") # for lua binding generator
 
     with open(os.path.join(ROOT_DIR, "environment.ps1"), "a") as myfile:
         if not ndk_only:
             myfile.write("$env:ANDROID_SDK_ROOT=\"" + ANDROID_SDK_ROOT + "\"\n")
+            myfile.write("$env:ANDROID_HOME=\"" + ANDROID_SDK_ROOT + "\"\n")
         myfile.write("$env:ANDROID_NDK=\"" + ANDROID_NDK + "\"\n") # for lua binding generator
 
 def main(ndk_only):
