@@ -72,7 +72,7 @@
   2. 启动 Android Studio并打开axis\tests\cpp-tests\proj.android
   3. 通过 [Tools][SdkManagers] 打开sdk管理工具，选择如下SDK Platforms和SDK Tools后， 点击按钮 ```Apply``` 一路跟着引导安装即可:
      * Android SDK Platform 33  (在SDK Platforms页签)  
-     * Android Gradle Plugin (AGP) 7.2.0  
+     * Android Gradle Plugin (AGP) 7.2.2  
      * Android SDK Build-Tools 30.0.3 和 AGP 版本对应  
      * Gradle 7.4.2  
      * NDK r23c+  
