@@ -160,7 +160,7 @@ class CCPluginDeploy(axis.CCPlugin):
         self.package = compile_dep.android_package
         self.activity = compile_dep.android_activity
         apk_path = compile_dep.apk_path
-        sdk_root = axis.check_environment_variable('ANDROID_SDK')
+        sdk_root = axis.check_environment_variable('ANDROID_SDK_ROOT')
         adb_path = axis.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
 
         if not self._no_uninstall:

@@ -29,7 +29,7 @@ THE SOFTWARE.
 This script will install environment variables needed to by axis. It will set these envrironment variables:
 * AXIS_CONSOLE_ROOT: used to run axis console tools
 * ANDROID_NDK: used to build android native codes
-* ANDROID_SDK: used to generate applicatoin on Android through commands
+* ANDROID_SDK_ROOT: used to generate applicatoin on Android through commands
 * AXIS_ROOT: path where axis is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
@@ -67,7 +67,7 @@ AXIS_ROOT = 'AXIS_ROOT'
 AXIS_CONSOLE_ROOT = 'AXIS_CONSOLE_ROOT'
 
 ANDROID_NDK = 'ANDROID_NDK'
-ANDROID_SDK = 'ANDROID_SDK'
+ANDROID_SDK_ROOT = 'ANDROID_SDK_ROOT'
 
 def _check_python_version():
     major_ver = sys.version_info[0]
@@ -194,7 +194,7 @@ class SetEnvVar(object):
         file.write('\n# Add environment variable %s for axis\n' % key)
         file.write('export %s="%s"\n' % (key, value))
         file.write('export PATH=$%s:$PATH\n' % key)
-        if key == ANDROID_SDK:
+        if key == ANDROID_SDK_ROOT:
             file.write(
                 'export PATH=$%s/tools:$%s/platform-tools:$PATH\n' % (key, key))
         file.close()
@@ -296,7 +296,7 @@ class SetEnvVar(object):
 #             if sys_var == ANDROID_NDK:
 #                 root.wm_title('Set ANDROID_NDK')
 #             else:
-#                 root.wm_title('Set ANDROID_SDK')
+#                 root.wm_title('Set ANDROID_SDK_ROOT')
 
 #             def callback():
 #                 self.tmp_input_value = tkFileDialog.askdirectory()
@@ -312,14 +312,14 @@ class SetEnvVar(object):
 # You can safely skip this step now. You can set the ANDROID_NDK later.
 #                 """
 
-#             if sys_var == ANDROID_SDK:
+#             if sys_var == ANDROID_SDK_ROOT:
 #                 label_content = 'Select path for Android SDK'
 #                 label_help = """
 # The Android SDK is needed to develop games for Android.
 # For further information, go to:
 # https://developer.android.com/tools/sdk/ndk/index.html.
 
-# You can safely skip this step now. You can set the ANDROID_SDK later.
+# You can safely skip this step now. You can set the ANDROID_SDK_ROOT later.
 #                 """
 
 #             Tkinter.Label(root, text=label_help).pack()
@@ -346,7 +346,7 @@ class SetEnvVar(object):
         ret = False
         if var_name == ANDROID_NDK:
             ret = self._is_ndk_root_valid(value)
-        elif var_name == ANDROID_SDK:
+        elif var_name == ANDROID_SDK_ROOT:
             ret = self._is_android_sdk_root_valid(value)
         else:
             ret = False
@@ -583,7 +583,7 @@ class SetEnvVar(object):
     def _find_value_from_sys(self, var_name):
         if var_name == ANDROID_NDK:
             return self._get_ndkbuild_path()
-        elif var_name == ANDROID_SDK:
+        elif var_name == ANDROID_SDK_ROOT:
             return self._get_androidsdk_path()
         else:
             return None
@@ -656,7 +656,7 @@ class SetEnvVar(object):
                   self.file_used_for_setup)
         if(quiet) :
             ndk_ret = self.set_variable(ANDROID_NDK, ndk_root)
-            sdk_ret = self.set_variable(ANDROID_SDK, android_sdk_root)
+            sdk_ret = self.set_variable(ANDROID_SDK_ROOT, android_sdk_root)
 
         # tip the backup file
         if (self.backup_file is not None) and (os.path.exists(self.backup_file)):
