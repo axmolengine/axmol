@@ -155,6 +155,27 @@ public:
      */
     axis::backend::PrimitiveType getPrimitiveType() const { return _drawPrimitive; }
 
+    /**
+     * Enable material transparent rendering.
+     * WARNING: depth testing will not work.
+     */
+    void setTransparent(bool value);
+
+    /**
+     * Is material transparent?
+     */
+    bool isTransparent() const { return _isTransparent; }
+
+    /**
+     * Enable material 2D queue rendering.
+     */
+    void setForce2DQueue(bool value);
+
+    /**
+     * Is material in 2D render queue?
+     */
+    bool isForce2DQueue() const { return _force2DQueue; }
+
 protected:
     Material();
     ~Material();
@@ -188,6 +209,9 @@ protected:
 
     std::unordered_map<std::string, int> _textureSlots;
     int _textureSlotIndex = 0;
+
+    bool _isTransparent = false;  // is this mesh transparent.
+    bool _force2DQueue = false;   // render meshes using this material in 2D render queue.
 
     axis::backend::PrimitiveType _drawPrimitive =
         axis::backend::PrimitiveType::TRIANGLE;  // primitive draw type for meshes

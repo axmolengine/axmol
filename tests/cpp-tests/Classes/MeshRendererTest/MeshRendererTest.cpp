@@ -2214,7 +2214,7 @@ MeshRendererClippingTest::MeshRendererClippingTest()
     auto animation = Animation3D::create("MeshRendererTest/orc.c3b");
     auto animate   = Animate3D::create(animation);
     mesh3D->runAction(RepeatForever::create(animate));
-    mesh3D->setForce2DQueue(true);
+    mesh3D->getMaterial()->setForce2DQueue(true);
 }
 
 MeshRendererClippingTest::~MeshRendererClippingTest() {}

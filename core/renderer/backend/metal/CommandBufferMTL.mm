@@ -290,7 +290,7 @@ void CommandBufferMTL::setIndexBuffer(Buffer* buffer)
     [_mtlIndexBuffer retain];
 }
 
-void CommandBufferMTL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count)
+void CommandBufferMTL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawPrimitives:toMTLPrimitive(primitiveType) vertexStart:start vertexCount:count];
@@ -299,7 +299,8 @@ void CommandBufferMTL::drawArrays(PrimitiveType primitiveType, std::size_t start
 void CommandBufferMTL::drawElements(PrimitiveType primitiveType,
                                     IndexFormat indexType,
                                     std::size_t count,
-                                    std::size_t offset)
+                                    std::size_t offset,
+									bool wireframe /* unused */)
 {
     prepareDrawing();
     [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)

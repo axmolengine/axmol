@@ -731,12 +731,13 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     {
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
         _commandBuffer->drawElements(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
-                                     cmd->getIndexDrawOffset());
+                                     cmd->getIndexDrawOffset(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
     }
     else
     {
-        _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount());
+        _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
+                                   cmd->isWireframe());
         _drawnVertices += cmd->getVertexDrawCount();
     }
     _drawnBatches++;

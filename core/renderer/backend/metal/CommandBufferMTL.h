@@ -143,8 +143,10 @@ public:
      * @param start For each instance, the first index to draw
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
+	 *
+	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count) override;
+    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe) override;
 
     /**
      * Draw primitives with an index list.
@@ -154,11 +156,14 @@ public:
      * @param offset Byte offset within indexBuffer to start reading indexes from.
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
+	 *
+	 * TODO: Implement a wireframe mode for METAL devices. Refer to: https://forums.ogre3d.org/viewtopic.php?t=95089
      */
     virtual void drawElements(PrimitiveType primitiveType,
                               IndexFormat indexType,
                               std::size_t count,
-                              std::size_t offset) override;
+                              std::size_t offset,
+                              bool wireframe) override;
 
     /**
      * Do some resources release.

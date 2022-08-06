@@ -2258,7 +2258,7 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 7) 
+    if (argc == 8) 
     {
         axis::Renderer* arg0;
         double arg1;
@@ -2267,26 +2267,30 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
         unsigned int arg4;
         axis::Vec4 arg5;
         bool arg6;
+		bool arg7;
 
         ok &= luaval_to_object<axis::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Mesh:draw");
 
-        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Mesh:draw");
+        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Mesh:draw");
 
         ok &= luaval_to_mat4(tolua_S, 4, &arg2, "ax.Mesh:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Mesh:draw");
+        ok &= luaval_to_uint32(tolua_S, 5, &arg3, "ax.Mesh:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.Mesh:draw");
+        ok &= luaval_to_uint32(tolua_S, 6, &arg4, "ax.Mesh:draw");
 
         ok &= luaval_to_vec4(tolua_S, 7, &arg5, "ax.Mesh:draw");
 
-        ok &= luaval_to_boolean(tolua_S, 8,&arg6, "ax.Mesh:draw");
+        ok &= luaval_to_boolean(tolua_S, 8, &arg6, "ax.Mesh:draw");
+		
+		ok &= luaval_to_boolean(tolua_S, 9, &arg7, "ax.Mesh:draw");
+		
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_draw'", nullptr);
             return 0;
         }
-        cobj->draw(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        cobj->draw(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2627,7 +2631,7 @@ int lua_axis_3d_Mesh_setForce2DQueue(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_setForce2DQueue'", nullptr);
             return 0;
         }
-        cobj->setForce2DQueue(arg0);
+        cobj->getMaterial()->setForce2DQueue(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4480,7 +4484,7 @@ int lua_axis_3d_MeshRenderer_setForce2DQueue(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_setForce2DQueue'", nullptr);
             return 0;
         }
-        cobj->setForce2DQueue(arg0);
+        cobj->getMaterial()->setForce2DQueue(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
