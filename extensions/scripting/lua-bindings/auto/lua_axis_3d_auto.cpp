@@ -2267,24 +2267,23 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
         unsigned int arg4;
         axis::Vec4 arg5;
         bool arg6;
-		bool arg7;
+        bool arg7;
 
         ok &= luaval_to_object<axis::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Mesh:draw");
 
-        ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.Mesh:draw");
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Mesh:draw");
 
         ok &= luaval_to_mat4(tolua_S, 4, &arg2, "ax.Mesh:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 5, &arg3, "ax.Mesh:draw");
+        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.Mesh:draw");
 
-        ok &= luaval_to_uint32(tolua_S, 6, &arg4, "ax.Mesh:draw");
+        ok &= luaval_to_uint32(tolua_S, 6,&arg4, "ax.Mesh:draw");
 
         ok &= luaval_to_vec4(tolua_S, 7, &arg5, "ax.Mesh:draw");
 
-        ok &= luaval_to_boolean(tolua_S, 8, &arg6, "ax.Mesh:draw");
-		
-		ok &= luaval_to_boolean(tolua_S, 9, &arg7, "ax.Mesh:draw");
-		
+        ok &= luaval_to_boolean(tolua_S, 8,&arg6, "ax.Mesh:draw");
+
+        ok &= luaval_to_boolean(tolua_S, 9,&arg7, "ax.Mesh:draw");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_draw'", nullptr);
@@ -2294,7 +2293,7 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:draw",argc, 7);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:draw",argc, 8);
     return 0;
 
 #if AXIS_DEBUG >= 1
@@ -2595,56 +2594,6 @@ int lua_axis_3d_Mesh_setBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
-int lua_axis_3d_Mesh_setForce2DQueue(lua_State* tolua_S)
-{
-    int argc = 0;
-    axis::Mesh* cobj = nullptr;
-    bool ok  = true;
-
-#if AXIS_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if AXIS_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
-
-#if AXIS_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_3d_Mesh_setForce2DQueue'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:setForce2DQueue");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_setForce2DQueue'", nullptr);
-            return 0;
-        }
-        cobj->getMaterial()->setForce2DQueue(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:setForce2DQueue",argc, 1);
-    return 0;
-
-#if AXIS_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_axis_3d_Mesh_setForce2DQueue'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_axis_3d_Mesh_setSkin(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2857,7 +2806,6 @@ int lua_register_axis_3d_Mesh(lua_State* tolua_S)
         tolua_function(tolua_S,"getProgramState",lua_axis_3d_Mesh_getProgramState);
         tolua_function(tolua_S,"getMeshVertexAttribCount",lua_axis_3d_Mesh_getMeshVertexAttribCount);
         tolua_function(tolua_S,"setBlendFunc",lua_axis_3d_Mesh_setBlendFunc);
-        tolua_function(tolua_S,"setForce2DQueue",lua_axis_3d_Mesh_setForce2DQueue);
         tolua_function(tolua_S,"setSkin",lua_axis_3d_Mesh_setSkin);
         tolua_function(tolua_S,"isVisible",lua_axis_3d_Mesh_isVisible);
         tolua_function(tolua_S,"setVisible",lua_axis_3d_Mesh_setVisible);
@@ -3833,6 +3781,17 @@ int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
 #endif
 
     argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMaterial'", nullptr);
+            return 0;
+        }
+        axis::Material* ret = cobj->getMaterial();
+        object_to_luaval<axis::Material>(tolua_S, "ax.Material",(axis::Material*)ret);
+        return 1;
+    }
     if (argc == 1) 
     {
         int arg0;
@@ -3847,12 +3806,109 @@ int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
         object_to_luaval<axis::Material>(tolua_S, "ax.Material",(axis::Material*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMaterial",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMaterial",argc, 0);
     return 0;
 
 #if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_3d_MeshRenderer_getMaterial'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_axis_3d_MeshRenderer_setWireframe(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_3d_MeshRenderer_setWireframe'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setWireframe");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_setWireframe'", nullptr);
+            return 0;
+        }
+        cobj->setWireframe(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:setWireframe",argc, 1);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_3d_MeshRenderer_setWireframe'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_axis_3d_MeshRenderer_isWireframe(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_3d_MeshRenderer_isWireframe'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_isWireframe'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isWireframe();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:isWireframe",argc, 0);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_3d_MeshRenderer_isWireframe'.",&tolua_err);
 #endif
 
     return 0;
@@ -4448,56 +4504,6 @@ int lua_axis_3d_MeshRenderer_setBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
-int lua_axis_3d_MeshRenderer_setForce2DQueue(lua_State* tolua_S)
-{
-    int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
-    bool ok  = true;
-
-#if AXIS_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if AXIS_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
-
-#if AXIS_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_3d_MeshRenderer_setForce2DQueue'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setForce2DQueue");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_setForce2DQueue'", nullptr);
-            return 0;
-        }
-        cobj->getMaterial()->setForce2DQueue(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:setForce2DQueue",argc, 1);
-    return 0;
-
-#if AXIS_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_axis_3d_MeshRenderer_setForce2DQueue'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_axis_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4833,6 +4839,8 @@ int lua_register_axis_3d_MeshRenderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setTexture",lua_axis_3d_MeshRenderer_setTexture);
         tolua_function(tolua_S,"getLightMask",lua_axis_3d_MeshRenderer_getLightMask);
         tolua_function(tolua_S,"getMaterial",lua_axis_3d_MeshRenderer_getMaterial);
+        tolua_function(tolua_S,"setWireframe",lua_axis_3d_MeshRenderer_setWireframe);
+        tolua_function(tolua_S,"isWireframe",lua_axis_3d_MeshRenderer_isWireframe);
         tolua_function(tolua_S,"setCullFace",lua_axis_3d_MeshRenderer_setCullFace);
         tolua_function(tolua_S,"getMeshes",lua_axis_3d_MeshRenderer_getMeshes);
         tolua_function(tolua_S,"removeAllAttachNode",lua_axis_3d_MeshRenderer_removeAllAttachNode);
@@ -4845,7 +4853,6 @@ int lua_register_axis_3d_MeshRenderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setLightMask",lua_axis_3d_MeshRenderer_setLightMask);
         tolua_function(tolua_S,"getAttachNode",lua_axis_3d_MeshRenderer_getAttachNode);
         tolua_function(tolua_S,"setBlendFunc",lua_axis_3d_MeshRenderer_setBlendFunc);
-        tolua_function(tolua_S,"setForce2DQueue",lua_axis_3d_MeshRenderer_setForce2DQueue);
         tolua_function(tolua_S,"genMaterial",lua_axis_3d_MeshRenderer_genMaterial);
         tolua_function(tolua_S,"removeAttachNode",lua_axis_3d_MeshRenderer_removeAttachNode);
         tolua_function(tolua_S,"getSkeleton",lua_axis_3d_MeshRenderer_getSkeleton);
