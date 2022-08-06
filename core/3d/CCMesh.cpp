@@ -111,8 +111,6 @@ static Texture2D* getDummyTexture()
 Mesh::Mesh()
     : _skin(nullptr)
     , _visible(true)
-    , _isTransparent(false)
-    , _force2DQueue(false)
     , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
     , _meshIndexData(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
@@ -390,12 +388,13 @@ void Mesh::draw(Renderer* renderer,
                 uint32_t flags,
                 unsigned int lightMask,
                 const Vec4& color,
-                bool forceDepthWrite)
+                bool forceDepthWrite,
+                bool wireframe)
 {
     if (!isVisible())
         return;
 
-    bool isTransparent = (_isTransparent || color.w < 1.f);
+    bool isTransparent = (_material->isTransparent() || color.w < 1.f);
     float globalZ      = isTransparent ? 0 : globalZOrder;
     if (isTransparent)
         flags |= Node::FLAGS_RENDER_AS_3D;
@@ -415,8 +414,6 @@ void Mesh::draw(Renderer* renderer,
         _material->getStateBlock().setDepthWrite(false);
     else
         _material->getStateBlock().setDepthWrite(true);
-
-    _material->getStateBlock().setBlend(_force2DQueue || isTransparent);
 
     // set default uniforms for Mesh
     // 'u_color' and others
@@ -441,7 +438,8 @@ void Mesh::draw(Renderer* renderer,
         command.init(globalZ, transform);
         command.setSkipBatching(isTransparent);
         command.setTransparent(isTransparent);
-        command.set3D(!_force2DQueue);
+        command.set3D(!_material->isForce2DQueue());
+        command.setWireframe(wireframe);
     }
 
     _meshIndexData->setPrimitiveType(_material->_drawPrimitive);

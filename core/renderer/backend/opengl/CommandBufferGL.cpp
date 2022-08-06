@@ -211,24 +211,40 @@ void CommandBufferGL::setProgramState(ProgramState* programState)
     _programState = programState;
 }
 
-void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count)
+void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
+#ifdef AX_USE_GL  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#else
+    if (wireframe) primitiveType = PrimitiveType::LINE;
+#endif
     glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
-
+#ifdef AX_USE_GL  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
     cleanResources();
 }
 
 void CommandBufferGL::drawElements(PrimitiveType primitiveType,
                                    IndexFormat indexType,
                                    std::size_t count,
-                                   std::size_t offset)
+                                   std::size_t offset,
+                                   bool wireframe)
 {
     prepareDrawing();
+#ifdef AX_USE_GL  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#else
+    if (wireframe) primitiveType = PrimitiveType::LINE;
+#endif
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
+#ifdef AX_USE_GL  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
     cleanResources();
 }
 

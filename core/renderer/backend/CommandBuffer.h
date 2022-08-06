@@ -153,7 +153,10 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count) = 0;
+    virtual void drawArrays(PrimitiveType primitiveType,
+                            std::size_t start,
+                            std::size_t count,
+                            bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list.
@@ -167,7 +170,8 @@ public:
     virtual void drawElements(PrimitiveType primitiveType,
                               IndexFormat indexType,
                               std::size_t count,
-                              std::size_t offset) = 0;
+                              std::size_t offset,
+                              bool wireframe = false) = 0;
 
     /**
      * Do some resources release.
