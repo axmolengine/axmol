@@ -95431,6 +95431,100 @@ int lua_axis_base_Material_draw(lua_State* tolua_S)
 
     return 0;
 }
+int lua_axis_base_Material_isTransparent(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::Material* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Material",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::Material*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_base_Material_isTransparent'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_base_Material_isTransparent'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isTransparent();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:isTransparent",argc, 0);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_base_Material_isTransparent'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_axis_base_Material_isForce2DQueue(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::Material* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Material",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::Material*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_base_Material_isForce2DQueue'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_base_Material_isForce2DQueue'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->isForce2DQueue();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:isForce2DQueue",argc, 0);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_base_Material_isForce2DQueue'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_axis_base_Material_getRenderState(lua_State* tolua_S)
 {
     int argc = 0;
@@ -95524,6 +95618,56 @@ int lua_axis_base_Material_setName(lua_State* tolua_S)
 #if AXIS_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_base_Material_setName'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_axis_base_Material_setForce2DQueue(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::Material* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Material",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::Material*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_base_Material_setForce2DQueue'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Material:setForce2DQueue");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_base_Material_setForce2DQueue'", nullptr);
+            return 0;
+        }
+        cobj->setForce2DQueue(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:setForce2DQueue",argc, 1);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_base_Material_setForce2DQueue'.",&tolua_err);
 #endif
 
     return 0;
@@ -95919,6 +96063,56 @@ int lua_axis_base_Material_addTechnique(lua_State* tolua_S)
 
     return 0;
 }
+int lua_axis_base_Material_setTransparent(lua_State* tolua_S)
+{
+    int argc = 0;
+    axis::Material* cobj = nullptr;
+    bool ok  = true;
+
+#if AXIS_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if AXIS_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Material",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (axis::Material*)tolua_tousertype(tolua_S,1,0);
+
+#if AXIS_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_base_Material_setTransparent'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Material:setTransparent");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_axis_base_Material_setTransparent'", nullptr);
+            return 0;
+        }
+        cobj->setTransparent(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Material:setTransparent",argc, 1);
+    return 0;
+
+#if AXIS_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_axis_base_Material_setTransparent'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_axis_base_Material_getPrimitiveType(lua_State* tolua_S)
 {
     int argc = 0;
@@ -96135,8 +96329,11 @@ int lua_register_axis_base_Material(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Material");
         tolua_function(tolua_S,"clone",lua_axis_base_Material_clone);
         tolua_function(tolua_S,"draw",lua_axis_base_Material_draw);
+        tolua_function(tolua_S,"isTransparent",lua_axis_base_Material_isTransparent);
+        tolua_function(tolua_S,"isForce2DQueue",lua_axis_base_Material_isForce2DQueue);
         tolua_function(tolua_S,"getRenderState",lua_axis_base_Material_getRenderState);
         tolua_function(tolua_S,"setName",lua_axis_base_Material_setName);
+        tolua_function(tolua_S,"setForce2DQueue",lua_axis_base_Material_setForce2DQueue);
         tolua_function(tolua_S,"getTechniqueByIndex",lua_axis_base_Material_getTechniqueByIndex);
         tolua_function(tolua_S,"getName",lua_axis_base_Material_getName);
         tolua_function(tolua_S,"getTechniques",lua_axis_base_Material_getTechniques);
@@ -96145,6 +96342,7 @@ int lua_register_axis_base_Material(lua_State* tolua_S)
         tolua_function(tolua_S,"getTechniqueByName",lua_axis_base_Material_getTechniqueByName);
         tolua_function(tolua_S,"setPrimitiveType",lua_axis_base_Material_setPrimitiveType);
         tolua_function(tolua_S,"addTechnique",lua_axis_base_Material_addTechnique);
+        tolua_function(tolua_S,"setTransparent",lua_axis_base_Material_setTransparent);
         tolua_function(tolua_S,"getPrimitiveType",lua_axis_base_Material_getPrimitiveType);
         tolua_function(tolua_S,"getTechnique",lua_axis_base_Material_getTechnique);
         tolua_function(tolua_S,"createWithFilename", lua_axis_base_Material_createWithFilename);
