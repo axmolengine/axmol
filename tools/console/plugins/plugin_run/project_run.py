@@ -238,7 +238,7 @@ class CCPluginRun(axis.CCPlugin):
         if not self._platforms.is_android_active():
             return
 
-        sdk_root = axis.check_environment_variable('ANDROID_SDK')
+        sdk_root = axis.check_environment_variable('ANDROID_SDK_ROOT')
         adb_path = axis.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
         deploy_dep = dependencies['deploy']
         startapp = "%s shell am start -n \"%s/%s\"" % (adb_path, deploy_dep.package, deploy_dep.activity)

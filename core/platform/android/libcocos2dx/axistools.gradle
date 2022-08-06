@@ -103,15 +103,8 @@ class axistools {
             ndkVer = ndkVer.substring(0, ndkVer.length() - 1)
         }
 
-        /* Collect ndk dirs */
-        def ndkRoot = Paths.get("${System.env.ANDROID_NDK}")
         def ndkDirs = []
-        if (Files.exists(ndkRoot)) {
-            ndkRoot = ndkRoot.toAbsolutePath().toString()
-            ndkDirs.add(ndkRoot)
-        }
-
-        def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
+        def sdkRoot = Paths.get("${System.env.ANDROID_SDK_ROOT}")
         if (Files.exists(sdkRoot)) {
             File dir = new File(sdkRoot.toAbsolutePath().toString() + '/ndk')
             if (dir.isDirectory()) {
@@ -159,7 +152,7 @@ class axistools {
             }
         }
 
-        def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
+        def sdkRoot = Paths.get("${System.env.ANDROID_SDK_ROOT}")
 
         if(Files.exists(sdkRoot)) {
             def verList = []
