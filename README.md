@@ -105,10 +105,12 @@ See [windows workflow guide](https://github.com/axis-project/axis/issues/564)
   2. When starting Android Studio for the first time, It will guide you to install the SDK and other tools, just install them
   3. Start Android and choose [Open an existing Android Studio Project] and select ```axis\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
-     * Android SDK Platform 29 r5  
-     * Android SDK Build-Tools 29.0.2  
+     * Android SDK Platform 33  
+     * Android Grandle Plugin (AGP) 7.2.0  
+     * Android SDK Build-Tools 30.0.3 match with AGP
+     * Gradle 7.4.2
      * NDK r23c+  
-     * CMake 3.10+  
+     * CMake 3.22.1+  
   5. Wait for ```Gradle sync``` finish.
   6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
   
