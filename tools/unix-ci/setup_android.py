@@ -103,7 +103,7 @@ def install_android_sdk():
         'platform-tools',
         'cmdline-tools;latest',
         'platforms;android-33',
-        'build-tools;33.0.0',
+        'build-tools;30.0.3', # match with AGP 7.2.0: https://developer.android.com/studio/releases/gradle-plugin
         'cmake;3.22.1',
         'ndk;' + NDK_VER
     ]
