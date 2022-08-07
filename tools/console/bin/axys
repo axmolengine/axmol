@@ -14,5 +14,5 @@ else
     exit 1
 fi
 
-$PYTHON "$AXYS_CONSOLE_BIN_DIRECTORY/axis.py" "$@"
+$PYTHON "$AXYS_CONSOLE_BIN_DIRECTORY/axys.py" "$@"
 

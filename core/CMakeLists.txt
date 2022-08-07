@@ -26,14 +26,14 @@
 # ****************************************************************************/
 
 # this CMakeLists is to generate Axis Engine Library
-# build axis
+# build axys
 # build axislua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
 set(AXYS_VERSION 1.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
-    set(_AX_CORE_LIB axis CACHE INTERNAL "The axis core lib name" )
+    set(_AX_CORE_LIB axys CACHE INTERNAL "The axys core lib name" )
 endif()
 
 if (NOT DEFINED AX_USE_COMPAT_GL)

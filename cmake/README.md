@@ -10,14 +10,14 @@ CMake is an open-source, cross-platform family of tools designed to build, test 
   ```
 if the CMake version is lower than 3.14, please upgrade.
 
-2. You should use **out-of-source** builds, this means you need to create a different directory than **axis** to execute the `cmake` command.
+2. You should use **out-of-source** builds, this means you need to create a different directory than **axys** to execute the `cmake` command.
 
 ## Step by Step
 
 ### Linux
 
 ```sh
-cd axis
+cd axys
 mkdir linux-build && cd linux-build
 cmake ..
 make
@@ -28,35 +28,35 @@ Execute `make help` to see all build targets, `make <target>` build specified ta
 ### Generate Visual Studio projects
 
 ```sh
-cd axis
+cd axys
 mkdir win32-build
 cmake -B win32-build -G"Visual Studio 16 2019"
 # build
 cmake --build win32-build --config Debug
 ```
-or open **axis.sln** in Explorer to use the generated project. 
+or open **axys.sln** in Explorer to use the generated project. 
 
 ### Generate macOS Project
 
 ```sh
-cd axis
+cd axys
 mkdir mac-build
 cmake -B mac-build -GXcode
-open mac-build/axis.xcodeproj
+open mac-build/axys.xcodeproj
 ```
 
 ### Generate iOS Project
 
 ```sh
-cd axis
+cd axys
 mkdir ios-build
 cmake -B ios-build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
-open ios-build/axis.xcodeproj
+open ios-build/axys.xcodeproj
 ```
 
 #### How do I customize the generated Xcode project?
 
-Xcode project settings that you want to affect both the app project and the axis library project should be passed on the command
+Xcode project settings that you want to affect both the app project and the axys library project should be passed on the command
 line when invoking `cmake`.
 
 Xcode project settings that you want to affect the app project only shoudl be put into the its `CMakeLists.txt` file.
@@ -75,7 +75,7 @@ set_xcode_property(${APP_NAME} XXX "Value")
 
 ##### Deployment Target
 
-As explained above, pass this on the command line so both the app the axis are built using the same version:
+As explained above, pass this on the command line so both the app the axys are built using the same version:
 
 For iOS pass `-DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=version`, where `version` is `9.0`, `10.0`, etc.
 
@@ -103,7 +103,7 @@ from `cmake`:
 
 ### Android Studio
 
-We use the Gradle for Android applications, and Gradle use cmake to build the native code, see  [gradle.properties](https://github.com/c4games/axis/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/gradle.properties#L38): `PROP_NDK_MODE`, it controls how native builds work.
+We use the Gradle for Android applications, and Gradle use cmake to build the native code, see  [gradle.properties](https://github.com/axys1/axys/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/gradle.properties#L38): `PROP_NDK_MODE`, it controls how native builds work.
 
 ```sh
 # android native code build type
@@ -113,7 +113,7 @@ We use the Gradle for Android applications, and Gradle use cmake to build the na
 PROP_BUILD_TYPE=cmake
 ```
 
-If you want to add cmake build arguments, please add it at [external Native Build](https://github.com/c4games/axis/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/app/build.gradle#L25) block of __app/build.gradle__ file.
+If you want to add cmake build arguments, please add it at [external Native Build](https://github.com/axys1/axys/blob/84be684e3858393a6f3efc50e3f95d4e0ac92a20/tests/cpp-empty-test/proj.android/app/build.gradle#L25) block of __app/build.gradle__ file.
 
 
 ## Build Options
@@ -131,7 +131,7 @@ If you want to add cmake build arguments, please add it at [external Native Buil
 
 1. __`-H -B`__, `-H` specify the CMake project Home directory, `-B` specify CMake-generated project binary directory. for example
 
-    * `-H..\axis -Bmsvc_build` the generated native project's location will be `msvc_build` directory.
+    * `-H..\axys -Bmsvc_build` the generated native project's location will be `msvc_build` directory.
 
 1. __`--build  <dir>`__, build a CMake-generated project binary tree, for example
 

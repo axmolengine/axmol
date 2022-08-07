@@ -29,13 +29,13 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(axis)
+project(axys)
 
 if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
 endif()
 
-# axis root path
+# axys root path
 set(AXYS_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
 
@@ -50,13 +50,13 @@ option(AX_BUILD_EXAMPLES "Build examples" ON)
 
 set(AX_ENABLE_EXT_LUA ON) 
 
-add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axis/core)
+add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
 
-# prevent tests project to build "axis/core" again
+# prevent tests project to build "axys/core" again
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
-    # add cpp-template-default into project(axis) for tmp test
+    # add cpp-template-default into project(axys) for tmp test
     add_subdirectory(${AXYS_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
 
 	# add cpp tests default

@@ -28,7 +28,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axis/core)
+        add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
     endif()
 
 endif()
