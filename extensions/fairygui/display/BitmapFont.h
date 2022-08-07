@@ -16,7 +16,7 @@ public:
     static BitmapFont* create();
 
     virtual int* getHorizontalKerningForTextUTF32(const std::u32string& text, int &outNumLetters) const override;
-#    if defined(AXIS_VERSION)
+#    if defined(AXYS_VERSION)
     virtual axis::FontAtlas* newFontAtlas() override { return new axis::FontAtlas(this); }
 #else
     virtual axis::FontAtlas* createFontAtlas() override { return new axis::FontAtlas(*this); }

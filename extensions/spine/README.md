@@ -5,5 +5,5 @@
 2. Switch to branch `spinexx` then copy `spine-axis/spine` to ```axis/extensions/spine```
 
 ## References
-* axis: https://github.com/axis-project/axis
+* axis: https://github.com/axys1/axys
 * spine-runtimes: https://github.com/EsotericSoftware/spine-runtimes

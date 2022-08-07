@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -973,7 +973,7 @@ void Director::reset()
     if (_eventDispatcher)
         _eventDispatcher->dispatchEvent(_eventResetDirector);
 
-    // Fix github issue: https://github.com/axis-project/axis/issues/550
+    // Fix github issue: https://github.com/axys1/axys/issues/550
     // !!!The AudioEngine hold scheduler must end before Director destroyed, otherwise, just lead app crash
     AudioEngine::end();
 

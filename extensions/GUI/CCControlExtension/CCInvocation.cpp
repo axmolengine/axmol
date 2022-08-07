@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://axis-project.github.io/
+ * https://axys1.github.io/
  *
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  *

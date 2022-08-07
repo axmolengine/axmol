@@ -149,7 +149,7 @@ class CCPluginNew(axis.CCPlugin):
             args.name = CCPluginNew.DEFAULT_PROJ_NAME[args.language]
 
         if not args.package:
-            args.package = "org.cocos2dx.%s" % args.name
+            args.package = "org.axys1.%s" % args.name
 
         if not args.ios_bundleid:
             args.ios_bundleid = args.package
@@ -408,7 +408,7 @@ class TPCreator(object):
 
         self.tp_name = tp_name
         self.tp_dir = tp_dir
-        self.tp_json = 'axis-project-template.json'
+        self.tp_json = 'axys1-template.json'
 
         # search in 'template_metadata' first
         tp_json_path = os.path.join(tp_dir, 'template_metadata', self.tp_json)

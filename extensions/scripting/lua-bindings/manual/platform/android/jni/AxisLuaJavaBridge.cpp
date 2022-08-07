@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@
 
 extern "C" {
 
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_callLuaFunctionWithString(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_callLuaFunctionWithString(JNIEnv* env,
                                                                                              jclass,
                                                                                              jint functionId,
                                                                                              jstring value)
@@ -47,7 +47,7 @@ JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_callLuaFuncti
 }
 
 JNIEXPORT jint JNICALL
-Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
+Java_org_axys1_lib_AxysLuaJavaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
                                                                             jclass,
                                                                             jstring luaFunctionName,
                                                                             jstring value)
@@ -59,14 +59,14 @@ Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_callLuaGlobalFunctionWithString(JNIE
     return ret;
 }
 
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_retainLuaFunction(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_retainLuaFunction(JNIEnv* env,
                                                                                      jclass,
                                                                                      jint luaFunctionId)
 {
     return LuaJavaBridge::retainLuaFunctionById(luaFunctionId);
 }
 
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_releaseLuaFunction(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_releaseLuaFunction(JNIEnv* env,
                                                                                       jclass,
                                                                                       jint luaFunctionId)
 {

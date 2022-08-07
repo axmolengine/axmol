@@ -1,4 +1,4 @@
-set(cocos_root ${AXIS_ROOT_PATH})
+set(cocos_root ${AXYS_ROOT_PATH})
 
 set(lua_bindings_manual_headers
     manual/CCComponentLua.h

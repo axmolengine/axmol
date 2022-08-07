@@ -2,7 +2,7 @@
 Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  ****************************************************************************/
-package org.cocos2dx.lib;
+package org.axys1.lib;
 
 import java.lang.reflect.Method;
 
-import org.cocos2dx.lib.GameControllerDelegate.ControllerEventListener;
-import org.cocos2dx.lib.inputmanagercompat.InputManagerCompat;
-import org.cocos2dx.lib.inputmanagercompat.InputManagerCompat.InputDeviceListener;
-import org.cocos2dx.lib.Cocos2dxActivity;
+import org.axys1.lib.GameControllerDelegate.ControllerEventListener;
+import org.axys1.lib.inputmanagercompat.InputManagerCompat;
+import org.axys1.lib.inputmanagercompat.InputManagerCompat.InputDeviceListener;
+import org.axys1.lib.AxysActivity;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -70,19 +70,19 @@ public abstract class GameControllerActivity extends Cocos2dxActivity implements
                 if (mControllerMoga != null) {
                     return;
                 }
-                controllerDelegate = loader.loadClass("org.cocos2dx.lib.GameControllerMoga");
+                controllerDelegate = loader.loadClass("org.axys1.lib.GameControllerMoga");
             } else if (driveType == DRIVERTYPE_NIBIRU) {
                 if (mControllerNibiru != null) {
                     mControllerNibiru.onCreate(sGameControllerActivity);
                     mControllerNibiru.onResume();
                     return;
                 }
-                controllerDelegate = loader.loadClass("org.cocos2dx.lib.GameControllerNibiru");
+                controllerDelegate = loader.loadClass("org.axys1.lib.GameControllerNibiru");
             } else if (driveType == DRIVERTYPE_OUYA) {
                 if (mControllerOuya != null) {
                     return;
                 }
-                controllerDelegate = loader.loadClass("org.cocos2dx.lib.GameControllerOuya");
+                controllerDelegate = loader.loadClass("org.axys1.lib.GameControllerOuya");
             }
             
             GameControllerDelegate instance = (GameControllerDelegate)controllerDelegate.newInstance();         

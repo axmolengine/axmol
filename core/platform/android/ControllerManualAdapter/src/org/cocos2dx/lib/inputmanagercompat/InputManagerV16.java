@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.cocos2dx.lib.inputmanagercompat;
+package org.axys1.lib.inputmanagercompat;
 
 import android.annotation.TargetApi;
 import android.content.Context;

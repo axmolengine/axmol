@@ -87,7 +87,7 @@ SkeletonBatch::~SkeletonBatch () {
 backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, backend::ProgramState* programState)
 {
 	auto& currentState = command->getPipelineDescriptor().programState;
-#if defined(AXIS_VERSION)
+#if defined(AXYS_VERSION)
 	if(currentState == nullptr || currentState->getProgram() != programState->getProgram() || currentState->getUniformID() != programState->getUniformID()) {
 #else
 	if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {

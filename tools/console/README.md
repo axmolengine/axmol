@@ -13,7 +13,7 @@ Examples:
 ```
 # starts a new project called "My Game" for multi-platform
 
-$ axis new MyGame -l cpp -p org.axis.mygame
+$ axis new MyGame -l cpp -p org.axys1.mygame
 
 $ cd MyGame
 

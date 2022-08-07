@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -32,38 +32,38 @@ extern "C" {
 
 /// @cond
 /*
- * Class:     Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge
+ * Class:     Java_org_axys1_lib_AxysLuaJavaBridge
  * Method:    callLuaFunctionWithString
  * Signature: (ILjava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_callLuaFunctionWithString(JNIEnv*,
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_callLuaFunctionWithString(JNIEnv*,
                                                                                              jclass,
                                                                                              jint,
                                                                                              jstring);
 
 /*
- * Class:     Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge
+ * Class:     Java_org_axys1_lib_AxysLuaJavaBridge
  * Method:    callLuaGlobalFunctionWithString
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_callLuaGlobalFunctionWithString(JNIEnv* env,
                                                                                                    jclass,
                                                                                                    jstring,
                                                                                                    jstring);
 
 /*
- * Class:     Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge
+ * Class:     Java_org_axys1_lib_AxysLuaJavaBridge
  * Method:    retainLuaFunction
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_retainLuaFunction(JNIEnv* env, jclass, jint);
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_retainLuaFunction(JNIEnv* env, jclass, jint);
 
 /*
- * Class:     Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge
+ * Class:     Java_org_axys1_lib_AxysLuaJavaBridge
  * Method:    releaseLuaFunction
  * Signature: (I)I
  */
-JNIEXPORT jint JNICALL Java_org_cocos2dx_lib_Cocos2dxLuaJavaBridge_releaseLuaFunction(JNIEnv* env, jclass, jint);
+JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_releaseLuaFunction(JNIEnv* env, jclass, jint);
 
 }  // extern "C"
 

@@ -86,7 +86,7 @@ endif()
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 
 # set hash style to both for android old device compatible
-# see also: https://github.com/axis-project/axis/discussions/614
+# see also: https://github.com/axys1/axys/discussions/614
 if (ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
 endif()

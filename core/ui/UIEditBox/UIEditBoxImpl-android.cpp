@@ -5,7 +5,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@
 
 NS_AX_BEGIN
 
-static const char* editBoxClassName = "org.cocos2dx.lib.Cocos2dxEditBoxHelper";
+static const char* editBoxClassName = "org.axys1.lib.AxysEditBoxHelper";
 
 namespace ui
 {
@@ -53,12 +53,12 @@ static void editBoxEditingDidBegin(int index);
 static void editBoxEditingDidChanged(int index, std::string_view text);
 static void editBoxEditingDidEnd(int index, std::string_view text, int action);
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingDidBegin(JNIEnv*, jclass, jint index)
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysEditBoxHelper_editBoxEditingDidBegin(JNIEnv*, jclass, jint index)
 {
     editBoxEditingDidBegin(index);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingChanged(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysEditBoxHelper_editBoxEditingChanged(JNIEnv* env,
                                                                                          jclass,
                                                                                          jint index,
                                                                                          jstring text)
@@ -67,7 +67,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditin
     editBoxEditingDidChanged(index, textString);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingDidEnd(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysEditBoxHelper_editBoxEditingDidEnd(JNIEnv* env,
                                                                                         jclass,
                                                                                         jint index,
                                                                                         jstring text,

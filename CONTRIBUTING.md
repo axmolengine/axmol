@@ -6,14 +6,14 @@
 
 You can ask general questions by using:
 
--   Forum (preferred way): https://github.com/axis-project/axis/discussions
+-   Forum (preferred way): https://github.com/axys1/axys/discussions
 
 ## Reporting bugs
 
-To report bugs, please use the [Issue Tracker](https://github.com/axis-project/axis/issues)
+To report bugs, please use the [Issue Tracker](https://github.com/axys1/axys/issues)
 
 Steps to report a bug:
-* Open the [url](https://github.com/axis-project/axis/issues/new)
+* Open the [url](https://github.com/axys1/axys/issues/new)
 * Add all the needed information to reproduce the bug, the information include
     * engine version
     * steps to reproduce the bug
@@ -30,7 +30,7 @@ If you want to contribute code, please follow these steps:
 -   Download the latest axis develop branch from github:
 
 ```
-$ git clone git://github.com/axis-project/axis.git
+$ git clone git://github.com/axys1/axys.git
 $ cd axis
 $ git checkout dev
 ```

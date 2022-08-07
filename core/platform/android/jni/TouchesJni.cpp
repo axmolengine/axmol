@@ -2,7 +2,7 @@
 Copyright (c) 2010 cocos2d-x.org
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,20 +34,20 @@ USING_NS_AX;
 
 extern "C" {
 JNIEXPORT void JNICALL
-Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+Java_org_axys1_lib_AxysRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
     axis::Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL
-Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+Java_org_axys1_lib_AxysRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
     axis::Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &idlong, &x, &y);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeTouchesMove(JNIEnv* env,
                                                                                 jclass,
                                                                                 jintArray ids,
                                                                                 jfloatArray xs,
@@ -69,7 +69,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(
     axis::Director::getInstance()->getOpenGLView()->handleTouchesMove(size, idlong, x, y);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCancel(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeTouchesCancel(JNIEnv* env,
                                                                                   jclass,
                                                                                   jintArray ids,
                                                                                   jfloatArray xs,
@@ -114,7 +114,7 @@ static std::unordered_map<int, axis::EventKeyboard::KeyCode> g_keyCodeMap = {
 
 };
 
-JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyEvent(JNIEnv*,
+JNIEXPORT jboolean JNICALL Java_org_axys1_lib_AxysRenderer_nativeKeyEvent(JNIEnv*,
                                                                                  jclass,
                                                                                  jint keyCode,
                                                                                  jboolean isPressed)

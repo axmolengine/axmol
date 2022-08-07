@@ -4,7 +4,7 @@
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
 # Copyright (c) 2021-2022 Bytedance Inc.
 # 
-# https://axis-project.github.io/
+# https://axys1.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@
 # build axislua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
-set(AXIS_VERSION 1.0)
+set(AXYS_VERSION 1.0)
 
 if(NOT DEFINED AXIS_CORE_LIB)
     set(AXIS_CORE_LIB axis CACHE INTERNAL "The axis core lib name" )
@@ -80,7 +80,7 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-set(COCOS_HEADER axis.h
+set(COCOS_HEADER axys.h
     ${COCOS_2D_HEADER}
     ${COCOS_3D_HEADER}
     ${COCOS_PLATFORM_HEADER}
@@ -95,7 +95,7 @@ set(COCOS_HEADER axis.h
     ${COCOS_NETWORK_HEADER}
     )
 
-set(COCOS_SRC axis.cpp
+set(COCOS_SRC axys.cpp
     ${COCOS_2D_SRC}
     ${COCOS_3D_SRC}
     ${COCOS_PLATFORM_SRC}
@@ -115,7 +115,7 @@ list(APPEND COCOS_SRC ${COCOS_HEADER})
 add_library(${AXIS_CORE_LIB} ${COCOS_SRC})
 
 # use thirdparty libs
-add_subdirectory(${AXIS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
+add_subdirectory(${AXYS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${AXIS_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
@@ -126,17 +126,17 @@ use_axis_compile_options(${AXIS_CORE_LIB})
 use_axis_libs_depend(${AXIS_CORE_LIB})
 
 target_include_directories(${AXIS_CORE_LIB}
-    PUBLIC ${AXIS_ROOT_PATH}
-    PUBLIC ${AXIS_ROOT_PATH}/thirdparty
-    PUBLIC ${AXIS_ROOT_PATH}/extensions
-    PUBLIC ${AXIS_ROOT_PATH}/core
-    PUBLIC ${AXIS_ROOT_PATH}/core/platform
+    PUBLIC ${AXYS_ROOT_PATH}
+    PUBLIC ${AXYS_ROOT_PATH}/thirdparty
+    PUBLIC ${AXYS_ROOT_PATH}/extensions
+    PUBLIC ${AXYS_ROOT_PATH}/core
+    PUBLIC ${AXYS_ROOT_PATH}/core/platform
 
-    INTERFACE ${AXIS_ROOT_PATH}/thirdparty
-    INTERFACE ${AXIS_ROOT_PATH}/extensions
-    INTERFACE ${AXIS_ROOT_PATH}/core/base
-    INTERFACE ${AXIS_ROOT_PATH}/core/audio
-    INTERFACE ${AXIS_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
+    INTERFACE ${AXYS_ROOT_PATH}/thirdparty
+    INTERFACE ${AXYS_ROOT_PATH}/extensions
+    INTERFACE ${AXYS_ROOT_PATH}/core/base
+    INTERFACE ${AXYS_ROOT_PATH}/core/audio
+    INTERFACE ${AXYS_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
 )
 
 set_target_properties(${AXIS_CORE_LIB}
@@ -144,13 +144,13 @@ set_target_properties(${AXIS_CORE_LIB}
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-                      VERSION "${AXIS_VERSION}"
+                      VERSION "${AXYS_VERSION}"
                       FOLDER "Internal"
                       )
 
 ## Lua bindings lib
 # if(AX_ENABLE_EXT_LUA)
-#     add_subdirectory(${AXIS_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
+#     add_subdirectory(${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
 # endif()
 
 if(XCODE OR VS)
@@ -169,7 +169,7 @@ if(WINDOWS)
     
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
-            PATHS ${AXIS_ROOT_PATH}/tools/external/nuget)
+            PATHS ${AXYS_ROOT_PATH}/tools/external/nuget)
             
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
@@ -190,7 +190,7 @@ if(WINDOWS)
 endif()
 
 # engine extensions
-add_subdirectory(${AXIS_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
+add_subdirectory(${AXYS_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${AXIS_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)

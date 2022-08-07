@@ -41,7 +41,7 @@ class CCPluginVersion(cocos2d.CCPlugin):
 
     	with open(path, 'r')  as f:
     		data = f.read()
-    		match = re.search('axisVersion\(\)\s*{\s*return\s+"([^"]+)"\s*;', data)
+    		match = re.search('axysVersion\(\)\s*{\s*return\s+"([^"]+)"\s*;', data)
     		if match:
     			print 'cocos2d %s' % match.group(1)
     		else:

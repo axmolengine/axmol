@@ -5,7 +5,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020-2021 C4games Ltd
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-extern const char* axisVersion();
+extern const char* axysVersion();
 
 Configuration* Configuration::s_sharedConfiguration = nullptr;
 
@@ -66,7 +66,7 @@ Configuration::Configuration()
 
 bool Configuration::init()
 {
-    _valueDict["axis.version"] = Value(axisVersion());
+    _valueDict["axis.version"] = Value(axysVersion());
 
 #if AX_ENABLE_PROFILERS
     _valueDict["axis.compiled_with_profiler"] = Value(true);

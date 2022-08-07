@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "platform/android/CCFileUtils-android.h"
 #include "platform/CCCommon.h"
 #include "platform/android/jni/JniHelper.h"
-#include "platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
+#include "platform/android/jni/Java_org_axys1_lib_AxysHelper.h"
 #include "android/asset_manager.h"
 #include "android/asset_manager_jni.h"
 #include "base/ZipUtils.h"
@@ -212,7 +212,7 @@ bool FileUtilsAndroid::isAbsolutePath(std::string_view strPath) const
     DECLARE_GUARD;
     // On Android, there are two situations for full path.
     // 1) Files in APK, e.g. assets/path/path/file.png
-    // 2) Files not in APK, e.g. /data/data/org.cocos2dx.hellocpp/cache/path/path/file.png, or
+    // 2) Files not in APK, e.g. /data/data/org.axys1.hellocpp/cache/path/path/file.png, or
     // /sdcard/path/path/file.png. So these two situations need to be checked on Android.
     return (strPath[0] == '/' || strPath.find(_defaultResRootPath) == 0);
 }
@@ -370,7 +370,7 @@ std::string FileUtilsAndroid::getNativeWritableAbsolutePath() const
 {
     // Fix for Nexus 10 (Android 4.2 multi-user environment)
     // the path is retrieved through Java Context.getCacheDir() method
-    std::string path = JniHelper::callStaticStringMethod("org.cocos2dx.lib.Cocos2dxHelper", "getCocos2dxWritablePath");
+    std::string path = JniHelper::callStaticStringMethod("org.axys1.lib.AxysHelper", "getCocos2dxWritablePath");
     if (!path.empty())
         path.append("/");
 

@@ -3,7 +3,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -159,7 +159,7 @@ Controller::Controller()
 
 void Controller::receiveExternalKeyEvent(int externalKeyCode, bool receive)
 {
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.GameControllerHelper", "receiveExternalKeyEvent", _deviceId,
+    JniHelper::callStaticVoidMethod("org.axys1.lib.GameControllerHelper", "receiveExternalKeyEvent", _deviceId,
                                     externalKeyCode, receive);
 }
 
@@ -167,7 +167,7 @@ NS_AX_END
 
 extern "C" {
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControllerConnected(JNIEnv*,
+JNIEXPORT void JNICALL Java_org_axys1_lib_GameControllerAdapter_nativeControllerConnected(JNIEnv*,
                                                                                              jclass,
                                                                                              jstring deviceName,
                                                                                              jint controllerID)
@@ -176,7 +176,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
     axis::ControllerImpl::onConnected(axis::JniHelper::jstring2string(deviceName), controllerID);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControllerDisconnected(JNIEnv*,
+JNIEXPORT void JNICALL Java_org_axys1_lib_GameControllerAdapter_nativeControllerDisconnected(JNIEnv*,
                                                                                                 jclass,
                                                                                                 jstring deviceName,
                                                                                                 jint controllerID)
@@ -185,7 +185,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
     axis::ControllerImpl::onDisconnected(axis::JniHelper::jstring2string(deviceName), controllerID);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControllerButtonEvent(JNIEnv*,
+JNIEXPORT void JNICALL Java_org_axys1_lib_GameControllerAdapter_nativeControllerButtonEvent(JNIEnv*,
                                                                                                jclass,
                                                                                                jstring deviceName,
                                                                                                jint controllerID,
@@ -198,7 +198,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControl
                                            isPressed, value, isAnalog);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_GameControllerAdapter_nativeControllerAxisEvent(JNIEnv*,
+JNIEXPORT void JNICALL Java_org_axys1_lib_GameControllerAdapter_nativeControllerAxisEvent(JNIEnv*,
                                                                                              jclass,
                                                                                              jstring deviceName,
                                                                                              jint controllerID,

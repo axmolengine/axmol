@@ -3,7 +3,7 @@
 
  Portions copyright (c) 2017 Serge Zaitsev
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

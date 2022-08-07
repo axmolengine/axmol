@@ -4,7 +4,7 @@
  Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +70,7 @@
 
 NS_AX_BEGIN
 
-extern const char* axisVersion(void);
+extern const char* axysVersion(void);
 
 #define PROMPT "> "
 #define DEFAULT_COMMAND_SEPARATOR '|'
@@ -1562,7 +1562,7 @@ void Console::commandUpload(socket_native_type fd)
 
 void Console::commandVersion(socket_native_type fd, std::string_view /*args*/)
 {
-    Console::Utility::mydprintf(fd, "%s\n", axisVersion());
+    Console::Utility::mydprintf(fd, "%s\n", axysVersion());
 }
 
 // helper free functions

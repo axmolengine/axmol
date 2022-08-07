@@ -17,8 +17,8 @@
 #}
 
 # Proguard Cocos2d-x for release
--keep public class org.cocos2dx.** { *; }
--dontwarn org.cocos2dx.**
+-keep public class org.axys1.** { *; }
+-dontwarn org.axys1.**
 -keep public class com.chukong.** { *; }
 -dontwarn com.chukong.**
 -keep public class com.huawei.android.** { *; }
@@ -27,9 +27,6 @@
 # Proguard Apache HTTP for release
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
-
--keep public class com.cocos2dx.** { *; }
--dontwarn com.cocos2dx.**
 
 # Proguard Android Webivew for release. uncomment if you are using a webview in cocos2d-x
 #-keep public class android.net.http.SslError

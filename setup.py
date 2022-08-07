@@ -30,7 +30,7 @@ This script will install environment variables needed to by axis. It will set th
 * AXIS_CONSOLE_ROOT: used to run axis console tools
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK_ROOT: used to generate applicatoin on Android through commands
-* AXIS_ROOT: path where axis is installed
+* AXYS_ROOT: path where axis is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
 
@@ -63,7 +63,7 @@ from time import time
 from time import sleep
 from os.path import dirname
 
-AXIS_ROOT = 'AXIS_ROOT'
+AXYS_ROOT = 'AXYS_ROOT'
 AXIS_CONSOLE_ROOT = 'AXIS_CONSOLE_ROOT'
 
 ANDROID_NDK = 'ANDROID_NDK'
@@ -478,17 +478,17 @@ class SetEnvVar(object):
             self._force_update_env(AXIS_CONSOLE_ROOT, axis_console_root)
 
     def set_axis_root(self):
-        print("->Check environment variable %s" % AXIS_ROOT)
+        print("->Check environment variable %s" % AXYS_ROOT)
         axis_root = self.current_absolute_path
-        old_dir = self._find_environment_variable(AXIS_ROOT)
+        old_dir = self._find_environment_variable(AXYS_ROOT)
         if old_dir is None:
             # add environment variable
-            self._set_environment_variable(AXIS_ROOT, axis_root)
+            self._set_environment_variable(AXYS_ROOT, axis_root)
         else:
             if old_dir == axis_root:
                 # is same with before, nothing to do
                 return
-            self._force_update_env(AXIS_ROOT, axis_root)
+            self._force_update_env(AXYS_ROOT, axis_root)
 
     def _force_update_unix_env(self, var_name, value):
         import re
