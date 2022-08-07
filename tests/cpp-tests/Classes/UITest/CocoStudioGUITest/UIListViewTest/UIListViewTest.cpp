@@ -25,7 +25,7 @@
 #include "UIListViewTest.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace axys::ui;
 
 const char* font_UIListViewTest = "fonts/Marker Felt.ttf";
 

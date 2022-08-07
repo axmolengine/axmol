@@ -822,7 +822,7 @@ void WebViewImpl::setBackgroundTransparent()
     _systemWebControl->setBackgroundTransparent();
 }
 }  // namespace ui
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 //
 // Implement Win32WebControl

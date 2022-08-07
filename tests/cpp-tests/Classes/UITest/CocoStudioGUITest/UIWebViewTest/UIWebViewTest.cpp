@@ -26,7 +26,7 @@
 #include "UIWebViewTest.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace axys::ui;
 
 WebViewTests::WebViewTests()
 {

@@ -25,7 +25,7 @@
 #include "UILoadingBarTest.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace axys::ui;
 
 UILoadingBarTests::UILoadingBarTests()
 {

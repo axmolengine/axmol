@@ -27,7 +27,7 @@
 
 # this CMakeLists is to generate Axis Engine Library
 # build axys
-# build axislua if AX_ENABLE_EXT_LUA=ON
+# build axlua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
 set(AXYS_VERSION 1.0)

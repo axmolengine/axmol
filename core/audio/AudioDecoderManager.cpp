@@ -92,4 +92,4 @@ void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
     delete decoder;
 }
 
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

@@ -78,7 +78,7 @@ void tgaRGBtogreyscale(tImageTGA* info);
 /// releases the memory used for the image
 void tgaDestroy(tImageTGA* info);
 
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 /// @endcond
 #endif  // __SUPPORT_DATA_SUPPORT_TGALIB_H__

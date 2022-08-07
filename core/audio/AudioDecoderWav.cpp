@@ -258,4 +258,4 @@ bool AudioDecoderWav::seek(uint32_t frameOffset)
     auto offset = framesToBytes(frameOffset);
     return wav_seek(&_wavf, offset) == offset;
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

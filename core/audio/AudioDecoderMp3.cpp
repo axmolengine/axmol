@@ -298,4 +298,4 @@ bool AudioDecoderMp3::seek(uint32_t frameOffset)
     return (offset >= 0 && offset == frameOffset);
 #endif
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

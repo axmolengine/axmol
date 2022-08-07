@@ -348,4 +348,4 @@ void JniHelper::reportError(const char* className, const char* methodName, const
          signature);
 }
 
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

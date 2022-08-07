@@ -1063,4 +1063,4 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     }
 }
 
-NS_AX_END  // end of namespace axis;
+NS_AX_END  // end of namespace axys;

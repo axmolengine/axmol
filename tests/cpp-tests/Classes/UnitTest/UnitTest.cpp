@@ -30,7 +30,7 @@
 #include "yasio/detail/byte_buffer.hpp"
 
 USING_NS_AX;
-using namespace axis::network;
+using namespace axys::network;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    if defined(__arm64__)

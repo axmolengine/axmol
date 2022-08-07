@@ -1227,4 +1227,4 @@ bool GLViewImpl::loadGL()
     return true;
 }
 
-NS_AX_END  // end of namespace axis;
+NS_AX_END  // end of namespace axys;

@@ -35,7 +35,7 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "scripting/lua-bindings/manual/AxisLuaLoader.h"
+#include "scripting/lua-bindings/manual/AxluaLoader.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #    include "scripting/lua-bindings/manual/platform/ios/CCLuaObjcBridge.h"
@@ -46,12 +46,12 @@ extern "C" {
 #endif
 
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/auto/lua_axis_base_auto.hpp"
-#include "scripting/lua-bindings/manual/base/lua_axis_base_manual.hpp"
+#include "scripting/lua-bindings/auto/axlua_base_auto.hpp"
+#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/auto/lua_axis_physics_auto.hpp"
-#include "scripting/lua-bindings/manual/physics/lua_axis_physics_manual.hpp"
-#include "scripting/lua-bindings/auto/lua_axis_backend_auto.hpp"
+#include "scripting/lua-bindings/auto/axlua_physics_auto.hpp"
+#include "scripting/lua-bindings/manual/physics/axlua_physics_manual.hpp"
+#include "scripting/lua-bindings/auto/axlua_backend_auto.hpp"
 #include "base/ZipUtils.h"
 #include "platform/CCFileUtils.h"
 
@@ -170,7 +170,7 @@ bool LuaStack::init()
     tolua_script_handler_mgr_open(_state);
 
     // add cocos2dx loader
-    addLuaLoader(axis_lua_loader);
+    addLuaLoader(axlua_loader);
 
     return true;
 }

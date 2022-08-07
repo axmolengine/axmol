@@ -29,7 +29,7 @@
 
 USING_NS_AX;
 USING_NS_AX_EXT;
-using namespace axis::ui;
+using namespace axys::ui;
 
 enum
 {

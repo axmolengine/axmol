@@ -2,32 +2,32 @@ set(cocos_root ${AXYS_ROOT_PATH})
 
 set(lua_bindings_manual_headers
     manual/CCComponentLua.h
-    manual/3d/lua_axis_3d_manual.h
+    manual/3d/axlua_3d_manual.h
     manual/CCLuaStack.h
     manual/CCLuaEngine.h
     manual/lua_module_register.h
     manual/CCLuaBridge.h
-    manual/extension/lua_axis_extension_manual.h
+    manual/extension/axlua_extension_manual.h
     manual/LuaBasicConversions.h
     manual/spine/LuaSkeletonAnimation.h
     manual/platform/ios/CCLuaObjcBridge.h
-    manual/network/lua_axis_network_manual.h
+    manual/network/axlua_network_manual.h
     manual/network/lua_xml_http_request.h
     manual/network/lua_downloader.h
-    manual/audioengine/lua_axis_audioengine_manual.h
+    manual/audioengine/axlua_audioengine_manual.h
     manual/Lua-BindingsExport.h
     manual/tolua_fix.h
-    manual/navmesh/lua_axis_navmesh_manual.h
-    manual/navmesh/lua_axis_navmesh_conversions.h
+    manual/navmesh/axlua_navmesh_manual.h
+    manual/navmesh/axlua_navmesh_conversions.h
     manual/base/LuaScriptHandlerMgr.h
-    manual/base/lua_axis_base_manual.hpp
-    manual/AxisLuaLoader.h
+    manual/base/axlua_base_manual.hpp
+    manual/AxluaLoader.h
     manual/CCLuaValue.h
-    manual/physics3d/lua_axis_physics3d_manual.h
+    manual/physics3d/axlua_physics3d_manual.h
     manual/cocostudio/lua-cocostudio-conversions.h
     manual/cocostudio/CustomGUIReader.h
-    manual/ui/lua_axis_ui_manual.hpp
-    manual/controller/lua_axis_controller_manual.hpp
+    manual/ui/axlua_ui_manual.hpp
+    manual/controller/axlua_controller_manual.hpp
     )
 
 set(lua_bindings_manual_files
@@ -35,63 +35,63 @@ set(lua_bindings_manual_files
     manual/CCLuaEngine.cpp
     manual/CCLuaStack.cpp
     manual/CCLuaValue.cpp
-    manual/AxisLuaLoader.cpp
+    manual/AxluaLoader.cpp
     manual/LuaBasicConversions.cpp
     manual/lua_module_register.cpp
     manual/tolua_fix.cpp
     manual/CCComponentLua.cpp
     manual/base/LuaScriptHandlerMgr.cpp
-    manual/base/lua_axis_base_manual.cpp
-    manual/physics/lua_axis_physics_manual.cpp
-    manual/3d/lua_axis_3d_manual.cpp
+    manual/base/axlua_base_manual.cpp
+    manual/physics/axlua_physics_manual.cpp
+    manual/3d/axlua_3d_manual.cpp
     manual/cocostudio/CustomGUIReader.cpp
-    manual/cocostudio/lua_axis_cocostudio_manual.cpp
+    manual/cocostudio/axlua_cocostudio_manual.cpp
     manual/cocostudio/lua-cocostudio-conversions.cpp
-    manual/cocostudio/lua_axis_csloader_manual.cpp
-    manual/controller/lua_axis_controller_manual.cpp
-    manual/extension/lua_axis_extension_manual.cpp
-    manual/network/lua_axis_network_manual.cpp
+    manual/cocostudio/axlua_csloader_manual.cpp
+    manual/controller/axlua_controller_manual.cpp
+    manual/extension/axlua_extension_manual.cpp
+    manual/network/axlua_network_manual.cpp
     manual/network/lua_xml_http_request.cpp
     manual/network/lua_downloader.cpp
-    manual/spine/lua_axis_spine_manual.cpp
+    manual/spine/axlua_spine_manual.cpp
     manual/spine/LuaSkeletonAnimation.cpp
-    manual/ui/lua_axis_ui_manual.cpp
-    manual/audioengine/lua_axis_audioengine_manual.cpp
-    manual/physics3d/lua_axis_physics3d_manual.cpp
-    manual/navmesh/lua_axis_navmesh_conversions.cpp
-    manual/navmesh/lua_axis_navmesh_manual.cpp
+    manual/ui/axlua_ui_manual.cpp
+    manual/audioengine/axlua_audioengine_manual.cpp
+    manual/physics3d/axlua_physics3d_manual.cpp
+    manual/navmesh/axlua_navmesh_conversions.cpp
+    manual/navmesh/axlua_navmesh_manual.cpp
     )
 
 set(lua_bindings_auto_headers
-    auto/lua_axis_audioengine_auto.hpp
-    auto/lua_axis_3d_auto.hpp
-    auto/lua_axis_controller_auto.hpp
-    auto/lua_axis_spine_auto.hpp
-    auto/lua_axis_studio_auto.hpp
-    auto/lua_axis_base_auto.hpp
-    auto/lua_axis_navmesh_auto.hpp
-    auto/lua_axis_csloader_auto.hpp
-    auto/lua_axis_physics3d_auto.hpp
-    auto/lua_axis_ui_auto.hpp
-    auto/lua_axis_physics_auto.hpp
-    auto/lua_axis_extension_auto.hpp
-    auto/lua_axis_backend_auto.hpp
+    auto/axlua_audioengine_auto.hpp
+    auto/axlua_3d_auto.hpp
+    auto/axlua_controller_auto.hpp
+    auto/axlua_spine_auto.hpp
+    auto/axlua_studio_auto.hpp
+    auto/axlua_base_auto.hpp
+    auto/axlua_navmesh_auto.hpp
+    auto/axlua_csloader_auto.hpp
+    auto/axlua_physics3d_auto.hpp
+    auto/axlua_ui_auto.hpp
+    auto/axlua_physics_auto.hpp
+    auto/axlua_extension_auto.hpp
+    auto/axlua_backend_auto.hpp
     )
 
 set(lua_bindings_auto_files
-    auto/lua_axis_3d_auto.cpp
-    auto/lua_axis_base_auto.cpp
-    auto/lua_axis_controller_auto.cpp
-    auto/lua_axis_extension_auto.cpp
-    auto/lua_axis_physics_auto.cpp
-    auto/lua_axis_spine_auto.cpp
-    auto/lua_axis_studio_auto.cpp
-    auto/lua_axis_csloader_auto.cpp
-    auto/lua_axis_ui_auto.cpp
-    auto/lua_axis_audioengine_auto.cpp
-    auto/lua_axis_physics3d_auto.cpp
-    auto/lua_axis_navmesh_auto.cpp
-    auto/lua_axis_backend_auto.cpp
+    auto/axlua_3d_auto.cpp
+    auto/axlua_base_auto.cpp
+    auto/axlua_controller_auto.cpp
+    auto/axlua_extension_auto.cpp
+    auto/axlua_physics_auto.cpp
+    auto/axlua_spine_auto.cpp
+    auto/axlua_studio_auto.cpp
+    auto/axlua_csloader_auto.cpp
+    auto/axlua_ui_auto.cpp
+    auto/axlua_audioengine_auto.cpp
+    auto/axlua_physics3d_auto.cpp
+    auto/axlua_navmesh_auto.cpp
+    auto/axlua_backend_auto.cpp
     )
 
 if(APPLE)
@@ -107,57 +107,57 @@ if(APPLE)
     if(IOS)
         set(lua_bindings_manual_headers
             ${lua_bindings_manual_headers}
-            manual/ui/lua_axis_webview_manual.hpp
-            auto/lua_axis_webview_auto.hpp
-            auto/lua_axis_video_auto.hpp
-            manual/ui/lua_axis_video_manual.hpp
+            manual/ui/axlua_webview_manual.hpp
+            auto/axlua_webview_auto.hpp
+            auto/axlua_video_auto.hpp
+            manual/ui/axlua_video_manual.hpp
             )
         set(lua_bindings_manual_files
             ${lua_bindings_manual_files}
-            manual/ui/lua_axis_webview_manual.cpp
-            auto/lua_axis_webview_auto.cpp
-            manual/ui/lua_axis_video_manual.cpp
-            auto/lua_axis_video_auto.cpp
+            manual/ui/axlua_webview_manual.cpp
+            auto/axlua_webview_auto.cpp
+            manual/ui/axlua_video_manual.cpp
+            auto/axlua_video_auto.cpp
             )
     endif()
 elseif(ANDROID)
     set(lua_bindings_manual_headers
         ${lua_bindings_manual_headers}
-        manual/ui/lua_axis_webview_manual.hpp
-        auto/lua_axis_webview_auto.hpp
-        auto/lua_axis_video_auto.hpp
-        manual/ui/lua_axis_video_manual.hpp
+        manual/ui/axlua_webview_manual.hpp
+        auto/axlua_webview_auto.hpp
+        auto/axlua_video_auto.hpp
+        manual/ui/axlua_video_manual.hpp
         )
     set(lua_bindings_manual_files
         ${lua_bindings_manual_files}
-        manual/ui/lua_axis_webview_manual.cpp
-        auto/lua_axis_webview_auto.cpp
-        manual/ui/lua_axis_video_manual.cpp
-        auto/lua_axis_video_auto.cpp
+        manual/ui/axlua_webview_manual.cpp
+        auto/axlua_webview_auto.cpp
+        manual/ui/axlua_video_manual.cpp
+        auto/axlua_video_auto.cpp
         )
 elseif(WINDOWS)
     if(AX_ENABLE_MFMEDIA)
         set(lua_bindings_manual_headers
             ${lua_bindings_manual_headers}
-            auto/lua_axis_video_auto.hpp
-            manual/ui/lua_axis_video_manual.hpp
+            auto/axlua_video_auto.hpp
+            manual/ui/axlua_video_manual.hpp
             )
         set(lua_bindings_manual_files
             ${lua_bindings_manual_files}
-            manual/ui/lua_axis_video_manual.cpp
-            auto/lua_axis_video_auto.cpp
+            manual/ui/axlua_video_manual.cpp
+            auto/axlua_video_auto.cpp
             )
     endif()
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         set(lua_bindings_manual_headers
             ${lua_bindings_manual_headers}
-            manual/ui/lua_axis_webview_manual.hpp
-            auto/lua_axis_webview_auto.hpp
+            manual/ui/axlua_webview_manual.hpp
+            auto/axlua_webview_auto.hpp
             )
         set(lua_bindings_manual_files
             ${lua_bindings_manual_files}
-            manual/ui/lua_axis_webview_manual.cpp
-            auto/lua_axis_webview_auto.cpp
+            manual/ui/axlua_webview_manual.cpp
+            auto/axlua_webview_auto.cpp
             )
     endif()
 endif()

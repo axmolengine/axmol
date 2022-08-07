@@ -263,14 +263,14 @@ private:
     void copy(const LuaValue& rhs);
 };
 
-inline std::string axislua_tostr(lua_State* L, int arg)
+inline std::string axlua_tostr(lua_State* L, int arg)
 {
     size_t l      = 0;
     const char* s = lua_tolstring(L, arg, &l);
     return std::string{s, l};
 }
 
-inline std::string_view axislua_tosv(lua_State* L, int arg)
+inline std::string_view axlua_tosv(lua_State* L, int arg)
 {
     size_t l      = 0;
     const char* s = lua_tolstring(L, arg, &l);

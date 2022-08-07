@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include "renderer/CCGroupCommand.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace axys::ui;
 
 ActionsTests::ActionsTests()
 {

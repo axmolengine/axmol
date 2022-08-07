@@ -25,7 +25,7 @@
 #include "UIScrollViewTest.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace axys::ui;
 
 UIScrollViewTests::UIScrollViewTests()
 {

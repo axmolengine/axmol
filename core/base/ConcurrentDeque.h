@@ -113,4 +113,4 @@ private:
     std::deque<_Ty> queue_;
     mutable std::recursive_mutex mtx_;
 };
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

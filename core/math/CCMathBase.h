@@ -59,7 +59,7 @@
 
 #ifdef __cplusplus
 #    define NS_AX_MATH_BEGIN \
-        namespace axis    \
+        namespace axys    \
         {
 #    define NS_AX_MATH_END }
 #    define USING_NS_AX_MATH using namespace axys

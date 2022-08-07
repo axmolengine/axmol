@@ -17,9 +17,19 @@ def _check_ndk_root_env():
     '''
 
     try:
-        ANDROID_NDK = os.environ['ANDROID_NDK']
+
+        sdkRoot = os.environ['ANDROID_SDK_ROOT']
+        for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
+            for ndkVer in ndkVers:
+                if (ndkVer == '19.2.5345600'):
+                    ANDROID_NDK = "{0}{1}ndk{1}{2}".format(sdkRoot, os.path.sep, ndkVer)
+                    break
+            break
+
+        if ANDROID_NDK == None: raise
+
     except Exception:
-        print("ANDROID_NDK not defined. Please define ANDROID_NDK in your environment.")
+        print("The ndk-r19c not installed in '{0}{1}ndk', please install via cmdline-tools/bin/sdkmanager --verbose --sdk_root=D:\dev\adt\sdk \"ndk;19.2.5345600\"".format(sdkRoot, os.path.sep))
         sys.exit(1)
 
     return ANDROID_NDK

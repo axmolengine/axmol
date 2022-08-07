@@ -166,7 +166,7 @@ function(axis_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 	        PRIVATE _USRLUASTATIC=1
         )
     endif()
-    target_link_libraries(${APP_NAME} axislua lua-cjson tolua plainlua)
+    target_link_libraries(${APP_NAME} axlua lua-cjson tolua plainlua)
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"

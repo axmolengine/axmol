@@ -42,7 +42,7 @@ namespace ui
 {
 class Widget;
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 namespace cocostudio
 {

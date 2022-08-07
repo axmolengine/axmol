@@ -221,4 +221,4 @@ SInt64 AudioDecoderEXT::getSizeCallback(void* inClientData)
     auto* audioDecoder = (AudioDecoderEXT*)inClientData;
     return audioDecoder->_streamSize;
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

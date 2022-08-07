@@ -172,4 +172,4 @@ protected:
     mutable WAV_FILE _wavf;
 };
 
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
