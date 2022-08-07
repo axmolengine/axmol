@@ -205,21 +205,21 @@ def main():
         output_dir = '%s/extensions/scripting/lua-bindings/auto' % project_root
 
         cmd_args = {
-                    'axys_base.ini' : ('axys_base', 'lua_axys_base_auto'), \
-                    'axys_backend.ini' : ('axys_backend', 'lua_axys_backend_auto'), \
-                    'axys_extension.ini' : ('axys_extension', 'lua_axys_extension_auto'), \
-                    'axys_ui.ini' : ('axys_ui', 'lua_axys_ui_auto'), \
-                    'axys_studio.ini' : ('axys_studio', 'lua_axys_studio_auto'), \
-                    'axys_spine.ini' : ('axys_spine', 'lua_axys_spine_auto'), \
-                    'axys_physics.ini' : ('axys_physics', 'lua_axys_physics_auto'), \
-                    'axys_video.ini' : ('axys_video', 'lua_axys_video_auto'), \
-                    'axys_controller.ini' : ('axys_controller', 'lua_axys_controller_auto'), \
-                    'axys_3d.ini': ('axys_3d', 'lua_axys_3d_auto'), \
-                    'axys_audioengine.ini': ('axys_audioengine', 'lua_axys_audioengine_auto'), \
-                    'axys_csloader.ini' : ('axys_csloader', 'lua_axys_csloader_auto'), \
-                    'axys_webview.ini' : ('axys_webview', 'lua_axys_webview_auto'), \
-                    'axys_physics3d.ini' : ('axys_physics3d', 'lua_axys_physics3d_auto'), \
-                    'axys_navmesh.ini' : ('axys_navmesh', 'lua_axys_navmesh_auto'), \
+                    'axys_base.ini' : ('axys_base', 'axlua_base_auto'), \
+                    'axys_backend.ini' : ('axys_backend', 'axlua_backend_auto'), \
+                    'axys_extension.ini' : ('axys_extension', 'axlua_extension_auto'), \
+                    'axys_ui.ini' : ('axys_ui', 'axlua_ui_auto'), \
+                    'axys_studio.ini' : ('axys_studio', 'axlua_studio_auto'), \
+                    'axys_spine.ini' : ('axys_spine', 'axlua_spine_auto'), \
+                    'axys_physics.ini' : ('axys_physics', 'axlua_physics_auto'), \
+                    'axys_video.ini' : ('axys_video', 'axlua_video_auto'), \
+                    'axys_controller.ini' : ('axys_controller', 'axlua_controller_auto'), \
+                    'axys_3d.ini': ('axys_3d', 'axlua_3d_auto'), \
+                    'axys_audioengine.ini': ('axys_audioengine', 'axlua_audioengine_auto'), \
+                    'axys_csloader.ini' : ('axys_csloader', 'axlua_csloader_auto'), \
+                    'axys_webview.ini' : ('axys_webview', 'axlua_webview_auto'), \
+                    'axys_physics3d.ini' : ('axys_physics3d', 'axlua_physics3d_auto'), \
+                    'axys_navmesh.ini' : ('axys_navmesh', 'axlua_navmesh_auto'), \
                     }
         target = 'lua'
         generator_py = '%s/generator.py' % cxx_generator_root
