@@ -41,7 +41,7 @@ void BaseLight::onEnter()
         auto& lights = scene->_lights;
         auto iter    = std::find(lights.begin(), lights.end(), this);
         if (iter == lights.end())
-            lights.push_back(this);
+            lights.emplace_back(this);
     }
     Node::onEnter();
 }

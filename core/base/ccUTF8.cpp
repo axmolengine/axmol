@@ -490,7 +490,7 @@ void StringUTF8::replace(std::string_view newStr)
             charUTF8._char.append((char*)sequenceUtf8, lengthChar);
             sequenceUtf8 += lengthChar;
 
-            _str.push_back(charUTF8);
+            _str.emplace_back(charUTF8);
         }
     }
 }

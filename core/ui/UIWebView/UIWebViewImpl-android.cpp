@@ -60,7 +60,7 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
         using namespace cxx17;  // for cxx17::string_view literal
         if (cxx20::starts_with(baseUrl, "assets/"_sv))
         {
-            fixedBaseUrl.assign(s_assetsBaseUrl).push_back(baseUrl[7]);
+            fixedBaseUrl.assign(s_assetsBaseUrl).emplace_back(baseUrl[7]);
         }
         else
         {
@@ -74,7 +74,7 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
 
     if (fixedBaseUrl.c_str()[fixedBaseUrl.length() - 1] != '/')
     {
-        fixedBaseUrl.push_back('/');
+        fixedBaseUrl.emplace_back('/');
     }
 
     return fixedBaseUrl;

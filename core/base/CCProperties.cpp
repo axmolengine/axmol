@@ -65,7 +65,7 @@ Properties::Properties(const Properties& copy)
 
     for (const auto space : copy._namespaces)
     {
-        _namespaces.push_back(new Properties(*space));
+        _namespaces.emplace_back(new Properties(*space));
     }
     rewind();
 }
@@ -245,7 +245,7 @@ void Properties::readProperties()
                 else
                 {
                     // Normal name/value pair
-                    _properties.push_back(Property(name, value));
+                    _properties.emplace_back(Property(name, value));
                 }
             }
             else
@@ -319,7 +319,7 @@ void Properties::readProperties()
 
                     // New namespace without an ID.
                     Properties* space = new Properties(_data, _dataIdx, name, NULL, parentID, this);
-                    _namespaces.push_back(space);
+                    _namespaces.emplace_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
                     if (rccc && rccc == lineEnd)
@@ -361,7 +361,7 @@ void Properties::readProperties()
 
                         // Create new namespace.
                         Properties* space = new Properties(_data, _dataIdx, name, value, parentID, this);
-                        _namespaces.push_back(space);
+                        _namespaces.emplace_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
                         if (rccc && rccc == lineEnd)
@@ -382,7 +382,7 @@ void Properties::readProperties()
                         {
                             // Create new namespace.
                             Properties* space = new Properties(_data, _dataIdx, name, value, parentID, this);
-                            _namespaces.push_back(space);
+                            _namespaces.emplace_back(space);
                         }
                         else
                         {
@@ -395,11 +395,11 @@ void Properties::readProperties()
                             // Store "name value" as a name/value pair, or even just "name".
                             if (value != NULL)
                             {
-                                _properties.push_back(Property(name, value));
+                                _properties.emplace_back(Property(name, value));
                             }
                             else
                             {
-                                _properties.push_back(Property(name, ""));
+                                _properties.emplace_back(Property(name, ""));
                             }
                         }
                     }
@@ -555,7 +555,7 @@ void Properties::resolveInheritance(const char* id)
                 std::vector<Properties*>::const_iterator itt;
                 for (const auto space : parent->_namespaces)
                 {
-                    derived->_namespaces.push_back(new Properties(*space));
+                    derived->_namespaces.emplace_back(new Properties(*space));
                 }
                 derived->rewind();
 
@@ -621,7 +621,7 @@ void Properties::mergeWith(Properties* overrides)
             // Add this new namespace.
             Properties* newNamespace = new Properties(*overridesNamespace);
 
-            this->_namespaces.push_back(newNamespace);
+            this->_namespaces.emplace_back(newNamespace);
             this->_namespacesItr = this->_namespaces.end();
         }
 
@@ -844,7 +844,7 @@ bool Properties::setString(const char* name, const char* value)
         }
 
         // There is no property with this name, so add one
-        _properties.push_back(Property(name, value ? value : ""));
+        _properties.emplace_back(Property(name, value ? value : ""));
     }
     else
     {
@@ -1054,7 +1054,7 @@ void Properties::setVariable(const char* name, const char* value)
         // Add a new variable with this name
         if (!_variables)
             _variables = new std::vector<Property>();
-        _variables->push_back(Property(name, value ? value : ""));
+        _variables->emplace_back(Property(name, value ? value : ""));
     }
 }
 
@@ -1073,7 +1073,7 @@ Properties* Properties::clone()
     {
         AXASSERT(_namespaces[i], "Invalid namespace");
         Properties* child = _namespaces[i]->clone();
-        p->_namespaces.push_back(child);
+        p->_namespaces.emplace_back(child);
         child->_parent = p;
     }
     p->_namespacesItr = p->_namespaces.end();
@@ -1118,10 +1118,10 @@ void calculateNamespacePath(std::string_view urlString,
         auto namespacePathString = urlString.substr(loc + 1);
         while ((loc = namespacePathString.find('/')) != std::string::npos)
         {
-            namespacePath.push_back(std::string{namespacePathString.substr(0, loc)});
+            namespacePath.emplace_back(std::string{namespacePathString.substr(0, loc)});
             namespacePathString = namespacePathString.substr(loc + 1);
         }
-        namespacePath.push_back(std::string{namespacePathString});
+        namespacePath.emplace_back(std::string{namespacePathString});
     }
     else
     {

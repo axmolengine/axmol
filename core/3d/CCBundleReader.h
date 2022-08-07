@@ -207,7 +207,7 @@ inline bool BundleReader::readArray<std::string>(unsigned int* length, std::vect
     {
         for (int i = 0; i < (int)*length; ++i)
         {
-            values->push_back(readString());
+            values->emplace_back(readString());
         }
     }
     return true;

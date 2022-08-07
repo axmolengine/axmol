@@ -158,7 +158,7 @@ void log(const char* format, ...)
     SendLogToWindow(buf.c_str());
 #    endif
 #else
-    buf.push_back('\n');
+    buf.emplace_back('\n');
     // Linux, Mac, iOS, etc
     fprintf(stdout, "%s", buf.c_str());
     fflush(stdout);
@@ -211,7 +211,7 @@ std::vector<std::string>& Console::Utility::split(std::string_view s, char delim
     std::string item;
     while (std::getline(ss, item, delim))
     {
-        elems.push_back(item);
+        elems.emplace_back(item);
     }
     return elems;
 }
@@ -697,7 +697,7 @@ void Console::log(const char* buf)
     if (_sendDebugStrings)
     {
         _DebugStringsMutex.lock();
-        _DebugStrings.push_back(buf);
+        _DebugStrings.emplace_back(buf);
         _DebugStringsMutex.unlock();
     }
 }
@@ -784,13 +784,13 @@ void Console::loop()
                     {
                         // no data received, or fd is closed
                         // fix #18620. readable and no pending data means that the fd is closed.
-                        to_remove.push_back(fd);
+                        to_remove.emplace_back(fd);
                         continue;
                     }
 
                     if (!parseCommand(fd))
                     {
-                        to_remove.push_back(fd);
+                        to_remove.emplace_back(fd);
                     }
                     if (--nready <= 0)
                         break;
@@ -1017,7 +1017,7 @@ void Console::addClient()
     if (fd != -1)
     {
         FD_SET(fd, &_read_set);
-        _fds.push_back(fd);
+        _fds.emplace_back(fd);
         _maxfd = (std::max)(_maxfd, fd);
 
         Console::Utility::sendPrompt(fd);

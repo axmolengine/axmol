@@ -77,7 +77,7 @@ public:
         int thread_count = std::thread::hardware_concurrency();
         for (int i = 0; i < thread_count; ++i)
         {
-            _threads.push_back(std::thread{&astc_decompress_job_manager::run, this});
+            _threads.emplace_back(std::thread{&astc_decompress_job_manager::run, this});
         }
     }
 
@@ -112,7 +112,7 @@ public:
             return ASTCENC_ERR_OUT_OF_MEM;
 
         _task_queue_mtx.lock();
-        _task_queue.push_back(task);
+        _task_queue.emplace_back(task);
         _task_queue_mtx.unlock();
         _task_queue_cv.notify_all();  // notify all thread to process the single decompress task parallel
 
