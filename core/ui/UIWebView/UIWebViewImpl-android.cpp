@@ -74,7 +74,7 @@ static std::string getFixedBaseUrl(std::string_view baseUrl)
 
     if (fixedBaseUrl.c_str()[fixedBaseUrl.length() - 1] != '/')
     {
-        fixedBaseUrl.emplace_back('/');
+        fixedBaseUrl.push_back('/');
     }
 
     return fixedBaseUrl;
