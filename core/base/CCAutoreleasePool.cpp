@@ -30,7 +30,7 @@ NS_AX_BEGIN
 
 AutoreleasePool::AutoreleasePool()
     : _name("")
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     , _isClearing(false)
 #endif
 {
@@ -40,7 +40,7 @@ AutoreleasePool::AutoreleasePool()
 
 AutoreleasePool::AutoreleasePool(std::string_view name)
     : _name(name)
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     , _isClearing(false)
 #endif
 {
@@ -63,7 +63,7 @@ void AutoreleasePool::addObject(Ref* object)
 
 void AutoreleasePool::clear()
 {
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     _isClearing = true;
 #endif
     std::vector<Ref*> releasings;
@@ -72,7 +72,7 @@ void AutoreleasePool::clear()
     {
         obj->release();
     }
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     _isClearing = false;
 #endif
 }

@@ -512,7 +512,7 @@ void ScrollViewDemo::onTouchesEnded(const std::vector<Touch*>& touches, Event* e
 
 // RawStencilBufferTests
 
-//#if AXIS_DEBUG > 1
+//#if _AX_DEBUG > 1
 
 static const float _alphaThreshold = 0.05f;
 
@@ -809,7 +809,7 @@ void RawStencilBufferTest6::setupStencilForDrawingOnPlane(int plane)
     RawStencilBufferTest::setupStencilForDrawingOnPlane(plane);
 }
 
-//#endif // AXIS_DEBUG > 1
+//#endif // _AX_DEBUG > 1
 
 // ClippingToRenderTextureTest
 

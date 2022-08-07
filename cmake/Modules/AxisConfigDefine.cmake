@@ -109,7 +109,7 @@ endif()
 
 # Set macro definitions for special platforms
 function(use_axis_compile_define target)
-    target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:AXIS_DEBUG=1>)
+    target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:_AX_DEBUG=1>)
     
     # !important axis not use double precision
     # target_compile_definitions(${target} PUBLIC CP_USE_CGTYPES=0)

@@ -11,18 +11,18 @@ int lua_axis_navmesh_NavMeshAgent_setMaxSpeed(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setMaxSpeed'", nullptr);
@@ -48,7 +48,7 @@ int lua_axis_navmesh_NavMeshAgent_setMaxSpeed(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setMaxSpeed",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setMaxSpeed'.",&tolua_err);
 #endif
@@ -61,18 +61,18 @@ int lua_axis_navmesh_NavMeshAgent_syncToNode(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_syncToNode'", nullptr);
@@ -95,7 +95,7 @@ int lua_axis_navmesh_NavMeshAgent_syncToNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:syncToNode",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_syncToNode'.",&tolua_err);
 #endif
@@ -108,18 +108,18 @@ int lua_axis_navmesh_NavMeshAgent_completeOffMeshLink(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_completeOffMeshLink'", nullptr);
@@ -142,7 +142,7 @@ int lua_axis_navmesh_NavMeshAgent_completeOffMeshLink(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:completeOffMeshLink",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_completeOffMeshLink'.",&tolua_err);
 #endif
@@ -155,18 +155,18 @@ int lua_axis_navmesh_NavMeshAgent_getSeparationWeight(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getSeparationWeight'", nullptr);
@@ -189,7 +189,7 @@ int lua_axis_navmesh_NavMeshAgent_getSeparationWeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getSeparationWeight",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getSeparationWeight'.",&tolua_err);
 #endif
@@ -202,18 +202,18 @@ int lua_axis_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink'", nullptr);
@@ -239,7 +239,7 @@ int lua_axis_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setAutoTraverseOffMeshLink",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setAutoTraverseOffMeshLink'.",&tolua_err);
 #endif
@@ -252,18 +252,18 @@ int lua_axis_navmesh_NavMeshAgent_getCurrentVelocity(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getCurrentVelocity'", nullptr);
@@ -286,7 +286,7 @@ int lua_axis_navmesh_NavMeshAgent_getCurrentVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getCurrentVelocity",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getCurrentVelocity'.",&tolua_err);
 #endif
@@ -299,18 +299,18 @@ int lua_axis_navmesh_NavMeshAgent_syncToAgent(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_syncToAgent'", nullptr);
@@ -333,7 +333,7 @@ int lua_axis_navmesh_NavMeshAgent_syncToAgent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:syncToAgent",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_syncToAgent'.",&tolua_err);
 #endif
@@ -346,18 +346,18 @@ int lua_axis_navmesh_NavMeshAgent_isOnOffMeshLink(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_isOnOffMeshLink'", nullptr);
@@ -380,7 +380,7 @@ int lua_axis_navmesh_NavMeshAgent_isOnOffMeshLink(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:isOnOffMeshLink",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_isOnOffMeshLink'.",&tolua_err);
 #endif
@@ -393,18 +393,18 @@ int lua_axis_navmesh_NavMeshAgent_setSeparationWeight(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setSeparationWeight'", nullptr);
@@ -430,7 +430,7 @@ int lua_axis_navmesh_NavMeshAgent_setSeparationWeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setSeparationWeight",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setSeparationWeight'.",&tolua_err);
 #endif
@@ -443,18 +443,18 @@ int lua_axis_navmesh_NavMeshAgent_pause(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_pause'", nullptr);
@@ -477,7 +477,7 @@ int lua_axis_navmesh_NavMeshAgent_pause(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:pause",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_pause'.",&tolua_err);
 #endif
@@ -490,18 +490,18 @@ int lua_axis_navmesh_NavMeshAgent_getUserData(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getUserData'", nullptr);
@@ -524,7 +524,7 @@ int lua_axis_navmesh_NavMeshAgent_getUserData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getUserData",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getUserData'.",&tolua_err);
 #endif
@@ -537,18 +537,18 @@ int lua_axis_navmesh_NavMeshAgent_setAutoOrientation(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setAutoOrientation'", nullptr);
@@ -574,7 +574,7 @@ int lua_axis_navmesh_NavMeshAgent_setAutoOrientation(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setAutoOrientation",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setAutoOrientation'.",&tolua_err);
 #endif
@@ -587,18 +587,18 @@ int lua_axis_navmesh_NavMeshAgent_getHeight(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getHeight'", nullptr);
@@ -621,7 +621,7 @@ int lua_axis_navmesh_NavMeshAgent_getHeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getHeight",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getHeight'.",&tolua_err);
 #endif
@@ -634,18 +634,18 @@ int lua_axis_navmesh_NavMeshAgent_getMaxSpeed(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getMaxSpeed'", nullptr);
@@ -668,7 +668,7 @@ int lua_axis_navmesh_NavMeshAgent_getMaxSpeed(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getMaxSpeed",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getMaxSpeed'.",&tolua_err);
 #endif
@@ -681,18 +681,18 @@ int lua_axis_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getCurrentOffMeshLinkData'", nullptr);
@@ -715,7 +715,7 @@ int lua_axis_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getCurrentOffMeshLinkData",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getCurrentOffMeshLinkData'.",&tolua_err);
 #endif
@@ -728,18 +728,18 @@ int lua_axis_navmesh_NavMeshAgent_getRadius(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getRadius'", nullptr);
@@ -762,7 +762,7 @@ int lua_axis_navmesh_NavMeshAgent_getRadius(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getRadius",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getRadius'.",&tolua_err);
 #endif
@@ -775,18 +775,18 @@ int lua_axis_navmesh_NavMeshAgent_setSyncFlag(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setSyncFlag'", nullptr);
@@ -812,7 +812,7 @@ int lua_axis_navmesh_NavMeshAgent_setSyncFlag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setSyncFlag",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setSyncFlag'.",&tolua_err);
 #endif
@@ -825,18 +825,18 @@ int lua_axis_navmesh_NavMeshAgent_getSyncFlag(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getSyncFlag'", nullptr);
@@ -859,7 +859,7 @@ int lua_axis_navmesh_NavMeshAgent_getSyncFlag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getSyncFlag",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getSyncFlag'.",&tolua_err);
 #endif
@@ -872,18 +872,18 @@ int lua_axis_navmesh_NavMeshAgent_resume(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_resume'", nullptr);
@@ -906,7 +906,7 @@ int lua_axis_navmesh_NavMeshAgent_resume(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:resume",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_resume'.",&tolua_err);
 #endif
@@ -919,18 +919,18 @@ int lua_axis_navmesh_NavMeshAgent_stop(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_stop'", nullptr);
@@ -953,7 +953,7 @@ int lua_axis_navmesh_NavMeshAgent_stop(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:stop",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_stop'.",&tolua_err);
 #endif
@@ -966,18 +966,18 @@ int lua_axis_navmesh_NavMeshAgent_setMaxAcceleration(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setMaxAcceleration'", nullptr);
@@ -1003,7 +1003,7 @@ int lua_axis_navmesh_NavMeshAgent_setMaxAcceleration(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setMaxAcceleration",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setMaxAcceleration'.",&tolua_err);
 #endif
@@ -1016,18 +1016,18 @@ int lua_axis_navmesh_NavMeshAgent_setOrientationRefAxes(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setOrientationRefAxes'", nullptr);
@@ -1053,7 +1053,7 @@ int lua_axis_navmesh_NavMeshAgent_setOrientationRefAxes(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setOrientationRefAxes",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setOrientationRefAxes'.",&tolua_err);
 #endif
@@ -1066,18 +1066,18 @@ int lua_axis_navmesh_NavMeshAgent_getMaxAcceleration(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getMaxAcceleration'", nullptr);
@@ -1100,7 +1100,7 @@ int lua_axis_navmesh_NavMeshAgent_getMaxAcceleration(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getMaxAcceleration",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getMaxAcceleration'.",&tolua_err);
 #endif
@@ -1113,18 +1113,18 @@ int lua_axis_navmesh_NavMeshAgent_setHeight(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setHeight'", nullptr);
@@ -1150,7 +1150,7 @@ int lua_axis_navmesh_NavMeshAgent_setHeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setHeight",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setHeight'.",&tolua_err);
 #endif
@@ -1163,18 +1163,18 @@ int lua_axis_navmesh_NavMeshAgent_setUserData(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setUserData'", nullptr);
@@ -1201,7 +1201,7 @@ int lua_axis_navmesh_NavMeshAgent_setUserData(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setUserData",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setUserData'.",&tolua_err);
 #endif
@@ -1214,18 +1214,18 @@ int lua_axis_navmesh_NavMeshAgent_getObstacleAvoidanceType(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getObstacleAvoidanceType'", nullptr);
@@ -1248,7 +1248,7 @@ int lua_axis_navmesh_NavMeshAgent_getObstacleAvoidanceType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getObstacleAvoidanceType",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getObstacleAvoidanceType'.",&tolua_err);
 #endif
@@ -1261,18 +1261,18 @@ int lua_axis_navmesh_NavMeshAgent_getVelocity(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_getVelocity'", nullptr);
@@ -1295,7 +1295,7 @@ int lua_axis_navmesh_NavMeshAgent_getVelocity(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:getVelocity",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getVelocity'.",&tolua_err);
 #endif
@@ -1308,18 +1308,18 @@ int lua_axis_navmesh_NavMeshAgent_setRadius(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setRadius'", nullptr);
@@ -1345,7 +1345,7 @@ int lua_axis_navmesh_NavMeshAgent_setRadius(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setRadius",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setRadius'.",&tolua_err);
 #endif
@@ -1358,18 +1358,18 @@ int lua_axis_navmesh_NavMeshAgent_setObstacleAvoidanceType(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshAgent_setObstacleAvoidanceType'", nullptr);
@@ -1395,7 +1395,7 @@ int lua_axis_navmesh_NavMeshAgent_setObstacleAvoidanceType(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:setObstacleAvoidanceType",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_setObstacleAvoidanceType'.",&tolua_err);
 #endif
@@ -1407,11 +1407,11 @@ int lua_axis_navmesh_NavMeshAgent_getNavMeshAgentComponentName(lua_State* tolua_
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -1430,7 +1430,7 @@ int lua_axis_navmesh_NavMeshAgent_getNavMeshAgentComponentName(lua_State* tolua_
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.NavMeshAgent:getNavMeshAgentComponentName",argc, 0);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_getNavMeshAgentComponentName'.",&tolua_err);
 #endif
@@ -1441,11 +1441,11 @@ int lua_axis_navmesh_NavMeshAgent_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.NavMeshAgent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -1466,7 +1466,7 @@ int lua_axis_navmesh_NavMeshAgent_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.NavMeshAgent:create",argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_create'.",&tolua_err);
 #endif
@@ -1478,7 +1478,7 @@ int lua_axis_navmesh_NavMeshAgent_constructor(lua_State* tolua_S)
     axis::NavMeshAgent* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1502,7 +1502,7 @@ int lua_axis_navmesh_NavMeshAgent_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshAgent:NavMeshAgent",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshAgent_constructor'.",&tolua_err);
 #endif
 
@@ -1566,18 +1566,18 @@ int lua_axis_navmesh_NavMeshObstacle_getSyncFlag(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_getSyncFlag'", nullptr);
@@ -1600,7 +1600,7 @@ int lua_axis_navmesh_NavMeshObstacle_getSyncFlag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:getSyncFlag",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_getSyncFlag'.",&tolua_err);
 #endif
@@ -1613,18 +1613,18 @@ int lua_axis_navmesh_NavMeshObstacle_initWith(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_initWith'", nullptr);
@@ -1653,7 +1653,7 @@ int lua_axis_navmesh_NavMeshObstacle_initWith(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:initWith",argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_initWith'.",&tolua_err);
 #endif
@@ -1666,18 +1666,18 @@ int lua_axis_navmesh_NavMeshObstacle_syncToObstacle(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_syncToObstacle'", nullptr);
@@ -1700,7 +1700,7 @@ int lua_axis_navmesh_NavMeshObstacle_syncToObstacle(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:syncToObstacle",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_syncToObstacle'.",&tolua_err);
 #endif
@@ -1713,18 +1713,18 @@ int lua_axis_navmesh_NavMeshObstacle_syncToNode(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_syncToNode'", nullptr);
@@ -1747,7 +1747,7 @@ int lua_axis_navmesh_NavMeshObstacle_syncToNode(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:syncToNode",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_syncToNode'.",&tolua_err);
 #endif
@@ -1760,18 +1760,18 @@ int lua_axis_navmesh_NavMeshObstacle_getHeight(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_getHeight'", nullptr);
@@ -1794,7 +1794,7 @@ int lua_axis_navmesh_NavMeshObstacle_getHeight(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:getHeight",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_getHeight'.",&tolua_err);
 #endif
@@ -1807,18 +1807,18 @@ int lua_axis_navmesh_NavMeshObstacle_setSyncFlag(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_setSyncFlag'", nullptr);
@@ -1844,7 +1844,7 @@ int lua_axis_navmesh_NavMeshObstacle_setSyncFlag(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:setSyncFlag",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_setSyncFlag'.",&tolua_err);
 #endif
@@ -1857,18 +1857,18 @@ int lua_axis_navmesh_NavMeshObstacle_getRadius(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMeshObstacle*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMeshObstacle_getRadius'", nullptr);
@@ -1891,7 +1891,7 @@ int lua_axis_navmesh_NavMeshObstacle_getRadius(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:getRadius",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_getRadius'.",&tolua_err);
 #endif
@@ -1903,11 +1903,11 @@ int lua_axis_navmesh_NavMeshObstacle_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -1930,7 +1930,7 @@ int lua_axis_navmesh_NavMeshObstacle_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.NavMeshObstacle:create",argc, 2);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_create'.",&tolua_err);
 #endif
@@ -1941,11 +1941,11 @@ int lua_axis_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(lua_State* 
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.NavMeshObstacle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -1964,7 +1964,7 @@ int lua_axis_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(lua_State* 
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.NavMeshObstacle:getNavMeshObstacleComponentName",argc, 0);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName'.",&tolua_err);
 #endif
@@ -1976,7 +1976,7 @@ int lua_axis_navmesh_NavMeshObstacle_constructor(lua_State* tolua_S)
     axis::NavMeshObstacle* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -2000,7 +2000,7 @@ int lua_axis_navmesh_NavMeshObstacle_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMeshObstacle:NavMeshObstacle",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMeshObstacle_constructor'.",&tolua_err);
 #endif
 
@@ -2042,18 +2042,18 @@ int lua_axis_navmesh_NavMesh_removeNavMeshObstacle(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_removeNavMeshObstacle'", nullptr);
@@ -2079,7 +2079,7 @@ int lua_axis_navmesh_NavMesh_removeNavMeshObstacle(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:removeNavMeshObstacle",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_removeNavMeshObstacle'.",&tolua_err);
 #endif
@@ -2092,18 +2092,18 @@ int lua_axis_navmesh_NavMesh_removeNavMeshAgent(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_removeNavMeshAgent'", nullptr);
@@ -2129,7 +2129,7 @@ int lua_axis_navmesh_NavMesh_removeNavMeshAgent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:removeNavMeshAgent",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_removeNavMeshAgent'.",&tolua_err);
 #endif
@@ -2142,18 +2142,18 @@ int lua_axis_navmesh_NavMesh_update(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_update'", nullptr);
@@ -2179,7 +2179,7 @@ int lua_axis_navmesh_NavMesh_update(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:update",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_update'.",&tolua_err);
 #endif
@@ -2192,18 +2192,18 @@ int lua_axis_navmesh_NavMesh_isDebugDrawEnabled(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_isDebugDrawEnabled'", nullptr);
@@ -2226,7 +2226,7 @@ int lua_axis_navmesh_NavMesh_isDebugDrawEnabled(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:isDebugDrawEnabled",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_isDebugDrawEnabled'.",&tolua_err);
 #endif
@@ -2239,18 +2239,18 @@ int lua_axis_navmesh_NavMesh_addNavMeshAgent(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_addNavMeshAgent'", nullptr);
@@ -2276,7 +2276,7 @@ int lua_axis_navmesh_NavMesh_addNavMeshAgent(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:addNavMeshAgent",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_addNavMeshAgent'.",&tolua_err);
 #endif
@@ -2289,18 +2289,18 @@ int lua_axis_navmesh_NavMesh_addNavMeshObstacle(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_addNavMeshObstacle'", nullptr);
@@ -2326,7 +2326,7 @@ int lua_axis_navmesh_NavMesh_addNavMeshObstacle(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:addNavMeshObstacle",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_addNavMeshObstacle'.",&tolua_err);
 #endif
@@ -2339,18 +2339,18 @@ int lua_axis_navmesh_NavMesh_setDebugDrawEnable(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_setDebugDrawEnable'", nullptr);
@@ -2376,7 +2376,7 @@ int lua_axis_navmesh_NavMesh_setDebugDrawEnable(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:setDebugDrawEnable",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_setDebugDrawEnable'.",&tolua_err);
 #endif
@@ -2389,18 +2389,18 @@ int lua_axis_navmesh_NavMesh_debugDraw(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
     cobj = (axis::NavMesh*)tolua_tousertype(tolua_S,1,0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj) 
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axis_navmesh_NavMesh_debugDraw'", nullptr);
@@ -2426,7 +2426,7 @@ int lua_axis_navmesh_NavMesh_debugDraw(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:debugDraw",argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_debugDraw'.",&tolua_err);
 #endif
@@ -2438,11 +2438,11 @@ int lua_axis_navmesh_NavMesh_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S,1,"ax.NavMesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
@@ -2465,7 +2465,7 @@ int lua_axis_navmesh_NavMesh_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.NavMesh:create",argc, 2);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_create'.",&tolua_err);
 #endif
@@ -2477,7 +2477,7 @@ int lua_axis_navmesh_NavMesh_constructor(lua_State* tolua_S)
     axis::NavMesh* cobj = nullptr;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -2501,7 +2501,7 @@ int lua_axis_navmesh_NavMesh_constructor(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.NavMesh:NavMesh",argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_error(tolua_S,"#ferror in function 'lua_axis_navmesh_NavMesh_constructor'.",&tolua_err);
 #endif
 

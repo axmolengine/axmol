@@ -304,7 +304,7 @@ public:                                                             \
 
 /// @name Cocos2d debug
 /// @{
-#if !defined(AXIS_DEBUG) || AXIS_DEBUG == 0
+#if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #    define AXLOG(...) \
         do             \
         {              \
@@ -322,7 +322,7 @@ public:                                                             \
         {                  \
         } while (0)
 
-#elif AXIS_DEBUG == 1
+#elif _AX_DEBUG == 1
 #    define AXLOG(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define AXLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define AXLOGINFO(format, ...) \
@@ -331,15 +331,15 @@ public:                                                             \
         } while (0)
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 
-#elif AXIS_DEBUG > 1
+#elif _AX_DEBUG > 1
 #    define AXLOG(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define AXLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define AXLOGINFO(format, ...) axis::log(format, ##__VA_ARGS__)
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
-#endif  // AXIS_DEBUG
+#endif  // _AX_DEBUG
 
 /** Lua engine debug */
-#if !defined(AXIS_DEBUG) || AXIS_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
+#if !defined(_AX_DEBUG) || _AX_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
 #    define LUALOG(...)
 #else
 #    define LUALOG(format, ...) axis::log(format, ##__VA_ARGS__)

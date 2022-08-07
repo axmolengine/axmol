@@ -32,8 +32,8 @@
 # The version number
 set(AXYS_VERSION 1.0)
 
-if(NOT DEFINED AXIS_CORE_LIB)
-    set(AXIS_CORE_LIB axis CACHE INTERNAL "The axis core lib name" )
+if(NOT DEFINED _AX_CORE_LIB)
+    set(_AX_CORE_LIB axis CACHE INTERNAL "The axis core lib name" )
 endif()
 
 if (NOT DEFINED AX_USE_COMPAT_GL)
@@ -56,7 +56,7 @@ if(XCODE)
     set(CMAKE_XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS "@executable_path/Frameworks" CACHE INTERNAL "")
 endif()
 
-set(AXIS_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
+set(_AX_THIRDPARTY_NAME "thirdparty" CACHE INTERNAL "" )
 
 if (WIN32)
     option(WIN32_PATH_USE_ACP "" OFF)
@@ -112,20 +112,20 @@ set(COCOS_SRC axys.cpp
 
 list(APPEND COCOS_SRC ${COCOS_HEADER})
 
-add_library(${AXIS_CORE_LIB} ${COCOS_SRC})
+add_library(${_AX_CORE_LIB} ${COCOS_SRC})
 
 # use thirdparty libs
 add_subdirectory(${AXYS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
-target_link_libraries(${AXIS_CORE_LIB} thirdparty)
+target_link_libraries(${_AX_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
-use_axis_compile_define(${AXIS_CORE_LIB})
-use_axis_compile_options(${AXIS_CORE_LIB})
+use_axis_compile_define(${_AX_CORE_LIB})
+use_axis_compile_options(${_AX_CORE_LIB})
 
 # use all platform related system libs
-use_axis_libs_depend(${AXIS_CORE_LIB})
+use_axis_libs_depend(${_AX_CORE_LIB})
 
-target_include_directories(${AXIS_CORE_LIB}
+target_include_directories(${_AX_CORE_LIB}
     PUBLIC ${AXYS_ROOT_PATH}
     PUBLIC ${AXYS_ROOT_PATH}/thirdparty
     PUBLIC ${AXYS_ROOT_PATH}/extensions
@@ -139,7 +139,7 @@ target_include_directories(${AXIS_CORE_LIB}
     INTERFACE ${AXYS_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
 )
 
-set_target_properties(${AXIS_CORE_LIB}
+set_target_properties(${_AX_CORE_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -154,14 +154,14 @@ set_target_properties(${AXIS_CORE_LIB}
 # endif()
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${AXIS_CORE_LIB}")
+    cocos_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
 if(WINDOWS)
     # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${AXIS_CORE_LIB} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
-        set_target_properties(${AXIS_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
+        target_sources(${_AX_CORE_LIB} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
+        set_target_properties(${_AX_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
         set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
     endif()
     # compile c as c++. needed for precompiled header
@@ -180,12 +180,12 @@ if(WINDOWS)
             ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
 
         if(CMAKE_GENERATOR STREQUAL "Ninja")
-            target_link_libraries(${AXIS_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
-            target_include_directories(${AXIS_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+            target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+            target_include_directories(${_AX_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
         else()
-            target_link_libraries(${AXIS_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+            target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
-        target_compile_definitions(${AXIS_CORE_LIB} PUBLIC AXIS_HAVE_WEBVIEW2)
+        target_compile_definitions(${_AX_CORE_LIB} PUBLIC _AX_HAVE_WEBVIEW2)
     endif()
 endif()
 
@@ -193,9 +193,9 @@ endif()
 add_subdirectory(${AXYS_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
-    target_sources(${AXIS_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
-    target_sources(${AXIS_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
-    target_compile_options(${AXIS_CORE_LIB} PUBLIC "/Zm2000")
+    target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
+    target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
+    target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")
 endif()
 
 # copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
@@ -206,5 +206,5 @@ endif()
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+
 #    # TODO: Only turn this off if ${CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET} < 11.0
-#    target_compile_options(${AXIS_CORE_LIB} PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-fno-aligned-allocation>)
+#    target_compile_options(${_AX_CORE_LIB} PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-fno-aligned-allocation>)
 #endif()

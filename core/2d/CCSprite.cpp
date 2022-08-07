@@ -130,7 +130,7 @@ Sprite* Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
 {
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
-#if AXIS_DEBUG > 0
+#if _AX_DEBUG > 0
     char msg[256] = {0};
     sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.data());
     AXASSERT(frame != nullptr, msg);

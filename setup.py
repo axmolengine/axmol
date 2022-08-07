@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 '''
 This script will install environment variables needed to by axis. It will set these envrironment variables:
-* AXIS_CONSOLE_ROOT: used to run axis console tools
+* AXYS_CONSOLE_ROOT: used to run axis console tools
 * ANDROID_NDK: used to build android native codes
 * ANDROID_SDK_ROOT: used to generate applicatoin on Android through commands
 * AXYS_ROOT: path where axis is installed
@@ -64,7 +64,7 @@ from time import sleep
 from os.path import dirname
 
 AXYS_ROOT = 'AXYS_ROOT'
-AXIS_CONSOLE_ROOT = 'AXIS_CONSOLE_ROOT'
+AXYS_CONSOLE_ROOT = 'AXYS_CONSOLE_ROOT'
 
 ANDROID_NDK = 'ANDROID_NDK'
 ANDROID_SDK_ROOT = 'ANDROID_SDK_ROOT'
@@ -454,17 +454,17 @@ class SetEnvVar(object):
             print("  ->Add directory \"%s\" into PATH failed!\n" % add_dir)
 
     def set_console_root(self):
-        print("->Check environment variable %s" % AXIS_CONSOLE_ROOT)
+        print("->Check environment variable %s" % AXYS_CONSOLE_ROOT)
         axis_console_root = os.path.join(
             self.current_absolute_path, 'tools', 'console', 'bin')
-        old_dir = self._find_environment_variable(AXIS_CONSOLE_ROOT)
+        old_dir = self._find_environment_variable(AXYS_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
             if self._isWindows():
                 self.set_windows_path(axis_console_root)
 
             self._set_environment_variable(
-                AXIS_CONSOLE_ROOT, axis_console_root)
+                AXYS_CONSOLE_ROOT, axis_console_root)
         else:
             if old_dir == axis_console_root:
                 # is same with before, nothing to do
@@ -475,7 +475,7 @@ class SetEnvVar(object):
                 self.remove_dir_from_win_path(old_dir)
                 self.set_windows_path(axis_console_root)
 
-            self._force_update_env(AXIS_CONSOLE_ROOT, axis_console_root)
+            self._force_update_env(AXYS_CONSOLE_ROOT, axis_console_root)
 
     def set_axis_root(self):
         print("->Check environment variable %s" % AXYS_ROOT)

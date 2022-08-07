@@ -100,14 +100,14 @@ static int tolua_axis_EventListenerController_clone(lua_State* tolua_S)
 
     int argc                               = 0;
     axis::EventListenerController* self = nullptr;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerController", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     self = static_cast<axis::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(tolua_S, "invalid 'self' in function 'tolua_axis_EventListenerController_clone'\n", nullptr);
@@ -141,7 +141,7 @@ static int tolua_axis_EventListenerController_clone(lua_State* tolua_S)
     AXLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'clone'.", &tolua_err);
     return 0;
@@ -155,14 +155,14 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
 
     int argc                               = 0;
     axis::EventListenerController* self = nullptr;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerController", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     self = static_cast<axis::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(tolua_S,
@@ -175,7 +175,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
 
     if (argc == 2)
     {
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         if (!toluafix_isfunction(tolua_S, 2, "LUA_FUNCTION", 0, &tolua_err) ||
             !tolua_isnumber(tolua_S, 3, 0, &tolua_err))
         {
@@ -283,7 +283,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
     AXLOG("'registerScriptHandler' has wrong number of arguments: %d, was expecting %d\n", argc, 2);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'registerScriptHandler'.", &tolua_err);
     return 0;
@@ -309,14 +309,14 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
 
     int argc                  = 0;
     axis::Controller* self = nullptr;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.Controller", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     self = static_cast<axis::Controller*>(tolua_tousertype(tolua_S, 1, 0));
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(tolua_S, "invalid 'self' in function 'tolua_axis_Controller_getKeyStatus'\n", nullptr);
@@ -328,7 +328,7 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
 
     if (argc == 1)
     {
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         if (!tolua_isnumber(tolua_S, 2, 0, &tolua_err))
             goto tolua_lerror;
 #    endif
@@ -352,7 +352,7 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
     AXLOG("'clone' has wrong number of arguments: %d, was expecting %d\n", argc, 0);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'getKeyStatus'.", &tolua_err);
     return 0;

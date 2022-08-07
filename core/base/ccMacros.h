@@ -37,7 +37,7 @@ THE SOFTWARE.
 #include "platform/CCStdC.h"
 
 #ifndef AXASSERT
-#    if AXIS_DEBUG > 0
+#    if _AX_DEBUG > 0
 #        if AX_ENABLE_SCRIPT_BINDING
 extern bool AX_DLL cc_assert_script_compatible(const char* msg);
 #            define AXASSERT(cond, msg)                                       \

@@ -30,7 +30,7 @@
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #    include "navmesh/CCNavMeshAgent.h"
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 extern void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName);
 #    endif
 
@@ -44,7 +44,7 @@ bool luaval_to_navmeshagentparam(lua_State* L, int lo, axis::NavMeshAgentParam* 
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #    endif
         ok = false;
@@ -120,7 +120,7 @@ bool luaval_to_offmeshlinkdata(lua_State* L, int lo, axis::OffMeshLinkData* outV
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #    endif
         ok = false;

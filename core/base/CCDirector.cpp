@@ -358,7 +358,7 @@ void Director::calculateDeltaTime()
         _deltaTime = MAX(0, _deltaTime);
     }
 
-#if AXIS_DEBUG
+#if _AX_DEBUG
     // If we are debugging our code, prevent big delta time
     if (_deltaTime > 0.2f)
     {

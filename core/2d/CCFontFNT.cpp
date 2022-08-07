@@ -443,7 +443,7 @@ void BMFontConfiguration::parseCommonArguments(const char* line)
     auto tmp = strstr(line, "lineHeight=") + 11;
     sscanf(tmp, "%d", &_commonHeight);
 
-#if AXIS_DEBUG > 0
+#if _AX_DEBUG > 0
     // scaleW. sanity check
     int value;
     tmp = strstr(tmp, "scaleW=") + 7;

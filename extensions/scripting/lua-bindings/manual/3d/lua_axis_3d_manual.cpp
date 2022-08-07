@@ -35,18 +35,18 @@ int lua_axis_3d_MeshRenderer_getAABB(lua_State* L)
     int argc                = 0;
     axis::MeshRenderer* cobj = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.MeshRenderer", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::MeshRenderer*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_MeshRenderer_getAABB'", nullptr);
@@ -64,7 +64,7 @@ int lua_axis_3d_MeshRenderer_getAABB(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getAABB", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_MeshRenderer_getAABB'.", &tolua_err);
 #endif
@@ -75,11 +75,11 @@ int lua_axis_3d_MeshRenderer_createAsync(lua_State* L)
 {
     int argc = 0;
     bool ok  = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(L, 1, "ax.MeshRenderer", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -99,7 +99,7 @@ int lua_axis_3d_MeshRenderer_createAsync(lua_State* L)
             if (!ok)
                 break;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
             if (!toluafix_isfunction(L, 4, "LUA_FUNCTION", 0, &tolua_err))
             {
                 goto tolua_lerror;
@@ -132,7 +132,7 @@ int lua_axis_3d_MeshRenderer_createAsync(lua_State* L)
             if (!ok)
                 break;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
             if (!toluafix_isfunction(L, 3, "LUA_FUNCTION", 0, &tolua_err))
             {
                 goto tolua_lerror;
@@ -158,7 +158,7 @@ int lua_axis_3d_MeshRenderer_createAsync(lua_State* L)
     ok = true;
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d", "ax.MeshRenderer:createAsync", argc, 3);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_MeshRenderer_createAsync'.", &tolua_err);
 #endif
@@ -186,7 +186,7 @@ bool luaval_to_terraindata(lua_State* L, int lo, axis::Terrain::TerrainData* out
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
         ok = false;
 #endif
@@ -332,11 +332,11 @@ int lua_axis_3d_Terrain_create(lua_State* L)
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(L, 1, "ax.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -374,7 +374,7 @@ int lua_axis_3d_Terrain_create(lua_State* L)
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Terrain:create", argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_Terrain_create'.", &tolua_err);
 #endif
@@ -386,16 +386,16 @@ int lua_axis_3d_Terrain_getHeight(lua_State* L)
     int argc               = 0;
     axis::Terrain* cobj = nullptr;
     bool ok                = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
     cobj = (axis::Terrain*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_Terrain_getHeight'", nullptr);
@@ -504,7 +504,7 @@ int lua_axis_3d_Terrain_getHeight(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Terrain:getHeight", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_Terrain_getHeight'.", &tolua_err);
 #endif
@@ -517,16 +517,16 @@ int lua_axis_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     int argc               = 0;
     axis::Terrain* cobj = nullptr;
     bool ok                = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
     cobj = (axis::Terrain*)tolua_tousertype(tolua_S, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_3d_Terrain_getIntersectionPoint'", nullptr);
@@ -580,7 +580,7 @@ int lua_axis_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
                argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_3d_Terrain_getIntersectionPoint'.", &tolua_err);
 #endif
@@ -606,11 +606,11 @@ int lua_axis_3d_Bundle3D_getTrianglesList(lua_State* L)
     int argc = 0;
     bool ok  = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertable(L, 1, "ax.Bundle3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
@@ -633,7 +633,7 @@ int lua_axis_3d_Bundle3D_getTrianglesList(lua_State* L)
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Bundle3D:getTrianglesList", argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_Bundle3D_getTrianglesList'.", &tolua_err);
 #endif
@@ -668,18 +668,18 @@ int lua_axis_3d_AABB_reset(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_reset'", nullptr);
@@ -699,7 +699,7 @@ int lua_axis_3d_AABB_reset(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:reset", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_reset'.", &tolua_err);
 #endif
@@ -712,18 +712,18 @@ int lua_axis_3d_AABB_set(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_set'", nullptr);
@@ -748,7 +748,7 @@ int lua_axis_3d_AABB_set(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:set", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_set'.", &tolua_err);
 #endif
@@ -761,18 +761,18 @@ int lua_axis_3d_AABB_transform(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_transform'", nullptr);
@@ -794,7 +794,7 @@ int lua_axis_3d_AABB_transform(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:transform", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_transform'.", &tolua_err);
 #endif
@@ -807,18 +807,18 @@ int lua_axis_3d_AABB_getCenter(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_getCenter'", nullptr);
@@ -838,7 +838,7 @@ int lua_axis_3d_AABB_getCenter(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:getCenter", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_getCenter'.", &tolua_err);
 #endif
@@ -851,18 +851,18 @@ int lua_axis_3d_AABB_isEmpty(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_isEmpty'", nullptr);
@@ -882,7 +882,7 @@ int lua_axis_3d_AABB_isEmpty(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:isEmpty", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_isEmpty'.", &tolua_err);
 #endif
@@ -895,18 +895,18 @@ int lua_axis_3d_AABB_getCorners(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_getCorners'", nullptr);
@@ -928,7 +928,7 @@ int lua_axis_3d_AABB_getCorners(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:getCorners", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_getCorners'.", &tolua_err);
 #endif
@@ -941,18 +941,18 @@ int lua_axis_3d_AABB_updateMinMax(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_updateMinMax'", nullptr);
@@ -977,7 +977,7 @@ int lua_axis_3d_AABB_updateMinMax(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:updateMinMax", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_updateMinMax'.", &tolua_err);
 #endif
@@ -990,18 +990,18 @@ int lua_axis_3d_AABB_containPoint(lua_State* L)
     axis::AABB* cobj = nullptr;
     bool ok             = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_AABB_containPoint'", nullptr);
@@ -1024,7 +1024,7 @@ int lua_axis_3d_AABB_containPoint(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:containPoint", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_containPoint'.", &tolua_err);
 #endif
@@ -1036,7 +1036,7 @@ int lua_axis_3d_AABB_constructor(lua_State* L)
     int argc            = 0;
     axis::AABB* cobj = nullptr;
     bool ok             = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1080,7 +1080,7 @@ int lua_axis_3d_AABB_constructor(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AABB:AABB", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_error(L, "#ferror in function 'lua_axis_3d_AABB_constructor'.", &tolua_err);
 #endif
 
@@ -1091,14 +1091,14 @@ int lua_axis_3d_get_AABB_min(lua_State* L)
 {
     axis::AABB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AABB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_AABB_min'\n", nullptr);
@@ -1108,7 +1108,7 @@ int lua_axis_3d_get_AABB_min(lua_State* L)
     vec3_to_luaval(L, self->_min);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_AABB_min'.", &tolua_err);
     return 0;
@@ -1120,14 +1120,14 @@ int lua_axis_3d_set_AABB_min(lua_State* L)
     int argc            = 0;
     axis::AABB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AABB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_AABB_min'\n", nullptr);
@@ -1139,7 +1139,7 @@ int lua_axis_3d_set_AABB_min(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1149,7 +1149,7 @@ int lua_axis_3d_set_AABB_min(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_AABB_min'.", &tolua_err);
     return 0;
@@ -1160,14 +1160,14 @@ int lua_axis_3d_get_AABB_max(lua_State* L)
 {
     axis::AABB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AABB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_AABB_max'\n", nullptr);
@@ -1177,7 +1177,7 @@ int lua_axis_3d_get_AABB_max(lua_State* L)
     vec3_to_luaval(L, self->_max);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_AABB_max'.", &tolua_err);
     return 0;
@@ -1189,14 +1189,14 @@ int lua_axis_3d_set_AABB_max(lua_State* L)
     int argc            = 0;
     axis::AABB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AABB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::AABB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_AABB_max'\n", nullptr);
@@ -1208,7 +1208,7 @@ int lua_axis_3d_set_AABB_max(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1218,7 +1218,7 @@ int lua_axis_3d_set_AABB_max(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_Ray_direction'.", &tolua_err);
     return 0;
@@ -1262,18 +1262,18 @@ int lua_axis_3d_OBB_reset(lua_State* L)
     axis::OBB* cobj = nullptr;
     bool ok            = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_OBB_reset'", nullptr);
@@ -1293,7 +1293,7 @@ int lua_axis_3d_OBB_reset(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:reset", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_reset'.", &tolua_err);
 #endif
@@ -1306,18 +1306,18 @@ int lua_axis_3d_OBB_set(lua_State* L)
     axis::OBB* cobj = nullptr;
     bool ok            = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_OBB_set'", nullptr);
@@ -1351,7 +1351,7 @@ int lua_axis_3d_OBB_set(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:set", argc, 5);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_set'.", &tolua_err);
 #endif
@@ -1364,18 +1364,18 @@ int lua_axis_3d_OBB_transform(lua_State* L)
     axis::OBB* cobj = nullptr;
     bool ok            = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_OBB_transform'", nullptr);
@@ -1397,7 +1397,7 @@ int lua_axis_3d_OBB_transform(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:transform", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_transform'.", &tolua_err);
 #endif
@@ -1411,18 +1411,18 @@ int lua_axis_3d_OBB_containPoint(lua_State* L)
     axis::OBB* cobj = nullptr;
     bool ok            = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_OBB_containPoint'", nullptr);
@@ -1445,7 +1445,7 @@ int lua_axis_3d_OBB_containPoint(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:containPoint", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_containPoint'.", &tolua_err);
 #endif
@@ -1458,7 +1458,7 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
     int argc           = 0;
     axis::OBB* cobj = nullptr;
     bool ok            = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -1520,7 +1520,7 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:OBB", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_constructor'.", &tolua_err);
 #endif
 
@@ -1532,14 +1532,14 @@ int lua_axis_3d_OBB_intersects(lua_State* L)
     int argc           = 0;
     axis::OBB* self = nullptr;
     bool ok            = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_OBB_intersects'\n", nullptr);
@@ -1561,7 +1561,7 @@ int lua_axis_3d_OBB_intersects(lua_State* L)
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:intersects", argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_intersects'.", &tolua_err);
     return 0;
@@ -1572,14 +1572,14 @@ int lua_axis_3d_get_OBB_center(lua_State* L)
 {
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_OBB_center'\n", nullptr);
@@ -1589,7 +1589,7 @@ int lua_axis_3d_get_OBB_center(lua_State* L)
     vec3_to_luaval(L, self->_center);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_OBB_center'.", &tolua_err);
     return 0;
@@ -1601,14 +1601,14 @@ int lua_axis_3d_set_OBB_center(lua_State* L)
     int argc           = 0;
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_OBB_center'\n", nullptr);
@@ -1620,7 +1620,7 @@ int lua_axis_3d_set_OBB_center(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1630,7 +1630,7 @@ int lua_axis_3d_set_OBB_center(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_OBB_center'.", &tolua_err);
     return 0;
@@ -1641,14 +1641,14 @@ int lua_axis_3d_get_OBB_xAxis(lua_State* L)
 {
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_OBB_xAxis'\n", nullptr);
@@ -1658,7 +1658,7 @@ int lua_axis_3d_get_OBB_xAxis(lua_State* L)
     vec3_to_luaval(L, self->_xAxis);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_OBB_xAxis'.", &tolua_err);
     return 0;
@@ -1670,14 +1670,14 @@ int lua_axis_3d_set_OBB_xAxis(lua_State* L)
     int argc           = 0;
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_OBB_xAxis'\n", nullptr);
@@ -1689,7 +1689,7 @@ int lua_axis_3d_set_OBB_xAxis(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1699,7 +1699,7 @@ int lua_axis_3d_set_OBB_xAxis(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_OBB_center'.", &tolua_err);
     return 0;
@@ -1710,14 +1710,14 @@ int lua_axis_3d_get_OBB_yAxis(lua_State* L)
 {
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_OBB_yAxis'\n", nullptr);
@@ -1727,7 +1727,7 @@ int lua_axis_3d_get_OBB_yAxis(lua_State* L)
     vec3_to_luaval(L, self->_yAxis);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_OBB_yAxis'.", &tolua_err);
     return 0;
@@ -1739,14 +1739,14 @@ int lua_axis_3d_set_OBB_yAxis(lua_State* L)
     int argc           = 0;
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_OBB_yAxis'\n", nullptr);
@@ -1758,7 +1758,7 @@ int lua_axis_3d_set_OBB_yAxis(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1768,7 +1768,7 @@ int lua_axis_3d_set_OBB_yAxis(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_OBB_yAxis'.", &tolua_err);
     return 0;
@@ -1779,14 +1779,14 @@ int lua_axis_3d_get_OBB_zAxis(lua_State* L)
 {
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_OBB_zAxis'\n", nullptr);
@@ -1796,7 +1796,7 @@ int lua_axis_3d_get_OBB_zAxis(lua_State* L)
     vec3_to_luaval(L, self->_zAxis);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_OBB_zAxis'.", &tolua_err);
     return 0;
@@ -1808,14 +1808,14 @@ int lua_axis_3d_set_OBB_zAxis(lua_State* L)
     int argc           = 0;
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_OBB_zAxis'\n", nullptr);
@@ -1827,7 +1827,7 @@ int lua_axis_3d_set_OBB_zAxis(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1837,7 +1837,7 @@ int lua_axis_3d_set_OBB_zAxis(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_OBB_zAxis'.", &tolua_err);
     return 0;
@@ -1848,14 +1848,14 @@ int lua_axis_3d_get_OBB_extents(lua_State* L)
 {
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_OBB_extents'\n", nullptr);
@@ -1865,7 +1865,7 @@ int lua_axis_3d_get_OBB_extents(lua_State* L)
     vec3_to_luaval(L, self->_extents);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_OBB_extents'.", &tolua_err);
     return 0;
@@ -1877,14 +1877,14 @@ int lua_axis_3d_set_OBB_extents(lua_State* L)
     int argc           = 0;
     axis::OBB* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::OBB*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_OBB_extents'\n", nullptr);
@@ -1896,7 +1896,7 @@ int lua_axis_3d_set_OBB_extents(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1906,7 +1906,7 @@ int lua_axis_3d_set_OBB_extents(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_OBB_extents'.", &tolua_err);
     return 0;
@@ -1918,18 +1918,18 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
     int argc           = 0;
     axis::OBB* cobj = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.OBB", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_OBB_getCorners'", nullptr);
@@ -1941,7 +1941,7 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
     if (argc == 1)
     {
         axis::Vec3* arg0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1986,7 +1986,7 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.OBB:getCorners", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_OBB_getCorners'.", &tolua_err);
 #endif
@@ -2032,18 +2032,18 @@ int lua_axis_3d_Ray_set(lua_State* L)
     axis::Ray* cobj = nullptr;
     bool ok            = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::Ray*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_Ray_set'", nullptr);
@@ -2068,7 +2068,7 @@ int lua_axis_3d_Ray_set(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ray:set", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_Ray_set'.", &tolua_err);
 #endif
@@ -2081,18 +2081,18 @@ int lua_axis_3d_Ray_transform(lua_State* L)
     axis::Ray* cobj = nullptr;
     bool ok            = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::Ray*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(L, "invalid 'cobj' in function 'lua_axis_3d_Ray_transform'", nullptr);
@@ -2114,7 +2114,7 @@ int lua_axis_3d_Ray_transform(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ray:transform", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_Ray_transform'.", &tolua_err);
 #endif
@@ -2127,14 +2127,14 @@ int lua_axis_3d_Ray_intersects(lua_State* L)
     int argc           = 0;
     axis::Ray* self = nullptr;
     bool ok            = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::Ray*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_Ray_intersects'\n", nullptr);
@@ -2158,7 +2158,7 @@ int lua_axis_3d_Ray_intersects(lua_State* L)
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ray:intersects", argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_Ray_intersects'.", &tolua_err);
     return 0;
@@ -2170,7 +2170,7 @@ int lua_axis_3d_Ray_constructor(lua_State* L)
     int argc           = 0;
     axis::Ray* cobj = nullptr;
     bool ok            = true;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -2214,7 +2214,7 @@ int lua_axis_3d_Ray_constructor(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Ray:Ray", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_error(L, "#ferror in function 'lua_axis_3d_Ray_constructor'.", &tolua_err);
 #endif
 
@@ -2225,14 +2225,14 @@ int lua_axis_3d_get_Ray_origin(lua_State* L)
 {
     axis::Ray* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::Ray*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_Ray_origin'\n", nullptr);
@@ -2242,7 +2242,7 @@ int lua_axis_3d_get_Ray_origin(lua_State* L)
     vec3_to_luaval(L, self->_origin);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_Ray_origin'.", &tolua_err);
     return 0;
@@ -2254,14 +2254,14 @@ int lua_axis_3d_set_Ray_origin(lua_State* L)
     int argc           = 0;
     axis::Ray* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::Ray*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_Ray_origin'\n", nullptr);
@@ -2273,7 +2273,7 @@ int lua_axis_3d_set_Ray_origin(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -2283,7 +2283,7 @@ int lua_axis_3d_set_Ray_origin(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_Ray_origin'.", &tolua_err);
     return 0;
@@ -2294,14 +2294,14 @@ int lua_axis_3d_get_Ray_direction(lua_State* L)
 {
     axis::Ray* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::Ray*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_get_Ray_direction'\n", nullptr);
@@ -2311,7 +2311,7 @@ int lua_axis_3d_get_Ray_direction(lua_State* L)
     vec3_to_luaval(L, self->_direction);
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_get_Ray_direction'.", &tolua_err);
     return 0;
@@ -2323,14 +2323,14 @@ int lua_axis_3d_set_Ray_direction(lua_State* L)
     int argc           = 0;
     axis::Ray* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.Ray", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (axis::Ray*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_3d_set_Ray_direction'\n", nullptr);
@@ -2342,7 +2342,7 @@ int lua_axis_3d_set_Ray_direction(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -2352,7 +2352,7 @@ int lua_axis_3d_set_Ray_direction(lua_State* L)
 
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_3d_set_Ray_direction'.", &tolua_err);
     return 0;

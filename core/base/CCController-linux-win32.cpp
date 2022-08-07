@@ -4229,7 +4229,7 @@ public:
 // Show a one-time warning in debug mode for every button that's currently not matched in the input profile.
 // This will let the developers know that the mapping must be included in the constructor of ControllerImpl located
 // above.
-#    ifdef AXIS_DEBUG
+#    ifdef _AX_DEBUG
                 int count;
                 glfwGetJoystickButtons(deviceId, &count);
                 for (int i = 0; i < count; ++i)
@@ -4265,7 +4265,7 @@ public:
         }
 
 // Show a warning if the controller input profile is non-existent:
-#    ifdef AXIS_DEBUG
+#    ifdef _AX_DEBUG
         if (controller->_buttonInputMap.empty())
         {
             AXLOG("ControllerImpl: Could not find a button input map for controller: %s", deviceName.data());
@@ -4332,7 +4332,7 @@ public:
         {
             ControllerImpl::getInstance()->onDisconnected(deviceId);
         }
-#    ifdef AXIS_DEBUG
+#    ifdef _AX_DEBUG
         else
         {
             AXLOG("ControllerImpl: Unhandled GLFW joystick event: %d", event);

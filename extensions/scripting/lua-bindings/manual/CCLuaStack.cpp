@@ -712,7 +712,7 @@ int LuaStack::luaLoadBuffer(lua_State* L, const char* chunk, int chunkSize, cons
     skipBOM(chunk, chunkSize);
     r = luaL_loadbuffer(L, chunk, chunkSize, chunkName);
 
-#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     if (r)
     {
         switch (r)

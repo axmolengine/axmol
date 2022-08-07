@@ -388,7 +388,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         //         AXLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
     }
 
-#    if AXIS_DEBUG
+#    if _AX_DEBUG
     CHECK_GL_ERROR();
 #    endif
 

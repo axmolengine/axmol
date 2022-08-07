@@ -131,7 +131,7 @@ else()
 endif()
 
 if (NOT _AX_USE_PREBUILT)
-    target_link_libraries(${APP_NAME} ${AXIS_LUA_LIB})
+    target_link_libraries(${APP_NAME} ${_AX_LUA_LIB})
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE Classes)

@@ -50,18 +50,18 @@ int lua_axis_physics_PhysicsBody_getJoints(lua_State* tolua_S)
     axis::PhysicsBody* cobj = nullptr;
     bool ok                    = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsBody", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsBody_getJoints'", NULL);
@@ -102,7 +102,7 @@ int lua_axis_physics_PhysicsBody_getJoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getJoints", argc, 0);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsBody_getJoints'.", &tolua_err);
 #    endif
@@ -115,18 +115,18 @@ int lua_axis_physics_PhysicsWorld_getScene(lua_State* tolua_S)
     int argc                    = 0;
     axis::PhysicsWorld* cobj = nullptr;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsWorld", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsWorld_getScene'", NULL);
@@ -152,7 +152,7 @@ int lua_axis_physics_PhysicsWorld_getScene(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getScene", argc, 0);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsWorld_getScene'.", &tolua_err);
 #    endif
@@ -166,18 +166,18 @@ int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
     axis::PhysicsWorld* cobj = nullptr;
     bool ok                     = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsWorld", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsWorld_rayCast'", NULL);
@@ -220,7 +220,7 @@ int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "rayCast", argc, 4);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsWorld_rayCast'.", &tolua_err);
 #    endif
@@ -233,18 +233,18 @@ int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
     axis::PhysicsWorld* cobj = nullptr;
     bool ok                     = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsWorld", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsWorld_queryRect'", NULL);
@@ -284,7 +284,7 @@ int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "queryRect", argc, 3);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsWorld_queryRect'.", &tolua_err);
 #    endif
@@ -298,18 +298,18 @@ int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
     axis::PhysicsWorld* cobj = nullptr;
     bool ok                     = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsWorld", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsWorld_queryPoint'", NULL);
@@ -348,7 +348,7 @@ int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "queryPoint", argc, 3);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsWorld_queryPoint'.", &tolua_err);
 #    endif
@@ -361,11 +361,11 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsBody", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -483,7 +483,7 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "createPolygon", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsBody_createPolygon'.", &tolua_err);
 #    endif
@@ -495,11 +495,11 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsBody", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -616,7 +616,7 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "createEdgePolygon", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsBody_createEdgePolygon'.", &tolua_err);
 #    endif
@@ -628,11 +628,11 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsBody", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -749,7 +749,7 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "createEdgeChain", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsBody_createEdgeChain'.", &tolua_err);
 #    endif
@@ -761,11 +761,11 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShape", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -821,7 +821,7 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "recenterPoints", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShape_recenterPoints'.", &tolua_err);
 #    endif
@@ -833,11 +833,11 @@ int lua_axis_physics_PhysicsShape_getPolygonCenter(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShape", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -868,7 +868,7 @@ int lua_axis_physics_PhysicsShape_getPolygonCenter(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "getPolygonCenter", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShape_getPolygonCenter'.", &tolua_err);
 #    endif
@@ -880,18 +880,18 @@ int lua_axis_physics_PhysicsShapeBox_getPoints(lua_State* tolua_S)
     int argc                       = 0;
     axis::PhysicsShapeBox* cobj = nullptr;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsShapeBox", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsShapeBox*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsShapeBox_getPoints'", NULL);
@@ -910,7 +910,7 @@ int lua_axis_physics_PhysicsShapeBox_getPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapeBox_getPoints'.", &tolua_err);
 #    endif
@@ -923,18 +923,18 @@ int lua_axis_physics_PhysicsShapePolygon_getPoints(lua_State* tolua_S)
     int argc                           = 0;
     axis::PhysicsShapePolygon* cobj = nullptr;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsShapePolygon", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsShapePolygon*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsShapePolygon_getPoints'", NULL);
@@ -955,7 +955,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapePolygon_getPoints'.", &tolua_err);
 #    endif
@@ -968,11 +968,11 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShapePolygon", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -1057,7 +1057,7 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapePolygon_create'.", &tolua_err);
 #    endif
@@ -1068,11 +1068,11 @@ int lua_axis_physics_PhysicsShapePolygon_calculateArea(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShapePolygon", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -1103,7 +1103,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateArea(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "calculateArea", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapePolygon_calculateArea'.", &tolua_err);
 #    endif
@@ -1114,11 +1114,11 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShapePolygon", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -1177,7 +1177,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "calculateMoment", argc, 3);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapePolygon_calculateMoment'.", &tolua_err);
 #    endif
@@ -1189,18 +1189,18 @@ int lua_axis_physics_PhysicsShapeEdgeBox_getPoints(lua_State* tolua_S)
     int argc                           = 0;
     axis::PhysicsShapeEdgeBox* cobj = nullptr;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsShapeEdgeBox", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsShapeEdgeBox*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsShapeEdgeBox_getPoints'", NULL);
@@ -1221,7 +1221,7 @@ int lua_axis_physics_PhysicsShapeEdgeBox_getPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapeEdgeBox_getPoints'.", &tolua_err);
 #    endif
@@ -1234,18 +1234,18 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_getPoints(lua_State* tolua_S)
     int argc                               = 0;
     axis::PhysicsShapeEdgePolygon* cobj = nullptr;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsShapeEdgePolygon", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsShapeEdgePolygon*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsShapeEdgePolygon_getPoints'",
@@ -1267,7 +1267,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_getPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapeEdgePolygon_getPoints'.", &tolua_err);
 #    endif
@@ -1280,18 +1280,18 @@ int lua_axis_physics_PhysicsShapeEdgeChain_getPoints(lua_State* tolua_S)
     int argc                             = 0;
     axis::PhysicsShapeEdgeChain* cobj = nullptr;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.PhysicsShapeEdgeChain", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     cobj = (axis::PhysicsShapeEdgeChain*)tolua_tousertype(tolua_S, 1, 0);
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_physics_PhysicsShapeEdgeChain_getPoints'", NULL);
@@ -1312,7 +1312,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_getPoints(lua_State* tolua_S)
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "getPoints", argc, 1);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapeEdgeChain_getPoints'.", &tolua_err);
 #    endif
@@ -1327,14 +1327,14 @@ static int tolua_axis_EventListenerPhysicsContact_registerScriptHandler(lua_Stat
 
     int argc                          = 0;
     EventListenerPhysicsContact* self = nullptr;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerPhysicsContact", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
     self = static_cast<EventListenerPhysicsContact*>(tolua_tousertype(tolua_S, 1, 0));
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(tolua_S,
@@ -1347,7 +1347,7 @@ static int tolua_axis_EventListenerPhysicsContact_registerScriptHandler(lua_Stat
 
     if (argc == 2)
     {
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         if (!toluafix_isfunction(tolua_S, 2, "LUA_FUNCTION", 0, &tolua_err) ||
             !tolua_isnumber(tolua_S, 3, 0, &tolua_err))
         {
@@ -1423,7 +1423,7 @@ static int tolua_axis_EventListenerPhysicsContact_registerScriptHandler(lua_Stat
     luaL_error(tolua_S, "'registerScriptHandler' has wrong number of arguments: %d, was expecting %d\n", argc, 2);
     return 0;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'registerScriptHandler'.", &tolua_err);
     return 0;
@@ -1435,11 +1435,11 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShapeEdgePolygon", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -1523,7 +1523,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapeEdgePolygon_create'.", &tolua_err);
 #    endif
@@ -1535,11 +1535,11 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
     int argc = 0;
     bool ok  = true;
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #    endif
 
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
     if (!tolua_isusertable(tolua_S, 1, "ax.PhysicsShapeEdgeChain", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
@@ -1623,7 +1623,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
     return 0;
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_physics_PhysicsShapeEdgeChain_create'.", &tolua_err);
 #    endif

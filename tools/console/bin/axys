@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
-AXIS_CONSOLE_BIN_DIRECTORY=$(dirname "$0")
-AXIS_CONSOLE_BIN_DIRECTORY=$(cd "$AXIS_CONSOLE_BIN_DIRECTORY" && pwd -P)
+AXYS_CONSOLE_BIN_DIRECTORY=$(dirname "$0")
+AXYS_CONSOLE_BIN_DIRECTORY=$(cd "$AXYS_CONSOLE_BIN_DIRECTORY" && pwd -P)
 
 if hash python3 2>/dev/null; then
     PYTHON=python3
@@ -14,5 +14,5 @@ else
     exit 1
 fi
 
-$PYTHON "$AXIS_CONSOLE_BIN_DIRECTORY/axis.py" "$@"
+$PYTHON "$AXYS_CONSOLE_BIN_DIRECTORY/axis.py" "$@"
 

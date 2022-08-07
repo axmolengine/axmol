@@ -85,7 +85,7 @@ static int lua_axis_AssetsManager_setDelegate(lua_State* L)
     int argc            = 0;
     AssetsManager* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.AssetsManager", 0, &tolua_err))
         goto tolua_lerror;
@@ -93,7 +93,7 @@ static int lua_axis_AssetsManager_setDelegate(lua_State* L)
 
     self = (AssetsManager*)tolua_tousertype(L, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_AssetsManager_setDelegate'\n", nullptr);
@@ -105,7 +105,7 @@ static int lua_axis_AssetsManager_setDelegate(lua_State* L)
 
     if (2 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err) || !tolua_isnumber(L, 3, 0, &tolua_err))
         {
             goto tolua_lerror;
@@ -132,7 +132,7 @@ static int lua_axis_AssetsManager_setDelegate(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n", "ax.AssetsManager:setDelegate", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_AssetsManager_setDelegate'.", &tolua_err);
     return 0;
@@ -164,7 +164,7 @@ static int lua_axis_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
 
     int argc = 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertable(L, 1, "ax.EventListenerAssetsManagerEx", 0, &tolua_err))
         goto tolua_lerror;
@@ -175,7 +175,7 @@ static int lua_axis_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
     if (argc == 2)
     {
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isusertype(L, 2, "ax.AssetsManagerEx", 0, &tolua_err) ||
             !toluafix_isfunction(L, 3, "LUA_FUNCTION", 0, &tolua_err))
             goto tolua_lerror;
@@ -204,7 +204,7 @@ static int lua_axis_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "create", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_Extension_EventListenerAssetsManagerEx_create'.", &tolua_err);
     return 0;
@@ -228,18 +228,18 @@ int lua_axis_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
     axis::ParticleSystem3D* cobj = nullptr;
     bool ok                         = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.ParticleSystem3D", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_extension_ParticleSystem3D_getParticlePool'",
@@ -266,7 +266,7 @@ int lua_axis_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
                "ax.ParticleSystem3D:getParticlePool", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_extension_ParticleSystem3D_getParticlePool'.", &tolua_err);
 #endif
@@ -291,18 +291,18 @@ int lua_axis_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
     axis::ParticlePool* cobj = nullptr;
     bool ok                     = true;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S, 1, "ax.ParticlePool", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     cobj = (axis::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (!cobj)
     {
         tolua_error(tolua_S, "invalid 'cobj' in function 'lua_axis_extension_ParticlePool_getActiveDataList'",
@@ -345,7 +345,7 @@ int lua_axis_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
                "ax.ParticlePool:getActiveParticleList", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(tolua_S, "#ferror in function 'lua_axis_extension_ParticlePool_getActiveParticleList'.",
                 &tolua_err);

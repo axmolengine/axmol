@@ -298,7 +298,7 @@ static int lua_axis_XMLHttpRequest_constructor(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
@@ -314,7 +314,7 @@ static int lua_axis_XMLHttpRequest_constructor(lua_State* L)
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "XMLHttpRequest", argc, 0);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_constructor'.", &tolua_err);
     return 0;
@@ -325,14 +325,14 @@ static int lua_get_XMLHttpRequest_responseType(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_responseType'\n", nullptr);
@@ -343,7 +343,7 @@ static int lua_get_XMLHttpRequest_responseType(lua_State* L)
     tolua_pushnumber(L, (lua_Number)self->getResponseType());
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_responseType'.", &tolua_err);
     return 0;
@@ -355,14 +355,14 @@ static int lua_set_XMLHttpRequest_responseType(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_set_XMLHttpRequest_responseType'\n", nullptr);
@@ -374,7 +374,7 @@ static int lua_set_XMLHttpRequest_responseType(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isnumber(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -389,7 +389,7 @@ static int lua_set_XMLHttpRequest_responseType(lua_State* L)
                argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_set_XMLHttpRequest_responseType'.", &tolua_err);
     return 0;
@@ -400,14 +400,14 @@ static int lua_get_XMLHttpRequest_withCredentials(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_withCredentials'\n", nullptr);
@@ -418,7 +418,7 @@ static int lua_get_XMLHttpRequest_withCredentials(lua_State* L)
     tolua_pushboolean(L, self->getWithCredentialsValue());
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_withCredentials'.", &tolua_err);
     return 0;
@@ -430,14 +430,14 @@ static int lua_set_XMLHttpRequest_withCredentials(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_set_XMLHttpRequest_withCredentials'\n", nullptr);
@@ -449,7 +449,7 @@ static int lua_set_XMLHttpRequest_withCredentials(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isboolean(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -461,7 +461,7 @@ static int lua_set_XMLHttpRequest_withCredentials(lua_State* L)
                argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_set_XMLHttpRequest_withCredentials'.", &tolua_err);
     return 0;
@@ -472,14 +472,14 @@ static int lua_get_XMLHttpRequest_timeout(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_timeout'\n", nullptr);
@@ -490,7 +490,7 @@ static int lua_get_XMLHttpRequest_timeout(lua_State* L)
     tolua_pushnumber(L, (lua_Number)self->getTimeout());
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_timeout'.", &tolua_err);
     return 0;
@@ -502,14 +502,14 @@ static int lua_set_XMLHttpRequest_timeout(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_set_XMLHttpRequest_timeout'\n", nullptr);
@@ -521,7 +521,7 @@ static int lua_set_XMLHttpRequest_timeout(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isnumber(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -532,7 +532,7 @@ static int lua_set_XMLHttpRequest_timeout(lua_State* L)
     luaL_error(L, "'setTimeout' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n", argc, 1);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_set_XMLHttpRequest_timeout'.", &tolua_err);
     return 0;
@@ -543,14 +543,14 @@ static int lua_get_XMLHttpRequest_readyState(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_readyState'\n", nullptr);
@@ -562,7 +562,7 @@ static int lua_get_XMLHttpRequest_readyState(lua_State* L)
 
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_readyState'.", &tolua_err);
     return 0;
@@ -573,14 +573,14 @@ static int lua_get_XMLHttpRequest_status(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_status'\n", nullptr);
@@ -592,7 +592,7 @@ static int lua_get_XMLHttpRequest_status(lua_State* L)
 
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_status'.", &tolua_err);
     return 0;
@@ -603,14 +603,14 @@ static int lua_get_XMLHttpRequest_statusText(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_statusText'\n", nullptr);
@@ -622,7 +622,7 @@ static int lua_get_XMLHttpRequest_statusText(lua_State* L)
 
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_statusText'.", &tolua_err);
     return 0;
@@ -633,14 +633,14 @@ static int lua_get_XMLHttpRequest_responseText(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_responseText'\n", nullptr);
@@ -650,7 +650,7 @@ static int lua_get_XMLHttpRequest_responseText(lua_State* L)
     lua_pushlstring(L, self->getData(), self->getDataSize());
     return 1;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_responseText'.", &tolua_err);
     return 0;
@@ -661,14 +661,14 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
 {
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_get_XMLHttpRequest_response'\n", nullptr);
@@ -723,7 +723,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
         return 1;
     }
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_get_XMLHttpRequest_response'.", &tolua_err);
     return 0;
@@ -735,14 +735,14 @@ static int lua_axis_XMLHttpRequest_open(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_open'\n", nullptr);
@@ -754,7 +754,7 @@ static int lua_axis_XMLHttpRequest_open(lua_State* L)
 
     if (argc >= 2)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isstring(L, 2, 0, &tolua_err) || !tolua_isstring(L, 3, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -764,7 +764,7 @@ static int lua_axis_XMLHttpRequest_open(lua_State* L)
         bool async         = true;
         if (argc > 2)
         {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
             if (!tolua_isboolean(L, 4, 0, &tolua_err))
                 goto tolua_lerror;
 #endif
@@ -818,7 +818,7 @@ static int lua_axis_XMLHttpRequest_open(lua_State* L)
     luaL_error(L, "'open' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n", argc, 2);
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_open'.", &tolua_err);
     return 0;
@@ -833,14 +833,14 @@ static int lua_axis_XMLHttpRequest_send(lua_State* L)
     const char* data = NULL;
     size_t size      = 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_send'\n", nullptr);
@@ -854,7 +854,7 @@ static int lua_axis_XMLHttpRequest_send(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isstring(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -874,7 +874,7 @@ static int lua_axis_XMLHttpRequest_send(lua_State* L)
     self->_sendRequest();
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_send'.", &tolua_err);
     return 0;
@@ -889,14 +889,14 @@ static int lua_axis_XMLHttpRequest_abort(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_send'\n", nullptr);
@@ -913,7 +913,7 @@ static int lua_axis_XMLHttpRequest_abort(lua_State* L)
     }
     return 0;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_send'.", &tolua_err);
     return 0;
@@ -925,14 +925,14 @@ static int lua_axis_XMLHttpRequest_setRequestHeader(lua_State* L)
     int argc                   = 0;
     LuaMinXmlHttpRequest* self = nullptr;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_setRequestHeader'\n", nullptr);
@@ -944,7 +944,7 @@ static int lua_axis_XMLHttpRequest_setRequestHeader(lua_State* L)
 
     if (2 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isstring(L, 2, 0, &tolua_err) || !tolua_isstring(L, 3, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -958,7 +958,7 @@ static int lua_axis_XMLHttpRequest_setRequestHeader(lua_State* L)
     luaL_error(L, "'setRequestHeader' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n",
                argc, 2);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_setRequestHeader'.", &tolua_err);
     return 0;
@@ -973,14 +973,14 @@ static int lua_axis_XMLHttpRequest_getAllResponseHeaders(lua_State* L)
     std::stringstream responseheaders;
     std::string responseheader;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_getAllResponseHeaders'\n", nullptr);
@@ -1008,7 +1008,7 @@ static int lua_axis_XMLHttpRequest_getAllResponseHeaders(lua_State* L)
                "'getAllResponseHeaders' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n",
                argc, 0);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_getAllResponseHeaders'.", &tolua_err);
     return 0;
@@ -1022,14 +1022,14 @@ static int lua_axis_XMLHttpRequest_getResponseHeader(lua_State* L)
 
     std::string responseheader;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_getAllResponseHeaders'\n", nullptr);
@@ -1041,7 +1041,7 @@ static int lua_axis_XMLHttpRequest_getResponseHeader(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!tolua_isstring(L, 2, 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1063,7 +1063,7 @@ static int lua_axis_XMLHttpRequest_getResponseHeader(lua_State* L)
     luaL_error(L, "'getResponseHeader' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n",
                argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_getAllResponseHeaders'.", &tolua_err);
     return 0;
@@ -1077,14 +1077,14 @@ static int lua_axis_XMLHttpRequest_registerScriptHandler(lua_State* L)
 
     std::string responseheader;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_registerScriptHandler'\n", nullptr);
@@ -1096,7 +1096,7 @@ static int lua_axis_XMLHttpRequest_registerScriptHandler(lua_State* L)
 
     if (1 == argc)
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         if (!toluafix_isfunction(L, 2, "LUA_FUNCTION", 0, &tolua_err))
             goto tolua_lerror;
 #endif
@@ -1111,7 +1111,7 @@ static int lua_axis_XMLHttpRequest_registerScriptHandler(lua_State* L)
                "'registerScriptHandler' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n",
                argc, 1);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_registerScriptHandler'.", &tolua_err);
     return 0;
@@ -1125,14 +1125,14 @@ static int lua_axis_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
 
     std::string responseheader;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(L, 1, "ax.XMLHttpRequest", 0, &tolua_err))
         goto tolua_lerror;
 #endif
 
     self = (LuaMinXmlHttpRequest*)tolua_tousertype(L, 1, 0);
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     if (nullptr == self)
     {
         tolua_error(L, "invalid 'self' in function 'lua_axis_XMLHttpRequest_unregisterScriptHandler'\n", nullptr);
@@ -1154,7 +1154,7 @@ static int lua_axis_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
                "'unregisterScriptHandler' function of XMLHttpRequest wrong number of arguments: %d, was expecting %d\n",
                argc, 0);
     return 0;
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 tolua_lerror:
     tolua_error(L, "#ferror in function 'lua_axis_XMLHttpRequest_unregisterScriptHandler'.", &tolua_err);
     return 0;

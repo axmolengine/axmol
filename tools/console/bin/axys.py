@@ -19,7 +19,7 @@ import sys
 import os
 import subprocess
 from contextlib import contextmanager
-import axis_project
+import axys_project
 import shutil
 import string
 import locale
@@ -83,10 +83,10 @@ class Cocos2dIniParser:
 
         # read global config file
         self.cocos2d_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-        self._cp.read(os.path.join(self.cocos2d_path, "axis.ini"))
+        self._cp.read(os.path.join(self.cocos2d_path, "axys.ini"))
 
         # XXX: override with local config ??? why ???
-        # self._cp.read("~/.cocos2d-js/axis.ini")
+        # self._cp.read("~/.cocos2d-js/axys.ini")
 
     def parse_plugins(self):
         classes = {}
@@ -287,10 +287,10 @@ class CMDRunner(object):
 
 class DataStatistic(object):
     '''
-    In order to improve axis, we periodically send anonymous data about how you use axis.
-    You can turn off this function by change the value of "enable_stat" in axis.ini.
+    In order to improve axys, we periodically send anonymous data about how you use axys.
+    You can turn off this function by change the value of "enable_stat" in axys.ini.
 
-    Information collected will be used to develop new features and improve axis.
+    Information collected will be used to develop new features and improve axys.
 
     Since no personally identifiable information is collected,
     the anonymous data will not be meaningful to anyone outside of Chukong Inc.
@@ -302,7 +302,7 @@ class DataStatistic(object):
 
     @classmethod
     def get_cfg_file_path(cls):
-        return os.path.join(os.path.expanduser('~/.axis'), 'local_cfg.json')
+        return os.path.join(os.path.expanduser('~/.axys'), 'local_cfg.json')
 
     @classmethod
     def get_cfg_value(cls, key, default_value):
@@ -361,7 +361,7 @@ class DataStatistic(object):
         cls.set_cfg_value(cls.key_agreement_shown, True)
 
         # write the config to ini
-        ini_file = os.path.join(get_current_path(), "axis.ini")
+        ini_file = os.path.join(get_current_path(), "axys.ini")
         f = open(ini_file)
         old_lines = f.readlines()
         f.close()
@@ -403,10 +403,10 @@ class DataStatistic(object):
     @classmethod
     def init_stat_obj(cls):
         if cls.inited == False:
-            # get the axis_stat module
+            # get the axys_stat module
             m = None
             try:
-                m = __import__("axis_stat")
+                m = __import__("axys_stat")
             except:
                 pass
 
@@ -414,9 +414,9 @@ class DataStatistic(object):
                 stat_cls = getattr(m, "Statistic")
                 cls.stat_obj = stat_cls(STAT_VERSION)
 
-            # axis_stat is found
+            # axys_stat is found
             if cls.stat_obj is not None:
-                # check config in axis.ini
+                # check config in axys.ini
                 parser = Cocos2dIniParser()
                 cur_enabled = parser.is_statistic_enabled()
 
@@ -476,7 +476,7 @@ class CCPlugin(object):
 
     @classmethod
     def get_cocos2d_path(cls):
-        """returns the path where axis is installed"""
+        """returns the path where axys is installed"""
 
         #
         # 1: Check for config.ini
@@ -491,7 +491,7 @@ class CCPlugin(object):
         # 2: default engine path
         #
         # possible path of console
-        # /Users/myself/axis/tools/console/bin
+        # /Users/myself/axys/tools/console/bin
         # if so, we have to remove the last 3 segments
         path = cls.get_console_path()
         path = os.path.abspath(path)
@@ -550,7 +550,7 @@ class CCPlugin(object):
         #
         # 3: Templates can be in ~/.cocos2d/templates as well
         #
-        user_path = os.path.expanduser("~/.axis/templates")
+        user_path = os.path.expanduser("~/.axys/templates")
         if os.path.isdir(user_path):
             paths.append(user_path)
 
@@ -571,10 +571,10 @@ class CCPlugin(object):
 
     @staticmethod
     def _log_path():
-        log_dir = os.path.expanduser("~/.axis")
+        log_dir = os.path.expanduser("~/.axys")
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
-        return os.path.join(log_dir, "axis.log")
+        return os.path.join(log_dir, "axys.log")
 
     # the list of plugins this plugin needs to run before itself.
     # ie: if it returns ('a', 'b'), the plugin 'a' will run first, then 'b'
@@ -608,7 +608,7 @@ class CCPlugin(object):
     # override this method and call super.
     def init(self, args):
         self._verbose = (not args.quiet)
-        self._platforms = axis_project.Platforms(self._project, args.platform, args.proj_dir)
+        self._platforms = axys_project.Platforms(self._project, args.platform, args.proj_dir)
         if self._platforms.none_active():
             self._platforms.select_one()
 
@@ -641,7 +641,7 @@ class CCPlugin(object):
                             action="store_true",
                             dest="quiet",
                             help=MultiLanguage.get_string('COCOS_HELP_ARG_QUIET'))
-        platform_list = axis_project.Platforms.list_for_display()
+        platform_list = axys_project.Platforms.list_for_display()
         parser.add_argument("-p", "--platform",
                             dest="platform",
                             help=MultiLanguage.get_string('COCOS_HELP_ARG_PLATFORM'))
@@ -657,9 +657,9 @@ class CCPlugin(object):
         (args, unkonw) = parser.parse_known_args(argv)
 
         if args.src_dir is None:
-            self._project = axis_project.Project(os.path.abspath(os.getcwd()))
+            self._project = axys_project.Project(os.path.abspath(os.getcwd()))
         else:
-            self._project = axis_project.Project(
+            self._project = axys_project.Project(
                 os.path.abspath(args.src_dir))
 
         args.src_dir = self._project.get_project_dir()
@@ -674,7 +674,7 @@ class CCPlugin(object):
                                     CCPluginError.ERROR_WRONG_ARGS)
 
         if args.listplatforms and self._project is not None:
-            platforms = axis_project.Platforms(self._project, args.platform, args.proj_dir)
+            platforms = axys_project.Platforms(self._project, args.platform, args.proj_dir)
             p = platforms.get_available_platforms().keys()
             print('{"platforms":' + json.dumps(p) + '}')
             sys.exit(0)
@@ -1085,7 +1085,7 @@ if __name__ == "__main__":
     engine_path = os.path.normpath(os.path.join(cur_path, '../../../'))
     COCOS_ENGINE_VERSION = utils.get_engine_version(engine_path)
     STAT_VERSION = COCOS_ENGINE_VERSION
-    ver_pattern = r"axis-(.*)"
+    ver_pattern = r"axys-(.*)"
     match = re.match(ver_pattern, COCOS_ENGINE_VERSION)
     if match:
         STAT_VERSION = match.group(1)
@@ -1095,7 +1095,7 @@ if __name__ == "__main__":
         DataStatistic.change_agree_stat(False)
     else:
         DataStatistic.show_stat_agreement(skip_agree_value)
-        DataStatistic.stat_event('axis', 'start', 'invoked')
+        DataStatistic.stat_event('axys', 'start', 'invoked')
 
     if not _check_python_version():
         DataStatistic.terminate_stat()
@@ -1121,7 +1121,7 @@ if __name__ == "__main__":
         argv = sys.argv[2:]
         # try to find plugin by name
         if command in plugins:
-            DataStatistic.stat_event('axis', 'running_command', command)
+            DataStatistic.stat_event('axys', 'running_command', command)
             run_plugin(command, argv, plugins)
         else:
             # try to find plugin by category_name, so the len(sys.argv) at
@@ -1132,7 +1132,7 @@ if __name__ == "__main__":
                 command = sys.argv[1] + '_' + sys.argv[2]
                 argv = sys.argv[3:]
                 if command in plugins:
-                    DataStatistic.stat_event('axis', 'running_command', command)
+                    DataStatistic.stat_event('axys', 'running_command', command)
                     run_plugin(command, argv, plugins)
                 else:
                     raise CCPluginError(MultiLanguage.get_string('COCOS_ERROR_CMD_NOT_FOUND_FMT',

@@ -168,7 +168,7 @@ private:
     axis::Vec2 _lastPoint;
 };
 
-//#if AXIS_DEBUG > 1
+//#if _AX_DEBUG > 1
 
 class RawStencilBufferTest : public BaseClippingNodeTest
 {
@@ -261,7 +261,7 @@ public:
     virtual std::string subtitle() const override;
 };
 
-//#endif //AXIS_DEBUG > 1
+//#endif //_AX_DEBUG > 1
 
 class ClippingToRenderTextureTest : public BaseClippingNodeTest
 {

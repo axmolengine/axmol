@@ -151,7 +151,7 @@ else()
 endif()
 
 if (NOT _AX_USE_PREBUILT)
-    target_link_libraries(${APP_NAME} ${AXIS_CORE_LIB})
+    target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 endif()
 
 target_include_directories(${APP_NAME}

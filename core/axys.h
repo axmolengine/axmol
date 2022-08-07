@@ -276,4 +276,4 @@ AX_DLL const char* axysVersion();
 
 NS_AX_END
 
-#endif  // __AXIS_H__
+#endif  // __AXYS_H__

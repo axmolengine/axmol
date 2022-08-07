@@ -502,7 +502,7 @@ void EventDispatcher::addEventListenerWithSceneGraphPriority(EventListener* list
     addEventListener(listener);
 }
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && _AX_DEBUG > 0
 
 void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
 {
@@ -559,7 +559,7 @@ void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
     }
 }
 
-#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
+#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && _AX_DEBUG > 0
 
 void EventDispatcher::addEventListenerWithFixedPriority(EventListener* listener, int fixedPriority)
 {

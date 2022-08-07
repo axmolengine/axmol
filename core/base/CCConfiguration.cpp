@@ -80,7 +80,7 @@ bool Configuration::init()
     _valueDict["axis.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
-#if AXIS_DEBUG
+#if _AX_DEBUG
     _valueDict["axis.build_type"] = Value("DEBUG");
 #else
     _valueDict["axis.build_type"]                   = Value("RELEASE");

@@ -187,7 +187,7 @@ Node::~Node()
 
     _eventDispatcher->removeEventListenersForTarget(this);
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && _AX_DEBUG > 0
     _eventDispatcher->debugCheckNodeHasNoEventListenersOnDestruction(this);
 #endif
 

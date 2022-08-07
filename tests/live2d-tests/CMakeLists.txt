@@ -129,7 +129,7 @@ else()
     config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
-target_link_libraries(${APP_NAME} ${AXIS_CORE_LIB})
+target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes

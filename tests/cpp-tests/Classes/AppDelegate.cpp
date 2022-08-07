@@ -36,9 +36,9 @@ USING_NS_AX;
 
 // Enable log on Debug version
 #ifndef NDEBUG
-#    define AXIS_DEBUG 1
+#    define _AX_DEBUG 1
 #else
-#    define AXIS_DEBUG 0
+#    define _AX_DEBUG 0
 #endif
 
 AppDelegate::AppDelegate() : _testController(nullptr) {}

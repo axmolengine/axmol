@@ -347,7 +347,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto&& pass : technique->getPasses())
             {
-#ifdef AXIS_DEBUG
+#ifdef _AX_DEBUG
                 // make it crashed when missing attribute data
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {

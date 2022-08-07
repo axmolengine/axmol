@@ -154,10 +154,10 @@ endfunction()
 
 function(copy_thirdparty_dlls cocos_target destDir)
     # init dependency list with direct dependencies
-    get_property(DEPENDENCIES TARGET ${AXIS_THIRDPARTY_NAME} PROPERTY LINK_LIBRARIES)
+    get_property(DEPENDENCIES TARGET ${_AX_THIRDPARTY_NAME} PROPERTY LINK_LIBRARIES)
     # We're not intersted in interface link libraries of the top-most target
 #     if (INCLUDE_INTERFACE_LINK_LIBRARIES)
-#        get_property(INTERFACE_LINK_LIBRARIES TARGET ${AXIS_THIRDPARTY_NAME} PROPERTY
+#        get_property(INTERFACE_LINK_LIBRARIES TARGET ${_AX_THIRDPARTY_NAME} PROPERTY
 #   INTERFACE_LINK_LIBRARIES)
 #        list(APPEND DEPENDENCIES ${INTERFACE_LINK_LIBRARIES})
 #     endif()
@@ -175,7 +175,7 @@ function(copy_thirdparty_dlls cocos_target destDir)
     SET(EXT_LIB_FILES "")
  
     foreach(DEPENDENCY ${DEPENDENCIES})
-      # message(STATUS ${DEPENDENCY} " depends by ${AXIS_THIRDPARTY_NAME}")
+      # message(STATUS ${DEPENDENCY} " depends by ${_AX_THIRDPARTY_NAME}")
       get_property(IMPORTLIB TARGET ${DEPENDENCY} PROPERTY IMPORTED_IMPLIB)
       get_property(IMPORTDLL TARGET ${DEPENDENCY} PROPERTY IMPORTED_LOCATION)
       if(IMPORTLIB)
@@ -223,9 +223,9 @@ function(cocos_copy_target_dll cocos_target)
     # Copy windows angle binaries
     add_custom_command(TARGET ${cocos_target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${AXYS_ROOT_PATH}/${AXIS_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
-        ${AXYS_ROOT_PATH}/${AXIS_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
-        ${AXYS_ROOT_PATH}/${AXIS_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
+        ${AXYS_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
+        ${AXYS_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
+        ${AXYS_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
         $<TARGET_FILE_DIR:${cocos_target}>
     )
 

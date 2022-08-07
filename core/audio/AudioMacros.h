@@ -49,7 +49,7 @@
 #    define AUDIO_LOG(fmt, ...) printf(fmt "\n", ##__VA_ARGS__)
 #endif
 
-#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
 #    define ALOGV(fmt, ...) AUDIO_LOG("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #else
 #    define ALOGV(fmt, ...) \
@@ -62,7 +62,7 @@
 #define ALOGW(fmt, ...) AUDIO_LOG("W/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #define ALOGE(fmt, ...) AUDIO_LOG("E/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 
-#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
 #    define CHECK_AL_ERROR_DEBUG()                                                                     \
         do                                                                                             \
         {                                                                                              \

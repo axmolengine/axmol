@@ -53,7 +53,7 @@ USING_NS_AX;
 extern std::unordered_map<uintptr_t, const char*> g_luaType;
 extern std::unordered_map<cxx17::string_view, const char*> g_typeCast;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName = "");
 #endif
 
@@ -627,7 +627,7 @@ bool luaval_to_ccmap_string_key(lua_State* L, int lo, axis::Map<std::string, T>*
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err);
 #endif
         ok = false;

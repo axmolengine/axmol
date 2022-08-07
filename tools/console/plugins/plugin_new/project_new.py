@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# axis "new" plugin
+# axys "new" plugin
 #
 # Copyright 2013 (C) cocos2d-x.org
 #
@@ -16,8 +16,8 @@ import os
 import sys
 import json
 import shutil
-import axis
-import axis_project
+import axys
+import axys_project
 import re
 import utils
 from collections import OrderedDict
@@ -26,12 +26,12 @@ from MultiLanguage import MultiLanguage
 #
 # Plugins should be a sublass of CCJSPlugin
 #
-class CCPluginNew(axis.CCPlugin):
+class CCPluginNew(axys.CCPlugin):
 
     DEFAULT_PROJ_NAME = {
-        axis_project.Project.CPP: 'MyCppGame',
-        axis_project.Project.LUA: 'MyLuaGame',
-        axis_project.Project.JS: 'MyJSGame'
+        axys_project.Project.CPP: 'MyCppGame',
+        axys_project.Project.LUA: 'MyLuaGame',
+        axys_project.Project.JS: 'MyJSGame'
     }
 
     @staticmethod
@@ -44,7 +44,7 @@ class CCPluginNew(axis.CCPlugin):
 
     def init(self, args):
         self._projname = args.name
-        self._projdir = axis.encode_with(
+        self._projdir = axys.encode_with(
             os.path.abspath(os.path.join(args.directory, self._projname)), "utf-8")
         self._lang = args.language
         self._package = args.package
@@ -57,7 +57,7 @@ class CCPluginNew(axis.CCPlugin):
         # search for custom paths
         if args.engine_path is not None:
             self._cocosroot = os.path.abspath(args.engine_path)
-            self._cocosroot = axis.encode_with(self._cocosroot, "utf-8")
+            self._cocosroot = axys.encode_with(self._cocosroot, "utf-8")
             tp_path = os.path.join(self._cocosroot, "templates")
             if os.path.isdir(tp_path):
                 self._templates_paths.append(tp_path)
@@ -83,10 +83,10 @@ class CCPluginNew(axis.CCPlugin):
             if template_key in dic:
                 self._tpdir = dic[template_key]["path"]
             else:
-                raise axis.CCPluginError(
+                raise axys.CCPluginError(
                     "Template name '%s' not found. Available templates: %s" %
                     (template_key, dic.keys()),
-                    axis.CCPluginError.ERROR_PATH_NOT_FOUND)
+                    axys.CCPluginError.ERROR_PATH_NOT_FOUND)
         else:
             # Old way
             self._templates = Templates(args.language, self._templates_paths, args.template)
@@ -101,7 +101,7 @@ class CCPluginNew(axis.CCPlugin):
         from argparse import ArgumentParser
         # set the parser to parse input params
         # the correspond variable name of "-x, --xxx" is parser.xxx
-        parser = ArgumentParser(prog="axis %s" % self.__class__.plugin_name(),
+        parser = ArgumentParser(prog="axys %s" % self.__class__.plugin_name(),
                                 description=self.__class__.brief_description())
 
         parser.add_argument(
@@ -173,7 +173,7 @@ class CCPluginNew(axis.CCPlugin):
             engine_type = None
 
             framework_ver_file = os.path.join(self._cocosroot, 'version')
-            x_ver_file = os.path.join(self._cocosroot, 'core/axis.cpp')
+            x_ver_file = os.path.join(self._cocosroot, 'core/axys.cpp')
             js_ver_file = os.path.join(self._cocosroot, 'frameworks/js-bindings/bindings/manual/ScriptingCore.h')
             if os.path.isfile(framework_ver_file):
                 # the engine is Cocos Framework
@@ -207,7 +207,7 @@ class CCPluginNew(axis.CCPlugin):
 
             if ver_str is not None:
                 # stat the engine version info
-                axis.DataStatistic.stat_event('new_engine_ver', ver_str, engine_type)
+                axys.DataStatistic.stat_event('new_engine_ver', ver_str, engine_type)
         except:
             pass
 
@@ -215,7 +215,7 @@ class CCPluginNew(axis.CCPlugin):
         # check the dst project dir exists
         if os.path.exists(self._projdir):
             message = MultiLanguage.get_string('NEW_ERROR_FOLDER_EXISTED_FMT', self._projdir)
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         creator = TPCreator(self._lang, self._cocosroot, self._projname, self._projdir,
                             self._tpname, self._tpdir, self._package, self._mac_bundleid, self._ios_bundleid)
@@ -223,7 +223,7 @@ class CCPluginNew(axis.CCPlugin):
         creator.do_default_step()
 
         data = None
-        cfg_path = os.path.join(self._projdir, axis_project.Project.CONFIG)
+        cfg_path = os.path.join(self._projdir, axys_project.Project.CONFIG)
         if os.path.isfile(cfg_path):
             f = open(cfg_path)
             data = json.load(f)
@@ -232,26 +232,26 @@ class CCPluginNew(axis.CCPlugin):
         if data is None:
             data = {}
 
-        if axis_project.Project.KEY_PROJ_TYPE not in data:
-            data[axis_project.Project.KEY_PROJ_TYPE] = self._lang
+        if axys_project.Project.KEY_PROJ_TYPE not in data:
+            data[axys_project.Project.KEY_PROJ_TYPE] = self._lang
 
         # script project may add native support
-        if self._lang in (axis_project.Project.LUA, axis_project.Project.JS):
+        if self._lang in (axys_project.Project.LUA, axys_project.Project.JS):
             # REMOVE the option --no-native. Because it's added for Cocos Code IDE.
             # It will cause confusion: https://github.com/cocos2d/cocos2d-console/issues/401
             # if self._other_opts.no_native is not self._other_opts.no_native:
             #     creator.do_other_step('do_add_native_support')
-            #     data[axis_project.Project.KEY_HAS_NATIVE] = True
+            #     data[axys_project.Project.KEY_HAS_NATIVE] = True
             # else:
-            #     data[axis_project.Project.KEY_HAS_NATIVE] = False
+            #     data[axys_project.Project.KEY_HAS_NATIVE] = False
             creator.do_other_step('do_add_native_support')
-            data[axis_project.Project.KEY_HAS_NATIVE] = True
+            data[axys_project.Project.KEY_HAS_NATIVE] = True
 
         # record the engine version if not predefined
-        if not (axis_project.Project.KEY_ENGINE_VERSION in data):
+        if not (axys_project.Project.KEY_ENGINE_VERSION in data):
             engine_version = utils.get_engine_version(self._cocosroot)
             if engine_version is not None:
-                data[axis_project.Project.KEY_ENGINE_VERSION] = engine_version
+                data[axys_project.Project.KEY_ENGINE_VERSION] = engine_version
 
         # if --portrait is specified, change the orientation
         if self._other_opts.portrait:
@@ -265,7 +265,7 @@ class CCPluginNew(axis.CCPlugin):
     def run(self, argv, dependencies):
         self.parse_args(argv)
         action_str = 'new_%s' % (self._lang)
-        axis.DataStatistic.stat_event('new', action_str, self._tpname)
+        axys.DataStatistic.stat_event('new', action_str, self._tpname)
         self._create_from_cmd()
         self._stat_engine_version()
 
@@ -333,7 +333,7 @@ class Templates(object):
             if current in self._template_folders:
                 self._current = current
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_TEMPLATE_NOT_FOUND_FMT', current))
+                axys.Logging.warning(MultiLanguage.get_string('NEW_TEMPLATE_NOT_FOUND_FMT', current))
 
     def _scan(self):
         template_pattern = {
@@ -368,7 +368,7 @@ class Templates(object):
             need_engine = "cocos2d-js" if self._lang == "js" else "cocos2d-x"
             engine_tip = MultiLanguage.get_string('NEW_ERROR_ENGINE_TIP_FMT', need_engine)
             message = MultiLanguage.get_string('NEW_ERROR_TEMPLATE_NOT_FOUND_FMT', (self._lang, engine_tip))
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_PATH_NOT_FOUND)
 
     def none_active(self):
         return self._current is None
@@ -379,14 +379,14 @@ class Templates(object):
         return self._template_folders[self._current]
 
     def select_one(self):
-        axis.Logging.warning(MultiLanguage.get_string('NEW_SELECT_TEMPLATE_TIP1'))
+        axys.Logging.warning(MultiLanguage.get_string('NEW_SELECT_TEMPLATE_TIP1'))
 
         p = self._template_folders.keys()
         for i in range(len(p)):
-            axis.Logging.warning('%d %s' % (i + 1, p[i]))
-        axis.Logging.warning(MultiLanguage.get_string('NEW_SELECT_TEMPLATE_TIP2'))
+            axys.Logging.warning('%d %s' % (i + 1, p[i]))
+        axys.Logging.warning(MultiLanguage.get_string('NEW_SELECT_TEMPLATE_TIP2'))
         while True:
-            option = axis.get_input()
+            option = axys.get_input()
             if option.isdigit():
                 option = int(option) - 1
                 if option in range(len(p)):
@@ -418,7 +418,7 @@ class TPCreator(object):
 
         if not os.path.exists(tp_json_path):
             message = MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT', tp_json_path)
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         if(sys.version_info.major >= 3):
             f = open(tp_json_path, encoding='utf8')
@@ -432,13 +432,13 @@ class TPCreator(object):
         # read the default creating step
         if 'do_default' not in tpinfo:
             message = (MultiLanguage.get_string('NEW_ERROR_DEFAILT_CFG_NOT_FOUND_FMT', tp_json_path))
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_WRONG_CONFIG)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_WRONG_CONFIG)
         self.tp_default_step = tpinfo.pop('do_default')
         # keep the other steps
         self.tp_other_step = tpinfo
 
     def cp_self(self, project_dir, exclude_files):
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_COPY_TEMPLATE_FMT', project_dir))
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_COPY_TEMPLATE_FMT', project_dir))
 
         if not os.path.exists(self.project_dir):
             os.makedirs(self.project_dir)
@@ -448,7 +448,7 @@ class TPCreator(object):
             "to": self.project_dir,
             "exclude": exclude_files
         }
-        axis.copy_files_with_config(copy_cfg, self.tp_dir, self.project_dir)
+        axys.copy_files_with_config(copy_cfg, self.tp_dir, self.project_dir)
 
     def do_default_step(self):
         default_cmds = self.tp_default_step
@@ -468,10 +468,10 @@ class TPCreator(object):
             if not_existed_error:
                 # handle as error
                 message = MultiLanguage.get_string('NEW_ERROR_STEP_NOT_FOUND_FMT', step)
-                raise axis.CCPluginError(message, axis.CCPluginError.ERROR_WRONG_CONFIG)
+                raise axys.CCPluginError(message, axys.CCPluginError.ERROR_WRONG_CONFIG)
             else:
                 # handle as warning
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_STEP_NOT_FOUND_FMT', step))
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_STEP_NOT_FOUND_FMT', step))
                 return
 
         cmds = self.tp_other_step[step]
@@ -490,13 +490,13 @@ class TPCreator(object):
             try:
                 cmd = getattr(self, k)
             except AttributeError:
-                raise axis.CCPluginError(MultiLanguage.get_string('NEW_ERROR_CMD_NOT_FOUND_FMT', k),
-                                          axis.CCPluginError.ERROR_WRONG_CONFIG)
+                raise axys.CCPluginError(MultiLanguage.get_string('NEW_ERROR_CMD_NOT_FOUND_FMT', k),
+                                          axys.CCPluginError.ERROR_WRONG_CONFIG)
 
             try:
                 cmd(v)
             except Exception as e:
-                raise axis.CCPluginError(str(e), axis.CCPluginError.ERROR_RUNNING_CMD)
+                raise axys.CCPluginError(str(e), axys.CCPluginError.ERROR_RUNNING_CMD)
 
 # cmd methods below
     def append_h5_engine(self, v):
@@ -507,7 +507,7 @@ class TPCreator(object):
         moudle_cfg = os.path.join(src, moduleConfig)
         if not os.path.exists(moudle_cfg):
             message = MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT', moudle_cfg)
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_PATH_NOT_FOUND)
 
         f = open(moudle_cfg)
         data = json.load(f, 'utf8')
@@ -523,16 +523,16 @@ class TPCreator(object):
                     file_list.append(f)
 
         # begin copy engine
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_COPY_H5'))
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_COPY_H5'))
         for index in range(len(file_list)):
             srcfile = os.path.join(src, file_list[index])
             dstfile = os.path.join(dst, file_list[index])
 
-            srcfile = axis.add_path_prefix(srcfile)
-            dstfile = axis.add_path_prefix(dstfile)
+            srcfile = axys.add_path_prefix(srcfile)
+            dstfile = axys.add_path_prefix(dstfile)
 
             if not os.path.exists(os.path.dirname(dstfile)):
-                os.makedirs(axis.add_path_prefix(os.path.dirname(dstfile)))
+                os.makedirs(axys.add_path_prefix(os.path.dirname(dstfile)))
 
             # copy file or folder
             if os.path.exists(srcfile):
@@ -546,23 +546,23 @@ class TPCreator(object):
                     shutil.copy2(srcfile, dstfile)
 
     def append_from_template(self, v):
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_TEMPLATE'))
-        axis.copy_files_with_config(v, self.tp_dir, self.project_dir)
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_TEMPLATE'))
+        axys.copy_files_with_config(v, self.tp_dir, self.project_dir)
 
     def append_dir(self, v):
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_DIR'))
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_DIR'))
         for item in v:
-            axis.copy_files_with_config(
+            axys.copy_files_with_config(
                 item, self.cocos_root, self.project_dir)
 
     def append_file(self, v):
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_FILE'))
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_FILE'))
         for item in v:
             src = os.path.join(self.cocos_root, item['from'])
             dst = os.path.join(self.project_dir, item['to'])
 
-            src = axis.add_path_prefix(src)
-            dst = axis.add_path_prefix(dst)
+            src = axys.add_path_prefix(src)
+            dst = axys.add_path_prefix(dst)
 
             shutil.copy2(src, dst)
 
@@ -576,7 +576,7 @@ class TPCreator(object):
         if dst_project_name == src_project_name:
             return
 
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_RENAME_PROJ_FMT',
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_RENAME_PROJ_FMT',
                                                     (src_project_name, dst_project_name)))
         files = v['files']
         for f in files:
@@ -594,7 +594,7 @@ class TPCreator(object):
                         os.remove(dst_file_path)
                     os.rename(src_file_path, dst_file_path)
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                os.path.join(dst_project_dir, src)))
 
     def project_replace_project_name(self, v):
@@ -606,7 +606,7 @@ class TPCreator(object):
         if dst_project_name == src_project_name:
             return
 
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_PROJ_FMT',
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_PROJ_FMT',
                                                     (src_project_name, dst_project_name)))
         files = v['files']
         for f in files:
@@ -615,7 +615,7 @@ class TPCreator(object):
                 replace_string(
                     os.path.join(dst_project_dir, dst), src_project_name, dst_project_name)
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                os.path.join(dst_project_dir, dst)))
 
     def project_replace_package_name(self, v):
@@ -628,19 +628,19 @@ class TPCreator(object):
         if dst_package_name == src_package_name:
             return
 
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_PKG_FMT',
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_PKG_FMT',
                                                     (src_package_name, dst_package_name)))
         files = v['files']
         if not dst_package_name:
-            raise axis.CCPluginError(MultiLanguage.get_string('NEW_ERROR_PKG_NAME_NOT_SPECIFIED'),
-                                      axis.CCPluginError.ERROR_WRONG_ARGS)
+            raise axys.CCPluginError(MultiLanguage.get_string('NEW_ERROR_PKG_NAME_NOT_SPECIFIED'),
+                                      axys.CCPluginError.ERROR_WRONG_ARGS)
         for f in files:
             dst = f.replace("PROJECT_NAME", dst_project_name)
             if os.path.exists(os.path.join(dst_project_dir, dst)):
                 replace_string(
                     os.path.join(dst_project_dir, dst), src_package_name, dst_package_name)
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                os.path.join(dst_project_dir, dst)))
 
     def project_replace_so_name(self, v):
@@ -651,19 +651,19 @@ class TPCreator(object):
         if src_so_name == dst_so_name:
             return
 
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_SO_FMT',
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_REPLACE_SO_FMT',
                                                     (src_so_name, dst_so_name)))
         files = v['files']
         if not dst_so_name:
-            raise axis.CCPluginError(MultiLanguage.get_string('NEW_ERROR_PKG_NAME_NOT_SPECIFIED'),
-                                      axis.CCPluginError.ERROR_WRONG_ARGS)
+            raise axys.CCPluginError(MultiLanguage.get_string('NEW_ERROR_PKG_NAME_NOT_SPECIFIED'),
+                                      axys.CCPluginError.ERROR_WRONG_ARGS)
         for f in files:
             dst = f.replace("PROJECT_NAME", self.project_name)
             dstpath = os.path.join(self.project_dir, dst)
             if os.path.exists(dstpath):
                 replace_string(dstpath, src_so_name, dst_so_name)
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                dstpath))
 
     def project_replace_mac_bundleid(self, v):
@@ -679,7 +679,7 @@ class TPCreator(object):
         if src_bundleid == dst_bundleid:
             return
 
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_MAC_BUNDLEID_FMT',
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_MAC_BUNDLEID_FMT',
                                                     (src_bundleid, dst_bundleid)))
         files = v['files']
         for f in files:
@@ -688,7 +688,7 @@ class TPCreator(object):
                 replace_string(
                     os.path.join(dst_project_dir, dst), src_bundleid, dst_bundleid)
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                os.path.join(dst_project_dir, dst)))
 
     def project_replace_ios_bundleid(self, v):
@@ -704,7 +704,7 @@ class TPCreator(object):
         if src_bundleid == dst_bundleid:
             return
 
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_IOS_BUNDLEID_FMT',
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_IOS_BUNDLEID_FMT',
                                                     (src_bundleid, dst_bundleid)))
         files = v['files']
         for f in files:
@@ -713,7 +713,7 @@ class TPCreator(object):
                 replace_string(
                     os.path.join(dst_project_dir, dst), src_bundleid, dst_bundleid)
             else:
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT',
                                                                os.path.join(dst_project_dir, dst)))
 
     def modify_files(self, v):
@@ -728,14 +728,14 @@ class TPCreator(object):
                 ...
             ]
         """
-        axis.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_MODIFY_FILE'))
+        axys.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_MODIFY_FILE'))
         for modify_info in v:
             modify_file = modify_info["file_path"]
             if not os.path.isabs(modify_file):
                 modify_file = os.path.abspath(os.path.join(self.project_dir, modify_file))
 
             if not os.path.isfile(modify_file):
-                axis.Logging.warning(MultiLanguage.get_string('NEW_WARNING_NOT_A_FILE_FMT', modify_file))
+                axys.Logging.warning(MultiLanguage.get_string('NEW_WARNING_NOT_A_FILE_FMT', modify_file))
                 continue
 
             pattern = modify_info["pattern"]

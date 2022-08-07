@@ -1157,7 +1157,7 @@ class NativeClass(object):
 
     def _is_ref_class(self, depth = 0):
         """
-        Mark the class as 'axis::Ref' or its subclass.
+        Mark the class as 'axys::Ref' or its subclass.
         """
         # print ">" * (depth + 1) + " " + self.class_name
 
@@ -1704,29 +1704,29 @@ class Generator(object):
 
         for (k, v) in script_ns_dict.items():
             if namespace_class_name.find(k) >= 0:
-                if namespace_class_name.find("axis::Vec2") == 0:
+                if namespace_class_name.find("axys::Vec2") == 0:
                     return "vec2_object"
-                if namespace_class_name.find("axis::Vec3") == 0:
+                if namespace_class_name.find("axys::Vec3") == 0:
                     return "vec3_object"
-                if namespace_class_name.find("axis::Vec4") == 0:
+                if namespace_class_name.find("axys::Vec4") == 0:
                     return "vec4_object"
-                if namespace_class_name.find("axis::Mat4") == 0:
+                if namespace_class_name.find("axys::Mat4") == 0:
                     return "mat4_object"
-                if namespace_class_name.find("axis::Vector") == 0:
+                if namespace_class_name.find("axys::Vector") == 0:
                     return "Array"
-                if namespace_class_name.find("axis::Map") == 0 or namespace_class_name.find("axis::StringMap") == 0:
+                if namespace_class_name.find("axys::Map") == 0 or namespace_class_name.find("axys::StringMap") == 0:
                     return "map_object"
-                if namespace_class_name.find("axis::Point")  == 0:
+                if namespace_class_name.find("axys::Point")  == 0:
                     return "point_object"
-                if namespace_class_name.find("axis::Size")  == 0:
+                if namespace_class_name.find("axys::Size")  == 0:
                     return "size_object"
-                if namespace_class_name.find("axis::Rect")  == 0:
+                if namespace_class_name.find("axys::Rect")  == 0:
                     return "rect_object"
-                if namespace_class_name.find("axis::Color3B") == 0:
+                if namespace_class_name.find("axys::Color3B") == 0:
                     return "color3b_object"
-                if namespace_class_name.find("axis::Color4B") == 0:
+                if namespace_class_name.find("axys::Color4B") == 0:
                     return "color4b_object"
-                if namespace_class_name.find("axis::Color4F") == 0:
+                if namespace_class_name.find("axys::Color4F") == 0:
                     return "color4f_object"
                 else:
                     return namespace_class_name.replace("*","").replace("const ", "").replace(k,v)
@@ -1750,29 +1750,29 @@ class Generator(object):
 
         for (k, v) in script_ns_dict.items():
             if namespace_class_name.find(k) >= 0:
-                if namespace_class_name.find("axis::Vec2") == 0:
+                if namespace_class_name.find("axys::Vec2") == 0:
                     return "vec2_table"
-                if namespace_class_name.find("axis::Vec3") == 0:
+                if namespace_class_name.find("axys::Vec3") == 0:
                     return "vec3_table"
-                if namespace_class_name.find("axis::Vec4") == 0:
+                if namespace_class_name.find("axys::Vec4") == 0:
                     return "vec4_table"
-                if namespace_class_name.find("axis::Vector") == 0:
+                if namespace_class_name.find("axys::Vector") == 0:
                     return "array_table"
-                if namespace_class_name.find("axis::Mat4") == 0:
+                if namespace_class_name.find("axys::Mat4") == 0:
                     return "mat4_table"
-                if namespace_class_name.find("axis::Map") == 0 or namespace_class_name.find("axis::StringMap") == 0:
+                if namespace_class_name.find("axys::Map") == 0 or namespace_class_name.find("axys::StringMap") == 0:
                     return "map_table"
-                if namespace_class_name.find("axis::Point")  == 0:
+                if namespace_class_name.find("axys::Point")  == 0:
                     return "point_table"
-                if namespace_class_name.find("axis::Size")  == 0:
+                if namespace_class_name.find("axys::Size")  == 0:
                     return "size_table"
-                if namespace_class_name.find("axis::Rect")  == 0:
+                if namespace_class_name.find("axys::Rect")  == 0:
                     return "rect_table"
-                if namespace_class_name.find("axis::Color3B") == 0:
+                if namespace_class_name.find("axys::Color3B") == 0:
                     return "color3b_table"
-                if namespace_class_name.find("axis::Color4B") == 0:
+                if namespace_class_name.find("axys::Color4B") == 0:
                     return "color4b_table"
-                if namespace_class_name.find("axis::Color4F") == 0:
+                if namespace_class_name.find("axys::Color4F") == 0:
                     return "color4f_table"
                 if is_ret == 1:
                     return namespace_class_name.replace("*","").replace("const ", "").replace(k,"")
@@ -1802,9 +1802,9 @@ class Generator(object):
 
     def js_ret_name_from_native(self, namespace_class_name, is_enum) :
         if self.is_cocos_class(namespace_class_name):
-            if namespace_class_name.find("axis::Vector") >=0:
+            if namespace_class_name.find("axys::Vector") >=0:
                 return "new Array()"
-            if namespace_class_name.find("axis::Map") >=0 or namespace_class_name.find("axis::StringMap") >=0:
+            if namespace_class_name.find("axys::Map") >=0 or namespace_class_name.find("axys::StringMap") >=0:
                 return "map_object"
             if is_enum:
                 return 0
@@ -1921,7 +1921,7 @@ def main():
                 'clang_args': (config.get(s, 'extra_arguments', 0, dict(userconfig.items('DEFAULT'))) or "").split(" "),
                 'target': os.path.join(workingdir, "targets", t),
                 'outdir': outdir,
-                'search_paths': os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axisdir'), 'core')) + ";" + os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axisdir'), 'extensions')),
+                'search_paths': os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axysdir'), 'core')) + ";" + os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axysdir'), 'extensions')),
                 'remove_prefix': config.get(s, 'remove_prefix'),
                 'target_ns': config.get(s, 'target_namespace'),
                 'cpp_ns': config.get(s, 'cpp_namespace').split(' ') if config.has_option(s, 'cpp_namespace') else None,

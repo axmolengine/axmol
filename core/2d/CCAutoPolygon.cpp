@@ -408,7 +408,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
         prevx = stepx;
         prevy = stepy;
 
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
         const auto totalPixel = _width * _height;
         AXASSERT(count <= totalPixel, "oh no, marching square cannot find starting position");
 #endif

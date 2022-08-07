@@ -1,16 +1,16 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# statistics: Statistics the user behaviors of axis-console by google analytics
+# statistics: Statistics the user behaviors of axys-console by google analytics
 #
 # Author: Bin Zhang
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-Statistics the user behaviors of axis-console by google analytics
+Statistics the user behaviors of axys-console by google analytics
 '''
 
-import axis
+import axys
 import uuid
 import locale
 
@@ -79,7 +79,7 @@ class Fields(object):
 GA_CACHE_EVENTS_FILE = 'cache_events'
 GA_CACHE_EVENTS_BAK_FILE = 'cache_event_bak'
 
-local_cfg_path = os.path.expanduser('~/.axis')
+local_cfg_path = os.path.expanduser('~/.axys')
 local_cfg_file = os.path.join(local_cfg_path, GA_CACHE_EVENTS_FILE)
 local_cfg_bak_file = os.path.join(local_cfg_path, GA_CACHE_EVENTS_BAK_FILE)
 file_in_use_lock = multiprocessing.Lock()
@@ -103,34 +103,34 @@ def get_language():
 
 def get_user_agent():
     ret_str = None
-    if axis.os_is_win32():
+    if axys.os_is_win32():
         ver_info = sys.getwindowsversion()
         ver_str = '%d.%d' % (ver_info[0], ver_info[1])
-        if axis.os_is_32bit_windows():
+        if axys.os_is_32bit_windows():
             arch_str = "WOW32"
         else:
             arch_str = "WOW64"
         ret_str = "Mozilla/5.0 (Windows NT %s; %s) Chrome/103.0.5060.114 Safari/537.36" % (ver_str, arch_str)
-    elif axis.os_is_mac():
+    elif axys.os_is_mac():
         ver_str = (platform.mac_ver()[0]).replace('.', '_')
         ret_str = "Mozilla/5.0 (Macintosh; Intel Mac OS X %s) Chrome/103.0.5060.114 Safari/537.36" % ver_str
-    elif axis.os_is_linux():
+    elif axys.os_is_linux():
         arch_str = platform.machine()
         ret_str = "Mozilla/5.0 (X11; Linux %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36" % arch_str
 
     return ret_str
 
 def get_system_info():
-    if axis.os_is_win32():
+    if axys.os_is_win32():
         ret_str = "windows"
         ret_str += "_%s" % platform.release()
-        if axis.os_is_32bit_windows():
+        if axys.os_is_32bit_windows():
             ret_str += "_%s" % "32bit"
         else:
             ret_str += "_%s" % "64bit"
-    elif axis.os_is_mac():
+    elif axys.os_is_mac():
         ret_str = "mac_%s" % (platform.mac_ver()[0]).replace('.', '_')
-    elif axis.os_is_linux():
+    elif axys.os_is_linux():
         ret_str = "linux_%s" % platform.linux_distribution()[0]
     else:
         ret_str = "unknown"
@@ -182,9 +182,9 @@ def gen_bi_event(event, event_value):
     params = {
         'cached_event' : is_cache_event
     }
-    if category == 'axis':
+    if category == 'axys':
         if action == 'start':
-            event_name = 'axis_invoked'
+            event_name = 'axys_invoked'
         elif action == 'running_command':
             event_name = 'running_command'
             params['command'] = label
@@ -226,19 +226,19 @@ def gen_bi_event(event, event_value):
     return ret
 
 def get_bi_params(events, event_value, multi_events=False, engine_version=''):
-    if axis.os_is_win32():
+    if axys.os_is_win32():
         system_str = 'windows'
         ver_info = sys.getwindowsversion()
         ver_str = '%d.%d' % (ver_info[0], ver_info[1])
-        if axis.os_is_32bit_windows():
+        if axys.os_is_32bit_windows():
             arch_str = "_32bit"
         else:
             arch_str = "_64bit"
         system_ver = '%s%s' % (ver_str, arch_str)
-    elif axis.os_is_mac():
+    elif axys.os_is_mac():
         system_str = 'mac'
         system_ver = (platform.mac_ver()[0])
-    elif axis.os_is_linux():
+    elif axys.os_is_linux():
         system_str = 'linux'
         system_ver = platform.machine()
     else:
@@ -489,7 +489,7 @@ class Statistic(object):
     def __init__(self, engine_version):
         self.process_pool = []
         self.engine_version = engine_version
-        if axis.os_is_win32():
+        if axys.os_is_win32():
             multiprocessing.freeze_support()
 
     def send_cached_events(self):
