@@ -142,7 +142,7 @@ tolua_lerror:
     return 0;
 }
 
-int register_all_axis_csloader_manual(lua_State* L)
+int register_all_axys_csloader_manual(lua_State* L)
 {
     lua_pushstring(L, "ax.CSLoader");
     lua_rawget(L, LUA_REGISTRYINDEX);

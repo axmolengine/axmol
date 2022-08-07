@@ -144,19 +144,19 @@ bool LuaStack::init()
     luaL_register(_state, "_G", global_functions);
 
     g_luaType.clear();
-    register_all_axis_base(_state);
-    register_all_axis_backend(_state);
-    register_all_axis_manual(_state);
-    register_all_axis_module_manual(_state);
-    register_all_axis_math_manual(_state);
-    register_all_axis_shaders_manual(_state);
-    register_all_axis_bytearray_manual(_state);
+    register_all_axys_base(_state);
+    register_all_axys_backend(_state);
+    register_all_axys_manual(_state);
+    register_all_axys_module_manual(_state);
+    register_all_axys_math_manual(_state);
+    register_all_axys_shaders_manual(_state);
+    register_all_axys_bytearray_manual(_state);
 
     tolua_luanode_open(_state);
     register_luanode_manual(_state);
 #if AX_USE_PHYSICS
-    register_all_axis_physics(_state);
-    register_all_axis_physics_manual(_state);
+    register_all_axys_physics(_state);
+    register_all_axys_physics_manual(_state);
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)

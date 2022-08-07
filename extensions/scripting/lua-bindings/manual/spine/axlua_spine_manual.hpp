@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 /// @cond
-TOLUA_API int register_all_axis_spine_manual(lua_State* L);
+TOLUA_API int register_all_axys_spine_manual(lua_State* L);
 /// @endcond
 
 /**

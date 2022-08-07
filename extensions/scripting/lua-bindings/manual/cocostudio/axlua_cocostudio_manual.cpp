@@ -600,7 +600,7 @@ tolua_lerror:
     return 0;
 }
 
-int register_all_axis_coco_studio_manual(lua_State* L)
+int register_all_axys_coco_studio_manual(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -637,10 +637,10 @@ int register_cocostudio_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axis_studio(L);
-        register_all_axis_csloader(L);
-        register_all_axis_coco_studio_manual(L);
-        register_all_axis_csloader_manual(L);
+        register_all_axys_studio(L);
+        register_all_axys_csloader(L);
+        register_all_axys_coco_studio_manual(L);
+        register_all_axys_csloader_manual(L);
         lua_register_axis_coco_studio_CustomGUIReader(L);
     }
     lua_pop(L, 1);

@@ -1630,7 +1630,7 @@ tolua_lerror:
     return 0;
 }
 
-int register_all_axis_physics_manual(lua_State* tolua_S)
+int register_all_axys_physics_manual(lua_State* tolua_S)
 {
     lua_pushstring(tolua_S, "ax.PhysicsBody");
     lua_rawget(tolua_S, LUA_REGISTRYINDEX);

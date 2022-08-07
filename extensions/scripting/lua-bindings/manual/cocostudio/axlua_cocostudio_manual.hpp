@@ -36,7 +36,7 @@ extern "C" {
 #include "base/CCRef.h"
 #include <string>
 
-TOLUA_API int  register_all_axis_coco_studio_manual(lua_State* L);
+TOLUA_API int  register_all_axys_coco_studio_manual(lua_State* L);
 
 /**
  * @addtogroup lua

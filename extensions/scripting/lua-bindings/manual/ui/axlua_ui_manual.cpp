@@ -1028,7 +1028,7 @@ static void extendEditBox(lua_State* L)
     lua_pop(L, 1);
 }
 
-int register_all_axis_ui_manual(lua_State* L)
+int register_all_axys_ui_manual(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -1241,21 +1241,21 @@ int register_ui_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axis_ui(L);
-        register_all_axis_ui_manual(L);
+        register_all_axys_ui(L);
+        register_all_axys_ui_manual(L);
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && !defined(AX_TARGET_OS_TVOS)
-        register_all_axis_video(L);
-        register_all_axis_video_manual(L);
-        register_all_axis_webview(L);
-        register_all_axis_webview_manual(L);
+        register_all_axys_video(L);
+        register_all_axys_video_manual(L);
+        register_all_axys_webview(L);
+        register_all_axys_webview_manual(L);
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    if defined(AX_ENABLE_MFMEDIA)
-        register_all_axis_video(L);
-        register_all_axis_video_manual(L);
+        register_all_axys_video(L);
+        register_all_axys_video_manual(L);
 #    endif
 #    if defined(AX_ENABLE_MSEDGE_WEBVIEW2)
-        register_all_axis_webview(L);
-        register_all_axis_webview_manual(L);
+        register_all_axys_webview(L);
+        register_all_axys_webview_manual(L);
 #    endif
 #endif
         extendEventListenerFocusEvent(L);

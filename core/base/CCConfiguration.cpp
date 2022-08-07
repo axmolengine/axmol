@@ -66,24 +66,24 @@ Configuration::Configuration()
 
 bool Configuration::init()
 {
-    _valueDict["axis.version"] = Value(axysVersion());
+    _valueDict["axys.version"] = Value(axysVersion());
 
 #if AX_ENABLE_PROFILERS
-    _valueDict["axis.compiled_with_profiler"] = Value(true);
+    _valueDict["axys.compiled_with_profiler"] = Value(true);
 #else
-    _valueDict["axis.compiled_with_profiler"]       = Value(false);
+    _valueDict["axys.compiled_with_profiler"]       = Value(false);
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
-    _valueDict["axis.compiled_with_gl_state_cache"] = Value(false);
+    _valueDict["axys.compiled_with_gl_state_cache"] = Value(false);
 #else
-    _valueDict["axis.compiled_with_gl_state_cache"] = Value(true);
+    _valueDict["axys.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
 #if _AX_DEBUG
-    _valueDict["axis.build_type"] = Value("DEBUG");
+    _valueDict["axys.build_type"] = Value("DEBUG");
 #else
-    _valueDict["axis.build_type"]                   = Value("RELEASE");
+    _valueDict["axys.build_type"]                   = Value("RELEASE");
 #endif
 
     return true;
@@ -383,25 +383,25 @@ void Configuration::loadConfigFile(std::string_view filename)
     }
 
     // light info
-    std::string name = "axis.3d.max_dir_light_in_shader";
+    std::string name = "axys.3d.max_dir_light_in_shader";
     if (_valueDict.find(name) != _valueDict.end())
         _maxDirLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxDirLightInShader);
 
-    name = "axis.3d.max_point_light_in_shader";
+    name = "axys.3d.max_point_light_in_shader";
     if (_valueDict.find(name) != _valueDict.end())
         _maxPointLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxPointLightInShader);
 
-    name = "axis.3d.max_spot_light_in_shader";
+    name = "axys.3d.max_spot_light_in_shader";
     if (_valueDict.find(name) != _valueDict.end())
         _maxSpotLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxSpotLightInShader);
 
-    name = "axis.3d.animate_quality";
+    name = "axys.3d.animate_quality";
     if (_valueDict.find(name) != _valueDict.end())
         _animate3DQuality = (Animate3DQuality)_valueDict[name].asInt();
     else

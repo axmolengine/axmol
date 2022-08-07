@@ -365,7 +365,7 @@ static void extendParticlePool(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
-int register_all_axis_extension_manual(lua_State* tolua_S)
+int register_all_axys_extension_manual(lua_State* tolua_S)
 {
     extendAssetsManager(tolua_S);
     extendManifest(tolua_S);
@@ -380,8 +380,8 @@ int register_extension_module(lua_State* tolua_S)
     lua_getglobal(tolua_S, "_G");
     if (lua_istable(tolua_S, -1))  // stack:...,_G,
     {
-        register_all_axis_extension(tolua_S);
-        register_all_axis_extension_manual(tolua_S);
+        register_all_axys_extension(tolua_S);
+        register_all_axys_extension_manual(tolua_S);
     }
     lua_pop(tolua_S, 1);
     return 1;
