@@ -1,4 +1,4 @@
-# Axys(Axis) Game Engine
+# Axys(aka. Axis) Game Engine
 
 [![dev](https://img.shields.io/github/v/release/axys1/axys?include_prereleases&label=release)](https://github.com/axys1/axys/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axys1/axys/blob/master/LICENSE)
