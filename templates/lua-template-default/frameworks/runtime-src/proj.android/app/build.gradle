@@ -8,15 +8,13 @@ apply from: project(':libcocos2dx').projectDir.toString() + "/axistools.gradle"
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
 
-    // setup ndk
-    def ndkInfo = axistools.findNDK(project)
-    ndkVersion = ndkInfo[0]
-    if(ndkInfo[1]) {
-        ndkPath = ndkInfo[1]
+    // Setup native build tools: ndk & cmake
+    def nbtInfo = axistools.findNativeBuildTools(project)
+    ndkVersion = nbtInfo[0]
+    if(nbtInfo[1]) {
+        ndkPath = nbtInfo[1]
     }
-
-    // setup cmake
-    def cmakeVer = axistools.findCMake(project)
+    def cmakeVer = nbtInfo[2]
 
     defaultConfig {
         applicationId "org.cocos2dx.hellolua"

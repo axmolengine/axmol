@@ -90,59 +90,87 @@ class VersionComparator implements Comparator<String> {
 }
 
 class axistools {
+
+    static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313+", cmakeVer = "3.22.1+") {
+
+        // Detecting sdkRoot
+        def sdkRoot = null
+        Properties projProps = new Properties()
+        try {
+            projProps.load(project.rootProject.file("local.properties").newDataInputStream())
+            sdkRoot = projProps.getProperty("sdk.dir")
+        }
+        catch(Exception ex) {
+            ex.printStackTrace()
+        }
+
+        if (sdkRoot == null || !new File(sdkRoot).isDirectory()) {
+            sdkRoot = Paths.get("${System.env.ANDROID_SDK_ROOT}").toAbsolutePath().toString()
+            if (!new File(sdkRoot).isDirectory()) {
+                throw new  Exception('android sdk not specified properly in local.properties or system env ANDROID_SDK_ROOT')
+            }
+        }
+
+        def rets = new String[3] // ndkVer,ndkPath,cmakeVer
+        findNDK(sdkRoot, ndkVer, rets)
+        findCMake(sdkRoot, cmakeVer, rets)
+        return rets
+    }
+
     /**
      * Find suitable ndk for current project
      * @param project The current android project
      * @param ndkVer The required ndk version for current project
+     * @param rets
      * @return
      */
-    static String[] findNDK(project, ndkVer = "23.2.8568313") {
+    private static void findNDK(sdkRoot, ndkVer, rets) {
         def allowNewerNdk = null
         if (ndkVer.endsWith('+')) {
             allowNewerNdk = true
             ndkVer = ndkVer.substring(0, ndkVer.length() - 1)
         }
 
-        /* Collect ndk dirs */
-        def ndkRoot = Paths.get("${System.env.ANDROID_NDK}")
-        def ndkDirs = []
-        if (Files.exists(ndkRoot)) {
-            ndkRoot = ndkRoot.toAbsolutePath().toString()
-            ndkDirs.add(ndkRoot)
-        }
-
-        def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
-        if (Files.exists(sdkRoot)) {
-            File dir = new File(sdkRoot.toAbsolutePath().toString() + '/ndk')
-            if (dir.isDirectory()) {
-                for (ndkDir in dir.listFiles()) {
-                    ndkDirs.add(ndkDir.toString())
-                }
+        def verList = []
+        File dir = new File("${sdkRoot}${File.separator}ndk")
+        if (dir.isDirectory()) {
+            for (ndkDir in dir.listFiles()) {
+                verList.add(ndkDir.getName())
             }
         }
 
+        verList.sort {a,b ->
+            return  axistools.compareVersion(b, a)
+        }
+
+        def ndkDirs = []
+
+        // Collect ndkDirs for search
+        for(ver in verList){
+            ndkDirs.add("${sdkRoot}${File.separator}ndk${File.separator}${ver}")
+        }
+
         /* Find suitable ndk in dirs */
-        def rets = new String[2]
         rets[0] = ndkVer
 
         for (ndkDir in ndkDirs) {
             if (findNDKInDir(ndkVer, allowNewerNdk, ndkDir, rets)) {
-                return rets
+                return
             }
         }
 
         println("No installed ndk found, the gradle will install ndk: $ndkVer automatically")
         rets[1] = null
-        return rets
     }
 
     /**
      * Find suitable cmake for current project
      * @param project The current android project
      * @param cmakeVer The required cmake version of project
+     * @param rets
      * @return
      */
-    static String findCMake(project, String cmakeVer = "3.10.2+") {
+    private static void findCMake(sdkRoot, String cmakeVer, rets) {
         def allowNewerCMake = false
         if(cmakeVer.endsWith('+')) {
             allowNewerCMake = true
@@ -152,38 +180,27 @@ class axistools {
         def cmakeBinDirs = []
 
         def cmakeBinDir = null
-        if (project != null) {
-            cmakeBinDir = getCMakeBinFromProjectLocal(project)
-            if (cmakeBinDir != null) {
-                cmakeBinDirs.add(cmakeBinDir);
+
+        def verList = []
+
+        // Scan installed cmake in $sdk_root/cmake
+        File sdkCMakeDir = new File("${sdkRoot}${File.separator}cmake")
+        if (sdkCMakeDir.isDirectory()) {
+            for (cmakeDir in sdkCMakeDir.listFiles()) {
+                verList.add(cmakeDir.getName())
             }
         }
 
-        def sdkRoot = Paths.get("${System.env.ANDROID_SDK}")
+        // Sort cmake verList
+        verList.sort {a,b ->
+            return  axistools.compareVersion(b, a)
+        }
 
-        if(Files.exists(sdkRoot)) {
-            def verList = []
-
-            // Scan installed cmake in $sdk_root/cmake
-            File sdkCMakeDir = new File(sdkRoot.toAbsolutePath().toString() + '/cmake')
-            if (sdkCMakeDir.isDirectory()) {
-                for (cmakeDir in sdkCMakeDir.listFiles()) {
-                    verList.add(cmakeDir.getName())
-                }
-            }
-
-            // Sort cmake verList
-            verList.sort {a,b ->
-                return  axistools.compareVersion(b, a)
-            }
-
-            // Collect cmakeBinDirs for search
-            sdkRoot = sdkRoot.toAbsolutePath().toString()
-            for(foundVer in verList){
-                cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + foundVer + File.separator + "bin"
-                if(new File(cmakeBinDir).isDirectory()) {
-                    cmakeBinDirs.add(cmakeBinDir)
-                }
+        // Collect cmakeBinDirs for search
+        for(ver in verList){
+            cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + ver + File.separator + "bin"
+            if(new File(cmakeBinDir).isDirectory()) {
+                cmakeBinDirs.add(cmakeBinDir)
             }
         }
 
@@ -206,17 +223,17 @@ class axistools {
             foundCMakeVer = cmakeVer
         }
 
-        return foundCMakeVer
+        rets[2] = foundCMakeVer
     }
 
     private static int compareVersion(String ver1, String ver2) {
-        return new VersionComparator().compare(ver1, ver2);
+        return new VersionComparator().compare(ver1, ver2)
     }
 
     private static String findNDKInDir(ndkVer, allowNewerNdk, ndkDir, rets) {
         def found = null
         def properties = new Properties()
-        File propertiesFile = new File("$ndkDir/source.properties")
+        File propertiesFile = new File("$ndkDir${File.separator}source.properties")
         propertiesFile.withInputStream {
             properties.load(it)
             def foundNdkVer = properties['Pkg.Revision']
@@ -263,9 +280,9 @@ class axistools {
             int exitVal = proc.exitValue()
             if (exitVal == 0) {
                 InputStream stdIn = proc.getInputStream();
-                InputStreamReader isr = new InputStreamReader(stdIn);
-                BufferedReader br = new BufferedReader(isr);
-                String verLine = br.readLine();
+                InputStreamReader isr = new InputStreamReader(stdIn)
+                BufferedReader br = new BufferedReader(isr)
+                String verLine = br.readLine()
                 def verInfo = verLine.split("\\s")
                 if (verInfo.length >= 3) {
                     def foundVer = verInfo[2]
@@ -295,37 +312,19 @@ class axistools {
         return foundCMakeVer
     }
 
-    private static String getCMakeBinFromProjectLocal(project) {
-        String programName = getCMakeProgramName();
-        Properties properties = new Properties()
-        try {
-            properties.load(project.rootProject.file("local.properties"))
-            def cmakeDir = properties.getProperty("cmake.dir")
-            if(cmakeDir != null) {
-                def cmakeBin = "$cmakeDir/bin"
-                if(new File("$cmakeBin/$programName").isFile())
-                    return cmakeBin;
-            }
-        }
-        catch(Exception) {
-        }
-
-        return null
-    }
-
     private static String getCMakeBinFromPath() {
-        String cmakeExecName = getCMakeProgramName();
+        String cmakeExecName = getCMakeProgramName()
         def foundBinPath = null
         Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
                 .map(Paths::get)
                 .anyMatch(path -> {
-                    def programPath = path.resolve(cmakeExecName);
+                    def programPath = path.resolve(cmakeExecName)
                     boolean fileExist = Files.exists(path.resolve(cmakeExecName))
                     if(fileExist) {
                         foundBinPath = path.toAbsolutePath().toString()
                     }
                     return fileExist
-                });
+                })
 
         return foundBinPath
     }
@@ -339,7 +338,7 @@ class axistools {
     }
 
     private static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("windows");
+        return System.getProperty("os.name").toLowerCase().contains("windows")
     }
 }
 
