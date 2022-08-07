@@ -91,7 +91,7 @@ class VersionComparator implements Comparator<String> {
 
 class axistools {
 
-    static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313", cmakeVer = "3.22.1+") {
+    static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313+", cmakeVer = "3.22.1+") {
 
         // Detecting sdkRoot
         def sdkRoot = null
@@ -131,12 +131,23 @@ class axistools {
             ndkVer = ndkVer.substring(0, ndkVer.length() - 1)
         }
 
-        def ndkDirs = []
-        File dir = new File("${sdkRoot}/ndk")
+        def verList = []
+        File dir = new File("${sdkRoot}${File.separator}ndk")
         if (dir.isDirectory()) {
             for (ndkDir in dir.listFiles()) {
-                ndkDirs.add(ndkDir.toString())
+                verList.add(ndkDir.getName())
             }
+        }
+
+        verList.sort {a,b ->
+            return  axistools.compareVersion(b, a)
+        }
+
+        def ndkDirs = []
+
+        // Collect ndkDirs for search
+        for(ver in verList){
+            ndkDirs.add("${sdkRoot}${File.separator}ndk${File.separator}${ver}")
         }
 
         /* Find suitable ndk in dirs */
@@ -173,7 +184,7 @@ class axistools {
         def verList = []
 
         // Scan installed cmake in $sdk_root/cmake
-        File sdkCMakeDir = new File(sdkRoot + '/cmake')
+        File sdkCMakeDir = new File("${sdkRoot}${File.separator}cmake")
         if (sdkCMakeDir.isDirectory()) {
             for (cmakeDir in sdkCMakeDir.listFiles()) {
                 verList.add(cmakeDir.getName())
@@ -186,8 +197,8 @@ class axistools {
         }
 
         // Collect cmakeBinDirs for search
-        for(foundVer in verList){
-            cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + foundVer + File.separator + "bin"
+        for(ver in verList){
+            cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + ver + File.separator + "bin"
             if(new File(cmakeBinDir).isDirectory()) {
                 cmakeBinDirs.add(cmakeBinDir)
             }
@@ -222,7 +233,7 @@ class axistools {
     private static String findNDKInDir(ndkVer, allowNewerNdk, ndkDir, rets) {
         def found = null
         def properties = new Properties()
-        File propertiesFile = new File("$ndkDir/source.properties")
+        File propertiesFile = new File("$ndkDir${File.separator}source.properties")
         propertiesFile.withInputStream {
             properties.load(it)
             def foundNdkVer = properties['Pkg.Revision']
