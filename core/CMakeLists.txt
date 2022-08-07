@@ -48,7 +48,7 @@ if (NOT DEFINED AX_ENABLE_MFMEDIA)
     set(AX_ENABLE_MFMEDIA TRUE CACHE INTERNAL "Enabling microsoft media foundation for windows video player" )
 endif()
 
-project(axis_libs)
+project(axys_libs)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
@@ -119,11 +119,11 @@ add_subdirectory(${AXYS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${_AX_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
-use_axis_compile_define(${_AX_CORE_LIB})
-use_axis_compile_options(${_AX_CORE_LIB})
+use_ax_compile_define(${_AX_CORE_LIB})
+use_ax_compile_options(${_AX_CORE_LIB})
 
 # use all platform related system libs
-use_axis_libs_depend(${_AX_CORE_LIB})
+use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
     PUBLIC ${AXYS_ROOT_PATH}

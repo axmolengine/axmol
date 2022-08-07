@@ -104,7 +104,7 @@ macro(axis_depend)
     endif()
 endmacro()
 
-macro(use_axis_libs_depend target)
+macro(use_ax_depend target)
     axis_depend()
     foreach(platform_lib ${PLATFORM_SPECIFIC_LIBS})
         target_link_libraries(${target} ${platform_lib})

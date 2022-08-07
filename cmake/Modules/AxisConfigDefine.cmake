@@ -108,7 +108,7 @@ if(WINDOWS)
 endif()
 
 # Set macro definitions for special platforms
-function(use_axis_compile_define target)
+function(use_ax_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:_AX_DEBUG=1>)
     
     # !important axis not use double precision
@@ -157,7 +157,7 @@ function(use_axis_compile_define target)
 endfunction()
 
 # Set compiler options
-function(use_axis_compile_options target)
+function(use_ax_compile_options target)
     if(MSVC)
         target_compile_options(${target}
             PUBLIC /MP

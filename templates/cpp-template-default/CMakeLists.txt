@@ -199,7 +199,7 @@ endif()
 
 if (_AX_USE_PREBUILT) # support windows only
     include(${AXYS_ROOT_PATH}/cmake/Modules/AxisConfigDefine.cmake)
-    use_axis_compile_define(${APP_NAME})
+    use_ax_compile_define(${APP_NAME})
 
     include(${AXYS_ROOT_PATH}/cmake/Modules/AxisLinkHelpers.cmake)
     axis_link_cxx_prebuilt(${APP_NAME} ${AXYS_ROOT_PATH} ${AX_PREBUILT_DIR})
