@@ -80,7 +80,7 @@ UserDefaultTest::UserDefaultTest()
 //
 //     for (int i = 0; i <= 5; i++)
 //     {
-//         v.push_back(static_cast<T>(i));
+//         v.emplace_back(static_cast<T>(i));
 //     }
 //     data.copy((unsigned char*) v.data(), v.size() * sizeof(T));
 //     UserDefault::getInstance()->setDataForKey(key, data);
@@ -94,7 +94,7 @@ UserDefaultTest::UserDefaultTest()
 //
 //     for (int i = 5; i >= 0; i--)
 //     {
-//         v.push_back(static_cast<T>(i));
+//         v.emplace_back(static_cast<T>(i));
 //     }
 //     data.copy((unsigned char*) v.data(), v.size() * sizeof(T));
 //     UserDefault::getInstance()->setDataForKey(key, data);

@@ -800,7 +800,7 @@ void MeshRendererEffectTest::addNewMeshWithCoords(Vec2 p)
     auto seq         = Sequence::create(action, action_back, nullptr);
 
     mesh->runAction(RepeatForever::create(seq));
-    _meshes.push_back(mesh);
+    _meshes.emplace_back(mesh);
 }
 
 void MeshRendererEffectTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
@@ -815,10 +815,10 @@ void MeshRendererEffectTest::onTouchesEnded(const std::vector<Touch*>& touches, 
 
 AsyncLoadMeshRendererTest::AsyncLoadMeshRendererTest()
 {
-    _paths.push_back("MeshRendererTest/girl.c3b");
-    _paths.push_back("MeshRendererTest/orc.c3b");
-    _paths.push_back("MeshRendererTest/ReskinGirl.c3b");
-    _paths.push_back("MeshRendererTest/axe.c3b");
+    _paths.emplace_back("MeshRendererTest/girl.c3b");
+    _paths.emplace_back("MeshRendererTest/orc.c3b");
+    _paths.emplace_back("MeshRendererTest/ReskinGirl.c3b");
+    _paths.emplace_back("MeshRendererTest/axe.c3b");
 
     TTFConfig ttfConfig("fonts/arial.ttf", 15);
     auto label1 = Label::createWithTTF(ttfConfig, "AsyncLoad MeshRenderer");
@@ -919,7 +919,7 @@ void MeshRendererWithSkinTest::addNewMeshWithCoords(Vec2 p)
     mesh->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
     mesh->setPosition(Vec2(p.x, p.y));
     addChild(mesh);
-    _meshes.push_back(mesh);
+    _meshes.emplace_back(mesh);
 
     auto animation = Animation3D::create(fileName);
     if (animation)
@@ -1328,32 +1328,32 @@ void MeshRendererReskinTest::addNewMeshWithCoords(Vec2 p)
     _mesh = mesh;
 
     auto& body = _skins[(int)SkinType::UPPER_BODY];
-    body.push_back("Girl_UpperBody01");
-    body.push_back("Girl_UpperBody02");
+    body.emplace_back("Girl_UpperBody01");
+    body.emplace_back("Girl_UpperBody02");
 
     auto& pants = _skins[(int)SkinType::PANTS];
-    pants.push_back("Girl_LowerBody01");
-    pants.push_back("Girl_LowerBody02");
+    pants.emplace_back("Girl_LowerBody01");
+    pants.emplace_back("Girl_LowerBody02");
 
     auto& shoes = _skins[(int)SkinType::SHOES];
-    shoes.push_back("Girl_Shoes01");
-    shoes.push_back("Girl_Shoes02");
+    shoes.emplace_back("Girl_Shoes01");
+    shoes.emplace_back("Girl_Shoes02");
 
     auto& hair = _skins[(int)SkinType::HAIR];
-    hair.push_back("Girl_Hair01");
-    hair.push_back("Girl_Hair02");
+    hair.emplace_back("Girl_Hair01");
+    hair.emplace_back("Girl_Hair02");
 
     auto& face = _skins[(int)SkinType::FACE];
-    face.push_back("Girl_Face01");
-    face.push_back("Girl_Face02");
+    face.emplace_back("Girl_Face01");
+    face.emplace_back("Girl_Face02");
 
     auto& hand = _skins[(int)SkinType::HAND];
-    hand.push_back("Girl_Hand01");
-    hand.push_back("Girl_Hand02");
+    hand.emplace_back("Girl_Hand01");
+    hand.emplace_back("Girl_Hand02");
 
     auto& glasses = _skins[(int)SkinType::GLASSES];
-    glasses.push_back("");
-    glasses.push_back("Girl_Glasses01");
+    glasses.emplace_back("");
+    glasses.emplace_back("Girl_Glasses01");
 
     memset(_curSkin, 0, (int)SkinType::MAX_TYPE * sizeof(int));
 
@@ -1426,7 +1426,7 @@ void MeshRendererWithOBBPerformanceTest::addNewOBBWithCoords(Vec2 p)
     AABB aabb(-extents, extents);
     auto obb    = OBB(aabb);
     obb._center = Vec3(p.x, p.y, 0);
-    _obb.push_back(obb);
+    _obb.emplace_back(obb);
 }
 
 void MeshRendererWithOBBPerformanceTest::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
@@ -1569,7 +1569,7 @@ void MeshRendererWithOBBPerformanceTest::addOBBWithCount(float value)
         AABB aabb(-extents, extents);
         auto obb    = OBB(aabb);
         obb._center = Vec3(randompos.x, randompos.y, 0);
-        _obb.push_back(obb);
+        _obb.emplace_back(obb);
     }
 }
 
@@ -1992,7 +1992,7 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
         mesh->runAction(act);
     }
     addChild(mesh);
-    _meshes.push_back(mesh);
+    _meshes.emplace_back(mesh);
 
     // add jumping orc
     fileName = "MeshRendererTest/orc_jump.c3t";
@@ -2010,7 +2010,7 @@ void NodeAnimationTest::addNewMeshWithCoords(Vec2 p)
         mesh->runAction(act);
     }
     addChild(mesh);
-    _meshes.push_back(mesh);
+    _meshes.emplace_back(mesh);
 }
 
 MeshRendererCubeMapTest::MeshRendererCubeMapTest() : _textureCube(nullptr), _skyBox(nullptr), _teapot(nullptr)

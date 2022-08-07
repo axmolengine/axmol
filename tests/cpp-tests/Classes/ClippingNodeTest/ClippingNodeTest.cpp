@@ -828,7 +828,7 @@ void ClippingToRenderTextureTest::setup()
     auto button = MenuItemFont::create("Reproduce bug", [&](Ref* sender) {
         std::vector<Node*> nodes;
         enumerateChildren("remove me [0-9]", [&](Node* node) {
-            nodes.push_back(node);
+            nodes.emplace_back(node);
             return false;
         });
         for (auto node : nodes)
